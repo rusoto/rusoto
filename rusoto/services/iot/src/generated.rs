@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -29,1849 +28,1849 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
-#[doc="<p>The input for the AcceptCertificateTransfer operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the AcceptCertificateTransfer operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AcceptCertificateTransferRequest {
-    #[doc="<p>The ID of the certificate.</p>"]
-    #[serde(rename="certificateId")]
+    /// <p>The ID of the certificate.</p>
+    #[serde(rename = "certificateId")]
     pub certificate_id: String,
-    #[doc="<p>Specifies whether the certificate is active.</p>"]
-    #[serde(rename="setAsActive")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether the certificate is active.</p>
+    #[serde(rename = "setAsActive")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub set_as_active: Option<bool>,
 }
 
-#[doc="<p>Describes the actions associated with a rule.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Describes the actions associated with a rule.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Action {
-    #[doc="<p>Change the state of a CloudWatch alarm.</p>"]
-    #[serde(rename="cloudwatchAlarm")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Change the state of a CloudWatch alarm.</p>
+    #[serde(rename = "cloudwatchAlarm")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cloudwatch_alarm: Option<CloudwatchAlarmAction>,
-    #[doc="<p>Capture a CloudWatch metric.</p>"]
-    #[serde(rename="cloudwatchMetric")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Capture a CloudWatch metric.</p>
+    #[serde(rename = "cloudwatchMetric")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cloudwatch_metric: Option<CloudwatchMetricAction>,
-    #[doc="<p>Write to a DynamoDB table.</p>"]
-    #[serde(rename="dynamoDB")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Write to a DynamoDB table.</p>
+    #[serde(rename = "dynamoDB")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub dynamo_db: Option<DynamoDBAction>,
-    #[doc="<p>Write to a DynamoDB table. This is a new version of the DynamoDB action. It allows you to write each attribute in an MQTT message payload into a separate DynamoDB column.</p>"]
-    #[serde(rename="dynamoDBv2")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Write to a DynamoDB table. This is a new version of the DynamoDB action. It allows you to write each attribute in an MQTT message payload into a separate DynamoDB column.</p>
+    #[serde(rename = "dynamoDBv2")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub dynamo_d_bv_2: Option<DynamoDBv2Action>,
-    #[doc="<p>Write data to an Amazon Elasticsearch Service domain.</p>"]
-    #[serde(rename="elasticsearch")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Write data to an Amazon Elasticsearch Service domain.</p>
+    #[serde(rename = "elasticsearch")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub elasticsearch: Option<ElasticsearchAction>,
-    #[doc="<p>Write to an Amazon Kinesis Firehose stream.</p>"]
-    #[serde(rename="firehose")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Write to an Amazon Kinesis Firehose stream.</p>
+    #[serde(rename = "firehose")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub firehose: Option<FirehoseAction>,
-    #[doc="<p>Write data to an Amazon Kinesis stream.</p>"]
-    #[serde(rename="kinesis")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Write data to an Amazon Kinesis stream.</p>
+    #[serde(rename = "kinesis")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub kinesis: Option<KinesisAction>,
-    #[doc="<p>Invoke a Lambda function.</p>"]
-    #[serde(rename="lambda")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Invoke a Lambda function.</p>
+    #[serde(rename = "lambda")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub lambda: Option<LambdaAction>,
-    #[doc="<p>Publish to another MQTT topic.</p>"]
-    #[serde(rename="republish")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Publish to another MQTT topic.</p>
+    #[serde(rename = "republish")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub republish: Option<RepublishAction>,
-    #[doc="<p>Write to an Amazon S3 bucket.</p>"]
-    #[serde(rename="s3")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Write to an Amazon S3 bucket.</p>
+    #[serde(rename = "s3")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub s_3: Option<S3Action>,
-    #[doc="<p>Send a message to a Salesforce IoT Cloud Input Stream.</p>"]
-    #[serde(rename="salesforce")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Send a message to a Salesforce IoT Cloud Input Stream.</p>
+    #[serde(rename = "salesforce")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub salesforce: Option<SalesforceAction>,
-    #[doc="<p>Publish to an Amazon SNS topic.</p>"]
-    #[serde(rename="sns")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Publish to an Amazon SNS topic.</p>
+    #[serde(rename = "sns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sns: Option<SnsAction>,
-    #[doc="<p>Publish to an Amazon SQS queue.</p>"]
-    #[serde(rename="sqs")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Publish to an Amazon SQS queue.</p>
+    #[serde(rename = "sqs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sqs: Option<SqsAction>,
 }
 
-#[doc="<p>The input for the AttachPrincipalPolicy operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the AttachPrincipalPolicy operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AttachPrincipalPolicyRequest {
-    #[doc="<p>The policy name.</p>"]
-    #[serde(rename="policyName")]
+    /// <p>The policy name.</p>
+    #[serde(rename = "policyName")]
     pub policy_name: String,
-    #[doc="<p>The principal, which can be a certificate ARN (as returned from the CreateCertificate operation) or an Amazon Cognito ID.</p>"]
-    #[serde(rename="principal")]
+    /// <p>The principal, which can be a certificate ARN (as returned from the CreateCertificate operation) or an Amazon Cognito ID.</p>
+    #[serde(rename = "principal")]
     pub principal: String,
 }
 
-#[doc="<p>The input for the AttachThingPrincipal operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the AttachThingPrincipal operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AttachThingPrincipalRequest {
-    #[doc="<p>The principal, such as a certificate or other credential.</p>"]
-    #[serde(rename="principal")]
+    /// <p>The principal, such as a certificate or other credential.</p>
+    #[serde(rename = "principal")]
     pub principal: String,
-    #[doc="<p>The name of the thing.</p>"]
-    #[serde(rename="thingName")]
+    /// <p>The name of the thing.</p>
+    #[serde(rename = "thingName")]
     pub thing_name: String,
 }
 
-#[doc="<p>The output from the AttachThingPrincipal operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output from the AttachThingPrincipal operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AttachThingPrincipalResponse;
 
-#[doc="<p>The attribute payload.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The attribute payload.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AttributePayload {
-    #[doc="<p>A JSON string containing up to three key-value pair in JSON format. For example:</p> <p> <code>{\\\"attributes\\\":{\\\"string1\\\":\\\"string2\\\"}}</code> </p>"]
-    #[serde(rename="attributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A JSON string containing up to three key-value pair in JSON format. For example:</p> <p> <code>{\"attributes\":{\"string1\":\"string2\"}}</code> </p>
+    #[serde(rename = "attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub attributes: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>Specifies whether the list of attributes provided in the <code>AttributePayload</code> is merged with the attributes stored in the registry, instead of overwriting them.</p> <p>To remove an attribute, call <code>UpdateThing</code> with an empty attribute value.</p> <note> <p>The <code>merge</code> attribute is only valid when calling <code>UpdateThing</code>.</p> </note>"]
-    #[serde(rename="merge")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether the list of attributes provided in the <code>AttributePayload</code> is merged with the attributes stored in the registry, instead of overwriting them.</p> <p>To remove an attribute, call <code>UpdateThing</code> with an empty attribute value.</p> <note> <p>The <code>merge</code> attribute is only valid when calling <code>UpdateThing</code>.</p> </note>
+    #[serde(rename = "merge")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub merge: Option<bool>,
 }
 
-#[doc="<p>A CA certificate.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A CA certificate.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CACertificate {
-    #[doc="<p>The ARN of the CA certificate.</p>"]
-    #[serde(rename="certificateArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the CA certificate.</p>
+    #[serde(rename = "certificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_arn: Option<String>,
-    #[doc="<p>The ID of the CA certificate.</p>"]
-    #[serde(rename="certificateId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the CA certificate.</p>
+    #[serde(rename = "certificateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_id: Option<String>,
-    #[doc="<p>The date the CA certificate was created.</p>"]
-    #[serde(rename="creationDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the CA certificate was created.</p>
+    #[serde(rename = "creationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
-    #[doc="<p>The status of the CA certificate.</p> <p>The status value REGISTER_INACTIVE is deprecated and should not be used.</p>"]
-    #[serde(rename="status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the CA certificate.</p> <p>The status value REGISTER_INACTIVE is deprecated and should not be used.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
 
-#[doc="<p>Describes a CA certificate.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes a CA certificate.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CACertificateDescription {
-    #[doc="<p>Whether the CA certificate configured for auto registration of device certificates. Valid values are \"ENABLE\" and \"DISABLE\"</p>"]
-    #[serde(rename="autoRegistrationStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Whether the CA certificate configured for auto registration of device certificates. Valid values are "ENABLE" and "DISABLE"</p>
+    #[serde(rename = "autoRegistrationStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_registration_status: Option<String>,
-    #[doc="<p>The CA certificate ARN.</p>"]
-    #[serde(rename="certificateArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The CA certificate ARN.</p>
+    #[serde(rename = "certificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_arn: Option<String>,
-    #[doc="<p>The CA certificate ID.</p>"]
-    #[serde(rename="certificateId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The CA certificate ID.</p>
+    #[serde(rename = "certificateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_id: Option<String>,
-    #[doc="<p>The CA certificate data, in PEM format.</p>"]
-    #[serde(rename="certificatePem")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The CA certificate data, in PEM format.</p>
+    #[serde(rename = "certificatePem")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_pem: Option<String>,
-    #[doc="<p>The date the CA certificate was created.</p>"]
-    #[serde(rename="creationDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the CA certificate was created.</p>
+    #[serde(rename = "creationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
-    #[doc="<p>The owner of the CA certificate.</p>"]
-    #[serde(rename="ownedBy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The owner of the CA certificate.</p>
+    #[serde(rename = "ownedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub owned_by: Option<String>,
-    #[doc="<p>The status of a CA certificate.</p>"]
-    #[serde(rename="status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of a CA certificate.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
 
-#[doc="<p>The input for the CancelCertificateTransfer operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the CancelCertificateTransfer operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CancelCertificateTransferRequest {
-    #[doc="<p>The ID of the certificate.</p>"]
-    #[serde(rename="certificateId")]
+    /// <p>The ID of the certificate.</p>
+    #[serde(rename = "certificateId")]
     pub certificate_id: String,
 }
 
-#[doc="<p>Information about a certificate.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about a certificate.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Certificate {
-    #[doc="<p>The ARN of the certificate.</p>"]
-    #[serde(rename="certificateArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the certificate.</p>
+    #[serde(rename = "certificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_arn: Option<String>,
-    #[doc="<p>The ID of the certificate.</p>"]
-    #[serde(rename="certificateId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the certificate.</p>
+    #[serde(rename = "certificateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_id: Option<String>,
-    #[doc="<p>The date and time the certificate was created.</p>"]
-    #[serde(rename="creationDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time the certificate was created.</p>
+    #[serde(rename = "creationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
-    #[doc="<p>The status of the certificate.</p> <p>The status value REGISTER_INACTIVE is deprecated and should not be used.</p>"]
-    #[serde(rename="status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the certificate.</p> <p>The status value REGISTER_INACTIVE is deprecated and should not be used.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
 
-#[doc="<p>Describes a certificate.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes a certificate.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CertificateDescription {
-    #[doc="<p>The certificate ID of the CA certificate used to sign this certificate.</p>"]
-    #[serde(rename="caCertificateId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The certificate ID of the CA certificate used to sign this certificate.</p>
+    #[serde(rename = "caCertificateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ca_certificate_id: Option<String>,
-    #[doc="<p>The ARN of the certificate.</p>"]
-    #[serde(rename="certificateArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the certificate.</p>
+    #[serde(rename = "certificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_arn: Option<String>,
-    #[doc="<p>The ID of the certificate.</p>"]
-    #[serde(rename="certificateId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the certificate.</p>
+    #[serde(rename = "certificateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_id: Option<String>,
-    #[doc="<p>The certificate data, in PEM format.</p>"]
-    #[serde(rename="certificatePem")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The certificate data, in PEM format.</p>
+    #[serde(rename = "certificatePem")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_pem: Option<String>,
-    #[doc="<p>The date and time the certificate was created.</p>"]
-    #[serde(rename="creationDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time the certificate was created.</p>
+    #[serde(rename = "creationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
-    #[doc="<p>The date and time the certificate was last modified.</p>"]
-    #[serde(rename="lastModifiedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time the certificate was last modified.</p>
+    #[serde(rename = "lastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_date: Option<f64>,
-    #[doc="<p>The ID of the AWS account that owns the certificate.</p>"]
-    #[serde(rename="ownedBy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the AWS account that owns the certificate.</p>
+    #[serde(rename = "ownedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub owned_by: Option<String>,
-    #[doc="<p>The ID of the AWS account of the previous owner of the certificate.</p>"]
-    #[serde(rename="previousOwnedBy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the AWS account of the previous owner of the certificate.</p>
+    #[serde(rename = "previousOwnedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub previous_owned_by: Option<String>,
-    #[doc="<p>The status of the certificate.</p>"]
-    #[serde(rename="status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the certificate.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The transfer data.</p>"]
-    #[serde(rename="transferData")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The transfer data.</p>
+    #[serde(rename = "transferData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub transfer_data: Option<TransferData>,
 }
 
-#[doc="<p>Describes an action that updates a CloudWatch alarm.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Describes an action that updates a CloudWatch alarm.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct CloudwatchAlarmAction {
-    #[doc="<p>The CloudWatch alarm name.</p>"]
-    #[serde(rename="alarmName")]
+    /// <p>The CloudWatch alarm name.</p>
+    #[serde(rename = "alarmName")]
     pub alarm_name: String,
-    #[doc="<p>The IAM role that allows access to the CloudWatch alarm.</p>"]
-    #[serde(rename="roleArn")]
+    /// <p>The IAM role that allows access to the CloudWatch alarm.</p>
+    #[serde(rename = "roleArn")]
     pub role_arn: String,
-    #[doc="<p>The reason for the alarm change.</p>"]
-    #[serde(rename="stateReason")]
+    /// <p>The reason for the alarm change.</p>
+    #[serde(rename = "stateReason")]
     pub state_reason: String,
-    #[doc="<p>The value of the alarm state. Acceptable values are: OK, ALARM, INSUFFICIENT_DATA.</p>"]
-    #[serde(rename="stateValue")]
+    /// <p>The value of the alarm state. Acceptable values are: OK, ALARM, INSUFFICIENT_DATA.</p>
+    #[serde(rename = "stateValue")]
     pub state_value: String,
 }
 
-#[doc="<p>Describes an action that captures a CloudWatch metric.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Describes an action that captures a CloudWatch metric.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct CloudwatchMetricAction {
-    #[doc="<p>The CloudWatch metric name.</p>"]
-    #[serde(rename="metricName")]
+    /// <p>The CloudWatch metric name.</p>
+    #[serde(rename = "metricName")]
     pub metric_name: String,
-    #[doc="<p>The CloudWatch metric namespace name.</p>"]
-    #[serde(rename="metricNamespace")]
+    /// <p>The CloudWatch metric namespace name.</p>
+    #[serde(rename = "metricNamespace")]
     pub metric_namespace: String,
-    #[doc="<p>An optional <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/cloudwatch_concepts.html#about_timestamp\">Unix timestamp</a>.</p>"]
-    #[serde(rename="metricTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An optional <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/cloudwatch_concepts.html#about_timestamp">Unix timestamp</a>.</p>
+    #[serde(rename = "metricTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub metric_timestamp: Option<String>,
-    #[doc="<p>The <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/cloudwatch_concepts.html#Unit\">metric unit</a> supported by CloudWatch.</p>"]
-    #[serde(rename="metricUnit")]
+    /// <p>The <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/cloudwatch_concepts.html#Unit">metric unit</a> supported by CloudWatch.</p>
+    #[serde(rename = "metricUnit")]
     pub metric_unit: String,
-    #[doc="<p>The CloudWatch metric value.</p>"]
-    #[serde(rename="metricValue")]
+    /// <p>The CloudWatch metric value.</p>
+    #[serde(rename = "metricValue")]
     pub metric_value: String,
-    #[doc="<p>The IAM role that allows access to the CloudWatch metric.</p>"]
-    #[serde(rename="roleArn")]
+    /// <p>The IAM role that allows access to the CloudWatch metric.</p>
+    #[serde(rename = "roleArn")]
     pub role_arn: String,
 }
 
-#[doc="<p>The input for the CreateCertificateFromCsr operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the CreateCertificateFromCsr operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateCertificateFromCsrRequest {
-    #[doc="<p>The certificate signing request (CSR).</p>"]
-    #[serde(rename="certificateSigningRequest")]
+    /// <p>The certificate signing request (CSR).</p>
+    #[serde(rename = "certificateSigningRequest")]
     pub certificate_signing_request: String,
-    #[doc="<p>Specifies whether the certificate is active.</p>"]
-    #[serde(rename="setAsActive")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether the certificate is active.</p>
+    #[serde(rename = "setAsActive")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub set_as_active: Option<bool>,
 }
 
-#[doc="<p>The output from the CreateCertificateFromCsr operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output from the CreateCertificateFromCsr operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateCertificateFromCsrResponse {
-    #[doc="<p>The Amazon Resource Name (ARN) of the certificate. You can use the ARN as a principal for policy operations.</p>"]
-    #[serde(rename="certificateArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the certificate. You can use the ARN as a principal for policy operations.</p>
+    #[serde(rename = "certificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_arn: Option<String>,
-    #[doc="<p>The ID of the certificate. Certificate management operations only take a certificateId.</p>"]
-    #[serde(rename="certificateId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the certificate. Certificate management operations only take a certificateId.</p>
+    #[serde(rename = "certificateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_id: Option<String>,
-    #[doc="<p>The certificate data, in PEM format.</p>"]
-    #[serde(rename="certificatePem")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The certificate data, in PEM format.</p>
+    #[serde(rename = "certificatePem")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_pem: Option<String>,
 }
 
-#[doc="<p>The input for the CreateKeysAndCertificate operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the CreateKeysAndCertificate operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateKeysAndCertificateRequest {
-    #[doc="<p>Specifies whether the certificate is active.</p>"]
-    #[serde(rename="setAsActive")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether the certificate is active.</p>
+    #[serde(rename = "setAsActive")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub set_as_active: Option<bool>,
 }
 
-#[doc="<p>The output of the CreateKeysAndCertificate operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output of the CreateKeysAndCertificate operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateKeysAndCertificateResponse {
-    #[doc="<p>The ARN of the certificate.</p>"]
-    #[serde(rename="certificateArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the certificate.</p>
+    #[serde(rename = "certificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_arn: Option<String>,
-    #[doc="<p>The ID of the certificate. AWS IoT issues a default subject name for the certificate (for example, AWS IoT Certificate).</p>"]
-    #[serde(rename="certificateId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the certificate. AWS IoT issues a default subject name for the certificate (for example, AWS IoT Certificate).</p>
+    #[serde(rename = "certificateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_id: Option<String>,
-    #[doc="<p>The certificate data, in PEM format.</p>"]
-    #[serde(rename="certificatePem")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The certificate data, in PEM format.</p>
+    #[serde(rename = "certificatePem")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_pem: Option<String>,
-    #[doc="<p>The generated key pair.</p>"]
-    #[serde(rename="keyPair")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The generated key pair.</p>
+    #[serde(rename = "keyPair")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub key_pair: Option<KeyPair>,
 }
 
-#[doc="<p>The input for the CreatePolicy operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the CreatePolicy operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreatePolicyRequest {
-    #[doc="<p>The JSON document that describes the policy. <b>policyDocument</b> must have a minimum length of 1, with a maximum length of 2048, excluding whitespace.</p>"]
-    #[serde(rename="policyDocument")]
+    /// <p>The JSON document that describes the policy. <b>policyDocument</b> must have a minimum length of 1, with a maximum length of 2048, excluding whitespace.</p>
+    #[serde(rename = "policyDocument")]
     pub policy_document: String,
-    #[doc="<p>The policy name.</p>"]
-    #[serde(rename="policyName")]
+    /// <p>The policy name.</p>
+    #[serde(rename = "policyName")]
     pub policy_name: String,
 }
 
-#[doc="<p>The output from the CreatePolicy operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output from the CreatePolicy operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreatePolicyResponse {
-    #[doc="<p>The policy ARN.</p>"]
-    #[serde(rename="policyArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The policy ARN.</p>
+    #[serde(rename = "policyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_arn: Option<String>,
-    #[doc="<p>The JSON document that describes the policy.</p>"]
-    #[serde(rename="policyDocument")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The JSON document that describes the policy.</p>
+    #[serde(rename = "policyDocument")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_document: Option<String>,
-    #[doc="<p>The policy name.</p>"]
-    #[serde(rename="policyName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The policy name.</p>
+    #[serde(rename = "policyName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_name: Option<String>,
-    #[doc="<p>The policy version ID.</p>"]
-    #[serde(rename="policyVersionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The policy version ID.</p>
+    #[serde(rename = "policyVersionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_version_id: Option<String>,
 }
 
-#[doc="<p>The input for the CreatePolicyVersion operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the CreatePolicyVersion operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreatePolicyVersionRequest {
-    #[doc="<p>The JSON document that describes the policy. Minimum length of 1. Maximum length of 2048, excluding whitespaces</p>"]
-    #[serde(rename="policyDocument")]
+    /// <p>The JSON document that describes the policy. Minimum length of 1. Maximum length of 2048, excluding whitespaces</p>
+    #[serde(rename = "policyDocument")]
     pub policy_document: String,
-    #[doc="<p>The policy name.</p>"]
-    #[serde(rename="policyName")]
+    /// <p>The policy name.</p>
+    #[serde(rename = "policyName")]
     pub policy_name: String,
-    #[doc="<p>Specifies whether the policy version is set as the default. When this parameter is true, the new policy version becomes the operative version (that is, the version that is in effect for the certificates to which the policy is attached).</p>"]
-    #[serde(rename="setAsDefault")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether the policy version is set as the default. When this parameter is true, the new policy version becomes the operative version (that is, the version that is in effect for the certificates to which the policy is attached).</p>
+    #[serde(rename = "setAsDefault")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub set_as_default: Option<bool>,
 }
 
-#[doc="<p>The output of the CreatePolicyVersion operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output of the CreatePolicyVersion operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreatePolicyVersionResponse {
-    #[doc="<p>Specifies whether the policy version is the default.</p>"]
-    #[serde(rename="isDefaultVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether the policy version is the default.</p>
+    #[serde(rename = "isDefaultVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub is_default_version: Option<bool>,
-    #[doc="<p>The policy ARN.</p>"]
-    #[serde(rename="policyArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The policy ARN.</p>
+    #[serde(rename = "policyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_arn: Option<String>,
-    #[doc="<p>The JSON document that describes the policy.</p>"]
-    #[serde(rename="policyDocument")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The JSON document that describes the policy.</p>
+    #[serde(rename = "policyDocument")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_document: Option<String>,
-    #[doc="<p>The policy version ID.</p>"]
-    #[serde(rename="policyVersionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The policy version ID.</p>
+    #[serde(rename = "policyVersionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_version_id: Option<String>,
 }
 
-#[doc="<p>The input for the CreateThing operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the CreateThing operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateThingRequest {
-    #[doc="<p>The attribute payload, which consists of up to three name/value pairs in a JSON document. For example:</p> <p> <code>{\\\"attributes\\\":{\\\"string1\\\":\\\"string2\\\"}}</code> </p>"]
-    #[serde(rename="attributePayload")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The attribute payload, which consists of up to three name/value pairs in a JSON document. For example:</p> <p> <code>{\"attributes\":{\"string1\":\"string2\"}}</code> </p>
+    #[serde(rename = "attributePayload")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub attribute_payload: Option<AttributePayload>,
-    #[doc="<p>The name of the thing to create.</p>"]
-    #[serde(rename="thingName")]
+    /// <p>The name of the thing to create.</p>
+    #[serde(rename = "thingName")]
     pub thing_name: String,
-    #[doc="<p>The name of the thing type associated with the new thing.</p>"]
-    #[serde(rename="thingTypeName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the thing type associated with the new thing.</p>
+    #[serde(rename = "thingTypeName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_type_name: Option<String>,
 }
 
-#[doc="<p>The output of the CreateThing operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output of the CreateThing operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateThingResponse {
-    #[doc="<p>The ARN of the new thing.</p>"]
-    #[serde(rename="thingArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the new thing.</p>
+    #[serde(rename = "thingArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_arn: Option<String>,
-    #[doc="<p>The name of the new thing.</p>"]
-    #[serde(rename="thingName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the new thing.</p>
+    #[serde(rename = "thingName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_name: Option<String>,
 }
 
-#[doc="<p>The input for the CreateThingType operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the CreateThingType operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateThingTypeRequest {
-    #[doc="<p>The name of the thing type.</p>"]
-    #[serde(rename="thingTypeName")]
+    /// <p>The name of the thing type.</p>
+    #[serde(rename = "thingTypeName")]
     pub thing_type_name: String,
-    #[doc="<p>The ThingTypeProperties for the thing type to create. It contains information about the new thing type including a description, and a list of searchable thing attribute names.</p>"]
-    #[serde(rename="thingTypeProperties")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ThingTypeProperties for the thing type to create. It contains information about the new thing type including a description, and a list of searchable thing attribute names.</p>
+    #[serde(rename = "thingTypeProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_type_properties: Option<ThingTypeProperties>,
 }
 
-#[doc="<p>The output of the CreateThingType operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output of the CreateThingType operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateThingTypeResponse {
-    #[doc="<p>The Amazon Resource Name (ARN) of the thing type.</p>"]
-    #[serde(rename="thingTypeArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the thing type.</p>
+    #[serde(rename = "thingTypeArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_type_arn: Option<String>,
-    #[doc="<p>The name of the thing type.</p>"]
-    #[serde(rename="thingTypeName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the thing type.</p>
+    #[serde(rename = "thingTypeName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_type_name: Option<String>,
 }
 
-#[doc="<p>The input for the CreateTopicRule operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the CreateTopicRule operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateTopicRuleRequest {
-    #[doc="<p>The name of the rule.</p>"]
-    #[serde(rename="ruleName")]
+    /// <p>The name of the rule.</p>
+    #[serde(rename = "ruleName")]
     pub rule_name: String,
-    #[doc="<p>The rule payload.</p>"]
-    #[serde(rename="topicRulePayload")]
+    /// <p>The rule payload.</p>
+    #[serde(rename = "topicRulePayload")]
     pub topic_rule_payload: TopicRulePayload,
 }
 
-#[doc="<p>Input for the DeleteCACertificate operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Input for the DeleteCACertificate operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteCACertificateRequest {
-    #[doc="<p>The ID of the certificate to delete.</p>"]
-    #[serde(rename="certificateId")]
+    /// <p>The ID of the certificate to delete.</p>
+    #[serde(rename = "certificateId")]
     pub certificate_id: String,
 }
 
-#[doc="<p>The output for the DeleteCACertificate operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output for the DeleteCACertificate operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteCACertificateResponse;
 
-#[doc="<p>The input for the DeleteCertificate operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the DeleteCertificate operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteCertificateRequest {
-    #[doc="<p>The ID of the certificate.</p>"]
-    #[serde(rename="certificateId")]
+    /// <p>The ID of the certificate.</p>
+    #[serde(rename = "certificateId")]
     pub certificate_id: String,
 }
 
-#[doc="<p>The input for the DeletePolicy operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the DeletePolicy operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeletePolicyRequest {
-    #[doc="<p>The name of the policy to delete.</p>"]
-    #[serde(rename="policyName")]
+    /// <p>The name of the policy to delete.</p>
+    #[serde(rename = "policyName")]
     pub policy_name: String,
 }
 
-#[doc="<p>The input for the DeletePolicyVersion operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the DeletePolicyVersion operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeletePolicyVersionRequest {
-    #[doc="<p>The name of the policy.</p>"]
-    #[serde(rename="policyName")]
+    /// <p>The name of the policy.</p>
+    #[serde(rename = "policyName")]
     pub policy_name: String,
-    #[doc="<p>The policy version ID.</p>"]
-    #[serde(rename="policyVersionId")]
+    /// <p>The policy version ID.</p>
+    #[serde(rename = "policyVersionId")]
     pub policy_version_id: String,
 }
 
-#[doc="<p>The input for the DeleteRegistrationCode operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the DeleteRegistrationCode operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteRegistrationCodeRequest;
 
-#[doc="<p>The output for the DeleteRegistrationCode operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output for the DeleteRegistrationCode operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteRegistrationCodeResponse;
 
-#[doc="<p>The input for the DeleteThing operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the DeleteThing operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteThingRequest {
-    #[doc="<p>The expected version of the thing record in the registry. If the version of the record in the registry does not match the expected version specified in the request, the <code>DeleteThing</code> request is rejected with a <code>VersionConflictException</code>.</p>"]
-    #[serde(rename="expectedVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The expected version of the thing record in the registry. If the version of the record in the registry does not match the expected version specified in the request, the <code>DeleteThing</code> request is rejected with a <code>VersionConflictException</code>.</p>
+    #[serde(rename = "expectedVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub expected_version: Option<i64>,
-    #[doc="<p>The name of the thing to delete.</p>"]
-    #[serde(rename="thingName")]
+    /// <p>The name of the thing to delete.</p>
+    #[serde(rename = "thingName")]
     pub thing_name: String,
 }
 
-#[doc="<p>The output of the DeleteThing operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output of the DeleteThing operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteThingResponse;
 
-#[doc="<p>The input for the DeleteThingType operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the DeleteThingType operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteThingTypeRequest {
-    #[doc="<p>The name of the thing type.</p>"]
-    #[serde(rename="thingTypeName")]
+    /// <p>The name of the thing type.</p>
+    #[serde(rename = "thingTypeName")]
     pub thing_type_name: String,
 }
 
-#[doc="<p>The output for the DeleteThingType operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output for the DeleteThingType operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteThingTypeResponse;
 
-#[doc="<p>The input for the DeleteTopicRule operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the DeleteTopicRule operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteTopicRuleRequest {
-    #[doc="<p>The name of the rule.</p>"]
-    #[serde(rename="ruleName")]
+    /// <p>The name of the rule.</p>
+    #[serde(rename = "ruleName")]
     pub rule_name: String,
 }
 
-#[doc="<p>The input for the DeprecateThingType operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the DeprecateThingType operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeprecateThingTypeRequest {
-    #[doc="<p>The name of the thing type to deprecate.</p>"]
-    #[serde(rename="thingTypeName")]
+    /// <p>The name of the thing type to deprecate.</p>
+    #[serde(rename = "thingTypeName")]
     pub thing_type_name: String,
-    #[doc="<p>Whether to undeprecate a deprecated thing type. If <b>true</b>, the thing type will not be deprecated anymore and you can associate it with things.</p>"]
-    #[serde(rename="undoDeprecate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Whether to undeprecate a deprecated thing type. If <b>true</b>, the thing type will not be deprecated anymore and you can associate it with things.</p>
+    #[serde(rename = "undoDeprecate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub undo_deprecate: Option<bool>,
 }
 
-#[doc="<p>The output for the DeprecateThingType operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output for the DeprecateThingType operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeprecateThingTypeResponse;
 
-#[doc="<p>The input for the DescribeCACertificate operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the DescribeCACertificate operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeCACertificateRequest {
-    #[doc="<p>The CA certificate identifier.</p>"]
-    #[serde(rename="certificateId")]
+    /// <p>The CA certificate identifier.</p>
+    #[serde(rename = "certificateId")]
     pub certificate_id: String,
 }
 
-#[doc="<p>The output from the DescribeCACertificate operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output from the DescribeCACertificate operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeCACertificateResponse {
-    #[doc="<p>The CA certificate description.</p>"]
-    #[serde(rename="certificateDescription")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The CA certificate description.</p>
+    #[serde(rename = "certificateDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_description: Option<CACertificateDescription>,
 }
 
-#[doc="<p>The input for the DescribeCertificate operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the DescribeCertificate operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeCertificateRequest {
-    #[doc="<p>The ID of the certificate.</p>"]
-    #[serde(rename="certificateId")]
+    /// <p>The ID of the certificate.</p>
+    #[serde(rename = "certificateId")]
     pub certificate_id: String,
 }
 
-#[doc="<p>The output of the DescribeCertificate operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output of the DescribeCertificate operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeCertificateResponse {
-    #[doc="<p>The description of the certificate.</p>"]
-    #[serde(rename="certificateDescription")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The description of the certificate.</p>
+    #[serde(rename = "certificateDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_description: Option<CertificateDescription>,
 }
 
-#[doc="<p>The input for the DescribeEndpoint operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the DescribeEndpoint operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeEndpointRequest;
 
-#[doc="<p>The output from the DescribeEndpoint operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output from the DescribeEndpoint operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeEndpointResponse {
-    #[doc="<p>The endpoint. The format of the endpoint is as follows: <i>identifier</i>.iot.<i>region</i>.amazonaws.com.</p>"]
-    #[serde(rename="endpointAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The endpoint. The format of the endpoint is as follows: <i>identifier</i>.iot.<i>region</i>.amazonaws.com.</p>
+    #[serde(rename = "endpointAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_address: Option<String>,
 }
 
-#[doc="<p>The input for the DescribeThing operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the DescribeThing operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeThingRequest {
-    #[doc="<p>The name of the thing.</p>"]
-    #[serde(rename="thingName")]
+    /// <p>The name of the thing.</p>
+    #[serde(rename = "thingName")]
     pub thing_name: String,
 }
 
-#[doc="<p>The output from the DescribeThing operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output from the DescribeThing operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeThingResponse {
-    #[doc="<p>The thing attributes.</p>"]
-    #[serde(rename="attributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The thing attributes.</p>
+    #[serde(rename = "attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub attributes: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The default client ID.</p>"]
-    #[serde(rename="defaultClientId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The default client ID.</p>
+    #[serde(rename = "defaultClientId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub default_client_id: Option<String>,
-    #[doc="<p>The name of the thing.</p>"]
-    #[serde(rename="thingName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the thing.</p>
+    #[serde(rename = "thingName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_name: Option<String>,
-    #[doc="<p>The thing type name.</p>"]
-    #[serde(rename="thingTypeName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The thing type name.</p>
+    #[serde(rename = "thingTypeName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_type_name: Option<String>,
-    #[doc="<p>The current version of the thing record in the registry.</p> <note> <p>To avoid unintentional changes to the information in the registry, you can pass the version information in the <code>expectedVersion</code> parameter of the <code>UpdateThing</code> and <code>DeleteThing</code> calls.</p> </note>"]
-    #[serde(rename="version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The current version of the thing record in the registry.</p> <note> <p>To avoid unintentional changes to the information in the registry, you can pass the version information in the <code>expectedVersion</code> parameter of the <code>UpdateThing</code> and <code>DeleteThing</code> calls.</p> </note>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<i64>,
 }
 
-#[doc="<p>The input for the DescribeThingType operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the DescribeThingType operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeThingTypeRequest {
-    #[doc="<p>The name of the thing type.</p>"]
-    #[serde(rename="thingTypeName")]
+    /// <p>The name of the thing type.</p>
+    #[serde(rename = "thingTypeName")]
     pub thing_type_name: String,
 }
 
-#[doc="<p>The output for the DescribeThingType operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output for the DescribeThingType operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeThingTypeResponse {
-    #[doc="<p>The ThingTypeMetadata contains additional information about the thing type including: creation date and time, a value indicating whether the thing type is deprecated, and a date and time when it was deprecated.</p>"]
-    #[serde(rename="thingTypeMetadata")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ThingTypeMetadata contains additional information about the thing type including: creation date and time, a value indicating whether the thing type is deprecated, and a date and time when it was deprecated.</p>
+    #[serde(rename = "thingTypeMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_type_metadata: Option<ThingTypeMetadata>,
-    #[doc="<p>The name of the thing type.</p>"]
-    #[serde(rename="thingTypeName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the thing type.</p>
+    #[serde(rename = "thingTypeName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_type_name: Option<String>,
-    #[doc="<p>The ThingTypeProperties contains information about the thing type including description, and a list of searchable thing attribute names.</p>"]
-    #[serde(rename="thingTypeProperties")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ThingTypeProperties contains information about the thing type including description, and a list of searchable thing attribute names.</p>
+    #[serde(rename = "thingTypeProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_type_properties: Option<ThingTypeProperties>,
 }
 
-#[doc="<p>The input for the DetachPrincipalPolicy operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the DetachPrincipalPolicy operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DetachPrincipalPolicyRequest {
-    #[doc="<p>The name of the policy to detach.</p>"]
-    #[serde(rename="policyName")]
+    /// <p>The name of the policy to detach.</p>
+    #[serde(rename = "policyName")]
     pub policy_name: String,
-    #[doc="<p>The principal.</p> <p>If the principal is a certificate, specify the certificate ARN. If the principal is an Amazon Cognito identity, specify the identity ID.</p>"]
-    #[serde(rename="principal")]
+    /// <p>The principal.</p> <p>If the principal is a certificate, specify the certificate ARN. If the principal is an Amazon Cognito identity, specify the identity ID.</p>
+    #[serde(rename = "principal")]
     pub principal: String,
 }
 
-#[doc="<p>The input for the DetachThingPrincipal operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the DetachThingPrincipal operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DetachThingPrincipalRequest {
-    #[doc="<p>If the principal is a certificate, this value must be ARN of the certificate. If the principal is an Amazon Cognito identity, this value must be the ID of the Amazon Cognito identity.</p>"]
-    #[serde(rename="principal")]
+    /// <p>If the principal is a certificate, this value must be ARN of the certificate. If the principal is an Amazon Cognito identity, this value must be the ID of the Amazon Cognito identity.</p>
+    #[serde(rename = "principal")]
     pub principal: String,
-    #[doc="<p>The name of the thing.</p>"]
-    #[serde(rename="thingName")]
+    /// <p>The name of the thing.</p>
+    #[serde(rename = "thingName")]
     pub thing_name: String,
 }
 
-#[doc="<p>The output from the DetachThingPrincipal operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output from the DetachThingPrincipal operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DetachThingPrincipalResponse;
 
-#[doc="<p>The input for the DisableTopicRuleRequest operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the DisableTopicRuleRequest operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DisableTopicRuleRequest {
-    #[doc="<p>The name of the rule to disable.</p>"]
-    #[serde(rename="ruleName")]
+    /// <p>The name of the rule to disable.</p>
+    #[serde(rename = "ruleName")]
     pub rule_name: String,
 }
 
-#[doc="<p>Describes an action to write to a DynamoDB table.</p> <p>The <code>tableName</code>, <code>hashKeyField</code>, and <code>rangeKeyField</code> values must match the values used when you created the table.</p> <p>The <code>hashKeyValue</code> and <code>rangeKeyvalue</code> fields use a substitution template syntax. These templates provide data at runtime. The syntax is as follows: ${<i>sql-expression</i>}.</p> <p>You can specify any valid expression in a WHERE or SELECT clause, including JSON properties, comparisons, calculations, and functions. For example, the following field uses the third level of the topic:</p> <p> <code>\"hashKeyValue\": \"${topic(3)}\"</code> </p> <p>The following field uses the timestamp:</p> <p> <code>\"rangeKeyValue\": \"${timestamp()}\"</code> </p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Describes an action to write to a DynamoDB table.</p> <p>The <code>tableName</code>, <code>hashKeyField</code>, and <code>rangeKeyField</code> values must match the values used when you created the table.</p> <p>The <code>hashKeyValue</code> and <code>rangeKeyvalue</code> fields use a substitution template syntax. These templates provide data at runtime. The syntax is as follows: ${<i>sql-expression</i>}.</p> <p>You can specify any valid expression in a WHERE or SELECT clause, including JSON properties, comparisons, calculations, and functions. For example, the following field uses the third level of the topic:</p> <p> <code>"hashKeyValue": "${topic(3)}"</code> </p> <p>The following field uses the timestamp:</p> <p> <code>"rangeKeyValue": "${timestamp()}"</code> </p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct DynamoDBAction {
-    #[doc="<p>The hash key name.</p>"]
-    #[serde(rename="hashKeyField")]
+    /// <p>The hash key name.</p>
+    #[serde(rename = "hashKeyField")]
     pub hash_key_field: String,
-    #[doc="<p>The hash key type. Valid values are \"STRING\" or \"NUMBER\"</p>"]
-    #[serde(rename="hashKeyType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The hash key type. Valid values are "STRING" or "NUMBER"</p>
+    #[serde(rename = "hashKeyType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hash_key_type: Option<String>,
-    #[doc="<p>The hash key value.</p>"]
-    #[serde(rename="hashKeyValue")]
+    /// <p>The hash key value.</p>
+    #[serde(rename = "hashKeyValue")]
     pub hash_key_value: String,
-    #[doc="<p>The type of operation to be performed. This follows the substitution template, so it can be <code>${operation}</code>, but the substitution must result in one of the following: <code>INSERT</code>, <code>UPDATE</code>, or <code>DELETE</code>.</p>"]
-    #[serde(rename="operation")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of operation to be performed. This follows the substitution template, so it can be <code>${operation}</code>, but the substitution must result in one of the following: <code>INSERT</code>, <code>UPDATE</code>, or <code>DELETE</code>.</p>
+    #[serde(rename = "operation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub operation: Option<String>,
-    #[doc="<p>The action payload. This name can be customized.</p>"]
-    #[serde(rename="payloadField")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The action payload. This name can be customized.</p>
+    #[serde(rename = "payloadField")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub payload_field: Option<String>,
-    #[doc="<p>The range key name.</p>"]
-    #[serde(rename="rangeKeyField")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The range key name.</p>
+    #[serde(rename = "rangeKeyField")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub range_key_field: Option<String>,
-    #[doc="<p>The range key type. Valid values are \"STRING\" or \"NUMBER\"</p>"]
-    #[serde(rename="rangeKeyType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The range key type. Valid values are "STRING" or "NUMBER"</p>
+    #[serde(rename = "rangeKeyType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub range_key_type: Option<String>,
-    #[doc="<p>The range key value.</p>"]
-    #[serde(rename="rangeKeyValue")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The range key value.</p>
+    #[serde(rename = "rangeKeyValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub range_key_value: Option<String>,
-    #[doc="<p>The ARN of the IAM role that grants access to the DynamoDB table.</p>"]
-    #[serde(rename="roleArn")]
+    /// <p>The ARN of the IAM role that grants access to the DynamoDB table.</p>
+    #[serde(rename = "roleArn")]
     pub role_arn: String,
-    #[doc="<p>The name of the DynamoDB table.</p>"]
-    #[serde(rename="tableName")]
+    /// <p>The name of the DynamoDB table.</p>
+    #[serde(rename = "tableName")]
     pub table_name: String,
 }
 
-#[doc="<p>Describes an action to write to a DynamoDB table.</p> <p>This DynamoDB action writes each attribute in the message payload into it's own column in the DynamoDB table.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Describes an action to write to a DynamoDB table.</p> <p>This DynamoDB action writes each attribute in the message payload into it's own column in the DynamoDB table.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct DynamoDBv2Action {
-    #[doc="<p>Specifies the DynamoDB table to which the message data will be written. For example:</p> <p> <code>{ \"dynamoDBv2\": { \"roleArn\": \"aws:iam:12341251:my-role\" \"putItem\": { \"tableName\": \"my-table\" } } }</code> </p> <p>Each attribute in the message payload will be written to a separate column in the DynamoDB database.</p>"]
-    #[serde(rename="putItem")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies the DynamoDB table to which the message data will be written. For example:</p> <p> <code>{ "dynamoDBv2": { "roleArn": "aws:iam:12341251:my-role" "putItem": { "tableName": "my-table" } } }</code> </p> <p>Each attribute in the message payload will be written to a separate column in the DynamoDB database.</p>
+    #[serde(rename = "putItem")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub put_item: Option<PutItemInput>,
-    #[doc="<p>The ARN of the IAM role that grants access to the DynamoDB table.</p>"]
-    #[serde(rename="roleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the IAM role that grants access to the DynamoDB table.</p>
+    #[serde(rename = "roleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
 }
 
-#[doc="<p>Describes an action that writes data to an Amazon Elasticsearch Service domain.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Describes an action that writes data to an Amazon Elasticsearch Service domain.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ElasticsearchAction {
-    #[doc="<p>The endpoint of your Elasticsearch domain.</p>"]
-    #[serde(rename="endpoint")]
+    /// <p>The endpoint of your Elasticsearch domain.</p>
+    #[serde(rename = "endpoint")]
     pub endpoint: String,
-    #[doc="<p>The unique identifier for the document you are storing.</p>"]
-    #[serde(rename="id")]
+    /// <p>The unique identifier for the document you are storing.</p>
+    #[serde(rename = "id")]
     pub id: String,
-    #[doc="<p>The Elasticsearch index where you want to store your data.</p>"]
-    #[serde(rename="index")]
+    /// <p>The Elasticsearch index where you want to store your data.</p>
+    #[serde(rename = "index")]
     pub index: String,
-    #[doc="<p>The IAM role ARN that has access to Elasticsearch.</p>"]
-    #[serde(rename="roleArn")]
+    /// <p>The IAM role ARN that has access to Elasticsearch.</p>
+    #[serde(rename = "roleArn")]
     pub role_arn: String,
-    #[doc="<p>The type of document you are storing.</p>"]
-    #[serde(rename="type")]
+    /// <p>The type of document you are storing.</p>
+    #[serde(rename = "type")]
     pub type_: String,
 }
 
-#[doc="<p>The input for the EnableTopicRuleRequest operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the EnableTopicRuleRequest operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct EnableTopicRuleRequest {
-    #[doc="<p>The name of the topic rule to enable.</p>"]
-    #[serde(rename="ruleName")]
+    /// <p>The name of the topic rule to enable.</p>
+    #[serde(rename = "ruleName")]
     pub rule_name: String,
 }
 
-#[doc="<p>Describes an action that writes data to an Amazon Kinesis Firehose stream.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Describes an action that writes data to an Amazon Kinesis Firehose stream.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct FirehoseAction {
-    #[doc="<p>The delivery stream name.</p>"]
-    #[serde(rename="deliveryStreamName")]
+    /// <p>The delivery stream name.</p>
+    #[serde(rename = "deliveryStreamName")]
     pub delivery_stream_name: String,
-    #[doc="<p>The IAM role that grants access to the Amazon Kinesis Firehost stream.</p>"]
-    #[serde(rename="roleArn")]
+    /// <p>The IAM role that grants access to the Amazon Kinesis Firehost stream.</p>
+    #[serde(rename = "roleArn")]
     pub role_arn: String,
-    #[doc="<p>A character separator that will be used to separate records written to the Firehose stream. Valid values are: '\\n' (newline), '\\t' (tab), '\\r\\n' (Windows newline), ',' (comma).</p>"]
-    #[serde(rename="separator")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A character separator that will be used to separate records written to the Firehose stream. Valid values are: '\n' (newline), '\t' (tab), '\r\n' (Windows newline), ',' (comma).</p>
+    #[serde(rename = "separator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub separator: Option<String>,
 }
 
-#[doc="<p>The input for the GetLoggingOptions operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the GetLoggingOptions operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetLoggingOptionsRequest;
 
-#[doc="<p>The output from the GetLoggingOptions operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output from the GetLoggingOptions operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetLoggingOptionsResponse {
-    #[doc="<p>The logging level.</p>"]
-    #[serde(rename="logLevel")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The logging level.</p>
+    #[serde(rename = "logLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub log_level: Option<String>,
-    #[doc="<p>The ARN of the IAM role that grants access.</p>"]
-    #[serde(rename="roleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the IAM role that grants access.</p>
+    #[serde(rename = "roleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
 }
 
-#[doc="<p>The input for the GetPolicy operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the GetPolicy operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetPolicyRequest {
-    #[doc="<p>The name of the policy.</p>"]
-    #[serde(rename="policyName")]
+    /// <p>The name of the policy.</p>
+    #[serde(rename = "policyName")]
     pub policy_name: String,
 }
 
-#[doc="<p>The output from the GetPolicy operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output from the GetPolicy operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetPolicyResponse {
-    #[doc="<p>The default policy version ID.</p>"]
-    #[serde(rename="defaultVersionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The default policy version ID.</p>
+    #[serde(rename = "defaultVersionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub default_version_id: Option<String>,
-    #[doc="<p>The policy ARN.</p>"]
-    #[serde(rename="policyArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The policy ARN.</p>
+    #[serde(rename = "policyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_arn: Option<String>,
-    #[doc="<p>The JSON document that describes the policy.</p>"]
-    #[serde(rename="policyDocument")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The JSON document that describes the policy.</p>
+    #[serde(rename = "policyDocument")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_document: Option<String>,
-    #[doc="<p>The policy name.</p>"]
-    #[serde(rename="policyName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The policy name.</p>
+    #[serde(rename = "policyName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_name: Option<String>,
 }
 
-#[doc="<p>The input for the GetPolicyVersion operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the GetPolicyVersion operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetPolicyVersionRequest {
-    #[doc="<p>The name of the policy.</p>"]
-    #[serde(rename="policyName")]
+    /// <p>The name of the policy.</p>
+    #[serde(rename = "policyName")]
     pub policy_name: String,
-    #[doc="<p>The policy version ID.</p>"]
-    #[serde(rename="policyVersionId")]
+    /// <p>The policy version ID.</p>
+    #[serde(rename = "policyVersionId")]
     pub policy_version_id: String,
 }
 
-#[doc="<p>The output from the GetPolicyVersion operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output from the GetPolicyVersion operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetPolicyVersionResponse {
-    #[doc="<p>Specifies whether the policy version is the default.</p>"]
-    #[serde(rename="isDefaultVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether the policy version is the default.</p>
+    #[serde(rename = "isDefaultVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub is_default_version: Option<bool>,
-    #[doc="<p>The policy ARN.</p>"]
-    #[serde(rename="policyArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The policy ARN.</p>
+    #[serde(rename = "policyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_arn: Option<String>,
-    #[doc="<p>The JSON document that describes the policy.</p>"]
-    #[serde(rename="policyDocument")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The JSON document that describes the policy.</p>
+    #[serde(rename = "policyDocument")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_document: Option<String>,
-    #[doc="<p>The policy name.</p>"]
-    #[serde(rename="policyName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The policy name.</p>
+    #[serde(rename = "policyName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_name: Option<String>,
-    #[doc="<p>The policy version ID.</p>"]
-    #[serde(rename="policyVersionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The policy version ID.</p>
+    #[serde(rename = "policyVersionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_version_id: Option<String>,
 }
 
-#[doc="<p>The input to the GetRegistrationCode operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input to the GetRegistrationCode operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetRegistrationCodeRequest;
 
-#[doc="<p>The output from the GetRegistrationCode operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output from the GetRegistrationCode operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetRegistrationCodeResponse {
-    #[doc="<p>The CA certificate registration code.</p>"]
-    #[serde(rename="registrationCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The CA certificate registration code.</p>
+    #[serde(rename = "registrationCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registration_code: Option<String>,
 }
 
-#[doc="<p>The input for the GetTopicRule operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the GetTopicRule operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetTopicRuleRequest {
-    #[doc="<p>The name of the rule.</p>"]
-    #[serde(rename="ruleName")]
+    /// <p>The name of the rule.</p>
+    #[serde(rename = "ruleName")]
     pub rule_name: String,
 }
 
-#[doc="<p>The output from the GetTopicRule operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output from the GetTopicRule operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetTopicRuleResponse {
-    #[doc="<p>The rule.</p>"]
-    #[serde(rename="rule")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The rule.</p>
+    #[serde(rename = "rule")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rule: Option<TopicRule>,
-    #[doc="<p>The rule ARN.</p>"]
-    #[serde(rename="ruleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The rule ARN.</p>
+    #[serde(rename = "ruleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rule_arn: Option<String>,
 }
 
-#[doc="<p>Describes a key pair.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes a key pair.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct KeyPair {
-    #[doc="<p>The private key.</p>"]
-    #[serde(rename="PrivateKey")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The private key.</p>
+    #[serde(rename = "PrivateKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub private_key: Option<String>,
-    #[doc="<p>The public key.</p>"]
-    #[serde(rename="PublicKey")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The public key.</p>
+    #[serde(rename = "PublicKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub public_key: Option<String>,
 }
 
-#[doc="<p>Describes an action to write data to an Amazon Kinesis stream.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Describes an action to write data to an Amazon Kinesis stream.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct KinesisAction {
-    #[doc="<p>The partition key.</p>"]
-    #[serde(rename="partitionKey")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The partition key.</p>
+    #[serde(rename = "partitionKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub partition_key: Option<String>,
-    #[doc="<p>The ARN of the IAM role that grants access to the Amazon Kinesis stream.</p>"]
-    #[serde(rename="roleArn")]
+    /// <p>The ARN of the IAM role that grants access to the Amazon Kinesis stream.</p>
+    #[serde(rename = "roleArn")]
     pub role_arn: String,
-    #[doc="<p>The name of the Amazon Kinesis stream.</p>"]
-    #[serde(rename="streamName")]
+    /// <p>The name of the Amazon Kinesis stream.</p>
+    #[serde(rename = "streamName")]
     pub stream_name: String,
 }
 
-#[doc="<p>Describes an action to invoke a Lambda function.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Describes an action to invoke a Lambda function.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct LambdaAction {
-    #[doc="<p>The ARN of the Lambda function.</p>"]
-    #[serde(rename="functionArn")]
+    /// <p>The ARN of the Lambda function.</p>
+    #[serde(rename = "functionArn")]
     pub function_arn: String,
 }
 
-#[doc="<p>Input for the ListCACertificates operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Input for the ListCACertificates operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListCACertificatesRequest {
-    #[doc="<p>Determines the order of the results.</p>"]
-    #[serde(rename="ascendingOrder")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Determines the order of the results.</p>
+    #[serde(rename = "ascendingOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ascending_order: Option<bool>,
-    #[doc="<p>The marker for the next set of results.</p>"]
-    #[serde(rename="marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The marker for the next set of results.</p>
+    #[serde(rename = "marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p>The result page size.</p>"]
-    #[serde(rename="pageSize")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The result page size.</p>
+    #[serde(rename = "pageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
 }
 
-#[doc="<p>The output from the ListCACertificates operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output from the ListCACertificates operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListCACertificatesResponse {
-    #[doc="<p>The CA certificates registered in your AWS account.</p>"]
-    #[serde(rename="certificates")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The CA certificates registered in your AWS account.</p>
+    #[serde(rename = "certificates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificates: Option<Vec<CACertificate>>,
-    #[doc="<p>The current position within the list of CA certificates.</p>"]
-    #[serde(rename="nextMarker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The current position within the list of CA certificates.</p>
+    #[serde(rename = "nextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_marker: Option<String>,
 }
 
-#[doc="<p>The input to the ListCertificatesByCA operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input to the ListCertificatesByCA operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListCertificatesByCARequest {
-    #[doc="<p>Specifies the order for results. If True, the results are returned in ascending order, based on the creation date.</p>"]
-    #[serde(rename="ascendingOrder")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies the order for results. If True, the results are returned in ascending order, based on the creation date.</p>
+    #[serde(rename = "ascendingOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ascending_order: Option<bool>,
-    #[doc="<p>The ID of the CA certificate. This operation will list all registered device certificate that were signed by this CA certificate.</p>"]
-    #[serde(rename="caCertificateId")]
+    /// <p>The ID of the CA certificate. This operation will list all registered device certificate that were signed by this CA certificate.</p>
+    #[serde(rename = "caCertificateId")]
     pub ca_certificate_id: String,
-    #[doc="<p>The marker for the next set of results.</p>"]
-    #[serde(rename="marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The marker for the next set of results.</p>
+    #[serde(rename = "marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p>The result page size.</p>"]
-    #[serde(rename="pageSize")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The result page size.</p>
+    #[serde(rename = "pageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
 }
 
-#[doc="<p>The output of the ListCertificatesByCA operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output of the ListCertificatesByCA operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListCertificatesByCAResponse {
-    #[doc="<p>The device certificates signed by the specified CA certificate.</p>"]
-    #[serde(rename="certificates")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The device certificates signed by the specified CA certificate.</p>
+    #[serde(rename = "certificates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificates: Option<Vec<Certificate>>,
-    #[doc="<p>The marker for the next set of results, or null if there are no additional results.</p>"]
-    #[serde(rename="nextMarker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The marker for the next set of results, or null if there are no additional results.</p>
+    #[serde(rename = "nextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_marker: Option<String>,
 }
 
-#[doc="<p>The input for the ListCertificates operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the ListCertificates operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListCertificatesRequest {
-    #[doc="<p>Specifies the order for results. If True, the results are returned in ascending order, based on the creation date.</p>"]
-    #[serde(rename="ascendingOrder")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies the order for results. If True, the results are returned in ascending order, based on the creation date.</p>
+    #[serde(rename = "ascendingOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ascending_order: Option<bool>,
-    #[doc="<p>The marker for the next set of results.</p>"]
-    #[serde(rename="marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The marker for the next set of results.</p>
+    #[serde(rename = "marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p>The result page size.</p>"]
-    #[serde(rename="pageSize")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The result page size.</p>
+    #[serde(rename = "pageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
 }
 
-#[doc="<p>The output of the ListCertificates operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output of the ListCertificates operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListCertificatesResponse {
-    #[doc="<p>The descriptions of the certificates.</p>"]
-    #[serde(rename="certificates")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The descriptions of the certificates.</p>
+    #[serde(rename = "certificates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificates: Option<Vec<Certificate>>,
-    #[doc="<p>The marker for the next set of results, or null if there are no additional results.</p>"]
-    #[serde(rename="nextMarker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The marker for the next set of results, or null if there are no additional results.</p>
+    #[serde(rename = "nextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_marker: Option<String>,
 }
 
-#[doc="<p>The input to the ListOutgoingCertificates operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input to the ListOutgoingCertificates operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListOutgoingCertificatesRequest {
-    #[doc="<p>Specifies the order for results. If True, the results are returned in ascending order, based on the creation date.</p>"]
-    #[serde(rename="ascendingOrder")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies the order for results. If True, the results are returned in ascending order, based on the creation date.</p>
+    #[serde(rename = "ascendingOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ascending_order: Option<bool>,
-    #[doc="<p>The marker for the next set of results.</p>"]
-    #[serde(rename="marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The marker for the next set of results.</p>
+    #[serde(rename = "marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p>The result page size.</p>"]
-    #[serde(rename="pageSize")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The result page size.</p>
+    #[serde(rename = "pageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
 }
 
-#[doc="<p>The output from the ListOutgoingCertificates operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output from the ListOutgoingCertificates operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListOutgoingCertificatesResponse {
-    #[doc="<p>The marker for the next set of results.</p>"]
-    #[serde(rename="nextMarker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The marker for the next set of results.</p>
+    #[serde(rename = "nextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_marker: Option<String>,
-    #[doc="<p>The certificates that are being transfered but not yet accepted.</p>"]
-    #[serde(rename="outgoingCertificates")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The certificates that are being transfered but not yet accepted.</p>
+    #[serde(rename = "outgoingCertificates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub outgoing_certificates: Option<Vec<OutgoingCertificate>>,
 }
 
-#[doc="<p>The input for the ListPolicies operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the ListPolicies operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListPoliciesRequest {
-    #[doc="<p>Specifies the order for results. If true, the results are returned in ascending creation order.</p>"]
-    #[serde(rename="ascendingOrder")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies the order for results. If true, the results are returned in ascending creation order.</p>
+    #[serde(rename = "ascendingOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ascending_order: Option<bool>,
-    #[doc="<p>The marker for the next set of results.</p>"]
-    #[serde(rename="marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The marker for the next set of results.</p>
+    #[serde(rename = "marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p>The result page size.</p>"]
-    #[serde(rename="pageSize")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The result page size.</p>
+    #[serde(rename = "pageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
 }
 
-#[doc="<p>The output from the ListPolicies operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output from the ListPolicies operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListPoliciesResponse {
-    #[doc="<p>The marker for the next set of results, or null if there are no additional results.</p>"]
-    #[serde(rename="nextMarker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The marker for the next set of results, or null if there are no additional results.</p>
+    #[serde(rename = "nextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_marker: Option<String>,
-    #[doc="<p>The descriptions of the policies.</p>"]
-    #[serde(rename="policies")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The descriptions of the policies.</p>
+    #[serde(rename = "policies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policies: Option<Vec<Policy>>,
 }
 
-#[doc="<p>The input for the ListPolicyPrincipals operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the ListPolicyPrincipals operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListPolicyPrincipalsRequest {
-    #[doc="<p>Specifies the order for results. If true, the results are returned in ascending creation order.</p>"]
-    #[serde(rename="ascendingOrder")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies the order for results. If true, the results are returned in ascending creation order.</p>
+    #[serde(rename = "ascendingOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ascending_order: Option<bool>,
-    #[doc="<p>The marker for the next set of results.</p>"]
-    #[serde(rename="marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The marker for the next set of results.</p>
+    #[serde(rename = "marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p>The result page size.</p>"]
-    #[serde(rename="pageSize")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The result page size.</p>
+    #[serde(rename = "pageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
-    #[doc="<p>The policy name.</p>"]
-    #[serde(rename="policyName")]
+    /// <p>The policy name.</p>
+    #[serde(rename = "policyName")]
     pub policy_name: String,
 }
 
-#[doc="<p>The output from the ListPolicyPrincipals operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output from the ListPolicyPrincipals operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListPolicyPrincipalsResponse {
-    #[doc="<p>The marker for the next set of results, or null if there are no additional results.</p>"]
-    #[serde(rename="nextMarker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The marker for the next set of results, or null if there are no additional results.</p>
+    #[serde(rename = "nextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_marker: Option<String>,
-    #[doc="<p>The descriptions of the principals.</p>"]
-    #[serde(rename="principals")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The descriptions of the principals.</p>
+    #[serde(rename = "principals")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub principals: Option<Vec<String>>,
 }
 
-#[doc="<p>The input for the ListPolicyVersions operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the ListPolicyVersions operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListPolicyVersionsRequest {
-    #[doc="<p>The policy name.</p>"]
-    #[serde(rename="policyName")]
+    /// <p>The policy name.</p>
+    #[serde(rename = "policyName")]
     pub policy_name: String,
 }
 
-#[doc="<p>The output from the ListPolicyVersions operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output from the ListPolicyVersions operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListPolicyVersionsResponse {
-    #[doc="<p>The policy versions.</p>"]
-    #[serde(rename="policyVersions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The policy versions.</p>
+    #[serde(rename = "policyVersions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_versions: Option<Vec<PolicyVersion>>,
 }
 
-#[doc="<p>The input for the ListPrincipalPolicies operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the ListPrincipalPolicies operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListPrincipalPoliciesRequest {
-    #[doc="<p>Specifies the order for results. If true, results are returned in ascending creation order.</p>"]
-    #[serde(rename="ascendingOrder")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies the order for results. If true, results are returned in ascending creation order.</p>
+    #[serde(rename = "ascendingOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ascending_order: Option<bool>,
-    #[doc="<p>The marker for the next set of results.</p>"]
-    #[serde(rename="marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The marker for the next set of results.</p>
+    #[serde(rename = "marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p>The result page size.</p>"]
-    #[serde(rename="pageSize")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The result page size.</p>
+    #[serde(rename = "pageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
-    #[doc="<p>The principal.</p>"]
-    #[serde(rename="principal")]
+    /// <p>The principal.</p>
+    #[serde(rename = "principal")]
     pub principal: String,
 }
 
-#[doc="<p>The output from the ListPrincipalPolicies operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output from the ListPrincipalPolicies operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListPrincipalPoliciesResponse {
-    #[doc="<p>The marker for the next set of results, or null if there are no additional results.</p>"]
-    #[serde(rename="nextMarker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The marker for the next set of results, or null if there are no additional results.</p>
+    #[serde(rename = "nextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_marker: Option<String>,
-    #[doc="<p>The policies.</p>"]
-    #[serde(rename="policies")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The policies.</p>
+    #[serde(rename = "policies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policies: Option<Vec<Policy>>,
 }
 
-#[doc="<p>The input for the ListPrincipalThings operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the ListPrincipalThings operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListPrincipalThingsRequest {
-    #[doc="<p>The maximum number of results to return in this operation.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of results to return in this operation.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The principal.</p>"]
-    #[serde(rename="principal")]
+    /// <p>The principal.</p>
+    #[serde(rename = "principal")]
     pub principal: String,
 }
 
-#[doc="<p>The output from the ListPrincipalThings operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output from the ListPrincipalThings operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListPrincipalThingsResponse {
-    #[doc="<p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The things.</p>"]
-    #[serde(rename="things")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The things.</p>
+    #[serde(rename = "things")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub things: Option<Vec<String>>,
 }
 
-#[doc="<p>The input for the ListThingPrincipal operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the ListThingPrincipal operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListThingPrincipalsRequest {
-    #[doc="<p>The name of the thing.</p>"]
-    #[serde(rename="thingName")]
+    /// <p>The name of the thing.</p>
+    #[serde(rename = "thingName")]
     pub thing_name: String,
 }
 
-#[doc="<p>The output from the ListThingPrincipals operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output from the ListThingPrincipals operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListThingPrincipalsResponse {
-    #[doc="<p>The principals associated with the thing.</p>"]
-    #[serde(rename="principals")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The principals associated with the thing.</p>
+    #[serde(rename = "principals")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub principals: Option<Vec<String>>,
 }
 
-#[doc="<p>The input for the ListThingTypes operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the ListThingTypes operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListThingTypesRequest {
-    #[doc="<p>The maximum number of results to return in this operation.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of results to return in this operation.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The name of the thing type.</p>"]
-    #[serde(rename="thingTypeName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the thing type.</p>
+    #[serde(rename = "thingTypeName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_type_name: Option<String>,
 }
 
-#[doc="<p>The output for the ListThingTypes operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output for the ListThingTypes operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListThingTypesResponse {
-    #[doc="<p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The thing types.</p>"]
-    #[serde(rename="thingTypes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The thing types.</p>
+    #[serde(rename = "thingTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_types: Option<Vec<ThingTypeDefinition>>,
 }
 
-#[doc="<p>The input for the ListThings operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the ListThings operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListThingsRequest {
-    #[doc="<p>The attribute name used to search for things.</p>"]
-    #[serde(rename="attributeName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The attribute name used to search for things.</p>
+    #[serde(rename = "attributeName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub attribute_name: Option<String>,
-    #[doc="<p>The attribute value used to search for things.</p>"]
-    #[serde(rename="attributeValue")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The attribute value used to search for things.</p>
+    #[serde(rename = "attributeValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub attribute_value: Option<String>,
-    #[doc="<p>The maximum number of results to return in this operation.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of results to return in this operation.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The name of the thing type used to search for things.</p>"]
-    #[serde(rename="thingTypeName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the thing type used to search for things.</p>
+    #[serde(rename = "thingTypeName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_type_name: Option<String>,
 }
 
-#[doc="<p>The output from the ListThings operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output from the ListThings operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListThingsResponse {
-    #[doc="<p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The things.</p>"]
-    #[serde(rename="things")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The things.</p>
+    #[serde(rename = "things")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub things: Option<Vec<ThingAttribute>>,
 }
 
-#[doc="<p>The input for the ListTopicRules operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the ListTopicRules operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListTopicRulesRequest {
-    #[doc="<p>The maximum number of results to return.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of results to return.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>A token used to retrieve the next value.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A token used to retrieve the next value.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Specifies whether the rule is disabled.</p>"]
-    #[serde(rename="ruleDisabled")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether the rule is disabled.</p>
+    #[serde(rename = "ruleDisabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rule_disabled: Option<bool>,
-    #[doc="<p>The topic.</p>"]
-    #[serde(rename="topic")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The topic.</p>
+    #[serde(rename = "topic")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub topic: Option<String>,
 }
 
-#[doc="<p>The output from the ListTopicRules operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output from the ListTopicRules operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListTopicRulesResponse {
-    #[doc="<p>A token used to retrieve the next value.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A token used to retrieve the next value.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The rules.</p>"]
-    #[serde(rename="rules")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The rules.</p>
+    #[serde(rename = "rules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rules: Option<Vec<TopicRuleListItem>>,
 }
 
-#[doc="<p>Describes the logging options payload.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Describes the logging options payload.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct LoggingOptionsPayload {
-    #[doc="<p>The logging level.</p>"]
-    #[serde(rename="logLevel")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The logging level.</p>
+    #[serde(rename = "logLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub log_level: Option<String>,
-    #[doc="<p>The ARN of the IAM role that grants access.</p>"]
-    #[serde(rename="roleArn")]
+    /// <p>The ARN of the IAM role that grants access.</p>
+    #[serde(rename = "roleArn")]
     pub role_arn: String,
 }
 
-#[doc="<p>A certificate that has been transfered but not yet accepted.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A certificate that has been transfered but not yet accepted.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct OutgoingCertificate {
-    #[doc="<p>The certificate ARN.</p>"]
-    #[serde(rename="certificateArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The certificate ARN.</p>
+    #[serde(rename = "certificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_arn: Option<String>,
-    #[doc="<p>The certificate ID.</p>"]
-    #[serde(rename="certificateId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The certificate ID.</p>
+    #[serde(rename = "certificateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_id: Option<String>,
-    #[doc="<p>The certificate creation date.</p>"]
-    #[serde(rename="creationDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The certificate creation date.</p>
+    #[serde(rename = "creationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
-    #[doc="<p>The date the transfer was initiated.</p>"]
-    #[serde(rename="transferDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the transfer was initiated.</p>
+    #[serde(rename = "transferDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub transfer_date: Option<f64>,
-    #[doc="<p>The transfer message.</p>"]
-    #[serde(rename="transferMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The transfer message.</p>
+    #[serde(rename = "transferMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub transfer_message: Option<String>,
-    #[doc="<p>The AWS account to which the transfer was made.</p>"]
-    #[serde(rename="transferredTo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS account to which the transfer was made.</p>
+    #[serde(rename = "transferredTo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub transferred_to: Option<String>,
 }
 
-#[doc="<p>Describes an AWS IoT policy.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes an AWS IoT policy.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Policy {
-    #[doc="<p>The policy ARN.</p>"]
-    #[serde(rename="policyArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The policy ARN.</p>
+    #[serde(rename = "policyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_arn: Option<String>,
-    #[doc="<p>The policy name.</p>"]
-    #[serde(rename="policyName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The policy name.</p>
+    #[serde(rename = "policyName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_name: Option<String>,
 }
 
-#[doc="<p>Describes a policy version.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes a policy version.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PolicyVersion {
-    #[doc="<p>The date and time the policy was created.</p>"]
-    #[serde(rename="createDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time the policy was created.</p>
+    #[serde(rename = "createDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub create_date: Option<f64>,
-    #[doc="<p>Specifies whether the policy version is the default.</p>"]
-    #[serde(rename="isDefaultVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether the policy version is the default.</p>
+    #[serde(rename = "isDefaultVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub is_default_version: Option<bool>,
-    #[doc="<p>The policy version ID.</p>"]
-    #[serde(rename="versionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The policy version ID.</p>
+    #[serde(rename = "versionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version_id: Option<String>,
 }
 
-#[doc="<p>The input for the DynamoActionVS action that specifies the DynamoDB table to which the message data will be written.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>The input for the DynamoActionVS action that specifies the DynamoDB table to which the message data will be written.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct PutItemInput {
-    #[doc="<p>The table where the message data will be written</p>"]
-    #[serde(rename="tableName")]
+    /// <p>The table where the message data will be written</p>
+    #[serde(rename = "tableName")]
     pub table_name: String,
 }
 
-#[doc="<p>The input to the RegisterCACertificate operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input to the RegisterCACertificate operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct RegisterCACertificateRequest {
-    #[doc="<p>Allows this CA certificate to be used for auto registration of device certificates.</p>"]
-    #[serde(rename="allowAutoRegistration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Allows this CA certificate to be used for auto registration of device certificates.</p>
+    #[serde(rename = "allowAutoRegistration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub allow_auto_registration: Option<bool>,
-    #[doc="<p>The CA certificate.</p>"]
-    #[serde(rename="caCertificate")]
+    /// <p>The CA certificate.</p>
+    #[serde(rename = "caCertificate")]
     pub ca_certificate: String,
-    #[doc="<p>A boolean value that specifies if the CA certificate is set to active.</p>"]
-    #[serde(rename="setAsActive")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A boolean value that specifies if the CA certificate is set to active.</p>
+    #[serde(rename = "setAsActive")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub set_as_active: Option<bool>,
-    #[doc="<p>The private key verification certificate.</p>"]
-    #[serde(rename="verificationCertificate")]
+    /// <p>The private key verification certificate.</p>
+    #[serde(rename = "verificationCertificate")]
     pub verification_certificate: String,
 }
 
-#[doc="<p>The output from the RegisterCACertificateResponse operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output from the RegisterCACertificateResponse operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RegisterCACertificateResponse {
-    #[doc="<p>The CA certificate ARN.</p>"]
-    #[serde(rename="certificateArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The CA certificate ARN.</p>
+    #[serde(rename = "certificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_arn: Option<String>,
-    #[doc="<p>The CA certificate identifier.</p>"]
-    #[serde(rename="certificateId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The CA certificate identifier.</p>
+    #[serde(rename = "certificateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_id: Option<String>,
 }
 
-#[doc="<p>The input to the RegisterCertificate operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input to the RegisterCertificate operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct RegisterCertificateRequest {
-    #[doc="<p>The CA certificate used to sign the device certificate being registered.</p>"]
-    #[serde(rename="caCertificatePem")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The CA certificate used to sign the device certificate being registered.</p>
+    #[serde(rename = "caCertificatePem")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ca_certificate_pem: Option<String>,
-    #[doc="<p>The certificate data, in PEM format.</p>"]
-    #[serde(rename="certificatePem")]
+    /// <p>The certificate data, in PEM format.</p>
+    #[serde(rename = "certificatePem")]
     pub certificate_pem: String,
-    #[doc="<p>The status of the register certificate request.</p>"]
-    #[serde(rename="status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the register certificate request.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
 
-#[doc="<p>The output from the RegisterCertificate operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output from the RegisterCertificate operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RegisterCertificateResponse {
-    #[doc="<p>The certificate ARN.</p>"]
-    #[serde(rename="certificateArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The certificate ARN.</p>
+    #[serde(rename = "certificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_arn: Option<String>,
-    #[doc="<p>The certificate identifier.</p>"]
-    #[serde(rename="certificateId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The certificate identifier.</p>
+    #[serde(rename = "certificateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_id: Option<String>,
 }
 
-#[doc="<p>The input for the RejectCertificateTransfer operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the RejectCertificateTransfer operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct RejectCertificateTransferRequest {
-    #[doc="<p>The ID of the certificate.</p>"]
-    #[serde(rename="certificateId")]
+    /// <p>The ID of the certificate.</p>
+    #[serde(rename = "certificateId")]
     pub certificate_id: String,
-    #[doc="<p>The reason the certificate transfer was rejected.</p>"]
-    #[serde(rename="rejectReason")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The reason the certificate transfer was rejected.</p>
+    #[serde(rename = "rejectReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub reject_reason: Option<String>,
 }
 
-#[doc="<p>The input for the ReplaceTopicRule operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the ReplaceTopicRule operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ReplaceTopicRuleRequest {
-    #[doc="<p>The name of the rule.</p>"]
-    #[serde(rename="ruleName")]
+    /// <p>The name of the rule.</p>
+    #[serde(rename = "ruleName")]
     pub rule_name: String,
-    #[doc="<p>The rule payload.</p>"]
-    #[serde(rename="topicRulePayload")]
+    /// <p>The rule payload.</p>
+    #[serde(rename = "topicRulePayload")]
     pub topic_rule_payload: TopicRulePayload,
 }
 
-#[doc="<p>Describes an action to republish to another topic.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Describes an action to republish to another topic.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct RepublishAction {
-    #[doc="<p>The ARN of the IAM role that grants access.</p>"]
-    #[serde(rename="roleArn")]
+    /// <p>The ARN of the IAM role that grants access.</p>
+    #[serde(rename = "roleArn")]
     pub role_arn: String,
-    #[doc="<p>The name of the MQTT topic.</p>"]
-    #[serde(rename="topic")]
+    /// <p>The name of the MQTT topic.</p>
+    #[serde(rename = "topic")]
     pub topic: String,
 }
 
-#[doc="<p>Describes an action to write data to an Amazon S3 bucket.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Describes an action to write data to an Amazon S3 bucket.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct S3Action {
-    #[doc="<p>The Amazon S3 bucket.</p>"]
-    #[serde(rename="bucketName")]
+    /// <p>The Amazon S3 bucket.</p>
+    #[serde(rename = "bucketName")]
     pub bucket_name: String,
-    #[doc="<p>The Amazon S3 canned ACL that controls access to the object identified by the object key. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl\">S3 canned ACLs</a>.</p>"]
-    #[serde(rename="cannedAcl")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon S3 canned ACL that controls access to the object identified by the object key. For more information, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl">S3 canned ACLs</a>.</p>
+    #[serde(rename = "cannedAcl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub canned_acl: Option<String>,
-    #[doc="<p>The object key.</p>"]
-    #[serde(rename="key")]
+    /// <p>The object key.</p>
+    #[serde(rename = "key")]
     pub key: String,
-    #[doc="<p>The ARN of the IAM role that grants access.</p>"]
-    #[serde(rename="roleArn")]
+    /// <p>The ARN of the IAM role that grants access.</p>
+    #[serde(rename = "roleArn")]
     pub role_arn: String,
 }
 
-#[doc="<p>Describes an action to write a message to a Salesforce IoT Cloud Input Stream.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Describes an action to write a message to a Salesforce IoT Cloud Input Stream.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct SalesforceAction {
-    #[doc="<p>The token used to authenticate access to the Salesforce IoT Cloud Input Stream. The token is available from the Salesforce IoT Cloud platform after creation of the Input Stream.</p>"]
-    #[serde(rename="token")]
+    /// <p>The token used to authenticate access to the Salesforce IoT Cloud Input Stream. The token is available from the Salesforce IoT Cloud platform after creation of the Input Stream.</p>
+    #[serde(rename = "token")]
     pub token: String,
-    #[doc="<p>The URL exposed by the Salesforce IoT Cloud Input Stream. The URL is available from the Salesforce IoT Cloud platform after creation of the Input Stream.</p>"]
-    #[serde(rename="url")]
+    /// <p>The URL exposed by the Salesforce IoT Cloud Input Stream. The URL is available from the Salesforce IoT Cloud platform after creation of the Input Stream.</p>
+    #[serde(rename = "url")]
     pub url: String,
 }
 
-#[doc="<p>The input for the SetDefaultPolicyVersion operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the SetDefaultPolicyVersion operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct SetDefaultPolicyVersionRequest {
-    #[doc="<p>The policy name.</p>"]
-    #[serde(rename="policyName")]
+    /// <p>The policy name.</p>
+    #[serde(rename = "policyName")]
     pub policy_name: String,
-    #[doc="<p>The policy version ID.</p>"]
-    #[serde(rename="policyVersionId")]
+    /// <p>The policy version ID.</p>
+    #[serde(rename = "policyVersionId")]
     pub policy_version_id: String,
 }
 
-#[doc="<p>The input for the SetLoggingOptions operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the SetLoggingOptions operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct SetLoggingOptionsRequest {
-    #[doc="<p>The logging options payload.</p>"]
-    #[serde(rename="loggingOptionsPayload")]
+    /// <p>The logging options payload.</p>
+    #[serde(rename = "loggingOptionsPayload")]
     pub logging_options_payload: LoggingOptionsPayload,
 }
 
-#[doc="<p>Describes an action to publish to an Amazon SNS topic.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Describes an action to publish to an Amazon SNS topic.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct SnsAction {
-    #[doc="<p>The message format of the message to publish. Optional. Accepted values are \"JSON\" and \"RAW\". The default value of the attribute is \"RAW\". SNS uses this setting to determine if the payload should be parsed and relevant platform-specific bits of the payload should be extracted. To read more about SNS message formats, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/json-formats.html\">http://docs.aws.amazon.com/sns/latest/dg/json-formats.html</a> refer to their official documentation.</p>"]
-    #[serde(rename="messageFormat")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The message format of the message to publish. Optional. Accepted values are "JSON" and "RAW". The default value of the attribute is "RAW". SNS uses this setting to determine if the payload should be parsed and relevant platform-specific bits of the payload should be extracted. To read more about SNS message formats, see <a href="http://docs.aws.amazon.com/sns/latest/dg/json-formats.html">http://docs.aws.amazon.com/sns/latest/dg/json-formats.html</a> refer to their official documentation.</p>
+    #[serde(rename = "messageFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub message_format: Option<String>,
-    #[doc="<p>The ARN of the IAM role that grants access.</p>"]
-    #[serde(rename="roleArn")]
+    /// <p>The ARN of the IAM role that grants access.</p>
+    #[serde(rename = "roleArn")]
     pub role_arn: String,
-    #[doc="<p>The ARN of the SNS topic.</p>"]
-    #[serde(rename="targetArn")]
+    /// <p>The ARN of the SNS topic.</p>
+    #[serde(rename = "targetArn")]
     pub target_arn: String,
 }
 
-#[doc="<p>Describes an action to publish data to an Amazon SQS queue.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Describes an action to publish data to an Amazon SQS queue.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct SqsAction {
-    #[doc="<p>The URL of the Amazon SQS queue.</p>"]
-    #[serde(rename="queueUrl")]
+    /// <p>The URL of the Amazon SQS queue.</p>
+    #[serde(rename = "queueUrl")]
     pub queue_url: String,
-    #[doc="<p>The ARN of the IAM role that grants access.</p>"]
-    #[serde(rename="roleArn")]
+    /// <p>The ARN of the IAM role that grants access.</p>
+    #[serde(rename = "roleArn")]
     pub role_arn: String,
-    #[doc="<p>Specifies whether to use Base64 encoding.</p>"]
-    #[serde(rename="useBase64")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether to use Base64 encoding.</p>
+    #[serde(rename = "useBase64")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub use_base_64: Option<bool>,
 }
 
-#[doc="<p>The properties of the thing, including thing name, thing type name, and a list of thing attributes.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The properties of the thing, including thing name, thing type name, and a list of thing attributes.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ThingAttribute {
-    #[doc="<p>A list of thing attributes which are name-value pairs.</p>"]
-    #[serde(rename="attributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of thing attributes which are name-value pairs.</p>
+    #[serde(rename = "attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub attributes: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The name of the thing.</p>"]
-    #[serde(rename="thingName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the thing.</p>
+    #[serde(rename = "thingName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_name: Option<String>,
-    #[doc="<p>The name of the thing type, if the thing has been associated with a type.</p>"]
-    #[serde(rename="thingTypeName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the thing type, if the thing has been associated with a type.</p>
+    #[serde(rename = "thingTypeName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_type_name: Option<String>,
-    #[doc="<p>The version of the thing record in the registry.</p>"]
-    #[serde(rename="version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version of the thing record in the registry.</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<i64>,
 }
 
-#[doc="<p>The definition of the thing type, including thing type name and description.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The definition of the thing type, including thing type name and description.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ThingTypeDefinition {
-    #[doc="<p>The ThingTypeMetadata contains additional information about the thing type including: creation date and time, a value indicating whether the thing type is deprecated, and a date and time when it was deprecated.</p>"]
-    #[serde(rename="thingTypeMetadata")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ThingTypeMetadata contains additional information about the thing type including: creation date and time, a value indicating whether the thing type is deprecated, and a date and time when it was deprecated.</p>
+    #[serde(rename = "thingTypeMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_type_metadata: Option<ThingTypeMetadata>,
-    #[doc="<p>The name of the thing type.</p>"]
-    #[serde(rename="thingTypeName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the thing type.</p>
+    #[serde(rename = "thingTypeName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_type_name: Option<String>,
-    #[doc="<p>The ThingTypeProperties for the thing type.</p>"]
-    #[serde(rename="thingTypeProperties")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ThingTypeProperties for the thing type.</p>
+    #[serde(rename = "thingTypeProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_type_properties: Option<ThingTypeProperties>,
 }
 
-#[doc="<p>The ThingTypeMetadata contains additional information about the thing type including: creation date and time, a value indicating whether the thing type is deprecated, and a date and time when time was deprecated.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The ThingTypeMetadata contains additional information about the thing type including: creation date and time, a value indicating whether the thing type is deprecated, and a date and time when time was deprecated.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ThingTypeMetadata {
-    #[doc="<p>The date and time when the thing type was created.</p>"]
-    #[serde(rename="creationDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time when the thing type was created.</p>
+    #[serde(rename = "creationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
-    #[doc="<p>Whether the thing type is deprecated. If <b>true</b>, no new things could be associated with this type.</p>"]
-    #[serde(rename="deprecated")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Whether the thing type is deprecated. If <b>true</b>, no new things could be associated with this type.</p>
+    #[serde(rename = "deprecated")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deprecated: Option<bool>,
-    #[doc="<p>The date and time when the thing type was deprecated.</p>"]
-    #[serde(rename="deprecationDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time when the thing type was deprecated.</p>
+    #[serde(rename = "deprecationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deprecation_date: Option<f64>,
 }
 
-#[doc="<p>The ThingTypeProperties contains information about the thing type including: a thing type description, and a list of searchable thing attribute names.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>The ThingTypeProperties contains information about the thing type including: a thing type description, and a list of searchable thing attribute names.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ThingTypeProperties {
-    #[doc="<p>A list of searchable thing attribute names.</p>"]
-    #[serde(rename="searchableAttributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of searchable thing attribute names.</p>
+    #[serde(rename = "searchableAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub searchable_attributes: Option<Vec<String>>,
-    #[doc="<p>The description of the thing type.</p>"]
-    #[serde(rename="thingTypeDescription")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The description of the thing type.</p>
+    #[serde(rename = "thingTypeDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_type_description: Option<String>,
 }
 
-#[doc="<p>Describes a rule.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes a rule.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct TopicRule {
-    #[doc="<p>The actions associated with the rule.</p>"]
-    #[serde(rename="actions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The actions associated with the rule.</p>
+    #[serde(rename = "actions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub actions: Option<Vec<Action>>,
-    #[doc="<p>The version of the SQL rules engine to use when evaluating the rule.</p>"]
-    #[serde(rename="awsIotSqlVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version of the SQL rules engine to use when evaluating the rule.</p>
+    #[serde(rename = "awsIotSqlVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_iot_sql_version: Option<String>,
-    #[doc="<p>The date and time the rule was created.</p>"]
-    #[serde(rename="createdAt")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time the rule was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<f64>,
-    #[doc="<p>The description of the rule.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The description of the rule.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>Specifies whether the rule is disabled.</p>"]
-    #[serde(rename="ruleDisabled")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether the rule is disabled.</p>
+    #[serde(rename = "ruleDisabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rule_disabled: Option<bool>,
-    #[doc="<p>The name of the rule.</p>"]
-    #[serde(rename="ruleName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the rule.</p>
+    #[serde(rename = "ruleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rule_name: Option<String>,
-    #[doc="<p>The SQL statement used to query the topic. When using a SQL query with multiple lines, be sure to escape the newline characters.</p>"]
-    #[serde(rename="sql")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The SQL statement used to query the topic. When using a SQL query with multiple lines, be sure to escape the newline characters.</p>
+    #[serde(rename = "sql")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sql: Option<String>,
 }
 
-#[doc="<p>Describes a rule.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes a rule.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct TopicRuleListItem {
-    #[doc="<p>The date and time the rule was created.</p>"]
-    #[serde(rename="createdAt")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time the rule was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<f64>,
-    #[doc="<p>The rule ARN.</p>"]
-    #[serde(rename="ruleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The rule ARN.</p>
+    #[serde(rename = "ruleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rule_arn: Option<String>,
-    #[doc="<p>Specifies whether the rule is disabled.</p>"]
-    #[serde(rename="ruleDisabled")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether the rule is disabled.</p>
+    #[serde(rename = "ruleDisabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rule_disabled: Option<bool>,
-    #[doc="<p>The name of the rule.</p>"]
-    #[serde(rename="ruleName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the rule.</p>
+    #[serde(rename = "ruleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rule_name: Option<String>,
-    #[doc="<p>The pattern for the topic names that apply.</p>"]
-    #[serde(rename="topicPattern")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The pattern for the topic names that apply.</p>
+    #[serde(rename = "topicPattern")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub topic_pattern: Option<String>,
 }
 
-#[doc="<p>Describes a rule.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Describes a rule.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct TopicRulePayload {
-    #[doc="<p>The actions associated with the rule.</p>"]
-    #[serde(rename="actions")]
+    /// <p>The actions associated with the rule.</p>
+    #[serde(rename = "actions")]
     pub actions: Vec<Action>,
-    #[doc="<p>The version of the SQL rules engine to use when evaluating the rule.</p>"]
-    #[serde(rename="awsIotSqlVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version of the SQL rules engine to use when evaluating the rule.</p>
+    #[serde(rename = "awsIotSqlVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_iot_sql_version: Option<String>,
-    #[doc="<p>The description of the rule.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The description of the rule.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>Specifies whether the rule is disabled.</p>"]
-    #[serde(rename="ruleDisabled")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether the rule is disabled.</p>
+    #[serde(rename = "ruleDisabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rule_disabled: Option<bool>,
-    #[doc="<p>The SQL statement used to query the topic. For more information, see <a href=\"http://docs.aws.amazon.com/iot/latest/developerguide/iot-rules.html#aws-iot-sql-reference\">AWS IoT SQL Reference</a> in the <i>AWS IoT Developer Guide</i>.</p>"]
-    #[serde(rename="sql")]
+    /// <p>The SQL statement used to query the topic. For more information, see <a href="http://docs.aws.amazon.com/iot/latest/developerguide/iot-rules.html#aws-iot-sql-reference">AWS IoT SQL Reference</a> in the <i>AWS IoT Developer Guide</i>.</p>
+    #[serde(rename = "sql")]
     pub sql: String,
 }
 
-#[doc="<p>The input for the TransferCertificate operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the TransferCertificate operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct TransferCertificateRequest {
-    #[doc="<p>The ID of the certificate.</p>"]
-    #[serde(rename="certificateId")]
+    /// <p>The ID of the certificate.</p>
+    #[serde(rename = "certificateId")]
     pub certificate_id: String,
-    #[doc="<p>The AWS account.</p>"]
-    #[serde(rename="targetAwsAccount")]
+    /// <p>The AWS account.</p>
+    #[serde(rename = "targetAwsAccount")]
     pub target_aws_account: String,
-    #[doc="<p>The transfer message.</p>"]
-    #[serde(rename="transferMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The transfer message.</p>
+    #[serde(rename = "transferMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub transfer_message: Option<String>,
 }
 
-#[doc="<p>The output from the TransferCertificate operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output from the TransferCertificate operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct TransferCertificateResponse {
-    #[doc="<p>The ARN of the certificate.</p>"]
-    #[serde(rename="transferredCertificateArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the certificate.</p>
+    #[serde(rename = "transferredCertificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub transferred_certificate_arn: Option<String>,
 }
 
-#[doc="<p>Data used to transfer a certificate to an AWS account.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Data used to transfer a certificate to an AWS account.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct TransferData {
-    #[doc="<p>The date the transfer was accepted.</p>"]
-    #[serde(rename="acceptDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the transfer was accepted.</p>
+    #[serde(rename = "acceptDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_date: Option<f64>,
-    #[doc="<p>The date the transfer was rejected.</p>"]
-    #[serde(rename="rejectDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the transfer was rejected.</p>
+    #[serde(rename = "rejectDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub reject_date: Option<f64>,
-    #[doc="<p>The reason why the transfer was rejected.</p>"]
-    #[serde(rename="rejectReason")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The reason why the transfer was rejected.</p>
+    #[serde(rename = "rejectReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub reject_reason: Option<String>,
-    #[doc="<p>The date the transfer took place.</p>"]
-    #[serde(rename="transferDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the transfer took place.</p>
+    #[serde(rename = "transferDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub transfer_date: Option<f64>,
-    #[doc="<p>The transfer message.</p>"]
-    #[serde(rename="transferMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The transfer message.</p>
+    #[serde(rename = "transferMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub transfer_message: Option<String>,
 }
 
-#[doc="<p>The input to the UpdateCACertificate operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input to the UpdateCACertificate operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateCACertificateRequest {
-    #[doc="<p>The CA certificate identifier.</p>"]
-    #[serde(rename="certificateId")]
+    /// <p>The CA certificate identifier.</p>
+    #[serde(rename = "certificateId")]
     pub certificate_id: String,
-    #[doc="<p>The new value for the auto registration status. Valid values are: \"ENABLE\" or \"DISABLE\".</p>"]
-    #[serde(rename="newAutoRegistrationStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The new value for the auto registration status. Valid values are: "ENABLE" or "DISABLE".</p>
+    #[serde(rename = "newAutoRegistrationStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub new_auto_registration_status: Option<String>,
-    #[doc="<p>The updated status of the CA certificate.</p> <p> <b>Note:</b> The status value REGISTER_INACTIVE is deprecated and should not be used.</p>"]
-    #[serde(rename="newStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The updated status of the CA certificate.</p> <p> <b>Note:</b> The status value REGISTER_INACTIVE is deprecated and should not be used.</p>
+    #[serde(rename = "newStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub new_status: Option<String>,
 }
 
-#[doc="<p>The input for the UpdateCertificate operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the UpdateCertificate operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateCertificateRequest {
-    #[doc="<p>The ID of the certificate.</p>"]
-    #[serde(rename="certificateId")]
+    /// <p>The ID of the certificate.</p>
+    #[serde(rename = "certificateId")]
     pub certificate_id: String,
-    #[doc="<p>The new status.</p> <p> <b>Note:</b> Setting the status to PENDING_TRANSFER will result in an exception being thrown. PENDING_TRANSFER is a status used internally by AWS IoT. It is not intended for developer use.</p> <p> <b>Note:</b> The status value REGISTER_INACTIVE is deprecated and should not be used.</p>"]
-    #[serde(rename="newStatus")]
+    /// <p>The new status.</p> <p> <b>Note:</b> Setting the status to PENDING_TRANSFER will result in an exception being thrown. PENDING_TRANSFER is a status used internally by AWS IoT. It is not intended for developer use.</p> <p> <b>Note:</b> The status value REGISTER_INACTIVE is deprecated and should not be used.</p>
+    #[serde(rename = "newStatus")]
     pub new_status: String,
 }
 
-#[doc="<p>The input for the UpdateThing operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the UpdateThing operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateThingRequest {
-    #[doc="<p>A list of thing attributes, a JSON string containing name-value pairs. For example:</p> <p> <code>{\\\"attributes\\\":{\\\"name1\\\":\\\"value2\\\"}}</code> </p> <p>This data is used to add new attributes or update existing attributes.</p>"]
-    #[serde(rename="attributePayload")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of thing attributes, a JSON string containing name-value pairs. For example:</p> <p> <code>{\"attributes\":{\"name1\":\"value2\"}}</code> </p> <p>This data is used to add new attributes or update existing attributes.</p>
+    #[serde(rename = "attributePayload")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub attribute_payload: Option<AttributePayload>,
-    #[doc="<p>The expected version of the thing record in the registry. If the version of the record in the registry does not match the expected version specified in the request, the <code>UpdateThing</code> request is rejected with a <code>VersionConflictException</code>.</p>"]
-    #[serde(rename="expectedVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The expected version of the thing record in the registry. If the version of the record in the registry does not match the expected version specified in the request, the <code>UpdateThing</code> request is rejected with a <code>VersionConflictException</code>.</p>
+    #[serde(rename = "expectedVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub expected_version: Option<i64>,
-    #[doc="<p>Remove a thing type association. If <b>true</b>, the assocation is removed.</p>"]
-    #[serde(rename="removeThingType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Remove a thing type association. If <b>true</b>, the assocation is removed.</p>
+    #[serde(rename = "removeThingType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub remove_thing_type: Option<bool>,
-    #[doc="<p>The name of the thing to update.</p>"]
-    #[serde(rename="thingName")]
+    /// <p>The name of the thing to update.</p>
+    #[serde(rename = "thingName")]
     pub thing_name: String,
-    #[doc="<p>The name of the thing type.</p>"]
-    #[serde(rename="thingTypeName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the thing type.</p>
+    #[serde(rename = "thingTypeName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_type_name: Option<String>,
 }
 
-#[doc="<p>The output from the UpdateThing operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output from the UpdateThing operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateThingResponse;
 
 /// Errors returned by AcceptCertificateTransfer
@@ -1901,7 +1900,6 @@ pub enum AcceptCertificateTransferError {
     Unknown(String),
 }
 
-
 impl AcceptCertificateTransferError {
     pub fn from_body(body: &str) -> AcceptCertificateTransferError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1921,12 +1919,24 @@ impl AcceptCertificateTransferError {
                     "InvalidRequestException" => {
                         AcceptCertificateTransferError::InvalidRequest(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => AcceptCertificateTransferError::ResourceNotFound(String::from(error_message)),
-                    "ServiceUnavailableException" => AcceptCertificateTransferError::ServiceUnavailable(String::from(error_message)),
+                    "ResourceNotFoundException" => {
+                        AcceptCertificateTransferError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServiceUnavailableException" => {
+                        AcceptCertificateTransferError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
                     "ThrottlingException" => {
                         AcceptCertificateTransferError::Throttling(String::from(error_message))
                     }
-                    "TransferAlreadyCompletedException" => AcceptCertificateTransferError::TransferAlreadyCompleted(String::from(error_message)),
+                    "TransferAlreadyCompletedException" => {
+                        AcceptCertificateTransferError::TransferAlreadyCompleted(String::from(
+                            error_message,
+                        ))
+                    }
                     "UnauthorizedException" => {
                         AcceptCertificateTransferError::Unauthorized(String::from(error_message))
                     }
@@ -2011,7 +2021,6 @@ pub enum AttachPrincipalPolicyError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl AttachPrincipalPolicyError {
     pub fn from_body(body: &str) -> AttachPrincipalPolicyError {
@@ -2127,7 +2136,6 @@ pub enum AttachThingPrincipalError {
     Unknown(String),
 }
 
-
 impl AttachThingPrincipalError {
     pub fn from_body(body: &str) -> AttachThingPrincipalError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2240,7 +2248,6 @@ pub enum CancelCertificateTransferError {
     Unknown(String),
 }
 
-
 impl CancelCertificateTransferError {
     pub fn from_body(body: &str) -> CancelCertificateTransferError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2260,12 +2267,24 @@ impl CancelCertificateTransferError {
                     "InvalidRequestException" => {
                         CancelCertificateTransferError::InvalidRequest(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => CancelCertificateTransferError::ResourceNotFound(String::from(error_message)),
-                    "ServiceUnavailableException" => CancelCertificateTransferError::ServiceUnavailable(String::from(error_message)),
+                    "ResourceNotFoundException" => {
+                        CancelCertificateTransferError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServiceUnavailableException" => {
+                        CancelCertificateTransferError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
                     "ThrottlingException" => {
                         CancelCertificateTransferError::Throttling(String::from(error_message))
                     }
-                    "TransferAlreadyCompletedException" => CancelCertificateTransferError::TransferAlreadyCompleted(String::from(error_message)),
+                    "TransferAlreadyCompletedException" => {
+                        CancelCertificateTransferError::TransferAlreadyCompleted(String::from(
+                            error_message,
+                        ))
+                    }
                     "UnauthorizedException" => {
                         CancelCertificateTransferError::Unauthorized(String::from(error_message))
                     }
@@ -2347,7 +2366,6 @@ pub enum CreateCertificateFromCsrError {
     Unknown(String),
 }
 
-
 impl CreateCertificateFromCsrError {
     pub fn from_body(body: &str) -> CreateCertificateFromCsrError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2367,7 +2385,11 @@ impl CreateCertificateFromCsrError {
                     "InvalidRequestException" => {
                         CreateCertificateFromCsrError::InvalidRequest(String::from(error_message))
                     }
-                    "ServiceUnavailableException" => CreateCertificateFromCsrError::ServiceUnavailable(String::from(error_message)),
+                    "ServiceUnavailableException" => {
+                        CreateCertificateFromCsrError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
                     "ThrottlingException" => {
                         CreateCertificateFromCsrError::Throttling(String::from(error_message))
                     }
@@ -2450,7 +2472,6 @@ pub enum CreateKeysAndCertificateError {
     Unknown(String),
 }
 
-
 impl CreateKeysAndCertificateError {
     pub fn from_body(body: &str) -> CreateKeysAndCertificateError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2470,7 +2491,11 @@ impl CreateKeysAndCertificateError {
                     "InvalidRequestException" => {
                         CreateKeysAndCertificateError::InvalidRequest(String::from(error_message))
                     }
-                    "ServiceUnavailableException" => CreateKeysAndCertificateError::ServiceUnavailable(String::from(error_message)),
+                    "ServiceUnavailableException" => {
+                        CreateKeysAndCertificateError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
                     "ThrottlingException" => {
                         CreateKeysAndCertificateError::Throttling(String::from(error_message))
                     }
@@ -2556,7 +2581,6 @@ pub enum CreatePolicyError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreatePolicyError {
     pub fn from_body(body: &str) -> CreatePolicyError {
@@ -2673,7 +2697,6 @@ pub enum CreatePolicyVersionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreatePolicyVersionError {
     pub fn from_body(body: &str) -> CreatePolicyVersionError {
@@ -2795,7 +2818,6 @@ pub enum CreateThingError {
     Unknown(String),
 }
 
-
 impl CreateThingError {
     pub fn from_body(body: &str) -> CreateThingError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2908,7 +2930,6 @@ pub enum CreateThingTypeError {
     Unknown(String),
 }
 
-
 impl CreateThingTypeError {
     pub fn from_body(body: &str) -> CreateThingTypeError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3015,7 +3036,6 @@ pub enum CreateTopicRuleError {
     Unknown(String),
 }
 
-
 impl CreateTopicRuleError {
     pub fn from_body(body: &str) -> CreateTopicRuleError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3121,7 +3141,6 @@ pub enum DeleteCACertificateError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteCACertificateError {
     pub fn from_body(body: &str) -> DeleteCACertificateError {
@@ -3240,7 +3259,6 @@ pub enum DeleteCertificateError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteCertificateError {
     pub fn from_body(body: &str) -> DeleteCertificateError {
@@ -3362,7 +3380,6 @@ pub enum DeletePolicyError {
     Unknown(String),
 }
 
-
 impl DeletePolicyError {
     pub fn from_body(body: &str) -> DeletePolicyError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3477,7 +3494,6 @@ pub enum DeletePolicyVersionError {
     Unknown(String),
 }
 
-
 impl DeletePolicyVersionError {
     pub fn from_body(body: &str) -> DeletePolicyVersionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3590,7 +3606,6 @@ pub enum DeleteRegistrationCodeError {
     Unknown(String),
 }
 
-
 impl DeleteRegistrationCodeError {
     pub fn from_body(body: &str) -> DeleteRegistrationCodeError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3698,7 +3713,6 @@ pub enum DeleteThingError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteThingError {
     pub fn from_body(body: &str) -> DeleteThingError {
@@ -3812,7 +3826,6 @@ pub enum DeleteThingTypeError {
     Unknown(String),
 }
 
-
 impl DeleteThingTypeError {
     pub fn from_body(body: &str) -> DeleteThingTypeError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3917,7 +3930,6 @@ pub enum DeleteTopicRuleError {
     Unknown(String),
 }
 
-
 impl DeleteTopicRuleError {
     pub fn from_body(body: &str) -> DeleteTopicRuleError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4017,7 +4029,6 @@ pub enum DeprecateThingTypeError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeprecateThingTypeError {
     pub fn from_body(body: &str) -> DeprecateThingTypeError {
@@ -4129,7 +4140,6 @@ pub enum DescribeCACertificateError {
     Unknown(String),
 }
 
-
 impl DescribeCACertificateError {
     pub fn from_body(body: &str) -> DescribeCACertificateError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4240,7 +4250,6 @@ pub enum DescribeCertificateError {
     Unknown(String),
 }
 
-
 impl DescribeCertificateError {
     pub fn from_body(body: &str) -> DescribeCertificateError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4345,7 +4354,6 @@ pub enum DescribeEndpointError {
     Unknown(String),
 }
 
-
 impl DescribeEndpointError {
     pub fn from_body(body: &str) -> DescribeEndpointError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4441,7 +4449,6 @@ pub enum DescribeThingError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeThingError {
     pub fn from_body(body: &str) -> DescribeThingError {
@@ -4550,7 +4557,6 @@ pub enum DescribeThingTypeError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeThingTypeError {
     pub fn from_body(body: &str) -> DescribeThingTypeError {
@@ -4662,7 +4668,6 @@ pub enum DetachPrincipalPolicyError {
     Unknown(String),
 }
 
-
 impl DetachPrincipalPolicyError {
     pub fn from_body(body: &str) -> DetachPrincipalPolicyError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4773,7 +4778,6 @@ pub enum DetachThingPrincipalError {
     Unknown(String),
 }
 
-
 impl DetachThingPrincipalError {
     pub fn from_body(body: &str) -> DetachThingPrincipalError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4880,7 +4884,6 @@ pub enum DisableTopicRuleError {
     Unknown(String),
 }
 
-
 impl DisableTopicRuleError {
     pub fn from_body(body: &str) -> DisableTopicRuleError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4977,7 +4980,6 @@ pub enum EnableTopicRuleError {
     Unknown(String),
 }
 
-
 impl EnableTopicRuleError {
     pub fn from_body(body: &str) -> EnableTopicRuleError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5071,7 +5073,6 @@ pub enum GetLoggingOptionsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetLoggingOptionsError {
     pub fn from_body(body: &str) -> GetLoggingOptionsError {
@@ -5170,7 +5171,6 @@ pub enum GetPolicyError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetPolicyError {
     pub fn from_body(body: &str) -> GetPolicyError {
@@ -5278,7 +5278,6 @@ pub enum GetPolicyVersionError {
     Unknown(String),
 }
 
-
 impl GetPolicyVersionError {
     pub fn from_body(body: &str) -> GetPolicyVersionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5385,7 +5384,6 @@ pub enum GetRegistrationCodeError {
     Unknown(String),
 }
 
-
 impl GetRegistrationCodeError {
     pub fn from_body(body: &str) -> GetRegistrationCodeError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5488,7 +5486,6 @@ pub enum GetTopicRuleError {
     Unknown(String),
 }
 
-
 impl GetTopicRuleError {
     pub fn from_body(body: &str) -> GetTopicRuleError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5584,7 +5581,6 @@ pub enum ListCACertificatesError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListCACertificatesError {
     pub fn from_body(body: &str) -> ListCACertificatesError {
@@ -5690,7 +5686,6 @@ pub enum ListCertificatesError {
     Unknown(String),
 }
 
-
 impl ListCertificatesError {
     pub fn from_body(body: &str) -> ListCertificatesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5792,7 +5787,6 @@ pub enum ListCertificatesByCAError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListCertificatesByCAError {
     pub fn from_body(body: &str) -> ListCertificatesByCAError {
@@ -5898,7 +5892,6 @@ pub enum ListOutgoingCertificatesError {
     Unknown(String),
 }
 
-
 impl ListOutgoingCertificatesError {
     pub fn from_body(body: &str) -> ListOutgoingCertificatesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5918,7 +5911,11 @@ impl ListOutgoingCertificatesError {
                     "InvalidRequestException" => {
                         ListOutgoingCertificatesError::InvalidRequest(String::from(error_message))
                     }
-                    "ServiceUnavailableException" => ListOutgoingCertificatesError::ServiceUnavailable(String::from(error_message)),
+                    "ServiceUnavailableException" => {
+                        ListOutgoingCertificatesError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
                     "ThrottlingException" => {
                         ListOutgoingCertificatesError::Throttling(String::from(error_message))
                     }
@@ -6000,7 +5997,6 @@ pub enum ListPoliciesError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListPoliciesError {
     pub fn from_body(body: &str) -> ListPoliciesError {
@@ -6105,7 +6101,6 @@ pub enum ListPolicyPrincipalsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListPolicyPrincipalsError {
     pub fn from_body(body: &str) -> ListPolicyPrincipalsError {
@@ -6217,7 +6212,6 @@ pub enum ListPolicyVersionsError {
     Unknown(String),
 }
 
-
 impl ListPolicyVersionsError {
     pub fn from_body(body: &str) -> ListPolicyVersionsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6327,7 +6321,6 @@ pub enum ListPrincipalPoliciesError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListPrincipalPoliciesError {
     pub fn from_body(body: &str) -> ListPrincipalPoliciesError {
@@ -6439,7 +6432,6 @@ pub enum ListPrincipalThingsError {
     Unknown(String),
 }
 
-
 impl ListPrincipalThingsError {
     pub fn from_body(body: &str) -> ListPrincipalThingsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6550,7 +6542,6 @@ pub enum ListThingPrincipalsError {
     Unknown(String),
 }
 
-
 impl ListThingPrincipalsError {
     pub fn from_body(body: &str) -> ListThingPrincipalsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6659,7 +6650,6 @@ pub enum ListThingTypesError {
     Unknown(String),
 }
 
-
 impl ListThingTypesError {
     pub fn from_body(body: &str) -> ListThingTypesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6762,7 +6752,6 @@ pub enum ListThingsError {
     Unknown(String),
 }
 
-
 impl ListThingsError {
     pub fn from_body(body: &str) -> ListThingsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6858,7 +6847,6 @@ pub enum ListTopicRulesError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListTopicRulesError {
     pub fn from_body(body: &str) -> ListTopicRulesError {
@@ -6962,7 +6950,6 @@ pub enum RegisterCACertificateError {
     Unknown(String),
 }
 
-
 impl RegisterCACertificateError {
     pub fn from_body(body: &str) -> RegisterCACertificateError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6976,7 +6963,11 @@ impl RegisterCACertificateError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "CertificateValidationException" => RegisterCACertificateError::CertificateValidation(String::from(error_message)),
+                    "CertificateValidationException" => {
+                        RegisterCACertificateError::CertificateValidation(String::from(
+                            error_message,
+                        ))
+                    }
                     "InternalFailureException" => {
                         RegisterCACertificateError::InternalFailure(String::from(error_message))
                     }
@@ -6986,8 +6977,16 @@ impl RegisterCACertificateError {
                     "LimitExceededException" => {
                         RegisterCACertificateError::LimitExceeded(String::from(error_message))
                     }
-                    "RegistrationCodeValidationException" => RegisterCACertificateError::RegistrationCodeValidation(String::from(error_message)),
-                    "ResourceAlreadyExistsException" => RegisterCACertificateError::ResourceAlreadyExists(String::from(error_message)),
+                    "RegistrationCodeValidationException" => {
+                        RegisterCACertificateError::RegistrationCodeValidation(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceAlreadyExistsException" => {
+                        RegisterCACertificateError::ResourceAlreadyExists(String::from(
+                            error_message,
+                        ))
+                    }
                     "ServiceUnavailableException" => {
                         RegisterCACertificateError::ServiceUnavailable(String::from(error_message))
                     }
@@ -7084,7 +7083,6 @@ pub enum RegisterCertificateError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl RegisterCertificateError {
     pub fn from_body(body: &str) -> RegisterCertificateError {
@@ -7210,7 +7208,6 @@ pub enum RejectCertificateTransferError {
     Unknown(String),
 }
 
-
 impl RejectCertificateTransferError {
     pub fn from_body(body: &str) -> RejectCertificateTransferError {
         match from_str::<SerdeJsonValue>(body) {
@@ -7230,12 +7227,24 @@ impl RejectCertificateTransferError {
                     "InvalidRequestException" => {
                         RejectCertificateTransferError::InvalidRequest(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => RejectCertificateTransferError::ResourceNotFound(String::from(error_message)),
-                    "ServiceUnavailableException" => RejectCertificateTransferError::ServiceUnavailable(String::from(error_message)),
+                    "ResourceNotFoundException" => {
+                        RejectCertificateTransferError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServiceUnavailableException" => {
+                        RejectCertificateTransferError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
                     "ThrottlingException" => {
                         RejectCertificateTransferError::Throttling(String::from(error_message))
                     }
-                    "TransferAlreadyCompletedException" => RejectCertificateTransferError::TransferAlreadyCompleted(String::from(error_message)),
+                    "TransferAlreadyCompletedException" => {
+                        RejectCertificateTransferError::TransferAlreadyCompleted(String::from(
+                            error_message,
+                        ))
+                    }
                     "UnauthorizedException" => {
                         RejectCertificateTransferError::Unauthorized(String::from(error_message))
                     }
@@ -7316,7 +7325,6 @@ pub enum ReplaceTopicRuleError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ReplaceTopicRuleError {
     pub fn from_body(body: &str) -> ReplaceTopicRuleError {
@@ -7422,7 +7430,6 @@ pub enum SetDefaultPolicyVersionError {
     Unknown(String),
 }
 
-
 impl SetDefaultPolicyVersionError {
     pub fn from_body(body: &str) -> SetDefaultPolicyVersionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -7445,7 +7452,11 @@ impl SetDefaultPolicyVersionError {
                     "ResourceNotFoundException" => {
                         SetDefaultPolicyVersionError::ResourceNotFound(String::from(error_message))
                     }
-                    "ServiceUnavailableException" => SetDefaultPolicyVersionError::ServiceUnavailable(String::from(error_message)),
+                    "ServiceUnavailableException" => {
+                        SetDefaultPolicyVersionError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
                     "ThrottlingException" => {
                         SetDefaultPolicyVersionError::Throttling(String::from(error_message))
                     }
@@ -7524,7 +7535,6 @@ pub enum SetLoggingOptionsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl SetLoggingOptionsError {
     pub fn from_body(body: &str) -> SetLoggingOptionsError {
@@ -7627,7 +7637,6 @@ pub enum TransferCertificateError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl TransferCertificateError {
     pub fn from_body(body: &str) -> TransferCertificateError {
@@ -7747,7 +7756,6 @@ pub enum UpdateCACertificateError {
     Unknown(String),
 }
 
-
 impl UpdateCACertificateError {
     pub fn from_body(body: &str) -> UpdateCACertificateError {
         match from_str::<SerdeJsonValue>(body) {
@@ -7859,7 +7867,6 @@ pub enum UpdateCertificateError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl UpdateCertificateError {
     pub fn from_body(body: &str) -> UpdateCertificateError {
@@ -7977,7 +7984,6 @@ pub enum UpdateThingError {
     Unknown(String),
 }
 
-
 impl UpdateThingError {
     pub fn from_body(body: &str) -> UpdateThingError {
         match from_str::<SerdeJsonValue>(body) {
@@ -8068,351 +8074,330 @@ impl Error for UpdateThingError {
 /// Trait representing the capabilities of the AWS IoT API. AWS IoT clients implement this trait.
 pub trait Iot {
     #[doc="<p>Accepts a pending certificate transfer. The default state of the certificate is INACTIVE.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p>"]
-    fn accept_certificate_transfer(&self,
-                                   input: &AcceptCertificateTransferRequest)
-                                   -> Result<(), AcceptCertificateTransferError>;
-
+    fn accept_certificate_transfer(
+        &self,
+        input: &AcceptCertificateTransferRequest,
+    ) -> Result<(), AcceptCertificateTransferError>;
 
     #[doc="<p>Attaches the specified policy to the specified principal (certificate or other credential).</p>"]
-    fn attach_principal_policy(&self,
-                               input: &AttachPrincipalPolicyRequest)
-                               -> Result<(), AttachPrincipalPolicyError>;
+    fn attach_principal_policy(
+        &self,
+        input: &AttachPrincipalPolicyRequest,
+    ) -> Result<(), AttachPrincipalPolicyError>;
 
-
-    #[doc="<p>Attaches the specified principal to the specified thing.</p>"]
-    fn attach_thing_principal
-        (&self,
-         input: &AttachThingPrincipalRequest)
-         -> Result<AttachThingPrincipalResponse, AttachThingPrincipalError>;
-
+    #[doc = "<p>Attaches the specified principal to the specified thing.</p>"]
+    fn attach_thing_principal(
+        &self,
+        input: &AttachThingPrincipalRequest,
+    ) -> Result<AttachThingPrincipalResponse, AttachThingPrincipalError>;
 
     #[doc="<p>Cancels a pending transfer for the specified certificate.</p> <p> <b>Note</b> Only the transfer source account can use this operation to cancel a transfer. (Transfer destinations can use <a>RejectCertificateTransfer</a> instead.) After transfer, AWS IoT returns the certificate to the source account in the INACTIVE state. After the destination account has accepted the transfer, the transfer cannot be cancelled.</p> <p>After a certificate transfer is cancelled, the status of the certificate changes from PENDING_TRANSFER to INACTIVE.</p>"]
-    fn cancel_certificate_transfer(&self,
-                                   input: &CancelCertificateTransferRequest)
-                                   -> Result<(), CancelCertificateTransferError>;
-
+    fn cancel_certificate_transfer(
+        &self,
+        input: &CancelCertificateTransferRequest,
+    ) -> Result<(), CancelCertificateTransferError>;
 
     #[doc="<p>Creates an X.509 certificate using the specified certificate signing request.</p> <p> <b>Note:</b> The CSR must include a public key that is either an RSA key with a length of at least 2048 bits or an ECC key from NIST P-256 or NIST P-384 curves. </p> <p> <b>Note:</b> Reusing the same certificate signing request (CSR) results in a distinct certificate.</p> <p>You can create multiple certificates in a batch by creating a directory, copying multiple .csr files into that directory, and then specifying that directory on the command line. The following commands show how to create a batch of certificates given a batch of CSRs.</p> <p>Assuming a set of CSRs are located inside of the directory my-csr-directory:</p> <p>On Linux and OS X, the command is:</p> <p>$ ls my-csr-directory/ | xargs -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>This command lists all of the CSRs in my-csr-directory and pipes each CSR file name to the aws iot create-certificate-from-csr AWS CLI command to create a certificate for the corresponding CSR.</p> <p>The aws iot create-certificate-from-csr part of the command can also be run in parallel to speed up the certificate creation process:</p> <p>$ ls my-csr-directory/ | xargs -P 10 -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>On Windows PowerShell, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; ls -Name my-csr-directory | %{aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/$_}</p> <p>On a Windows command prompt, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; forfiles /p my-csr-directory /c \"cmd /c aws iot create-certificate-from-csr --certificate-signing-request file://@path\"</p>"]
-    fn create_certificate_from_csr
-        (&self,
-         input: &CreateCertificateFromCsrRequest)
-         -> Result<CreateCertificateFromCsrResponse, CreateCertificateFromCsrError>;
-
+    fn create_certificate_from_csr(
+        &self,
+        input: &CreateCertificateFromCsrRequest,
+    ) -> Result<CreateCertificateFromCsrResponse, CreateCertificateFromCsrError>;
 
     #[doc="<p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key.</p> <p> <b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>"]
-    fn create_keys_and_certificate
-        (&self,
-         input: &CreateKeysAndCertificateRequest)
-         -> Result<CreateKeysAndCertificateResponse, CreateKeysAndCertificateError>;
-
+    fn create_keys_and_certificate(
+        &self,
+        input: &CreateKeysAndCertificateRequest,
+    ) -> Result<CreateKeysAndCertificateResponse, CreateKeysAndCertificateError>;
 
     #[doc="<p>Creates an AWS IoT policy.</p> <p>The created policy is the default version for the policy. This operation creates a policy version with a version identifier of <b>1</b> and sets <b>1</b> as the policy's default version.</p>"]
-    fn create_policy(&self,
-                     input: &CreatePolicyRequest)
-                     -> Result<CreatePolicyResponse, CreatePolicyError>;
-
+    fn create_policy(
+        &self,
+        input: &CreatePolicyRequest,
+    ) -> Result<CreatePolicyResponse, CreatePolicyError>;
 
     #[doc="<p>Creates a new version of the specified AWS IoT policy. To update a policy, create a new policy version. A managed policy can have up to five versions. If the policy has five versions, you must use <a>DeletePolicyVersion</a> to delete an existing version before you create a new one.</p> <p>Optionally, you can set the new version as the policy's default version. The default version is the operative version (that is, the version that is in effect for the certificates to which the policy is attached).</p>"]
-    fn create_policy_version(&self,
-                             input: &CreatePolicyVersionRequest)
-                             -> Result<CreatePolicyVersionResponse, CreatePolicyVersionError>;
+    fn create_policy_version(
+        &self,
+        input: &CreatePolicyVersionRequest,
+    ) -> Result<CreatePolicyVersionResponse, CreatePolicyVersionError>;
 
+    #[doc = "<p>Creates a thing record in the thing registry.</p>"]
+    fn create_thing(
+        &self,
+        input: &CreateThingRequest,
+    ) -> Result<CreateThingResponse, CreateThingError>;
 
-    #[doc="<p>Creates a thing record in the thing registry.</p>"]
-    fn create_thing(&self,
-                    input: &CreateThingRequest)
-                    -> Result<CreateThingResponse, CreateThingError>;
-
-
-    #[doc="<p>Creates a new thing type.</p>"]
-    fn create_thing_type(&self,
-                         input: &CreateThingTypeRequest)
-                         -> Result<CreateThingTypeResponse, CreateThingTypeError>;
-
+    #[doc = "<p>Creates a new thing type.</p>"]
+    fn create_thing_type(
+        &self,
+        input: &CreateThingTypeRequest,
+    ) -> Result<CreateThingTypeResponse, CreateThingTypeError>;
 
     #[doc="<p>Creates a rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>"]
-    fn create_topic_rule(&self,
-                         input: &CreateTopicRuleRequest)
-                         -> Result<(), CreateTopicRuleError>;
+    fn create_topic_rule(&self, input: &CreateTopicRuleRequest)
+        -> Result<(), CreateTopicRuleError>;
 
-
-    #[doc="<p>Deletes a registered CA certificate.</p>"]
-    fn delete_ca_certificate(&self,
-                             input: &DeleteCACertificateRequest)
-                             -> Result<DeleteCACertificateResponse, DeleteCACertificateError>;
-
+    #[doc = "<p>Deletes a registered CA certificate.</p>"]
+    fn delete_ca_certificate(
+        &self,
+        input: &DeleteCACertificateRequest,
+    ) -> Result<DeleteCACertificateResponse, DeleteCACertificateError>;
 
     #[doc="<p>Deletes the specified certificate.</p> <p>A certificate cannot be deleted if it has a policy attached to it or if its status is set to ACTIVE. To delete a certificate, first use the <a>DetachPrincipalPolicy</a> API to detach all policies. Next, use the <a>UpdateCertificate</a> API to set the certificate to the INACTIVE status.</p>"]
-    fn delete_certificate(&self,
-                          input: &DeleteCertificateRequest)
-                          -> Result<(), DeleteCertificateError>;
-
+    fn delete_certificate(
+        &self,
+        input: &DeleteCertificateRequest,
+    ) -> Result<(), DeleteCertificateError>;
 
     #[doc="<p>Deletes the specified policy.</p> <p>A policy cannot be deleted if it has non-default versions or it is attached to any certificate.</p> <p>To delete a policy, use the DeletePolicyVersion API to delete all non-default versions of the policy; use the DetachPrincipalPolicy API to detach the policy from any certificate; and then use the DeletePolicy API to delete the policy.</p> <p>When a policy is deleted using DeletePolicy, its default version is deleted with it.</p>"]
     fn delete_policy(&self, input: &DeletePolicyRequest) -> Result<(), DeletePolicyError>;
 
-
     #[doc="<p>Deletes the specified version of the specified policy. You cannot delete the default version of a policy using this API. To delete the default version of a policy, use <a>DeletePolicy</a>. To find out which version of a policy is marked as the default version, use ListPolicyVersions.</p>"]
-    fn delete_policy_version(&self,
-                             input: &DeletePolicyVersionRequest)
-                             -> Result<(), DeletePolicyVersionError>;
+    fn delete_policy_version(
+        &self,
+        input: &DeletePolicyVersionRequest,
+    ) -> Result<(), DeletePolicyVersionError>;
 
+    #[doc = "<p>Deletes a CA certificate registration code.</p>"]
+    fn delete_registration_code(
+        &self,
+    ) -> Result<DeleteRegistrationCodeResponse, DeleteRegistrationCodeError>;
 
-    #[doc="<p>Deletes a CA certificate registration code.</p>"]
-    fn delete_registration_code
-        (&self)
-         -> Result<DeleteRegistrationCodeResponse, DeleteRegistrationCodeError>;
-
-
-    #[doc="<p>Deletes the specified thing.</p>"]
-    fn delete_thing(&self,
-                    input: &DeleteThingRequest)
-                    -> Result<DeleteThingResponse, DeleteThingError>;
-
+    #[doc = "<p>Deletes the specified thing.</p>"]
+    fn delete_thing(
+        &self,
+        input: &DeleteThingRequest,
+    ) -> Result<DeleteThingResponse, DeleteThingError>;
 
     #[doc="<p>Deletes the specified thing type . You cannot delete a thing type if it has things associated with it. To delete a thing type, first mark it as deprecated by calling <a>DeprecateThingType</a>, then remove any associated things by calling <a>UpdateThing</a> to change the thing type on any associated thing, and finally use <a>DeleteThingType</a> to delete the thing type.</p>"]
-    fn delete_thing_type(&self,
-                         input: &DeleteThingTypeRequest)
-                         -> Result<DeleteThingTypeResponse, DeleteThingTypeError>;
+    fn delete_thing_type(
+        &self,
+        input: &DeleteThingTypeRequest,
+    ) -> Result<DeleteThingTypeResponse, DeleteThingTypeError>;
 
-
-    #[doc="<p>Deletes the specified rule.</p>"]
-    fn delete_topic_rule(&self,
-                         input: &DeleteTopicRuleRequest)
-                         -> Result<(), DeleteTopicRuleError>;
-
+    #[doc = "<p>Deletes the specified rule.</p>"]
+    fn delete_topic_rule(&self, input: &DeleteTopicRuleRequest)
+        -> Result<(), DeleteTopicRuleError>;
 
     #[doc="<p>Deprecates a thing type. You can not associate new things with deprecated thing type.</p>"]
-    fn deprecate_thing_type(&self,
-                            input: &DeprecateThingTypeRequest)
-                            -> Result<DeprecateThingTypeResponse, DeprecateThingTypeError>;
+    fn deprecate_thing_type(
+        &self,
+        input: &DeprecateThingTypeRequest,
+    ) -> Result<DeprecateThingTypeResponse, DeprecateThingTypeError>;
 
+    #[doc = "<p>Describes a registered CA certificate.</p>"]
+    fn describe_ca_certificate(
+        &self,
+        input: &DescribeCACertificateRequest,
+    ) -> Result<DescribeCACertificateResponse, DescribeCACertificateError>;
 
-    #[doc="<p>Describes a registered CA certificate.</p>"]
-    fn describe_ca_certificate
-        (&self,
-         input: &DescribeCACertificateRequest)
-         -> Result<DescribeCACertificateResponse, DescribeCACertificateError>;
+    #[doc = "<p>Gets information about the specified certificate.</p>"]
+    fn describe_certificate(
+        &self,
+        input: &DescribeCertificateRequest,
+    ) -> Result<DescribeCertificateResponse, DescribeCertificateError>;
 
-
-    #[doc="<p>Gets information about the specified certificate.</p>"]
-    fn describe_certificate(&self,
-                            input: &DescribeCertificateRequest)
-                            -> Result<DescribeCertificateResponse, DescribeCertificateError>;
-
-
-    #[doc="<p>Returns a unique endpoint specific to the AWS account making the call.</p>"]
+    #[doc = "<p>Returns a unique endpoint specific to the AWS account making the call.</p>"]
     fn describe_endpoint(&self) -> Result<DescribeEndpointResponse, DescribeEndpointError>;
 
+    #[doc = "<p>Gets information about the specified thing.</p>"]
+    fn describe_thing(
+        &self,
+        input: &DescribeThingRequest,
+    ) -> Result<DescribeThingResponse, DescribeThingError>;
 
-    #[doc="<p>Gets information about the specified thing.</p>"]
-    fn describe_thing(&self,
-                      input: &DescribeThingRequest)
-                      -> Result<DescribeThingResponse, DescribeThingError>;
+    #[doc = "<p>Gets information about the specified thing type.</p>"]
+    fn describe_thing_type(
+        &self,
+        input: &DescribeThingTypeRequest,
+    ) -> Result<DescribeThingTypeResponse, DescribeThingTypeError>;
 
+    #[doc = "<p>Removes the specified policy from the specified certificate.</p>"]
+    fn detach_principal_policy(
+        &self,
+        input: &DetachPrincipalPolicyRequest,
+    ) -> Result<(), DetachPrincipalPolicyError>;
 
-    #[doc="<p>Gets information about the specified thing type.</p>"]
-    fn describe_thing_type(&self,
-                           input: &DescribeThingTypeRequest)
-                           -> Result<DescribeThingTypeResponse, DescribeThingTypeError>;
+    #[doc = "<p>Detaches the specified principal from the specified thing.</p>"]
+    fn detach_thing_principal(
+        &self,
+        input: &DetachThingPrincipalRequest,
+    ) -> Result<DetachThingPrincipalResponse, DetachThingPrincipalError>;
 
+    #[doc = "<p>Disables the specified rule.</p>"]
+    fn disable_topic_rule(
+        &self,
+        input: &DisableTopicRuleRequest,
+    ) -> Result<(), DisableTopicRuleError>;
 
-    #[doc="<p>Removes the specified policy from the specified certificate.</p>"]
-    fn detach_principal_policy(&self,
-                               input: &DetachPrincipalPolicyRequest)
-                               -> Result<(), DetachPrincipalPolicyError>;
+    #[doc = "<p>Enables the specified rule.</p>"]
+    fn enable_topic_rule(&self, input: &EnableTopicRuleRequest)
+        -> Result<(), EnableTopicRuleError>;
 
-
-    #[doc="<p>Detaches the specified principal from the specified thing.</p>"]
-    fn detach_thing_principal
-        (&self,
-         input: &DetachThingPrincipalRequest)
-         -> Result<DetachThingPrincipalResponse, DetachThingPrincipalError>;
-
-
-    #[doc="<p>Disables the specified rule.</p>"]
-    fn disable_topic_rule(&self,
-                          input: &DisableTopicRuleRequest)
-                          -> Result<(), DisableTopicRuleError>;
-
-
-    #[doc="<p>Enables the specified rule.</p>"]
-    fn enable_topic_rule(&self,
-                         input: &EnableTopicRuleRequest)
-                         -> Result<(), EnableTopicRuleError>;
-
-
-    #[doc="<p>Gets the logging options.</p>"]
+    #[doc = "<p>Gets the logging options.</p>"]
     fn get_logging_options(&self) -> Result<GetLoggingOptionsResponse, GetLoggingOptionsError>;
-
 
     #[doc="<p>Gets information about the specified policy with the policy document of the default version.</p>"]
     fn get_policy(&self, input: &GetPolicyRequest) -> Result<GetPolicyResponse, GetPolicyError>;
 
+    #[doc = "<p>Gets information about the specified policy version.</p>"]
+    fn get_policy_version(
+        &self,
+        input: &GetPolicyVersionRequest,
+    ) -> Result<GetPolicyVersionResponse, GetPolicyVersionError>;
 
-    #[doc="<p>Gets information about the specified policy version.</p>"]
-    fn get_policy_version(&self,
-                          input: &GetPolicyVersionRequest)
-                          -> Result<GetPolicyVersionResponse, GetPolicyVersionError>;
+    #[doc = "<p>Gets a registration code used to register a CA certificate with AWS IoT.</p>"]
+    fn get_registration_code(
+        &self,
+    ) -> Result<GetRegistrationCodeResponse, GetRegistrationCodeError>;
 
-
-    #[doc="<p>Gets a registration code used to register a CA certificate with AWS IoT.</p>"]
-    fn get_registration_code(&self)
-                             -> Result<GetRegistrationCodeResponse, GetRegistrationCodeError>;
-
-
-    #[doc="<p>Gets information about the specified rule.</p>"]
-    fn get_topic_rule(&self,
-                      input: &GetTopicRuleRequest)
-                      -> Result<GetTopicRuleResponse, GetTopicRuleError>;
-
+    #[doc = "<p>Gets information about the specified rule.</p>"]
+    fn get_topic_rule(
+        &self,
+        input: &GetTopicRuleRequest,
+    ) -> Result<GetTopicRuleResponse, GetTopicRuleError>;
 
     #[doc="<p>Lists the CA certificates registered for your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>"]
-    fn list_ca_certificates(&self,
-                            input: &ListCACertificatesRequest)
-                            -> Result<ListCACertificatesResponse, ListCACertificatesError>;
-
+    fn list_ca_certificates(
+        &self,
+        input: &ListCACertificatesRequest,
+    ) -> Result<ListCACertificatesResponse, ListCACertificatesError>;
 
     #[doc="<p>Lists the certificates registered in your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>"]
-    fn list_certificates(&self,
-                         input: &ListCertificatesRequest)
-                         -> Result<ListCertificatesResponse, ListCertificatesError>;
+    fn list_certificates(
+        &self,
+        input: &ListCertificatesRequest,
+    ) -> Result<ListCertificatesResponse, ListCertificatesError>;
 
+    #[doc = "<p>List the device certificates signed by the specified CA certificate.</p>"]
+    fn list_certificates_by_ca(
+        &self,
+        input: &ListCertificatesByCARequest,
+    ) -> Result<ListCertificatesByCAResponse, ListCertificatesByCAError>;
 
-    #[doc="<p>List the device certificates signed by the specified CA certificate.</p>"]
-    fn list_certificates_by_ca
-        (&self,
-         input: &ListCertificatesByCARequest)
-         -> Result<ListCertificatesByCAResponse, ListCertificatesByCAError>;
+    #[doc = "<p>Lists certificates that are being transfered but not yet accepted.</p>"]
+    fn list_outgoing_certificates(
+        &self,
+        input: &ListOutgoingCertificatesRequest,
+    ) -> Result<ListOutgoingCertificatesResponse, ListOutgoingCertificatesError>;
 
+    #[doc = "<p>Lists your policies.</p>"]
+    fn list_policies(
+        &self,
+        input: &ListPoliciesRequest,
+    ) -> Result<ListPoliciesResponse, ListPoliciesError>;
 
-    #[doc="<p>Lists certificates that are being transfered but not yet accepted.</p>"]
-    fn list_outgoing_certificates
-        (&self,
-         input: &ListOutgoingCertificatesRequest)
-         -> Result<ListOutgoingCertificatesResponse, ListOutgoingCertificatesError>;
+    #[doc = "<p>Lists the principals associated with the specified policy.</p>"]
+    fn list_policy_principals(
+        &self,
+        input: &ListPolicyPrincipalsRequest,
+    ) -> Result<ListPolicyPrincipalsResponse, ListPolicyPrincipalsError>;
 
-
-    #[doc="<p>Lists your policies.</p>"]
-    fn list_policies(&self,
-                     input: &ListPoliciesRequest)
-                     -> Result<ListPoliciesResponse, ListPoliciesError>;
-
-
-    #[doc="<p>Lists the principals associated with the specified policy.</p>"]
-    fn list_policy_principals
-        (&self,
-         input: &ListPolicyPrincipalsRequest)
-         -> Result<ListPolicyPrincipalsResponse, ListPolicyPrincipalsError>;
-
-
-    #[doc="<p>Lists the versions of the specified policy and identifies the default version.</p>"]
-    fn list_policy_versions(&self,
-                            input: &ListPolicyVersionsRequest)
-                            -> Result<ListPolicyVersionsResponse, ListPolicyVersionsError>;
-
+    #[doc = "<p>Lists the versions of the specified policy and identifies the default version.</p>"]
+    fn list_policy_versions(
+        &self,
+        input: &ListPolicyVersionsRequest,
+    ) -> Result<ListPolicyVersionsResponse, ListPolicyVersionsError>;
 
     #[doc="<p>Lists the policies attached to the specified principal. If you use an Cognito identity, the ID must be in <a href=\"http://docs.aws.amazon.com/cognitoidentity/latest/APIReference/API_GetCredentialsForIdentity.html#API_GetCredentialsForIdentity_RequestSyntax\">AmazonCognito Identity format</a>.</p>"]
-    fn list_principal_policies
-        (&self,
-         input: &ListPrincipalPoliciesRequest)
-         -> Result<ListPrincipalPoliciesResponse, ListPrincipalPoliciesError>;
+    fn list_principal_policies(
+        &self,
+        input: &ListPrincipalPoliciesRequest,
+    ) -> Result<ListPrincipalPoliciesResponse, ListPrincipalPoliciesError>;
 
+    #[doc = "<p>Lists the things associated with the specified principal.</p>"]
+    fn list_principal_things(
+        &self,
+        input: &ListPrincipalThingsRequest,
+    ) -> Result<ListPrincipalThingsResponse, ListPrincipalThingsError>;
 
-    #[doc="<p>Lists the things associated with the specified principal.</p>"]
-    fn list_principal_things(&self,
-                             input: &ListPrincipalThingsRequest)
-                             -> Result<ListPrincipalThingsResponse, ListPrincipalThingsError>;
+    #[doc = "<p>Lists the principals associated with the specified thing.</p>"]
+    fn list_thing_principals(
+        &self,
+        input: &ListThingPrincipalsRequest,
+    ) -> Result<ListThingPrincipalsResponse, ListThingPrincipalsError>;
 
-
-    #[doc="<p>Lists the principals associated with the specified thing.</p>"]
-    fn list_thing_principals(&self,
-                             input: &ListThingPrincipalsRequest)
-                             -> Result<ListThingPrincipalsResponse, ListThingPrincipalsError>;
-
-
-    #[doc="<p>Lists the existing thing types.</p>"]
-    fn list_thing_types(&self,
-                        input: &ListThingTypesRequest)
-                        -> Result<ListThingTypesResponse, ListThingTypesError>;
-
+    #[doc = "<p>Lists the existing thing types.</p>"]
+    fn list_thing_types(
+        &self,
+        input: &ListThingTypesRequest,
+    ) -> Result<ListThingTypesResponse, ListThingTypesError>;
 
     #[doc="<p>Lists your things. Use the <b>attributeName</b> and <b>attributeValue</b> parameters to filter your things. For example, calling <code>ListThings</code> with attributeName=Color and attributeValue=Red retrieves all things in the registry that contain an attribute <b>Color</b> with the value <b>Red</b>. </p>"]
-    fn list_things(&self,
-                   input: &ListThingsRequest)
-                   -> Result<ListThingsResponse, ListThingsError>;
+    fn list_things(&self, input: &ListThingsRequest)
+        -> Result<ListThingsResponse, ListThingsError>;
 
-
-    #[doc="<p>Lists the rules for the specific topic.</p>"]
-    fn list_topic_rules(&self,
-                        input: &ListTopicRulesRequest)
-                        -> Result<ListTopicRulesResponse, ListTopicRulesError>;
-
+    #[doc = "<p>Lists the rules for the specific topic.</p>"]
+    fn list_topic_rules(
+        &self,
+        input: &ListTopicRulesRequest,
+    ) -> Result<ListTopicRulesResponse, ListTopicRulesError>;
 
     #[doc="<p>Registers a CA certificate with AWS IoT. This CA certificate can then be used to sign device certificates, which can be then registered with AWS IoT. You can register up to 10 CA certificates per AWS account that have the same subject field. This enables you to have up to 10 certificate authorities sign your device certificates. If you have more than one CA certificate registered, make sure you pass the CA certificate when you register your device certificates with the RegisterCertificate API.</p>"]
-    fn register_ca_certificate
-        (&self,
-         input: &RegisterCACertificateRequest)
-         -> Result<RegisterCACertificateResponse, RegisterCACertificateError>;
-
+    fn register_ca_certificate(
+        &self,
+        input: &RegisterCACertificateRequest,
+    ) -> Result<RegisterCACertificateResponse, RegisterCACertificateError>;
 
     #[doc="<p>Registers a device certificate with AWS IoT. If you have more than one CA certificate that has the same subject field, you must specify the CA certificate that was used to sign the device certificate being registered.</p>"]
-    fn register_certificate(&self,
-                            input: &RegisterCertificateRequest)
-                            -> Result<RegisterCertificateResponse, RegisterCertificateError>;
-
+    fn register_certificate(
+        &self,
+        input: &RegisterCertificateRequest,
+    ) -> Result<RegisterCertificateResponse, RegisterCertificateError>;
 
     #[doc="<p>Rejects a pending certificate transfer. After AWS IoT rejects a certificate transfer, the certificate status changes from <b>PENDING_TRANSFER</b> to <b>INACTIVE</b>.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p> <p>This operation can only be called by the transfer destination. After it is called, the certificate will be returned to the source's account in the INACTIVE state.</p>"]
-    fn reject_certificate_transfer(&self,
-                                   input: &RejectCertificateTransferRequest)
-                                   -> Result<(), RejectCertificateTransferError>;
-
+    fn reject_certificate_transfer(
+        &self,
+        input: &RejectCertificateTransferRequest,
+    ) -> Result<(), RejectCertificateTransferError>;
 
     #[doc="<p>Replaces the specified rule. You must specify all parameters for the new rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>"]
-    fn replace_topic_rule(&self,
-                          input: &ReplaceTopicRuleRequest)
-                          -> Result<(), ReplaceTopicRuleError>;
-
+    fn replace_topic_rule(
+        &self,
+        input: &ReplaceTopicRuleRequest,
+    ) -> Result<(), ReplaceTopicRuleError>;
 
     #[doc="<p>Sets the specified version of the specified policy as the policy's default (operative) version. This action affects all certificates to which the policy is attached. To list the principals the policy is attached to, use the ListPrincipalPolicy API.</p>"]
-    fn set_default_policy_version(&self,
-                                  input: &SetDefaultPolicyVersionRequest)
-                                  -> Result<(), SetDefaultPolicyVersionError>;
+    fn set_default_policy_version(
+        &self,
+        input: &SetDefaultPolicyVersionRequest,
+    ) -> Result<(), SetDefaultPolicyVersionError>;
 
-
-    #[doc="<p>Sets the logging options.</p>"]
-    fn set_logging_options(&self,
-                           input: &SetLoggingOptionsRequest)
-                           -> Result<(), SetLoggingOptionsError>;
-
+    #[doc = "<p>Sets the logging options.</p>"]
+    fn set_logging_options(
+        &self,
+        input: &SetLoggingOptionsRequest,
+    ) -> Result<(), SetLoggingOptionsError>;
 
     #[doc="<p>Transfers the specified certificate to the specified AWS account.</p> <p>You can cancel the transfer until it is acknowledged by the recipient.</p> <p>No notification is sent to the transfer destination's account. It is up to the caller to notify the transfer target.</p> <p>The certificate being transferred must not be in the ACTIVE state. You can use the UpdateCertificate API to deactivate it.</p> <p>The certificate must not have any policies attached to it. You can use the DetachPrincipalPolicy API to detach them.</p>"]
-    fn transfer_certificate(&self,
-                            input: &TransferCertificateRequest)
-                            -> Result<TransferCertificateResponse, TransferCertificateError>;
+    fn transfer_certificate(
+        &self,
+        input: &TransferCertificateRequest,
+    ) -> Result<TransferCertificateResponse, TransferCertificateError>;
 
-
-    #[doc="<p>Updates a registered CA certificate.</p>"]
-    fn update_ca_certificate(&self,
-                             input: &UpdateCACertificateRequest)
-                             -> Result<(), UpdateCACertificateError>;
-
+    #[doc = "<p>Updates a registered CA certificate.</p>"]
+    fn update_ca_certificate(
+        &self,
+        input: &UpdateCACertificateRequest,
+    ) -> Result<(), UpdateCACertificateError>;
 
     #[doc="<p>Updates the status of the specified certificate. This operation is idempotent.</p> <p>Moving a certificate from the ACTIVE state (including REVOKED) will not disconnect currently connected devices, but these devices will be unable to reconnect.</p> <p>The ACTIVE state is required to authenticate devices connecting to AWS IoT using a certificate.</p>"]
-    fn update_certificate(&self,
-                          input: &UpdateCertificateRequest)
-                          -> Result<(), UpdateCertificateError>;
+    fn update_certificate(
+        &self,
+        input: &UpdateCertificateRequest,
+    ) -> Result<(), UpdateCertificateError>;
 
-
-    #[doc="<p>Updates the data for a thing.</p>"]
-    fn update_thing(&self,
-                    input: &UpdateThingRequest)
-                    -> Result<UpdateThingResponse, UpdateThingError>;
+    #[doc = "<p>Updates the data for a thing.</p>"]
+    fn update_thing(
+        &self,
+        input: &UpdateThingRequest,
+    ) -> Result<UpdateThingResponse, UpdateThingError>;
 }
 /// A client for the AWS IoT API.
 pub struct IotClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -8420,8 +8405,9 @@ pub struct IotClient<P, D>
 }
 
 impl<P, D> IotClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         IotClient {
@@ -8433,21 +8419,24 @@ impl<P, D> IotClient<P, D>
 }
 
 impl<P, D> Iot for IotClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     #[doc="<p>Accepts a pending certificate transfer. The default state of the certificate is INACTIVE.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p>"]
-    fn accept_certificate_transfer(&self,
-                                   input: &AcceptCertificateTransferRequest)
-                                   -> Result<(), AcceptCertificateTransferError> {
-        let request_uri = format!("/accept-certificate-transfer/{certificate_id}",
-                                  certificate_id = input.certificate_id);
+    fn accept_certificate_transfer(
+        &self,
+        input: &AcceptCertificateTransferRequest,
+    ) -> Result<(), AcceptCertificateTransferError> {
+        let request_uri = format!(
+            "/accept-certificate-transfer/{certificate_id}",
+            certificate_id = input.certificate_id
+        );
 
         let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.set_as_active {
@@ -8462,25 +8451,27 @@ impl<P, D> Iot for IotClient<P, D>
             StatusCode::Ok => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AcceptCertificateTransferError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(AcceptCertificateTransferError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Attaches the specified policy to the specified principal (certificate or other credential).</p>"]
-    fn attach_principal_policy(&self,
-                               input: &AttachPrincipalPolicyRequest)
-                               -> Result<(), AttachPrincipalPolicyError> {
-        let request_uri = format!("/principal-policies/{policy_name}",
-                                  policy_name = input.policy_name);
+    fn attach_principal_policy(
+        &self,
+        input: &AttachPrincipalPolicyRequest,
+    ) -> Result<(), AttachPrincipalPolicyError> {
+        let request_uri = format!(
+            "/principal-policies/{policy_name}",
+            policy_name = input.policy_name
+        );
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8489,7 +8480,6 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.add_header("x-amzn-iot-principal", &input.principal);
 
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
@@ -8497,25 +8487,27 @@ impl<P, D> Iot for IotClient<P, D>
             StatusCode::Ok => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AttachPrincipalPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AttachPrincipalPolicyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Attaches the specified principal to the specified thing.</p>"]
-    fn attach_thing_principal
-        (&self,
-         input: &AttachThingPrincipalRequest)
-         -> Result<AttachThingPrincipalResponse, AttachThingPrincipalError> {
-        let request_uri = format!("/things/{thing_name}/principals",
-                                  thing_name = input.thing_name);
+    #[doc = "<p>Attaches the specified principal to the specified thing.</p>"]
+    fn attach_thing_principal(
+        &self,
+        input: &AttachThingPrincipalRequest,
+    ) -> Result<AttachThingPrincipalResponse, AttachThingPrincipalError> {
+        let request_uri = format!(
+            "/things/{thing_name}/principals",
+            thing_name = input.thing_name
+        );
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8524,13 +8516,11 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.add_header("x-amzn-principal", &input.principal);
 
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -8542,33 +8532,32 @@ impl<P, D> Iot for IotClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<AttachThingPrincipalResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AttachThingPrincipalError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AttachThingPrincipalError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Cancels a pending transfer for the specified certificate.</p> <p> <b>Note</b> Only the transfer source account can use this operation to cancel a transfer. (Transfer destinations can use <a>RejectCertificateTransfer</a> instead.) After transfer, AWS IoT returns the certificate to the source account in the INACTIVE state. After the destination account has accepted the transfer, the transfer cannot be cancelled.</p> <p>After a certificate transfer is cancelled, the status of the certificate changes from PENDING_TRANSFER to INACTIVE.</p>"]
-    fn cancel_certificate_transfer(&self,
-                                   input: &CancelCertificateTransferRequest)
-                                   -> Result<(), CancelCertificateTransferError> {
-        let request_uri = format!("/cancel-certificate-transfer/{certificate_id}",
-                                  certificate_id = input.certificate_id);
+    fn cancel_certificate_transfer(
+        &self,
+        input: &CancelCertificateTransferRequest,
+    ) -> Result<(), CancelCertificateTransferError> {
+        let request_uri = format!(
+            "/cancel-certificate-transfer/{certificate_id}",
+            certificate_id = input.certificate_id
+        );
 
         let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
@@ -8577,24 +8566,23 @@ impl<P, D> Iot for IotClient<P, D>
             StatusCode::Ok => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CancelCertificateTransferError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(CancelCertificateTransferError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates an X.509 certificate using the specified certificate signing request.</p> <p> <b>Note:</b> The CSR must include a public key that is either an RSA key with a length of at least 2048 bits or an ECC key from NIST P-256 or NIST P-384 curves. </p> <p> <b>Note:</b> Reusing the same certificate signing request (CSR) results in a distinct certificate.</p> <p>You can create multiple certificates in a batch by creating a directory, copying multiple .csr files into that directory, and then specifying that directory on the command line. The following commands show how to create a batch of certificates given a batch of CSRs.</p> <p>Assuming a set of CSRs are located inside of the directory my-csr-directory:</p> <p>On Linux and OS X, the command is:</p> <p>$ ls my-csr-directory/ | xargs -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>This command lists all of the CSRs in my-csr-directory and pipes each CSR file name to the aws iot create-certificate-from-csr AWS CLI command to create a certificate for the corresponding CSR.</p> <p>The aws iot create-certificate-from-csr part of the command can also be run in parallel to speed up the certificate creation process:</p> <p>$ ls my-csr-directory/ | xargs -P 10 -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>On Windows PowerShell, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; ls -Name my-csr-directory | %{aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/$_}</p> <p>On a Windows command prompt, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; forfiles /p my-csr-directory /c \"cmd /c aws iot create-certificate-from-csr --certificate-signing-request file://@path\"</p>"]
-    fn create_certificate_from_csr
-        (&self,
-         input: &CreateCertificateFromCsrRequest)
-         -> Result<CreateCertificateFromCsrResponse, CreateCertificateFromCsrError> {
+    fn create_certificate_from_csr(
+        &self,
+        input: &CreateCertificateFromCsrRequest,
+    ) -> Result<CreateCertificateFromCsrResponse, CreateCertificateFromCsrError> {
         let request_uri = "/certificates";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -8615,7 +8603,6 @@ impl<P, D> Iot for IotClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -8625,35 +8612,32 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CreateCertificateFromCsrResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<CreateCertificateFromCsrResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateCertificateFromCsrError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(CreateCertificateFromCsrError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key.</p> <p> <b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>"]
-    fn create_keys_and_certificate
-        (&self,
-         input: &CreateKeysAndCertificateRequest)
-         -> Result<CreateKeysAndCertificateResponse, CreateKeysAndCertificateError> {
+    fn create_keys_and_certificate(
+        &self,
+        input: &CreateKeysAndCertificateRequest,
+    ) -> Result<CreateKeysAndCertificateResponse, CreateKeysAndCertificateError> {
         let request_uri = "/keys-and-certificate";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.set_as_active {
@@ -8666,7 +8650,6 @@ impl<P, D> Iot for IotClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -8676,27 +8659,26 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CreateKeysAndCertificateResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<CreateKeysAndCertificateResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateKeysAndCertificateError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(CreateKeysAndCertificateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates an AWS IoT policy.</p> <p>The created policy is the default version for the policy. This operation creates a policy version with a version identifier of <b>1</b> and sets <b>1</b> as the policy's default version.</p>"]
-    fn create_policy(&self,
-                     input: &CreatePolicyRequest)
-                     -> Result<CreatePolicyResponse, CreatePolicyError> {
+    fn create_policy(
+        &self,
+        input: &CreatePolicyRequest,
+    ) -> Result<CreatePolicyResponse, CreatePolicyError> {
         let request_uri = format!("/policies/{policy_name}", policy_name = input.policy_name);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -8706,14 +8688,11 @@ impl<P, D> Iot for IotClient<P, D>
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -8725,25 +8704,27 @@ impl<P, D> Iot for IotClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<CreatePolicyResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreatePolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreatePolicyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a new version of the specified AWS IoT policy. To update a policy, create a new policy version. A managed policy can have up to five versions. If the policy has five versions, you must use <a>DeletePolicyVersion</a> to delete an existing version before you create a new one.</p> <p>Optionally, you can set the new version as the policy's default version. The default version is the operative version (that is, the version that is in effect for the certificates to which the policy is attached).</p>"]
-    fn create_policy_version(&self,
-                             input: &CreatePolicyVersionRequest)
-                             -> Result<CreatePolicyVersionResponse, CreatePolicyVersionError> {
-        let request_uri = format!("/policies/{policy_name}/version",
-                                  policy_name = input.policy_name);
+    fn create_policy_version(
+        &self,
+        input: &CreatePolicyVersionRequest,
+    ) -> Result<CreatePolicyVersionResponse, CreatePolicyVersionError> {
+        let request_uri = format!(
+            "/policies/{policy_name}/version",
+            policy_name = input.policy_name
+        );
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8763,7 +8744,6 @@ impl<P, D> Iot for IotClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -8775,23 +8755,23 @@ impl<P, D> Iot for IotClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<CreatePolicyVersionResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreatePolicyVersionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreatePolicyVersionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates a thing record in the thing registry.</p>"]
-    fn create_thing(&self,
-                    input: &CreateThingRequest)
-                    -> Result<CreateThingResponse, CreateThingError> {
+    #[doc = "<p>Creates a thing record in the thing registry.</p>"]
+    fn create_thing(
+        &self,
+        input: &CreateThingRequest,
+    ) -> Result<CreateThingResponse, CreateThingError> {
         let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -8801,14 +8781,11 @@ impl<P, D> Iot for IotClient<P, D>
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -8820,25 +8797,27 @@ impl<P, D> Iot for IotClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<CreateThingResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateThingError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateThingError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates a new thing type.</p>"]
-    fn create_thing_type(&self,
-                         input: &CreateThingTypeRequest)
-                         -> Result<CreateThingTypeResponse, CreateThingTypeError> {
-        let request_uri = format!("/thing-types/{thing_type_name}",
-                                  thing_type_name = input.thing_type_name);
+    #[doc = "<p>Creates a new thing type.</p>"]
+    fn create_thing_type(
+        &self,
+        input: &CreateThingTypeRequest,
+    ) -> Result<CreateThingTypeResponse, CreateThingTypeError> {
+        let request_uri = format!(
+            "/thing-types/{thing_type_name}",
+            thing_type_name = input.thing_type_name
+        );
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8847,14 +8826,11 @@ impl<P, D> Iot for IotClient<P, D>
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -8866,23 +8842,23 @@ impl<P, D> Iot for IotClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<CreateThingTypeResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateThingTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateThingTypeError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>"]
-    fn create_topic_rule(&self,
-                         input: &CreateTopicRuleRequest)
-                         -> Result<(), CreateTopicRuleError> {
+    fn create_topic_rule(
+        &self,
+        input: &CreateTopicRuleRequest,
+    ) -> Result<(), CreateTopicRuleError> {
         let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -8892,8 +8868,6 @@ impl<P, D> Iot for IotClient<P, D>
         let encoded = Some(serde_json::to_vec(&input.topic_rule_payload).unwrap());
         request.set_payload(encoded);
 
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
@@ -8901,39 +8875,38 @@ impl<P, D> Iot for IotClient<P, D>
             StatusCode::Ok => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateTopicRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateTopicRuleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes a registered CA certificate.</p>"]
-    fn delete_ca_certificate(&self,
-                             input: &DeleteCACertificateRequest)
-                             -> Result<DeleteCACertificateResponse, DeleteCACertificateError> {
-        let request_uri = format!("/cacertificate/{ca_certificate_id}",
-                                  ca_certificate_id = input.certificate_id);
+    #[doc = "<p>Deletes a registered CA certificate.</p>"]
+    fn delete_ca_certificate(
+        &self,
+        input: &DeleteCACertificateRequest,
+    ) -> Result<DeleteCACertificateResponse, DeleteCACertificateError> {
+        let request_uri = format!(
+            "/cacertificate/{ca_certificate_id}",
+            ca_certificate_id = input.certificate_id
+        );
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -8945,33 +8918,32 @@ impl<P, D> Iot for IotClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<DeleteCACertificateResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteCACertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteCACertificateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes the specified certificate.</p> <p>A certificate cannot be deleted if it has a policy attached to it or if its status is set to ACTIVE. To delete a certificate, first use the <a>DetachPrincipalPolicy</a> API to detach all policies. Next, use the <a>UpdateCertificate</a> API to set the certificate to the INACTIVE status.</p>"]
-    fn delete_certificate(&self,
-                          input: &DeleteCertificateRequest)
-                          -> Result<(), DeleteCertificateError> {
-        let request_uri = format!("/certificates/{certificate_id}",
-                                  certificate_id = input.certificate_id);
+    fn delete_certificate(
+        &self,
+        input: &DeleteCertificateRequest,
+    ) -> Result<(), DeleteCertificateError> {
+        let request_uri = format!(
+            "/certificates/{certificate_id}",
+            certificate_id = input.certificate_id
+        );
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
@@ -8980,17 +8952,17 @@ impl<P, D> Iot for IotClient<P, D>
             StatusCode::Ok => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteCertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteCertificateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Deletes the specified policy.</p> <p>A policy cannot be deleted if it has non-default versions or it is attached to any certificate.</p> <p>To delete a policy, use the DeletePolicyVersion API to delete all non-default versions of the policy; use the DetachPrincipalPolicy API to detach the policy from any certificate; and then use the DeletePolicy API to delete the policy.</p> <p>When a policy is deleted using DeletePolicy, its default version is deleted with it.</p>"]
     fn delete_policy(&self, input: &DeletePolicyRequest) -> Result<(), DeletePolicyError> {
@@ -9001,9 +8973,6 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.set_endpoint_prefix("iot".to_string());
 
-
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
@@ -9011,34 +8980,34 @@ impl<P, D> Iot for IotClient<P, D>
             StatusCode::Ok => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeletePolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeletePolicyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes the specified version of the specified policy. You cannot delete the default version of a policy using this API. To delete the default version of a policy, use <a>DeletePolicy</a>. To find out which version of a policy is marked as the default version, use ListPolicyVersions.</p>"]
-    fn delete_policy_version(&self,
-                             input: &DeletePolicyVersionRequest)
-                             -> Result<(), DeletePolicyVersionError> {
-        let request_uri = format!("/policies/{policy_name}/version/{policy_version_id}",
-                                  policy_name = input.policy_name,
-                                  policy_version_id = input.policy_version_id);
+    fn delete_policy_version(
+        &self,
+        input: &DeletePolicyVersionRequest,
+    ) -> Result<(), DeletePolicyVersionError> {
+        let request_uri = format!(
+            "/policies/{policy_name}/version/{policy_version_id}",
+            policy_name = input.policy_name,
+            policy_version_id = input.policy_version_id
+        );
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
@@ -9046,22 +9015,22 @@ impl<P, D> Iot for IotClient<P, D>
             StatusCode::Ok => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeletePolicyVersionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeletePolicyVersionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes a CA certificate registration code.</p>"]
-    fn delete_registration_code
-        (&self)
-         -> Result<DeleteRegistrationCodeResponse, DeleteRegistrationCodeError> {
+    #[doc = "<p>Deletes a CA certificate registration code.</p>"]
+    fn delete_registration_code(
+        &self,
+    ) -> Result<DeleteRegistrationCodeResponse, DeleteRegistrationCodeError> {
         let request_uri = "/registrationcode";
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -9069,15 +9038,11 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.set_endpoint_prefix("iot".to_string());
 
-
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9087,33 +9052,32 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DeleteRegistrationCodeResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<DeleteRegistrationCodeResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteRegistrationCodeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteRegistrationCodeError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes the specified thing.</p>"]
-    fn delete_thing(&self,
-                    input: &DeleteThingRequest)
-                    -> Result<DeleteThingResponse, DeleteThingError> {
+    #[doc = "<p>Deletes the specified thing.</p>"]
+    fn delete_thing(
+        &self,
+        input: &DeleteThingRequest,
+    ) -> Result<DeleteThingResponse, DeleteThingError> {
         let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.expected_version {
@@ -9126,7 +9090,6 @@ impl<P, D> Iot for IotClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9138,40 +9101,38 @@ impl<P, D> Iot for IotClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<DeleteThingResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteThingError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteThingError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes the specified thing type . You cannot delete a thing type if it has things associated with it. To delete a thing type, first mark it as deprecated by calling <a>DeprecateThingType</a>, then remove any associated things by calling <a>UpdateThing</a> to change the thing type on any associated thing, and finally use <a>DeleteThingType</a> to delete the thing type.</p>"]
-    fn delete_thing_type(&self,
-                         input: &DeleteThingTypeRequest)
-                         -> Result<DeleteThingTypeResponse, DeleteThingTypeError> {
-        let request_uri = format!("/thing-types/{thing_type_name}",
-                                  thing_type_name = input.thing_type_name);
+    fn delete_thing_type(
+        &self,
+        input: &DeleteThingTypeRequest,
+    ) -> Result<DeleteThingTypeResponse, DeleteThingTypeError> {
+        let request_uri = format!(
+            "/thing-types/{thing_type_name}",
+            thing_type_name = input.thing_type_name
+        );
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9183,32 +9144,29 @@ impl<P, D> Iot for IotClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<DeleteThingTypeResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteThingTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteThingTypeError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes the specified rule.</p>"]
-    fn delete_topic_rule(&self,
-                         input: &DeleteTopicRuleRequest)
-                         -> Result<(), DeleteTopicRuleError> {
+    #[doc = "<p>Deletes the specified rule.</p>"]
+    fn delete_topic_rule(
+        &self,
+        input: &DeleteTopicRuleRequest,
+    ) -> Result<(), DeleteTopicRuleError> {
         let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
@@ -9217,24 +9175,27 @@ impl<P, D> Iot for IotClient<P, D>
             StatusCode::Ok => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteTopicRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteTopicRuleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deprecates a thing type. You can not associate new things with deprecated thing type.</p>"]
-    fn deprecate_thing_type(&self,
-                            input: &DeprecateThingTypeRequest)
-                            -> Result<DeprecateThingTypeResponse, DeprecateThingTypeError> {
-        let request_uri = format!("/thing-types/{thing_type_name}/deprecate",
-                                  thing_type_name = input.thing_type_name);
+    fn deprecate_thing_type(
+        &self,
+        input: &DeprecateThingTypeRequest,
+    ) -> Result<DeprecateThingTypeResponse, DeprecateThingTypeError> {
+        let request_uri = format!(
+            "/thing-types/{thing_type_name}/deprecate",
+            thing_type_name = input.thing_type_name
+        );
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9243,14 +9204,11 @@ impl<P, D> Iot for IotClient<P, D>
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9262,41 +9220,38 @@ impl<P, D> Iot for IotClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<DeprecateThingTypeResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeprecateThingTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeprecateThingTypeError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Describes a registered CA certificate.</p>"]
-    fn describe_ca_certificate
-        (&self,
-         input: &DescribeCACertificateRequest)
-         -> Result<DescribeCACertificateResponse, DescribeCACertificateError> {
-        let request_uri = format!("/cacertificate/{ca_certificate_id}",
-                                  ca_certificate_id = input.certificate_id);
+    #[doc = "<p>Describes a registered CA certificate.</p>"]
+    fn describe_ca_certificate(
+        &self,
+        input: &DescribeCACertificateRequest,
+    ) -> Result<DescribeCACertificateResponse, DescribeCACertificateError> {
+        let request_uri = format!(
+            "/cacertificate/{ca_certificate_id}",
+            ca_certificate_id = input.certificate_id
+        );
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9306,43 +9261,41 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DescribeCACertificateResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<DescribeCACertificateResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeCACertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeCACertificateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about the specified certificate.</p>"]
-    fn describe_certificate(&self,
-                            input: &DescribeCertificateRequest)
-                            -> Result<DescribeCertificateResponse, DescribeCertificateError> {
-        let request_uri = format!("/certificates/{certificate_id}",
-                                  certificate_id = input.certificate_id);
+    #[doc = "<p>Gets information about the specified certificate.</p>"]
+    fn describe_certificate(
+        &self,
+        input: &DescribeCertificateRequest,
+    ) -> Result<DescribeCertificateResponse, DescribeCertificateError> {
+        let request_uri = format!(
+            "/certificates/{certificate_id}",
+            certificate_id = input.certificate_id
+        );
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9354,20 +9307,19 @@ impl<P, D> Iot for IotClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<DescribeCertificateResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeCertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeCertificateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Returns a unique endpoint specific to the AWS account making the call.</p>"]
+    #[doc = "<p>Returns a unique endpoint specific to the AWS account making the call.</p>"]
     fn describe_endpoint(&self) -> Result<DescribeEndpointResponse, DescribeEndpointError> {
         let request_uri = "/endpoint";
 
@@ -9376,15 +9328,11 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.set_endpoint_prefix("iot".to_string());
 
-
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9396,23 +9344,23 @@ impl<P, D> Iot for IotClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<DescribeEndpointResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeEndpointError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeEndpointError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about the specified thing.</p>"]
-    fn describe_thing(&self,
-                      input: &DescribeThingRequest)
-                      -> Result<DescribeThingResponse, DescribeThingError> {
+    #[doc = "<p>Gets information about the specified thing.</p>"]
+    fn describe_thing(
+        &self,
+        input: &DescribeThingRequest,
+    ) -> Result<DescribeThingResponse, DescribeThingError> {
         let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -9420,15 +9368,11 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.set_endpoint_prefix("iot".to_string());
 
-
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9440,40 +9384,38 @@ impl<P, D> Iot for IotClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<DescribeThingResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeThingError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeThingError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about the specified thing type.</p>"]
-    fn describe_thing_type(&self,
-                           input: &DescribeThingTypeRequest)
-                           -> Result<DescribeThingTypeResponse, DescribeThingTypeError> {
-        let request_uri = format!("/thing-types/{thing_type_name}",
-                                  thing_type_name = input.thing_type_name);
+    #[doc = "<p>Gets information about the specified thing type.</p>"]
+    fn describe_thing_type(
+        &self,
+        input: &DescribeThingTypeRequest,
+    ) -> Result<DescribeThingTypeResponse, DescribeThingTypeError> {
+        let request_uri = format!(
+            "/thing-types/{thing_type_name}",
+            thing_type_name = input.thing_type_name
+        );
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9485,25 +9427,27 @@ impl<P, D> Iot for IotClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<DescribeThingTypeResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeThingTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeThingTypeError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Removes the specified policy from the specified certificate.</p>"]
-    fn detach_principal_policy(&self,
-                               input: &DetachPrincipalPolicyRequest)
-                               -> Result<(), DetachPrincipalPolicyError> {
-        let request_uri = format!("/principal-policies/{policy_name}",
-                                  policy_name = input.policy_name);
+    #[doc = "<p>Removes the specified policy from the specified certificate.</p>"]
+    fn detach_principal_policy(
+        &self,
+        input: &DetachPrincipalPolicyRequest,
+    ) -> Result<(), DetachPrincipalPolicyError> {
+        let request_uri = format!(
+            "/principal-policies/{policy_name}",
+            policy_name = input.policy_name
+        );
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9512,7 +9456,6 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.add_header("x-amzn-iot-principal", &input.principal);
 
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
@@ -9520,25 +9463,27 @@ impl<P, D> Iot for IotClient<P, D>
             StatusCode::Ok => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DetachPrincipalPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DetachPrincipalPolicyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Detaches the specified principal from the specified thing.</p>"]
-    fn detach_thing_principal
-        (&self,
-         input: &DetachThingPrincipalRequest)
-         -> Result<DetachThingPrincipalResponse, DetachThingPrincipalError> {
-        let request_uri = format!("/things/{thing_name}/principals",
-                                  thing_name = input.thing_name);
+    #[doc = "<p>Detaches the specified principal from the specified thing.</p>"]
+    fn detach_thing_principal(
+        &self,
+        input: &DetachThingPrincipalRequest,
+    ) -> Result<DetachThingPrincipalResponse, DetachThingPrincipalError> {
+        let request_uri = format!(
+            "/things/{thing_name}/principals",
+            thing_name = input.thing_name
+        );
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9547,13 +9492,11 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.add_header("x-amzn-principal", &input.principal);
 
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9565,23 +9508,23 @@ impl<P, D> Iot for IotClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<DetachThingPrincipalResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DetachThingPrincipalError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DetachThingPrincipalError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Disables the specified rule.</p>"]
-    fn disable_topic_rule(&self,
-                          input: &DisableTopicRuleRequest)
-                          -> Result<(), DisableTopicRuleError> {
+    #[doc = "<p>Disables the specified rule.</p>"]
+    fn disable_topic_rule(
+        &self,
+        input: &DisableTopicRuleRequest,
+    ) -> Result<(), DisableTopicRuleError> {
         let request_uri = format!("/rules/{rule_name}/disable", rule_name = input.rule_name);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -9589,9 +9532,6 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.set_endpoint_prefix("iot".to_string());
 
-
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
@@ -9599,22 +9539,23 @@ impl<P, D> Iot for IotClient<P, D>
             StatusCode::Ok => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DisableTopicRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DisableTopicRuleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Enables the specified rule.</p>"]
-    fn enable_topic_rule(&self,
-                         input: &EnableTopicRuleRequest)
-                         -> Result<(), EnableTopicRuleError> {
+    #[doc = "<p>Enables the specified rule.</p>"]
+    fn enable_topic_rule(
+        &self,
+        input: &EnableTopicRuleRequest,
+    ) -> Result<(), EnableTopicRuleError> {
         let request_uri = format!("/rules/{rule_name}/enable", rule_name = input.rule_name);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -9622,9 +9563,6 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.set_endpoint_prefix("iot".to_string());
 
-
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
@@ -9632,19 +9570,19 @@ impl<P, D> Iot for IotClient<P, D>
             StatusCode::Ok => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(EnableTopicRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(EnableTopicRuleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets the logging options.</p>"]
+    #[doc = "<p>Gets the logging options.</p>"]
     fn get_logging_options(&self) -> Result<GetLoggingOptionsResponse, GetLoggingOptionsError> {
         let request_uri = "/loggingOptions";
 
@@ -9653,15 +9591,11 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.set_endpoint_prefix("iot".to_string());
 
-
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9673,18 +9607,17 @@ impl<P, D> Iot for IotClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetLoggingOptionsResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetLoggingOptionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetLoggingOptionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Gets information about the specified policy with the policy document of the default version.</p>"]
     fn get_policy(&self, input: &GetPolicyRequest) -> Result<GetPolicyResponse, GetPolicyError> {
@@ -9695,15 +9628,11 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.set_endpoint_prefix("iot".to_string());
 
-
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9715,41 +9644,39 @@ impl<P, D> Iot for IotClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetPolicyResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetPolicyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about the specified policy version.</p>"]
-    fn get_policy_version(&self,
-                          input: &GetPolicyVersionRequest)
-                          -> Result<GetPolicyVersionResponse, GetPolicyVersionError> {
-        let request_uri = format!("/policies/{policy_name}/version/{policy_version_id}",
-                                  policy_name = input.policy_name,
-                                  policy_version_id = input.policy_version_id);
+    #[doc = "<p>Gets information about the specified policy version.</p>"]
+    fn get_policy_version(
+        &self,
+        input: &GetPolicyVersionRequest,
+    ) -> Result<GetPolicyVersionResponse, GetPolicyVersionError> {
+        let request_uri = format!(
+            "/policies/{policy_name}/version/{policy_version_id}",
+            policy_name = input.policy_name,
+            policy_version_id = input.policy_version_id
+        );
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9761,22 +9688,22 @@ impl<P, D> Iot for IotClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetPolicyVersionResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetPolicyVersionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetPolicyVersionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets a registration code used to register a CA certificate with AWS IoT.</p>"]
-    fn get_registration_code(&self)
-                             -> Result<GetRegistrationCodeResponse, GetRegistrationCodeError> {
+    #[doc = "<p>Gets a registration code used to register a CA certificate with AWS IoT.</p>"]
+    fn get_registration_code(
+        &self,
+    ) -> Result<GetRegistrationCodeResponse, GetRegistrationCodeError> {
         let request_uri = "/registrationcode";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -9784,15 +9711,11 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.set_endpoint_prefix("iot".to_string());
 
-
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9804,23 +9727,23 @@ impl<P, D> Iot for IotClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetRegistrationCodeResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetRegistrationCodeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetRegistrationCodeError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about the specified rule.</p>"]
-    fn get_topic_rule(&self,
-                      input: &GetTopicRuleRequest)
-                      -> Result<GetTopicRuleResponse, GetTopicRuleError> {
+    #[doc = "<p>Gets information about the specified rule.</p>"]
+    fn get_topic_rule(
+        &self,
+        input: &GetTopicRuleRequest,
+    ) -> Result<GetTopicRuleResponse, GetTopicRuleError> {
         let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -9828,15 +9751,11 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.set_endpoint_prefix("iot".to_string());
 
-
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9848,30 +9767,29 @@ impl<P, D> Iot for IotClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetTopicRuleResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetTopicRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetTopicRuleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists the CA certificates registered for your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>"]
-    fn list_ca_certificates(&self,
-                            input: &ListCACertificatesRequest)
-                            -> Result<ListCACertificatesResponse, ListCACertificatesError> {
+    fn list_ca_certificates(
+        &self,
+        input: &ListCACertificatesRequest,
+    ) -> Result<ListCACertificatesResponse, ListCACertificatesError> {
         let request_uri = "/cacertificates";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.ascending_order {
@@ -9890,7 +9808,6 @@ impl<P, D> Iot for IotClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9902,30 +9819,29 @@ impl<P, D> Iot for IotClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<ListCACertificatesResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListCACertificatesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListCACertificatesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists the certificates registered in your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>"]
-    fn list_certificates(&self,
-                         input: &ListCertificatesRequest)
-                         -> Result<ListCertificatesResponse, ListCertificatesError> {
+    fn list_certificates(
+        &self,
+        input: &ListCertificatesRequest,
+    ) -> Result<ListCertificatesResponse, ListCertificatesError> {
         let request_uri = "/certificates";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.ascending_order {
@@ -9944,7 +9860,6 @@ impl<P, D> Iot for IotClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9956,32 +9871,32 @@ impl<P, D> Iot for IotClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<ListCertificatesResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListCertificatesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListCertificatesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>List the device certificates signed by the specified CA certificate.</p>"]
-    fn list_certificates_by_ca
-        (&self,
-         input: &ListCertificatesByCARequest)
-         -> Result<ListCertificatesByCAResponse, ListCertificatesByCAError> {
-        let request_uri = format!("/certificates-by-ca/{ca_certificate_id}",
-                                  ca_certificate_id = input.ca_certificate_id);
+    #[doc = "<p>List the device certificates signed by the specified CA certificate.</p>"]
+    fn list_certificates_by_ca(
+        &self,
+        input: &ListCertificatesByCARequest,
+    ) -> Result<ListCertificatesByCAResponse, ListCertificatesByCAError> {
+        let request_uri = format!(
+            "/certificates-by-ca/{ca_certificate_id}",
+            ca_certificate_id = input.ca_certificate_id
+        );
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.ascending_order {
@@ -10000,7 +9915,6 @@ impl<P, D> Iot for IotClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -10012,31 +9926,29 @@ impl<P, D> Iot for IotClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<ListCertificatesByCAResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListCertificatesByCAError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListCertificatesByCAError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists certificates that are being transfered but not yet accepted.</p>"]
-    fn list_outgoing_certificates
-        (&self,
-         input: &ListOutgoingCertificatesRequest)
-         -> Result<ListOutgoingCertificatesResponse, ListOutgoingCertificatesError> {
+    #[doc = "<p>Lists certificates that are being transfered but not yet accepted.</p>"]
+    fn list_outgoing_certificates(
+        &self,
+        input: &ListOutgoingCertificatesRequest,
+    ) -> Result<ListOutgoingCertificatesResponse, ListOutgoingCertificatesError> {
         let request_uri = "/certificates-out-going";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.ascending_order {
@@ -10055,7 +9967,6 @@ impl<P, D> Iot for IotClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -10065,34 +9976,32 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListOutgoingCertificatesResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<ListOutgoingCertificatesResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListOutgoingCertificatesError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(ListOutgoingCertificatesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists your policies.</p>"]
-    fn list_policies(&self,
-                     input: &ListPoliciesRequest)
-                     -> Result<ListPoliciesResponse, ListPoliciesError> {
+    #[doc = "<p>Lists your policies.</p>"]
+    fn list_policies(
+        &self,
+        input: &ListPoliciesRequest,
+    ) -> Result<ListPoliciesResponse, ListPoliciesError> {
         let request_uri = "/policies";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.ascending_order {
@@ -10111,7 +10020,6 @@ impl<P, D> Iot for IotClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -10123,24 +10031,23 @@ impl<P, D> Iot for IotClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<ListPoliciesResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListPoliciesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListPoliciesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists the principals associated with the specified policy.</p>"]
-    fn list_policy_principals
-        (&self,
-         input: &ListPolicyPrincipalsRequest)
-         -> Result<ListPolicyPrincipalsResponse, ListPolicyPrincipalsError> {
+    #[doc = "<p>Lists the principals associated with the specified policy.</p>"]
+    fn list_policy_principals(
+        &self,
+        input: &ListPolicyPrincipalsRequest,
+    ) -> Result<ListPolicyPrincipalsResponse, ListPolicyPrincipalsError> {
         let request_uri = "/policy-principals";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -10166,7 +10073,6 @@ impl<P, D> Iot for IotClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -10178,40 +10084,38 @@ impl<P, D> Iot for IotClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<ListPolicyPrincipalsResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListPolicyPrincipalsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListPolicyPrincipalsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists the versions of the specified policy and identifies the default version.</p>"]
-    fn list_policy_versions(&self,
-                            input: &ListPolicyVersionsRequest)
-                            -> Result<ListPolicyVersionsResponse, ListPolicyVersionsError> {
-        let request_uri = format!("/policies/{policy_name}/version",
-                                  policy_name = input.policy_name);
+    #[doc = "<p>Lists the versions of the specified policy and identifies the default version.</p>"]
+    fn list_policy_versions(
+        &self,
+        input: &ListPolicyVersionsRequest,
+    ) -> Result<ListPolicyVersionsResponse, ListPolicyVersionsError> {
+        let request_uri = format!(
+            "/policies/{policy_name}/version",
+            policy_name = input.policy_name
+        );
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -10223,24 +10127,23 @@ impl<P, D> Iot for IotClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<ListPolicyVersionsResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListPolicyVersionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListPolicyVersionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists the policies attached to the specified principal. If you use an Cognito identity, the ID must be in <a href=\"http://docs.aws.amazon.com/cognitoidentity/latest/APIReference/API_GetCredentialsForIdentity.html#API_GetCredentialsForIdentity_RequestSyntax\">AmazonCognito Identity format</a>.</p>"]
-    fn list_principal_policies
-        (&self,
-         input: &ListPrincipalPoliciesRequest)
-         -> Result<ListPrincipalPoliciesResponse, ListPrincipalPoliciesError> {
+    fn list_principal_policies(
+        &self,
+        input: &ListPrincipalPoliciesRequest,
+    ) -> Result<ListPrincipalPoliciesResponse, ListPrincipalPoliciesError> {
         let request_uri = "/principal-policies";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -10266,7 +10169,6 @@ impl<P, D> Iot for IotClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -10276,26 +10178,26 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListPrincipalPoliciesResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<ListPrincipalPoliciesResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListPrincipalPoliciesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListPrincipalPoliciesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists the things associated with the specified principal.</p>"]
-    fn list_principal_things(&self,
-                             input: &ListPrincipalThingsRequest)
-                             -> Result<ListPrincipalThingsResponse, ListPrincipalThingsError> {
+    #[doc = "<p>Lists the things associated with the specified principal.</p>"]
+    fn list_principal_things(
+        &self,
+        input: &ListPrincipalThingsRequest,
+    ) -> Result<ListPrincipalThingsResponse, ListPrincipalThingsError> {
         let request_uri = "/principals/things";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -10318,7 +10220,6 @@ impl<P, D> Iot for IotClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -10330,40 +10231,38 @@ impl<P, D> Iot for IotClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<ListPrincipalThingsResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListPrincipalThingsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListPrincipalThingsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists the principals associated with the specified thing.</p>"]
-    fn list_thing_principals(&self,
-                             input: &ListThingPrincipalsRequest)
-                             -> Result<ListThingPrincipalsResponse, ListThingPrincipalsError> {
-        let request_uri = format!("/things/{thing_name}/principals",
-                                  thing_name = input.thing_name);
+    #[doc = "<p>Lists the principals associated with the specified thing.</p>"]
+    fn list_thing_principals(
+        &self,
+        input: &ListThingPrincipalsRequest,
+    ) -> Result<ListThingPrincipalsResponse, ListThingPrincipalsError> {
+        let request_uri = format!(
+            "/things/{thing_name}/principals",
+            thing_name = input.thing_name
+        );
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -10375,30 +10274,29 @@ impl<P, D> Iot for IotClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<ListThingPrincipalsResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListThingPrincipalsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListThingPrincipalsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists the existing thing types.</p>"]
-    fn list_thing_types(&self,
-                        input: &ListThingTypesRequest)
-                        -> Result<ListThingTypesResponse, ListThingTypesError> {
+    #[doc = "<p>Lists the existing thing types.</p>"]
+    fn list_thing_types(
+        &self,
+        input: &ListThingTypesRequest,
+    ) -> Result<ListThingTypesResponse, ListThingTypesError> {
         let request_uri = "/thing-types";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.max_results {
@@ -10417,7 +10315,6 @@ impl<P, D> Iot for IotClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -10429,30 +10326,29 @@ impl<P, D> Iot for IotClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<ListThingTypesResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListThingTypesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListThingTypesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists your things. Use the <b>attributeName</b> and <b>attributeValue</b> parameters to filter your things. For example, calling <code>ListThings</code> with attributeName=Color and attributeValue=Red retrieves all things in the registry that contain an attribute <b>Color</b> with the value <b>Red</b>. </p>"]
-    fn list_things(&self,
-                   input: &ListThingsRequest)
-                   -> Result<ListThingsResponse, ListThingsError> {
+    fn list_things(
+        &self,
+        input: &ListThingsRequest,
+    ) -> Result<ListThingsResponse, ListThingsError> {
         let request_uri = "/things";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.attribute_name {
@@ -10477,7 +10373,6 @@ impl<P, D> Iot for IotClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -10489,30 +10384,29 @@ impl<P, D> Iot for IotClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<ListThingsResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListThingsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListThingsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists the rules for the specific topic.</p>"]
-    fn list_topic_rules(&self,
-                        input: &ListTopicRulesRequest)
-                        -> Result<ListTopicRulesResponse, ListTopicRulesError> {
+    #[doc = "<p>Lists the rules for the specific topic.</p>"]
+    fn list_topic_rules(
+        &self,
+        input: &ListTopicRulesRequest,
+    ) -> Result<ListTopicRulesResponse, ListTopicRulesError> {
         let request_uri = "/rules";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.max_results {
@@ -10534,7 +10428,6 @@ impl<P, D> Iot for IotClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -10546,24 +10439,23 @@ impl<P, D> Iot for IotClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<ListTopicRulesResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListTopicRulesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListTopicRulesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Registers a CA certificate with AWS IoT. This CA certificate can then be used to sign device certificates, which can be then registered with AWS IoT. You can register up to 10 CA certificates per AWS account that have the same subject field. This enables you to have up to 10 certificate authorities sign your device certificates. If you have more than one CA certificate registered, make sure you pass the CA certificate when you register your device certificates with the RegisterCertificate API.</p>"]
-    fn register_ca_certificate
-        (&self,
-         input: &RegisterCACertificateRequest)
-         -> Result<RegisterCACertificateResponse, RegisterCACertificateError> {
+    fn register_ca_certificate(
+        &self,
+        input: &RegisterCACertificateRequest,
+    ) -> Result<RegisterCACertificateResponse, RegisterCACertificateError> {
         let request_uri = "/cacertificate";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -10587,7 +10479,6 @@ impl<P, D> Iot for IotClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -10597,26 +10488,26 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<RegisterCACertificateResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<RegisterCACertificateResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(RegisterCACertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(RegisterCACertificateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Registers a device certificate with AWS IoT. If you have more than one CA certificate that has the same subject field, you must specify the CA certificate that was used to sign the device certificate being registered.</p>"]
-    fn register_certificate(&self,
-                            input: &RegisterCertificateRequest)
-                            -> Result<RegisterCertificateResponse, RegisterCertificateError> {
+    fn register_certificate(
+        &self,
+        input: &RegisterCertificateRequest,
+    ) -> Result<RegisterCertificateResponse, RegisterCertificateError> {
         let request_uri = "/certificate/register";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -10626,14 +10517,11 @@ impl<P, D> Iot for IotClient<P, D>
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -10645,25 +10533,27 @@ impl<P, D> Iot for IotClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<RegisterCertificateResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(RegisterCertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(RegisterCertificateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Rejects a pending certificate transfer. After AWS IoT rejects a certificate transfer, the certificate status changes from <b>PENDING_TRANSFER</b> to <b>INACTIVE</b>.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p> <p>This operation can only be called by the transfer destination. After it is called, the certificate will be returned to the source's account in the INACTIVE state.</p>"]
-    fn reject_certificate_transfer(&self,
-                                   input: &RejectCertificateTransferRequest)
-                                   -> Result<(), RejectCertificateTransferError> {
-        let request_uri = format!("/reject-certificate-transfer/{certificate_id}",
-                                  certificate_id = input.certificate_id);
+    fn reject_certificate_transfer(
+        &self,
+        input: &RejectCertificateTransferRequest,
+    ) -> Result<(), RejectCertificateTransferError> {
+        let request_uri = format!(
+            "/reject-certificate-transfer/{certificate_id}",
+            certificate_id = input.certificate_id
+        );
 
         let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10672,8 +10562,6 @@ impl<P, D> Iot for IotClient<P, D>
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
@@ -10681,23 +10569,23 @@ impl<P, D> Iot for IotClient<P, D>
             StatusCode::Ok => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(RejectCertificateTransferError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(RejectCertificateTransferError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Replaces the specified rule. You must specify all parameters for the new rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>"]
-    fn replace_topic_rule(&self,
-                          input: &ReplaceTopicRuleRequest)
-                          -> Result<(), ReplaceTopicRuleError> {
+    fn replace_topic_rule(
+        &self,
+        input: &ReplaceTopicRuleRequest,
+    ) -> Result<(), ReplaceTopicRuleError> {
         let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
 
         let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
@@ -10707,8 +10595,6 @@ impl<P, D> Iot for IotClient<P, D>
         let encoded = Some(serde_json::to_vec(&input.topic_rule_payload).unwrap());
         request.set_payload(encoded);
 
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
@@ -10716,34 +10602,34 @@ impl<P, D> Iot for IotClient<P, D>
             StatusCode::Ok => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ReplaceTopicRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ReplaceTopicRuleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Sets the specified version of the specified policy as the policy's default (operative) version. This action affects all certificates to which the policy is attached. To list the principals the policy is attached to, use the ListPrincipalPolicy API.</p>"]
-    fn set_default_policy_version(&self,
-                                  input: &SetDefaultPolicyVersionRequest)
-                                  -> Result<(), SetDefaultPolicyVersionError> {
-        let request_uri = format!("/policies/{policy_name}/version/{policy_version_id}",
-                                  policy_name = input.policy_name,
-                                  policy_version_id = input.policy_version_id);
+    fn set_default_policy_version(
+        &self,
+        input: &SetDefaultPolicyVersionRequest,
+    ) -> Result<(), SetDefaultPolicyVersionError> {
+        let request_uri = format!(
+            "/policies/{policy_name}/version/{policy_version_id}",
+            policy_name = input.policy_name,
+            policy_version_id = input.policy_version_id
+        );
 
         let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
@@ -10751,23 +10637,23 @@ impl<P, D> Iot for IotClient<P, D>
             StatusCode::Ok => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(SetDefaultPolicyVersionError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(SetDefaultPolicyVersionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Sets the logging options.</p>"]
-    fn set_logging_options(&self,
-                           input: &SetLoggingOptionsRequest)
-                           -> Result<(), SetLoggingOptionsError> {
+    #[doc = "<p>Sets the logging options.</p>"]
+    fn set_logging_options(
+        &self,
+        input: &SetLoggingOptionsRequest,
+    ) -> Result<(), SetLoggingOptionsError> {
         let request_uri = "/loggingOptions";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -10777,8 +10663,6 @@ impl<P, D> Iot for IotClient<P, D>
         let encoded = Some(serde_json::to_vec(&input.logging_options_payload).unwrap());
         request.set_payload(encoded);
 
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
@@ -10786,24 +10670,27 @@ impl<P, D> Iot for IotClient<P, D>
             StatusCode::Ok => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(SetLoggingOptionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(SetLoggingOptionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Transfers the specified certificate to the specified AWS account.</p> <p>You can cancel the transfer until it is acknowledged by the recipient.</p> <p>No notification is sent to the transfer destination's account. It is up to the caller to notify the transfer target.</p> <p>The certificate being transferred must not be in the ACTIVE state. You can use the UpdateCertificate API to deactivate it.</p> <p>The certificate must not have any policies attached to it. You can use the DetachPrincipalPolicy API to detach them.</p>"]
-    fn transfer_certificate(&self,
-                            input: &TransferCertificateRequest)
-                            -> Result<TransferCertificateResponse, TransferCertificateError> {
-        let request_uri = format!("/transfer-certificate/{certificate_id}",
-                                  certificate_id = input.certificate_id);
+    fn transfer_certificate(
+        &self,
+        input: &TransferCertificateRequest,
+    ) -> Result<TransferCertificateResponse, TransferCertificateError> {
+        let request_uri = format!(
+            "/transfer-certificate/{certificate_id}",
+            certificate_id = input.certificate_id
+        );
 
         let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10821,7 +10708,6 @@ impl<P, D> Iot for IotClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -10833,31 +10719,32 @@ impl<P, D> Iot for IotClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<TransferCertificateResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(TransferCertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(TransferCertificateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Updates a registered CA certificate.</p>"]
-    fn update_ca_certificate(&self,
-                             input: &UpdateCACertificateRequest)
-                             -> Result<(), UpdateCACertificateError> {
-        let request_uri = format!("/cacertificate/{ca_certificate_id}",
-                                  ca_certificate_id = input.certificate_id);
+    #[doc = "<p>Updates a registered CA certificate.</p>"]
+    fn update_ca_certificate(
+        &self,
+        input: &UpdateCACertificateRequest,
+    ) -> Result<(), UpdateCACertificateError> {
+        let request_uri = format!(
+            "/cacertificate/{ca_certificate_id}",
+            ca_certificate_id = input.certificate_id
+        );
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.new_auto_registration_status {
@@ -10875,30 +10762,32 @@ impl<P, D> Iot for IotClient<P, D>
             StatusCode::Ok => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateCACertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateCACertificateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Updates the status of the specified certificate. This operation is idempotent.</p> <p>Moving a certificate from the ACTIVE state (including REVOKED) will not disconnect currently connected devices, but these devices will be unable to reconnect.</p> <p>The ACTIVE state is required to authenticate devices connecting to AWS IoT using a certificate.</p>"]
-    fn update_certificate(&self,
-                          input: &UpdateCertificateRequest)
-                          -> Result<(), UpdateCertificateError> {
-        let request_uri = format!("/certificates/{certificate_id}",
-                                  certificate_id = input.certificate_id);
+    fn update_certificate(
+        &self,
+        input: &UpdateCertificateRequest,
+    ) -> Result<(), UpdateCertificateError> {
+        let request_uri = format!(
+            "/certificates/{certificate_id}",
+            certificate_id = input.certificate_id
+        );
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-
 
         let mut params = Params::new();
         params.put("newStatus", &input.new_status);
@@ -10911,22 +10800,23 @@ impl<P, D> Iot for IotClient<P, D>
             StatusCode::Ok => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateCertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateCertificateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Updates the data for a thing.</p>"]
-    fn update_thing(&self,
-                    input: &UpdateThingRequest)
-                    -> Result<UpdateThingResponse, UpdateThingError> {
+    #[doc = "<p>Updates the data for a thing.</p>"]
+    fn update_thing(
+        &self,
+        input: &UpdateThingRequest,
+    ) -> Result<UpdateThingResponse, UpdateThingError> {
         let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
 
         let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
@@ -10936,14 +10826,11 @@ impl<P, D> Iot for IotClient<P, D>
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -10955,14 +10842,14 @@ impl<P, D> Iot for IotClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<UpdateThingResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateThingError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateThingError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

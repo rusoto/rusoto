@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -28,548 +27,547 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AddTagsToResourceRequest {
-    #[doc="<p>The Amazon Resource Name (ARN) of the AWS CloudHSM resource to tag.</p>"]
-    #[serde(rename="ResourceArn")]
+    /// <p>The Amazon Resource Name (ARN) of the AWS CloudHSM resource to tag.</p>
+    #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
-    #[doc="<p>One or more tags.</p>"]
-    #[serde(rename="TagList")]
+    /// <p>One or more tags.</p>
+    #[serde(rename = "TagList")]
     pub tag_list: Vec<Tag>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AddTagsToResourceResponse {
-    #[doc="<p>The status of the operation.</p>"]
-    #[serde(rename="Status")]
+    /// <p>The status of the operation.</p>
+    #[serde(rename = "Status")]
     pub status: String,
 }
 
-#[doc="<p>Contains the inputs for the <a>CreateHapgRequest</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Contains the inputs for the <a>CreateHapgRequest</a> action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateHapgRequest {
-    #[doc="<p>The label of the new high-availability partition group.</p>"]
-    #[serde(rename="Label")]
+    /// <p>The label of the new high-availability partition group.</p>
+    #[serde(rename = "Label")]
     pub label: String,
 }
 
-#[doc="<p>Contains the output of the <a>CreateHAPartitionGroup</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains the output of the <a>CreateHAPartitionGroup</a> action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateHapgResponse {
-    #[doc="<p>The ARN of the high-availability partition group.</p>"]
-    #[serde(rename="HapgArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the high-availability partition group.</p>
+    #[serde(rename = "HapgArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hapg_arn: Option<String>,
 }
 
-#[doc="<p>Contains the inputs for the <a>CreateHsm</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Contains the inputs for the <a>CreateHsm</a> operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateHsmRequest {
-    #[doc="<p>A user-defined token to ensure idempotence. Subsequent calls to this operation with the same token will be ignored.</p>"]
-    #[serde(rename="ClientToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A user-defined token to ensure idempotence. Subsequent calls to this operation with the same token will be ignored.</p>
+    #[serde(rename = "ClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
-    #[doc="<p>The IP address to assign to the HSM's ENI.</p> <p>If an IP address is not specified, an IP address will be randomly chosen from the CIDR range of the subnet.</p>"]
-    #[serde(rename="EniIp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The IP address to assign to the HSM's ENI.</p> <p>If an IP address is not specified, an IP address will be randomly chosen from the CIDR range of the subnet.</p>
+    #[serde(rename = "EniIp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub eni_ip: Option<String>,
-    #[doc="<p>The external ID from <b>IamRoleArn</b>, if present.</p>"]
-    #[serde(rename="ExternalId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The external ID from <b>IamRoleArn</b>, if present.</p>
+    #[serde(rename = "ExternalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub external_id: Option<String>,
-    #[doc="<p>The ARN of an IAM role to enable the AWS CloudHSM service to allocate an ENI on your behalf.</p>"]
-    #[serde(rename="IamRoleArn")]
+    /// <p>The ARN of an IAM role to enable the AWS CloudHSM service to allocate an ENI on your behalf.</p>
+    #[serde(rename = "IamRoleArn")]
     pub iam_role_arn: String,
-    #[doc="<p>The SSH public key to install on the HSM.</p>"]
-    #[serde(rename="SshKey")]
+    /// <p>The SSH public key to install on the HSM.</p>
+    #[serde(rename = "SshKey")]
     pub ssh_key: String,
-    #[doc="<p>The identifier of the subnet in your VPC in which to place the HSM.</p>"]
-    #[serde(rename="SubnetId")]
+    /// <p>The identifier of the subnet in your VPC in which to place the HSM.</p>
+    #[serde(rename = "SubnetId")]
     pub subnet_id: String,
-    #[serde(rename="SubscriptionType")]
-    pub subscription_type: String,
-    #[doc="<p>The IP address for the syslog monitoring server. The AWS CloudHSM service only supports one syslog monitoring server.</p>"]
-    #[serde(rename="SyslogIp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "SubscriptionType")] pub subscription_type: String,
+    /// <p>The IP address for the syslog monitoring server. The AWS CloudHSM service only supports one syslog monitoring server.</p>
+    #[serde(rename = "SyslogIp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub syslog_ip: Option<String>,
 }
 
-#[doc="<p>Contains the output of the <a>CreateHsm</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains the output of the <a>CreateHsm</a> operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateHsmResponse {
-    #[doc="<p>The ARN of the HSM.</p>"]
-    #[serde(rename="HsmArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the HSM.</p>
+    #[serde(rename = "HsmArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hsm_arn: Option<String>,
 }
 
-#[doc="<p>Contains the inputs for the <a>CreateLunaClient</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Contains the inputs for the <a>CreateLunaClient</a> action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateLunaClientRequest {
-    #[doc="<p>The contents of a Base64-Encoded X.509 v3 certificate to be installed on the HSMs used by this client.</p>"]
-    #[serde(rename="Certificate")]
+    /// <p>The contents of a Base64-Encoded X.509 v3 certificate to be installed on the HSMs used by this client.</p>
+    #[serde(rename = "Certificate")]
     pub certificate: String,
-    #[doc="<p>The label for the client.</p>"]
-    #[serde(rename="Label")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The label for the client.</p>
+    #[serde(rename = "Label")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub label: Option<String>,
 }
 
-#[doc="<p>Contains the output of the <a>CreateLunaClient</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains the output of the <a>CreateLunaClient</a> action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateLunaClientResponse {
-    #[doc="<p>The ARN of the client.</p>"]
-    #[serde(rename="ClientArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the client.</p>
+    #[serde(rename = "ClientArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub client_arn: Option<String>,
 }
 
-#[doc="<p>Contains the inputs for the <a>DeleteHapg</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Contains the inputs for the <a>DeleteHapg</a> action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteHapgRequest {
-    #[doc="<p>The ARN of the high-availability partition group to delete.</p>"]
-    #[serde(rename="HapgArn")]
+    /// <p>The ARN of the high-availability partition group to delete.</p>
+    #[serde(rename = "HapgArn")]
     pub hapg_arn: String,
 }
 
-#[doc="<p>Contains the output of the <a>DeleteHapg</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains the output of the <a>DeleteHapg</a> action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteHapgResponse {
-    #[doc="<p>The status of the action.</p>"]
-    #[serde(rename="Status")]
+    /// <p>The status of the action.</p>
+    #[serde(rename = "Status")]
     pub status: String,
 }
 
-#[doc="<p>Contains the inputs for the <a>DeleteHsm</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Contains the inputs for the <a>DeleteHsm</a> operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteHsmRequest {
-    #[doc="<p>The ARN of the HSM to delete.</p>"]
-    #[serde(rename="HsmArn")]
+    /// <p>The ARN of the HSM to delete.</p>
+    #[serde(rename = "HsmArn")]
     pub hsm_arn: String,
 }
 
-#[doc="<p>Contains the output of the <a>DeleteHsm</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains the output of the <a>DeleteHsm</a> operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteHsmResponse {
-    #[doc="<p>The status of the operation.</p>"]
-    #[serde(rename="Status")]
+    /// <p>The status of the operation.</p>
+    #[serde(rename = "Status")]
     pub status: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteLunaClientRequest {
-    #[doc="<p>The ARN of the client to delete.</p>"]
-    #[serde(rename="ClientArn")]
+    /// <p>The ARN of the client to delete.</p>
+    #[serde(rename = "ClientArn")]
     pub client_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteLunaClientResponse {
-    #[doc="<p>The status of the action.</p>"]
-    #[serde(rename="Status")]
+    /// <p>The status of the action.</p>
+    #[serde(rename = "Status")]
     pub status: String,
 }
 
-#[doc="<p>Contains the inputs for the <a>DescribeHapg</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Contains the inputs for the <a>DescribeHapg</a> action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeHapgRequest {
-    #[doc="<p>The ARN of the high-availability partition group to describe.</p>"]
-    #[serde(rename="HapgArn")]
+    /// <p>The ARN of the high-availability partition group to describe.</p>
+    #[serde(rename = "HapgArn")]
     pub hapg_arn: String,
 }
 
-#[doc="<p>Contains the output of the <a>DescribeHapg</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains the output of the <a>DescribeHapg</a> action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeHapgResponse {
-    #[doc="<p>The ARN of the high-availability partition group.</p>"]
-    #[serde(rename="HapgArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the high-availability partition group.</p>
+    #[serde(rename = "HapgArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hapg_arn: Option<String>,
-    #[doc="<p>The serial number of the high-availability partition group.</p>"]
-    #[serde(rename="HapgSerial")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The serial number of the high-availability partition group.</p>
+    #[serde(rename = "HapgSerial")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hapg_serial: Option<String>,
-    #[serde(rename="HsmsLastActionFailed")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "HsmsLastActionFailed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hsms_last_action_failed: Option<Vec<String>>,
-    #[serde(rename="HsmsPendingDeletion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "HsmsPendingDeletion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hsms_pending_deletion: Option<Vec<String>>,
-    #[serde(rename="HsmsPendingRegistration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "HsmsPendingRegistration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hsms_pending_registration: Option<Vec<String>>,
-    #[doc="<p>The label for the high-availability partition group.</p>"]
-    #[serde(rename="Label")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The label for the high-availability partition group.</p>
+    #[serde(rename = "Label")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub label: Option<String>,
-    #[doc="<p>The date and time the high-availability partition group was last modified.</p>"]
-    #[serde(rename="LastModifiedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time the high-availability partition group was last modified.</p>
+    #[serde(rename = "LastModifiedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_timestamp: Option<String>,
-    #[doc="<p>The list of partition serial numbers that belong to the high-availability partition group.</p>"]
-    #[serde(rename="PartitionSerialList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of partition serial numbers that belong to the high-availability partition group.</p>
+    #[serde(rename = "PartitionSerialList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub partition_serial_list: Option<Vec<String>>,
-    #[doc="<p>The state of the high-availability partition group.</p>"]
-    #[serde(rename="State")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The state of the high-availability partition group.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
 }
 
-#[doc="<p>Contains the inputs for the <a>DescribeHsm</a> operation. </p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Contains the inputs for the <a>DescribeHsm</a> operation. </p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeHsmRequest {
-    #[doc="<p>The ARN of the HSM. Either the <i>HsmArn</i> or the <i>SerialNumber</i> parameter must be specified.</p>"]
-    #[serde(rename="HsmArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the HSM. Either the <i>HsmArn</i> or the <i>SerialNumber</i> parameter must be specified.</p>
+    #[serde(rename = "HsmArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hsm_arn: Option<String>,
-    #[doc="<p>The serial number of the HSM. Either the <i>HsmArn</i> or the <i>HsmSerialNumber</i> parameter must be specified.</p>"]
-    #[serde(rename="HsmSerialNumber")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The serial number of the HSM. Either the <i>HsmArn</i> or the <i>HsmSerialNumber</i> parameter must be specified.</p>
+    #[serde(rename = "HsmSerialNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hsm_serial_number: Option<String>,
 }
 
-#[doc="<p>Contains the output of the <a>DescribeHsm</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains the output of the <a>DescribeHsm</a> operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeHsmResponse {
-    #[doc="<p>The Availability Zone that the HSM is in.</p>"]
-    #[serde(rename="AvailabilityZone")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Availability Zone that the HSM is in.</p>
+    #[serde(rename = "AvailabilityZone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zone: Option<String>,
-    #[doc="<p>The identifier of the elastic network interface (ENI) attached to the HSM.</p>"]
-    #[serde(rename="EniId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier of the elastic network interface (ENI) attached to the HSM.</p>
+    #[serde(rename = "EniId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub eni_id: Option<String>,
-    #[doc="<p>The IP address assigned to the HSM's ENI.</p>"]
-    #[serde(rename="EniIp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The IP address assigned to the HSM's ENI.</p>
+    #[serde(rename = "EniIp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub eni_ip: Option<String>,
-    #[doc="<p>The ARN of the HSM.</p>"]
-    #[serde(rename="HsmArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the HSM.</p>
+    #[serde(rename = "HsmArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hsm_arn: Option<String>,
-    #[doc="<p>The HSM model type.</p>"]
-    #[serde(rename="HsmType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The HSM model type.</p>
+    #[serde(rename = "HsmType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hsm_type: Option<String>,
-    #[doc="<p>The ARN of the IAM role assigned to the HSM.</p>"]
-    #[serde(rename="IamRoleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the IAM role assigned to the HSM.</p>
+    #[serde(rename = "IamRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_role_arn: Option<String>,
-    #[doc="<p>The list of partitions on the HSM.</p>"]
-    #[serde(rename="Partitions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of partitions on the HSM.</p>
+    #[serde(rename = "Partitions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub partitions: Option<Vec<String>>,
-    #[doc="<p>The serial number of the HSM.</p>"]
-    #[serde(rename="SerialNumber")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The serial number of the HSM.</p>
+    #[serde(rename = "SerialNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub serial_number: Option<String>,
-    #[doc="<p>The date and time that the server certificate was last updated.</p>"]
-    #[serde(rename="ServerCertLastUpdated")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time that the server certificate was last updated.</p>
+    #[serde(rename = "ServerCertLastUpdated")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub server_cert_last_updated: Option<String>,
-    #[doc="<p>The URI of the certificate server.</p>"]
-    #[serde(rename="ServerCertUri")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The URI of the certificate server.</p>
+    #[serde(rename = "ServerCertUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub server_cert_uri: Option<String>,
-    #[doc="<p>The HSM software version.</p>"]
-    #[serde(rename="SoftwareVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The HSM software version.</p>
+    #[serde(rename = "SoftwareVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub software_version: Option<String>,
-    #[doc="<p>The date and time that the SSH key was last updated.</p>"]
-    #[serde(rename="SshKeyLastUpdated")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time that the SSH key was last updated.</p>
+    #[serde(rename = "SshKeyLastUpdated")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ssh_key_last_updated: Option<String>,
-    #[doc="<p>The public SSH key.</p>"]
-    #[serde(rename="SshPublicKey")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The public SSH key.</p>
+    #[serde(rename = "SshPublicKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ssh_public_key: Option<String>,
-    #[doc="<p>The status of the HSM.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the HSM.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>Contains additional information about the status of the HSM.</p>"]
-    #[serde(rename="StatusDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Contains additional information about the status of the HSM.</p>
+    #[serde(rename = "StatusDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status_details: Option<String>,
-    #[doc="<p>The identifier of the subnet that the HSM is in.</p>"]
-    #[serde(rename="SubnetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier of the subnet that the HSM is in.</p>
+    #[serde(rename = "SubnetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_id: Option<String>,
-    #[doc="<p>The subscription end date.</p>"]
-    #[serde(rename="SubscriptionEndDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The subscription end date.</p>
+    #[serde(rename = "SubscriptionEndDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subscription_end_date: Option<String>,
-    #[doc="<p>The subscription start date.</p>"]
-    #[serde(rename="SubscriptionStartDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The subscription start date.</p>
+    #[serde(rename = "SubscriptionStartDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subscription_start_date: Option<String>,
-    #[serde(rename="SubscriptionType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "SubscriptionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subscription_type: Option<String>,
-    #[doc="<p>The name of the HSM vendor.</p>"]
-    #[serde(rename="VendorName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the HSM vendor.</p>
+    #[serde(rename = "VendorName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub vendor_name: Option<String>,
-    #[doc="<p>The identifier of the VPC that the HSM is in.</p>"]
-    #[serde(rename="VpcId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier of the VPC that the HSM is in.</p>
+    #[serde(rename = "VpcId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeLunaClientRequest {
-    #[doc="<p>The certificate fingerprint.</p>"]
-    #[serde(rename="CertificateFingerprint")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The certificate fingerprint.</p>
+    #[serde(rename = "CertificateFingerprint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_fingerprint: Option<String>,
-    #[doc="<p>The ARN of the client.</p>"]
-    #[serde(rename="ClientArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the client.</p>
+    #[serde(rename = "ClientArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub client_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeLunaClientResponse {
-    #[doc="<p>The certificate installed on the HSMs used by this client.</p>"]
-    #[serde(rename="Certificate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The certificate installed on the HSMs used by this client.</p>
+    #[serde(rename = "Certificate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate: Option<String>,
-    #[doc="<p>The certificate fingerprint.</p>"]
-    #[serde(rename="CertificateFingerprint")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The certificate fingerprint.</p>
+    #[serde(rename = "CertificateFingerprint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_fingerprint: Option<String>,
-    #[doc="<p>The ARN of the client.</p>"]
-    #[serde(rename="ClientArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the client.</p>
+    #[serde(rename = "ClientArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub client_arn: Option<String>,
-    #[doc="<p>The label of the client.</p>"]
-    #[serde(rename="Label")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The label of the client.</p>
+    #[serde(rename = "Label")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub label: Option<String>,
-    #[doc="<p>The date and time the client was last modified.</p>"]
-    #[serde(rename="LastModifiedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time the client was last modified.</p>
+    #[serde(rename = "LastModifiedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_timestamp: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetConfigRequest {
-    #[doc="<p>The ARN of the client.</p>"]
-    #[serde(rename="ClientArn")]
+    /// <p>The ARN of the client.</p>
+    #[serde(rename = "ClientArn")]
     pub client_arn: String,
-    #[doc="<p>The client version.</p>"]
-    #[serde(rename="ClientVersion")]
+    /// <p>The client version.</p>
+    #[serde(rename = "ClientVersion")]
     pub client_version: String,
-    #[doc="<p>A list of ARNs that identify the high-availability partition groups that are associated with the client.</p>"]
-    #[serde(rename="HapgList")]
+    /// <p>A list of ARNs that identify the high-availability partition groups that are associated with the client.</p>
+    #[serde(rename = "HapgList")]
     pub hapg_list: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetConfigResponse {
-    #[doc="<p>The certificate file containing the server.pem files of the HSMs.</p>"]
-    #[serde(rename="ConfigCred")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The certificate file containing the server.pem files of the HSMs.</p>
+    #[serde(rename = "ConfigCred")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub config_cred: Option<String>,
-    #[doc="<p>The chrystoki.conf configuration file.</p>"]
-    #[serde(rename="ConfigFile")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The chrystoki.conf configuration file.</p>
+    #[serde(rename = "ConfigFile")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub config_file: Option<String>,
-    #[doc="<p>The type of credentials.</p>"]
-    #[serde(rename="ConfigType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of credentials.</p>
+    #[serde(rename = "ConfigType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub config_type: Option<String>,
 }
 
-#[doc="<p>Contains the inputs for the <a>ListAvailableZones</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Contains the inputs for the <a>ListAvailableZones</a> action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListAvailableZonesRequest;
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListAvailableZonesResponse {
-    #[doc="<p>The list of Availability Zones that have available AWS CloudHSM capacity.</p>"]
-    #[serde(rename="AZList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of Availability Zones that have available AWS CloudHSM capacity.</p>
+    #[serde(rename = "AZList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub az_list: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListHapgsRequest {
-    #[doc="<p>The <i>NextToken</i> value from a previous call to <a>ListHapgs</a>. Pass null if this is the first call.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <i>NextToken</i> value from a previous call to <a>ListHapgs</a>. Pass null if this is the first call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListHapgsResponse {
-    #[doc="<p>The list of high-availability partition groups.</p>"]
-    #[serde(rename="HapgList")]
+    /// <p>The list of high-availability partition groups.</p>
+    #[serde(rename = "HapgList")]
     pub hapg_list: Vec<String>,
-    #[doc="<p>If not null, more results are available. Pass this value to <a>ListHapgs</a> to retrieve the next set of items.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If not null, more results are available. Pass this value to <a>ListHapgs</a> to retrieve the next set of items.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListHsmsRequest {
-    #[doc="<p>The <i>NextToken</i> value from a previous call to <a>ListHsms</a>. Pass null if this is the first call.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <i>NextToken</i> value from a previous call to <a>ListHsms</a>. Pass null if this is the first call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Contains the output of the <a>ListHsms</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains the output of the <a>ListHsms</a> operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListHsmsResponse {
-    #[doc="<p>The list of ARNs that identify the HSMs.</p>"]
-    #[serde(rename="HsmList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of ARNs that identify the HSMs.</p>
+    #[serde(rename = "HsmList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hsm_list: Option<Vec<String>>,
-    #[doc="<p>If not null, more results are available. Pass this value to <a>ListHsms</a> to retrieve the next set of items.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If not null, more results are available. Pass this value to <a>ListHsms</a> to retrieve the next set of items.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListLunaClientsRequest {
-    #[doc="<p>The <i>NextToken</i> value from a previous call to <a>ListLunaClients</a>. Pass null if this is the first call.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <i>NextToken</i> value from a previous call to <a>ListLunaClients</a>. Pass null if this is the first call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListLunaClientsResponse {
-    #[doc="<p>The list of clients.</p>"]
-    #[serde(rename="ClientList")]
+    /// <p>The list of clients.</p>
+    #[serde(rename = "ClientList")]
     pub client_list: Vec<String>,
-    #[doc="<p>If not null, more results are available. Pass this to <a>ListLunaClients</a> to retrieve the next set of items.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If not null, more results are available. Pass this to <a>ListLunaClients</a> to retrieve the next set of items.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListTagsForResourceRequest {
-    #[doc="<p>The Amazon Resource Name (ARN) of the AWS CloudHSM resource.</p>"]
-    #[serde(rename="ResourceArn")]
+    /// <p>The Amazon Resource Name (ARN) of the AWS CloudHSM resource.</p>
+    #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListTagsForResourceResponse {
-    #[doc="<p>One or more tags.</p>"]
-    #[serde(rename="TagList")]
+    /// <p>One or more tags.</p>
+    #[serde(rename = "TagList")]
     pub tag_list: Vec<Tag>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ModifyHapgRequest {
-    #[doc="<p>The ARN of the high-availability partition group to modify.</p>"]
-    #[serde(rename="HapgArn")]
+    /// <p>The ARN of the high-availability partition group to modify.</p>
+    #[serde(rename = "HapgArn")]
     pub hapg_arn: String,
-    #[doc="<p>The new label for the high-availability partition group.</p>"]
-    #[serde(rename="Label")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The new label for the high-availability partition group.</p>
+    #[serde(rename = "Label")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub label: Option<String>,
-    #[doc="<p>The list of partition serial numbers to make members of the high-availability partition group.</p>"]
-    #[serde(rename="PartitionSerialList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of partition serial numbers to make members of the high-availability partition group.</p>
+    #[serde(rename = "PartitionSerialList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub partition_serial_list: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ModifyHapgResponse {
-    #[doc="<p>The ARN of the high-availability partition group.</p>"]
-    #[serde(rename="HapgArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the high-availability partition group.</p>
+    #[serde(rename = "HapgArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hapg_arn: Option<String>,
 }
 
-#[doc="<p>Contains the inputs for the <a>ModifyHsm</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Contains the inputs for the <a>ModifyHsm</a> operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ModifyHsmRequest {
-    #[doc="<p>The new IP address for the elastic network interface (ENI) attached to the HSM.</p> <p>If the HSM is moved to a different subnet, and an IP address is not specified, an IP address will be randomly chosen from the CIDR range of the new subnet.</p>"]
-    #[serde(rename="EniIp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The new IP address for the elastic network interface (ENI) attached to the HSM.</p> <p>If the HSM is moved to a different subnet, and an IP address is not specified, an IP address will be randomly chosen from the CIDR range of the new subnet.</p>
+    #[serde(rename = "EniIp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub eni_ip: Option<String>,
-    #[doc="<p>The new external ID.</p>"]
-    #[serde(rename="ExternalId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The new external ID.</p>
+    #[serde(rename = "ExternalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub external_id: Option<String>,
-    #[doc="<p>The ARN of the HSM to modify.</p>"]
-    #[serde(rename="HsmArn")]
+    /// <p>The ARN of the HSM to modify.</p>
+    #[serde(rename = "HsmArn")]
     pub hsm_arn: String,
-    #[doc="<p>The new IAM role ARN.</p>"]
-    #[serde(rename="IamRoleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The new IAM role ARN.</p>
+    #[serde(rename = "IamRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_role_arn: Option<String>,
-    #[doc="<p>The new identifier of the subnet that the HSM is in. The new subnet must be in the same Availability Zone as the current subnet.</p>"]
-    #[serde(rename="SubnetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The new identifier of the subnet that the HSM is in. The new subnet must be in the same Availability Zone as the current subnet.</p>
+    #[serde(rename = "SubnetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_id: Option<String>,
-    #[doc="<p>The new IP address for the syslog monitoring server. The AWS CloudHSM service only supports one syslog monitoring server.</p>"]
-    #[serde(rename="SyslogIp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The new IP address for the syslog monitoring server. The AWS CloudHSM service only supports one syslog monitoring server.</p>
+    #[serde(rename = "SyslogIp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub syslog_ip: Option<String>,
 }
 
-#[doc="<p>Contains the output of the <a>ModifyHsm</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains the output of the <a>ModifyHsm</a> operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ModifyHsmResponse {
-    #[doc="<p>The ARN of the HSM.</p>"]
-    #[serde(rename="HsmArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the HSM.</p>
+    #[serde(rename = "HsmArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hsm_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ModifyLunaClientRequest {
-    #[doc="<p>The new certificate for the client.</p>"]
-    #[serde(rename="Certificate")]
+    /// <p>The new certificate for the client.</p>
+    #[serde(rename = "Certificate")]
     pub certificate: String,
-    #[doc="<p>The ARN of the client.</p>"]
-    #[serde(rename="ClientArn")]
+    /// <p>The ARN of the client.</p>
+    #[serde(rename = "ClientArn")]
     pub client_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ModifyLunaClientResponse {
-    #[doc="<p>The ARN of the client.</p>"]
-    #[serde(rename="ClientArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the client.</p>
+    #[serde(rename = "ClientArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub client_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct RemoveTagsFromResourceRequest {
-    #[doc="<p>The Amazon Resource Name (ARN) of the AWS CloudHSM resource.</p>"]
-    #[serde(rename="ResourceArn")]
+    /// <p>The Amazon Resource Name (ARN) of the AWS CloudHSM resource.</p>
+    #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
-    #[doc="<p>The tag key or keys to remove.</p> <p>Specify only the tag key to remove (not the value). To overwrite the value for an existing tag, use <a>AddTagsToResource</a>.</p>"]
-    #[serde(rename="TagKeyList")]
+    /// <p>The tag key or keys to remove.</p> <p>Specify only the tag key to remove (not the value). To overwrite the value for an existing tag, use <a>AddTagsToResource</a>.</p>
+    #[serde(rename = "TagKeyList")]
     pub tag_key_list: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RemoveTagsFromResourceResponse {
-    #[doc="<p>The status of the operation.</p>"]
-    #[serde(rename="Status")]
+    /// <p>The status of the operation.</p>
+    #[serde(rename = "Status")]
     pub status: String,
 }
 
-#[doc="<p>A key-value pair that identifies or specifies metadata about an AWS CloudHSM resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>A key-value pair that identifies or specifies metadata about an AWS CloudHSM resource.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Tag {
-    #[doc="<p>The key of the tag.</p>"]
-    #[serde(rename="Key")]
+    /// <p>The key of the tag.</p>
+    #[serde(rename = "Key")]
     pub key: String,
-    #[doc="<p>The value of the tag.</p>"]
-    #[serde(rename="Value")]
+    /// <p>The value of the tag.</p>
+    #[serde(rename = "Value")]
     pub value: String,
 }
 
@@ -591,7 +589,6 @@ pub enum AddTagsToResourceError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl AddTagsToResourceError {
     pub fn from_body(body: &str) -> AddTagsToResourceError {
@@ -685,7 +682,6 @@ pub enum CreateHapgError {
     Unknown(String),
 }
 
-
 impl CreateHapgError {
     pub fn from_body(body: &str) -> CreateHapgError {
         match from_str::<SerdeJsonValue>(body) {
@@ -774,7 +770,6 @@ pub enum CreateHsmError {
     Unknown(String),
 }
 
-
 impl CreateHsmError {
     pub fn from_body(body: &str) -> CreateHsmError {
         match from_str::<SerdeJsonValue>(body) {
@@ -862,7 +857,6 @@ pub enum CreateLunaClientError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateLunaClientError {
     pub fn from_body(body: &str) -> CreateLunaClientError {
@@ -954,7 +948,6 @@ pub enum DeleteHapgError {
     Unknown(String),
 }
 
-
 impl DeleteHapgError {
     pub fn from_body(body: &str) -> DeleteHapgError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1043,7 +1036,6 @@ pub enum DeleteHsmError {
     Unknown(String),
 }
 
-
 impl DeleteHsmError {
     pub fn from_body(body: &str) -> DeleteHsmError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1131,7 +1123,6 @@ pub enum DeleteLunaClientError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteLunaClientError {
     pub fn from_body(body: &str) -> DeleteLunaClientError {
@@ -1223,7 +1214,6 @@ pub enum DescribeHapgError {
     Unknown(String),
 }
 
-
 impl DescribeHapgError {
     pub fn from_body(body: &str) -> DescribeHapgError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1314,7 +1304,6 @@ pub enum DescribeHsmError {
     Unknown(String),
 }
 
-
 impl DescribeHsmError {
     pub fn from_body(body: &str) -> DescribeHsmError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1404,7 +1393,6 @@ pub enum DescribeLunaClientError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeLunaClientError {
     pub fn from_body(body: &str) -> DescribeLunaClientError {
@@ -1498,7 +1486,6 @@ pub enum GetConfigError {
     Unknown(String),
 }
 
-
 impl GetConfigError {
     pub fn from_body(body: &str) -> GetConfigError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1586,7 +1573,6 @@ pub enum ListAvailableZonesError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListAvailableZonesError {
     pub fn from_body(body: &str) -> ListAvailableZonesError {
@@ -1680,7 +1666,6 @@ pub enum ListHapgsError {
     Unknown(String),
 }
 
-
 impl ListHapgsError {
     pub fn from_body(body: &str) -> ListHapgsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1769,7 +1754,6 @@ pub enum ListHsmsError {
     Unknown(String),
 }
 
-
 impl ListHsmsError {
     pub fn from_body(body: &str) -> ListHsmsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1857,7 +1841,6 @@ pub enum ListLunaClientsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListLunaClientsError {
     pub fn from_body(body: &str) -> ListLunaClientsError {
@@ -1948,7 +1931,6 @@ pub enum ListTagsForResourceError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListTagsForResourceError {
     pub fn from_body(body: &str) -> ListTagsForResourceError {
@@ -2042,7 +2024,6 @@ pub enum ModifyHapgError {
     Unknown(String),
 }
 
-
 impl ModifyHapgError {
     pub fn from_body(body: &str) -> ModifyHapgError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2131,7 +2112,6 @@ pub enum ModifyHsmError {
     Unknown(String),
 }
 
-
 impl ModifyHsmError {
     pub fn from_body(body: &str) -> ModifyHsmError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2216,7 +2196,6 @@ pub enum ModifyLunaClientError {
     Unknown(String),
 }
 
-
 impl ModifyLunaClientError {
     pub fn from_body(body: &str) -> ModifyLunaClientError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2299,7 +2278,6 @@ pub enum RemoveTagsFromResourceError {
     Unknown(String),
 }
 
-
 impl RemoveTagsFromResourceError {
     pub fn from_body(body: &str) -> RemoveTagsFromResourceError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2376,115 +2354,103 @@ impl Error for RemoveTagsFromResourceError {
 /// Trait representing the capabilities of the CloudHSM API. CloudHSM clients implement this trait.
 pub trait CloudHsm {
     #[doc="<p>Adds or overwrites one or more tags for the specified AWS CloudHSM resource.</p> <p>Each tag consists of a key and a value. Tag keys must be unique to each resource.</p>"]
-    fn add_tags_to_resource(&self,
-                            input: &AddTagsToResourceRequest)
-                            -> Result<AddTagsToResourceResponse, AddTagsToResourceError>;
-
+    fn add_tags_to_resource(
+        &self,
+        input: &AddTagsToResourceRequest,
+    ) -> Result<AddTagsToResourceResponse, AddTagsToResourceError>;
 
     #[doc="<p>Creates a high-availability partition group. A high-availability partition group is a group of partitions that spans multiple physical HSMs.</p>"]
-    fn create_hapg(&self,
-                   input: &CreateHapgRequest)
-                   -> Result<CreateHapgResponse, CreateHapgError>;
-
+    fn create_hapg(&self, input: &CreateHapgRequest)
+        -> Result<CreateHapgResponse, CreateHapgError>;
 
     #[doc="<p>Creates an uninitialized HSM instance.</p> <p>There is an upfront fee charged for each HSM instance that you create with the <a>CreateHsm</a> operation. If you accidentally provision an HSM and want to request a refund, delete the instance using the <a>DeleteHsm</a> operation, go to the <a href=\"https://console.aws.amazon.com/support/home#/\">AWS Support Center</a>, create a new case, and select <b>Account and Billing Support</b>.</p> <important> <p>It can take up to 20 minutes to create and provision an HSM. You can monitor the status of the HSM with the <a>DescribeHsm</a> operation. The HSM is ready to be initialized when the status changes to <code>RUNNING</code>.</p> </important>"]
     fn create_hsm(&self, input: &CreateHsmRequest) -> Result<CreateHsmResponse, CreateHsmError>;
 
+    #[doc = "<p>Creates an HSM client.</p>"]
+    fn create_luna_client(
+        &self,
+        input: &CreateLunaClientRequest,
+    ) -> Result<CreateLunaClientResponse, CreateLunaClientError>;
 
-    #[doc="<p>Creates an HSM client.</p>"]
-    fn create_luna_client(&self,
-                          input: &CreateLunaClientRequest)
-                          -> Result<CreateLunaClientResponse, CreateLunaClientError>;
-
-
-    #[doc="<p>Deletes a high-availability partition group.</p>"]
-    fn delete_hapg(&self,
-                   input: &DeleteHapgRequest)
-                   -> Result<DeleteHapgResponse, DeleteHapgError>;
-
+    #[doc = "<p>Deletes a high-availability partition group.</p>"]
+    fn delete_hapg(&self, input: &DeleteHapgRequest)
+        -> Result<DeleteHapgResponse, DeleteHapgError>;
 
     #[doc="<p>Deletes an HSM. After completion, this operation cannot be undone and your key material cannot be recovered.</p>"]
     fn delete_hsm(&self, input: &DeleteHsmRequest) -> Result<DeleteHsmResponse, DeleteHsmError>;
 
+    #[doc = "<p>Deletes a client.</p>"]
+    fn delete_luna_client(
+        &self,
+        input: &DeleteLunaClientRequest,
+    ) -> Result<DeleteLunaClientResponse, DeleteLunaClientError>;
 
-    #[doc="<p>Deletes a client.</p>"]
-    fn delete_luna_client(&self,
-                          input: &DeleteLunaClientRequest)
-                          -> Result<DeleteLunaClientResponse, DeleteLunaClientError>;
-
-
-    #[doc="<p>Retrieves information about a high-availability partition group.</p>"]
-    fn describe_hapg(&self,
-                     input: &DescribeHapgRequest)
-                     -> Result<DescribeHapgResponse, DescribeHapgError>;
-
+    #[doc = "<p>Retrieves information about a high-availability partition group.</p>"]
+    fn describe_hapg(
+        &self,
+        input: &DescribeHapgRequest,
+    ) -> Result<DescribeHapgResponse, DescribeHapgError>;
 
     #[doc="<p>Retrieves information about an HSM. You can identify the HSM by its ARN or its serial number.</p>"]
-    fn describe_hsm(&self,
-                    input: &DescribeHsmRequest)
-                    -> Result<DescribeHsmResponse, DescribeHsmError>;
+    fn describe_hsm(
+        &self,
+        input: &DescribeHsmRequest,
+    ) -> Result<DescribeHsmResponse, DescribeHsmError>;
 
-
-    #[doc="<p>Retrieves information about an HSM client.</p>"]
-    fn describe_luna_client(&self,
-                            input: &DescribeLunaClientRequest)
-                            -> Result<DescribeLunaClientResponse, DescribeLunaClientError>;
-
+    #[doc = "<p>Retrieves information about an HSM client.</p>"]
+    fn describe_luna_client(
+        &self,
+        input: &DescribeLunaClientRequest,
+    ) -> Result<DescribeLunaClientResponse, DescribeLunaClientError>;
 
     #[doc="<p>Gets the configuration files necessary to connect to all high availability partition groups the client is associated with.</p>"]
     fn get_config(&self, input: &GetConfigRequest) -> Result<GetConfigResponse, GetConfigError>;
 
-
-    #[doc="<p>Lists the Availability Zones that have available AWS CloudHSM capacity.</p>"]
+    #[doc = "<p>Lists the Availability Zones that have available AWS CloudHSM capacity.</p>"]
     fn list_available_zones(&self) -> Result<ListAvailableZonesResponse, ListAvailableZonesError>;
-
 
     #[doc="<p>Lists the high-availability partition groups for the account.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> member. If more results are available, the <i>NextToken</i> member of the response contains a token that you pass in the next call to <a>ListHapgs</a> to retrieve the next set of items.</p>"]
     fn list_hapgs(&self, input: &ListHapgsRequest) -> Result<ListHapgsResponse, ListHapgsError>;
 
-
     #[doc="<p>Retrieves the identifiers of all of the HSMs provisioned for the current customer.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> member. If more results are available, the <i>NextToken</i> member of the response contains a token that you pass in the next call to <a>ListHsms</a> to retrieve the next set of items.</p>"]
     fn list_hsms(&self, input: &ListHsmsRequest) -> Result<ListHsmsResponse, ListHsmsError>;
 
-
     #[doc="<p>Lists all of the clients.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> member. If more results are available, the <i>NextToken</i> member of the response contains a token that you pass in the next call to <a>ListLunaClients</a> to retrieve the next set of items.</p>"]
-    fn list_luna_clients(&self,
-                         input: &ListLunaClientsRequest)
-                         -> Result<ListLunaClientsResponse, ListLunaClientsError>;
+    fn list_luna_clients(
+        &self,
+        input: &ListLunaClientsRequest,
+    ) -> Result<ListLunaClientsResponse, ListLunaClientsError>;
 
+    #[doc = "<p>Returns a list of all tags for the specified AWS CloudHSM resource.</p>"]
+    fn list_tags_for_resource(
+        &self,
+        input: &ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, ListTagsForResourceError>;
 
-    #[doc="<p>Returns a list of all tags for the specified AWS CloudHSM resource.</p>"]
-    fn list_tags_for_resource(&self,
-                              input: &ListTagsForResourceRequest)
-                              -> Result<ListTagsForResourceResponse, ListTagsForResourceError>;
-
-
-    #[doc="<p>Modifies an existing high-availability partition group.</p>"]
-    fn modify_hapg(&self,
-                   input: &ModifyHapgRequest)
-                   -> Result<ModifyHapgResponse, ModifyHapgError>;
-
+    #[doc = "<p>Modifies an existing high-availability partition group.</p>"]
+    fn modify_hapg(&self, input: &ModifyHapgRequest)
+        -> Result<ModifyHapgResponse, ModifyHapgError>;
 
     #[doc="<p>Modifies an HSM.</p> <important> <p>This operation can result in the HSM being offline for up to 15 minutes while the AWS CloudHSM service is reconfigured. If you are modifying a production HSM, you should ensure that your AWS CloudHSM service is configured for high availability, and consider executing this operation during a maintenance window.</p> </important>"]
     fn modify_hsm(&self, input: &ModifyHsmRequest) -> Result<ModifyHsmResponse, ModifyHsmError>;
 
-
     #[doc="<p>Modifies the certificate used by the client.</p> <p>This action can potentially start a workflow to install the new certificate on the client's HSMs.</p>"]
-    fn modify_luna_client(&self,
-                          input: &ModifyLunaClientRequest)
-                          -> Result<ModifyLunaClientResponse, ModifyLunaClientError>;
-
+    fn modify_luna_client(
+        &self,
+        input: &ModifyLunaClientRequest,
+    ) -> Result<ModifyLunaClientResponse, ModifyLunaClientError>;
 
     #[doc="<p>Removes one or more tags from the specified AWS CloudHSM resource.</p> <p>To remove a tag, specify only the tag key to remove (not the value). To overwrite the value for an existing tag, use <a>AddTagsToResource</a>.</p>"]
-    fn remove_tags_from_resource
-        (&self,
-         input: &RemoveTagsFromResourceRequest)
-         -> Result<RemoveTagsFromResourceResponse, RemoveTagsFromResourceError>;
+    fn remove_tags_from_resource(
+        &self,
+        input: &RemoveTagsFromResourceRequest,
+    ) -> Result<RemoveTagsFromResourceResponse, RemoveTagsFromResourceError>;
 }
 /// A client for the CloudHSM API.
 pub struct CloudHsmClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -2492,8 +2458,9 @@ pub struct CloudHsmClient<P, D>
 }
 
 impl<P, D> CloudHsmClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         CloudHsmClient {
@@ -2505,13 +2472,15 @@ impl<P, D> CloudHsmClient<P, D>
 }
 
 impl<P, D> CloudHsm for CloudHsmClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     #[doc="<p>Adds or overwrites one or more tags for the specified AWS CloudHSM resource.</p> <p>Each tag consists of a key and a value. Tag keys must be unique to each resource.</p>"]
-    fn add_tags_to_resource(&self,
-                            input: &AddTagsToResourceRequest)
-                            -> Result<AddTagsToResourceResponse, AddTagsToResourceError> {
+    fn add_tags_to_resource(
+        &self,
+        input: &AddTagsToResourceRequest,
+    ) -> Result<AddTagsToResourceResponse, AddTagsToResourceError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2527,21 +2496,25 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AddTagsToResourceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<AddTagsToResourceResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AddTagsToResourceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a high-availability partition group. A high-availability partition group is a group of partitions that spans multiple physical HSMs.</p>"]
-    fn create_hapg(&self,
-                   input: &CreateHapgRequest)
-                   -> Result<CreateHapgResponse, CreateHapgError> {
+    fn create_hapg(
+        &self,
+        input: &CreateHapgRequest,
+    ) -> Result<CreateHapgResponse, CreateHapgError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2557,18 +2530,19 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateHapgResponse>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateHapgResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateHapgError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateHapgError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Creates an uninitialized HSM instance.</p> <p>There is an upfront fee charged for each HSM instance that you create with the <a>CreateHsm</a> operation. If you accidentally provision an HSM and want to request a refund, delete the instance using the <a>DeleteHsm</a> operation, go to the <a href=\"https://console.aws.amazon.com/support/home#/\">AWS Support Center</a>, create a new case, and select <b>Account and Billing Support</b>.</p> <important> <p>It can take up to 20 minutes to create and provision an HSM. You can monitor the status of the HSM with the <a>DescribeHsm</a> operation. The HSM is ready to be initialized when the status changes to <code>RUNNING</code>.</p> </important>"]
     fn create_hsm(&self, input: &CreateHsmRequest) -> Result<CreateHsmResponse, CreateHsmError> {
@@ -2587,23 +2561,25 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateHsmResponse>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateHsmResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateHsmError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateHsmError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates an HSM client.</p>"]
-    fn create_luna_client(&self,
-                          input: &CreateLunaClientRequest)
-                          -> Result<CreateLunaClientResponse, CreateLunaClientError> {
+    #[doc = "<p>Creates an HSM client.</p>"]
+    fn create_luna_client(
+        &self,
+        input: &CreateLunaClientRequest,
+    ) -> Result<CreateLunaClientResponse, CreateLunaClientError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2619,23 +2595,25 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateLunaClientResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateLunaClientResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateLunaClientError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateLunaClientError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes a high-availability partition group.</p>"]
-    fn delete_hapg(&self,
-                   input: &DeleteHapgRequest)
-                   -> Result<DeleteHapgResponse, DeleteHapgError> {
+    #[doc = "<p>Deletes a high-availability partition group.</p>"]
+    fn delete_hapg(
+        &self,
+        input: &DeleteHapgRequest,
+    ) -> Result<DeleteHapgResponse, DeleteHapgError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2651,18 +2629,19 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteHapgResponse>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteHapgResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteHapgError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteHapgError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Deletes an HSM. After completion, this operation cannot be undone and your key material cannot be recovered.</p>"]
     fn delete_hsm(&self, input: &DeleteHsmRequest) -> Result<DeleteHsmResponse, DeleteHsmError> {
@@ -2681,23 +2660,25 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteHsmResponse>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteHsmResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteHsmError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteHsmError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes a client.</p>"]
-    fn delete_luna_client(&self,
-                          input: &DeleteLunaClientRequest)
-                          -> Result<DeleteLunaClientResponse, DeleteLunaClientError> {
+    #[doc = "<p>Deletes a client.</p>"]
+    fn delete_luna_client(
+        &self,
+        input: &DeleteLunaClientRequest,
+    ) -> Result<DeleteLunaClientResponse, DeleteLunaClientError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2713,23 +2694,25 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteLunaClientResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteLunaClientResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteLunaClientError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteLunaClientError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves information about a high-availability partition group.</p>"]
-    fn describe_hapg(&self,
-                     input: &DescribeHapgRequest)
-                     -> Result<DescribeHapgResponse, DescribeHapgError> {
+    #[doc = "<p>Retrieves information about a high-availability partition group.</p>"]
+    fn describe_hapg(
+        &self,
+        input: &DescribeHapgRequest,
+    ) -> Result<DescribeHapgResponse, DescribeHapgError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2745,23 +2728,25 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeHapgResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribeHapgResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeHapgError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeHapgError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves information about an HSM. You can identify the HSM by its ARN or its serial number.</p>"]
-    fn describe_hsm(&self,
-                    input: &DescribeHsmRequest)
-                    -> Result<DescribeHsmResponse, DescribeHsmError> {
+    fn describe_hsm(
+        &self,
+        input: &DescribeHsmRequest,
+    ) -> Result<DescribeHsmResponse, DescribeHsmError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2777,23 +2762,25 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeHsmResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribeHsmResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeHsmError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeHsmError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves information about an HSM client.</p>"]
-    fn describe_luna_client(&self,
-                            input: &DescribeLunaClientRequest)
-                            -> Result<DescribeLunaClientResponse, DescribeLunaClientError> {
+    #[doc = "<p>Retrieves information about an HSM client.</p>"]
+    fn describe_luna_client(
+        &self,
+        input: &DescribeLunaClientRequest,
+    ) -> Result<DescribeLunaClientResponse, DescribeLunaClientError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2809,16 +2796,19 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeLunaClientResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeLunaClientResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeLunaClientError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeLunaClientError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Gets the configuration files necessary to connect to all high availability partition groups the client is associated with.</p>"]
     fn get_config(&self, input: &GetConfigRequest) -> Result<GetConfigResponse, GetConfigError> {
@@ -2837,20 +2827,21 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetConfigResponse>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetConfigResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetConfigError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetConfigError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists the Availability Zones that have available AWS CloudHSM capacity.</p>"]
+    #[doc = "<p>Lists the Availability Zones that have available AWS CloudHSM capacity.</p>"]
     fn list_available_zones(&self) -> Result<ListAvailableZonesResponse, ListAvailableZonesError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
@@ -2866,16 +2857,19 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListAvailableZonesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListAvailableZonesResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListAvailableZonesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListAvailableZonesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Lists the high-availability partition groups for the account.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> member. If more results are available, the <i>NextToken</i> member of the response contains a token that you pass in the next call to <a>ListHapgs</a> to retrieve the next set of items.</p>"]
     fn list_hapgs(&self, input: &ListHapgsRequest) -> Result<ListHapgsResponse, ListHapgsError> {
@@ -2894,18 +2888,19 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListHapgsResponse>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListHapgsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListHapgsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListHapgsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Retrieves the identifiers of all of the HSMs provisioned for the current customer.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> member. If more results are available, the <i>NextToken</i> member of the response contains a token that you pass in the next call to <a>ListHsms</a> to retrieve the next set of items.</p>"]
     fn list_hsms(&self, input: &ListHsmsRequest) -> Result<ListHsmsResponse, ListHsmsError> {
@@ -2924,23 +2919,25 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListHsmsResponse>(String::from_utf8_lossy(&body)
-                                                                .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListHsmsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListHsmsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListHsmsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists all of the clients.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> member. If more results are available, the <i>NextToken</i> member of the response contains a token that you pass in the next call to <a>ListLunaClients</a> to retrieve the next set of items.</p>"]
-    fn list_luna_clients(&self,
-                         input: &ListLunaClientsRequest)
-                         -> Result<ListLunaClientsResponse, ListLunaClientsError> {
+    fn list_luna_clients(
+        &self,
+        input: &ListLunaClientsRequest,
+    ) -> Result<ListLunaClientsResponse, ListLunaClientsError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2956,28 +2953,32 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListLunaClientsResponse>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListLunaClientsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListLunaClientsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListLunaClientsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Returns a list of all tags for the specified AWS CloudHSM resource.</p>"]
-    fn list_tags_for_resource(&self,
-                              input: &ListTagsForResourceRequest)
-                              -> Result<ListTagsForResourceResponse, ListTagsForResourceError> {
+    #[doc = "<p>Returns a list of all tags for the specified AWS CloudHSM resource.</p>"]
+    fn list_tags_for_resource(
+        &self,
+        input: &ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, ListTagsForResourceError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "CloudHsmFrontendService.ListTagsForResource");
+        request.add_header(
+            "x-amz-target",
+            "CloudHsmFrontendService.ListTagsForResource",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2989,21 +2990,25 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListTagsForResourceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListTagsForResourceResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListTagsForResourceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Modifies an existing high-availability partition group.</p>"]
-    fn modify_hapg(&self,
-                   input: &ModifyHapgRequest)
-                   -> Result<ModifyHapgResponse, ModifyHapgError> {
+    #[doc = "<p>Modifies an existing high-availability partition group.</p>"]
+    fn modify_hapg(
+        &self,
+        input: &ModifyHapgRequest,
+    ) -> Result<ModifyHapgResponse, ModifyHapgError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3019,18 +3024,19 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ModifyHapgResponse>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ModifyHapgResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ModifyHapgError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ModifyHapgError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Modifies an HSM.</p> <important> <p>This operation can result in the HSM being offline for up to 15 minutes while the AWS CloudHSM service is reconfigured. If you are modifying a production HSM, you should ensure that your AWS CloudHSM service is configured for high availability, and consider executing this operation during a maintenance window.</p> </important>"]
     fn modify_hsm(&self, input: &ModifyHsmRequest) -> Result<ModifyHsmResponse, ModifyHsmError> {
@@ -3049,23 +3055,25 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ModifyHsmResponse>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ModifyHsmResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ModifyHsmError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ModifyHsmError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Modifies the certificate used by the client.</p> <p>This action can potentially start a workflow to install the new certificate on the client's HSMs.</p>"]
-    fn modify_luna_client(&self,
-                          input: &ModifyLunaClientRequest)
-                          -> Result<ModifyLunaClientResponse, ModifyLunaClientError> {
+    fn modify_luna_client(
+        &self,
+        input: &ModifyLunaClientRequest,
+    ) -> Result<ModifyLunaClientResponse, ModifyLunaClientError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3081,29 +3089,32 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ModifyLunaClientResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ModifyLunaClientResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ModifyLunaClientError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ModifyLunaClientError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Removes one or more tags from the specified AWS CloudHSM resource.</p> <p>To remove a tag, specify only the tag key to remove (not the value). To overwrite the value for an existing tag, use <a>AddTagsToResource</a>.</p>"]
-    fn remove_tags_from_resource
-        (&self,
-         input: &RemoveTagsFromResourceRequest)
-         -> Result<RemoveTagsFromResourceResponse, RemoveTagsFromResourceError> {
+    fn remove_tags_from_resource(
+        &self,
+        input: &RemoveTagsFromResourceRequest,
+    ) -> Result<RemoveTagsFromResourceResponse, RemoveTagsFromResourceError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "CloudHsmFrontendService.RemoveTagsFromResource");
+        request.add_header(
+            "x-amz-target",
+            "CloudHsmFrontendService.RemoveTagsFromResource",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3115,12 +3126,16 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<RemoveTagsFromResourceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<RemoveTagsFromResourceResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(RemoveTagsFromResourceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

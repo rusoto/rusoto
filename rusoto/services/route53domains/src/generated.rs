@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -28,791 +27,791 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[doc="<p>Information for one billing record.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information for one billing record.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct BillingRecord {
-    #[doc="<p>The date that the operation was billed, in Unix format.</p>"]
-    #[serde(rename="BillDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the operation was billed, in Unix format.</p>
+    #[serde(rename = "BillDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bill_date: Option<f64>,
-    #[doc="<p>The name of the domain that the billing record applies to. If the domain name contains characters other than a-z, 0-9, and - (hyphen), such as an internationalized domain name, then this value is in Punycode. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DomainNameFormat.html\">DNS Domain Name Format</a> in the <i>Amazon Route 53 Developer Guidezzz</i>.</p>"]
-    #[serde(rename="DomainName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the domain that the billing record applies to. If the domain name contains characters other than a-z, 0-9, and - (hyphen), such as an internationalized domain name, then this value is in Punycode. For more information, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DomainNameFormat.html">DNS Domain Name Format</a> in the <i>Amazon Route 53 Developer Guidezzz</i>.</p>
+    #[serde(rename = "DomainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name: Option<String>,
-    #[doc="<p>The ID of the invoice that is associated with the billing record.</p>"]
-    #[serde(rename="InvoiceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the invoice that is associated with the billing record.</p>
+    #[serde(rename = "InvoiceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub invoice_id: Option<String>,
-    #[doc="<p>The operation that you were charged for.</p>"]
-    #[serde(rename="Operation")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The operation that you were charged for.</p>
+    #[serde(rename = "Operation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub operation: Option<String>,
-    #[doc="<p>The price that you were charged for the operation, in US dollars.</p> <p>Example value: 12.0</p>"]
-    #[serde(rename="Price")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The price that you were charged for the operation, in US dollars.</p> <p>Example value: 12.0</p>
+    #[serde(rename = "Price")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub price: Option<f64>,
 }
 
-#[doc="<p>The CheckDomainAvailability request contains the following elements.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The CheckDomainAvailability request contains the following elements.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CheckDomainAvailabilityRequest {
-    #[doc="<p>The name of the domain that you want to get availability for.</p> <p>Constraints: The domain name can contain only the letters a through z, the numbers 0 through 9, and hyphen (-). Internationalized Domain Names are not supported.</p>"]
-    #[serde(rename="DomainName")]
+    /// <p>The name of the domain that you want to get availability for.</p> <p>Constraints: The domain name can contain only the letters a through z, the numbers 0 through 9, and hyphen (-). Internationalized Domain Names are not supported.</p>
+    #[serde(rename = "DomainName")]
     pub domain_name: String,
-    #[doc="<p>Reserved for future use.</p>"]
-    #[serde(rename="IdnLangCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Reserved for future use.</p>
+    #[serde(rename = "IdnLangCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub idn_lang_code: Option<String>,
 }
 
-#[doc="<p>The CheckDomainAvailability response includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The CheckDomainAvailability response includes the following elements.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CheckDomainAvailabilityResponse {
-    #[doc="<p>Whether the domain name is available for registering.</p> <note> <p>You can only register domains designated as <code>AVAILABLE</code>.</p> </note> <p>Valid values:</p> <dl> <dt>AVAILABLE</dt> <dd> <p>The domain name is available.</p> </dd> <dt>AVAILABLE_RESERVED</dt> <dd> <p>The domain name is reserved under specific conditions.</p> </dd> <dt>AVAILABLE_PREORDER</dt> <dd> <p>The domain name is available and can be preordered.</p> </dd> <dt>DONT_KNOW</dt> <dd> <p>The TLD registry didn't reply with a definitive answer about whether the domain name is available. Amazon Route 53 can return this response for a variety of reasons, for example, the registry is performing maintenance. Try again later.</p> </dd> <dt>PENDING</dt> <dd> <p>The TLD registry didn't return a response in the expected amount of time. When the response is delayed, it usually takes just a few extra seconds. You can resubmit the request immediately.</p> </dd> <dt>RESERVED</dt> <dd> <p>The domain name has been reserved for another person or organization.</p> </dd> <dt>UNAVAILABLE</dt> <dd> <p>The domain name is not available.</p> </dd> <dt>UNAVAILABLE_PREMIUM</dt> <dd> <p>The domain name is not available.</p> </dd> <dt>UNAVAILABLE_RESTRICTED</dt> <dd> <p>The domain name is forbidden.</p> </dd> </dl>"]
-    #[serde(rename="Availability")]
+    /// <p>Whether the domain name is available for registering.</p> <note> <p>You can only register domains designated as <code>AVAILABLE</code>.</p> </note> <p>Valid values:</p> <dl> <dt>AVAILABLE</dt> <dd> <p>The domain name is available.</p> </dd> <dt>AVAILABLE_RESERVED</dt> <dd> <p>The domain name is reserved under specific conditions.</p> </dd> <dt>AVAILABLE_PREORDER</dt> <dd> <p>The domain name is available and can be preordered.</p> </dd> <dt>DONT_KNOW</dt> <dd> <p>The TLD registry didn't reply with a definitive answer about whether the domain name is available. Amazon Route 53 can return this response for a variety of reasons, for example, the registry is performing maintenance. Try again later.</p> </dd> <dt>PENDING</dt> <dd> <p>The TLD registry didn't return a response in the expected amount of time. When the response is delayed, it usually takes just a few extra seconds. You can resubmit the request immediately.</p> </dd> <dt>RESERVED</dt> <dd> <p>The domain name has been reserved for another person or organization.</p> </dd> <dt>UNAVAILABLE</dt> <dd> <p>The domain name is not available.</p> </dd> <dt>UNAVAILABLE_PREMIUM</dt> <dd> <p>The domain name is not available.</p> </dd> <dt>UNAVAILABLE_RESTRICTED</dt> <dd> <p>The domain name is forbidden.</p> </dd> </dl>
+    #[serde(rename = "Availability")]
     pub availability: String,
 }
 
-#[doc="<p>ContactDetail includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>ContactDetail includes the following elements.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ContactDetail {
-    #[doc="<p>First line of the contact's address.</p>"]
-    #[serde(rename="AddressLine1")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>First line of the contact's address.</p>
+    #[serde(rename = "AddressLine1")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub address_line_1: Option<String>,
-    #[doc="<p>Second line of contact's address, if any.</p>"]
-    #[serde(rename="AddressLine2")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Second line of contact's address, if any.</p>
+    #[serde(rename = "AddressLine2")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub address_line_2: Option<String>,
-    #[doc="<p>The city of the contact's address.</p>"]
-    #[serde(rename="City")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The city of the contact's address.</p>
+    #[serde(rename = "City")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub city: Option<String>,
-    #[doc="<p>Indicates whether the contact is a person, company, association, or public organization. If you choose an option other than <code>PERSON</code>, you must enter an organization name, and you can't enable privacy protection for the contact.</p>"]
-    #[serde(rename="ContactType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether the contact is a person, company, association, or public organization. If you choose an option other than <code>PERSON</code>, you must enter an organization name, and you can't enable privacy protection for the contact.</p>
+    #[serde(rename = "ContactType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub contact_type: Option<String>,
-    #[doc="<p>Code for the country of the contact's address.</p>"]
-    #[serde(rename="CountryCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Code for the country of the contact's address.</p>
+    #[serde(rename = "CountryCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub country_code: Option<String>,
-    #[doc="<p>Email address of the contact.</p>"]
-    #[serde(rename="Email")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Email address of the contact.</p>
+    #[serde(rename = "Email")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub email: Option<String>,
-    #[doc="<p>A list of name-value pairs for parameters required by certain top-level domains.</p>"]
-    #[serde(rename="ExtraParams")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of name-value pairs for parameters required by certain top-level domains.</p>
+    #[serde(rename = "ExtraParams")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_params: Option<Vec<ExtraParam>>,
-    #[doc="<p>Fax number of the contact.</p> <p>Constraints: Phone number must be specified in the format \"+[country dialing code].[number including any area code]\". For example, a US phone number might appear as <code>\"+1.1234567890\"</code>.</p>"]
-    #[serde(rename="Fax")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Fax number of the contact.</p> <p>Constraints: Phone number must be specified in the format "+[country dialing code].[number including any area code]". For example, a US phone number might appear as <code>"+1.1234567890"</code>.</p>
+    #[serde(rename = "Fax")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fax: Option<String>,
-    #[doc="<p>First name of contact.</p>"]
-    #[serde(rename="FirstName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>First name of contact.</p>
+    #[serde(rename = "FirstName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub first_name: Option<String>,
-    #[doc="<p>Last name of contact.</p>"]
-    #[serde(rename="LastName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Last name of contact.</p>
+    #[serde(rename = "LastName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_name: Option<String>,
-    #[doc="<p>Name of the organization for contact types other than <code>PERSON</code>.</p>"]
-    #[serde(rename="OrganizationName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Name of the organization for contact types other than <code>PERSON</code>.</p>
+    #[serde(rename = "OrganizationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub organization_name: Option<String>,
-    #[doc="<p>The phone number of the contact.</p> <p>Constraints: Phone number must be specified in the format \"+[country dialing code].[number including any area code&gt;]\". For example, a US phone number might appear as <code>\"+1.1234567890\"</code>.</p>"]
-    #[serde(rename="PhoneNumber")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The phone number of the contact.</p> <p>Constraints: Phone number must be specified in the format "+[country dialing code].[number including any area code&gt;]". For example, a US phone number might appear as <code>"+1.1234567890"</code>.</p>
+    #[serde(rename = "PhoneNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub phone_number: Option<String>,
-    #[doc="<p>The state or province of the contact's city.</p>"]
-    #[serde(rename="State")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The state or province of the contact's city.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
-    #[doc="<p>The zip or postal code of the contact's address.</p>"]
-    #[serde(rename="ZipCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The zip or postal code of the contact's address.</p>
+    #[serde(rename = "ZipCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub zip_code: Option<String>,
 }
 
-#[doc="<p>The DeleteTagsForDomainRequest includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The DeleteTagsForDomainRequest includes the following elements.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteTagsForDomainRequest {
-    #[doc="<p>The domain for which you want to delete one or more tags.</p>"]
-    #[serde(rename="DomainName")]
+    /// <p>The domain for which you want to delete one or more tags.</p>
+    #[serde(rename = "DomainName")]
     pub domain_name: String,
-    #[doc="<p>A list of tag keys to delete.</p>"]
-    #[serde(rename="TagsToDelete")]
+    /// <p>A list of tag keys to delete.</p>
+    #[serde(rename = "TagsToDelete")]
     pub tags_to_delete: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteTagsForDomainResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DisableDomainAutoRenewRequest {
-    #[doc="<p>The name of the domain that you want to disable automatic renewal for.</p>"]
-    #[serde(rename="DomainName")]
+    /// <p>The name of the domain that you want to disable automatic renewal for.</p>
+    #[serde(rename = "DomainName")]
     pub domain_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DisableDomainAutoRenewResponse;
 
-#[doc="<p>The DisableDomainTransferLock request includes the following element.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The DisableDomainTransferLock request includes the following element.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DisableDomainTransferLockRequest {
-    #[doc="<p>The name of the domain that you want to remove the transfer lock for.</p>"]
-    #[serde(rename="DomainName")]
+    /// <p>The name of the domain that you want to remove the transfer lock for.</p>
+    #[serde(rename = "DomainName")]
     pub domain_name: String,
 }
 
-#[doc="<p>The DisableDomainTransferLock response includes the following element.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The DisableDomainTransferLock response includes the following element.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DisableDomainTransferLockResponse {
-    #[doc="<p>Identifier for tracking the progress of the request. To use this ID to query the operation status, use <a>GetOperationDetail</a>.</p>"]
-    #[serde(rename="OperationId")]
+    /// <p>Identifier for tracking the progress of the request. To use this ID to query the operation status, use <a>GetOperationDetail</a>.</p>
+    #[serde(rename = "OperationId")]
     pub operation_id: String,
 }
 
-#[doc="<p>Information about one suggested domain name.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about one suggested domain name.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DomainSuggestion {
-    #[doc="<p>Whether the domain name is available for registering.</p> <note> <p>You can register only the domains that are designated as <code>AVAILABLE</code>.</p> </note> <p>Valid values:</p> <dl> <dt>AVAILABLE</dt> <dd> <p>The domain name is available.</p> </dd> <dt>AVAILABLE_RESERVED</dt> <dd> <p>The domain name is reserved under specific conditions.</p> </dd> <dt>AVAILABLE_PREORDER</dt> <dd> <p>The domain name is available and can be preordered.</p> </dd> <dt>DONT_KNOW</dt> <dd> <p>The TLD registry didn't reply with a definitive answer about whether the domain name is available. Amazon Route 53 can return this response for a variety of reasons, for example, the registry is performing maintenance. Try again later.</p> </dd> <dt>PENDING</dt> <dd> <p>The TLD registry didn't return a response in the expected amount of time. When the response is delayed, it usually takes just a few extra seconds. You can resubmit the request immediately.</p> </dd> <dt>RESERVED</dt> <dd> <p>The domain name has been reserved for another person or organization.</p> </dd> <dt>UNAVAILABLE</dt> <dd> <p>The domain name is not available.</p> </dd> <dt>UNAVAILABLE_PREMIUM</dt> <dd> <p>The domain name is not available.</p> </dd> <dt>UNAVAILABLE_RESTRICTED</dt> <dd> <p>The domain name is forbidden.</p> </dd> </dl>"]
-    #[serde(rename="Availability")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Whether the domain name is available for registering.</p> <note> <p>You can register only the domains that are designated as <code>AVAILABLE</code>.</p> </note> <p>Valid values:</p> <dl> <dt>AVAILABLE</dt> <dd> <p>The domain name is available.</p> </dd> <dt>AVAILABLE_RESERVED</dt> <dd> <p>The domain name is reserved under specific conditions.</p> </dd> <dt>AVAILABLE_PREORDER</dt> <dd> <p>The domain name is available and can be preordered.</p> </dd> <dt>DONT_KNOW</dt> <dd> <p>The TLD registry didn't reply with a definitive answer about whether the domain name is available. Amazon Route 53 can return this response for a variety of reasons, for example, the registry is performing maintenance. Try again later.</p> </dd> <dt>PENDING</dt> <dd> <p>The TLD registry didn't return a response in the expected amount of time. When the response is delayed, it usually takes just a few extra seconds. You can resubmit the request immediately.</p> </dd> <dt>RESERVED</dt> <dd> <p>The domain name has been reserved for another person or organization.</p> </dd> <dt>UNAVAILABLE</dt> <dd> <p>The domain name is not available.</p> </dd> <dt>UNAVAILABLE_PREMIUM</dt> <dd> <p>The domain name is not available.</p> </dd> <dt>UNAVAILABLE_RESTRICTED</dt> <dd> <p>The domain name is forbidden.</p> </dd> </dl>
+    #[serde(rename = "Availability")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub availability: Option<String>,
-    #[doc="<p>A suggested domain name.</p>"]
-    #[serde(rename="DomainName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A suggested domain name.</p>
+    #[serde(rename = "DomainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name: Option<String>,
 }
 
-#[doc="<p>Summary information about one domain.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Summary information about one domain.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DomainSummary {
-    #[doc="<p>Indicates whether the domain is automatically renewed upon expiration.</p>"]
-    #[serde(rename="AutoRenew")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether the domain is automatically renewed upon expiration.</p>
+    #[serde(rename = "AutoRenew")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_renew: Option<bool>,
-    #[doc="<p>The name of the domain that the summary information applies to.</p>"]
-    #[serde(rename="DomainName")]
+    /// <p>The name of the domain that the summary information applies to.</p>
+    #[serde(rename = "DomainName")]
     pub domain_name: String,
-    #[doc="<p>Expiration date of the domain in Coordinated Universal Time (UTC).</p>"]
-    #[serde(rename="Expiry")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Expiration date of the domain in Coordinated Universal Time (UTC).</p>
+    #[serde(rename = "Expiry")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub expiry: Option<f64>,
-    #[doc="<p>Indicates whether a domain is locked from unauthorized transfer to another party.</p>"]
-    #[serde(rename="TransferLock")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether a domain is locked from unauthorized transfer to another party.</p>
+    #[serde(rename = "TransferLock")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub transfer_lock: Option<bool>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct EnableDomainAutoRenewRequest {
-    #[doc="<p>The name of the domain that you want to enable automatic renewal for.</p>"]
-    #[serde(rename="DomainName")]
+    /// <p>The name of the domain that you want to enable automatic renewal for.</p>
+    #[serde(rename = "DomainName")]
     pub domain_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct EnableDomainAutoRenewResponse;
 
-#[doc="<p>A request to set the transfer lock for the specified domain.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>A request to set the transfer lock for the specified domain.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct EnableDomainTransferLockRequest {
-    #[doc="<p>The name of the domain that you want to set the transfer lock for.</p>"]
-    #[serde(rename="DomainName")]
+    /// <p>The name of the domain that you want to set the transfer lock for.</p>
+    #[serde(rename = "DomainName")]
     pub domain_name: String,
 }
 
-#[doc="<p>The EnableDomainTransferLock response includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The EnableDomainTransferLock response includes the following elements.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct EnableDomainTransferLockResponse {
-    #[doc="<p>Identifier for tracking the progress of the request. To use this ID to query the operation status, use GetOperationDetail.</p>"]
-    #[serde(rename="OperationId")]
+    /// <p>Identifier for tracking the progress of the request. To use this ID to query the operation status, use GetOperationDetail.</p>
+    #[serde(rename = "OperationId")]
     pub operation_id: String,
 }
 
-#[doc="<p>ExtraParam includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>ExtraParam includes the following elements.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ExtraParam {
-    #[doc="<p>Name of the additional parameter required by the top-level domain.</p>"]
-    #[serde(rename="Name")]
+    /// <p>Name of the additional parameter required by the top-level domain.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>Values corresponding to the additional parameter names required by some top-level domains.</p>"]
-    #[serde(rename="Value")]
+    /// <p>Values corresponding to the additional parameter names required by some top-level domains.</p>
+    #[serde(rename = "Value")]
     pub value: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetContactReachabilityStatusRequest {
-    #[doc="<p>The name of the domain for which you want to know whether the registrant contact has confirmed that the email address is valid.</p>"]
-    #[serde(rename="domainName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the domain for which you want to know whether the registrant contact has confirmed that the email address is valid.</p>
+    #[serde(rename = "domainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetContactReachabilityStatusResponse {
-    #[doc="<p>The domain name for which you requested the reachability status.</p>"]
-    #[serde(rename="domainName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The domain name for which you requested the reachability status.</p>
+    #[serde(rename = "domainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name: Option<String>,
-    #[doc="<p>Whether the registrant contact has responded. Values include the following:</p> <dl> <dt>PENDING</dt> <dd> <p>We sent the confirmation email and haven't received a response yet.</p> </dd> <dt>DONE</dt> <dd> <p>We sent the email and got confirmation from the registrant contact.</p> </dd> <dt>EXPIRED</dt> <dd> <p>The time limit expired before the registrant contact responded.</p> </dd> </dl>"]
-    #[serde(rename="status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Whether the registrant contact has responded. Values include the following:</p> <dl> <dt>PENDING</dt> <dd> <p>We sent the confirmation email and haven't received a response yet.</p> </dd> <dt>DONE</dt> <dd> <p>We sent the email and got confirmation from the registrant contact.</p> </dd> <dt>EXPIRED</dt> <dd> <p>The time limit expired before the registrant contact responded.</p> </dd> </dl>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
 
-#[doc="<p>The GetDomainDetail request includes the following element.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The GetDomainDetail request includes the following element.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDomainDetailRequest {
-    #[doc="<p>The name of the domain that you want to get detailed information about.</p>"]
-    #[serde(rename="DomainName")]
+    /// <p>The name of the domain that you want to get detailed information about.</p>
+    #[serde(rename = "DomainName")]
     pub domain_name: String,
 }
 
-#[doc="<p>The GetDomainDetail response includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The GetDomainDetail response includes the following elements.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetDomainDetailResponse {
-    #[doc="<p>Email address to contact to report incorrect contact information for a domain, to report that the domain is being used to send spam, to report that someone is cybersquatting on a domain name, or report some other type of abuse.</p>"]
-    #[serde(rename="AbuseContactEmail")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Email address to contact to report incorrect contact information for a domain, to report that the domain is being used to send spam, to report that someone is cybersquatting on a domain name, or report some other type of abuse.</p>
+    #[serde(rename = "AbuseContactEmail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub abuse_contact_email: Option<String>,
-    #[doc="<p>Phone number for reporting abuse.</p>"]
-    #[serde(rename="AbuseContactPhone")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Phone number for reporting abuse.</p>
+    #[serde(rename = "AbuseContactPhone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub abuse_contact_phone: Option<String>,
-    #[doc="<p>Provides details about the domain administrative contact.</p>"]
-    #[serde(rename="AdminContact")]
+    /// <p>Provides details about the domain administrative contact.</p>
+    #[serde(rename = "AdminContact")]
     pub admin_contact: ContactDetail,
-    #[doc="<p>Specifies whether contact information for the admin contact is concealed from WHOIS queries. If the value is <code>true</code>, WHOIS (\"who is\") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p>"]
-    #[serde(rename="AdminPrivacy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether contact information for the admin contact is concealed from WHOIS queries. If the value is <code>true</code>, WHOIS ("who is") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p>
+    #[serde(rename = "AdminPrivacy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub admin_privacy: Option<bool>,
-    #[doc="<p>Specifies whether the domain registration is set to renew automatically.</p>"]
-    #[serde(rename="AutoRenew")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether the domain registration is set to renew automatically.</p>
+    #[serde(rename = "AutoRenew")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_renew: Option<bool>,
-    #[doc="<p>The date when the domain was created as found in the response to a WHOIS query. The date format is Unix time.</p>"]
-    #[serde(rename="CreationDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date when the domain was created as found in the response to a WHOIS query. The date format is Unix time.</p>
+    #[serde(rename = "CreationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
-    #[doc="<p>Reserved for future use.</p>"]
-    #[serde(rename="DnsSec")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Reserved for future use.</p>
+    #[serde(rename = "DnsSec")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub dns_sec: Option<String>,
-    #[doc="<p>The name of a domain.</p>"]
-    #[serde(rename="DomainName")]
+    /// <p>The name of a domain.</p>
+    #[serde(rename = "DomainName")]
     pub domain_name: String,
-    #[doc="<p>The date when the registration for the domain is set to expire. The date format is Unix time.</p>"]
-    #[serde(rename="ExpirationDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date when the registration for the domain is set to expire. The date format is Unix time.</p>
+    #[serde(rename = "ExpirationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub expiration_date: Option<f64>,
-    #[doc="<p>The name of the domain.</p>"]
-    #[serde(rename="Nameservers")]
+    /// <p>The name of the domain.</p>
+    #[serde(rename = "Nameservers")]
     pub nameservers: Vec<Nameserver>,
-    #[doc="<p>Provides details about the domain registrant.</p>"]
-    #[serde(rename="RegistrantContact")]
+    /// <p>Provides details about the domain registrant.</p>
+    #[serde(rename = "RegistrantContact")]
     pub registrant_contact: ContactDetail,
-    #[doc="<p>Specifies whether contact information for the registrant contact is concealed from WHOIS queries. If the value is <code>true</code>, WHOIS (\"who is\") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p>"]
-    #[serde(rename="RegistrantPrivacy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether contact information for the registrant contact is concealed from WHOIS queries. If the value is <code>true</code>, WHOIS ("who is") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p>
+    #[serde(rename = "RegistrantPrivacy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registrant_privacy: Option<bool>,
-    #[doc="<p>Name of the registrar of the domain as identified in the registry. Amazon Route 53 domains are registered by registrar Gandi. The value is <code>\"GANDI SAS\"</code>. </p>"]
-    #[serde(rename="RegistrarName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Name of the registrar of the domain as identified in the registry. Amazon Route 53 domains are registered by registrar Gandi. The value is <code>"GANDI SAS"</code>. </p>
+    #[serde(rename = "RegistrarName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registrar_name: Option<String>,
-    #[doc="<p>Web address of the registrar.</p>"]
-    #[serde(rename="RegistrarUrl")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Web address of the registrar.</p>
+    #[serde(rename = "RegistrarUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registrar_url: Option<String>,
-    #[doc="<p>Reserved for future use.</p>"]
-    #[serde(rename="RegistryDomainId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Reserved for future use.</p>
+    #[serde(rename = "RegistryDomainId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_domain_id: Option<String>,
-    #[doc="<p>Reseller of the domain. Domains registered or transferred using Amazon Route 53 domains will have <code>\"Amazon\"</code> as the reseller. </p>"]
-    #[serde(rename="Reseller")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Reseller of the domain. Domains registered or transferred using Amazon Route 53 domains will have <code>"Amazon"</code> as the reseller. </p>
+    #[serde(rename = "Reseller")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub reseller: Option<String>,
-    #[doc="<p>An array of domain name status codes, also known as Extensible Provisioning Protocol (EPP) status codes.</p> <p>ICANN, the organization that maintains a central database of domain names, has developed a set of domain name status codes that tell you the status of a variety of operations on a domain name, for example, registering a domain name, transferring a domain name to another registrar, renewing the registration for a domain name, and so on. All registrars use this same set of status codes.</p> <p>For a current list of domain name status codes and an explanation of what each code means, go to the <a href=\"https://www.icann.org/\">ICANN website</a> and search for <code>epp status codes</code>. (Search on the ICANN website; web searches sometimes return an old version of the document.)</p>"]
-    #[serde(rename="StatusList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of domain name status codes, also known as Extensible Provisioning Protocol (EPP) status codes.</p> <p>ICANN, the organization that maintains a central database of domain names, has developed a set of domain name status codes that tell you the status of a variety of operations on a domain name, for example, registering a domain name, transferring a domain name to another registrar, renewing the registration for a domain name, and so on. All registrars use this same set of status codes.</p> <p>For a current list of domain name status codes and an explanation of what each code means, go to the <a href="https://www.icann.org/">ICANN website</a> and search for <code>epp status codes</code>. (Search on the ICANN website; web searches sometimes return an old version of the document.)</p>
+    #[serde(rename = "StatusList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status_list: Option<Vec<String>>,
-    #[doc="<p>Provides details about the domain technical contact.</p>"]
-    #[serde(rename="TechContact")]
+    /// <p>Provides details about the domain technical contact.</p>
+    #[serde(rename = "TechContact")]
     pub tech_contact: ContactDetail,
-    #[doc="<p>Specifies whether contact information for the tech contact is concealed from WHOIS queries. If the value is <code>true</code>, WHOIS (\"who is\") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p>"]
-    #[serde(rename="TechPrivacy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether contact information for the tech contact is concealed from WHOIS queries. If the value is <code>true</code>, WHOIS ("who is") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p>
+    #[serde(rename = "TechPrivacy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tech_privacy: Option<bool>,
-    #[doc="<p>The last updated date of the domain as found in the response to a WHOIS query. The date format is Unix time.</p>"]
-    #[serde(rename="UpdatedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The last updated date of the domain as found in the response to a WHOIS query. The date format is Unix time.</p>
+    #[serde(rename = "UpdatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_date: Option<f64>,
-    #[doc="<p>The fully qualified name of the WHOIS server that can answer the WHOIS query for the domain.</p>"]
-    #[serde(rename="WhoIsServer")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The fully qualified name of the WHOIS server that can answer the WHOIS query for the domain.</p>
+    #[serde(rename = "WhoIsServer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub who_is_server: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDomainSuggestionsRequest {
-    #[doc="<p>A domain name that you want to use as the basis for a list of possible domain names. The domain name must contain a top-level domain (TLD), such as .com, that Amazon Route 53 supports. For a list of TLDs, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/registrar-tld-list.html\">Domains that You Can Register with Amazon Route 53</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>"]
-    #[serde(rename="DomainName")]
+    /// <p>A domain name that you want to use as the basis for a list of possible domain names. The domain name must contain a top-level domain (TLD), such as .com, that Amazon Route 53 supports. For a list of TLDs, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/registrar-tld-list.html">Domains that You Can Register with Amazon Route 53</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>
+    #[serde(rename = "DomainName")]
     pub domain_name: String,
-    #[doc="<p>If <code>OnlyAvailable</code> is <code>true</code>, Amazon Route 53 returns only domain names that are available. If <code>OnlyAvailable</code> is <code>false</code>, Amazon Route 53 returns domain names without checking whether they're available to be registered. To determine whether the domain is available, you can call <code>checkDomainAvailability</code> for each suggestion.</p>"]
-    #[serde(rename="OnlyAvailable")]
+    /// <p>If <code>OnlyAvailable</code> is <code>true</code>, Amazon Route 53 returns only domain names that are available. If <code>OnlyAvailable</code> is <code>false</code>, Amazon Route 53 returns domain names without checking whether they're available to be registered. To determine whether the domain is available, you can call <code>checkDomainAvailability</code> for each suggestion.</p>
+    #[serde(rename = "OnlyAvailable")]
     pub only_available: bool,
-    #[doc="<p>The number of suggested domain names that you want Amazon Route 53 to return.</p>"]
-    #[serde(rename="SuggestionCount")]
+    /// <p>The number of suggested domain names that you want Amazon Route 53 to return.</p>
+    #[serde(rename = "SuggestionCount")]
     pub suggestion_count: i64,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetDomainSuggestionsResponse {
-    #[doc="<p>A list of possible domain names. If you specified <code>true</code> for <code>OnlyAvailable</code> in the request, the list contains only domains that are available for registration.</p>"]
-    #[serde(rename="SuggestionsList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of possible domain names. If you specified <code>true</code> for <code>OnlyAvailable</code> in the request, the list contains only domains that are available for registration.</p>
+    #[serde(rename = "SuggestionsList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub suggestions_list: Option<Vec<DomainSuggestion>>,
 }
 
-#[doc="<p>The <a>GetOperationDetail</a> request includes the following element.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The <a>GetOperationDetail</a> request includes the following element.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetOperationDetailRequest {
-    #[doc="<p>The identifier for the operation for which you want to get the status. Amazon Route 53 returned the identifier in the response to the original request.</p>"]
-    #[serde(rename="OperationId")]
+    /// <p>The identifier for the operation for which you want to get the status. Amazon Route 53 returned the identifier in the response to the original request.</p>
+    #[serde(rename = "OperationId")]
     pub operation_id: String,
 }
 
-#[doc="<p>The GetOperationDetail response includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The GetOperationDetail response includes the following elements.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetOperationDetailResponse {
-    #[doc="<p>The name of a domain.</p>"]
-    #[serde(rename="DomainName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of a domain.</p>
+    #[serde(rename = "DomainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name: Option<String>,
-    #[doc="<p>Detailed information on the status including possible errors.</p>"]
-    #[serde(rename="Message")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Detailed information on the status including possible errors.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
-    #[doc="<p>The identifier for the operation.</p>"]
-    #[serde(rename="OperationId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier for the operation.</p>
+    #[serde(rename = "OperationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub operation_id: Option<String>,
-    #[doc="<p>The current status of the requested operation in the system.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The current status of the requested operation in the system.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The date when the request was submitted.</p>"]
-    #[serde(rename="SubmittedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date when the request was submitted.</p>
+    #[serde(rename = "SubmittedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub submitted_date: Option<f64>,
-    #[doc="<p>The type of operation that was requested.</p>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of operation that was requested.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[doc="<p>The ListDomains request includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The ListDomains request includes the following elements.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListDomainsRequest {
-    #[doc="<p>For an initial request for a list of domains, omit this element. If the number of domains that are associated with the current AWS account is greater than the value that you specified for <code>MaxItems</code>, you can use <code>Marker</code> to return additional domains. Get the value of <code>NextPageMarker</code> from the previous response, and submit another request that includes the value of <code>NextPageMarker</code> in the <code>Marker</code> element.</p> <p>Constraints: The marker must match the value specified in the previous request.</p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For an initial request for a list of domains, omit this element. If the number of domains that are associated with the current AWS account is greater than the value that you specified for <code>MaxItems</code>, you can use <code>Marker</code> to return additional domains. Get the value of <code>NextPageMarker</code> from the previous response, and submit another request that includes the value of <code>NextPageMarker</code> in the <code>Marker</code> element.</p> <p>Constraints: The marker must match the value specified in the previous request.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p>Number of domains to be returned.</p> <p>Default: 20</p>"]
-    #[serde(rename="MaxItems")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Number of domains to be returned.</p> <p>Default: 20</p>
+    #[serde(rename = "MaxItems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_items: Option<i64>,
 }
 
-#[doc="<p>The ListDomains response includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The ListDomains response includes the following elements.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListDomainsResponse {
-    #[doc="<p>A summary of domains.</p>"]
-    #[serde(rename="Domains")]
+    /// <p>A summary of domains.</p>
+    #[serde(rename = "Domains")]
     pub domains: Vec<DomainSummary>,
-    #[doc="<p>If there are more domains than you specified for <code>MaxItems</code> in the request, submit another request and include the value of <code>NextPageMarker</code> in the value of <code>Marker</code>.</p>"]
-    #[serde(rename="NextPageMarker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If there are more domains than you specified for <code>MaxItems</code> in the request, submit another request and include the value of <code>NextPageMarker</code> in the value of <code>Marker</code>.</p>
+    #[serde(rename = "NextPageMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_marker: Option<String>,
 }
 
-#[doc="<p>The ListOperations request includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The ListOperations request includes the following elements.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListOperationsRequest {
-    #[doc="<p>For an initial request for a list of operations, omit this element. If the number of operations that are not yet complete is greater than the value that you specified for <code>MaxItems</code>, you can use <code>Marker</code> to return additional operations. Get the value of <code>NextPageMarker</code> from the previous response, and submit another request that includes the value of <code>NextPageMarker</code> in the <code>Marker</code> element.</p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For an initial request for a list of operations, omit this element. If the number of operations that are not yet complete is greater than the value that you specified for <code>MaxItems</code>, you can use <code>Marker</code> to return additional operations. Get the value of <code>NextPageMarker</code> from the previous response, and submit another request that includes the value of <code>NextPageMarker</code> in the <code>Marker</code> element.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p>Number of domains to be returned.</p> <p>Default: 20</p>"]
-    #[serde(rename="MaxItems")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Number of domains to be returned.</p> <p>Default: 20</p>
+    #[serde(rename = "MaxItems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_items: Option<i64>,
 }
 
-#[doc="<p>The ListOperations response includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The ListOperations response includes the following elements.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListOperationsResponse {
-    #[doc="<p>If there are more operations than you specified for <code>MaxItems</code> in the request, submit another request and include the value of <code>NextPageMarker</code> in the value of <code>Marker</code>.</p>"]
-    #[serde(rename="NextPageMarker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If there are more operations than you specified for <code>MaxItems</code> in the request, submit another request and include the value of <code>NextPageMarker</code> in the value of <code>Marker</code>.</p>
+    #[serde(rename = "NextPageMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_marker: Option<String>,
-    #[doc="<p>Lists summaries of the operations.</p>"]
-    #[serde(rename="Operations")]
+    /// <p>Lists summaries of the operations.</p>
+    #[serde(rename = "Operations")]
     pub operations: Vec<OperationSummary>,
 }
 
-#[doc="<p>The ListTagsForDomainRequest includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The ListTagsForDomainRequest includes the following elements.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListTagsForDomainRequest {
-    #[doc="<p>The domain for which you want to get a list of tags.</p>"]
-    #[serde(rename="DomainName")]
+    /// <p>The domain for which you want to get a list of tags.</p>
+    #[serde(rename = "DomainName")]
     pub domain_name: String,
 }
 
-#[doc="<p>The ListTagsForDomain response includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The ListTagsForDomain response includes the following elements.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListTagsForDomainResponse {
-    #[doc="<p>A list of the tags that are associated with the specified domain.</p>"]
-    #[serde(rename="TagList")]
+    /// <p>A list of the tags that are associated with the specified domain.</p>
+    #[serde(rename = "TagList")]
     pub tag_list: Vec<Tag>,
 }
 
-#[doc="<p>Nameserver includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Nameserver includes the following elements.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Nameserver {
-    #[doc="<p>Glue IP address of a name server entry. Glue IP addresses are required only when the name of the name server is a subdomain of the domain. For example, if your domain is example.com and the name server for the domain is ns.example.com, you need to specify the IP address for ns.example.com.</p> <p>Constraints: The list can contain only one IPv4 and one IPv6 address.</p>"]
-    #[serde(rename="GlueIps")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Glue IP address of a name server entry. Glue IP addresses are required only when the name of the name server is a subdomain of the domain. For example, if your domain is example.com and the name server for the domain is ns.example.com, you need to specify the IP address for ns.example.com.</p> <p>Constraints: The list can contain only one IPv4 and one IPv6 address.</p>
+    #[serde(rename = "GlueIps")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub glue_ips: Option<Vec<String>>,
-    #[doc="<p>The fully qualified host name of the name server.</p> <p>Constraint: Maximum 255 characters</p>"]
-    #[serde(rename="Name")]
+    /// <p>The fully qualified host name of the name server.</p> <p>Constraint: Maximum 255 characters</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[doc="<p>OperationSummary includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>OperationSummary includes the following elements.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct OperationSummary {
-    #[doc="<p>Identifier returned to track the requested action.</p>"]
-    #[serde(rename="OperationId")]
+    /// <p>Identifier returned to track the requested action.</p>
+    #[serde(rename = "OperationId")]
     pub operation_id: String,
-    #[doc="<p>The current status of the requested operation in the system.</p>"]
-    #[serde(rename="Status")]
+    /// <p>The current status of the requested operation in the system.</p>
+    #[serde(rename = "Status")]
     pub status: String,
-    #[doc="<p>The date when the request was submitted.</p>"]
-    #[serde(rename="SubmittedDate")]
+    /// <p>The date when the request was submitted.</p>
+    #[serde(rename = "SubmittedDate")]
     pub submitted_date: f64,
-    #[doc="<p>Type of the action requested.</p>"]
-    #[serde(rename="Type")]
+    /// <p>Type of the action requested.</p>
+    #[serde(rename = "Type")]
     pub type_: String,
 }
 
-#[doc="<p>The RegisterDomain request includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The RegisterDomain request includes the following elements.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct RegisterDomainRequest {
-    #[doc="<p>Provides detailed contact information.</p>"]
-    #[serde(rename="AdminContact")]
+    /// <p>Provides detailed contact information.</p>
+    #[serde(rename = "AdminContact")]
     pub admin_contact: ContactDetail,
-    #[doc="<p>Indicates whether the domain will be automatically renewed (<code>true</code>) or not (<code>false</code>). Autorenewal only takes effect after the account is charged.</p> <p>Default: <code>true</code> </p>"]
-    #[serde(rename="AutoRenew")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether the domain will be automatically renewed (<code>true</code>) or not (<code>false</code>). Autorenewal only takes effect after the account is charged.</p> <p>Default: <code>true</code> </p>
+    #[serde(rename = "AutoRenew")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_renew: Option<bool>,
-    #[doc="<p>The domain name that you want to register.</p> <p>Constraints: The domain name can contain only the letters a through z, the numbers 0 through 9, and hyphen (-). Internationalized Domain Names are not supported.</p>"]
-    #[serde(rename="DomainName")]
+    /// <p>The domain name that you want to register.</p> <p>Constraints: The domain name can contain only the letters a through z, the numbers 0 through 9, and hyphen (-). Internationalized Domain Names are not supported.</p>
+    #[serde(rename = "DomainName")]
     pub domain_name: String,
-    #[doc="<p>The number of years that you want to register the domain for. Domains are registered for a minimum of one year. The maximum period depends on the top-level domain. For the range of valid values for your domain, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/registrar-tld-list.html\">Domains that You Can Register with Amazon Route 53</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>Default: 1</p>"]
-    #[serde(rename="DurationInYears")]
+    /// <p>The number of years that you want to register the domain for. Domains are registered for a minimum of one year. The maximum period depends on the top-level domain. For the range of valid values for your domain, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/registrar-tld-list.html">Domains that You Can Register with Amazon Route 53</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>Default: 1</p>
+    #[serde(rename = "DurationInYears")]
     pub duration_in_years: i64,
-    #[doc="<p>Reserved for future use.</p>"]
-    #[serde(rename="IdnLangCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Reserved for future use.</p>
+    #[serde(rename = "IdnLangCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub idn_lang_code: Option<String>,
-    #[doc="<p>Whether you want to conceal contact information from WHOIS queries. If you specify <code>true</code>, WHOIS (\"who is\") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p> <p>Default: <code>true</code> </p>"]
-    #[serde(rename="PrivacyProtectAdminContact")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Whether you want to conceal contact information from WHOIS queries. If you specify <code>true</code>, WHOIS ("who is") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p> <p>Default: <code>true</code> </p>
+    #[serde(rename = "PrivacyProtectAdminContact")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub privacy_protect_admin_contact: Option<bool>,
-    #[doc="<p>Whether you want to conceal contact information from WHOIS queries. If you specify <code>true</code>, WHOIS (\"who is\") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p> <p>Default: <code>true</code> </p>"]
-    #[serde(rename="PrivacyProtectRegistrantContact")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Whether you want to conceal contact information from WHOIS queries. If you specify <code>true</code>, WHOIS ("who is") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p> <p>Default: <code>true</code> </p>
+    #[serde(rename = "PrivacyProtectRegistrantContact")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub privacy_protect_registrant_contact: Option<bool>,
-    #[doc="<p>Whether you want to conceal contact information from WHOIS queries. If you specify <code>true</code>, WHOIS (\"who is\") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p> <p>Default: <code>true</code> </p>"]
-    #[serde(rename="PrivacyProtectTechContact")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Whether you want to conceal contact information from WHOIS queries. If you specify <code>true</code>, WHOIS ("who is") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p> <p>Default: <code>true</code> </p>
+    #[serde(rename = "PrivacyProtectTechContact")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub privacy_protect_tech_contact: Option<bool>,
-    #[doc="<p>Provides detailed contact information.</p>"]
-    #[serde(rename="RegistrantContact")]
+    /// <p>Provides detailed contact information.</p>
+    #[serde(rename = "RegistrantContact")]
     pub registrant_contact: ContactDetail,
-    #[doc="<p>Provides detailed contact information.</p>"]
-    #[serde(rename="TechContact")]
+    /// <p>Provides detailed contact information.</p>
+    #[serde(rename = "TechContact")]
     pub tech_contact: ContactDetail,
 }
 
-#[doc="<p>The RegisterDomain response includes the following element.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The RegisterDomain response includes the following element.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RegisterDomainResponse {
-    #[doc="<p>Identifier for tracking the progress of the request. To use this ID to query the operation status, use <a>GetOperationDetail</a>.</p>"]
-    #[serde(rename="OperationId")]
+    /// <p>Identifier for tracking the progress of the request. To use this ID to query the operation status, use <a>GetOperationDetail</a>.</p>
+    #[serde(rename = "OperationId")]
     pub operation_id: String,
 }
 
-#[doc="<p>A <code>RenewDomain</code> request includes the number of years that you want to renew for and the current expiration year.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>A <code>RenewDomain</code> request includes the number of years that you want to renew for and the current expiration year.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct RenewDomainRequest {
-    #[doc="<p>The year when the registration for the domain is set to expire. This value must match the current expiration date for the domain.</p>"]
-    #[serde(rename="CurrentExpiryYear")]
+    /// <p>The year when the registration for the domain is set to expire. This value must match the current expiration date for the domain.</p>
+    #[serde(rename = "CurrentExpiryYear")]
     pub current_expiry_year: i64,
-    #[doc="<p>The name of the domain that you want to renew.</p>"]
-    #[serde(rename="DomainName")]
+    /// <p>The name of the domain that you want to renew.</p>
+    #[serde(rename = "DomainName")]
     pub domain_name: String,
-    #[doc="<p>The number of years that you want to renew the domain for. The maximum number of years depends on the top-level domain. For the range of valid values for your domain, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/registrar-tld-list.html\">Domains that You Can Register with Amazon Route 53</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>Default: 1</p>"]
-    #[serde(rename="DurationInYears")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of years that you want to renew the domain for. The maximum number of years depends on the top-level domain. For the range of valid values for your domain, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/registrar-tld-list.html">Domains that You Can Register with Amazon Route 53</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>Default: 1</p>
+    #[serde(rename = "DurationInYears")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub duration_in_years: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RenewDomainResponse {
-    #[doc="<p>The identifier for tracking the progress of the request. To use this ID to query the operation status, use <a>GetOperationDetail</a>.</p>"]
-    #[serde(rename="OperationId")]
+    /// <p>The identifier for tracking the progress of the request. To use this ID to query the operation status, use <a>GetOperationDetail</a>.</p>
+    #[serde(rename = "OperationId")]
     pub operation_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ResendContactReachabilityEmailRequest {
-    #[doc="<p>The name of the domain for which you want Amazon Route 53 to resend a confirmation email to the registrant contact.</p>"]
-    #[serde(rename="domainName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the domain for which you want Amazon Route 53 to resend a confirmation email to the registrant contact.</p>
+    #[serde(rename = "domainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ResendContactReachabilityEmailResponse {
-    #[doc="<p>The domain name for which you requested a confirmation email.</p>"]
-    #[serde(rename="domainName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The domain name for which you requested a confirmation email.</p>
+    #[serde(rename = "domainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name: Option<String>,
-    #[doc="<p>The email address for the registrant contact at the time that we sent the verification email.</p>"]
-    #[serde(rename="emailAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The email address for the registrant contact at the time that we sent the verification email.</p>
+    #[serde(rename = "emailAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub email_address: Option<String>,
-    #[doc="<p> <code>True</code> if the email address for the registrant contact has already been verified, and <code>false</code> otherwise. If the email address has already been verified, we don't send another confirmation email.</p>"]
-    #[serde(rename="isAlreadyVerified")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> <code>True</code> if the email address for the registrant contact has already been verified, and <code>false</code> otherwise. If the email address has already been verified, we don't send another confirmation email.</p>
+    #[serde(rename = "isAlreadyVerified")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub is_already_verified: Option<bool>,
 }
 
-#[doc="<p>A request for the authorization code for the specified domain. To transfer a domain to another registrar, you provide this value to the new registrar.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>A request for the authorization code for the specified domain. To transfer a domain to another registrar, you provide this value to the new registrar.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct RetrieveDomainAuthCodeRequest {
-    #[doc="<p>The name of the domain that you want to get an authorization code for.</p>"]
-    #[serde(rename="DomainName")]
+    /// <p>The name of the domain that you want to get an authorization code for.</p>
+    #[serde(rename = "DomainName")]
     pub domain_name: String,
 }
 
-#[doc="<p>The RetrieveDomainAuthCode response includes the following element.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The RetrieveDomainAuthCode response includes the following element.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RetrieveDomainAuthCodeResponse {
-    #[doc="<p>The authorization code for the domain.</p>"]
-    #[serde(rename="AuthCode")]
+    /// <p>The authorization code for the domain.</p>
+    #[serde(rename = "AuthCode")]
     pub auth_code: String,
 }
 
-#[doc="<p>Each tag includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Each tag includes the following elements.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Tag {
-    #[doc="<p>The key (name) of a tag.</p> <p>Valid values: A-Z, a-z, 0-9, space, \".:/=+\\-@\"</p> <p>Constraints: Each key can be 1-128 characters long.</p>"]
-    #[serde(rename="Key")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The key (name) of a tag.</p> <p>Valid values: A-Z, a-z, 0-9, space, ".:/=+\-@"</p> <p>Constraints: Each key can be 1-128 characters long.</p>
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    #[doc="<p>The value of a tag.</p> <p>Valid values: A-Z, a-z, 0-9, space, \".:/=+\\-@\"</p> <p>Constraints: Each value can be 0-256 characters long.</p>"]
-    #[serde(rename="Value")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The value of a tag.</p> <p>Valid values: A-Z, a-z, 0-9, space, ".:/=+\-@"</p> <p>Constraints: Each value can be 0-256 characters long.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
-#[doc="<p>The TransferDomain request includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The TransferDomain request includes the following elements.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct TransferDomainRequest {
-    #[doc="<p>Provides detailed contact information.</p>"]
-    #[serde(rename="AdminContact")]
+    /// <p>Provides detailed contact information.</p>
+    #[serde(rename = "AdminContact")]
     pub admin_contact: ContactDetail,
-    #[doc="<p>The authorization code for the domain. You get this value from the current registrar.</p>"]
-    #[serde(rename="AuthCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The authorization code for the domain. You get this value from the current registrar.</p>
+    #[serde(rename = "AuthCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_code: Option<String>,
-    #[doc="<p>Indicates whether the domain will be automatically renewed (true) or not (false). Autorenewal only takes effect after the account is charged.</p> <p>Default: true</p>"]
-    #[serde(rename="AutoRenew")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether the domain will be automatically renewed (true) or not (false). Autorenewal only takes effect after the account is charged.</p> <p>Default: true</p>
+    #[serde(rename = "AutoRenew")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_renew: Option<bool>,
-    #[doc="<p>The name of the domain that you want to transfer to Amazon Route 53.</p> <p>Constraints: The domain name can contain only the letters a through z, the numbers 0 through 9, and hyphen (-). Internationalized Domain Names are not supported.</p>"]
-    #[serde(rename="DomainName")]
+    /// <p>The name of the domain that you want to transfer to Amazon Route 53.</p> <p>Constraints: The domain name can contain only the letters a through z, the numbers 0 through 9, and hyphen (-). Internationalized Domain Names are not supported.</p>
+    #[serde(rename = "DomainName")]
     pub domain_name: String,
-    #[doc="<p>The number of years that you want to register the domain for. Domains are registered for a minimum of one year. The maximum period depends on the top-level domain.</p> <p>Default: 1</p>"]
-    #[serde(rename="DurationInYears")]
+    /// <p>The number of years that you want to register the domain for. Domains are registered for a minimum of one year. The maximum period depends on the top-level domain.</p> <p>Default: 1</p>
+    #[serde(rename = "DurationInYears")]
     pub duration_in_years: i64,
-    #[doc="<p>Reserved for future use.</p>"]
-    #[serde(rename="IdnLangCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Reserved for future use.</p>
+    #[serde(rename = "IdnLangCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub idn_lang_code: Option<String>,
-    #[doc="<p>Contains details for the host and glue IP addresses.</p>"]
-    #[serde(rename="Nameservers")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Contains details for the host and glue IP addresses.</p>
+    #[serde(rename = "Nameservers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub nameservers: Option<Vec<Nameserver>>,
-    #[doc="<p>Whether you want to conceal contact information from WHOIS queries. If you specify <code>true</code>, WHOIS (\"who is\") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p> <p>Default: <code>true</code> </p>"]
-    #[serde(rename="PrivacyProtectAdminContact")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Whether you want to conceal contact information from WHOIS queries. If you specify <code>true</code>, WHOIS ("who is") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p> <p>Default: <code>true</code> </p>
+    #[serde(rename = "PrivacyProtectAdminContact")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub privacy_protect_admin_contact: Option<bool>,
-    #[doc="<p>Whether you want to conceal contact information from WHOIS queries. If you specify <code>true</code>, WHOIS (\"who is\") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p> <p>Default: <code>true</code> </p>"]
-    #[serde(rename="PrivacyProtectRegistrantContact")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Whether you want to conceal contact information from WHOIS queries. If you specify <code>true</code>, WHOIS ("who is") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p> <p>Default: <code>true</code> </p>
+    #[serde(rename = "PrivacyProtectRegistrantContact")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub privacy_protect_registrant_contact: Option<bool>,
-    #[doc="<p>Whether you want to conceal contact information from WHOIS queries. If you specify <code>true</code>, WHOIS (\"who is\") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p> <p>Default: <code>true</code> </p>"]
-    #[serde(rename="PrivacyProtectTechContact")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Whether you want to conceal contact information from WHOIS queries. If you specify <code>true</code>, WHOIS ("who is") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p> <p>Default: <code>true</code> </p>
+    #[serde(rename = "PrivacyProtectTechContact")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub privacy_protect_tech_contact: Option<bool>,
-    #[doc="<p>Provides detailed contact information.</p>"]
-    #[serde(rename="RegistrantContact")]
+    /// <p>Provides detailed contact information.</p>
+    #[serde(rename = "RegistrantContact")]
     pub registrant_contact: ContactDetail,
-    #[doc="<p>Provides detailed contact information.</p>"]
-    #[serde(rename="TechContact")]
+    /// <p>Provides detailed contact information.</p>
+    #[serde(rename = "TechContact")]
     pub tech_contact: ContactDetail,
 }
 
-#[doc="<p>The TranserDomain response includes the following element.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The TranserDomain response includes the following element.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct TransferDomainResponse {
-    #[doc="<p>Identifier for tracking the progress of the request. To use this ID to query the operation status, use <a>GetOperationDetail</a>.</p>"]
-    #[serde(rename="OperationId")]
+    /// <p>Identifier for tracking the progress of the request. To use this ID to query the operation status, use <a>GetOperationDetail</a>.</p>
+    #[serde(rename = "OperationId")]
     pub operation_id: String,
 }
 
-#[doc="<p>The UpdateDomainContactPrivacy request includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The UpdateDomainContactPrivacy request includes the following elements.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateDomainContactPrivacyRequest {
-    #[doc="<p>Whether you want to conceal contact information from WHOIS queries. If you specify <code>true</code>, WHOIS (\"who is\") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p>"]
-    #[serde(rename="AdminPrivacy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Whether you want to conceal contact information from WHOIS queries. If you specify <code>true</code>, WHOIS ("who is") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p>
+    #[serde(rename = "AdminPrivacy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub admin_privacy: Option<bool>,
-    #[doc="<p>The name of the domain that you want to update the privacy setting for.</p>"]
-    #[serde(rename="DomainName")]
+    /// <p>The name of the domain that you want to update the privacy setting for.</p>
+    #[serde(rename = "DomainName")]
     pub domain_name: String,
-    #[doc="<p>Whether you want to conceal contact information from WHOIS queries. If you specify <code>true</code>, WHOIS (\"who is\") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p>"]
-    #[serde(rename="RegistrantPrivacy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Whether you want to conceal contact information from WHOIS queries. If you specify <code>true</code>, WHOIS ("who is") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p>
+    #[serde(rename = "RegistrantPrivacy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registrant_privacy: Option<bool>,
-    #[doc="<p>Whether you want to conceal contact information from WHOIS queries. If you specify <code>true</code>, WHOIS (\"who is\") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p>"]
-    #[serde(rename="TechPrivacy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Whether you want to conceal contact information from WHOIS queries. If you specify <code>true</code>, WHOIS ("who is") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p>
+    #[serde(rename = "TechPrivacy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tech_privacy: Option<bool>,
 }
 
-#[doc="<p>The UpdateDomainContactPrivacy response includes the following element.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The UpdateDomainContactPrivacy response includes the following element.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateDomainContactPrivacyResponse {
-    #[doc="<p>Identifier for tracking the progress of the request. To use this ID to query the operation status, use GetOperationDetail.</p>"]
-    #[serde(rename="OperationId")]
+    /// <p>Identifier for tracking the progress of the request. To use this ID to query the operation status, use GetOperationDetail.</p>
+    #[serde(rename = "OperationId")]
     pub operation_id: String,
 }
 
-#[doc="<p>The UpdateDomainContact request includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The UpdateDomainContact request includes the following elements.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateDomainContactRequest {
-    #[doc="<p>Provides detailed contact information.</p>"]
-    #[serde(rename="AdminContact")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Provides detailed contact information.</p>
+    #[serde(rename = "AdminContact")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub admin_contact: Option<ContactDetail>,
-    #[doc="<p>The name of the domain that you want to update contact information for.</p>"]
-    #[serde(rename="DomainName")]
+    /// <p>The name of the domain that you want to update contact information for.</p>
+    #[serde(rename = "DomainName")]
     pub domain_name: String,
-    #[doc="<p>Provides detailed contact information.</p>"]
-    #[serde(rename="RegistrantContact")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Provides detailed contact information.</p>
+    #[serde(rename = "RegistrantContact")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registrant_contact: Option<ContactDetail>,
-    #[doc="<p>Provides detailed contact information.</p>"]
-    #[serde(rename="TechContact")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Provides detailed contact information.</p>
+    #[serde(rename = "TechContact")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tech_contact: Option<ContactDetail>,
 }
 
-#[doc="<p>The UpdateDomainContact response includes the following element.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The UpdateDomainContact response includes the following element.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateDomainContactResponse {
-    #[doc="<p>Identifier for tracking the progress of the request. To use this ID to query the operation status, use <a>GetOperationDetail</a>.</p>"]
-    #[serde(rename="OperationId")]
+    /// <p>Identifier for tracking the progress of the request. To use this ID to query the operation status, use <a>GetOperationDetail</a>.</p>
+    #[serde(rename = "OperationId")]
     pub operation_id: String,
 }
 
-#[doc="<p>Replaces the current set of name servers for the domain with the specified set of name servers. If you use Amazon Route 53 as your DNS service, specify the four name servers in the delegation set for the hosted zone for the domain.</p> <p>If successful, this operation returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email. </p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Replaces the current set of name servers for the domain with the specified set of name servers. If you use Amazon Route 53 as your DNS service, specify the four name servers in the delegation set for the hosted zone for the domain.</p> <p>If successful, this operation returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email. </p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateDomainNameserversRequest {
-    #[doc="<p>The name of the domain that you want to change name servers for.</p>"]
-    #[serde(rename="DomainName")]
+    /// <p>The name of the domain that you want to change name servers for.</p>
+    #[serde(rename = "DomainName")]
     pub domain_name: String,
-    #[doc="<p>The authorization key for .fi domains</p>"]
-    #[serde(rename="FIAuthKey")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The authorization key for .fi domains</p>
+    #[serde(rename = "FIAuthKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fi_auth_key: Option<String>,
-    #[doc="<p>A list of new name servers for the domain.</p>"]
-    #[serde(rename="Nameservers")]
+    /// <p>A list of new name servers for the domain.</p>
+    #[serde(rename = "Nameservers")]
     pub nameservers: Vec<Nameserver>,
 }
 
-#[doc="<p>The UpdateDomainNameservers response includes the following element.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The UpdateDomainNameservers response includes the following element.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateDomainNameserversResponse {
-    #[doc="<p>Identifier for tracking the progress of the request. To use this ID to query the operation status, use <a>GetOperationDetail</a>.</p>"]
-    #[serde(rename="OperationId")]
+    /// <p>Identifier for tracking the progress of the request. To use this ID to query the operation status, use <a>GetOperationDetail</a>.</p>
+    #[serde(rename = "OperationId")]
     pub operation_id: String,
 }
 
-#[doc="<p>The UpdateTagsForDomainRequest includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The UpdateTagsForDomainRequest includes the following elements.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateTagsForDomainRequest {
-    #[doc="<p>The domain for which you want to add or update tags.</p>"]
-    #[serde(rename="DomainName")]
+    /// <p>The domain for which you want to add or update tags.</p>
+    #[serde(rename = "DomainName")]
     pub domain_name: String,
-    #[doc="<p>A list of the tag keys and values that you want to add or update. If you specify a key that already exists, the corresponding value will be replaced.</p>"]
-    #[serde(rename="TagsToUpdate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of the tag keys and values that you want to add or update. If you specify a key that already exists, the corresponding value will be replaced.</p>
+    #[serde(rename = "TagsToUpdate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags_to_update: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateTagsForDomainResponse;
 
-#[doc="<p>The ViewBilling request includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The ViewBilling request includes the following elements.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ViewBillingRequest {
-    #[doc="<p>The end date and time for the time period for which you want a list of billing records. Specify the date in Unix time format.</p>"]
-    #[serde(rename="End")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The end date and time for the time period for which you want a list of billing records. Specify the date in Unix time format.</p>
+    #[serde(rename = "End")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub end: Option<f64>,
-    #[doc="<p>For an initial request for a list of billing records, omit this element. If the number of billing records that are associated with the current AWS account during the specified period is greater than the value that you specified for <code>MaxItems</code>, you can use <code>Marker</code> to return additional billing records. Get the value of <code>NextPageMarker</code> from the previous response, and submit another request that includes the value of <code>NextPageMarker</code> in the <code>Marker</code> element. </p> <p>Constraints: The marker must match the value of <code>NextPageMarker</code> that was returned in the previous response.</p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For an initial request for a list of billing records, omit this element. If the number of billing records that are associated with the current AWS account during the specified period is greater than the value that you specified for <code>MaxItems</code>, you can use <code>Marker</code> to return additional billing records. Get the value of <code>NextPageMarker</code> from the previous response, and submit another request that includes the value of <code>NextPageMarker</code> in the <code>Marker</code> element. </p> <p>Constraints: The marker must match the value of <code>NextPageMarker</code> that was returned in the previous response.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p>The number of billing records to be returned.</p> <p>Default: 20</p>"]
-    #[serde(rename="MaxItems")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of billing records to be returned.</p> <p>Default: 20</p>
+    #[serde(rename = "MaxItems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_items: Option<i64>,
-    #[doc="<p>The beginning date and time for the time period for which you want a list of billing records. Specify the date in Unix time format.</p>"]
-    #[serde(rename="Start")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The beginning date and time for the time period for which you want a list of billing records. Specify the date in Unix time format.</p>
+    #[serde(rename = "Start")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub start: Option<f64>,
 }
 
-#[doc="<p>The ViewBilling response includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The ViewBilling response includes the following elements.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ViewBillingResponse {
-    #[doc="<p>A summary of billing records.</p>"]
-    #[serde(rename="BillingRecords")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A summary of billing records.</p>
+    #[serde(rename = "BillingRecords")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub billing_records: Option<Vec<BillingRecord>>,
-    #[doc="<p>If there are more billing records than you specified for <code>MaxItems</code> in the request, submit another request and include the value of <code>NextPageMarker</code> in the value of <code>Marker</code>.</p>"]
-    #[serde(rename="NextPageMarker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If there are more billing records than you specified for <code>MaxItems</code> in the request, submit another request and include the value of <code>NextPageMarker</code> in the value of <code>Marker</code>.</p>
+    #[serde(rename = "NextPageMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_marker: Option<String>,
 }
 
@@ -832,7 +831,6 @@ pub enum CheckDomainAvailabilityError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CheckDomainAvailabilityError {
     pub fn from_body(body: &str) -> CheckDomainAvailabilityError {
@@ -922,7 +920,6 @@ pub enum DeleteTagsForDomainError {
     Unknown(String),
 }
 
-
 impl DeleteTagsForDomainError {
     pub fn from_body(body: &str) -> DeleteTagsForDomainError {
         match from_str::<SerdeJsonValue>(body) {
@@ -939,7 +936,9 @@ impl DeleteTagsForDomainError {
                     "InvalidInput" => {
                         DeleteTagsForDomainError::InvalidInput(String::from(error_message))
                     }
-                    "OperationLimitExceeded" => DeleteTagsForDomainError::OperationLimitExceeded(String::from(error_message)),
+                    "OperationLimitExceeded" => DeleteTagsForDomainError::OperationLimitExceeded(
+                        String::from(error_message),
+                    ),
                     "UnsupportedTLD" => {
                         DeleteTagsForDomainError::UnsupportedTLD(String::from(error_message))
                     }
@@ -1010,7 +1009,6 @@ pub enum DisableDomainAutoRenewError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DisableDomainAutoRenewError {
     pub fn from_body(body: &str) -> DisableDomainAutoRenewError {
@@ -1104,7 +1102,6 @@ pub enum DisableDomainTransferLockError {
     Unknown(String),
 }
 
-
 impl DisableDomainTransferLockError {
     pub fn from_body(body: &str) -> DisableDomainTransferLockError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1118,12 +1115,20 @@ impl DisableDomainTransferLockError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DuplicateRequest" => DisableDomainTransferLockError::DuplicateRequest(String::from(error_message)),
+                    "DuplicateRequest" => DisableDomainTransferLockError::DuplicateRequest(
+                        String::from(error_message),
+                    ),
                     "InvalidInput" => {
                         DisableDomainTransferLockError::InvalidInput(String::from(error_message))
                     }
-                    "OperationLimitExceeded" => DisableDomainTransferLockError::OperationLimitExceeded(String::from(error_message)),
-                    "TLDRulesViolation" => DisableDomainTransferLockError::TLDRulesViolation(String::from(error_message)),
+                    "OperationLimitExceeded" => {
+                        DisableDomainTransferLockError::OperationLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
+                    "TLDRulesViolation" => DisableDomainTransferLockError::TLDRulesViolation(
+                        String::from(error_message),
+                    ),
                     "UnsupportedTLD" => {
                         DisableDomainTransferLockError::UnsupportedTLD(String::from(error_message))
                     }
@@ -1198,7 +1203,6 @@ pub enum EnableDomainAutoRenewError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl EnableDomainAutoRenewError {
     pub fn from_body(body: &str) -> EnableDomainAutoRenewError {
@@ -1296,7 +1300,6 @@ pub enum EnableDomainTransferLockError {
     Unknown(String),
 }
 
-
 impl EnableDomainTransferLockError {
     pub fn from_body(body: &str) -> EnableDomainTransferLockError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1316,8 +1319,14 @@ impl EnableDomainTransferLockError {
                     "InvalidInput" => {
                         EnableDomainTransferLockError::InvalidInput(String::from(error_message))
                     }
-                    "OperationLimitExceeded" => EnableDomainTransferLockError::OperationLimitExceeded(String::from(error_message)),
-                    "TLDRulesViolation" => EnableDomainTransferLockError::TLDRulesViolation(String::from(error_message)),
+                    "OperationLimitExceeded" => {
+                        EnableDomainTransferLockError::OperationLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
+                    "TLDRulesViolation" => EnableDomainTransferLockError::TLDRulesViolation(
+                        String::from(error_message),
+                    ),
                     "UnsupportedTLD" => {
                         EnableDomainTransferLockError::UnsupportedTLD(String::from(error_message))
                     }
@@ -1393,7 +1402,6 @@ pub enum GetContactReachabilityStatusError {
     Unknown(String),
 }
 
-
 impl GetContactReachabilityStatusError {
     pub fn from_body(body: &str) -> GetContactReachabilityStatusError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1410,8 +1418,14 @@ impl GetContactReachabilityStatusError {
                     "InvalidInput" => {
                         GetContactReachabilityStatusError::InvalidInput(String::from(error_message))
                     }
-                    "OperationLimitExceeded" => GetContactReachabilityStatusError::OperationLimitExceeded(String::from(error_message)),
-                    "UnsupportedTLD" => GetContactReachabilityStatusError::UnsupportedTLD(String::from(error_message)),
+                    "OperationLimitExceeded" => {
+                        GetContactReachabilityStatusError::OperationLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnsupportedTLD" => GetContactReachabilityStatusError::UnsupportedTLD(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         GetContactReachabilityStatusError::Validation(error_message.to_string())
                     }
@@ -1479,7 +1493,6 @@ pub enum GetDomainDetailError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetDomainDetailError {
     pub fn from_body(body: &str) -> GetDomainDetailError {
@@ -1565,7 +1578,6 @@ pub enum GetDomainSuggestionsError {
     Unknown(String),
 }
 
-
 impl GetDomainSuggestionsError {
     pub fn from_body(body: &str) -> GetDomainSuggestionsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1650,7 +1662,6 @@ pub enum GetOperationDetailError {
     Unknown(String),
 }
 
-
 impl GetOperationDetailError {
     pub fn from_body(body: &str) -> GetOperationDetailError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1731,7 +1742,6 @@ pub enum ListDomainsError {
     Unknown(String),
 }
 
-
 impl ListDomainsError {
     pub fn from_body(body: &str) -> ListDomainsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1807,7 +1817,6 @@ pub enum ListOperationsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListOperationsError {
     pub fn from_body(body: &str) -> ListOperationsError {
@@ -1890,7 +1899,6 @@ pub enum ListTagsForDomainError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListTagsForDomainError {
     pub fn from_body(body: &str) -> ListTagsForDomainError {
@@ -1989,7 +1997,6 @@ pub enum RegisterDomainError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl RegisterDomainError {
     pub fn from_body(body: &str) -> RegisterDomainError {
@@ -2097,7 +2104,6 @@ pub enum RenewDomainError {
     Unknown(String),
 }
 
-
 impl RenewDomainError {
     pub fn from_body(body: &str) -> RenewDomainError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2194,7 +2200,6 @@ pub enum ResendContactReachabilityEmailError {
     Unknown(String),
 }
 
-
 impl ResendContactReachabilityEmailError {
     pub fn from_body(body: &str) -> ResendContactReachabilityEmailError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2208,9 +2213,17 @@ impl ResendContactReachabilityEmailError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidInput" => ResendContactReachabilityEmailError::InvalidInput(String::from(error_message)),
-                    "OperationLimitExceeded" => ResendContactReachabilityEmailError::OperationLimitExceeded(String::from(error_message)),
-                    "UnsupportedTLD" => ResendContactReachabilityEmailError::UnsupportedTLD(String::from(error_message)),
+                    "InvalidInput" => ResendContactReachabilityEmailError::InvalidInput(
+                        String::from(error_message),
+                    ),
+                    "OperationLimitExceeded" => {
+                        ResendContactReachabilityEmailError::OperationLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnsupportedTLD" => ResendContactReachabilityEmailError::UnsupportedTLD(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         ResendContactReachabilityEmailError::Validation(error_message.to_string())
                     }
@@ -2278,7 +2291,6 @@ pub enum RetrieveDomainAuthCodeError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl RetrieveDomainAuthCodeError {
     pub fn from_body(body: &str) -> RetrieveDomainAuthCodeError {
@@ -2373,7 +2385,6 @@ pub enum TransferDomainError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl TransferDomainError {
     pub fn from_body(body: &str) -> TransferDomainError {
@@ -2481,7 +2492,6 @@ pub enum UpdateDomainContactError {
     Unknown(String),
 }
 
-
 impl UpdateDomainContactError {
     pub fn from_body(body: &str) -> UpdateDomainContactError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2501,7 +2511,9 @@ impl UpdateDomainContactError {
                     "InvalidInput" => {
                         UpdateDomainContactError::InvalidInput(String::from(error_message))
                     }
-                    "OperationLimitExceeded" => UpdateDomainContactError::OperationLimitExceeded(String::from(error_message)),
+                    "OperationLimitExceeded" => UpdateDomainContactError::OperationLimitExceeded(
+                        String::from(error_message),
+                    ),
                     "TLDRulesViolation" => {
                         UpdateDomainContactError::TLDRulesViolation(String::from(error_message))
                     }
@@ -2584,7 +2596,6 @@ pub enum UpdateDomainContactPrivacyError {
     Unknown(String),
 }
 
-
 impl UpdateDomainContactPrivacyError {
     pub fn from_body(body: &str) -> UpdateDomainContactPrivacyError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2598,12 +2609,20 @@ impl UpdateDomainContactPrivacyError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DuplicateRequest" => UpdateDomainContactPrivacyError::DuplicateRequest(String::from(error_message)),
+                    "DuplicateRequest" => UpdateDomainContactPrivacyError::DuplicateRequest(
+                        String::from(error_message),
+                    ),
                     "InvalidInput" => {
                         UpdateDomainContactPrivacyError::InvalidInput(String::from(error_message))
                     }
-                    "OperationLimitExceeded" => UpdateDomainContactPrivacyError::OperationLimitExceeded(String::from(error_message)),
-                    "TLDRulesViolation" => UpdateDomainContactPrivacyError::TLDRulesViolation(String::from(error_message)),
+                    "OperationLimitExceeded" => {
+                        UpdateDomainContactPrivacyError::OperationLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
+                    "TLDRulesViolation" => UpdateDomainContactPrivacyError::TLDRulesViolation(
+                        String::from(error_message),
+                    ),
                     "UnsupportedTLD" => {
                         UpdateDomainContactPrivacyError::UnsupportedTLD(String::from(error_message))
                     }
@@ -2683,7 +2702,6 @@ pub enum UpdateDomainNameserversError {
     Unknown(String),
 }
 
-
 impl UpdateDomainNameserversError {
     pub fn from_body(body: &str) -> UpdateDomainNameserversError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2703,7 +2721,11 @@ impl UpdateDomainNameserversError {
                     "InvalidInput" => {
                         UpdateDomainNameserversError::InvalidInput(String::from(error_message))
                     }
-                    "OperationLimitExceeded" => UpdateDomainNameserversError::OperationLimitExceeded(String::from(error_message)),
+                    "OperationLimitExceeded" => {
+                        UpdateDomainNameserversError::OperationLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
                     "TLDRulesViolation" => {
                         UpdateDomainNameserversError::TLDRulesViolation(String::from(error_message))
                     }
@@ -2782,7 +2804,6 @@ pub enum UpdateTagsForDomainError {
     Unknown(String),
 }
 
-
 impl UpdateTagsForDomainError {
     pub fn from_body(body: &str) -> UpdateTagsForDomainError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2799,7 +2820,9 @@ impl UpdateTagsForDomainError {
                     "InvalidInput" => {
                         UpdateTagsForDomainError::InvalidInput(String::from(error_message))
                     }
-                    "OperationLimitExceeded" => UpdateTagsForDomainError::OperationLimitExceeded(String::from(error_message)),
+                    "OperationLimitExceeded" => UpdateTagsForDomainError::OperationLimitExceeded(
+                        String::from(error_message),
+                    ),
                     "UnsupportedTLD" => {
                         UpdateTagsForDomainError::UnsupportedTLD(String::from(error_message))
                     }
@@ -2869,7 +2892,6 @@ pub enum ViewBillingError {
     Unknown(String),
 }
 
-
 impl ViewBillingError {
     pub fn from_body(body: &str) -> ViewBillingError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2934,157 +2956,148 @@ impl Error for ViewBillingError {
 /// Trait representing the capabilities of the Amazon Route 53 Domains API. Amazon Route 53 Domains clients implement this trait.
 pub trait Route53Domains {
     #[doc="<p>This operation checks the availability of one domain name. Note that if the availability status of a domain is pending, you must submit another request to determine the availability of the domain name.</p>"]
-    fn check_domain_availability
-        (&self,
-         input: &CheckDomainAvailabilityRequest)
-         -> Result<CheckDomainAvailabilityResponse, CheckDomainAvailabilityError>;
-
+    fn check_domain_availability(
+        &self,
+        input: &CheckDomainAvailabilityRequest,
+    ) -> Result<CheckDomainAvailabilityResponse, CheckDomainAvailabilityError>;
 
     #[doc="<p>This operation deletes the specified tags for a domain.</p> <p>All tag operations are eventually consistent; subsequent operations may not immediately represent all issued operations.</p>"]
-    fn delete_tags_for_domain(&self,
-                              input: &DeleteTagsForDomainRequest)
-                              -> Result<DeleteTagsForDomainResponse, DeleteTagsForDomainError>;
-
+    fn delete_tags_for_domain(
+        &self,
+        input: &DeleteTagsForDomainRequest,
+    ) -> Result<DeleteTagsForDomainResponse, DeleteTagsForDomainError>;
 
     #[doc="<p>This operation disables automatic renewal of domain registration for the specified domain.</p>"]
-    fn disable_domain_auto_renew
-        (&self,
-         input: &DisableDomainAutoRenewRequest)
-         -> Result<DisableDomainAutoRenewResponse, DisableDomainAutoRenewError>;
-
+    fn disable_domain_auto_renew(
+        &self,
+        input: &DisableDomainAutoRenewRequest,
+    ) -> Result<DisableDomainAutoRenewResponse, DisableDomainAutoRenewError>;
 
     #[doc="<p>This operation removes the transfer lock on the domain (specifically the <code>clientTransferProhibited</code> status) to allow domain transfers. We recommend you refrain from performing this action unless you intend to transfer the domain to a different registrar. Successful submission returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>"]
-    fn disable_domain_transfer_lock
-        (&self,
-         input: &DisableDomainTransferLockRequest)
-         -> Result<DisableDomainTransferLockResponse, DisableDomainTransferLockError>;
-
+    fn disable_domain_transfer_lock(
+        &self,
+        input: &DisableDomainTransferLockRequest,
+    ) -> Result<DisableDomainTransferLockResponse, DisableDomainTransferLockError>;
 
     #[doc="<p>This operation configures Amazon Route 53 to automatically renew the specified domain before the domain registration expires. The cost of renewing your domain registration is billed to your AWS account.</p> <p>The period during which you can renew a domain name varies by TLD. For a list of TLDs and their renewal policies, see <a href=\"http://wiki.gandi.net/en/domains/renew#renewal_restoration_and_deletion_times\">\"Renewal, restoration, and deletion times\"</a> on the website for our registrar partner, Gandi. Route 53 requires that you renew before the end of the renewal period that is listed on the Gandi website so we can complete processing before the deadline.</p>"]
-    fn enable_domain_auto_renew
-        (&self,
-         input: &EnableDomainAutoRenewRequest)
-         -> Result<EnableDomainAutoRenewResponse, EnableDomainAutoRenewError>;
-
+    fn enable_domain_auto_renew(
+        &self,
+        input: &EnableDomainAutoRenewRequest,
+    ) -> Result<EnableDomainAutoRenewResponse, EnableDomainAutoRenewError>;
 
     #[doc="<p>This operation sets the transfer lock on the domain (specifically the <code>clientTransferProhibited</code> status) to prevent domain transfers. Successful submission returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>"]
-    fn enable_domain_transfer_lock
-        (&self,
-         input: &EnableDomainTransferLockRequest)
-         -> Result<EnableDomainTransferLockResponse, EnableDomainTransferLockError>;
-
+    fn enable_domain_transfer_lock(
+        &self,
+        input: &EnableDomainTransferLockRequest,
+    ) -> Result<EnableDomainTransferLockResponse, EnableDomainTransferLockError>;
 
     #[doc="<p>For operations that require confirmation that the email address for the registrant contact is valid, such as registering a new domain, this operation returns information about whether the registrant contact has responded.</p> <p>If you want us to resend the email, use the <code>ResendContactReachabilityEmail</code> operation.</p>"]
-    fn get_contact_reachability_status
-        (&self,
-         input: &GetContactReachabilityStatusRequest)
-         -> Result<GetContactReachabilityStatusResponse, GetContactReachabilityStatusError>;
-
+    fn get_contact_reachability_status(
+        &self,
+        input: &GetContactReachabilityStatusRequest,
+    ) -> Result<GetContactReachabilityStatusResponse, GetContactReachabilityStatusError>;
 
     #[doc="<p>This operation returns detailed information about a specified domain that is associated with the current AWS account. Contact information for the domain is also returned as part of the output.</p>"]
-    fn get_domain_detail(&self,
-                         input: &GetDomainDetailRequest)
-                         -> Result<GetDomainDetailResponse, GetDomainDetailError>;
-
+    fn get_domain_detail(
+        &self,
+        input: &GetDomainDetailRequest,
+    ) -> Result<GetDomainDetailResponse, GetDomainDetailError>;
 
     #[doc="<p>The GetDomainSuggestions operation returns a list of suggested domain names given a string, which can either be a domain name or simply a word or phrase (without spaces).</p>"]
-    fn get_domain_suggestions
-        (&self,
-         input: &GetDomainSuggestionsRequest)
-         -> Result<GetDomainSuggestionsResponse, GetDomainSuggestionsError>;
-
+    fn get_domain_suggestions(
+        &self,
+        input: &GetDomainSuggestionsRequest,
+    ) -> Result<GetDomainSuggestionsResponse, GetDomainSuggestionsError>;
 
     #[doc="<p>This operation returns the current status of an operation that is not completed.</p>"]
-    fn get_operation_detail(&self,
-                            input: &GetOperationDetailRequest)
-                            -> Result<GetOperationDetailResponse, GetOperationDetailError>;
-
+    fn get_operation_detail(
+        &self,
+        input: &GetOperationDetailRequest,
+    ) -> Result<GetOperationDetailResponse, GetOperationDetailError>;
 
     #[doc="<p>This operation returns all the domain names registered with Amazon Route 53 for the current AWS account.</p>"]
-    fn list_domains(&self,
-                    input: &ListDomainsRequest)
-                    -> Result<ListDomainsResponse, ListDomainsError>;
-
+    fn list_domains(
+        &self,
+        input: &ListDomainsRequest,
+    ) -> Result<ListDomainsResponse, ListDomainsError>;
 
     #[doc="<p>This operation returns the operation IDs of operations that are not yet complete.</p>"]
-    fn list_operations(&self,
-                       input: &ListOperationsRequest)
-                       -> Result<ListOperationsResponse, ListOperationsError>;
-
+    fn list_operations(
+        &self,
+        input: &ListOperationsRequest,
+    ) -> Result<ListOperationsResponse, ListOperationsError>;
 
     #[doc="<p>This operation returns all of the tags that are associated with the specified domain.</p> <p>All tag operations are eventually consistent; subsequent operations may not immediately represent all issued operations.</p>"]
-    fn list_tags_for_domain(&self,
-                            input: &ListTagsForDomainRequest)
-                            -> Result<ListTagsForDomainResponse, ListTagsForDomainError>;
-
+    fn list_tags_for_domain(
+        &self,
+        input: &ListTagsForDomainRequest,
+    ) -> Result<ListTagsForDomainResponse, ListTagsForDomainError>;
 
     #[doc="<p>This operation registers a domain. Domains are registered by the AWS registrar partner, Gandi. For some top-level domains (TLDs), this operation requires extra parameters.</p> <p>When you register a domain, Amazon Route 53 does the following:</p> <ul> <li> <p>Creates a Amazon Route 53 hosted zone that has the same name as the domain. Amazon Route 53 assigns four name servers to your hosted zone and automatically updates your domain registration with the names of these name servers.</p> </li> <li> <p>Enables autorenew, so your domain registration will renew automatically each year. We'll notify you in advance of the renewal date so you can choose whether to renew the registration.</p> </li> <li> <p>Optionally enables privacy protection, so WHOIS queries return contact information for our registrar partner, Gandi, instead of the information you entered for registrant, admin, and tech contacts.</p> </li> <li> <p>If registration is successful, returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant is notified by email.</p> </li> <li> <p>Charges your AWS account an amount based on the top-level domain. For more information, see <a href=\"http://aws.amazon.com/route53/pricing/\">Amazon Route 53 Pricing</a>.</p> </li> </ul>"]
-    fn register_domain(&self,
-                       input: &RegisterDomainRequest)
-                       -> Result<RegisterDomainResponse, RegisterDomainError>;
-
+    fn register_domain(
+        &self,
+        input: &RegisterDomainRequest,
+    ) -> Result<RegisterDomainResponse, RegisterDomainError>;
 
     #[doc="<p>This operation renews a domain for the specified number of years. The cost of renewing your domain is billed to your AWS account.</p> <p>We recommend that you renew your domain several weeks before the expiration date. Some TLD registries delete domains before the expiration date if you haven't renewed far enough in advance. For more information about renewing domain registration, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-renew.html\">Renewing Registration for a Domain</a> in the Amazon Route 53 Developer Guide.</p>"]
-    fn renew_domain(&self,
-                    input: &RenewDomainRequest)
-                    -> Result<RenewDomainResponse, RenewDomainError>;
-
+    fn renew_domain(
+        &self,
+        input: &RenewDomainRequest,
+    ) -> Result<RenewDomainResponse, RenewDomainError>;
 
     #[doc="<p>For operations that require confirmation that the email address for the registrant contact is valid, such as registering a new domain, this operation resends the confirmation email to the current email address for the registrant contact.</p>"]
-    fn resend_contact_reachability_email
-        (&self,
-         input: &ResendContactReachabilityEmailRequest)
-         -> Result<ResendContactReachabilityEmailResponse, ResendContactReachabilityEmailError>;
-
+    fn resend_contact_reachability_email(
+        &self,
+        input: &ResendContactReachabilityEmailRequest,
+    ) -> Result<ResendContactReachabilityEmailResponse, ResendContactReachabilityEmailError>;
 
     #[doc="<p>This operation returns the AuthCode for the domain. To transfer a domain to another registrar, you provide this value to the new registrar.</p>"]
-    fn retrieve_domain_auth_code
-        (&self,
-         input: &RetrieveDomainAuthCodeRequest)
-         -> Result<RetrieveDomainAuthCodeResponse, RetrieveDomainAuthCodeError>;
-
+    fn retrieve_domain_auth_code(
+        &self,
+        input: &RetrieveDomainAuthCodeRequest,
+    ) -> Result<RetrieveDomainAuthCodeResponse, RetrieveDomainAuthCodeError>;
 
     #[doc="<p>This operation transfers a domain from another registrar to Amazon Route 53. When the transfer is complete, the domain is registered with the AWS registrar partner, Gandi.</p> <p>For transfer requirements, a detailed procedure, and information about viewing the status of a domain transfer, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-transfer-to-route-53.html\">Transferring Registration for a Domain to Amazon Route 53</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>If the registrar for your domain is also the DNS service provider for the domain, we highly recommend that you consider transferring your DNS service to Amazon Route 53 or to another DNS service provider before you transfer your registration. Some registrars provide free DNS service when you purchase a domain registration. When you transfer the registration, the previous registrar will not renew your domain registration and could end your DNS service at any time.</p> <important> <p>If the registrar for your domain is also the DNS service provider for the domain and you don't transfer DNS service to another provider, your website, email, and the web applications associated with the domain might become unavailable.</p> </important> <p>If the transfer is successful, this method returns an operation ID that you can use to track the progress and completion of the action. If the transfer doesn't complete successfully, the domain registrant will be notified by email.</p>"]
-    fn transfer_domain(&self,
-                       input: &TransferDomainRequest)
-                       -> Result<TransferDomainResponse, TransferDomainError>;
-
+    fn transfer_domain(
+        &self,
+        input: &TransferDomainRequest,
+    ) -> Result<TransferDomainResponse, TransferDomainError>;
 
     #[doc="<p>This operation updates the contact information for a particular domain. Information for at least one contact (registrant, administrator, or technical) must be supplied for update.</p> <p>If the update is successful, this method returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>"]
-    fn update_domain_contact(&self,
-                             input: &UpdateDomainContactRequest)
-                             -> Result<UpdateDomainContactResponse, UpdateDomainContactError>;
-
+    fn update_domain_contact(
+        &self,
+        input: &UpdateDomainContactRequest,
+    ) -> Result<UpdateDomainContactResponse, UpdateDomainContactError>;
 
     #[doc="<p>This operation updates the specified domain contact's privacy setting. When the privacy option is enabled, personal information such as postal or email address is hidden from the results of a public WHOIS query. The privacy services are provided by the AWS registrar, Gandi. For more information, see the <a href=\"http://www.gandi.net/domain/whois/?currency=USD&amp;amp;lang=en\">Gandi privacy features</a>.</p> <p>This operation only affects the privacy of the specified contact type (registrant, administrator, or tech). Successful acceptance returns an operation ID that you can use with <a>GetOperationDetail</a> to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>"]
-    fn update_domain_contact_privacy
-        (&self,
-         input: &UpdateDomainContactPrivacyRequest)
-         -> Result<UpdateDomainContactPrivacyResponse, UpdateDomainContactPrivacyError>;
-
+    fn update_domain_contact_privacy(
+        &self,
+        input: &UpdateDomainContactPrivacyRequest,
+    ) -> Result<UpdateDomainContactPrivacyResponse, UpdateDomainContactPrivacyError>;
 
     #[doc="<p>This operation replaces the current set of name servers for the domain with the specified set of name servers. If you use Amazon Route 53 as your DNS service, specify the four name servers in the delegation set for the hosted zone for the domain.</p> <p>If successful, this operation returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>"]
-    fn update_domain_nameservers
-        (&self,
-         input: &UpdateDomainNameserversRequest)
-         -> Result<UpdateDomainNameserversResponse, UpdateDomainNameserversError>;
-
+    fn update_domain_nameservers(
+        &self,
+        input: &UpdateDomainNameserversRequest,
+    ) -> Result<UpdateDomainNameserversResponse, UpdateDomainNameserversError>;
 
     #[doc="<p>This operation adds or updates tags for a specified domain.</p> <p>All tag operations are eventually consistent; subsequent operations may not immediately represent all issued operations.</p>"]
-    fn update_tags_for_domain(&self,
-                              input: &UpdateTagsForDomainRequest)
-                              -> Result<UpdateTagsForDomainResponse, UpdateTagsForDomainError>;
-
+    fn update_tags_for_domain(
+        &self,
+        input: &UpdateTagsForDomainRequest,
+    ) -> Result<UpdateTagsForDomainResponse, UpdateTagsForDomainError>;
 
     #[doc="<p>Returns all the domain-related billing records for the current AWS account for a specified period</p>"]
-    fn view_billing(&self,
-                    input: &ViewBillingRequest)
-                    -> Result<ViewBillingResponse, ViewBillingError>;
+    fn view_billing(
+        &self,
+        input: &ViewBillingRequest,
+    ) -> Result<ViewBillingResponse, ViewBillingError>;
 }
 /// A client for the Amazon Route 53 Domains API.
 pub struct Route53DomainsClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -3092,8 +3105,9 @@ pub struct Route53DomainsClient<P, D>
 }
 
 impl<P, D> Route53DomainsClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         Route53DomainsClient {
@@ -3105,19 +3119,22 @@ impl<P, D> Route53DomainsClient<P, D>
 }
 
 impl<P, D> Route53Domains for Route53DomainsClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     #[doc="<p>This operation checks the availability of one domain name. Note that if the availability status of a domain is pending, you must submit another request to determine the availability of the domain name.</p>"]
-    fn check_domain_availability
-        (&self,
-         input: &CheckDomainAvailabilityRequest)
-         -> Result<CheckDomainAvailabilityResponse, CheckDomainAvailabilityError> {
+    fn check_domain_availability(
+        &self,
+        input: &CheckDomainAvailabilityRequest,
+    ) -> Result<CheckDomainAvailabilityResponse, CheckDomainAvailabilityError> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "Route53Domains_v20140515.CheckDomainAvailability");
+        request.add_header(
+            "x-amz-target",
+            "Route53Domains_v20140515.CheckDomainAvailability",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3129,27 +3146,32 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CheckDomainAvailabilityResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CheckDomainAvailabilityResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CheckDomainAvailabilityError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(CheckDomainAvailabilityError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>This operation deletes the specified tags for a domain.</p> <p>All tag operations are eventually consistent; subsequent operations may not immediately represent all issued operations.</p>"]
-    fn delete_tags_for_domain(&self,
-                              input: &DeleteTagsForDomainRequest)
-                              -> Result<DeleteTagsForDomainResponse, DeleteTagsForDomainError> {
+    fn delete_tags_for_domain(
+        &self,
+        input: &DeleteTagsForDomainRequest,
+    ) -> Result<DeleteTagsForDomainResponse, DeleteTagsForDomainError> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "Route53Domains_v20140515.DeleteTagsForDomain");
+        request.add_header(
+            "x-amz-target",
+            "Route53Domains_v20140515.DeleteTagsForDomain",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3161,27 +3183,32 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteTagsForDomainResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DeleteTagsForDomainResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteTagsForDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteTagsForDomainError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>This operation disables automatic renewal of domain registration for the specified domain.</p>"]
-    fn disable_domain_auto_renew
-        (&self,
-         input: &DisableDomainAutoRenewRequest)
-         -> Result<DisableDomainAutoRenewResponse, DisableDomainAutoRenewError> {
+    fn disable_domain_auto_renew(
+        &self,
+        input: &DisableDomainAutoRenewRequest,
+    ) -> Result<DisableDomainAutoRenewResponse, DisableDomainAutoRenewError> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "Route53Domains_v20140515.DisableDomainAutoRenew");
+        request.add_header(
+            "x-amz-target",
+            "Route53Domains_v20140515.DisableDomainAutoRenew",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3193,27 +3220,32 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DisableDomainAutoRenewResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DisableDomainAutoRenewResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DisableDomainAutoRenewError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DisableDomainAutoRenewError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>This operation removes the transfer lock on the domain (specifically the <code>clientTransferProhibited</code> status) to allow domain transfers. We recommend you refrain from performing this action unless you intend to transfer the domain to a different registrar. Successful submission returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>"]
-    fn disable_domain_transfer_lock
-        (&self,
-         input: &DisableDomainTransferLockRequest)
-         -> Result<DisableDomainTransferLockResponse, DisableDomainTransferLockError> {
+    fn disable_domain_transfer_lock(
+        &self,
+        input: &DisableDomainTransferLockRequest,
+    ) -> Result<DisableDomainTransferLockResponse, DisableDomainTransferLockError> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "Route53Domains_v20140515.DisableDomainTransferLock");
+        request.add_header(
+            "x-amz-target",
+            "Route53Domains_v20140515.DisableDomainTransferLock",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3225,28 +3257,32 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DisableDomainTransferLockResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DisableDomainTransferLockResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DisableDomainTransferLockError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(DisableDomainTransferLockError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>This operation configures Amazon Route 53 to automatically renew the specified domain before the domain registration expires. The cost of renewing your domain registration is billed to your AWS account.</p> <p>The period during which you can renew a domain name varies by TLD. For a list of TLDs and their renewal policies, see <a href=\"http://wiki.gandi.net/en/domains/renew#renewal_restoration_and_deletion_times\">\"Renewal, restoration, and deletion times\"</a> on the website for our registrar partner, Gandi. Route 53 requires that you renew before the end of the renewal period that is listed on the Gandi website so we can complete processing before the deadline.</p>"]
-    fn enable_domain_auto_renew
-        (&self,
-         input: &EnableDomainAutoRenewRequest)
-         -> Result<EnableDomainAutoRenewResponse, EnableDomainAutoRenewError> {
+    fn enable_domain_auto_renew(
+        &self,
+        input: &EnableDomainAutoRenewRequest,
+    ) -> Result<EnableDomainAutoRenewResponse, EnableDomainAutoRenewError> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "Route53Domains_v20140515.EnableDomainAutoRenew");
+        request.add_header(
+            "x-amz-target",
+            "Route53Domains_v20140515.EnableDomainAutoRenew",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3258,27 +3294,32 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<EnableDomainAutoRenewResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<EnableDomainAutoRenewResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(EnableDomainAutoRenewError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(EnableDomainAutoRenewError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>This operation sets the transfer lock on the domain (specifically the <code>clientTransferProhibited</code> status) to prevent domain transfers. Successful submission returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>"]
-    fn enable_domain_transfer_lock
-        (&self,
-         input: &EnableDomainTransferLockRequest)
-         -> Result<EnableDomainTransferLockResponse, EnableDomainTransferLockError> {
+    fn enable_domain_transfer_lock(
+        &self,
+        input: &EnableDomainTransferLockRequest,
+    ) -> Result<EnableDomainTransferLockResponse, EnableDomainTransferLockError> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "Route53Domains_v20140515.EnableDomainTransferLock");
+        request.add_header(
+            "x-amz-target",
+            "Route53Domains_v20140515.EnableDomainTransferLock",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3290,28 +3331,32 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<EnableDomainTransferLockResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<EnableDomainTransferLockResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(EnableDomainTransferLockError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(EnableDomainTransferLockError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>For operations that require confirmation that the email address for the registrant contact is valid, such as registering a new domain, this operation returns information about whether the registrant contact has responded.</p> <p>If you want us to resend the email, use the <code>ResendContactReachabilityEmail</code> operation.</p>"]
-    fn get_contact_reachability_status
-        (&self,
-         input: &GetContactReachabilityStatusRequest)
-         -> Result<GetContactReachabilityStatusResponse, GetContactReachabilityStatusError> {
+    fn get_contact_reachability_status(
+        &self,
+        input: &GetContactReachabilityStatusRequest,
+    ) -> Result<GetContactReachabilityStatusResponse, GetContactReachabilityStatusError> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "Route53Domains_v20140515.GetContactReachabilityStatus");
+        request.add_header(
+            "x-amz-target",
+            "Route53Domains_v20140515.GetContactReachabilityStatus",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3323,22 +3368,27 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetContactReachabilityStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<GetContactReachabilityStatusResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetContactReachabilityStatusError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+                Err(GetContactReachabilityStatusError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>This operation returns detailed information about a specified domain that is associated with the current AWS account. Contact information for the domain is also returned as part of the output.</p>"]
-    fn get_domain_detail(&self,
-                         input: &GetDomainDetailRequest)
-                         -> Result<GetDomainDetailResponse, GetDomainDetailError> {
+    fn get_domain_detail(
+        &self,
+        input: &GetDomainDetailRequest,
+    ) -> Result<GetDomainDetailResponse, GetDomainDetailError> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3354,29 +3404,32 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetDomainDetailResponse>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetDomainDetailResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetDomainDetailError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetDomainDetailError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>The GetDomainSuggestions operation returns a list of suggested domain names given a string, which can either be a domain name or simply a word or phrase (without spaces).</p>"]
-    fn get_domain_suggestions
-        (&self,
-         input: &GetDomainSuggestionsRequest)
-         -> Result<GetDomainSuggestionsResponse, GetDomainSuggestionsError> {
+    fn get_domain_suggestions(
+        &self,
+        input: &GetDomainSuggestionsRequest,
+    ) -> Result<GetDomainSuggestionsResponse, GetDomainSuggestionsError> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "Route53Domains_v20140515.GetDomainSuggestions");
+        request.add_header(
+            "x-amz-target",
+            "Route53Domains_v20140515.GetDomainSuggestions",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3388,26 +3441,32 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetDomainSuggestionsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetDomainSuggestionsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetDomainSuggestionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetDomainSuggestionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>This operation returns the current status of an operation that is not completed.</p>"]
-    fn get_operation_detail(&self,
-                            input: &GetOperationDetailRequest)
-                            -> Result<GetOperationDetailResponse, GetOperationDetailError> {
+    fn get_operation_detail(
+        &self,
+        input: &GetOperationDetailRequest,
+    ) -> Result<GetOperationDetailResponse, GetOperationDetailError> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "Route53Domains_v20140515.GetOperationDetail");
+        request.add_header(
+            "x-amz-target",
+            "Route53Domains_v20140515.GetOperationDetail",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3419,21 +3478,25 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetOperationDetailResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetOperationDetailResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetOperationDetailError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetOperationDetailError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>This operation returns all the domain names registered with Amazon Route 53 for the current AWS account.</p>"]
-    fn list_domains(&self,
-                    input: &ListDomainsRequest)
-                    -> Result<ListDomainsResponse, ListDomainsError> {
+    fn list_domains(
+        &self,
+        input: &ListDomainsRequest,
+    ) -> Result<ListDomainsResponse, ListDomainsError> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3449,23 +3512,25 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListDomainsResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListDomainsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListDomainsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListDomainsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>This operation returns the operation IDs of operations that are not yet complete.</p>"]
-    fn list_operations(&self,
-                       input: &ListOperationsRequest)
-                       -> Result<ListOperationsResponse, ListOperationsError> {
+    fn list_operations(
+        &self,
+        input: &ListOperationsRequest,
+    ) -> Result<ListOperationsResponse, ListOperationsError> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3481,23 +3546,25 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListOperationsResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListOperationsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListOperationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListOperationsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>This operation returns all of the tags that are associated with the specified domain.</p> <p>All tag operations are eventually consistent; subsequent operations may not immediately represent all issued operations.</p>"]
-    fn list_tags_for_domain(&self,
-                            input: &ListTagsForDomainRequest)
-                            -> Result<ListTagsForDomainResponse, ListTagsForDomainError> {
+    fn list_tags_for_domain(
+        &self,
+        input: &ListTagsForDomainRequest,
+    ) -> Result<ListTagsForDomainResponse, ListTagsForDomainError> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3513,21 +3580,25 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListTagsForDomainResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListTagsForDomainResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListTagsForDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListTagsForDomainError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>This operation registers a domain. Domains are registered by the AWS registrar partner, Gandi. For some top-level domains (TLDs), this operation requires extra parameters.</p> <p>When you register a domain, Amazon Route 53 does the following:</p> <ul> <li> <p>Creates a Amazon Route 53 hosted zone that has the same name as the domain. Amazon Route 53 assigns four name servers to your hosted zone and automatically updates your domain registration with the names of these name servers.</p> </li> <li> <p>Enables autorenew, so your domain registration will renew automatically each year. We'll notify you in advance of the renewal date so you can choose whether to renew the registration.</p> </li> <li> <p>Optionally enables privacy protection, so WHOIS queries return contact information for our registrar partner, Gandi, instead of the information you entered for registrant, admin, and tech contacts.</p> </li> <li> <p>If registration is successful, returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant is notified by email.</p> </li> <li> <p>Charges your AWS account an amount based on the top-level domain. For more information, see <a href=\"http://aws.amazon.com/route53/pricing/\">Amazon Route 53 Pricing</a>.</p> </li> </ul>"]
-    fn register_domain(&self,
-                       input: &RegisterDomainRequest)
-                       -> Result<RegisterDomainResponse, RegisterDomainError> {
+    fn register_domain(
+        &self,
+        input: &RegisterDomainRequest,
+    ) -> Result<RegisterDomainResponse, RegisterDomainError> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3543,23 +3614,25 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<RegisterDomainResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<RegisterDomainResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(RegisterDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(RegisterDomainError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>This operation renews a domain for the specified number of years. The cost of renewing your domain is billed to your AWS account.</p> <p>We recommend that you renew your domain several weeks before the expiration date. Some TLD registries delete domains before the expiration date if you haven't renewed far enough in advance. For more information about renewing domain registration, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-renew.html\">Renewing Registration for a Domain</a> in the Amazon Route 53 Developer Guide.</p>"]
-    fn renew_domain(&self,
-                    input: &RenewDomainRequest)
-                    -> Result<RenewDomainResponse, RenewDomainError> {
+    fn renew_domain(
+        &self,
+        input: &RenewDomainRequest,
+    ) -> Result<RenewDomainResponse, RenewDomainError> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3575,29 +3648,32 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<RenewDomainResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<RenewDomainResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(RenewDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(RenewDomainError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>For operations that require confirmation that the email address for the registrant contact is valid, such as registering a new domain, this operation resends the confirmation email to the current email address for the registrant contact.</p>"]
-    fn resend_contact_reachability_email
-        (&self,
-         input: &ResendContactReachabilityEmailRequest)
-         -> Result<ResendContactReachabilityEmailResponse, ResendContactReachabilityEmailError> {
+    fn resend_contact_reachability_email(
+        &self,
+        input: &ResendContactReachabilityEmailRequest,
+    ) -> Result<ResendContactReachabilityEmailResponse, ResendContactReachabilityEmailError> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "Route53Domains_v20140515.ResendContactReachabilityEmail");
+        request.add_header(
+            "x-amz-target",
+            "Route53Domains_v20140515.ResendContactReachabilityEmail",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3609,28 +3685,34 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ResendContactReachabilityEmailResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<ResendContactReachabilityEmailResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ResendContactReachabilityEmailError::from_body(String::from_utf8_lossy(&body)
-                                                                       .as_ref()))
+                Err(ResendContactReachabilityEmailError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>This operation returns the AuthCode for the domain. To transfer a domain to another registrar, you provide this value to the new registrar.</p>"]
-    fn retrieve_domain_auth_code
-        (&self,
-         input: &RetrieveDomainAuthCodeRequest)
-         -> Result<RetrieveDomainAuthCodeResponse, RetrieveDomainAuthCodeError> {
+    fn retrieve_domain_auth_code(
+        &self,
+        input: &RetrieveDomainAuthCodeRequest,
+    ) -> Result<RetrieveDomainAuthCodeResponse, RetrieveDomainAuthCodeError> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "Route53Domains_v20140515.RetrieveDomainAuthCode");
+        request.add_header(
+            "x-amz-target",
+            "Route53Domains_v20140515.RetrieveDomainAuthCode",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3642,21 +3724,25 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<RetrieveDomainAuthCodeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<RetrieveDomainAuthCodeResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(RetrieveDomainAuthCodeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(RetrieveDomainAuthCodeError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>This operation transfers a domain from another registrar to Amazon Route 53. When the transfer is complete, the domain is registered with the AWS registrar partner, Gandi.</p> <p>For transfer requirements, a detailed procedure, and information about viewing the status of a domain transfer, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-transfer-to-route-53.html\">Transferring Registration for a Domain to Amazon Route 53</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>If the registrar for your domain is also the DNS service provider for the domain, we highly recommend that you consider transferring your DNS service to Amazon Route 53 or to another DNS service provider before you transfer your registration. Some registrars provide free DNS service when you purchase a domain registration. When you transfer the registration, the previous registrar will not renew your domain registration and could end your DNS service at any time.</p> <important> <p>If the registrar for your domain is also the DNS service provider for the domain and you don't transfer DNS service to another provider, your website, email, and the web applications associated with the domain might become unavailable.</p> </important> <p>If the transfer is successful, this method returns an operation ID that you can use to track the progress and completion of the action. If the transfer doesn't complete successfully, the domain registrant will be notified by email.</p>"]
-    fn transfer_domain(&self,
-                       input: &TransferDomainRequest)
-                       -> Result<TransferDomainResponse, TransferDomainError> {
+    fn transfer_domain(
+        &self,
+        input: &TransferDomainRequest,
+    ) -> Result<TransferDomainResponse, TransferDomainError> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3672,28 +3758,32 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<TransferDomainResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<TransferDomainResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(TransferDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(TransferDomainError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>This operation updates the contact information for a particular domain. Information for at least one contact (registrant, administrator, or technical) must be supplied for update.</p> <p>If the update is successful, this method returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>"]
-    fn update_domain_contact(&self,
-                             input: &UpdateDomainContactRequest)
-                             -> Result<UpdateDomainContactResponse, UpdateDomainContactError> {
+    fn update_domain_contact(
+        &self,
+        input: &UpdateDomainContactRequest,
+    ) -> Result<UpdateDomainContactResponse, UpdateDomainContactError> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "Route53Domains_v20140515.UpdateDomainContact");
+        request.add_header(
+            "x-amz-target",
+            "Route53Domains_v20140515.UpdateDomainContact",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3705,27 +3795,32 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateDomainContactResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<UpdateDomainContactResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateDomainContactError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateDomainContactError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>This operation updates the specified domain contact's privacy setting. When the privacy option is enabled, personal information such as postal or email address is hidden from the results of a public WHOIS query. The privacy services are provided by the AWS registrar, Gandi. For more information, see the <a href=\"http://www.gandi.net/domain/whois/?currency=USD&amp;amp;lang=en\">Gandi privacy features</a>.</p> <p>This operation only affects the privacy of the specified contact type (registrant, administrator, or tech). Successful acceptance returns an operation ID that you can use with <a>GetOperationDetail</a> to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>"]
-    fn update_domain_contact_privacy
-        (&self,
-         input: &UpdateDomainContactPrivacyRequest)
-         -> Result<UpdateDomainContactPrivacyResponse, UpdateDomainContactPrivacyError> {
+    fn update_domain_contact_privacy(
+        &self,
+        input: &UpdateDomainContactPrivacyRequest,
+    ) -> Result<UpdateDomainContactPrivacyResponse, UpdateDomainContactPrivacyError> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "Route53Domains_v20140515.UpdateDomainContactPrivacy");
+        request.add_header(
+            "x-amz-target",
+            "Route53Domains_v20140515.UpdateDomainContactPrivacy",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3737,28 +3832,32 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateDomainContactPrivacyResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<UpdateDomainContactPrivacyResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateDomainContactPrivacyError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+                Err(UpdateDomainContactPrivacyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>This operation replaces the current set of name servers for the domain with the specified set of name servers. If you use Amazon Route 53 as your DNS service, specify the four name servers in the delegation set for the hosted zone for the domain.</p> <p>If successful, this operation returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>"]
-    fn update_domain_nameservers
-        (&self,
-         input: &UpdateDomainNameserversRequest)
-         -> Result<UpdateDomainNameserversResponse, UpdateDomainNameserversError> {
+    fn update_domain_nameservers(
+        &self,
+        input: &UpdateDomainNameserversRequest,
+    ) -> Result<UpdateDomainNameserversResponse, UpdateDomainNameserversError> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "Route53Domains_v20140515.UpdateDomainNameservers");
+        request.add_header(
+            "x-amz-target",
+            "Route53Domains_v20140515.UpdateDomainNameservers",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3770,27 +3869,32 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateDomainNameserversResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<UpdateDomainNameserversResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateDomainNameserversError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(UpdateDomainNameserversError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>This operation adds or updates tags for a specified domain.</p> <p>All tag operations are eventually consistent; subsequent operations may not immediately represent all issued operations.</p>"]
-    fn update_tags_for_domain(&self,
-                              input: &UpdateTagsForDomainRequest)
-                              -> Result<UpdateTagsForDomainResponse, UpdateTagsForDomainError> {
+    fn update_tags_for_domain(
+        &self,
+        input: &UpdateTagsForDomainRequest,
+    ) -> Result<UpdateTagsForDomainResponse, UpdateTagsForDomainError> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "Route53Domains_v20140515.UpdateTagsForDomain");
+        request.add_header(
+            "x-amz-target",
+            "Route53Domains_v20140515.UpdateTagsForDomain",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3802,21 +3906,25 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateTagsForDomainResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<UpdateTagsForDomainResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateTagsForDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateTagsForDomainError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns all the domain-related billing records for the current AWS account for a specified period</p>"]
-    fn view_billing(&self,
-                    input: &ViewBillingRequest)
-                    -> Result<ViewBillingResponse, ViewBillingError> {
+    fn view_billing(
+        &self,
+        input: &ViewBillingRequest,
+    ) -> Result<ViewBillingResponse, ViewBillingError> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3832,14 +3940,16 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ViewBillingResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ViewBillingResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ViewBillingError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ViewBillingError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

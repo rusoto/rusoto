@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -28,2890 +27,2887 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[doc="<p>Represents the request to add custom attributes.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to add custom attributes.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AddCustomAttributesRequest {
-    #[doc="<p>An array of custom attributes, such as Mutable and Name.</p>"]
-    #[serde(rename="CustomAttributes")]
+    /// <p>An array of custom attributes, such as Mutable and Name.</p>
+    #[serde(rename = "CustomAttributes")]
     pub custom_attributes: Vec<SchemaAttributeType>,
-    #[doc="<p>The user pool ID for the user pool where you want to add custom attributes.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool where you want to add custom attributes.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[doc="<p>Represents the response from the server for the request to add custom attributes.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the response from the server for the request to add custom attributes.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AddCustomAttributesResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AdminAddUserToGroupRequest {
-    #[doc="<p>The group name.</p>"]
-    #[serde(rename="GroupName")]
+    /// <p>The group name.</p>
+    #[serde(rename = "GroupName")]
     pub group_name: String,
-    #[doc="<p>The user pool ID for the user pool.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
-    #[doc="<p>The username for the user.</p>"]
-    #[serde(rename="Username")]
+    /// <p>The username for the user.</p>
+    #[serde(rename = "Username")]
     pub username: String,
 }
 
-#[doc="<p>Represents the request to confirm user registration.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to confirm user registration.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AdminConfirmSignUpRequest {
-    #[doc="<p>The user pool ID for which you want to confirm user registration.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for which you want to confirm user registration.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
-    #[doc="<p>The user name for which you want to confirm user registration.</p>"]
-    #[serde(rename="Username")]
+    /// <p>The user name for which you want to confirm user registration.</p>
+    #[serde(rename = "Username")]
     pub username: String,
 }
 
-#[doc="<p>Represents the response from the server for the request to confirm registration.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the response from the server for the request to confirm registration.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AdminConfirmSignUpResponse;
 
-#[doc="<p>The type of configuration for creating a new user profile.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>The type of configuration for creating a new user profile.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct AdminCreateUserConfigType {
-    #[doc="<p>Set to <code>True</code> if only the administrator is allowed to create user profiles. Set to <code>False</code> if users can sign themselves up via an app.</p>"]
-    #[serde(rename="AllowAdminCreateUserOnly")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Set to <code>True</code> if only the administrator is allowed to create user profiles. Set to <code>False</code> if users can sign themselves up via an app.</p>
+    #[serde(rename = "AllowAdminCreateUserOnly")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub allow_admin_create_user_only: Option<bool>,
-    #[doc="<p>The message template to be used for the welcome message to new users.</p>"]
-    #[serde(rename="InviteMessageTemplate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The message template to be used for the welcome message to new users.</p>
+    #[serde(rename = "InviteMessageTemplate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub invite_message_template: Option<MessageTemplateType>,
-    #[doc="<p>The user account expiration limit, in days, after which the account is no longer usable. To reset the account after that time limit, you must call <code>AdminCreateUser</code> again, specifying <code>\"RESEND\"</code> for the <code>MessageAction</code> parameter. The default value for this parameter is 7.</p>"]
-    #[serde(rename="UnusedAccountValidityDays")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user account expiration limit, in days, after which the account is no longer usable. To reset the account after that time limit, you must call <code>AdminCreateUser</code> again, specifying <code>"RESEND"</code> for the <code>MessageAction</code> parameter. The default value for this parameter is 7.</p>
+    #[serde(rename = "UnusedAccountValidityDays")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub unused_account_validity_days: Option<i64>,
 }
 
-#[doc="<p>Represents the request to create a user in the specified user pool.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to create a user in the specified user pool.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AdminCreateUserRequest {
-    #[doc="<p>Specify <code>\"EMAIL\"</code> if email will be used to send the welcome message. Specify <code>\"SMS\"</code> if the phone number will be used. The default value is <code>\"SMS\"</code>. More than one value can be specified.</p>"]
-    #[serde(rename="DesiredDeliveryMediums")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specify <code>"EMAIL"</code> if email will be used to send the welcome message. Specify <code>"SMS"</code> if the phone number will be used. The default value is <code>"SMS"</code>. More than one value can be specified.</p>
+    #[serde(rename = "DesiredDeliveryMediums")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub desired_delivery_mediums: Option<Vec<String>>,
-    #[doc="<p>This parameter is only used if the <code>phone_number_verified</code> or <code>email_verified</code> attribute is set to <code>True</code>. Otherwise, it is ignored.</p> <p>If this parameter is set to <code>True</code> and the phone number or email address specified in the UserAttributes parameter already exists as an alias with a different user, the API call will migrate the alias from the previous user to the newly created user. The previous user will no longer be able to log in using that alias.</p> <p>If this parameter is set to <code>False</code>, the API throws an <code>AliasExistsException</code> error if the alias already exists. The default value is <code>False</code>.</p>"]
-    #[serde(rename="ForceAliasCreation")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>This parameter is only used if the <code>phone_number_verified</code> or <code>email_verified</code> attribute is set to <code>True</code>. Otherwise, it is ignored.</p> <p>If this parameter is set to <code>True</code> and the phone number or email address specified in the UserAttributes parameter already exists as an alias with a different user, the API call will migrate the alias from the previous user to the newly created user. The previous user will no longer be able to log in using that alias.</p> <p>If this parameter is set to <code>False</code>, the API throws an <code>AliasExistsException</code> error if the alias already exists. The default value is <code>False</code>.</p>
+    #[serde(rename = "ForceAliasCreation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub force_alias_creation: Option<bool>,
-    #[doc="<p>Set to <code>\"RESEND\"</code> to resend the invitation message to a user that already exists and reset the expiration limit on the user's account. Set to <code>\"SUPPRESS\"</code> to suppress sending the message. Only one value can be specified.</p>"]
-    #[serde(rename="MessageAction")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Set to <code>"RESEND"</code> to resend the invitation message to a user that already exists and reset the expiration limit on the user's account. Set to <code>"SUPPRESS"</code> to suppress sending the message. Only one value can be specified.</p>
+    #[serde(rename = "MessageAction")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub message_action: Option<String>,
-    #[doc="<p>The user's temporary password. This password must conform to the password policy that you specified when you created the user pool.</p> <p>The temporary password is valid only once. To complete the Admin Create User flow, the user must enter the temporary password in the sign-in page along with a new password to be used in all future sign-ins.</p> <p>This parameter is not required. If you do not specify a value, Amazon Cognito generates one for you.</p> <p>The temporary password can only be used until the user account expiration limit that you specified when you created the user pool. To reset the account after that time limit, you must call <code>AdminCreateUser</code> again, specifying <code>\"RESEND\"</code> for the <code>MessageAction</code> parameter.</p>"]
-    #[serde(rename="TemporaryPassword")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user's temporary password. This password must conform to the password policy that you specified when you created the user pool.</p> <p>The temporary password is valid only once. To complete the Admin Create User flow, the user must enter the temporary password in the sign-in page along with a new password to be used in all future sign-ins.</p> <p>This parameter is not required. If you do not specify a value, Amazon Cognito generates one for you.</p> <p>The temporary password can only be used until the user account expiration limit that you specified when you created the user pool. To reset the account after that time limit, you must call <code>AdminCreateUser</code> again, specifying <code>"RESEND"</code> for the <code>MessageAction</code> parameter.</p>
+    #[serde(rename = "TemporaryPassword")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub temporary_password: Option<String>,
-    #[doc="<p>An array of name-value pairs that contain user attributes and attribute values to be set for the user to be created. You can create a user without specifying any attributes other than <code>Username</code>. However, any attributes that you specify as required (in <a href=\"API_CreateUserPool.html\">CreateUserPool</a> or in the <b>Attributes</b> tab of the console) must be supplied either by you (in your call to <code>AdminCreateUser</code>) or by the user (when he or she signs up in response to your welcome message).</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p> <p>To send a message inviting the user to sign up, you must specify the user's email address or phone number. This can be done in your call to AdminCreateUser or in the <b>Users</b> tab of the Amazon Cognito console for managing your user pools.</p> <p>In your call to <code>AdminCreateUser</code>, you can set the <code>email_verified</code> attribute to <code>True</code>, and you can set the <code>phone_number_verified</code> attribute to <code>True</code>. (You can also do this by calling <a href=\"API_AdminUpdateUserAttributes.html\">AdminUpdateUserAttributes</a>.)</p> <ul> <li> <p> <b>email</b>: The email address of the user to whom the message that contains the code and username will be sent. Required if the <code>email_verified</code> attribute is set to <code>True</code>, or if <code>\"EMAIL\"</code> is specified in the <code>DesiredDeliveryMediums</code> parameter.</p> </li> <li> <p> <b>phone_number</b>: The phone number of the user to whom the message that contains the code and username will be sent. Required if the <code>phone_number_verified</code> attribute is set to <code>True</code>, or if <code>\"SMS\"</code> is specified in the <code>DesiredDeliveryMediums</code> parameter.</p> </li> </ul>"]
-    #[serde(rename="UserAttributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of name-value pairs that contain user attributes and attribute values to be set for the user to be created. You can create a user without specifying any attributes other than <code>Username</code>. However, any attributes that you specify as required (in <a href="API_CreateUserPool.html">CreateUserPool</a> or in the <b>Attributes</b> tab of the console) must be supplied either by you (in your call to <code>AdminCreateUser</code>) or by the user (when he or she signs up in response to your welcome message).</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p> <p>To send a message inviting the user to sign up, you must specify the user's email address or phone number. This can be done in your call to AdminCreateUser or in the <b>Users</b> tab of the Amazon Cognito console for managing your user pools.</p> <p>In your call to <code>AdminCreateUser</code>, you can set the <code>email_verified</code> attribute to <code>True</code>, and you can set the <code>phone_number_verified</code> attribute to <code>True</code>. (You can also do this by calling <a href="API_AdminUpdateUserAttributes.html">AdminUpdateUserAttributes</a>.)</p> <ul> <li> <p> <b>email</b>: The email address of the user to whom the message that contains the code and username will be sent. Required if the <code>email_verified</code> attribute is set to <code>True</code>, or if <code>"EMAIL"</code> is specified in the <code>DesiredDeliveryMediums</code> parameter.</p> </li> <li> <p> <b>phone_number</b>: The phone number of the user to whom the message that contains the code and username will be sent. Required if the <code>phone_number_verified</code> attribute is set to <code>True</code>, or if <code>"SMS"</code> is specified in the <code>DesiredDeliveryMediums</code> parameter.</p> </li> </ul>
+    #[serde(rename = "UserAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_attributes: Option<Vec<AttributeType>>,
-    #[doc="<p>The user pool ID for the user pool where the user will be created.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool where the user will be created.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
-    #[doc="<p>The username for the user. Must be unique within the user pool. Must be a UTF-8 string between 1 and 128 characters. After the user is created, the username cannot be changed.</p>"]
-    #[serde(rename="Username")]
+    /// <p>The username for the user. Must be unique within the user pool. Must be a UTF-8 string between 1 and 128 characters. After the user is created, the username cannot be changed.</p>
+    #[serde(rename = "Username")]
     pub username: String,
-    #[doc="<p>The user's validation data. This is an array of name-value pairs that contain user attributes and attribute values that you can use for custom validation, such as restricting the types of user accounts that can be registered. For example, you might choose to allow or disallow user sign-up based on the user's domain.</p> <p>To configure custom validation, you must create a Pre Sign-up Lambda trigger for the user pool as described in the Amazon Cognito Developer Guide. The Lambda trigger receives the validation data and uses it in the validation process.</p> <p>The user's validation data is not persisted.</p>"]
-    #[serde(rename="ValidationData")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user's validation data. This is an array of name-value pairs that contain user attributes and attribute values that you can use for custom validation, such as restricting the types of user accounts that can be registered. For example, you might choose to allow or disallow user sign-up based on the user's domain.</p> <p>To configure custom validation, you must create a Pre Sign-up Lambda trigger for the user pool as described in the Amazon Cognito Developer Guide. The Lambda trigger receives the validation data and uses it in the validation process.</p> <p>The user's validation data is not persisted.</p>
+    #[serde(rename = "ValidationData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub validation_data: Option<Vec<AttributeType>>,
 }
 
-#[doc="<p>Represents the response from the server to the request to create the user.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the response from the server to the request to create the user.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AdminCreateUserResponse {
-    #[doc="<p>The newly created user.</p>"]
-    #[serde(rename="User")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The newly created user.</p>
+    #[serde(rename = "User")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user: Option<UserType>,
 }
 
-#[doc="<p>Represents the request to delete user attributes as an administrator.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to delete user attributes as an administrator.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AdminDeleteUserAttributesRequest {
-    #[doc="<p>An array of strings representing the user attribute names you wish to delete.</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p>"]
-    #[serde(rename="UserAttributeNames")]
+    /// <p>An array of strings representing the user attribute names you wish to delete.</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p>
+    #[serde(rename = "UserAttributeNames")]
     pub user_attribute_names: Vec<String>,
-    #[doc="<p>The user pool ID for the user pool where you want to delete user attributes.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool where you want to delete user attributes.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
-    #[doc="<p>The user name of the user from which you would like to delete attributes.</p>"]
-    #[serde(rename="Username")]
+    /// <p>The user name of the user from which you would like to delete attributes.</p>
+    #[serde(rename = "Username")]
     pub username: String,
 }
 
-#[doc="<p>Represents the response received from the server for a request to delete user attributes.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the response received from the server for a request to delete user attributes.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AdminDeleteUserAttributesResponse;
 
-#[doc="<p>Represents the request to delete a user as an administrator.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to delete a user as an administrator.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AdminDeleteUserRequest {
-    #[doc="<p>The user pool ID for the user pool where you want to delete the user.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool where you want to delete the user.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
-    #[doc="<p>The user name of the user you wish to delete.</p>"]
-    #[serde(rename="Username")]
+    /// <p>The user name of the user you wish to delete.</p>
+    #[serde(rename = "Username")]
     pub username: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AdminDisableProviderForUserRequest {
-    #[doc="<p>The user to be disabled.</p>"]
-    #[serde(rename="User")]
+    /// <p>The user to be disabled.</p>
+    #[serde(rename = "User")]
     pub user: ProviderUserIdentifierType,
-    #[doc="<p>The user pool ID for the user pool.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AdminDisableProviderForUserResponse;
 
-#[doc="<p>Represents the request to disable any user as an administrator.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to disable any user as an administrator.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AdminDisableUserRequest {
-    #[doc="<p>The user pool ID for the user pool where you want to disable the user.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool where you want to disable the user.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
-    #[doc="<p>The user name of the user you wish to disable.</p>"]
-    #[serde(rename="Username")]
+    /// <p>The user name of the user you wish to disable.</p>
+    #[serde(rename = "Username")]
     pub username: String,
 }
 
-#[doc="<p>Represents the response received from the server to disable the user as an administrator.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the response received from the server to disable the user as an administrator.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AdminDisableUserResponse;
 
-#[doc="<p>Represents the request that enables the user as an administrator.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request that enables the user as an administrator.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AdminEnableUserRequest {
-    #[doc="<p>The user pool ID for the user pool where you want to enable the user.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool where you want to enable the user.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
-    #[doc="<p>The user name of the user you wish to enable.</p>"]
-    #[serde(rename="Username")]
+    /// <p>The user name of the user you wish to enable.</p>
+    #[serde(rename = "Username")]
     pub username: String,
 }
 
-#[doc="<p>Represents the response from the server for the request to enable a user as an administrator.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the response from the server for the request to enable a user as an administrator.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AdminEnableUserResponse;
 
-#[doc="<p>Sends the forgot device request, as an administrator.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Sends the forgot device request, as an administrator.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AdminForgetDeviceRequest {
-    #[doc="<p>The device key.</p>"]
-    #[serde(rename="DeviceKey")]
+    /// <p>The device key.</p>
+    #[serde(rename = "DeviceKey")]
     pub device_key: String,
-    #[doc="<p>The user pool ID.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
-    #[doc="<p>The user name.</p>"]
-    #[serde(rename="Username")]
+    /// <p>The user name.</p>
+    #[serde(rename = "Username")]
     pub username: String,
 }
 
-#[doc="<p>Represents the request to get the device, as an administrator.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to get the device, as an administrator.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AdminGetDeviceRequest {
-    #[doc="<p>The device key.</p>"]
-    #[serde(rename="DeviceKey")]
+    /// <p>The device key.</p>
+    #[serde(rename = "DeviceKey")]
     pub device_key: String,
-    #[doc="<p>The user pool ID.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
-    #[doc="<p>The user name.</p>"]
-    #[serde(rename="Username")]
+    /// <p>The user name.</p>
+    #[serde(rename = "Username")]
     pub username: String,
 }
 
-#[doc="<p>Gets the device response, as an administrator.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Gets the device response, as an administrator.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AdminGetDeviceResponse {
-    #[doc="<p>The device.</p>"]
-    #[serde(rename="Device")]
+    /// <p>The device.</p>
+    #[serde(rename = "Device")]
     pub device: DeviceType,
 }
 
-#[doc="<p>Represents the request to get the specified user as an administrator.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to get the specified user as an administrator.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AdminGetUserRequest {
-    #[doc="<p>The user pool ID for the user pool where you want to get information about the user.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool where you want to get information about the user.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
-    #[doc="<p>The user name of the user you wish to retrieve.</p>"]
-    #[serde(rename="Username")]
+    /// <p>The user name of the user you wish to retrieve.</p>
+    #[serde(rename = "Username")]
     pub username: String,
 }
 
-#[doc="<p>Represents the response from the server from the request to get the specified user as an administrator.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the response from the server from the request to get the specified user as an administrator.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AdminGetUserResponse {
-    #[doc="<p>Indicates that the status is enabled.</p>"]
-    #[serde(rename="Enabled")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates that the status is enabled.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    #[doc="<p>Specifies the options for MFA (e.g., email or phone number).</p>"]
-    #[serde(rename="MFAOptions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies the options for MFA (e.g., email or phone number).</p>
+    #[serde(rename = "MFAOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub mfa_options: Option<Vec<MFAOptionType>>,
-    #[doc="<p>An array of name-value pairs representing user attributes.</p>"]
-    #[serde(rename="UserAttributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of name-value pairs representing user attributes.</p>
+    #[serde(rename = "UserAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_attributes: Option<Vec<AttributeType>>,
-    #[doc="<p>The date the user was created.</p>"]
-    #[serde(rename="UserCreateDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the user was created.</p>
+    #[serde(rename = "UserCreateDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_create_date: Option<f64>,
-    #[doc="<p>The date the user was last modified.</p>"]
-    #[serde(rename="UserLastModifiedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the user was last modified.</p>
+    #[serde(rename = "UserLastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_last_modified_date: Option<f64>,
-    #[doc="<p>The user status. Can be one of the following:</p> <ul> <li> <p>UNCONFIRMED - User has been created but not confirmed.</p> </li> <li> <p>CONFIRMED - User has been confirmed.</p> </li> <li> <p>ARCHIVED - User is no longer active.</p> </li> <li> <p>COMPROMISED - User is disabled due to a potential security threat.</p> </li> <li> <p>UNKNOWN - User status is not known.</p> </li> </ul>"]
-    #[serde(rename="UserStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user status. Can be one of the following:</p> <ul> <li> <p>UNCONFIRMED - User has been created but not confirmed.</p> </li> <li> <p>CONFIRMED - User has been confirmed.</p> </li> <li> <p>ARCHIVED - User is no longer active.</p> </li> <li> <p>COMPROMISED - User is disabled due to a potential security threat.</p> </li> <li> <p>UNKNOWN - User status is not known.</p> </li> </ul>
+    #[serde(rename = "UserStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_status: Option<String>,
-    #[doc="<p>The user name of the user about whom you are receiving information.</p>"]
-    #[serde(rename="Username")]
+    /// <p>The user name of the user about whom you are receiving information.</p>
+    #[serde(rename = "Username")]
     pub username: String,
 }
 
-#[doc="<p>Initiates the authorization request, as an administrator.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Initiates the authorization request, as an administrator.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AdminInitiateAuthRequest {
-    #[doc="<p>The authentication flow for this call to execute. The API action will depend on this value. For example:</p> <ul> <li> <p> <code>REFRESH_TOKEN_AUTH</code> will take in a valid refresh token and return new tokens.</p> </li> <li> <p> <code>USER_SRP_AUTH</code> will take in <code>USERNAME</code> and <code>SRP_A</code> and return the SRP variables to be used for next challenge execution.</p> </li> </ul> <p>Valid values include:</p> <ul> <li> <p> <code>USER_SRP_AUTH</code>: Authentication flow for the Secure Remote Password (SRP) protocol.</p> </li> <li> <p> <code>REFRESH_TOKEN_AUTH</code>/<code>REFRESH_TOKEN</code>: Authentication flow for refreshing the access token and ID token by supplying a valid refresh token.</p> </li> <li> <p> <code>CUSTOM_AUTH</code>: Custom authentication flow.</p> </li> <li> <p> <code>ADMIN_NO_SRP_AUTH</code>: Non-SRP authentication flow; you can pass in the USERNAME and PASSWORD directly if the flow is enabled for calling the app client.</p> </li> </ul>"]
-    #[serde(rename="AuthFlow")]
+    /// <p>The authentication flow for this call to execute. The API action will depend on this value. For example:</p> <ul> <li> <p> <code>REFRESH_TOKEN_AUTH</code> will take in a valid refresh token and return new tokens.</p> </li> <li> <p> <code>USER_SRP_AUTH</code> will take in <code>USERNAME</code> and <code>SRP_A</code> and return the SRP variables to be used for next challenge execution.</p> </li> </ul> <p>Valid values include:</p> <ul> <li> <p> <code>USER_SRP_AUTH</code>: Authentication flow for the Secure Remote Password (SRP) protocol.</p> </li> <li> <p> <code>REFRESH_TOKEN_AUTH</code>/<code>REFRESH_TOKEN</code>: Authentication flow for refreshing the access token and ID token by supplying a valid refresh token.</p> </li> <li> <p> <code>CUSTOM_AUTH</code>: Custom authentication flow.</p> </li> <li> <p> <code>ADMIN_NO_SRP_AUTH</code>: Non-SRP authentication flow; you can pass in the USERNAME and PASSWORD directly if the flow is enabled for calling the app client.</p> </li> </ul>
+    #[serde(rename = "AuthFlow")]
     pub auth_flow: String,
-    #[doc="<p>The authentication parameters. These are inputs corresponding to the <code>AuthFlow</code> that you are invoking. The required values depend on the value of <code>AuthFlow</code>:</p> <ul> <li> <p>For <code>USER_SRP_AUTH</code>: <code>USERNAME</code> (required), <code>SRP_A</code> (required), <code>SECRET_HASH</code> (required if the app client is configured with a client secret), <code>DEVICE_KEY</code> </p> </li> <li> <p>For <code>REFRESH_TOKEN_AUTH/REFRESH_TOKEN</code>: <code>USERNAME</code> (required), <code>SECRET_HASH</code> (required if the app client is configured with a client secret), <code>REFRESH_TOKEN</code> (required), <code>DEVICE_KEY</code> </p> </li> <li> <p>For <code>ADMIN_NO_SRP_AUTH</code>: <code>USERNAME</code> (required), <code>SECRET_HASH</code> (if app client is configured with client secret), <code>PASSWORD</code> (required), <code>DEVICE_KEY</code> </p> </li> <li> <p>For <code>CUSTOM_AUTH</code>: <code>USERNAME</code> (required), <code>SECRET_HASH</code> (if app client is configured with client secret), <code>DEVICE_KEY</code> </p> </li> </ul>"]
-    #[serde(rename="AuthParameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The authentication parameters. These are inputs corresponding to the <code>AuthFlow</code> that you are invoking. The required values depend on the value of <code>AuthFlow</code>:</p> <ul> <li> <p>For <code>USER_SRP_AUTH</code>: <code>USERNAME</code> (required), <code>SRP_A</code> (required), <code>SECRET_HASH</code> (required if the app client is configured with a client secret), <code>DEVICE_KEY</code> </p> </li> <li> <p>For <code>REFRESH_TOKEN_AUTH/REFRESH_TOKEN</code>: <code>USERNAME</code> (required), <code>SECRET_HASH</code> (required if the app client is configured with a client secret), <code>REFRESH_TOKEN</code> (required), <code>DEVICE_KEY</code> </p> </li> <li> <p>For <code>ADMIN_NO_SRP_AUTH</code>: <code>USERNAME</code> (required), <code>SECRET_HASH</code> (if app client is configured with client secret), <code>PASSWORD</code> (required), <code>DEVICE_KEY</code> </p> </li> <li> <p>For <code>CUSTOM_AUTH</code>: <code>USERNAME</code> (required), <code>SECRET_HASH</code> (if app client is configured with client secret), <code>DEVICE_KEY</code> </p> </li> </ul>
+    #[serde(rename = "AuthParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_parameters: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The app client ID.</p>"]
-    #[serde(rename="ClientId")]
+    /// <p>The app client ID.</p>
+    #[serde(rename = "ClientId")]
     pub client_id: String,
-    #[doc="<p>This is a random key-value pair map which can contain any key and will be passed to your PreAuthentication Lambda trigger as-is. It can be used to implement additional validations around authentication.</p>"]
-    #[serde(rename="ClientMetadata")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>This is a random key-value pair map which can contain any key and will be passed to your PreAuthentication Lambda trigger as-is. It can be used to implement additional validations around authentication.</p>
+    #[serde(rename = "ClientMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub client_metadata: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The ID of the Amazon Cognito user pool.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The ID of the Amazon Cognito user pool.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[doc="<p>Initiates the authentication response, as an administrator.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Initiates the authentication response, as an administrator.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AdminInitiateAuthResponse {
-    #[doc="<p>The result of the authentication response. This is only returned if the caller does not need to pass another challenge. If the caller does need to pass another challenge before it gets tokens, <code>ChallengeName</code>, <code>ChallengeParameters</code>, and <code>Session</code> are returned.</p>"]
-    #[serde(rename="AuthenticationResult")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The result of the authentication response. This is only returned if the caller does not need to pass another challenge. If the caller does need to pass another challenge before it gets tokens, <code>ChallengeName</code>, <code>ChallengeParameters</code>, and <code>Session</code> are returned.</p>
+    #[serde(rename = "AuthenticationResult")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_result: Option<AuthenticationResultType>,
-    #[doc="<p>The name of the challenge which you are responding to with this call. This is returned to you in the <code>AdminInitiateAuth</code> response if you need to pass another challenge.</p> <ul> <li> <p> <code>SMS_MFA</code>: Next challenge is to supply an <code>SMS_MFA_CODE</code>, delivered via SMS.</p> </li> <li> <p> <code>PASSWORD_VERIFIER</code>: Next challenge is to supply <code>PASSWORD_CLAIM_SIGNATURE</code>, <code>PASSWORD_CLAIM_SECRET_BLOCK</code>, and <code>TIMESTAMP</code> after the client-side SRP calculations.</p> </li> <li> <p> <code>CUSTOM_CHALLENGE</code>: This is returned if your custom authentication flow determines that the user should pass another challenge before tokens are issued.</p> </li> <li> <p> <code>DEVICE_SRP_AUTH</code>: If device tracking was enabled on your user pool and the previous challenges were passed, this challenge is returned so that Amazon Cognito can start tracking this device.</p> </li> <li> <p> <code>DEVICE_PASSWORD_VERIFIER</code>: Similar to <code>PASSWORD_VERIFIER</code>, but for devices only.</p> </li> <li> <p> <code>ADMIN_NO_SRP_AUTH</code>: This is returned if you need to authenticate with <code>USERNAME</code> and <code>PASSWORD</code> directly. An app client must be enabled to use this flow.</p> </li> <li> <p> <code>NEW_PASSWORD_REQUIRED</code>: For users which are required to change their passwords after successful first login. This challenge should be passed with <code>NEW_PASSWORD</code> and any other required attributes.</p> </li> </ul>"]
-    #[serde(rename="ChallengeName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the challenge which you are responding to with this call. This is returned to you in the <code>AdminInitiateAuth</code> response if you need to pass another challenge.</p> <ul> <li> <p> <code>SMS_MFA</code>: Next challenge is to supply an <code>SMS_MFA_CODE</code>, delivered via SMS.</p> </li> <li> <p> <code>PASSWORD_VERIFIER</code>: Next challenge is to supply <code>PASSWORD_CLAIM_SIGNATURE</code>, <code>PASSWORD_CLAIM_SECRET_BLOCK</code>, and <code>TIMESTAMP</code> after the client-side SRP calculations.</p> </li> <li> <p> <code>CUSTOM_CHALLENGE</code>: This is returned if your custom authentication flow determines that the user should pass another challenge before tokens are issued.</p> </li> <li> <p> <code>DEVICE_SRP_AUTH</code>: If device tracking was enabled on your user pool and the previous challenges were passed, this challenge is returned so that Amazon Cognito can start tracking this device.</p> </li> <li> <p> <code>DEVICE_PASSWORD_VERIFIER</code>: Similar to <code>PASSWORD_VERIFIER</code>, but for devices only.</p> </li> <li> <p> <code>ADMIN_NO_SRP_AUTH</code>: This is returned if you need to authenticate with <code>USERNAME</code> and <code>PASSWORD</code> directly. An app client must be enabled to use this flow.</p> </li> <li> <p> <code>NEW_PASSWORD_REQUIRED</code>: For users which are required to change their passwords after successful first login. This challenge should be passed with <code>NEW_PASSWORD</code> and any other required attributes.</p> </li> </ul>
+    #[serde(rename = "ChallengeName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub challenge_name: Option<String>,
-    #[doc="<p>The challenge parameters. These are returned to you in the <code>AdminInitiateAuth</code> response if you need to pass another challenge. The responses in this parameter should be used to compute inputs to the next call (<code>AdminRespondToAuthChallenge</code>).</p> <p>All challenges require <code>USERNAME</code> and <code>SECRET_HASH</code> (if applicable).</p> <p>The value of the <code>USER_IF_FOR_SRP</code> attribute will be the user's actual username, not an alias (such as email address or phone number), even if you specified an alias in your call to <code>AdminInitiateAuth</code>. This is because, in the <code>AdminRespondToAuthChallenge</code> API <code>ChallengeResponses</code>, the <code>USERNAME</code> attribute cannot be an alias.</p>"]
-    #[serde(rename="ChallengeParameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The challenge parameters. These are returned to you in the <code>AdminInitiateAuth</code> response if you need to pass another challenge. The responses in this parameter should be used to compute inputs to the next call (<code>AdminRespondToAuthChallenge</code>).</p> <p>All challenges require <code>USERNAME</code> and <code>SECRET_HASH</code> (if applicable).</p> <p>The value of the <code>USER_IF_FOR_SRP</code> attribute will be the user's actual username, not an alias (such as email address or phone number), even if you specified an alias in your call to <code>AdminInitiateAuth</code>. This is because, in the <code>AdminRespondToAuthChallenge</code> API <code>ChallengeResponses</code>, the <code>USERNAME</code> attribute cannot be an alias.</p>
+    #[serde(rename = "ChallengeParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub challenge_parameters: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The session which should be passed both ways in challenge-response calls to the service. If <code>AdminInitiateAuth</code> or <code>AdminRespondToAuthChallenge</code> API call determines that the caller needs to go through another challenge, they return a session with other challenge parameters. This session should be passed as it is to the next <code>AdminRespondToAuthChallenge</code> API call.</p>"]
-    #[serde(rename="Session")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The session which should be passed both ways in challenge-response calls to the service. If <code>AdminInitiateAuth</code> or <code>AdminRespondToAuthChallenge</code> API call determines that the caller needs to go through another challenge, they return a session with other challenge parameters. This session should be passed as it is to the next <code>AdminRespondToAuthChallenge</code> API call.</p>
+    #[serde(rename = "Session")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub session: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AdminLinkProviderForUserRequest {
-    #[doc="<p>The existing user in the user pool to be linked to the external identity provider user account. Can be a native (Username + Password) Cognito User Pools user or a federated user (for example, a SAML or Facebook user). If the user doesn't exist, an exception is thrown. This is the user that is returned when the new user (with the linked identity provider attribute) signs in.</p> <p>The <code>ProviderAttributeValue</code> for the <code>DestinationUser</code> must match the username for the user in the user pool. The <code>ProviderAttributeName</code> will always be ignored.</p>"]
-    #[serde(rename="DestinationUser")]
+    /// <p>The existing user in the user pool to be linked to the external identity provider user account. Can be a native (Username + Password) Cognito User Pools user or a federated user (for example, a SAML or Facebook user). If the user doesn't exist, an exception is thrown. This is the user that is returned when the new user (with the linked identity provider attribute) signs in.</p> <p>The <code>ProviderAttributeValue</code> for the <code>DestinationUser</code> must match the username for the user in the user pool. The <code>ProviderAttributeName</code> will always be ignored.</p>
+    #[serde(rename = "DestinationUser")]
     pub destination_user: ProviderUserIdentifierType,
-    #[doc="<p>An external identity provider account for a user who does not currently exist yet in the user pool. This user must be a federated user (for example, a SAML or Facebook user), not another native user.</p> <p>If the <code>SourceUser</code> is a federated social identity provider user (Facebook, Google, or Login with Amazon), you must set the <code>ProviderAttributeName</code> to <code>Cognito_Subject</code>. For social identity providers, the <code>ProviderName</code> will be <code>Facebook</code>, <code>Google</code>, or <code>LoginWithAmazon</code>, and Cognito will automatically parse the Facebook, Google, and Login with Amazon tokens for <code>id</code>, <code>sub</code>, and <code>user_id</code>, respectively. The <code>ProviderAttributeValue</code> for the user must be the same value as the <code>id</code>, <code>sub</code>, or <code>user_id</code> value found in the social identity provider token.</p> <p/> <p>For SAML, the <code>ProviderAttributeName</code> can be any value that matches a claim in the SAML assertion. If you wish to link SAML users based on the subject of the SAML assertion, you should map the subject to a claim through the SAML identity provider and submit that claim name as the <code>ProviderAttributeName</code>. If you set <code>ProviderAttributeName</code> to <code>Cognito_Subject</code>, Cognito will automatically parse the default unique identifier found in the subject from the SAML token.</p>"]
-    #[serde(rename="SourceUser")]
+    /// <p>An external identity provider account for a user who does not currently exist yet in the user pool. This user must be a federated user (for example, a SAML or Facebook user), not another native user.</p> <p>If the <code>SourceUser</code> is a federated social identity provider user (Facebook, Google, or Login with Amazon), you must set the <code>ProviderAttributeName</code> to <code>Cognito_Subject</code>. For social identity providers, the <code>ProviderName</code> will be <code>Facebook</code>, <code>Google</code>, or <code>LoginWithAmazon</code>, and Cognito will automatically parse the Facebook, Google, and Login with Amazon tokens for <code>id</code>, <code>sub</code>, and <code>user_id</code>, respectively. The <code>ProviderAttributeValue</code> for the user must be the same value as the <code>id</code>, <code>sub</code>, or <code>user_id</code> value found in the social identity provider token.</p> <p/> <p>For SAML, the <code>ProviderAttributeName</code> can be any value that matches a claim in the SAML assertion. If you wish to link SAML users based on the subject of the SAML assertion, you should map the subject to a claim through the SAML identity provider and submit that claim name as the <code>ProviderAttributeName</code>. If you set <code>ProviderAttributeName</code> to <code>Cognito_Subject</code>, Cognito will automatically parse the default unique identifier found in the subject from the SAML token.</p>
+    #[serde(rename = "SourceUser")]
     pub source_user: ProviderUserIdentifierType,
-    #[doc="<p>The user pool ID for the user pool.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AdminLinkProviderForUserResponse;
 
-#[doc="<p>Represents the request to list devices, as an administrator.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to list devices, as an administrator.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AdminListDevicesRequest {
-    #[doc="<p>The limit of the devices request.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The limit of the devices request.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>The pagination token.</p>"]
-    #[serde(rename="PaginationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The pagination token.</p>
+    #[serde(rename = "PaginationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub pagination_token: Option<String>,
-    #[doc="<p>The user pool ID.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
-    #[doc="<p>The user name.</p>"]
-    #[serde(rename="Username")]
+    /// <p>The user name.</p>
+    #[serde(rename = "Username")]
     pub username: String,
 }
 
-#[doc="<p>Lists the device's response, as an administrator.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Lists the device's response, as an administrator.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AdminListDevicesResponse {
-    #[doc="<p>The devices in the list of devices response.</p>"]
-    #[serde(rename="Devices")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The devices in the list of devices response.</p>
+    #[serde(rename = "Devices")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub devices: Option<Vec<DeviceType>>,
-    #[doc="<p>The pagination token.</p>"]
-    #[serde(rename="PaginationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The pagination token.</p>
+    #[serde(rename = "PaginationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub pagination_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AdminListGroupsForUserRequest {
-    #[doc="<p>The limit of the request to list groups.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The limit of the request to list groups.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The user pool ID for the user pool.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
-    #[doc="<p>The username for the user.</p>"]
-    #[serde(rename="Username")]
+    /// <p>The username for the user.</p>
+    #[serde(rename = "Username")]
     pub username: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AdminListGroupsForUserResponse {
-    #[doc="<p>The groups that the user belongs to.</p>"]
-    #[serde(rename="Groups")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The groups that the user belongs to.</p>
+    #[serde(rename = "Groups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub groups: Option<Vec<GroupType>>,
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AdminRemoveUserFromGroupRequest {
-    #[doc="<p>The group name.</p>"]
-    #[serde(rename="GroupName")]
+    /// <p>The group name.</p>
+    #[serde(rename = "GroupName")]
     pub group_name: String,
-    #[doc="<p>The user pool ID for the user pool.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
-    #[doc="<p>The username for the user.</p>"]
-    #[serde(rename="Username")]
+    /// <p>The username for the user.</p>
+    #[serde(rename = "Username")]
     pub username: String,
 }
 
-#[doc="<p>Represents the request to reset a user's password as an administrator.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to reset a user's password as an administrator.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AdminResetUserPasswordRequest {
-    #[doc="<p>The user pool ID for the user pool where you want to reset the user's password.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool where you want to reset the user's password.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
-    #[doc="<p>The user name of the user whose password you wish to reset.</p>"]
-    #[serde(rename="Username")]
+    /// <p>The user name of the user whose password you wish to reset.</p>
+    #[serde(rename = "Username")]
     pub username: String,
 }
 
-#[doc="<p>Represents the response from the server to reset a user password as an administrator.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the response from the server to reset a user password as an administrator.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AdminResetUserPasswordResponse;
 
-#[doc="<p>The request to respond to the authentication challenge, as an administrator.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The request to respond to the authentication challenge, as an administrator.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AdminRespondToAuthChallengeRequest {
-    #[doc="<p>The challenge name. For more information, see <a href=\"API_AdminInitiateAuth.html\">AdminInitiateAuth</a>.</p>"]
-    #[serde(rename="ChallengeName")]
+    /// <p>The challenge name. For more information, see <a href="API_AdminInitiateAuth.html">AdminInitiateAuth</a>.</p>
+    #[serde(rename = "ChallengeName")]
     pub challenge_name: String,
-    #[doc="<p>The challenge responses. These are inputs corresponding to the value of <code>ChallengeName</code>, for example:</p> <ul> <li> <p> <code>SMS_MFA</code>: <code>SMS_MFA_CODE</code>, <code>USERNAME</code>, <code>SECRET_HASH</code> (if app client is configured with client secret).</p> </li> <li> <p> <code>PASSWORD_VERIFIER</code>: <code>PASSWORD_CLAIM_SIGNATURE</code>, <code>PASSWORD_CLAIM_SECRET_BLOCK</code>, <code>TIMESTAMP</code>, <code>USERNAME</code>, <code>SECRET_HASH</code> (if app client is configured with client secret).</p> </li> <li> <p> <code>ADMIN_NO_SRP_AUTH</code>: <code>PASSWORD</code>, <code>USERNAME</code>, <code>SECRET_HASH</code> (if app client is configured with client secret). </p> </li> <li> <p> <code>NEW_PASSWORD_REQUIRED</code>: <code>NEW_PASSWORD</code>, any other required attributes, <code>USERNAME</code>, <code>SECRET_HASH</code> (if app client is configured with client secret). </p> </li> </ul> <p>The value of the <code>USERNAME</code> attribute must be the user's actual username, not an alias (such as email address or phone number). To make this easier, the <code>AdminInitiateAuth</code> response includes the actual username value in the <code>USERNAMEUSER_ID_FOR_SRP</code> attribute, even if you specified an alias in your call to <code>AdminInitiateAuth</code>.</p>"]
-    #[serde(rename="ChallengeResponses")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The challenge responses. These are inputs corresponding to the value of <code>ChallengeName</code>, for example:</p> <ul> <li> <p> <code>SMS_MFA</code>: <code>SMS_MFA_CODE</code>, <code>USERNAME</code>, <code>SECRET_HASH</code> (if app client is configured with client secret).</p> </li> <li> <p> <code>PASSWORD_VERIFIER</code>: <code>PASSWORD_CLAIM_SIGNATURE</code>, <code>PASSWORD_CLAIM_SECRET_BLOCK</code>, <code>TIMESTAMP</code>, <code>USERNAME</code>, <code>SECRET_HASH</code> (if app client is configured with client secret).</p> </li> <li> <p> <code>ADMIN_NO_SRP_AUTH</code>: <code>PASSWORD</code>, <code>USERNAME</code>, <code>SECRET_HASH</code> (if app client is configured with client secret). </p> </li> <li> <p> <code>NEW_PASSWORD_REQUIRED</code>: <code>NEW_PASSWORD</code>, any other required attributes, <code>USERNAME</code>, <code>SECRET_HASH</code> (if app client is configured with client secret). </p> </li> </ul> <p>The value of the <code>USERNAME</code> attribute must be the user's actual username, not an alias (such as email address or phone number). To make this easier, the <code>AdminInitiateAuth</code> response includes the actual username value in the <code>USERNAMEUSER_ID_FOR_SRP</code> attribute, even if you specified an alias in your call to <code>AdminInitiateAuth</code>.</p>
+    #[serde(rename = "ChallengeResponses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub challenge_responses: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The app client ID.</p>"]
-    #[serde(rename="ClientId")]
+    /// <p>The app client ID.</p>
+    #[serde(rename = "ClientId")]
     pub client_id: String,
-    #[doc="<p>The session which should be passed both ways in challenge-response calls to the service. If <code>InitiateAuth</code> or <code>RespondToAuthChallenge</code> API call determines that the caller needs to go through another challenge, they return a session with other challenge parameters. This session should be passed as it is to the next <code>RespondToAuthChallenge</code> API call.</p>"]
-    #[serde(rename="Session")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The session which should be passed both ways in challenge-response calls to the service. If <code>InitiateAuth</code> or <code>RespondToAuthChallenge</code> API call determines that the caller needs to go through another challenge, they return a session with other challenge parameters. This session should be passed as it is to the next <code>RespondToAuthChallenge</code> API call.</p>
+    #[serde(rename = "Session")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub session: Option<String>,
-    #[doc="<p>The ID of the Amazon Cognito user pool.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The ID of the Amazon Cognito user pool.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[doc="<p>Responds to the authentication challenge, as an administrator.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Responds to the authentication challenge, as an administrator.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AdminRespondToAuthChallengeResponse {
-    #[doc="<p>The result returned by the server in response to the authentication request.</p>"]
-    #[serde(rename="AuthenticationResult")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The result returned by the server in response to the authentication request.</p>
+    #[serde(rename = "AuthenticationResult")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_result: Option<AuthenticationResultType>,
-    #[doc="<p>The name of the challenge. For more information, see <a href=\"API_AdminInitiateAuth.html\">AdminInitiateAuth</a>.</p>"]
-    #[serde(rename="ChallengeName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the challenge. For more information, see <a href="API_AdminInitiateAuth.html">AdminInitiateAuth</a>.</p>
+    #[serde(rename = "ChallengeName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub challenge_name: Option<String>,
-    #[doc="<p>The challenge parameters. For more information, see <a href=\"API_AdminInitiateAuth.html\">AdminInitiateAuth</a>.</p>"]
-    #[serde(rename="ChallengeParameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The challenge parameters. For more information, see <a href="API_AdminInitiateAuth.html">AdminInitiateAuth</a>.</p>
+    #[serde(rename = "ChallengeParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub challenge_parameters: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The session which should be passed both ways in challenge-response calls to the service. If the <a href=\"API_InitiateAuth.html\">InitiateAuth</a> or <a href=\"API_RespondToAuthChallenge.html\">RespondToAuthChallenge</a> API call determines that the caller needs to go through another challenge, they return a session with other challenge parameters. This session should be passed as it is to the next <code>RespondToAuthChallenge</code> API call.</p>"]
-    #[serde(rename="Session")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The session which should be passed both ways in challenge-response calls to the service. If the <a href="API_InitiateAuth.html">InitiateAuth</a> or <a href="API_RespondToAuthChallenge.html">RespondToAuthChallenge</a> API call determines that the caller needs to go through another challenge, they return a session with other challenge parameters. This session should be passed as it is to the next <code>RespondToAuthChallenge</code> API call.</p>
+    #[serde(rename = "Session")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub session: Option<String>,
 }
 
-#[doc="<p>Represents the request to set user settings as an administrator.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to set user settings as an administrator.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AdminSetUserSettingsRequest {
-    #[doc="<p>Specifies the options for MFA (e.g., email or phone number).</p>"]
-    #[serde(rename="MFAOptions")]
+    /// <p>Specifies the options for MFA (e.g., email or phone number).</p>
+    #[serde(rename = "MFAOptions")]
     pub mfa_options: Vec<MFAOptionType>,
-    #[doc="<p>The user pool ID for the user pool where you want to set the user's settings, such as MFA options.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool where you want to set the user's settings, such as MFA options.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
-    #[doc="<p>The user name of the user for whom you wish to set user settings.</p>"]
-    #[serde(rename="Username")]
+    /// <p>The user name of the user for whom you wish to set user settings.</p>
+    #[serde(rename = "Username")]
     pub username: String,
 }
 
-#[doc="<p>Represents the response from the server to set user settings as an administrator.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the response from the server to set user settings as an administrator.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AdminSetUserSettingsResponse;
 
-#[doc="<p>The request to update the device status, as an administrator.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The request to update the device status, as an administrator.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AdminUpdateDeviceStatusRequest {
-    #[doc="<p>The device key.</p>"]
-    #[serde(rename="DeviceKey")]
+    /// <p>The device key.</p>
+    #[serde(rename = "DeviceKey")]
     pub device_key: String,
-    #[doc="<p>The status indicating whether a device has been remembered or not.</p>"]
-    #[serde(rename="DeviceRememberedStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status indicating whether a device has been remembered or not.</p>
+    #[serde(rename = "DeviceRememberedStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub device_remembered_status: Option<String>,
-    #[doc="<p>The user pool ID.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
-    #[doc="<p>The user name.</p>"]
-    #[serde(rename="Username")]
+    /// <p>The user name.</p>
+    #[serde(rename = "Username")]
     pub username: String,
 }
 
-#[doc="<p>The status response from the request to update the device, as an administrator.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The status response from the request to update the device, as an administrator.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AdminUpdateDeviceStatusResponse;
 
-#[doc="<p>Represents the request to update the user's attributes as an administrator.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to update the user's attributes as an administrator.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AdminUpdateUserAttributesRequest {
-    #[doc="<p>An array of name-value pairs representing user attributes.</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p>"]
-    #[serde(rename="UserAttributes")]
+    /// <p>An array of name-value pairs representing user attributes.</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p>
+    #[serde(rename = "UserAttributes")]
     pub user_attributes: Vec<AttributeType>,
-    #[doc="<p>The user pool ID for the user pool where you want to update user attributes.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool where you want to update user attributes.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
-    #[doc="<p>The user name of the user for whom you want to update user attributes.</p>"]
-    #[serde(rename="Username")]
+    /// <p>The user name of the user for whom you want to update user attributes.</p>
+    #[serde(rename = "Username")]
     pub username: String,
 }
 
-#[doc="<p>Represents the response from the server for the request to update user attributes as an administrator.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the response from the server for the request to update user attributes as an administrator.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AdminUpdateUserAttributesResponse;
 
-#[doc="<p>The request to sign out of all devices, as an administrator.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The request to sign out of all devices, as an administrator.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AdminUserGlobalSignOutRequest {
-    #[doc="<p>The user pool ID.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
-    #[doc="<p>The user name.</p>"]
-    #[serde(rename="Username")]
+    /// <p>The user name.</p>
+    #[serde(rename = "Username")]
     pub username: String,
 }
 
-#[doc="<p>The global sign-out response, as an administrator.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The global sign-out response, as an administrator.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AdminUserGlobalSignOutResponse;
 
-#[doc="<p>Specifies whether the attribute is standard or custom.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Specifies whether the attribute is standard or custom.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct AttributeType {
-    #[doc="<p>The name of the attribute.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the attribute.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>The value of the attribute.</p>"]
-    #[serde(rename="Value")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The value of the attribute.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
-#[doc="<p>The result type of the authentication result.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The result type of the authentication result.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AuthenticationResultType {
-    #[doc="<p>The access token of the authentication result.</p>"]
-    #[serde(rename="AccessToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The access token of the authentication result.</p>
+    #[serde(rename = "AccessToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub access_token: Option<String>,
-    #[doc="<p>The expiration period of the authentication result.</p>"]
-    #[serde(rename="ExpiresIn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The expiration period of the authentication result.</p>
+    #[serde(rename = "ExpiresIn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub expires_in: Option<i64>,
-    #[doc="<p>The ID token of the authentication result.</p>"]
-    #[serde(rename="IdToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID token of the authentication result.</p>
+    #[serde(rename = "IdToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id_token: Option<String>,
-    #[doc="<p>The new device metadata from an authentication result.</p>"]
-    #[serde(rename="NewDeviceMetadata")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The new device metadata from an authentication result.</p>
+    #[serde(rename = "NewDeviceMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub new_device_metadata: Option<NewDeviceMetadataType>,
-    #[doc="<p>The refresh token of the authentication result.</p>"]
-    #[serde(rename="RefreshToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The refresh token of the authentication result.</p>
+    #[serde(rename = "RefreshToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub refresh_token: Option<String>,
-    #[doc="<p>The token type of the authentication result.</p>"]
-    #[serde(rename="TokenType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token type of the authentication result.</p>
+    #[serde(rename = "TokenType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub token_type: Option<String>,
 }
 
-#[doc="<p>Represents the request to change a user password.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to change a user password.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ChangePasswordRequest {
-    #[doc="<p>The access token in the change password request.</p>"]
-    #[serde(rename="AccessToken")]
+    /// <p>The access token in the change password request.</p>
+    #[serde(rename = "AccessToken")]
     pub access_token: String,
-    #[doc="<p>The old password in the change password request.</p>"]
-    #[serde(rename="PreviousPassword")]
+    /// <p>The old password in the change password request.</p>
+    #[serde(rename = "PreviousPassword")]
     pub previous_password: String,
-    #[doc="<p>The new password in the change password request.</p>"]
-    #[serde(rename="ProposedPassword")]
+    /// <p>The new password in the change password request.</p>
+    #[serde(rename = "ProposedPassword")]
     pub proposed_password: String,
 }
 
-#[doc="<p>The response from the server to the change password request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The response from the server to the change password request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ChangePasswordResponse;
 
-#[doc="<p>The type of code delivery details being returned from the server.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The type of code delivery details being returned from the server.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CodeDeliveryDetailsType {
-    #[doc="<p>The name of the attribute in the code delivery details type.</p>"]
-    #[serde(rename="AttributeName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the attribute in the code delivery details type.</p>
+    #[serde(rename = "AttributeName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub attribute_name: Option<String>,
-    #[doc="<p>The delivery medium (email message or phone number).</p>"]
-    #[serde(rename="DeliveryMedium")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The delivery medium (email message or phone number).</p>
+    #[serde(rename = "DeliveryMedium")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub delivery_medium: Option<String>,
-    #[doc="<p>The destination for the code delivery details.</p>"]
-    #[serde(rename="Destination")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The destination for the code delivery details.</p>
+    #[serde(rename = "Destination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub destination: Option<String>,
 }
 
-#[doc="<p>Confirms the device request.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Confirms the device request.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ConfirmDeviceRequest {
-    #[doc="<p>The access token.</p>"]
-    #[serde(rename="AccessToken")]
+    /// <p>The access token.</p>
+    #[serde(rename = "AccessToken")]
     pub access_token: String,
-    #[doc="<p>The device key.</p>"]
-    #[serde(rename="DeviceKey")]
+    /// <p>The device key.</p>
+    #[serde(rename = "DeviceKey")]
     pub device_key: String,
-    #[doc="<p>The device name.</p>"]
-    #[serde(rename="DeviceName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The device name.</p>
+    #[serde(rename = "DeviceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub device_name: Option<String>,
-    #[doc="<p>The configuration of the device secret verifier.</p>"]
-    #[serde(rename="DeviceSecretVerifierConfig")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The configuration of the device secret verifier.</p>
+    #[serde(rename = "DeviceSecretVerifierConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub device_secret_verifier_config: Option<DeviceSecretVerifierConfigType>,
 }
 
-#[doc="<p>Confirms the device response.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Confirms the device response.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ConfirmDeviceResponse {
-    #[doc="<p>Indicates whether the user confirmation is necessary to confirm the device response.</p>"]
-    #[serde(rename="UserConfirmationNecessary")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether the user confirmation is necessary to confirm the device response.</p>
+    #[serde(rename = "UserConfirmationNecessary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_confirmation_necessary: Option<bool>,
 }
 
-#[doc="<p>The request representing the confirmation for a password reset.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The request representing the confirmation for a password reset.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ConfirmForgotPasswordRequest {
-    #[doc="<p>The app client ID of the app associated with the user pool.</p>"]
-    #[serde(rename="ClientId")]
+    /// <p>The app client ID of the app associated with the user pool.</p>
+    #[serde(rename = "ClientId")]
     pub client_id: String,
-    #[doc="<p>The confirmation code sent by a user's request to retrieve a forgotten password. For more information, see <a href=\"API_ForgotPassword.html\">ForgotPassword</a> </p>"]
-    #[serde(rename="ConfirmationCode")]
+    /// <p>The confirmation code sent by a user's request to retrieve a forgotten password. For more information, see <a href="API_ForgotPassword.html">ForgotPassword</a> </p>
+    #[serde(rename = "ConfirmationCode")]
     pub confirmation_code: String,
-    #[doc="<p>The password sent by a user's request to retrieve a forgotten password.</p>"]
-    #[serde(rename="Password")]
+    /// <p>The password sent by a user's request to retrieve a forgotten password.</p>
+    #[serde(rename = "Password")]
     pub password: String,
-    #[doc="<p>A keyed-hash message authentication code (HMAC) calculated using the secret key of a user pool client and username plus the client ID in the message.</p>"]
-    #[serde(rename="SecretHash")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A keyed-hash message authentication code (HMAC) calculated using the secret key of a user pool client and username plus the client ID in the message.</p>
+    #[serde(rename = "SecretHash")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub secret_hash: Option<String>,
-    #[doc="<p>The user name of the user for whom you want to enter a code to retrieve a forgotten password.</p>"]
-    #[serde(rename="Username")]
+    /// <p>The user name of the user for whom you want to enter a code to retrieve a forgotten password.</p>
+    #[serde(rename = "Username")]
     pub username: String,
 }
 
-#[doc="<p>The response from the server that results from a user's request to retrieve a forgotten password.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The response from the server that results from a user's request to retrieve a forgotten password.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ConfirmForgotPasswordResponse;
 
-#[doc="<p>Represents the request to confirm registration of a user.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to confirm registration of a user.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ConfirmSignUpRequest {
-    #[doc="<p>The ID of the app client associated with the user pool.</p>"]
-    #[serde(rename="ClientId")]
+    /// <p>The ID of the app client associated with the user pool.</p>
+    #[serde(rename = "ClientId")]
     pub client_id: String,
-    #[doc="<p>The confirmation code sent by a user's request to confirm registration.</p>"]
-    #[serde(rename="ConfirmationCode")]
+    /// <p>The confirmation code sent by a user's request to confirm registration.</p>
+    #[serde(rename = "ConfirmationCode")]
     pub confirmation_code: String,
-    #[doc="<p>Boolean to be specified to force user confirmation irrespective of existing alias. By default set to <code>False</code>. If this parameter is set to <code>True</code> and the phone number/email used for sign up confirmation already exists as an alias with a different user, the API call will migrate the alias from the previous user to the newly created user being confirmed. If set to <code>False</code>, the API will throw an <b>AliasExistsException</b> error.</p>"]
-    #[serde(rename="ForceAliasCreation")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Boolean to be specified to force user confirmation irrespective of existing alias. By default set to <code>False</code>. If this parameter is set to <code>True</code> and the phone number/email used for sign up confirmation already exists as an alias with a different user, the API call will migrate the alias from the previous user to the newly created user being confirmed. If set to <code>False</code>, the API will throw an <b>AliasExistsException</b> error.</p>
+    #[serde(rename = "ForceAliasCreation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub force_alias_creation: Option<bool>,
-    #[doc="<p>A keyed-hash message authentication code (HMAC) calculated using the secret key of a user pool client and username plus the client ID in the message.</p>"]
-    #[serde(rename="SecretHash")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A keyed-hash message authentication code (HMAC) calculated using the secret key of a user pool client and username plus the client ID in the message.</p>
+    #[serde(rename = "SecretHash")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub secret_hash: Option<String>,
-    #[doc="<p>The user name of the user whose registration you wish to confirm.</p>"]
-    #[serde(rename="Username")]
+    /// <p>The user name of the user whose registration you wish to confirm.</p>
+    #[serde(rename = "Username")]
     pub username: String,
 }
 
-#[doc="<p>Represents the response from the server for the registration confirmation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the response from the server for the registration confirmation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ConfirmSignUpResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateGroupRequest {
-    #[doc="<p>A string containing the description of the group.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A string containing the description of the group.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The name of the group. Must be unique.</p>"]
-    #[serde(rename="GroupName")]
+    /// <p>The name of the group. Must be unique.</p>
+    #[serde(rename = "GroupName")]
     pub group_name: String,
-    #[doc="<p>A nonnegative integer value that specifies the precedence of this group relative to the other groups that a user can belong to in the user pool. Zero is the highest precedence value. Groups with lower <code>Precedence</code> values take precedence over groups with higher or null <code>Precedence</code> values. If a user belongs to two or more groups, it is the group with the lowest precedence value whose role ARN will be used in the <code>cognito:roles</code> and <code>cognito:preferred_role</code> claims in the user's tokens.</p> <p>Two groups can have the same <code>Precedence</code> value. If this happens, neither group takes precedence over the other. If two groups with the same <code>Precedence</code> have the same role ARN, that role is used in the <code>cognito:preferred_role</code> claim in tokens for users in each group. If the two groups have different role ARNs, the <code>cognito:preferred_role</code> claim is not set in users' tokens.</p> <p>The default <code>Precedence</code> value is null.</p>"]
-    #[serde(rename="Precedence")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A nonnegative integer value that specifies the precedence of this group relative to the other groups that a user can belong to in the user pool. Zero is the highest precedence value. Groups with lower <code>Precedence</code> values take precedence over groups with higher or null <code>Precedence</code> values. If a user belongs to two or more groups, it is the group with the lowest precedence value whose role ARN will be used in the <code>cognito:roles</code> and <code>cognito:preferred_role</code> claims in the user's tokens.</p> <p>Two groups can have the same <code>Precedence</code> value. If this happens, neither group takes precedence over the other. If two groups with the same <code>Precedence</code> have the same role ARN, that role is used in the <code>cognito:preferred_role</code> claim in tokens for users in each group. If the two groups have different role ARNs, the <code>cognito:preferred_role</code> claim is not set in users' tokens.</p> <p>The default <code>Precedence</code> value is null.</p>
+    #[serde(rename = "Precedence")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub precedence: Option<i64>,
-    #[doc="<p>The role ARN for the group.</p>"]
-    #[serde(rename="RoleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The role ARN for the group.</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
-    #[doc="<p>The user pool ID for the user pool.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateGroupResponse {
-    #[doc="<p>The group object for the group.</p>"]
-    #[serde(rename="Group")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The group object for the group.</p>
+    #[serde(rename = "Group")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub group: Option<GroupType>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateIdentityProviderRequest {
-    #[doc="<p>A mapping of identity provider attributes to standard and custom user pool attributes.</p>"]
-    #[serde(rename="AttributeMapping")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A mapping of identity provider attributes to standard and custom user pool attributes.</p>
+    #[serde(rename = "AttributeMapping")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub attribute_mapping: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>A list of identity provider identifiers.</p>"]
-    #[serde(rename="IdpIdentifiers")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of identity provider identifiers.</p>
+    #[serde(rename = "IdpIdentifiers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub idp_identifiers: Option<Vec<String>>,
-    #[doc="<p>The identity provider details, such as <code>MetadataURL</code> and <code>MetadataFile</code>.</p>"]
-    #[serde(rename="ProviderDetails")]
+    /// <p>The identity provider details, such as <code>MetadataURL</code> and <code>MetadataFile</code>.</p>
+    #[serde(rename = "ProviderDetails")]
     pub provider_details: ::std::collections::HashMap<String, String>,
-    #[doc="<p>The identity provider name.</p>"]
-    #[serde(rename="ProviderName")]
+    /// <p>The identity provider name.</p>
+    #[serde(rename = "ProviderName")]
     pub provider_name: String,
-    #[doc="<p>The identity provider type.</p>"]
-    #[serde(rename="ProviderType")]
+    /// <p>The identity provider type.</p>
+    #[serde(rename = "ProviderType")]
     pub provider_type: String,
-    #[doc="<p>The user pool ID.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateIdentityProviderResponse {
-    #[doc="<p>The newly created identity provider object.</p>"]
-    #[serde(rename="IdentityProvider")]
+    /// <p>The newly created identity provider object.</p>
+    #[serde(rename = "IdentityProvider")]
     pub identity_provider: IdentityProviderType,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateResourceServerRequest {
-    #[doc="<p>A unique resource server identifier for the resource server. This could be an HTTPS endpoint where the resource server is located. For example, <code>https://my-weather-api.example.com</code>.</p>"]
-    #[serde(rename="Identifier")]
+    /// <p>A unique resource server identifier for the resource server. This could be an HTTPS endpoint where the resource server is located. For example, <code>https://my-weather-api.example.com</code>.</p>
+    #[serde(rename = "Identifier")]
     pub identifier: String,
-    #[doc="<p>A friendly name for the resource server.</p>"]
-    #[serde(rename="Name")]
+    /// <p>A friendly name for the resource server.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>A list of scopes. Each scope is map, where the keys are <code>name</code> and <code>description</code>.</p>"]
-    #[serde(rename="Scopes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of scopes. Each scope is map, where the keys are <code>name</code> and <code>description</code>.</p>
+    #[serde(rename = "Scopes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub scopes: Option<Vec<ResourceServerScopeType>>,
-    #[doc="<p>The user pool ID for the user pool.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateResourceServerResponse {
-    #[doc="<p>The newly created resource server.</p>"]
-    #[serde(rename="ResourceServer")]
+    /// <p>The newly created resource server.</p>
+    #[serde(rename = "ResourceServer")]
     pub resource_server: ResourceServerType,
 }
 
-#[doc="<p>Represents the request to create the user import job.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to create the user import job.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateUserImportJobRequest {
-    #[doc="<p>The role ARN for the Amazon CloudWatch Logging role for the user import job.</p>"]
-    #[serde(rename="CloudWatchLogsRoleArn")]
+    /// <p>The role ARN for the Amazon CloudWatch Logging role for the user import job.</p>
+    #[serde(rename = "CloudWatchLogsRoleArn")]
     pub cloud_watch_logs_role_arn: String,
-    #[doc="<p>The job name for the user import job.</p>"]
-    #[serde(rename="JobName")]
+    /// <p>The job name for the user import job.</p>
+    #[serde(rename = "JobName")]
     pub job_name: String,
-    #[doc="<p>The user pool ID for the user pool that the users are being imported into.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool that the users are being imported into.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[doc="<p>Represents the response from the server to the request to create the user import job.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the response from the server to the request to create the user import job.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateUserImportJobResponse {
-    #[doc="<p>The job object that represents the user import job.</p>"]
-    #[serde(rename="UserImportJob")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The job object that represents the user import job.</p>
+    #[serde(rename = "UserImportJob")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_import_job: Option<UserImportJobType>,
 }
 
-#[doc="<p>Represents the request to create a user pool client.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to create a user pool client.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateUserPoolClientRequest {
-    #[doc="<p>Set to <code>code</code> to initiate a code grant flow, which provides an authorization code as the response. This code can be exchanged for access tokens with the token endpoint.</p> <p>Set to <code>token</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) directly.</p>"]
-    #[serde(rename="AllowedOAuthFlows")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Set to <code>code</code> to initiate a code grant flow, which provides an authorization code as the response. This code can be exchanged for access tokens with the token endpoint.</p> <p>Set to <code>token</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) directly.</p>
+    #[serde(rename = "AllowedOAuthFlows")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_o_auth_flows: Option<Vec<String>>,
-    #[doc="<p>Set to <code>True</code> if the client is allowed to follow the OAuth protocol when interacting with Cognito user pools.</p>"]
-    #[serde(rename="AllowedOAuthFlowsUserPoolClient")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Set to <code>True</code> if the client is allowed to follow the OAuth protocol when interacting with Cognito user pools.</p>
+    #[serde(rename = "AllowedOAuthFlowsUserPoolClient")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_o_auth_flows_user_pool_client: Option<bool>,
-    #[doc="<p>A list of allowed <code>OAuth</code> scopes. Currently supported values are <code>\"phone\"</code>, <code>\"email\"</code>, <code>\"openid\"</code>, and <code>\"Cognito\"</code>.</p>"]
-    #[serde(rename="AllowedOAuthScopes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of allowed <code>OAuth</code> scopes. Currently supported values are <code>"phone"</code>, <code>"email"</code>, <code>"openid"</code>, and <code>"Cognito"</code>.</p>
+    #[serde(rename = "AllowedOAuthScopes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_o_auth_scopes: Option<Vec<String>>,
-    #[doc="<p>A list of allowed callback URLs for the identity providers.</p>"]
-    #[serde(rename="CallbackURLs")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of allowed callback URLs for the identity providers.</p>
+    #[serde(rename = "CallbackURLs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub callback_ur_ls: Option<Vec<String>>,
-    #[doc="<p>The client name for the user pool client you would like to create.</p>"]
-    #[serde(rename="ClientName")]
+    /// <p>The client name for the user pool client you would like to create.</p>
+    #[serde(rename = "ClientName")]
     pub client_name: String,
-    #[doc="<p>The default redirect URI. Must be in the <code>CallbackURLs</code> list.</p>"]
-    #[serde(rename="DefaultRedirectURI")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The default redirect URI. Must be in the <code>CallbackURLs</code> list.</p>
+    #[serde(rename = "DefaultRedirectURI")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub default_redirect_uri: Option<String>,
-    #[doc="<p>The explicit authentication flows.</p>"]
-    #[serde(rename="ExplicitAuthFlows")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The explicit authentication flows.</p>
+    #[serde(rename = "ExplicitAuthFlows")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub explicit_auth_flows: Option<Vec<String>>,
-    #[doc="<p>Boolean to specify whether you want to generate a secret for the user pool client being created.</p>"]
-    #[serde(rename="GenerateSecret")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Boolean to specify whether you want to generate a secret for the user pool client being created.</p>
+    #[serde(rename = "GenerateSecret")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub generate_secret: Option<bool>,
-    #[doc="<p>A list of allowed logout URLs for the identity providers.</p>"]
-    #[serde(rename="LogoutURLs")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of allowed logout URLs for the identity providers.</p>
+    #[serde(rename = "LogoutURLs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub logout_ur_ls: Option<Vec<String>>,
-    #[doc="<p>The read attributes.</p>"]
-    #[serde(rename="ReadAttributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The read attributes.</p>
+    #[serde(rename = "ReadAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub read_attributes: Option<Vec<String>>,
-    #[doc="<p>The time limit, in days, after which the refresh token is no longer valid and cannot be used.</p>"]
-    #[serde(rename="RefreshTokenValidity")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time limit, in days, after which the refresh token is no longer valid and cannot be used.</p>
+    #[serde(rename = "RefreshTokenValidity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub refresh_token_validity: Option<i64>,
-    #[doc="<p>A list of provider names for the identity providers that are supported on this client.</p>"]
-    #[serde(rename="SupportedIdentityProviders")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of provider names for the identity providers that are supported on this client.</p>
+    #[serde(rename = "SupportedIdentityProviders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub supported_identity_providers: Option<Vec<String>>,
-    #[doc="<p>The user pool ID for the user pool where you want to create a user pool client.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool where you want to create a user pool client.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
-    #[doc="<p>The write attributes.</p>"]
-    #[serde(rename="WriteAttributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The write attributes.</p>
+    #[serde(rename = "WriteAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub write_attributes: Option<Vec<String>>,
 }
 
-#[doc="<p>Represents the response from the server to create a user pool client.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the response from the server to create a user pool client.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateUserPoolClientResponse {
-    #[doc="<p>The user pool client that was just created.</p>"]
-    #[serde(rename="UserPoolClient")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user pool client that was just created.</p>
+    #[serde(rename = "UserPoolClient")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool_client: Option<UserPoolClientType>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateUserPoolDomainRequest {
-    #[doc="<p>The domain string.</p>"]
-    #[serde(rename="Domain")]
+    /// <p>The domain string.</p>
+    #[serde(rename = "Domain")]
     pub domain: String,
-    #[doc="<p>The user pool ID.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateUserPoolDomainResponse;
 
-#[doc="<p>Represents the request to create a user pool.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to create a user pool.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateUserPoolRequest {
-    #[doc="<p>The configuration for <code>AdminCreateUser</code> requests.</p>"]
-    #[serde(rename="AdminCreateUserConfig")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The configuration for <code>AdminCreateUser</code> requests.</p>
+    #[serde(rename = "AdminCreateUserConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub admin_create_user_config: Option<AdminCreateUserConfigType>,
-    #[doc="<p>Attributes supported as an alias for this user pool. Possible values: <b>phone_number</b>, <b>email</b>, or <b>preferred_username</b>.</p>"]
-    #[serde(rename="AliasAttributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Attributes supported as an alias for this user pool. Possible values: <b>phone_number</b>, <b>email</b>, or <b>preferred_username</b>.</p>
+    #[serde(rename = "AliasAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub alias_attributes: Option<Vec<String>>,
-    #[doc="<p>The attributes to be auto-verified. Possible values: <b>email</b>, <b>phone_number</b>.</p>"]
-    #[serde(rename="AutoVerifiedAttributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The attributes to be auto-verified. Possible values: <b>email</b>, <b>phone_number</b>.</p>
+    #[serde(rename = "AutoVerifiedAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_verified_attributes: Option<Vec<String>>,
-    #[doc="<p>The device configuration.</p>"]
-    #[serde(rename="DeviceConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The device configuration.</p>
+    #[serde(rename = "DeviceConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub device_configuration: Option<DeviceConfigurationType>,
-    #[doc="<p>The email configuration.</p>"]
-    #[serde(rename="EmailConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The email configuration.</p>
+    #[serde(rename = "EmailConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub email_configuration: Option<EmailConfigurationType>,
-    #[doc="<p>A string representing the email verification message.</p>"]
-    #[serde(rename="EmailVerificationMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A string representing the email verification message.</p>
+    #[serde(rename = "EmailVerificationMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub email_verification_message: Option<String>,
-    #[doc="<p>A string representing the email verification subject.</p>"]
-    #[serde(rename="EmailVerificationSubject")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A string representing the email verification subject.</p>
+    #[serde(rename = "EmailVerificationSubject")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub email_verification_subject: Option<String>,
-    #[doc="<p>The Lambda trigger configuration information for the new user pool.</p>"]
-    #[serde(rename="LambdaConfig")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Lambda trigger configuration information for the new user pool.</p>
+    #[serde(rename = "LambdaConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub lambda_config: Option<LambdaConfigType>,
-    #[doc="<p>Specifies MFA configuration details.</p>"]
-    #[serde(rename="MfaConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies MFA configuration details.</p>
+    #[serde(rename = "MfaConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub mfa_configuration: Option<String>,
-    #[doc="<p>The policies associated with the new user pool.</p>"]
-    #[serde(rename="Policies")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The policies associated with the new user pool.</p>
+    #[serde(rename = "Policies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policies: Option<UserPoolPolicyType>,
-    #[doc="<p>A string used to name the user pool.</p>"]
-    #[serde(rename="PoolName")]
+    /// <p>A string used to name the user pool.</p>
+    #[serde(rename = "PoolName")]
     pub pool_name: String,
-    #[doc="<p>An array of schema attributes for the new user pool. These attributes can be standard or custom attributes.</p>"]
-    #[serde(rename="Schema")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of schema attributes for the new user pool. These attributes can be standard or custom attributes.</p>
+    #[serde(rename = "Schema")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schema: Option<Vec<SchemaAttributeType>>,
-    #[doc="<p>A string representing the SMS authentication message.</p>"]
-    #[serde(rename="SmsAuthenticationMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A string representing the SMS authentication message.</p>
+    #[serde(rename = "SmsAuthenticationMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sms_authentication_message: Option<String>,
-    #[doc="<p>The SMS configuration.</p>"]
-    #[serde(rename="SmsConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The SMS configuration.</p>
+    #[serde(rename = "SmsConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sms_configuration: Option<SmsConfigurationType>,
-    #[doc="<p>A string representing the SMS verification message.</p>"]
-    #[serde(rename="SmsVerificationMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A string representing the SMS verification message.</p>
+    #[serde(rename = "SmsVerificationMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sms_verification_message: Option<String>,
-    #[doc="<p>The cost allocation tags for the user pool. For more information, see <a href=\"http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-cost-allocation-tagging.html\">Adding Cost Allocation Tags to Your User Pool</a> </p>"]
-    #[serde(rename="UserPoolTags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The cost allocation tags for the user pool. For more information, see <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-cost-allocation-tagging.html">Adding Cost Allocation Tags to Your User Pool</a> </p>
+    #[serde(rename = "UserPoolTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool_tags: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>Specifies whether email addresses or phone numbers can be specified as usernames when a user signs up.</p>"]
-    #[serde(rename="UsernameAttributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether email addresses or phone numbers can be specified as usernames when a user signs up.</p>
+    #[serde(rename = "UsernameAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub username_attributes: Option<Vec<String>>,
-    #[doc="<p>The template for the verification message that the user sees when the app requests permission to access the user's information.</p>"]
-    #[serde(rename="VerificationMessageTemplate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The template for the verification message that the user sees when the app requests permission to access the user's information.</p>
+    #[serde(rename = "VerificationMessageTemplate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub verification_message_template: Option<VerificationMessageTemplateType>,
 }
 
-#[doc="<p>Represents the response from the server for the request to create a user pool.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the response from the server for the request to create a user pool.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateUserPoolResponse {
-    #[doc="<p>A container for the user pool details.</p>"]
-    #[serde(rename="UserPool")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A container for the user pool details.</p>
+    #[serde(rename = "UserPool")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool: Option<UserPoolType>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteGroupRequest {
-    #[doc="<p>The name of the group.</p>"]
-    #[serde(rename="GroupName")]
+    /// <p>The name of the group.</p>
+    #[serde(rename = "GroupName")]
     pub group_name: String,
-    #[doc="<p>The user pool ID for the user pool.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteIdentityProviderRequest {
-    #[doc="<p>The identity provider name.</p>"]
-    #[serde(rename="ProviderName")]
+    /// <p>The identity provider name.</p>
+    #[serde(rename = "ProviderName")]
     pub provider_name: String,
-    #[doc="<p>The user pool ID.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteResourceServerRequest {
-    #[doc="<p>The identifier for the resource server.</p>"]
-    #[serde(rename="Identifier")]
+    /// <p>The identifier for the resource server.</p>
+    #[serde(rename = "Identifier")]
     pub identifier: String,
-    #[doc="<p>The user pool ID for the user pool that hosts the resource server.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool that hosts the resource server.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[doc="<p>Represents the request to delete user attributes.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to delete user attributes.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteUserAttributesRequest {
-    #[doc="<p>The access token used in the request to delete user attributes.</p>"]
-    #[serde(rename="AccessToken")]
+    /// <p>The access token used in the request to delete user attributes.</p>
+    #[serde(rename = "AccessToken")]
     pub access_token: String,
-    #[doc="<p>An array of strings representing the user attribute names you wish to delete.</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p>"]
-    #[serde(rename="UserAttributeNames")]
+    /// <p>An array of strings representing the user attribute names you wish to delete.</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p>
+    #[serde(rename = "UserAttributeNames")]
     pub user_attribute_names: Vec<String>,
 }
 
-#[doc="<p>Represents the response from the server to delete user attributes.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the response from the server to delete user attributes.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteUserAttributesResponse;
 
-#[doc="<p>Represents the request to delete a user pool client.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to delete a user pool client.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteUserPoolClientRequest {
-    #[doc="<p>The app client ID of the app associated with the user pool.</p>"]
-    #[serde(rename="ClientId")]
+    /// <p>The app client ID of the app associated with the user pool.</p>
+    #[serde(rename = "ClientId")]
     pub client_id: String,
-    #[doc="<p>The user pool ID for the user pool where you want to delete the client.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool where you want to delete the client.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteUserPoolDomainRequest {
-    #[doc="<p>The domain string.</p>"]
-    #[serde(rename="Domain")]
+    /// <p>The domain string.</p>
+    #[serde(rename = "Domain")]
     pub domain: String,
-    #[doc="<p>The user pool ID.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteUserPoolDomainResponse;
 
-#[doc="<p>Represents the request to delete a user pool.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to delete a user pool.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteUserPoolRequest {
-    #[doc="<p>The user pool ID for the user pool you want to delete.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool you want to delete.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[doc="<p>Represents the request to delete a user.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to delete a user.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteUserRequest {
-    #[doc="<p>The access token from a request to delete a user.</p>"]
-    #[serde(rename="AccessToken")]
+    /// <p>The access token from a request to delete a user.</p>
+    #[serde(rename = "AccessToken")]
     pub access_token: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeIdentityProviderRequest {
-    #[doc="<p>The identity provider name.</p>"]
-    #[serde(rename="ProviderName")]
+    /// <p>The identity provider name.</p>
+    #[serde(rename = "ProviderName")]
     pub provider_name: String,
-    #[doc="<p>The user pool ID.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeIdentityProviderResponse {
-    #[doc="<p>The identity provider that was deleted.</p>"]
-    #[serde(rename="IdentityProvider")]
+    /// <p>The identity provider that was deleted.</p>
+    #[serde(rename = "IdentityProvider")]
     pub identity_provider: IdentityProviderType,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeResourceServerRequest {
-    #[doc="<p>The identifier for the resource server</p>"]
-    #[serde(rename="Identifier")]
+    /// <p>The identifier for the resource server</p>
+    #[serde(rename = "Identifier")]
     pub identifier: String,
-    #[doc="<p>The user pool ID for the user pool that hosts the resource server.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool that hosts the resource server.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeResourceServerResponse {
-    #[doc="<p>The resource server.</p>"]
-    #[serde(rename="ResourceServer")]
+    /// <p>The resource server.</p>
+    #[serde(rename = "ResourceServer")]
     pub resource_server: ResourceServerType,
 }
 
-#[doc="<p>Represents the request to describe the user import job.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to describe the user import job.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeUserImportJobRequest {
-    #[doc="<p>The job ID for the user import job.</p>"]
-    #[serde(rename="JobId")]
+    /// <p>The job ID for the user import job.</p>
+    #[serde(rename = "JobId")]
     pub job_id: String,
-    #[doc="<p>The user pool ID for the user pool that the users are being imported into.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool that the users are being imported into.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[doc="<p>Represents the response from the server to the request to describe the user import job.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the response from the server to the request to describe the user import job.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeUserImportJobResponse {
-    #[doc="<p>The job object that represents the user import job.</p>"]
-    #[serde(rename="UserImportJob")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The job object that represents the user import job.</p>
+    #[serde(rename = "UserImportJob")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_import_job: Option<UserImportJobType>,
 }
 
-#[doc="<p>Represents the request to describe a user pool client.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to describe a user pool client.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeUserPoolClientRequest {
-    #[doc="<p>The app client ID of the app associated with the user pool.</p>"]
-    #[serde(rename="ClientId")]
+    /// <p>The app client ID of the app associated with the user pool.</p>
+    #[serde(rename = "ClientId")]
     pub client_id: String,
-    #[doc="<p>The user pool ID for the user pool you want to describe.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool you want to describe.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[doc="<p>Represents the response from the server from a request to describe the user pool client.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the response from the server from a request to describe the user pool client.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeUserPoolClientResponse {
-    #[doc="<p>The user pool client from a server response to describe the user pool client.</p>"]
-    #[serde(rename="UserPoolClient")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user pool client from a server response to describe the user pool client.</p>
+    #[serde(rename = "UserPoolClient")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool_client: Option<UserPoolClientType>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeUserPoolDomainRequest {
-    #[doc="<p>The domain string.</p>"]
-    #[serde(rename="Domain")]
+    /// <p>The domain string.</p>
+    #[serde(rename = "Domain")]
     pub domain: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeUserPoolDomainResponse {
-    #[doc="<p>A domain description object containing information about the domain.</p>"]
-    #[serde(rename="DomainDescription")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A domain description object containing information about the domain.</p>
+    #[serde(rename = "DomainDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_description: Option<DomainDescriptionType>,
 }
 
-#[doc="<p>Represents the request to describe the user pool.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to describe the user pool.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeUserPoolRequest {
-    #[doc="<p>The user pool ID for the user pool you want to describe.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool you want to describe.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[doc="<p>Represents the response to describe the user pool.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the response to describe the user pool.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeUserPoolResponse {
-    #[doc="<p>The container of metadata returned by the server to describe the pool.</p>"]
-    #[serde(rename="UserPool")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The container of metadata returned by the server to describe the pool.</p>
+    #[serde(rename = "UserPool")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool: Option<UserPoolType>,
 }
 
-#[doc="<p>The type of configuration for the user pool's device tracking.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>The type of configuration for the user pool's device tracking.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct DeviceConfigurationType {
-    #[doc="<p>Indicates whether a challenge is required on a new device. Only applicable to a new device.</p>"]
-    #[serde(rename="ChallengeRequiredOnNewDevice")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether a challenge is required on a new device. Only applicable to a new device.</p>
+    #[serde(rename = "ChallengeRequiredOnNewDevice")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub challenge_required_on_new_device: Option<bool>,
-    #[doc="<p>If true, a device is only remembered on user prompt.</p>"]
-    #[serde(rename="DeviceOnlyRememberedOnUserPrompt")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If true, a device is only remembered on user prompt.</p>
+    #[serde(rename = "DeviceOnlyRememberedOnUserPrompt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub device_only_remembered_on_user_prompt: Option<bool>,
 }
 
-#[doc="<p>The device verifier against which it will be authenticated.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The device verifier against which it will be authenticated.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeviceSecretVerifierConfigType {
-    #[doc="<p>The password verifier.</p>"]
-    #[serde(rename="PasswordVerifier")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The password verifier.</p>
+    #[serde(rename = "PasswordVerifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub password_verifier: Option<String>,
-    #[doc="<p>The salt.</p>"]
-    #[serde(rename="Salt")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The salt.</p>
+    #[serde(rename = "Salt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub salt: Option<String>,
 }
 
-#[doc="<p>The device type.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The device type.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeviceType {
-    #[doc="<p>The device attributes.</p>"]
-    #[serde(rename="DeviceAttributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The device attributes.</p>
+    #[serde(rename = "DeviceAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub device_attributes: Option<Vec<AttributeType>>,
-    #[doc="<p>The creation date of the device.</p>"]
-    #[serde(rename="DeviceCreateDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The creation date of the device.</p>
+    #[serde(rename = "DeviceCreateDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub device_create_date: Option<f64>,
-    #[doc="<p>The device key.</p>"]
-    #[serde(rename="DeviceKey")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The device key.</p>
+    #[serde(rename = "DeviceKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub device_key: Option<String>,
-    #[doc="<p>The date in which the device was last authenticated.</p>"]
-    #[serde(rename="DeviceLastAuthenticatedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date in which the device was last authenticated.</p>
+    #[serde(rename = "DeviceLastAuthenticatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub device_last_authenticated_date: Option<f64>,
-    #[doc="<p>The last modified date of the device.</p>"]
-    #[serde(rename="DeviceLastModifiedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The last modified date of the device.</p>
+    #[serde(rename = "DeviceLastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub device_last_modified_date: Option<f64>,
 }
 
-#[doc="<p>A container for information about a domain.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A container for information about a domain.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DomainDescriptionType {
-    #[doc="<p>The AWS account ID for the user pool owner.</p>"]
-    #[serde(rename="AWSAccountId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS account ID for the user pool owner.</p>
+    #[serde(rename = "AWSAccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_account_id: Option<String>,
-    #[doc="<p>The ARN of the CloudFront distribution.</p>"]
-    #[serde(rename="CloudFrontDistribution")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the CloudFront distribution.</p>
+    #[serde(rename = "CloudFrontDistribution")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cloud_front_distribution: Option<String>,
-    #[doc="<p>The domain string.</p>"]
-    #[serde(rename="Domain")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The domain string.</p>
+    #[serde(rename = "Domain")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub domain: Option<String>,
-    #[doc="<p>The S3 bucket where the static files for this domain are stored.</p>"]
-    #[serde(rename="S3Bucket")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The S3 bucket where the static files for this domain are stored.</p>
+    #[serde(rename = "S3Bucket")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_bucket: Option<String>,
-    #[doc="<p>The domain status.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The domain status.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The user pool ID.</p>"]
-    #[serde(rename="UserPoolId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user pool ID.</p>
+    #[serde(rename = "UserPoolId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool_id: Option<String>,
-    #[doc="<p>The app version.</p>"]
-    #[serde(rename="Version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The app version.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
 
-#[doc="<p>The email configuration type.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>The email configuration type.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct EmailConfigurationType {
-    #[doc="<p>The REPLY-TO email address.</p>"]
-    #[serde(rename="ReplyToEmailAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The REPLY-TO email address.</p>
+    #[serde(rename = "ReplyToEmailAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_to_email_address: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the email source.</p>"]
-    #[serde(rename="SourceArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the email source.</p>
+    #[serde(rename = "SourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub source_arn: Option<String>,
 }
 
-#[doc="<p>Represents the request to forget the device.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to forget the device.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ForgetDeviceRequest {
-    #[doc="<p>The access token for the forgotten device request.</p>"]
-    #[serde(rename="AccessToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The access token for the forgotten device request.</p>
+    #[serde(rename = "AccessToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub access_token: Option<String>,
-    #[doc="<p>The device key.</p>"]
-    #[serde(rename="DeviceKey")]
+    /// <p>The device key.</p>
+    #[serde(rename = "DeviceKey")]
     pub device_key: String,
 }
 
-#[doc="<p>Represents the request to reset a user's password.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to reset a user's password.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ForgotPasswordRequest {
-    #[doc="<p>The ID of the client associated with the user pool.</p>"]
-    #[serde(rename="ClientId")]
+    /// <p>The ID of the client associated with the user pool.</p>
+    #[serde(rename = "ClientId")]
     pub client_id: String,
-    #[doc="<p>A keyed-hash message authentication code (HMAC) calculated using the secret key of a user pool client and username plus the client ID in the message.</p>"]
-    #[serde(rename="SecretHash")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A keyed-hash message authentication code (HMAC) calculated using the secret key of a user pool client and username plus the client ID in the message.</p>
+    #[serde(rename = "SecretHash")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub secret_hash: Option<String>,
-    #[doc="<p>The user name of the user for whom you want to enter a code to reset a forgotten password.</p>"]
-    #[serde(rename="Username")]
+    /// <p>The user name of the user for whom you want to enter a code to reset a forgotten password.</p>
+    #[serde(rename = "Username")]
     pub username: String,
 }
 
-#[doc="<p>Respresents the response from the server regarding the request to reset a password.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Respresents the response from the server regarding the request to reset a password.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ForgotPasswordResponse {
-    #[doc="<p>The code delivery details returned by the server in response to the request to reset a password.</p>"]
-    #[serde(rename="CodeDeliveryDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The code delivery details returned by the server in response to the request to reset a password.</p>
+    #[serde(rename = "CodeDeliveryDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub code_delivery_details: Option<CodeDeliveryDetailsType>,
 }
 
-#[doc="<p>Represents the request to get the header information for the .csv file for the user import job.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to get the header information for the .csv file for the user import job.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetCSVHeaderRequest {
-    #[doc="<p>The user pool ID for the user pool that the users are to be imported into.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool that the users are to be imported into.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[doc="<p>Represents the response from the server to the request to get the header information for the .csv file for the user import job.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the response from the server to the request to get the header information for the .csv file for the user import job.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetCSVHeaderResponse {
-    #[doc="<p>The header information for the .csv file for the user import job.</p>"]
-    #[serde(rename="CSVHeader")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The header information for the .csv file for the user import job.</p>
+    #[serde(rename = "CSVHeader")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub csv_header: Option<Vec<String>>,
-    #[doc="<p>The user pool ID for the user pool that the users are to be imported into.</p>"]
-    #[serde(rename="UserPoolId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user pool ID for the user pool that the users are to be imported into.</p>
+    #[serde(rename = "UserPoolId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool_id: Option<String>,
 }
 
-#[doc="<p>Represents the request to get the device.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to get the device.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDeviceRequest {
-    #[doc="<p>The access token.</p>"]
-    #[serde(rename="AccessToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The access token.</p>
+    #[serde(rename = "AccessToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub access_token: Option<String>,
-    #[doc="<p>The device key.</p>"]
-    #[serde(rename="DeviceKey")]
+    /// <p>The device key.</p>
+    #[serde(rename = "DeviceKey")]
     pub device_key: String,
 }
 
-#[doc="<p>Gets the device response.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Gets the device response.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetDeviceResponse {
-    #[doc="<p>The device.</p>"]
-    #[serde(rename="Device")]
+    /// <p>The device.</p>
+    #[serde(rename = "Device")]
     pub device: DeviceType,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetGroupRequest {
-    #[doc="<p>The name of the group.</p>"]
-    #[serde(rename="GroupName")]
+    /// <p>The name of the group.</p>
+    #[serde(rename = "GroupName")]
     pub group_name: String,
-    #[doc="<p>The user pool ID for the user pool.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetGroupResponse {
-    #[doc="<p>The group object for the group.</p>"]
-    #[serde(rename="Group")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The group object for the group.</p>
+    #[serde(rename = "Group")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub group: Option<GroupType>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetIdentityProviderByIdentifierRequest {
-    #[doc="<p>The identity provider ID.</p>"]
-    #[serde(rename="IdpIdentifier")]
+    /// <p>The identity provider ID.</p>
+    #[serde(rename = "IdpIdentifier")]
     pub idp_identifier: String,
-    #[doc="<p>The user pool ID.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetIdentityProviderByIdentifierResponse {
-    #[doc="<p>The identity provider object.</p>"]
-    #[serde(rename="IdentityProvider")]
+    /// <p>The identity provider object.</p>
+    #[serde(rename = "IdentityProvider")]
     pub identity_provider: IdentityProviderType,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetUICustomizationRequest {
-    #[doc="<p>The client ID for the client app.</p>"]
-    #[serde(rename="ClientId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The client ID for the client app.</p>
+    #[serde(rename = "ClientId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub client_id: Option<String>,
-    #[doc="<p>The user pool ID for the user pool.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetUICustomizationResponse {
-    #[doc="<p>The UI customization information.</p>"]
-    #[serde(rename="UICustomization")]
+    /// <p>The UI customization information.</p>
+    #[serde(rename = "UICustomization")]
     pub ui_customization: UICustomizationType,
 }
 
-#[doc="<p>Represents the request to get user attribute verification.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to get user attribute verification.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetUserAttributeVerificationCodeRequest {
-    #[doc="<p>The access token returned by the server response to get the user attribute verification code.</p>"]
-    #[serde(rename="AccessToken")]
+    /// <p>The access token returned by the server response to get the user attribute verification code.</p>
+    #[serde(rename = "AccessToken")]
     pub access_token: String,
-    #[doc="<p>The attribute name returned by the server response to get the user attribute verification code.</p>"]
-    #[serde(rename="AttributeName")]
+    /// <p>The attribute name returned by the server response to get the user attribute verification code.</p>
+    #[serde(rename = "AttributeName")]
     pub attribute_name: String,
 }
 
-#[doc="<p>The verification code response returned by the server response to get the user attribute verification code.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The verification code response returned by the server response to get the user attribute verification code.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetUserAttributeVerificationCodeResponse {
-    #[doc="<p>The code delivery details returned by the server in response to the request to get the user attribute verification code.</p>"]
-    #[serde(rename="CodeDeliveryDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The code delivery details returned by the server in response to the request to get the user attribute verification code.</p>
+    #[serde(rename = "CodeDeliveryDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub code_delivery_details: Option<CodeDeliveryDetailsType>,
 }
 
-#[doc="<p>Represents the request to get information about the user.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to get information about the user.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetUserRequest {
-    #[doc="<p>The access token returned by the server response to get information about the user.</p>"]
-    #[serde(rename="AccessToken")]
+    /// <p>The access token returned by the server response to get information about the user.</p>
+    #[serde(rename = "AccessToken")]
     pub access_token: String,
 }
 
-#[doc="<p>Represents the response from the server from the request to get information about the user.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the response from the server from the request to get information about the user.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetUserResponse {
-    #[doc="<p>Specifies the options for MFA (e.g., email or phone number).</p>"]
-    #[serde(rename="MFAOptions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies the options for MFA (e.g., email or phone number).</p>
+    #[serde(rename = "MFAOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub mfa_options: Option<Vec<MFAOptionType>>,
-    #[doc="<p>An array of name-value pairs representing user attributes.</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p>"]
-    #[serde(rename="UserAttributes")]
+    /// <p>An array of name-value pairs representing user attributes.</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p>
+    #[serde(rename = "UserAttributes")]
     pub user_attributes: Vec<AttributeType>,
-    #[doc="<p>The user name of the user you wish to retrieve from the get user request.</p>"]
-    #[serde(rename="Username")]
+    /// <p>The user name of the user you wish to retrieve from the get user request.</p>
+    #[serde(rename = "Username")]
     pub username: String,
 }
 
-#[doc="<p>Represents the request to sign out all devices.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to sign out all devices.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GlobalSignOutRequest {
-    #[doc="<p>The access token.</p>"]
-    #[serde(rename="AccessToken")]
+    /// <p>The access token.</p>
+    #[serde(rename = "AccessToken")]
     pub access_token: String,
 }
 
-#[doc="<p>The response to the request to sign out all devices.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The response to the request to sign out all devices.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GlobalSignOutResponse;
 
-#[doc="<p>The group type.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The group type.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GroupType {
-    #[doc="<p>The date the group was created.</p>"]
-    #[serde(rename="CreationDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the group was created.</p>
+    #[serde(rename = "CreationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
-    #[doc="<p>A string containing the description of the group.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A string containing the description of the group.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The name of the group.</p>"]
-    #[serde(rename="GroupName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the group.</p>
+    #[serde(rename = "GroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub group_name: Option<String>,
-    #[doc="<p>The date the group was last modified.</p>"]
-    #[serde(rename="LastModifiedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the group was last modified.</p>
+    #[serde(rename = "LastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_date: Option<f64>,
-    #[doc="<p>A nonnegative integer value that specifies the precedence of this group relative to the other groups that a user can belong to in the user pool. If a user belongs to two or more groups, it is the group with the highest precedence whose role ARN will be used in the <code>cognito:roles</code> and <code>cognito:preferred_role</code> claims in the user's tokens. Groups with higher <code>Precedence</code> values take precedence over groups with lower <code>Precedence</code> values or with null <code>Precedence</code> values.</p> <p>Two groups can have the same <code>Precedence</code> value. If this happens, neither group takes precedence over the other. If two groups with the same <code>Precedence</code> have the same role ARN, that role is used in the <code>cognito:preferred_role</code> claim in tokens for users in each group. If the two groups have different role ARNs, the <code>cognito:preferred_role</code> claim is not set in users' tokens.</p> <p>The default <code>Precedence</code> value is null.</p>"]
-    #[serde(rename="Precedence")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A nonnegative integer value that specifies the precedence of this group relative to the other groups that a user can belong to in the user pool. If a user belongs to two or more groups, it is the group with the highest precedence whose role ARN will be used in the <code>cognito:roles</code> and <code>cognito:preferred_role</code> claims in the user's tokens. Groups with higher <code>Precedence</code> values take precedence over groups with lower <code>Precedence</code> values or with null <code>Precedence</code> values.</p> <p>Two groups can have the same <code>Precedence</code> value. If this happens, neither group takes precedence over the other. If two groups with the same <code>Precedence</code> have the same role ARN, that role is used in the <code>cognito:preferred_role</code> claim in tokens for users in each group. If the two groups have different role ARNs, the <code>cognito:preferred_role</code> claim is not set in users' tokens.</p> <p>The default <code>Precedence</code> value is null.</p>
+    #[serde(rename = "Precedence")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub precedence: Option<i64>,
-    #[doc="<p>The role ARN for the group.</p>"]
-    #[serde(rename="RoleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The role ARN for the group.</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
-    #[doc="<p>The user pool ID for the user pool.</p>"]
-    #[serde(rename="UserPoolId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user pool ID for the user pool.</p>
+    #[serde(rename = "UserPoolId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool_id: Option<String>,
 }
 
-#[doc="<p>A container for information about an identity provider.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A container for information about an identity provider.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct IdentityProviderType {
-    #[doc="<p>A mapping of identity provider attributes to standard and custom user pool attributes.</p>"]
-    #[serde(rename="AttributeMapping")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A mapping of identity provider attributes to standard and custom user pool attributes.</p>
+    #[serde(rename = "AttributeMapping")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub attribute_mapping: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The date the identity provider was created.</p>"]
-    #[serde(rename="CreationDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the identity provider was created.</p>
+    #[serde(rename = "CreationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
-    #[doc="<p>A list of identity provider identifiers.</p>"]
-    #[serde(rename="IdpIdentifiers")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of identity provider identifiers.</p>
+    #[serde(rename = "IdpIdentifiers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub idp_identifiers: Option<Vec<String>>,
-    #[doc="<p>The date the identity provider was last modified.</p>"]
-    #[serde(rename="LastModifiedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the identity provider was last modified.</p>
+    #[serde(rename = "LastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_date: Option<f64>,
-    #[doc="<p>The identity provider details, such as <code>MetadataURL</code> and <code>MetadataFile</code>.</p>"]
-    #[serde(rename="ProviderDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identity provider details, such as <code>MetadataURL</code> and <code>MetadataFile</code>.</p>
+    #[serde(rename = "ProviderDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_details: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The identity provider name.</p>"]
-    #[serde(rename="ProviderName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identity provider name.</p>
+    #[serde(rename = "ProviderName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_name: Option<String>,
-    #[doc="<p>The identity provider type.</p>"]
-    #[serde(rename="ProviderType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identity provider type.</p>
+    #[serde(rename = "ProviderType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_type: Option<String>,
-    #[doc="<p>The user pool ID.</p>"]
-    #[serde(rename="UserPoolId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user pool ID.</p>
+    #[serde(rename = "UserPoolId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool_id: Option<String>,
 }
 
-#[doc="<p>Initiates the authentication request.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Initiates the authentication request.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct InitiateAuthRequest {
-    #[doc="<p>The authentication flow for this call to execute. The API action will depend on this value. For example: </p> <ul> <li> <p> <code>REFRESH_TOKEN_AUTH</code> will take in a valid refresh token and return new tokens.</p> </li> <li> <p> <code>USER_SRP_AUTH</code> will take in <code>USERNAME</code> and <code>SRP_A</code> and return the SRP variables to be used for next challenge execution.</p> </li> </ul> <p>Valid values include:</p> <ul> <li> <p> <code>USER_SRP_AUTH</code>: Authentication flow for the Secure Remote Password (SRP) protocol.</p> </li> <li> <p> <code>REFRESH_TOKEN_AUTH</code>/<code>REFRESH_TOKEN</code>: Authentication flow for refreshing the access token and ID token by supplying a valid refresh token.</p> </li> <li> <p> <code>CUSTOM_AUTH</code>: Custom authentication flow.</p> </li> </ul> <p> <code>ADMIN_NO_SRP_AUTH</code> is not a valid value.</p>"]
-    #[serde(rename="AuthFlow")]
+    /// <p>The authentication flow for this call to execute. The API action will depend on this value. For example: </p> <ul> <li> <p> <code>REFRESH_TOKEN_AUTH</code> will take in a valid refresh token and return new tokens.</p> </li> <li> <p> <code>USER_SRP_AUTH</code> will take in <code>USERNAME</code> and <code>SRP_A</code> and return the SRP variables to be used for next challenge execution.</p> </li> </ul> <p>Valid values include:</p> <ul> <li> <p> <code>USER_SRP_AUTH</code>: Authentication flow for the Secure Remote Password (SRP) protocol.</p> </li> <li> <p> <code>REFRESH_TOKEN_AUTH</code>/<code>REFRESH_TOKEN</code>: Authentication flow for refreshing the access token and ID token by supplying a valid refresh token.</p> </li> <li> <p> <code>CUSTOM_AUTH</code>: Custom authentication flow.</p> </li> </ul> <p> <code>ADMIN_NO_SRP_AUTH</code> is not a valid value.</p>
+    #[serde(rename = "AuthFlow")]
     pub auth_flow: String,
-    #[doc="<p>The authentication parameters. These are inputs corresponding to the <code>AuthFlow</code> that you are invoking. The required values depend on the value of <code>AuthFlow</code>:</p> <ul> <li> <p>For <code>USER_SRP_AUTH</code>: <code>USERNAME</code> (required), <code>SRP_A</code> (required), <code>SECRET_HASH</code> (required if the app client is configured with a client secret), <code>DEVICE_KEY</code> </p> </li> <li> <p>For <code>REFRESH_TOKEN_AUTH/REFRESH_TOKEN</code>: <code>USERNAME</code> (required), <code>SECRET_HASH</code> (required if the app client is configured with a client secret), <code>REFRESH_TOKEN</code> (required), <code>DEVICE_KEY</code> </p> </li> <li> <p>For <code>CUSTOM_AUTH</code>: <code>USERNAME</code> (required), <code>SECRET_HASH</code> (if app client is configured with client secret), <code>DEVICE_KEY</code> </p> </li> </ul>"]
-    #[serde(rename="AuthParameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The authentication parameters. These are inputs corresponding to the <code>AuthFlow</code> that you are invoking. The required values depend on the value of <code>AuthFlow</code>:</p> <ul> <li> <p>For <code>USER_SRP_AUTH</code>: <code>USERNAME</code> (required), <code>SRP_A</code> (required), <code>SECRET_HASH</code> (required if the app client is configured with a client secret), <code>DEVICE_KEY</code> </p> </li> <li> <p>For <code>REFRESH_TOKEN_AUTH/REFRESH_TOKEN</code>: <code>USERNAME</code> (required), <code>SECRET_HASH</code> (required if the app client is configured with a client secret), <code>REFRESH_TOKEN</code> (required), <code>DEVICE_KEY</code> </p> </li> <li> <p>For <code>CUSTOM_AUTH</code>: <code>USERNAME</code> (required), <code>SECRET_HASH</code> (if app client is configured with client secret), <code>DEVICE_KEY</code> </p> </li> </ul>
+    #[serde(rename = "AuthParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_parameters: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The app client ID.</p>"]
-    #[serde(rename="ClientId")]
+    /// <p>The app client ID.</p>
+    #[serde(rename = "ClientId")]
     pub client_id: String,
-    #[doc="<p>This is a random key-value pair map which can contain any key and will be passed to your PreAuthentication Lambda trigger as-is. It can be used to implement additional validations around authentication.</p>"]
-    #[serde(rename="ClientMetadata")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>This is a random key-value pair map which can contain any key and will be passed to your PreAuthentication Lambda trigger as-is. It can be used to implement additional validations around authentication.</p>
+    #[serde(rename = "ClientMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub client_metadata: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[doc="<p>Initiates the authentication response.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Initiates the authentication response.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct InitiateAuthResponse {
-    #[doc="<p>The result of the authentication response. This is only returned if the caller does not need to pass another challenge. If the caller does need to pass another challenge before it gets tokens, <code>ChallengeName</code>, <code>ChallengeParameters</code>, and <code>Session</code> are returned.</p>"]
-    #[serde(rename="AuthenticationResult")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The result of the authentication response. This is only returned if the caller does not need to pass another challenge. If the caller does need to pass another challenge before it gets tokens, <code>ChallengeName</code>, <code>ChallengeParameters</code>, and <code>Session</code> are returned.</p>
+    #[serde(rename = "AuthenticationResult")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_result: Option<AuthenticationResultType>,
-    #[doc="<p>The name of the challenge which you are responding to with this call. This is returned to you in the <code>AdminInitiateAuth</code> response if you need to pass another challenge.</p> <p>Valid values include the following. Note that all of these challenges require <code>USERNAME</code> and <code>SECRET_HASH</code> (if applicable) in the parameters.</p> <ul> <li> <p> <code>SMS_MFA</code>: Next challenge is to supply an <code>SMS_MFA_CODE</code>, delivered via SMS.</p> </li> <li> <p> <code>PASSWORD_VERIFIER</code>: Next challenge is to supply <code>PASSWORD_CLAIM_SIGNATURE</code>, <code>PASSWORD_CLAIM_SECRET_BLOCK</code>, and <code>TIMESTAMP</code> after the client-side SRP calculations.</p> </li> <li> <p> <code>CUSTOM_CHALLENGE</code>: This is returned if your custom authentication flow determines that the user should pass another challenge before tokens are issued.</p> </li> <li> <p> <code>DEVICE_SRP_AUTH</code>: If device tracking was enabled on your user pool and the previous challenges were passed, this challenge is returned so that Amazon Cognito can start tracking this device.</p> </li> <li> <p> <code>DEVICE_PASSWORD_VERIFIER</code>: Similar to <code>PASSWORD_VERIFIER</code>, but for devices only.</p> </li> <li> <p> <code>NEW_PASSWORD_REQUIRED</code>: For users which are required to change their passwords after successful first login. This challenge should be passed with <code>NEW_PASSWORD</code> and any other required attributes.</p> </li> </ul>"]
-    #[serde(rename="ChallengeName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the challenge which you are responding to with this call. This is returned to you in the <code>AdminInitiateAuth</code> response if you need to pass another challenge.</p> <p>Valid values include the following. Note that all of these challenges require <code>USERNAME</code> and <code>SECRET_HASH</code> (if applicable) in the parameters.</p> <ul> <li> <p> <code>SMS_MFA</code>: Next challenge is to supply an <code>SMS_MFA_CODE</code>, delivered via SMS.</p> </li> <li> <p> <code>PASSWORD_VERIFIER</code>: Next challenge is to supply <code>PASSWORD_CLAIM_SIGNATURE</code>, <code>PASSWORD_CLAIM_SECRET_BLOCK</code>, and <code>TIMESTAMP</code> after the client-side SRP calculations.</p> </li> <li> <p> <code>CUSTOM_CHALLENGE</code>: This is returned if your custom authentication flow determines that the user should pass another challenge before tokens are issued.</p> </li> <li> <p> <code>DEVICE_SRP_AUTH</code>: If device tracking was enabled on your user pool and the previous challenges were passed, this challenge is returned so that Amazon Cognito can start tracking this device.</p> </li> <li> <p> <code>DEVICE_PASSWORD_VERIFIER</code>: Similar to <code>PASSWORD_VERIFIER</code>, but for devices only.</p> </li> <li> <p> <code>NEW_PASSWORD_REQUIRED</code>: For users which are required to change their passwords after successful first login. This challenge should be passed with <code>NEW_PASSWORD</code> and any other required attributes.</p> </li> </ul>
+    #[serde(rename = "ChallengeName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub challenge_name: Option<String>,
-    #[doc="<p>The challenge parameters. These are returned to you in the <code>InitiateAuth</code> response if you need to pass another challenge. The responses in this parameter should be used to compute inputs to the next call (<code>RespondToAuthChallenge</code>). </p> <p>All challenges require <code>USERNAME</code> and <code>SECRET_HASH</code> (if applicable).</p>"]
-    #[serde(rename="ChallengeParameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The challenge parameters. These are returned to you in the <code>InitiateAuth</code> response if you need to pass another challenge. The responses in this parameter should be used to compute inputs to the next call (<code>RespondToAuthChallenge</code>). </p> <p>All challenges require <code>USERNAME</code> and <code>SECRET_HASH</code> (if applicable).</p>
+    #[serde(rename = "ChallengeParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub challenge_parameters: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The session which should be passed both ways in challenge-response calls to the service. If the <a href=\"API_InitiateAuth.html\">InitiateAuth</a> or <a href=\"API_RespondToAuthChallenge.html\">RespondToAuthChallenge</a> API call determines that the caller needs to go through another challenge, they return a session with other challenge parameters. This session should be passed as it is to the next <code>RespondToAuthChallenge</code> API call.</p>"]
-    #[serde(rename="Session")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The session which should be passed both ways in challenge-response calls to the service. If the <a href="API_InitiateAuth.html">InitiateAuth</a> or <a href="API_RespondToAuthChallenge.html">RespondToAuthChallenge</a> API call determines that the caller needs to go through another challenge, they return a session with other challenge parameters. This session should be passed as it is to the next <code>RespondToAuthChallenge</code> API call.</p>
+    #[serde(rename = "Session")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub session: Option<String>,
 }
 
-#[doc="<p>Specifies the type of configuration for AWS Lambda triggers.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Specifies the type of configuration for AWS Lambda triggers.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct LambdaConfigType {
-    #[doc="<p>Creates an authentication challenge.</p>"]
-    #[serde(rename="CreateAuthChallenge")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Creates an authentication challenge.</p>
+    #[serde(rename = "CreateAuthChallenge")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub create_auth_challenge: Option<String>,
-    #[doc="<p>A custom Message AWS Lambda trigger.</p>"]
-    #[serde(rename="CustomMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A custom Message AWS Lambda trigger.</p>
+    #[serde(rename = "CustomMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_message: Option<String>,
-    #[doc="<p>Defines the authentication challenge.</p>"]
-    #[serde(rename="DefineAuthChallenge")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Defines the authentication challenge.</p>
+    #[serde(rename = "DefineAuthChallenge")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub define_auth_challenge: Option<String>,
-    #[doc="<p>A post-authentication AWS Lambda trigger.</p>"]
-    #[serde(rename="PostAuthentication")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A post-authentication AWS Lambda trigger.</p>
+    #[serde(rename = "PostAuthentication")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub post_authentication: Option<String>,
-    #[doc="<p>A post-confirmation AWS Lambda trigger.</p>"]
-    #[serde(rename="PostConfirmation")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A post-confirmation AWS Lambda trigger.</p>
+    #[serde(rename = "PostConfirmation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub post_confirmation: Option<String>,
-    #[doc="<p>A pre-authentication AWS Lambda trigger.</p>"]
-    #[serde(rename="PreAuthentication")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A pre-authentication AWS Lambda trigger.</p>
+    #[serde(rename = "PreAuthentication")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub pre_authentication: Option<String>,
-    #[doc="<p>A pre-registration AWS Lambda trigger.</p>"]
-    #[serde(rename="PreSignUp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A pre-registration AWS Lambda trigger.</p>
+    #[serde(rename = "PreSignUp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub pre_sign_up: Option<String>,
-    #[doc="<p>Verifies the authentication challenge response.</p>"]
-    #[serde(rename="VerifyAuthChallengeResponse")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Verifies the authentication challenge response.</p>
+    #[serde(rename = "VerifyAuthChallengeResponse")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub verify_auth_challenge_response: Option<String>,
 }
 
-#[doc="<p>Represents the request to list the devices.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to list the devices.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListDevicesRequest {
-    #[doc="<p>The access tokens for the request to list devices.</p>"]
-    #[serde(rename="AccessToken")]
+    /// <p>The access tokens for the request to list devices.</p>
+    #[serde(rename = "AccessToken")]
     pub access_token: String,
-    #[doc="<p>The limit of the device request.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The limit of the device request.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>The pagination token for the list request.</p>"]
-    #[serde(rename="PaginationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The pagination token for the list request.</p>
+    #[serde(rename = "PaginationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub pagination_token: Option<String>,
 }
 
-#[doc="<p>Represents the response to list devices.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the response to list devices.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListDevicesResponse {
-    #[doc="<p>The devices returned in the list devices response.</p>"]
-    #[serde(rename="Devices")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The devices returned in the list devices response.</p>
+    #[serde(rename = "Devices")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub devices: Option<Vec<DeviceType>>,
-    #[doc="<p>The pagination token for the list device response.</p>"]
-    #[serde(rename="PaginationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The pagination token for the list device response.</p>
+    #[serde(rename = "PaginationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub pagination_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListGroupsRequest {
-    #[doc="<p>The limit of the request to list groups.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The limit of the request to list groups.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The user pool ID for the user pool.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListGroupsResponse {
-    #[doc="<p>The group objects for the groups.</p>"]
-    #[serde(rename="Groups")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The group objects for the groups.</p>
+    #[serde(rename = "Groups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub groups: Option<Vec<GroupType>>,
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListIdentityProvidersRequest {
-    #[doc="<p>The maximum number of identity providers to return.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of identity providers to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>A pagination token.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A pagination token.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The user pool ID.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListIdentityProvidersResponse {
-    #[doc="<p>A pagination token.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A pagination token.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>A list of identity provider objects.</p>"]
-    #[serde(rename="Providers")]
+    /// <p>A list of identity provider objects.</p>
+    #[serde(rename = "Providers")]
     pub providers: Vec<ProviderDescription>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListResourceServersRequest {
-    #[doc="<p>The maximum number of resource servers to return.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of resource servers to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>A pagination token.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A pagination token.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The user pool ID for the user pool.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListResourceServersResponse {
-    #[doc="<p>A pagination token.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A pagination token.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The resource servers.</p>"]
-    #[serde(rename="ResourceServers")]
+    /// <p>The resource servers.</p>
+    #[serde(rename = "ResourceServers")]
     pub resource_servers: Vec<ResourceServerType>,
 }
 
-#[doc="<p>Represents the request to list the user import jobs.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to list the user import jobs.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListUserImportJobsRequest {
-    #[doc="<p>The maximum number of import jobs you want the request to return.</p>"]
-    #[serde(rename="MaxResults")]
+    /// <p>The maximum number of import jobs you want the request to return.</p>
+    #[serde(rename = "MaxResults")]
     pub max_results: i64,
-    #[doc="<p>An identifier that was returned from the previous call to <code>ListUserImportJobs</code>, which can be used to return the next set of import jobs in the list.</p>"]
-    #[serde(rename="PaginationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to <code>ListUserImportJobs</code>, which can be used to return the next set of import jobs in the list.</p>
+    #[serde(rename = "PaginationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub pagination_token: Option<String>,
-    #[doc="<p>The user pool ID for the user pool that the users are being imported into.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool that the users are being imported into.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[doc="<p>Represents the response from the server to the request to list the user import jobs.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the response from the server to the request to list the user import jobs.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListUserImportJobsResponse {
-    #[doc="<p>An identifier that can be used to return the next set of user import jobs in the list.</p>"]
-    #[serde(rename="PaginationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that can be used to return the next set of user import jobs in the list.</p>
+    #[serde(rename = "PaginationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub pagination_token: Option<String>,
-    #[doc="<p>The user import jobs.</p>"]
-    #[serde(rename="UserImportJobs")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user import jobs.</p>
+    #[serde(rename = "UserImportJobs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_import_jobs: Option<Vec<UserImportJobType>>,
 }
 
-#[doc="<p>Represents the request to list the user pool clients.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to list the user pool clients.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListUserPoolClientsRequest {
-    #[doc="<p>The maximum number of results you want the request to return when listing the user pool clients.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of results you want the request to return when listing the user pool clients.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The user pool ID for the user pool where you want to list user pool clients.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool where you want to list user pool clients.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[doc="<p>Represents the response from the server that lists user pool clients.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the response from the server that lists user pool clients.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListUserPoolClientsResponse {
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The user pool clients in the response that lists user pool clients.</p>"]
-    #[serde(rename="UserPoolClients")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user pool clients in the response that lists user pool clients.</p>
+    #[serde(rename = "UserPoolClients")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool_clients: Option<Vec<UserPoolClientDescription>>,
 }
 
-#[doc="<p>Represents the request to list user pools.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to list user pools.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListUserPoolsRequest {
-    #[doc="<p>The maximum number of results you want the request to return when listing the user pools.</p>"]
-    #[serde(rename="MaxResults")]
+    /// <p>The maximum number of results you want the request to return when listing the user pools.</p>
+    #[serde(rename = "MaxResults")]
     pub max_results: i64,
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the response to list user pools.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the response to list user pools.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListUserPoolsResponse {
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The user pools from the response to list users.</p>"]
-    #[serde(rename="UserPools")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user pools from the response to list users.</p>
+    #[serde(rename = "UserPools")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pools: Option<Vec<UserPoolDescriptionType>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListUsersInGroupRequest {
-    #[doc="<p>The name of the group.</p>"]
-    #[serde(rename="GroupName")]
+    /// <p>The name of the group.</p>
+    #[serde(rename = "GroupName")]
     pub group_name: String,
-    #[doc="<p>The limit of the request to list users.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The limit of the request to list users.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The user pool ID for the user pool.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListUsersInGroupResponse {
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The users returned in the request to list users.</p>"]
-    #[serde(rename="Users")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The users returned in the request to list users.</p>
+    #[serde(rename = "Users")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub users: Option<Vec<UserType>>,
 }
 
-#[doc="<p>Represents the request to list users.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to list users.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListUsersRequest {
-    #[doc="<p>An array of strings, where each string is the name of a user attribute to be returned for each user in the search results. If the array is empty, all attributes are returned.</p>"]
-    #[serde(rename="AttributesToGet")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of strings, where each string is the name of a user attribute to be returned for each user in the search results. If the array is empty, all attributes are returned.</p>
+    #[serde(rename = "AttributesToGet")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub attributes_to_get: Option<Vec<String>>,
-    #[doc="<p>A filter string of the form \"<i>AttributeName</i> <i>Filter-Type</i> \"<i>AttributeValue</i>\"\". Quotation marks within the filter string must be escaped using the backslash (\\) character. For example, \"<code>family_name</code> = \\\"Reddy\\\"\".</p> <ul> <li> <p> <i>AttributeName</i>: The name of the attribute to search for. You can only search for one attribute at a time.</p> </li> <li> <p> <i>Filter-Type</i>: For an exact match, use =, for example, \"<code>given_name</code> = \\\"Jon\\\"\". For a prefix (\"starts with\") match, use ^=, for example, \"<code>given_name</code> ^= \\\"Jon\\\"\". </p> </li> <li> <p> <i>AttributeValue</i>: The attribute value that must be matched for each user.</p> </li> </ul> <p>If the filter string is empty, <code>ListUsers</code> returns all users in the user pool.</p> <p>You can only search for the following standard attributes:</p> <ul> <li> <p> <code>username</code> (case-sensitive)</p> </li> <li> <p> <code>email</code> </p> </li> <li> <p> <code>phone_number</code> </p> </li> <li> <p> <code>name</code> </p> </li> <li> <p> <code>given_name</code> </p> </li> <li> <p> <code>family_name</code> </p> </li> <li> <p> <code>preferred_username</code> </p> </li> <li> <p> <code>cognito:user_status</code> (called <b>Enabled</b> in the Console) (case-sensitive)</p> </li> <li> <p> <code>status</code> (case-insensitive)</p> </li> </ul> <p>Custom attributes are not searchable.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/cognito/latest/developerguide/how-to-manage-user-accounts.html#cognito-user-pools-searching-for-users-using-listusers-api\">Searching for Users Using the ListUsers API</a> and <a href=\"http://docs.aws.amazon.com/cognito/latest/developerguide/how-to-manage-user-accounts.html#cognito-user-pools-searching-for-users-listusers-api-examples\">Examples of Using the ListUsers API</a> in the <i>Amazon Cognito Developer Guide</i>.</p>"]
-    #[serde(rename="Filter")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A filter string of the form "<i>AttributeName</i> <i>Filter-Type</i> "<i>AttributeValue</i>"". Quotation marks within the filter string must be escaped using the backslash (\) character. For example, "<code>family_name</code> = \"Reddy\"".</p> <ul> <li> <p> <i>AttributeName</i>: The name of the attribute to search for. You can only search for one attribute at a time.</p> </li> <li> <p> <i>Filter-Type</i>: For an exact match, use =, for example, "<code>given_name</code> = \"Jon\"". For a prefix ("starts with") match, use ^=, for example, "<code>given_name</code> ^= \"Jon\"". </p> </li> <li> <p> <i>AttributeValue</i>: The attribute value that must be matched for each user.</p> </li> </ul> <p>If the filter string is empty, <code>ListUsers</code> returns all users in the user pool.</p> <p>You can only search for the following standard attributes:</p> <ul> <li> <p> <code>username</code> (case-sensitive)</p> </li> <li> <p> <code>email</code> </p> </li> <li> <p> <code>phone_number</code> </p> </li> <li> <p> <code>name</code> </p> </li> <li> <p> <code>given_name</code> </p> </li> <li> <p> <code>family_name</code> </p> </li> <li> <p> <code>preferred_username</code> </p> </li> <li> <p> <code>cognito:user_status</code> (called <b>Enabled</b> in the Console) (case-sensitive)</p> </li> <li> <p> <code>status</code> (case-insensitive)</p> </li> </ul> <p>Custom attributes are not searchable.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/how-to-manage-user-accounts.html#cognito-user-pools-searching-for-users-using-listusers-api">Searching for Users Using the ListUsers API</a> and <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/how-to-manage-user-accounts.html#cognito-user-pools-searching-for-users-listusers-api-examples">Examples of Using the ListUsers API</a> in the <i>Amazon Cognito Developer Guide</i>.</p>
+    #[serde(rename = "Filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<String>,
-    #[doc="<p>Maximum number of users to be returned.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Maximum number of users to be returned.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="PaginationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "PaginationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub pagination_token: Option<String>,
-    #[doc="<p>The user pool ID for the user pool on which the search should be performed.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool on which the search should be performed.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[doc="<p>The response from the request to list users.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The response from the request to list users.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListUsersResponse {
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="PaginationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "PaginationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub pagination_token: Option<String>,
-    #[doc="<p>The users returned in the request to list users.</p>"]
-    #[serde(rename="Users")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The users returned in the request to list users.</p>
+    #[serde(rename = "Users")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub users: Option<Vec<UserType>>,
 }
 
-#[doc="<p>Specifies the different settings for multi-factor authentication (MFA).</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Specifies the different settings for multi-factor authentication (MFA).</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct MFAOptionType {
-    #[doc="<p>The attribute name of the MFA option type.</p>"]
-    #[serde(rename="AttributeName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The attribute name of the MFA option type.</p>
+    #[serde(rename = "AttributeName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub attribute_name: Option<String>,
-    #[doc="<p>The delivery medium (email message or SMS message) to send the MFA code.</p>"]
-    #[serde(rename="DeliveryMedium")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The delivery medium (email message or SMS message) to send the MFA code.</p>
+    #[serde(rename = "DeliveryMedium")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub delivery_medium: Option<String>,
 }
 
-#[doc="<p>The message template structure.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>The message template structure.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct MessageTemplateType {
-    #[doc="<p>The message template for email messages.</p>"]
-    #[serde(rename="EmailMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The message template for email messages.</p>
+    #[serde(rename = "EmailMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub email_message: Option<String>,
-    #[doc="<p>The subject line for email messages.</p>"]
-    #[serde(rename="EmailSubject")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The subject line for email messages.</p>
+    #[serde(rename = "EmailSubject")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub email_subject: Option<String>,
-    #[doc="<p>The message template for SMS messages.</p>"]
-    #[serde(rename="SMSMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The message template for SMS messages.</p>
+    #[serde(rename = "SMSMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sms_message: Option<String>,
 }
 
-#[doc="<p>The new device metadata type.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The new device metadata type.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct NewDeviceMetadataType {
-    #[doc="<p>The device group key.</p>"]
-    #[serde(rename="DeviceGroupKey")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The device group key.</p>
+    #[serde(rename = "DeviceGroupKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub device_group_key: Option<String>,
-    #[doc="<p>The device key.</p>"]
-    #[serde(rename="DeviceKey")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The device key.</p>
+    #[serde(rename = "DeviceKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub device_key: Option<String>,
 }
 
-#[doc="<p>The minimum and maximum value of an attribute that is of the number data type.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>The minimum and maximum value of an attribute that is of the number data type.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct NumberAttributeConstraintsType {
-    #[doc="<p>The maximum value of an attribute that is of the number data type.</p>"]
-    #[serde(rename="MaxValue")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum value of an attribute that is of the number data type.</p>
+    #[serde(rename = "MaxValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_value: Option<String>,
-    #[doc="<p>The minimum value of an attribute that is of the number data type.</p>"]
-    #[serde(rename="MinValue")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The minimum value of an attribute that is of the number data type.</p>
+    #[serde(rename = "MinValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub min_value: Option<String>,
 }
 
-#[doc="<p>The password policy type.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>The password policy type.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct PasswordPolicyType {
-    #[doc="<p>The minimum length of the password policy that you have set. Cannot be less than 6.</p>"]
-    #[serde(rename="MinimumLength")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The minimum length of the password policy that you have set. Cannot be less than 6.</p>
+    #[serde(rename = "MinimumLength")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub minimum_length: Option<i64>,
-    #[doc="<p>In the password policy that you have set, refers to whether you have required users to use at least one lowercase letter in their password.</p>"]
-    #[serde(rename="RequireLowercase")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>In the password policy that you have set, refers to whether you have required users to use at least one lowercase letter in their password.</p>
+    #[serde(rename = "RequireLowercase")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub require_lowercase: Option<bool>,
-    #[doc="<p>In the password policy that you have set, refers to whether you have required users to use at least one number in their password.</p>"]
-    #[serde(rename="RequireNumbers")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>In the password policy that you have set, refers to whether you have required users to use at least one number in their password.</p>
+    #[serde(rename = "RequireNumbers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub require_numbers: Option<bool>,
-    #[doc="<p>In the password policy that you have set, refers to whether you have required users to use at least one symbol in their password.</p>"]
-    #[serde(rename="RequireSymbols")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>In the password policy that you have set, refers to whether you have required users to use at least one symbol in their password.</p>
+    #[serde(rename = "RequireSymbols")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub require_symbols: Option<bool>,
-    #[doc="<p>In the password policy that you have set, refers to whether you have required users to use at least one uppercase letter in their password.</p>"]
-    #[serde(rename="RequireUppercase")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>In the password policy that you have set, refers to whether you have required users to use at least one uppercase letter in their password.</p>
+    #[serde(rename = "RequireUppercase")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub require_uppercase: Option<bool>,
 }
 
-#[doc="<p>A container for identity provider details.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A container for identity provider details.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ProviderDescription {
-    #[doc="<p>The date the provider was added to the user pool.</p>"]
-    #[serde(rename="CreationDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the provider was added to the user pool.</p>
+    #[serde(rename = "CreationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
-    #[doc="<p>The date the provider was last modified.</p>"]
-    #[serde(rename="LastModifiedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the provider was last modified.</p>
+    #[serde(rename = "LastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_date: Option<f64>,
-    #[doc="<p>The identity provider name.</p>"]
-    #[serde(rename="ProviderName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identity provider name.</p>
+    #[serde(rename = "ProviderName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_name: Option<String>,
-    #[doc="<p>The identity provider type.</p>"]
-    #[serde(rename="ProviderType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identity provider type.</p>
+    #[serde(rename = "ProviderType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_type: Option<String>,
 }
 
-#[doc="<p>A container for information about an identity provider for a user pool.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>A container for information about an identity provider for a user pool.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ProviderUserIdentifierType {
-    #[doc="<p>The name of the provider attribute to link to, for example, <code>NameID</code>.</p>"]
-    #[serde(rename="ProviderAttributeName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the provider attribute to link to, for example, <code>NameID</code>.</p>
+    #[serde(rename = "ProviderAttributeName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_attribute_name: Option<String>,
-    #[doc="<p>The value of the provider attribute to link to, for example, <code>xxxxx_account</code>.</p>"]
-    #[serde(rename="ProviderAttributeValue")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The value of the provider attribute to link to, for example, <code>xxxxx_account</code>.</p>
+    #[serde(rename = "ProviderAttributeValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_attribute_value: Option<String>,
-    #[doc="<p>The name of the provider, for example, Facebook, Google, or Login with Amazon.</p>"]
-    #[serde(rename="ProviderName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the provider, for example, Facebook, Google, or Login with Amazon.</p>
+    #[serde(rename = "ProviderName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_name: Option<String>,
 }
 
-#[doc="<p>Represents the request to resend the confirmation code.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to resend the confirmation code.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ResendConfirmationCodeRequest {
-    #[doc="<p>The ID of the client associated with the user pool.</p>"]
-    #[serde(rename="ClientId")]
+    /// <p>The ID of the client associated with the user pool.</p>
+    #[serde(rename = "ClientId")]
     pub client_id: String,
-    #[doc="<p>A keyed-hash message authentication code (HMAC) calculated using the secret key of a user pool client and username plus the client ID in the message.</p>"]
-    #[serde(rename="SecretHash")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A keyed-hash message authentication code (HMAC) calculated using the secret key of a user pool client and username plus the client ID in the message.</p>
+    #[serde(rename = "SecretHash")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub secret_hash: Option<String>,
-    #[doc="<p>The user name of the user to whom you wish to resend a confirmation code.</p>"]
-    #[serde(rename="Username")]
+    /// <p>The user name of the user to whom you wish to resend a confirmation code.</p>
+    #[serde(rename = "Username")]
     pub username: String,
 }
 
-#[doc="<p>The response from the server when the Amazon Cognito Your User Pools service makes the request to resend a confirmation code.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The response from the server when the Amazon Cognito Your User Pools service makes the request to resend a confirmation code.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ResendConfirmationCodeResponse {
-    #[doc="<p>The code delivery details returned by the server in response to the request to resend the confirmation code.</p>"]
-    #[serde(rename="CodeDeliveryDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The code delivery details returned by the server in response to the request to resend the confirmation code.</p>
+    #[serde(rename = "CodeDeliveryDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub code_delivery_details: Option<CodeDeliveryDetailsType>,
 }
 
-#[doc="<p>A resource server scope.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>A resource server scope.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ResourceServerScopeType {
-    #[doc="<p>A description of the scope.</p>"]
-    #[serde(rename="ScopeDescription")]
+    /// <p>A description of the scope.</p>
+    #[serde(rename = "ScopeDescription")]
     pub scope_description: String,
-    #[doc="<p>The name of the scope.</p>"]
-    #[serde(rename="ScopeName")]
+    /// <p>The name of the scope.</p>
+    #[serde(rename = "ScopeName")]
     pub scope_name: String,
 }
 
-#[doc="<p>A container for information about a resource server for a user pool.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A container for information about a resource server for a user pool.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ResourceServerType {
-    #[doc="<p>The identifier for the resource server.</p>"]
-    #[serde(rename="Identifier")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier for the resource server.</p>
+    #[serde(rename = "Identifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub identifier: Option<String>,
-    #[doc="<p>The name of the resource server.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the resource server.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>A list of scopes that are defined for the resource server.</p>"]
-    #[serde(rename="Scopes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of scopes that are defined for the resource server.</p>
+    #[serde(rename = "Scopes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub scopes: Option<Vec<ResourceServerScopeType>>,
-    #[doc="<p>The user pool ID for the user pool that hosts the resource server.</p>"]
-    #[serde(rename="UserPoolId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user pool ID for the user pool that hosts the resource server.</p>
+    #[serde(rename = "UserPoolId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool_id: Option<String>,
 }
 
-#[doc="<p>The request to respond to an authentication challenge.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The request to respond to an authentication challenge.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct RespondToAuthChallengeRequest {
-    #[doc="<p>The challenge name. For more information, see <a href=\"API_InitiateAuth.html\">InitiateAuth</a>.</p> <p> <code>ADMIN_NO_SRP_AUTH</code> is not a valid value.</p>"]
-    #[serde(rename="ChallengeName")]
+    /// <p>The challenge name. For more information, see <a href="API_InitiateAuth.html">InitiateAuth</a>.</p> <p> <code>ADMIN_NO_SRP_AUTH</code> is not a valid value.</p>
+    #[serde(rename = "ChallengeName")]
     pub challenge_name: String,
-    #[doc="<p>The challenge responses. These are inputs corresponding to the value of <code>ChallengeName</code>, for example:</p> <ul> <li> <p> <code>SMS_MFA</code>: <code>SMS_MFA_CODE</code>, <code>USERNAME</code>, <code>SECRET_HASH</code> (if app client is configured with client secret).</p> </li> <li> <p> <code>PASSWORD_VERIFIER</code>: <code>PASSWORD_CLAIM_SIGNATURE</code>, <code>PASSWORD_CLAIM_SECRET_BLOCK</code>, <code>TIMESTAMP</code>, <code>USERNAME</code>, <code>SECRET_HASH</code> (if app client is configured with client secret).</p> </li> <li> <p> <code>NEW_PASSWORD_REQUIRED</code>: <code>NEW_PASSWORD</code>, any other required attributes, <code>USERNAME</code>, <code>SECRET_HASH</code> (if app client is configured with client secret). </p> </li> </ul>"]
-    #[serde(rename="ChallengeResponses")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The challenge responses. These are inputs corresponding to the value of <code>ChallengeName</code>, for example:</p> <ul> <li> <p> <code>SMS_MFA</code>: <code>SMS_MFA_CODE</code>, <code>USERNAME</code>, <code>SECRET_HASH</code> (if app client is configured with client secret).</p> </li> <li> <p> <code>PASSWORD_VERIFIER</code>: <code>PASSWORD_CLAIM_SIGNATURE</code>, <code>PASSWORD_CLAIM_SECRET_BLOCK</code>, <code>TIMESTAMP</code>, <code>USERNAME</code>, <code>SECRET_HASH</code> (if app client is configured with client secret).</p> </li> <li> <p> <code>NEW_PASSWORD_REQUIRED</code>: <code>NEW_PASSWORD</code>, any other required attributes, <code>USERNAME</code>, <code>SECRET_HASH</code> (if app client is configured with client secret). </p> </li> </ul>
+    #[serde(rename = "ChallengeResponses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub challenge_responses: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The app client ID.</p>"]
-    #[serde(rename="ClientId")]
+    /// <p>The app client ID.</p>
+    #[serde(rename = "ClientId")]
     pub client_id: String,
-    #[doc="<p>The session which should be passed both ways in challenge-response calls to the service. If <code>InitiateAuth</code> or <code>RespondToAuthChallenge</code> API call determines that the caller needs to go through another challenge, they return a session with other challenge parameters. This session should be passed as it is to the next <code>RespondToAuthChallenge</code> API call.</p>"]
-    #[serde(rename="Session")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The session which should be passed both ways in challenge-response calls to the service. If <code>InitiateAuth</code> or <code>RespondToAuthChallenge</code> API call determines that the caller needs to go through another challenge, they return a session with other challenge parameters. This session should be passed as it is to the next <code>RespondToAuthChallenge</code> API call.</p>
+    #[serde(rename = "Session")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub session: Option<String>,
 }
 
-#[doc="<p>The response to respond to the authentication challenge.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The response to respond to the authentication challenge.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RespondToAuthChallengeResponse {
-    #[doc="<p>The result returned by the server in response to the request to respond to the authentication challenge.</p>"]
-    #[serde(rename="AuthenticationResult")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The result returned by the server in response to the request to respond to the authentication challenge.</p>
+    #[serde(rename = "AuthenticationResult")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_result: Option<AuthenticationResultType>,
-    #[doc="<p>The challenge name. For more information, see <a href=\"API_InitiateAuth.html\">InitiateAuth</a>.</p>"]
-    #[serde(rename="ChallengeName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The challenge name. For more information, see <a href="API_InitiateAuth.html">InitiateAuth</a>.</p>
+    #[serde(rename = "ChallengeName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub challenge_name: Option<String>,
-    #[doc="<p>The challenge parameters. For more information, see <a href=\"API_InitiateAuth.html\">InitiateAuth</a>.</p>"]
-    #[serde(rename="ChallengeParameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The challenge parameters. For more information, see <a href="API_InitiateAuth.html">InitiateAuth</a>.</p>
+    #[serde(rename = "ChallengeParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub challenge_parameters: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The session which should be passed both ways in challenge-response calls to the service. If the <a href=\"API_InitiateAuth.html\">InitiateAuth</a> or <a href=\"API_RespondToAuthChallenge.html\">RespondToAuthChallenge</a> API call determines that the caller needs to go through another challenge, they return a session with other challenge parameters. This session should be passed as it is to the next <code>RespondToAuthChallenge</code> API call.</p>"]
-    #[serde(rename="Session")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The session which should be passed both ways in challenge-response calls to the service. If the <a href="API_InitiateAuth.html">InitiateAuth</a> or <a href="API_RespondToAuthChallenge.html">RespondToAuthChallenge</a> API call determines that the caller needs to go through another challenge, they return a session with other challenge parameters. This session should be passed as it is to the next <code>RespondToAuthChallenge</code> API call.</p>
+    #[serde(rename = "Session")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub session: Option<String>,
 }
 
-#[doc="<p>Contains information about the schema attribute.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Contains information about the schema attribute.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct SchemaAttributeType {
-    #[doc="<p>The attribute data type.</p>"]
-    #[serde(rename="AttributeDataType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The attribute data type.</p>
+    #[serde(rename = "AttributeDataType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub attribute_data_type: Option<String>,
-    #[doc="<p>Specifies whether the attribute type is developer only.</p>"]
-    #[serde(rename="DeveloperOnlyAttribute")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether the attribute type is developer only.</p>
+    #[serde(rename = "DeveloperOnlyAttribute")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub developer_only_attribute: Option<bool>,
-    #[doc="<p>Specifies whether the attribute can be changed once it has been created.</p>"]
-    #[serde(rename="Mutable")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether the attribute can be changed once it has been created.</p>
+    #[serde(rename = "Mutable")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub mutable: Option<bool>,
-    #[doc="<p>A schema attribute of the name type.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A schema attribute of the name type.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>Specifies the constraints for an attribute of the number type.</p>"]
-    #[serde(rename="NumberAttributeConstraints")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies the constraints for an attribute of the number type.</p>
+    #[serde(rename = "NumberAttributeConstraints")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub number_attribute_constraints: Option<NumberAttributeConstraintsType>,
-    #[doc="<p>Specifies whether a user pool attribute is required. If the attribute is required and the user does not provide a value, registration or sign-in will fail.</p>"]
-    #[serde(rename="Required")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether a user pool attribute is required. If the attribute is required and the user does not provide a value, registration or sign-in will fail.</p>
+    #[serde(rename = "Required")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub required: Option<bool>,
-    #[doc="<p>Specifies the constraints for an attribute of the string type.</p>"]
-    #[serde(rename="StringAttributeConstraints")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies the constraints for an attribute of the string type.</p>
+    #[serde(rename = "StringAttributeConstraints")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub string_attribute_constraints: Option<StringAttributeConstraintsType>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct SetUICustomizationRequest {
-    #[doc="<p>The CSS values in the UI customization.</p>"]
-    #[serde(rename="CSS")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The CSS values in the UI customization.</p>
+    #[serde(rename = "CSS")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub css: Option<String>,
-    #[doc="<p>The client ID for the client app.</p>"]
-    #[serde(rename="ClientId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The client ID for the client app.</p>
+    #[serde(rename = "ClientId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub client_id: Option<String>,
-    #[doc="<p>The uploaded logo image for the UI customization.</p>"]
-    #[serde(rename="ImageFile")]
-    #[serde(
-                            deserialize_with="::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-                            serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
-                            default,
-                        )]
+    /// <p>The uploaded logo image for the UI customization.</p>
+    #[serde(rename = "ImageFile")]
+    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
     pub image_file: Option<Vec<u8>>,
-    #[doc="<p>The user pool ID for the user pool.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct SetUICustomizationResponse {
-    #[doc="<p>The UI customization information.</p>"]
-    #[serde(rename="UICustomization")]
+    /// <p>The UI customization information.</p>
+    #[serde(rename = "UICustomization")]
     pub ui_customization: UICustomizationType,
 }
 
-#[doc="<p>Represents the request to set user settings.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to set user settings.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct SetUserSettingsRequest {
-    #[doc="<p>The access token for the set user settings request.</p>"]
-    #[serde(rename="AccessToken")]
+    /// <p>The access token for the set user settings request.</p>
+    #[serde(rename = "AccessToken")]
     pub access_token: String,
-    #[doc="<p>Specifies the options for MFA (e.g., email or phone number).</p>"]
-    #[serde(rename="MFAOptions")]
+    /// <p>Specifies the options for MFA (e.g., email or phone number).</p>
+    #[serde(rename = "MFAOptions")]
     pub mfa_options: Vec<MFAOptionType>,
 }
 
-#[doc="<p>The response from the server for a set user settings request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The response from the server for a set user settings request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct SetUserSettingsResponse;
 
-#[doc="<p>Represents the request to register a user.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to register a user.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct SignUpRequest {
-    #[doc="<p>The ID of the client associated with the user pool.</p>"]
-    #[serde(rename="ClientId")]
+    /// <p>The ID of the client associated with the user pool.</p>
+    #[serde(rename = "ClientId")]
     pub client_id: String,
-    #[doc="<p>The password of the user you wish to register.</p>"]
-    #[serde(rename="Password")]
+    /// <p>The password of the user you wish to register.</p>
+    #[serde(rename = "Password")]
     pub password: String,
-    #[doc="<p>A keyed-hash message authentication code (HMAC) calculated using the secret key of a user pool client and username plus the client ID in the message.</p>"]
-    #[serde(rename="SecretHash")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A keyed-hash message authentication code (HMAC) calculated using the secret key of a user pool client and username plus the client ID in the message.</p>
+    #[serde(rename = "SecretHash")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub secret_hash: Option<String>,
-    #[doc="<p>An array of name-value pairs representing user attributes.</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p>"]
-    #[serde(rename="UserAttributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of name-value pairs representing user attributes.</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p>
+    #[serde(rename = "UserAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_attributes: Option<Vec<AttributeType>>,
-    #[doc="<p>The user name of the user you wish to register.</p>"]
-    #[serde(rename="Username")]
+    /// <p>The user name of the user you wish to register.</p>
+    #[serde(rename = "Username")]
     pub username: String,
-    #[doc="<p>The validation data in the request to register a user.</p>"]
-    #[serde(rename="ValidationData")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The validation data in the request to register a user.</p>
+    #[serde(rename = "ValidationData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub validation_data: Option<Vec<AttributeType>>,
 }
 
-#[doc="<p>The response from the server for a registration request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The response from the server for a registration request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct SignUpResponse {
-    #[doc="<p>The code delivery details returned by the server response to the user registration request.</p>"]
-    #[serde(rename="CodeDeliveryDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The code delivery details returned by the server response to the user registration request.</p>
+    #[serde(rename = "CodeDeliveryDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub code_delivery_details: Option<CodeDeliveryDetailsType>,
-    #[doc="<p>A response from the server indicating that a user registration has been confirmed.</p>"]
-    #[serde(rename="UserConfirmed")]
+    /// <p>A response from the server indicating that a user registration has been confirmed.</p>
+    #[serde(rename = "UserConfirmed")]
     pub user_confirmed: bool,
-    #[doc="<p>The UUID of the authenticated user. This is not the same as <code>username</code>.</p>"]
-    #[serde(rename="UserSub")]
+    /// <p>The UUID of the authenticated user. This is not the same as <code>username</code>.</p>
+    #[serde(rename = "UserSub")]
     pub user_sub: String,
 }
 
-#[doc="<p>The SMS configuration type.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>The SMS configuration type.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct SmsConfigurationType {
-    #[doc="<p>The external ID.</p>"]
-    #[serde(rename="ExternalId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The external ID.</p>
+    #[serde(rename = "ExternalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub external_id: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (SNS) caller.</p>"]
-    #[serde(rename="SnsCallerArn")]
+    /// <p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (SNS) caller.</p>
+    #[serde(rename = "SnsCallerArn")]
     pub sns_caller_arn: String,
 }
 
-#[doc="<p>Represents the request to start the user import job.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to start the user import job.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StartUserImportJobRequest {
-    #[doc="<p>The job ID for the user import job.</p>"]
-    #[serde(rename="JobId")]
+    /// <p>The job ID for the user import job.</p>
+    #[serde(rename = "JobId")]
     pub job_id: String,
-    #[doc="<p>The user pool ID for the user pool that the users are being imported into.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool that the users are being imported into.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[doc="<p>Represents the response from the server to the request to start the user import job.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the response from the server to the request to start the user import job.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StartUserImportJobResponse {
-    #[doc="<p>The job object that represents the user import job.</p>"]
-    #[serde(rename="UserImportJob")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The job object that represents the user import job.</p>
+    #[serde(rename = "UserImportJob")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_import_job: Option<UserImportJobType>,
 }
 
-#[doc="<p>Represents the request to stop the user import job.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to stop the user import job.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StopUserImportJobRequest {
-    #[doc="<p>The job ID for the user import job.</p>"]
-    #[serde(rename="JobId")]
+    /// <p>The job ID for the user import job.</p>
+    #[serde(rename = "JobId")]
     pub job_id: String,
-    #[doc="<p>The user pool ID for the user pool that the users are being imported into.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool that the users are being imported into.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[doc="<p>Represents the response from the server to the request to stop the user import job.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the response from the server to the request to stop the user import job.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StopUserImportJobResponse {
-    #[doc="<p>The job object that represents the user import job.</p>"]
-    #[serde(rename="UserImportJob")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The job object that represents the user import job.</p>
+    #[serde(rename = "UserImportJob")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_import_job: Option<UserImportJobType>,
 }
 
-#[doc="<p>The type of constraints associated with an attribute of the string type.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>The type of constraints associated with an attribute of the string type.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct StringAttributeConstraintsType {
-    #[doc="<p>The maximum length of an attribute value of the string type.</p>"]
-    #[serde(rename="MaxLength")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum length of an attribute value of the string type.</p>
+    #[serde(rename = "MaxLength")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_length: Option<String>,
-    #[doc="<p>The minimum length of an attribute value of the string type.</p>"]
-    #[serde(rename="MinLength")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The minimum length of an attribute value of the string type.</p>
+    #[serde(rename = "MinLength")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub min_length: Option<String>,
 }
 
-#[doc="<p>A container for the UI customization information for a user pool's built-in app UI.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A container for the UI customization information for a user pool's built-in app UI.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UICustomizationType {
-    #[doc="<p>The CSS values in the UI customization.</p>"]
-    #[serde(rename="CSS")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The CSS values in the UI customization.</p>
+    #[serde(rename = "CSS")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub css: Option<String>,
-    #[doc="<p>The CSS version number.</p>"]
-    #[serde(rename="CSSVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The CSS version number.</p>
+    #[serde(rename = "CSSVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub css_version: Option<String>,
-    #[doc="<p>The client ID for the client app.</p>"]
-    #[serde(rename="ClientId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The client ID for the client app.</p>
+    #[serde(rename = "ClientId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub client_id: Option<String>,
-    #[doc="<p>The creation date for the UI customization.</p>"]
-    #[serde(rename="CreationDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The creation date for the UI customization.</p>
+    #[serde(rename = "CreationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
-    #[doc="<p>The logo image for the UI customization.</p>"]
-    #[serde(rename="ImageUrl")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The logo image for the UI customization.</p>
+    #[serde(rename = "ImageUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub image_url: Option<String>,
-    #[doc="<p>The last-modified date for the UI customization.</p>"]
-    #[serde(rename="LastModifiedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The last-modified date for the UI customization.</p>
+    #[serde(rename = "LastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_date: Option<f64>,
-    #[doc="<p>The user pool ID for the user pool.</p>"]
-    #[serde(rename="UserPoolId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user pool ID for the user pool.</p>
+    #[serde(rename = "UserPoolId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool_id: Option<String>,
 }
 
-#[doc="<p>Represents the request to update the device status.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to update the device status.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateDeviceStatusRequest {
-    #[doc="<p>The access token.</p>"]
-    #[serde(rename="AccessToken")]
+    /// <p>The access token.</p>
+    #[serde(rename = "AccessToken")]
     pub access_token: String,
-    #[doc="<p>The device key.</p>"]
-    #[serde(rename="DeviceKey")]
+    /// <p>The device key.</p>
+    #[serde(rename = "DeviceKey")]
     pub device_key: String,
-    #[doc="<p>The status of whether a device is remembered.</p>"]
-    #[serde(rename="DeviceRememberedStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of whether a device is remembered.</p>
+    #[serde(rename = "DeviceRememberedStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub device_remembered_status: Option<String>,
 }
 
-#[doc="<p>The response to the request to update the device status.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The response to the request to update the device status.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateDeviceStatusResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateGroupRequest {
-    #[doc="<p>A string containing the new description of the group.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A string containing the new description of the group.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The name of the group.</p>"]
-    #[serde(rename="GroupName")]
+    /// <p>The name of the group.</p>
+    #[serde(rename = "GroupName")]
     pub group_name: String,
-    #[doc="<p>The new precedence value for the group. For more information about this parameter, see <a href=\"API_CreateGroup.html\">CreateGroup</a>.</p>"]
-    #[serde(rename="Precedence")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The new precedence value for the group. For more information about this parameter, see <a href="API_CreateGroup.html">CreateGroup</a>.</p>
+    #[serde(rename = "Precedence")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub precedence: Option<i64>,
-    #[doc="<p>The new role ARN for the group. This is used for setting the <code>cognito:roles</code> and <code>cognito:preferred_role</code> claims in the token.</p>"]
-    #[serde(rename="RoleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The new role ARN for the group. This is used for setting the <code>cognito:roles</code> and <code>cognito:preferred_role</code> claims in the token.</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
-    #[doc="<p>The user pool ID for the user pool.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateGroupResponse {
-    #[doc="<p>The group object for the group.</p>"]
-    #[serde(rename="Group")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The group object for the group.</p>
+    #[serde(rename = "Group")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub group: Option<GroupType>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateIdentityProviderRequest {
-    #[doc="<p>The identity provider attribute mapping to be changed.</p>"]
-    #[serde(rename="AttributeMapping")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identity provider attribute mapping to be changed.</p>
+    #[serde(rename = "AttributeMapping")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub attribute_mapping: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>A list of identity provider identifiers.</p>"]
-    #[serde(rename="IdpIdentifiers")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of identity provider identifiers.</p>
+    #[serde(rename = "IdpIdentifiers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub idp_identifiers: Option<Vec<String>>,
-    #[doc="<p>The identity provider details to be updated, such as <code>MetadataURL</code> and <code>MetadataFile</code>.</p>"]
-    #[serde(rename="ProviderDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identity provider details to be updated, such as <code>MetadataURL</code> and <code>MetadataFile</code>.</p>
+    #[serde(rename = "ProviderDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_details: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The identity provider name.</p>"]
-    #[serde(rename="ProviderName")]
+    /// <p>The identity provider name.</p>
+    #[serde(rename = "ProviderName")]
     pub provider_name: String,
-    #[doc="<p>The user pool ID.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateIdentityProviderResponse {
-    #[doc="<p>The identity provider object.</p>"]
-    #[serde(rename="IdentityProvider")]
+    /// <p>The identity provider object.</p>
+    #[serde(rename = "IdentityProvider")]
     pub identity_provider: IdentityProviderType,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateResourceServerRequest {
-    #[doc="<p>The identifier for the resource server.</p>"]
-    #[serde(rename="Identifier")]
+    /// <p>The identifier for the resource server.</p>
+    #[serde(rename = "Identifier")]
     pub identifier: String,
-    #[doc="<p>The name of the resource server.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the resource server.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>The scope values to be set for the resource server.</p>"]
-    #[serde(rename="Scopes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The scope values to be set for the resource server.</p>
+    #[serde(rename = "Scopes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub scopes: Option<Vec<ResourceServerScopeType>>,
-    #[doc="<p>The user pool ID for the user pool.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateResourceServerResponse {
-    #[doc="<p>The resource server.</p>"]
-    #[serde(rename="ResourceServer")]
+    /// <p>The resource server.</p>
+    #[serde(rename = "ResourceServer")]
     pub resource_server: ResourceServerType,
 }
 
-#[doc="<p>Represents the request to update user attributes.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to update user attributes.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateUserAttributesRequest {
-    #[doc="<p>The access token for the request to update user attributes.</p>"]
-    #[serde(rename="AccessToken")]
+    /// <p>The access token for the request to update user attributes.</p>
+    #[serde(rename = "AccessToken")]
     pub access_token: String,
-    #[doc="<p>An array of name-value pairs representing user attributes.</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p>"]
-    #[serde(rename="UserAttributes")]
+    /// <p>An array of name-value pairs representing user attributes.</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p>
+    #[serde(rename = "UserAttributes")]
     pub user_attributes: Vec<AttributeType>,
 }
 
-#[doc="<p>Represents the response from the server for the request to update user attributes.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the response from the server for the request to update user attributes.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateUserAttributesResponse {
-    #[doc="<p>The code delivery details list from the server for the request to update user attributes.</p>"]
-    #[serde(rename="CodeDeliveryDetailsList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The code delivery details list from the server for the request to update user attributes.</p>
+    #[serde(rename = "CodeDeliveryDetailsList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub code_delivery_details_list: Option<Vec<CodeDeliveryDetailsType>>,
 }
 
-#[doc="<p>Represents the request to update the user pool client.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to update the user pool client.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateUserPoolClientRequest {
-    #[doc="<p>Set to <code>code</code> to initiate a code grant flow, which provides an authorization code as the response. This code can be exchanged for access tokens with the token endpoint.</p> <p>Set to <code>token</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) directly.</p>"]
-    #[serde(rename="AllowedOAuthFlows")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Set to <code>code</code> to initiate a code grant flow, which provides an authorization code as the response. This code can be exchanged for access tokens with the token endpoint.</p> <p>Set to <code>token</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) directly.</p>
+    #[serde(rename = "AllowedOAuthFlows")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_o_auth_flows: Option<Vec<String>>,
-    #[doc="<p>Set to TRUE if the client is allowed to follow the OAuth protocol when interacting with Cognito user pools.</p>"]
-    #[serde(rename="AllowedOAuthFlowsUserPoolClient")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Set to TRUE if the client is allowed to follow the OAuth protocol when interacting with Cognito user pools.</p>
+    #[serde(rename = "AllowedOAuthFlowsUserPoolClient")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_o_auth_flows_user_pool_client: Option<bool>,
-    #[doc="<p>A list of allowed <code>OAuth</code> scopes. Currently supported values are <code>\"phone\"</code>, <code>\"email\"</code>, <code>\"openid\"</code>, and <code>\"Cognito\"</code>.</p>"]
-    #[serde(rename="AllowedOAuthScopes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of allowed <code>OAuth</code> scopes. Currently supported values are <code>"phone"</code>, <code>"email"</code>, <code>"openid"</code>, and <code>"Cognito"</code>.</p>
+    #[serde(rename = "AllowedOAuthScopes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_o_auth_scopes: Option<Vec<String>>,
-    #[doc="<p>A list of allowed callback URLs for the identity providers.</p>"]
-    #[serde(rename="CallbackURLs")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of allowed callback URLs for the identity providers.</p>
+    #[serde(rename = "CallbackURLs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub callback_ur_ls: Option<Vec<String>>,
-    #[doc="<p>The ID of the client associated with the user pool.</p>"]
-    #[serde(rename="ClientId")]
+    /// <p>The ID of the client associated with the user pool.</p>
+    #[serde(rename = "ClientId")]
     pub client_id: String,
-    #[doc="<p>The client name from the update user pool client request.</p>"]
-    #[serde(rename="ClientName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The client name from the update user pool client request.</p>
+    #[serde(rename = "ClientName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub client_name: Option<String>,
-    #[doc="<p>The default redirect URI. Must be in the <code>CallbackURLs</code> list.</p>"]
-    #[serde(rename="DefaultRedirectURI")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The default redirect URI. Must be in the <code>CallbackURLs</code> list.</p>
+    #[serde(rename = "DefaultRedirectURI")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub default_redirect_uri: Option<String>,
-    #[doc="<p>Explicit authentication flows.</p>"]
-    #[serde(rename="ExplicitAuthFlows")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Explicit authentication flows.</p>
+    #[serde(rename = "ExplicitAuthFlows")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub explicit_auth_flows: Option<Vec<String>>,
-    #[doc="<p>A list of allowed logout URLs for the identity providers.</p>"]
-    #[serde(rename="LogoutURLs")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of allowed logout URLs for the identity providers.</p>
+    #[serde(rename = "LogoutURLs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub logout_ur_ls: Option<Vec<String>>,
-    #[doc="<p>The read-only attributes of the user pool.</p>"]
-    #[serde(rename="ReadAttributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The read-only attributes of the user pool.</p>
+    #[serde(rename = "ReadAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub read_attributes: Option<Vec<String>>,
-    #[doc="<p>The time limit, in days, after which the refresh token is no longer valid and cannot be used.</p>"]
-    #[serde(rename="RefreshTokenValidity")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time limit, in days, after which the refresh token is no longer valid and cannot be used.</p>
+    #[serde(rename = "RefreshTokenValidity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub refresh_token_validity: Option<i64>,
-    #[doc="<p>A list of provider names for the identity providers that are supported on this client.</p>"]
-    #[serde(rename="SupportedIdentityProviders")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of provider names for the identity providers that are supported on this client.</p>
+    #[serde(rename = "SupportedIdentityProviders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub supported_identity_providers: Option<Vec<String>>,
-    #[doc="<p>The user pool ID for the user pool where you want to update the user pool client.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool where you want to update the user pool client.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
-    #[doc="<p>The writeable attributes of the user pool.</p>"]
-    #[serde(rename="WriteAttributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The writeable attributes of the user pool.</p>
+    #[serde(rename = "WriteAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub write_attributes: Option<Vec<String>>,
 }
 
-#[doc="<p>Represents the response from the server to the request to update the user pool client.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the response from the server to the request to update the user pool client.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateUserPoolClientResponse {
-    #[doc="<p>The user pool client value from the response from the server when an update user pool client request is made.</p>"]
-    #[serde(rename="UserPoolClient")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user pool client value from the response from the server when an update user pool client request is made.</p>
+    #[serde(rename = "UserPoolClient")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool_client: Option<UserPoolClientType>,
 }
 
-#[doc="<p>Represents the request to update the user pool.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to update the user pool.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateUserPoolRequest {
-    #[doc="<p>The configuration for <code>AdminCreateUser</code> requests.</p>"]
-    #[serde(rename="AdminCreateUserConfig")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The configuration for <code>AdminCreateUser</code> requests.</p>
+    #[serde(rename = "AdminCreateUserConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub admin_create_user_config: Option<AdminCreateUserConfigType>,
-    #[doc="<p>The attributes that are automatically verified when the Amazon Cognito service makes a request to update user pools.</p>"]
-    #[serde(rename="AutoVerifiedAttributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The attributes that are automatically verified when the Amazon Cognito service makes a request to update user pools.</p>
+    #[serde(rename = "AutoVerifiedAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_verified_attributes: Option<Vec<String>>,
-    #[doc="<p>Device configuration.</p>"]
-    #[serde(rename="DeviceConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Device configuration.</p>
+    #[serde(rename = "DeviceConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub device_configuration: Option<DeviceConfigurationType>,
-    #[doc="<p>Email configuration.</p>"]
-    #[serde(rename="EmailConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Email configuration.</p>
+    #[serde(rename = "EmailConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub email_configuration: Option<EmailConfigurationType>,
-    #[doc="<p>The contents of the email verification message.</p>"]
-    #[serde(rename="EmailVerificationMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The contents of the email verification message.</p>
+    #[serde(rename = "EmailVerificationMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub email_verification_message: Option<String>,
-    #[doc="<p>The subject of the email verification message.</p>"]
-    #[serde(rename="EmailVerificationSubject")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The subject of the email verification message.</p>
+    #[serde(rename = "EmailVerificationSubject")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub email_verification_subject: Option<String>,
-    #[doc="<p>The AWS Lambda configuration information from the request to update the user pool.</p>"]
-    #[serde(rename="LambdaConfig")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS Lambda configuration information from the request to update the user pool.</p>
+    #[serde(rename = "LambdaConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub lambda_config: Option<LambdaConfigType>,
-    #[doc="<p>Can be one of the following values:</p> <ul> <li> <p> <code>OFF</code> - MFA tokens are not required and cannot be specified during user registration.</p> </li> <li> <p> <code>ON</code> - MFA tokens are required for all user registrations. You can only specify required when you are initially creating a user pool.</p> </li> <li> <p> <code>OPTIONAL</code> - Users have the option when registering to create an MFA token.</p> </li> </ul>"]
-    #[serde(rename="MfaConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Can be one of the following values:</p> <ul> <li> <p> <code>OFF</code> - MFA tokens are not required and cannot be specified during user registration.</p> </li> <li> <p> <code>ON</code> - MFA tokens are required for all user registrations. You can only specify required when you are initially creating a user pool.</p> </li> <li> <p> <code>OPTIONAL</code> - Users have the option when registering to create an MFA token.</p> </li> </ul>
+    #[serde(rename = "MfaConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub mfa_configuration: Option<String>,
-    #[doc="<p>A container with the policies you wish to update in a user pool.</p>"]
-    #[serde(rename="Policies")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A container with the policies you wish to update in a user pool.</p>
+    #[serde(rename = "Policies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policies: Option<UserPoolPolicyType>,
-    #[doc="<p>The contents of the SMS authentication message.</p>"]
-    #[serde(rename="SmsAuthenticationMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The contents of the SMS authentication message.</p>
+    #[serde(rename = "SmsAuthenticationMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sms_authentication_message: Option<String>,
-    #[doc="<p>SMS configuration.</p>"]
-    #[serde(rename="SmsConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>SMS configuration.</p>
+    #[serde(rename = "SmsConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sms_configuration: Option<SmsConfigurationType>,
-    #[doc="<p>A container with information about the SMS verification message.</p>"]
-    #[serde(rename="SmsVerificationMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A container with information about the SMS verification message.</p>
+    #[serde(rename = "SmsVerificationMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sms_verification_message: Option<String>,
-    #[doc="<p>The user pool ID for the user pool you want to update.</p>"]
-    #[serde(rename="UserPoolId")]
+    /// <p>The user pool ID for the user pool you want to update.</p>
+    #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
-    #[doc="<p>The cost allocation tags for the user pool. For more information, see <a href=\"http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-cost-allocation-tagging.html\">Adding Cost Allocation Tags to Your User Pool</a> </p>"]
-    #[serde(rename="UserPoolTags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The cost allocation tags for the user pool. For more information, see <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-cost-allocation-tagging.html">Adding Cost Allocation Tags to Your User Pool</a> </p>
+    #[serde(rename = "UserPoolTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool_tags: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The template for verification messages.</p>"]
-    #[serde(rename="VerificationMessageTemplate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The template for verification messages.</p>
+    #[serde(rename = "VerificationMessageTemplate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub verification_message_template: Option<VerificationMessageTemplateType>,
 }
 
-#[doc="<p>Represents the response from the server when you make a request to update the user pool.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the response from the server when you make a request to update the user pool.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateUserPoolResponse;
 
-#[doc="<p>The user import job type.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The user import job type.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UserImportJobType {
-    #[doc="<p>The role ARN for the Amazon CloudWatch Logging role for the user import job. For more information, see \"Creating the CloudWatch Logs IAM Role\" in the Amazon Cognito Developer Guide.</p>"]
-    #[serde(rename="CloudWatchLogsRoleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The role ARN for the Amazon CloudWatch Logging role for the user import job. For more information, see "Creating the CloudWatch Logs IAM Role" in the Amazon Cognito Developer Guide.</p>
+    #[serde(rename = "CloudWatchLogsRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cloud_watch_logs_role_arn: Option<String>,
-    #[doc="<p>The date when the user import job was completed.</p>"]
-    #[serde(rename="CompletionDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date when the user import job was completed.</p>
+    #[serde(rename = "CompletionDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub completion_date: Option<f64>,
-    #[doc="<p>The message returned when the user import job is completed.</p>"]
-    #[serde(rename="CompletionMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The message returned when the user import job is completed.</p>
+    #[serde(rename = "CompletionMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub completion_message: Option<String>,
-    #[doc="<p>The date the user import job was created.</p>"]
-    #[serde(rename="CreationDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the user import job was created.</p>
+    #[serde(rename = "CreationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
-    #[doc="<p>The number of users that could not be imported.</p>"]
-    #[serde(rename="FailedUsers")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of users that could not be imported.</p>
+    #[serde(rename = "FailedUsers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_users: Option<i64>,
-    #[doc="<p>The number of users that were successfully imported.</p>"]
-    #[serde(rename="ImportedUsers")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of users that were successfully imported.</p>
+    #[serde(rename = "ImportedUsers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub imported_users: Option<i64>,
-    #[doc="<p>The job ID for the user import job.</p>"]
-    #[serde(rename="JobId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The job ID for the user import job.</p>
+    #[serde(rename = "JobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub job_id: Option<String>,
-    #[doc="<p>The job name for the user import job.</p>"]
-    #[serde(rename="JobName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The job name for the user import job.</p>
+    #[serde(rename = "JobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
-    #[doc="<p>The pre-signed URL to be used to upload the <code>.csv</code> file.</p>"]
-    #[serde(rename="PreSignedUrl")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The pre-signed URL to be used to upload the <code>.csv</code> file.</p>
+    #[serde(rename = "PreSignedUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub pre_signed_url: Option<String>,
-    #[doc="<p>The number of users that were skipped.</p>"]
-    #[serde(rename="SkippedUsers")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of users that were skipped.</p>
+    #[serde(rename = "SkippedUsers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub skipped_users: Option<i64>,
-    #[doc="<p>The date when the user import job was started.</p>"]
-    #[serde(rename="StartDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date when the user import job was started.</p>
+    #[serde(rename = "StartDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub start_date: Option<f64>,
-    #[doc="<p>The status of the user import job. One of the following:</p> <ul> <li> <p> <code>Created</code> - The job was created but not started.</p> </li> <li> <p> <code>Pending</code> - A transition state. You have started the job, but it has not begun importing users yet.</p> </li> <li> <p> <code>InProgress</code> - The job has started, and users are being imported.</p> </li> <li> <p> <code>Stopping</code> - You have stopped the job, but the job has not stopped importing users yet.</p> </li> <li> <p> <code>Stopped</code> - You have stopped the job, and the job has stopped importing users.</p> </li> <li> <p> <code>Succeeded</code> - The job has completed successfully.</p> </li> <li> <p> <code>Failed</code> - The job has stopped due to an error.</p> </li> <li> <p> <code>Expired</code> - You created a job, but did not start the job within 24-48 hours. All data associated with the job was deleted, and the job cannot be started.</p> </li> </ul>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the user import job. One of the following:</p> <ul> <li> <p> <code>Created</code> - The job was created but not started.</p> </li> <li> <p> <code>Pending</code> - A transition state. You have started the job, but it has not begun importing users yet.</p> </li> <li> <p> <code>InProgress</code> - The job has started, and users are being imported.</p> </li> <li> <p> <code>Stopping</code> - You have stopped the job, but the job has not stopped importing users yet.</p> </li> <li> <p> <code>Stopped</code> - You have stopped the job, and the job has stopped importing users.</p> </li> <li> <p> <code>Succeeded</code> - The job has completed successfully.</p> </li> <li> <p> <code>Failed</code> - The job has stopped due to an error.</p> </li> <li> <p> <code>Expired</code> - You created a job, but did not start the job within 24-48 hours. All data associated with the job was deleted, and the job cannot be started.</p> </li> </ul>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The user pool ID for the user pool that the users are being imported into.</p>"]
-    #[serde(rename="UserPoolId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user pool ID for the user pool that the users are being imported into.</p>
+    #[serde(rename = "UserPoolId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool_id: Option<String>,
 }
 
-#[doc="<p>The description of the user pool client.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The description of the user pool client.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UserPoolClientDescription {
-    #[doc="<p>The ID of the client associated with the user pool.</p>"]
-    #[serde(rename="ClientId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the client associated with the user pool.</p>
+    #[serde(rename = "ClientId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub client_id: Option<String>,
-    #[doc="<p>The client name from the user pool client description.</p>"]
-    #[serde(rename="ClientName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The client name from the user pool client description.</p>
+    #[serde(rename = "ClientName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub client_name: Option<String>,
-    #[doc="<p>The user pool ID for the user pool where you want to describe the user pool client.</p>"]
-    #[serde(rename="UserPoolId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user pool ID for the user pool where you want to describe the user pool client.</p>
+    #[serde(rename = "UserPoolId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool_id: Option<String>,
 }
 
-#[doc="<p>Contains information about a user pool client.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains information about a user pool client.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UserPoolClientType {
-    #[doc="<p>Set to <code>code</code> to initiate a code grant flow, which provides an authorization code as the response. This code can be exchanged for access tokens with the token endpoint.</p> <p>Set to <code>token</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) directly.</p>"]
-    #[serde(rename="AllowedOAuthFlows")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Set to <code>code</code> to initiate a code grant flow, which provides an authorization code as the response. This code can be exchanged for access tokens with the token endpoint.</p> <p>Set to <code>token</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) directly.</p>
+    #[serde(rename = "AllowedOAuthFlows")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_o_auth_flows: Option<Vec<String>>,
-    #[doc="<p>Set to TRUE if the client is allowed to follow the OAuth protocol when interacting with Cognito user pools.</p>"]
-    #[serde(rename="AllowedOAuthFlowsUserPoolClient")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Set to TRUE if the client is allowed to follow the OAuth protocol when interacting with Cognito user pools.</p>
+    #[serde(rename = "AllowedOAuthFlowsUserPoolClient")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_o_auth_flows_user_pool_client: Option<bool>,
-    #[doc="<p>A list of allowed <code>OAuth</code> scopes. Currently supported values are <code>\"phone\"</code>, <code>\"email\"</code>, <code>\"openid\"</code>, and <code>\"Cognito\"</code>.</p>"]
-    #[serde(rename="AllowedOAuthScopes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of allowed <code>OAuth</code> scopes. Currently supported values are <code>"phone"</code>, <code>"email"</code>, <code>"openid"</code>, and <code>"Cognito"</code>.</p>
+    #[serde(rename = "AllowedOAuthScopes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_o_auth_scopes: Option<Vec<String>>,
-    #[doc="<p>A list of allowed callback URLs for the identity providers.</p>"]
-    #[serde(rename="CallbackURLs")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of allowed callback URLs for the identity providers.</p>
+    #[serde(rename = "CallbackURLs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub callback_ur_ls: Option<Vec<String>>,
-    #[doc="<p>The ID of the client associated with the user pool.</p>"]
-    #[serde(rename="ClientId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the client associated with the user pool.</p>
+    #[serde(rename = "ClientId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub client_id: Option<String>,
-    #[doc="<p>The client name from the user pool request of the client type.</p>"]
-    #[serde(rename="ClientName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The client name from the user pool request of the client type.</p>
+    #[serde(rename = "ClientName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub client_name: Option<String>,
-    #[doc="<p>The client secret from the user pool request of the client type.</p>"]
-    #[serde(rename="ClientSecret")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The client secret from the user pool request of the client type.</p>
+    #[serde(rename = "ClientSecret")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub client_secret: Option<String>,
-    #[doc="<p>The date the user pool client was created.</p>"]
-    #[serde(rename="CreationDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the user pool client was created.</p>
+    #[serde(rename = "CreationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
-    #[doc="<p>The default redirect URI. Must be in the <code>CallbackURLs</code> list.</p>"]
-    #[serde(rename="DefaultRedirectURI")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The default redirect URI. Must be in the <code>CallbackURLs</code> list.</p>
+    #[serde(rename = "DefaultRedirectURI")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub default_redirect_uri: Option<String>,
-    #[doc="<p>The explicit authentication flows.</p>"]
-    #[serde(rename="ExplicitAuthFlows")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The explicit authentication flows.</p>
+    #[serde(rename = "ExplicitAuthFlows")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub explicit_auth_flows: Option<Vec<String>>,
-    #[doc="<p>The date the user pool client was last modified.</p>"]
-    #[serde(rename="LastModifiedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the user pool client was last modified.</p>
+    #[serde(rename = "LastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_date: Option<f64>,
-    #[doc="<p>A list of allowed logout URLs for the identity providers.</p>"]
-    #[serde(rename="LogoutURLs")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of allowed logout URLs for the identity providers.</p>
+    #[serde(rename = "LogoutURLs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub logout_ur_ls: Option<Vec<String>>,
-    #[doc="<p>The Read-only attributes.</p>"]
-    #[serde(rename="ReadAttributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Read-only attributes.</p>
+    #[serde(rename = "ReadAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub read_attributes: Option<Vec<String>>,
-    #[doc="<p>The time limit, in days, after which the refresh token is no longer valid and cannot be used.</p>"]
-    #[serde(rename="RefreshTokenValidity")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time limit, in days, after which the refresh token is no longer valid and cannot be used.</p>
+    #[serde(rename = "RefreshTokenValidity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub refresh_token_validity: Option<i64>,
-    #[doc="<p>A list of provider names for the identity providers that are supported on this client.</p>"]
-    #[serde(rename="SupportedIdentityProviders")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of provider names for the identity providers that are supported on this client.</p>
+    #[serde(rename = "SupportedIdentityProviders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub supported_identity_providers: Option<Vec<String>>,
-    #[doc="<p>The user pool ID for the user pool client.</p>"]
-    #[serde(rename="UserPoolId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user pool ID for the user pool client.</p>
+    #[serde(rename = "UserPoolId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool_id: Option<String>,
-    #[doc="<p>The writeable attributes.</p>"]
-    #[serde(rename="WriteAttributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The writeable attributes.</p>
+    #[serde(rename = "WriteAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub write_attributes: Option<Vec<String>>,
 }
 
-#[doc="<p>A user pool description.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A user pool description.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UserPoolDescriptionType {
-    #[doc="<p>The date the user pool description was created.</p>"]
-    #[serde(rename="CreationDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the user pool description was created.</p>
+    #[serde(rename = "CreationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
-    #[doc="<p>The ID in a user pool description.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID in a user pool description.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>The AWS Lambda configuration information in a user pool description.</p>"]
-    #[serde(rename="LambdaConfig")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS Lambda configuration information in a user pool description.</p>
+    #[serde(rename = "LambdaConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub lambda_config: Option<LambdaConfigType>,
-    #[doc="<p>The date the user pool description was last modified.</p>"]
-    #[serde(rename="LastModifiedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the user pool description was last modified.</p>
+    #[serde(rename = "LastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_date: Option<f64>,
-    #[doc="<p>The name in a user pool description.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name in a user pool description.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The user pool status in a user pool description.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user pool status in a user pool description.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
 
-#[doc="<p>The type of policy in a user pool.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>The type of policy in a user pool.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct UserPoolPolicyType {
-    #[doc="<p>A container for information about the user pool password policy.</p>"]
-    #[serde(rename="PasswordPolicy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A container for information about the user pool password policy.</p>
+    #[serde(rename = "PasswordPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub password_policy: Option<PasswordPolicyType>,
 }
 
-#[doc="<p>A container for information about the user pool type.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A container for information about the user pool type.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UserPoolType {
-    #[doc="<p>The configuration for <code>AdminCreateUser</code> requests.</p>"]
-    #[serde(rename="AdminCreateUserConfig")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The configuration for <code>AdminCreateUser</code> requests.</p>
+    #[serde(rename = "AdminCreateUserConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub admin_create_user_config: Option<AdminCreateUserConfigType>,
-    #[doc="<p>Specifies the attributes that are aliased in a user pool.</p>"]
-    #[serde(rename="AliasAttributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies the attributes that are aliased in a user pool.</p>
+    #[serde(rename = "AliasAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub alias_attributes: Option<Vec<String>>,
-    #[doc="<p>Specifies the attributes that are auto-verified in a user pool.</p>"]
-    #[serde(rename="AutoVerifiedAttributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies the attributes that are auto-verified in a user pool.</p>
+    #[serde(rename = "AutoVerifiedAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_verified_attributes: Option<Vec<String>>,
-    #[doc="<p>The date the user pool was created.</p>"]
-    #[serde(rename="CreationDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the user pool was created.</p>
+    #[serde(rename = "CreationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
-    #[doc="<p>The device configuration.</p>"]
-    #[serde(rename="DeviceConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The device configuration.</p>
+    #[serde(rename = "DeviceConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub device_configuration: Option<DeviceConfigurationType>,
-    #[doc="<p>The email configuration.</p>"]
-    #[serde(rename="EmailConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The email configuration.</p>
+    #[serde(rename = "EmailConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub email_configuration: Option<EmailConfigurationType>,
-    #[doc="<p>The reason why the email configuration cannot send the messages to your users.</p>"]
-    #[serde(rename="EmailConfigurationFailure")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The reason why the email configuration cannot send the messages to your users.</p>
+    #[serde(rename = "EmailConfigurationFailure")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub email_configuration_failure: Option<String>,
-    #[doc="<p>The contents of the email verification message.</p>"]
-    #[serde(rename="EmailVerificationMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The contents of the email verification message.</p>
+    #[serde(rename = "EmailVerificationMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub email_verification_message: Option<String>,
-    #[doc="<p>The subject of the email verification message.</p>"]
-    #[serde(rename="EmailVerificationSubject")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The subject of the email verification message.</p>
+    #[serde(rename = "EmailVerificationSubject")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub email_verification_subject: Option<String>,
-    #[doc="<p>A number estimating the size of the user pool.</p>"]
-    #[serde(rename="EstimatedNumberOfUsers")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A number estimating the size of the user pool.</p>
+    #[serde(rename = "EstimatedNumberOfUsers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub estimated_number_of_users: Option<i64>,
-    #[doc="<p>The ID of the user pool.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the user pool.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>A container for the AWS Lambda triggers associated with a user pool.</p>"]
-    #[serde(rename="LambdaConfig")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A container for the AWS Lambda triggers associated with a user pool.</p>
+    #[serde(rename = "LambdaConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub lambda_config: Option<LambdaConfigType>,
-    #[doc="<p>The date the user pool was last modified.</p>"]
-    #[serde(rename="LastModifiedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the user pool was last modified.</p>
+    #[serde(rename = "LastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_date: Option<f64>,
-    #[doc="<p>Can be one of the following values:</p> <ul> <li> <p> <code>OFF</code> - MFA tokens are not required and cannot be specified during user registration.</p> </li> <li> <p> <code>ON</code> - MFA tokens are required for all user registrations. You can only specify required when you are initially creating a user pool.</p> </li> <li> <p> <code>OPTIONAL</code> - Users have the option when registering to create an MFA token.</p> </li> </ul>"]
-    #[serde(rename="MfaConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Can be one of the following values:</p> <ul> <li> <p> <code>OFF</code> - MFA tokens are not required and cannot be specified during user registration.</p> </li> <li> <p> <code>ON</code> - MFA tokens are required for all user registrations. You can only specify required when you are initially creating a user pool.</p> </li> <li> <p> <code>OPTIONAL</code> - Users have the option when registering to create an MFA token.</p> </li> </ul>
+    #[serde(rename = "MfaConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub mfa_configuration: Option<String>,
-    #[doc="<p>The name of the user pool.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the user pool.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>A container for the policies associated with a user pool.</p>"]
-    #[serde(rename="Policies")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A container for the policies associated with a user pool.</p>
+    #[serde(rename = "Policies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policies: Option<UserPoolPolicyType>,
-    #[doc="<p>A container with the schema attributes of a user pool.</p>"]
-    #[serde(rename="SchemaAttributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A container with the schema attributes of a user pool.</p>
+    #[serde(rename = "SchemaAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schema_attributes: Option<Vec<SchemaAttributeType>>,
-    #[doc="<p>The contents of the SMS authentication message.</p>"]
-    #[serde(rename="SmsAuthenticationMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The contents of the SMS authentication message.</p>
+    #[serde(rename = "SmsAuthenticationMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sms_authentication_message: Option<String>,
-    #[doc="<p>The SMS configuration.</p>"]
-    #[serde(rename="SmsConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The SMS configuration.</p>
+    #[serde(rename = "SmsConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sms_configuration: Option<SmsConfigurationType>,
-    #[doc="<p>The reason why the SMS configuration cannot send the messages to your users.</p>"]
-    #[serde(rename="SmsConfigurationFailure")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The reason why the SMS configuration cannot send the messages to your users.</p>
+    #[serde(rename = "SmsConfigurationFailure")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sms_configuration_failure: Option<String>,
-    #[doc="<p>The contents of the SMS verification message.</p>"]
-    #[serde(rename="SmsVerificationMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The contents of the SMS verification message.</p>
+    #[serde(rename = "SmsVerificationMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sms_verification_message: Option<String>,
-    #[doc="<p>The status of a user pool.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of a user pool.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The cost allocation tags for the user pool. For more information, see <a href=\"http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-cost-allocation-tagging.html\">Adding Cost Allocation Tags to Your User Pool</a> </p>"]
-    #[serde(rename="UserPoolTags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The cost allocation tags for the user pool. For more information, see <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-cost-allocation-tagging.html">Adding Cost Allocation Tags to Your User Pool</a> </p>
+    #[serde(rename = "UserPoolTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool_tags: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>Specifies whether email addresses or phone numbers can be specified as usernames when a user signs up.</p>"]
-    #[serde(rename="UsernameAttributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether email addresses or phone numbers can be specified as usernames when a user signs up.</p>
+    #[serde(rename = "UsernameAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub username_attributes: Option<Vec<String>>,
-    #[doc="<p>The template for verification messages.</p>"]
-    #[serde(rename="VerificationMessageTemplate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The template for verification messages.</p>
+    #[serde(rename = "VerificationMessageTemplate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub verification_message_template: Option<VerificationMessageTemplateType>,
 }
 
-#[doc="<p>The user type.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The user type.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UserType {
-    #[doc="<p>A container with information about the user type attributes.</p>"]
-    #[serde(rename="Attributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A container with information about the user type attributes.</p>
+    #[serde(rename = "Attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub attributes: Option<Vec<AttributeType>>,
-    #[doc="<p>Specifies whether the user is enabled.</p>"]
-    #[serde(rename="Enabled")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether the user is enabled.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    #[doc="<p>The MFA options for the user.</p>"]
-    #[serde(rename="MFAOptions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The MFA options for the user.</p>
+    #[serde(rename = "MFAOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub mfa_options: Option<Vec<MFAOptionType>>,
-    #[doc="<p>The creation date of the user.</p>"]
-    #[serde(rename="UserCreateDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The creation date of the user.</p>
+    #[serde(rename = "UserCreateDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_create_date: Option<f64>,
-    #[doc="<p>The last modified date of the user.</p>"]
-    #[serde(rename="UserLastModifiedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The last modified date of the user.</p>
+    #[serde(rename = "UserLastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_last_modified_date: Option<f64>,
-    #[doc="<p>The user status. Can be one of the following:</p> <ul> <li> <p>UNCONFIRMED - User has been created but not confirmed.</p> </li> <li> <p>CONFIRMED - User has been confirmed.</p> </li> <li> <p>ARCHIVED - User is no longer active.</p> </li> <li> <p>COMPROMISED - User is disabled due to a potential security threat.</p> </li> <li> <p>UNKNOWN - User status is not known.</p> </li> </ul>"]
-    #[serde(rename="UserStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user status. Can be one of the following:</p> <ul> <li> <p>UNCONFIRMED - User has been created but not confirmed.</p> </li> <li> <p>CONFIRMED - User has been confirmed.</p> </li> <li> <p>ARCHIVED - User is no longer active.</p> </li> <li> <p>COMPROMISED - User is disabled due to a potential security threat.</p> </li> <li> <p>UNKNOWN - User status is not known.</p> </li> </ul>
+    #[serde(rename = "UserStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_status: Option<String>,
-    #[doc="<p>The user name of the user you wish to describe.</p>"]
-    #[serde(rename="Username")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user name of the user you wish to describe.</p>
+    #[serde(rename = "Username")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
 }
 
-#[doc="<p>The template for verification messages.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>The template for verification messages.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct VerificationMessageTemplateType {
-    #[doc="<p>The default email option.</p>"]
-    #[serde(rename="DefaultEmailOption")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The default email option.</p>
+    #[serde(rename = "DefaultEmailOption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub default_email_option: Option<String>,
-    #[doc="<p>The email message template.</p>"]
-    #[serde(rename="EmailMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The email message template.</p>
+    #[serde(rename = "EmailMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub email_message: Option<String>,
-    #[doc="<p>The email message template for sending a confirmation link to the user.</p>"]
-    #[serde(rename="EmailMessageByLink")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The email message template for sending a confirmation link to the user.</p>
+    #[serde(rename = "EmailMessageByLink")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub email_message_by_link: Option<String>,
-    #[doc="<p>The subject line for the email message template.</p>"]
-    #[serde(rename="EmailSubject")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The subject line for the email message template.</p>
+    #[serde(rename = "EmailSubject")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub email_subject: Option<String>,
-    #[doc="<p>The subject line for the email message template for sending a confirmation link to the user.</p>"]
-    #[serde(rename="EmailSubjectByLink")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The subject line for the email message template for sending a confirmation link to the user.</p>
+    #[serde(rename = "EmailSubjectByLink")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub email_subject_by_link: Option<String>,
-    #[doc="<p>The SMS message template.</p>"]
-    #[serde(rename="SmsMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The SMS message template.</p>
+    #[serde(rename = "SmsMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sms_message: Option<String>,
 }
 
-#[doc="<p>Represents the request to verify user attributes.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to verify user attributes.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct VerifyUserAttributeRequest {
-    #[doc="<p>Represents the access token of the request to verify user attributes.</p>"]
-    #[serde(rename="AccessToken")]
+    /// <p>Represents the access token of the request to verify user attributes.</p>
+    #[serde(rename = "AccessToken")]
     pub access_token: String,
-    #[doc="<p>The attribute name in the request to verify user attributes.</p>"]
-    #[serde(rename="AttributeName")]
+    /// <p>The attribute name in the request to verify user attributes.</p>
+    #[serde(rename = "AttributeName")]
     pub attribute_name: String,
-    #[doc="<p>The verification code in the request to verify user attributes.</p>"]
-    #[serde(rename="Code")]
+    /// <p>The verification code in the request to verify user attributes.</p>
+    #[serde(rename = "Code")]
     pub code: String,
 }
 
-#[doc="<p>A container representing the response from the server from the request to verify user attributes.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A container representing the response from the server from the request to verify user attributes.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct VerifyUserAttributeResponse;
 
 /// Errors returned by AddCustomAttributes
@@ -2938,7 +2934,6 @@ pub enum AddCustomAttributesError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl AddCustomAttributesError {
     pub fn from_body(body: &str) -> AddCustomAttributesError {
@@ -3049,7 +3044,6 @@ pub enum AdminAddUserToGroupError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl AdminAddUserToGroupError {
     pub fn from_body(body: &str) -> AdminAddUserToGroupError {
@@ -3170,7 +3164,6 @@ pub enum AdminConfirmSignUpError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl AdminConfirmSignUpError {
     pub fn from_body(body: &str) -> AdminConfirmSignUpError {
@@ -3322,7 +3315,6 @@ pub enum AdminCreateUserError {
     Unknown(String),
 }
 
-
 impl AdminCreateUserError {
     pub fn from_body(body: &str) -> AdminCreateUserError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3351,8 +3343,16 @@ impl AdminCreateUserError {
                     "InvalidPasswordException" => {
                         AdminCreateUserError::InvalidPassword(String::from(error_message))
                     }
-                    "InvalidSmsRoleAccessPolicyException" => AdminCreateUserError::InvalidSmsRoleAccessPolicy(String::from(error_message)),
-                    "InvalidSmsRoleTrustRelationshipException" => AdminCreateUserError::InvalidSmsRoleTrustRelationship(String::from(error_message)),
+                    "InvalidSmsRoleAccessPolicyException" => {
+                        AdminCreateUserError::InvalidSmsRoleAccessPolicy(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidSmsRoleTrustRelationshipException" => {
+                        AdminCreateUserError::InvalidSmsRoleTrustRelationship(String::from(
+                            error_message,
+                        ))
+                    }
                     "NotAuthorizedException" => {
                         AdminCreateUserError::NotAuthorized(String::from(error_message))
                     }
@@ -3467,7 +3467,6 @@ pub enum AdminDeleteUserError {
     Unknown(String),
 }
 
-
 impl AdminDeleteUserError {
     pub fn from_body(body: &str) -> AdminDeleteUserError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3576,7 +3575,6 @@ pub enum AdminDeleteUserAttributesError {
     Unknown(String),
 }
 
-
 impl AdminDeleteUserAttributesError {
     pub fn from_body(body: &str) -> AdminDeleteUserAttributesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3593,11 +3591,19 @@ impl AdminDeleteUserAttributesError {
                     "InternalErrorException" => {
                         AdminDeleteUserAttributesError::InternalError(String::from(error_message))
                     }
-                    "InvalidParameterException" => AdminDeleteUserAttributesError::InvalidParameter(String::from(error_message)),
+                    "InvalidParameterException" => {
+                        AdminDeleteUserAttributesError::InvalidParameter(String::from(
+                            error_message,
+                        ))
+                    }
                     "NotAuthorizedException" => {
                         AdminDeleteUserAttributesError::NotAuthorized(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => AdminDeleteUserAttributesError::ResourceNotFound(String::from(error_message)),
+                    "ResourceNotFoundException" => {
+                        AdminDeleteUserAttributesError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
                     "TooManyRequestsException" => {
                         AdminDeleteUserAttributesError::TooManyRequests(String::from(error_message))
                     }
@@ -3685,7 +3691,6 @@ pub enum AdminDisableProviderForUserError {
     Unknown(String),
 }
 
-
 impl AdminDisableProviderForUserError {
     pub fn from_body(body: &str) -> AdminDisableProviderForUserError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3705,12 +3710,24 @@ impl AdminDisableProviderForUserError {
                     "InternalErrorException" => {
                         AdminDisableProviderForUserError::InternalError(String::from(error_message))
                     }
-                    "InvalidParameterException" => AdminDisableProviderForUserError::InvalidParameter(String::from(error_message)),
+                    "InvalidParameterException" => {
+                        AdminDisableProviderForUserError::InvalidParameter(String::from(
+                            error_message,
+                        ))
+                    }
                     "NotAuthorizedException" => {
                         AdminDisableProviderForUserError::NotAuthorized(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => AdminDisableProviderForUserError::ResourceNotFound(String::from(error_message)),
-                    "TooManyRequestsException" => AdminDisableProviderForUserError::TooManyRequests(String::from(error_message)),
+                    "ResourceNotFoundException" => {
+                        AdminDisableProviderForUserError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "TooManyRequestsException" => {
+                        AdminDisableProviderForUserError::TooManyRequests(String::from(
+                            error_message,
+                        ))
+                    }
                     "UserNotFoundException" => {
                         AdminDisableProviderForUserError::UserNotFound(String::from(error_message))
                     }
@@ -3793,7 +3810,6 @@ pub enum AdminDisableUserError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl AdminDisableUserError {
     pub fn from_body(body: &str) -> AdminDisableUserError {
@@ -3902,7 +3918,6 @@ pub enum AdminEnableUserError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl AdminEnableUserError {
     pub fn from_body(body: &str) -> AdminEnableUserError {
@@ -4014,7 +4029,6 @@ pub enum AdminForgetDeviceError {
     Unknown(String),
 }
 
-
 impl AdminForgetDeviceError {
     pub fn from_body(body: &str) -> AdminForgetDeviceError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4034,7 +4048,11 @@ impl AdminForgetDeviceError {
                     "InvalidParameterException" => {
                         AdminForgetDeviceError::InvalidParameter(String::from(error_message))
                     }
-                    "InvalidUserPoolConfigurationException" => AdminForgetDeviceError::InvalidUserPoolConfiguration(String::from(error_message)),
+                    "InvalidUserPoolConfigurationException" => {
+                        AdminForgetDeviceError::InvalidUserPoolConfiguration(String::from(
+                            error_message,
+                        ))
+                    }
                     "NotAuthorizedException" => {
                         AdminForgetDeviceError::NotAuthorized(String::from(error_message))
                     }
@@ -4127,7 +4145,6 @@ pub enum AdminGetDeviceError {
     Unknown(String),
 }
 
-
 impl AdminGetDeviceError {
     pub fn from_body(body: &str) -> AdminGetDeviceError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4147,7 +4164,11 @@ impl AdminGetDeviceError {
                     "InvalidParameterException" => {
                         AdminGetDeviceError::InvalidParameter(String::from(error_message))
                     }
-                    "InvalidUserPoolConfigurationException" => AdminGetDeviceError::InvalidUserPoolConfiguration(String::from(error_message)),
+                    "InvalidUserPoolConfigurationException" => {
+                        AdminGetDeviceError::InvalidUserPoolConfiguration(String::from(
+                            error_message,
+                        ))
+                    }
                     "NotAuthorizedException" => {
                         AdminGetDeviceError::NotAuthorized(String::from(error_message))
                     }
@@ -4233,7 +4254,6 @@ pub enum AdminGetUserError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl AdminGetUserError {
     pub fn from_body(body: &str) -> AdminGetUserError {
@@ -4361,7 +4381,6 @@ pub enum AdminInitiateAuthError {
     Unknown(String),
 }
 
-
 impl AdminInitiateAuthError {
     pub fn from_body(body: &str) -> AdminInitiateAuthError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4384,9 +4403,21 @@ impl AdminInitiateAuthError {
                     "InvalidParameterException" => {
                         AdminInitiateAuthError::InvalidParameter(String::from(error_message))
                     }
-                    "InvalidSmsRoleAccessPolicyException" => AdminInitiateAuthError::InvalidSmsRoleAccessPolicy(String::from(error_message)),
-                    "InvalidSmsRoleTrustRelationshipException" => AdminInitiateAuthError::InvalidSmsRoleTrustRelationship(String::from(error_message)),
-                    "InvalidUserPoolConfigurationException" => AdminInitiateAuthError::InvalidUserPoolConfiguration(String::from(error_message)),
+                    "InvalidSmsRoleAccessPolicyException" => {
+                        AdminInitiateAuthError::InvalidSmsRoleAccessPolicy(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidSmsRoleTrustRelationshipException" => {
+                        AdminInitiateAuthError::InvalidSmsRoleTrustRelationship(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidUserPoolConfigurationException" => {
+                        AdminInitiateAuthError::InvalidUserPoolConfiguration(String::from(
+                            error_message,
+                        ))
+                    }
                     "MFAMethodNotFoundException" => {
                         AdminInitiateAuthError::MFAMethodNotFound(String::from(error_message))
                     }
@@ -4504,7 +4535,6 @@ pub enum AdminLinkProviderForUserError {
     Unknown(String),
 }
 
-
 impl AdminLinkProviderForUserError {
     pub fn from_body(body: &str) -> AdminLinkProviderForUserError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4619,7 +4649,6 @@ pub enum AdminListDevicesError {
     Unknown(String),
 }
 
-
 impl AdminListDevicesError {
     pub fn from_body(body: &str) -> AdminListDevicesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4639,7 +4668,11 @@ impl AdminListDevicesError {
                     "InvalidParameterException" => {
                         AdminListDevicesError::InvalidParameter(String::from(error_message))
                     }
-                    "InvalidUserPoolConfigurationException" => AdminListDevicesError::InvalidUserPoolConfiguration(String::from(error_message)),
+                    "InvalidUserPoolConfigurationException" => {
+                        AdminListDevicesError::InvalidUserPoolConfiguration(String::from(
+                            error_message,
+                        ))
+                    }
                     "NotAuthorizedException" => {
                         AdminListDevicesError::NotAuthorized(String::from(error_message))
                     }
@@ -4725,7 +4758,6 @@ pub enum AdminListGroupsForUserError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl AdminListGroupsForUserError {
     pub fn from_body(body: &str) -> AdminListGroupsForUserError {
@@ -4836,7 +4868,6 @@ pub enum AdminRemoveUserFromGroupError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl AdminRemoveUserFromGroupError {
     pub fn from_body(body: &str) -> AdminRemoveUserFromGroupError {
@@ -4962,7 +4993,6 @@ pub enum AdminResetUserPasswordError {
     Unknown(String),
 }
 
-
 impl AdminResetUserPasswordError {
     pub fn from_body(body: &str) -> AdminResetUserPasswordError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4979,13 +5009,29 @@ impl AdminResetUserPasswordError {
                     "InternalErrorException" => {
                         AdminResetUserPasswordError::InternalError(String::from(error_message))
                     }
-                    "InvalidEmailRoleAccessPolicyException" => AdminResetUserPasswordError::InvalidEmailRoleAccessPolicy(String::from(error_message)),
-                    "InvalidLambdaResponseException" => AdminResetUserPasswordError::InvalidLambdaResponse(String::from(error_message)),
+                    "InvalidEmailRoleAccessPolicyException" => {
+                        AdminResetUserPasswordError::InvalidEmailRoleAccessPolicy(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidLambdaResponseException" => {
+                        AdminResetUserPasswordError::InvalidLambdaResponse(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidParameterException" => {
                         AdminResetUserPasswordError::InvalidParameter(String::from(error_message))
                     }
-                    "InvalidSmsRoleAccessPolicyException" => AdminResetUserPasswordError::InvalidSmsRoleAccessPolicy(String::from(error_message)),
-                    "InvalidSmsRoleTrustRelationshipException" => AdminResetUserPasswordError::InvalidSmsRoleTrustRelationship(String::from(error_message)),
+                    "InvalidSmsRoleAccessPolicyException" => {
+                        AdminResetUserPasswordError::InvalidSmsRoleAccessPolicy(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidSmsRoleTrustRelationshipException" => {
+                        AdminResetUserPasswordError::InvalidSmsRoleTrustRelationship(String::from(
+                            error_message,
+                        ))
+                    }
                     "LimitExceededException" => {
                         AdminResetUserPasswordError::LimitExceeded(String::from(error_message))
                     }
@@ -5001,7 +5047,11 @@ impl AdminResetUserPasswordError {
                     "UnexpectedLambdaException" => {
                         AdminResetUserPasswordError::UnexpectedLambda(String::from(error_message))
                     }
-                    "UserLambdaValidationException" => AdminResetUserPasswordError::UserLambdaValidation(String::from(error_message)),
+                    "UserLambdaValidationException" => {
+                        AdminResetUserPasswordError::UserLambdaValidation(String::from(
+                            error_message,
+                        ))
+                    }
                     "UserNotFoundException" => {
                         AdminResetUserPasswordError::UserNotFound(String::from(error_message))
                     }
@@ -5117,7 +5167,6 @@ pub enum AdminRespondToAuthChallengeError {
     Unknown(String),
 }
 
-
 impl AdminRespondToAuthChallengeError {
     pub fn from_body(body: &str) -> AdminRespondToAuthChallengeError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5143,22 +5192,74 @@ impl AdminRespondToAuthChallengeError {
                     "InternalErrorException" => {
                         AdminRespondToAuthChallengeError::InternalError(String::from(error_message))
                     }
-                    "InvalidLambdaResponseException" => AdminRespondToAuthChallengeError::InvalidLambdaResponse(String::from(error_message)),
-                    "InvalidParameterException" => AdminRespondToAuthChallengeError::InvalidParameter(String::from(error_message)),
-                    "InvalidPasswordException" => AdminRespondToAuthChallengeError::InvalidPassword(String::from(error_message)),
-                    "InvalidSmsRoleAccessPolicyException" => AdminRespondToAuthChallengeError::InvalidSmsRoleAccessPolicy(String::from(error_message)),
-                    "InvalidSmsRoleTrustRelationshipException" => AdminRespondToAuthChallengeError::InvalidSmsRoleTrustRelationship(String::from(error_message)),
-                    "InvalidUserPoolConfigurationException" => AdminRespondToAuthChallengeError::InvalidUserPoolConfiguration(String::from(error_message)),
-                    "MFAMethodNotFoundException" => AdminRespondToAuthChallengeError::MFAMethodNotFound(String::from(error_message)),
+                    "InvalidLambdaResponseException" => {
+                        AdminRespondToAuthChallengeError::InvalidLambdaResponse(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidParameterException" => {
+                        AdminRespondToAuthChallengeError::InvalidParameter(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidPasswordException" => {
+                        AdminRespondToAuthChallengeError::InvalidPassword(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidSmsRoleAccessPolicyException" => {
+                        AdminRespondToAuthChallengeError::InvalidSmsRoleAccessPolicy(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidSmsRoleTrustRelationshipException" => {
+                        AdminRespondToAuthChallengeError::InvalidSmsRoleTrustRelationship(
+                            String::from(error_message),
+                        )
+                    }
+                    "InvalidUserPoolConfigurationException" => {
+                        AdminRespondToAuthChallengeError::InvalidUserPoolConfiguration(
+                            String::from(error_message),
+                        )
+                    }
+                    "MFAMethodNotFoundException" => {
+                        AdminRespondToAuthChallengeError::MFAMethodNotFound(String::from(
+                            error_message,
+                        ))
+                    }
                     "NotAuthorizedException" => {
                         AdminRespondToAuthChallengeError::NotAuthorized(String::from(error_message))
                     }
-                    "PasswordResetRequiredException" => AdminRespondToAuthChallengeError::PasswordResetRequired(String::from(error_message)),
-                    "ResourceNotFoundException" => AdminRespondToAuthChallengeError::ResourceNotFound(String::from(error_message)),
-                    "TooManyRequestsException" => AdminRespondToAuthChallengeError::TooManyRequests(String::from(error_message)),
-                    "UnexpectedLambdaException" => AdminRespondToAuthChallengeError::UnexpectedLambda(String::from(error_message)),
-                    "UserLambdaValidationException" => AdminRespondToAuthChallengeError::UserLambdaValidation(String::from(error_message)),
-                    "UserNotConfirmedException" => AdminRespondToAuthChallengeError::UserNotConfirmed(String::from(error_message)),
+                    "PasswordResetRequiredException" => {
+                        AdminRespondToAuthChallengeError::PasswordResetRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundException" => {
+                        AdminRespondToAuthChallengeError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "TooManyRequestsException" => {
+                        AdminRespondToAuthChallengeError::TooManyRequests(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnexpectedLambdaException" => {
+                        AdminRespondToAuthChallengeError::UnexpectedLambda(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UserLambdaValidationException" => {
+                        AdminRespondToAuthChallengeError::UserLambdaValidation(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UserNotConfirmedException" => {
+                        AdminRespondToAuthChallengeError::UserNotConfirmed(String::from(
+                            error_message,
+                        ))
+                    }
                     "UserNotFoundException" => {
                         AdminRespondToAuthChallengeError::UserNotFound(String::from(error_message))
                     }
@@ -5251,7 +5352,6 @@ pub enum AdminSetUserSettingsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl AdminSetUserSettingsError {
     pub fn from_body(body: &str) -> AdminSetUserSettingsError {
@@ -5361,7 +5461,6 @@ pub enum AdminUpdateDeviceStatusError {
     Unknown(String),
 }
 
-
 impl AdminUpdateDeviceStatusError {
     pub fn from_body(body: &str) -> AdminUpdateDeviceStatusError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5381,7 +5480,11 @@ impl AdminUpdateDeviceStatusError {
                     "InvalidParameterException" => {
                         AdminUpdateDeviceStatusError::InvalidParameter(String::from(error_message))
                     }
-                    "InvalidUserPoolConfigurationException" => AdminUpdateDeviceStatusError::InvalidUserPoolConfiguration(String::from(error_message)),
+                    "InvalidUserPoolConfigurationException" => {
+                        AdminUpdateDeviceStatusError::InvalidUserPoolConfiguration(String::from(
+                            error_message,
+                        ))
+                    }
                     "NotAuthorizedException" => {
                         AdminUpdateDeviceStatusError::NotAuthorized(String::from(error_message))
                     }
@@ -5482,7 +5585,6 @@ pub enum AdminUpdateUserAttributesError {
     Unknown(String),
 }
 
-
 impl AdminUpdateUserAttributesError {
     pub fn from_body(body: &str) -> AdminUpdateUserAttributesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5502,17 +5604,37 @@ impl AdminUpdateUserAttributesError {
                     "InternalErrorException" => {
                         AdminUpdateUserAttributesError::InternalError(String::from(error_message))
                     }
-                    "InvalidLambdaResponseException" => AdminUpdateUserAttributesError::InvalidLambdaResponse(String::from(error_message)),
-                    "InvalidParameterException" => AdminUpdateUserAttributesError::InvalidParameter(String::from(error_message)),
+                    "InvalidLambdaResponseException" => {
+                        AdminUpdateUserAttributesError::InvalidLambdaResponse(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidParameterException" => {
+                        AdminUpdateUserAttributesError::InvalidParameter(String::from(
+                            error_message,
+                        ))
+                    }
                     "NotAuthorizedException" => {
                         AdminUpdateUserAttributesError::NotAuthorized(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => AdminUpdateUserAttributesError::ResourceNotFound(String::from(error_message)),
+                    "ResourceNotFoundException" => {
+                        AdminUpdateUserAttributesError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
                     "TooManyRequestsException" => {
                         AdminUpdateUserAttributesError::TooManyRequests(String::from(error_message))
                     }
-                    "UnexpectedLambdaException" => AdminUpdateUserAttributesError::UnexpectedLambda(String::from(error_message)),
-                    "UserLambdaValidationException" => AdminUpdateUserAttributesError::UserLambdaValidation(String::from(error_message)),
+                    "UnexpectedLambdaException" => {
+                        AdminUpdateUserAttributesError::UnexpectedLambda(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UserLambdaValidationException" => {
+                        AdminUpdateUserAttributesError::UserLambdaValidation(String::from(
+                            error_message,
+                        ))
+                    }
                     "UserNotFoundException" => {
                         AdminUpdateUserAttributesError::UserNotFound(String::from(error_message))
                     }
@@ -5598,7 +5720,6 @@ pub enum AdminUserGlobalSignOutError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl AdminUserGlobalSignOutError {
     pub fn from_body(body: &str) -> AdminUserGlobalSignOutError {
@@ -5717,7 +5838,6 @@ pub enum ChangePasswordError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ChangePasswordError {
     pub fn from_body(body: &str) -> ChangePasswordError {
@@ -5855,7 +5975,6 @@ pub enum ConfirmDeviceError {
     Unknown(String),
 }
 
-
 impl ConfirmDeviceError {
     pub fn from_body(body: &str) -> ConfirmDeviceError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5881,7 +6000,11 @@ impl ConfirmDeviceError {
                     "InvalidPasswordException" => {
                         ConfirmDeviceError::InvalidPassword(String::from(error_message))
                     }
-                    "InvalidUserPoolConfigurationException" => ConfirmDeviceError::InvalidUserPoolConfiguration(String::from(error_message)),
+                    "InvalidUserPoolConfigurationException" => {
+                        ConfirmDeviceError::InvalidUserPoolConfiguration(String::from(
+                            error_message,
+                        ))
+                    }
                     "NotAuthorizedException" => {
                         ConfirmDeviceError::NotAuthorized(String::from(error_message))
                     }
@@ -6004,7 +6127,6 @@ pub enum ConfirmForgotPasswordError {
     Unknown(String),
 }
 
-
 impl ConfirmForgotPasswordError {
     pub fn from_body(body: &str) -> ConfirmForgotPasswordError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6027,7 +6149,11 @@ impl ConfirmForgotPasswordError {
                     "InternalErrorException" => {
                         ConfirmForgotPasswordError::InternalError(String::from(error_message))
                     }
-                    "InvalidLambdaResponseException" => ConfirmForgotPasswordError::InvalidLambdaResponse(String::from(error_message)),
+                    "InvalidLambdaResponseException" => {
+                        ConfirmForgotPasswordError::InvalidLambdaResponse(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidParameterException" => {
                         ConfirmForgotPasswordError::InvalidParameter(String::from(error_message))
                     }
@@ -6043,14 +6169,22 @@ impl ConfirmForgotPasswordError {
                     "ResourceNotFoundException" => {
                         ConfirmForgotPasswordError::ResourceNotFound(String::from(error_message))
                     }
-                    "TooManyFailedAttemptsException" => ConfirmForgotPasswordError::TooManyFailedAttempts(String::from(error_message)),
+                    "TooManyFailedAttemptsException" => {
+                        ConfirmForgotPasswordError::TooManyFailedAttempts(String::from(
+                            error_message,
+                        ))
+                    }
                     "TooManyRequestsException" => {
                         ConfirmForgotPasswordError::TooManyRequests(String::from(error_message))
                     }
                     "UnexpectedLambdaException" => {
                         ConfirmForgotPasswordError::UnexpectedLambda(String::from(error_message))
                     }
-                    "UserLambdaValidationException" => ConfirmForgotPasswordError::UserLambdaValidation(String::from(error_message)),
+                    "UserLambdaValidationException" => {
+                        ConfirmForgotPasswordError::UserLambdaValidation(String::from(
+                            error_message,
+                        ))
+                    }
                     "UserNotConfirmedException" => {
                         ConfirmForgotPasswordError::UserNotConfirmed(String::from(error_message))
                     }
@@ -6160,7 +6294,6 @@ pub enum ConfirmSignUpError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ConfirmSignUpError {
     pub fn from_body(body: &str) -> ConfirmSignUpError {
@@ -6304,7 +6437,6 @@ pub enum CreateGroupError {
     Unknown(String),
 }
 
-
 impl CreateGroupError {
     pub fn from_body(body: &str) -> CreateGroupError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6418,7 +6550,6 @@ pub enum CreateIdentityProviderError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateIdentityProviderError {
     pub fn from_body(body: &str) -> CreateIdentityProviderError {
@@ -6534,7 +6665,6 @@ pub enum CreateResourceServerError {
     Unknown(String),
 }
 
-
 impl CreateResourceServerError {
     pub fn from_body(body: &str) -> CreateResourceServerError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6646,7 +6776,6 @@ pub enum CreateUserImportJobError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateUserImportJobError {
     pub fn from_body(body: &str) -> CreateUserImportJobError {
@@ -6768,7 +6897,6 @@ pub enum CreateUserPoolError {
     Unknown(String),
 }
 
-
 impl CreateUserPoolError {
     pub fn from_body(body: &str) -> CreateUserPoolError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6785,14 +6913,22 @@ impl CreateUserPoolError {
                     "InternalErrorException" => {
                         CreateUserPoolError::InternalError(String::from(error_message))
                     }
-                    "InvalidEmailRoleAccessPolicyException" => CreateUserPoolError::InvalidEmailRoleAccessPolicy(String::from(error_message)),
+                    "InvalidEmailRoleAccessPolicyException" => {
+                        CreateUserPoolError::InvalidEmailRoleAccessPolicy(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidParameterException" => {
                         CreateUserPoolError::InvalidParameter(String::from(error_message))
                     }
                     "InvalidSmsRoleAccessPolicyException" => {
                         CreateUserPoolError::InvalidSmsRoleAccessPolicy(String::from(error_message))
                     }
-                    "InvalidSmsRoleTrustRelationshipException" => CreateUserPoolError::InvalidSmsRoleTrustRelationship(String::from(error_message)),
+                    "InvalidSmsRoleTrustRelationshipException" => {
+                        CreateUserPoolError::InvalidSmsRoleTrustRelationship(String::from(
+                            error_message,
+                        ))
+                    }
                     "LimitExceededException" => {
                         CreateUserPoolError::LimitExceeded(String::from(error_message))
                     }
@@ -6888,7 +7024,6 @@ pub enum CreateUserPoolClientError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateUserPoolClientError {
     pub fn from_body(body: &str) -> CreateUserPoolClientError {
@@ -7004,7 +7139,6 @@ pub enum CreateUserPoolDomainError {
     Unknown(String),
 }
 
-
 impl CreateUserPoolDomainError {
     pub fn from_body(body: &str) -> CreateUserPoolDomainError {
         match from_str::<SerdeJsonValue>(body) {
@@ -7104,7 +7238,6 @@ pub enum DeleteGroupError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteGroupError {
     pub fn from_body(body: &str) -> DeleteGroupError {
@@ -7210,7 +7343,6 @@ pub enum DeleteIdentityProviderError {
     Unknown(String),
 }
 
-
 impl DeleteIdentityProviderError {
     pub fn from_body(body: &str) -> DeleteIdentityProviderError {
         match from_str::<SerdeJsonValue>(body) {
@@ -7239,7 +7371,11 @@ impl DeleteIdentityProviderError {
                     "TooManyRequestsException" => {
                         DeleteIdentityProviderError::TooManyRequests(String::from(error_message))
                     }
-                    "UnsupportedIdentityProviderException" => DeleteIdentityProviderError::UnsupportedIdentityProvider(String::from(error_message)),
+                    "UnsupportedIdentityProviderException" => {
+                        DeleteIdentityProviderError::UnsupportedIdentityProvider(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DeleteIdentityProviderError::Validation(error_message.to_string())
                     }
@@ -7316,7 +7452,6 @@ pub enum DeleteResourceServerError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteResourceServerError {
     pub fn from_body(body: &str) -> DeleteResourceServerError {
@@ -7427,7 +7562,6 @@ pub enum DeleteUserError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteUserError {
     pub fn from_body(body: &str) -> DeleteUserError {
@@ -7547,7 +7681,6 @@ pub enum DeleteUserAttributesError {
     Unknown(String),
 }
 
-
 impl DeleteUserAttributesError {
     pub fn from_body(body: &str) -> DeleteUserAttributesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -7570,7 +7703,11 @@ impl DeleteUserAttributesError {
                     "NotAuthorizedException" => {
                         DeleteUserAttributesError::NotAuthorized(String::from(error_message))
                     }
-                    "PasswordResetRequiredException" => DeleteUserAttributesError::PasswordResetRequired(String::from(error_message)),
+                    "PasswordResetRequiredException" => {
+                        DeleteUserAttributesError::PasswordResetRequired(String::from(
+                            error_message,
+                        ))
+                    }
                     "ResourceNotFoundException" => {
                         DeleteUserAttributesError::ResourceNotFound(String::from(error_message))
                     }
@@ -7663,7 +7800,6 @@ pub enum DeleteUserPoolError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteUserPoolError {
     pub fn from_body(body: &str) -> DeleteUserPoolError {
@@ -7771,7 +7907,6 @@ pub enum DeleteUserPoolClientError {
     Unknown(String),
 }
 
-
 impl DeleteUserPoolClientError {
     pub fn from_body(body: &str) -> DeleteUserPoolClientError {
         match from_str::<SerdeJsonValue>(body) {
@@ -7874,7 +8009,6 @@ pub enum DeleteUserPoolDomainError {
     Unknown(String),
 }
 
-
 impl DeleteUserPoolDomainError {
     pub fn from_body(body: &str) -> DeleteUserPoolDomainError {
         match from_str::<SerdeJsonValue>(body) {
@@ -7974,7 +8108,6 @@ pub enum DescribeIdentityProviderError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeIdentityProviderError {
     pub fn from_body(body: &str) -> DescribeIdentityProviderError {
@@ -8080,7 +8213,6 @@ pub enum DescribeResourceServerError {
     Unknown(String),
 }
 
-
 impl DescribeResourceServerError {
     pub fn from_body(body: &str) -> DescribeResourceServerError {
         match from_str::<SerdeJsonValue>(body) {
@@ -8184,7 +8316,6 @@ pub enum DescribeUserImportJobError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeUserImportJobError {
     pub fn from_body(body: &str) -> DescribeUserImportJobError {
@@ -8292,7 +8423,6 @@ pub enum DescribeUserPoolError {
     Unknown(String),
 }
 
-
 impl DescribeUserPoolError {
     pub fn from_body(body: &str) -> DescribeUserPoolError {
         match from_str::<SerdeJsonValue>(body) {
@@ -8399,7 +8529,6 @@ pub enum DescribeUserPoolClientError {
     Unknown(String),
 }
 
-
 impl DescribeUserPoolClientError {
     pub fn from_body(body: &str) -> DescribeUserPoolClientError {
         match from_str::<SerdeJsonValue>(body) {
@@ -8501,7 +8630,6 @@ pub enum DescribeUserPoolDomainError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeUserPoolDomainError {
     pub fn from_body(body: &str) -> DescribeUserPoolDomainError {
@@ -8610,7 +8738,6 @@ pub enum ForgetDeviceError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ForgetDeviceError {
     pub fn from_body(body: &str) -> ForgetDeviceError {
@@ -8750,7 +8877,6 @@ pub enum ForgotPasswordError {
     Unknown(String),
 }
 
-
 impl ForgotPasswordError {
     pub fn from_body(body: &str) -> ForgotPasswordError {
         match from_str::<SerdeJsonValue>(body) {
@@ -8770,7 +8896,11 @@ impl ForgotPasswordError {
                     "InternalErrorException" => {
                         ForgotPasswordError::InternalError(String::from(error_message))
                     }
-                    "InvalidEmailRoleAccessPolicyException" => ForgotPasswordError::InvalidEmailRoleAccessPolicy(String::from(error_message)),
+                    "InvalidEmailRoleAccessPolicyException" => {
+                        ForgotPasswordError::InvalidEmailRoleAccessPolicy(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidLambdaResponseException" => {
                         ForgotPasswordError::InvalidLambdaResponse(String::from(error_message))
                     }
@@ -8780,7 +8910,11 @@ impl ForgotPasswordError {
                     "InvalidSmsRoleAccessPolicyException" => {
                         ForgotPasswordError::InvalidSmsRoleAccessPolicy(String::from(error_message))
                     }
-                    "InvalidSmsRoleTrustRelationshipException" => ForgotPasswordError::InvalidSmsRoleTrustRelationship(String::from(error_message)),
+                    "InvalidSmsRoleTrustRelationshipException" => {
+                        ForgotPasswordError::InvalidSmsRoleTrustRelationship(String::from(
+                            error_message,
+                        ))
+                    }
                     "LimitExceededException" => {
                         ForgotPasswordError::LimitExceeded(String::from(error_message))
                     }
@@ -8888,7 +9022,6 @@ pub enum GetCSVHeaderError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetCSVHeaderError {
     pub fn from_body(body: &str) -> GetCSVHeaderError {
@@ -8999,7 +9132,6 @@ pub enum GetDeviceError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetDeviceError {
     pub fn from_body(body: &str) -> GetDeviceError {
@@ -9117,7 +9249,6 @@ pub enum GetGroupError {
     Unknown(String),
 }
 
-
 impl GetGroupError {
     pub fn from_body(body: &str) -> GetGroupError {
         match from_str::<SerdeJsonValue>(body) {
@@ -9218,7 +9349,6 @@ pub enum GetIdentityProviderByIdentifierError {
     Unknown(String),
 }
 
-
 impl GetIdentityProviderByIdentifierError {
     pub fn from_body(body: &str) -> GetIdentityProviderByIdentifierError {
         match from_str::<SerdeJsonValue>(body) {
@@ -9232,11 +9362,31 @@ impl GetIdentityProviderByIdentifierError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalErrorException" => GetIdentityProviderByIdentifierError::InternalError(String::from(error_message)),
-                    "InvalidParameterException" => GetIdentityProviderByIdentifierError::InvalidParameter(String::from(error_message)),
-                    "NotAuthorizedException" => GetIdentityProviderByIdentifierError::NotAuthorized(String::from(error_message)),
-                    "ResourceNotFoundException" => GetIdentityProviderByIdentifierError::ResourceNotFound(String::from(error_message)),
-                    "TooManyRequestsException" => GetIdentityProviderByIdentifierError::TooManyRequests(String::from(error_message)),
+                    "InternalErrorException" => {
+                        GetIdentityProviderByIdentifierError::InternalError(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidParameterException" => {
+                        GetIdentityProviderByIdentifierError::InvalidParameter(String::from(
+                            error_message,
+                        ))
+                    }
+                    "NotAuthorizedException" => {
+                        GetIdentityProviderByIdentifierError::NotAuthorized(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundException" => {
+                        GetIdentityProviderByIdentifierError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "TooManyRequestsException" => {
+                        GetIdentityProviderByIdentifierError::TooManyRequests(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         GetIdentityProviderByIdentifierError::Validation(error_message.to_string())
                     }
@@ -9312,7 +9462,6 @@ pub enum GetUICustomizationError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetUICustomizationError {
     pub fn from_body(body: &str) -> GetUICustomizationError {
@@ -9423,7 +9572,6 @@ pub enum GetUserError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetUserError {
     pub fn from_body(body: &str) -> GetUserError {
@@ -9559,7 +9707,6 @@ pub enum GetUserAttributeVerificationCodeError {
     Unknown(String),
 }
 
-
 impl GetUserAttributeVerificationCodeError {
     pub fn from_body(body: &str) -> GetUserAttributeVerificationCodeError {
         match from_str::<SerdeJsonValue>(body) {
@@ -9573,22 +9720,86 @@ impl GetUserAttributeVerificationCodeError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "CodeDeliveryFailureException" => GetUserAttributeVerificationCodeError::CodeDeliveryFailure(String::from(error_message)),
-                    "InternalErrorException" => GetUserAttributeVerificationCodeError::InternalError(String::from(error_message)),
-                    "InvalidEmailRoleAccessPolicyException" => GetUserAttributeVerificationCodeError::InvalidEmailRoleAccessPolicy(String::from(error_message)),
-                    "InvalidLambdaResponseException" => GetUserAttributeVerificationCodeError::InvalidLambdaResponse(String::from(error_message)),
-                    "InvalidParameterException" => GetUserAttributeVerificationCodeError::InvalidParameter(String::from(error_message)),
-                    "InvalidSmsRoleAccessPolicyException" => GetUserAttributeVerificationCodeError::InvalidSmsRoleAccessPolicy(String::from(error_message)),
-                    "InvalidSmsRoleTrustRelationshipException" => GetUserAttributeVerificationCodeError::InvalidSmsRoleTrustRelationship(String::from(error_message)),
-                    "LimitExceededException" => GetUserAttributeVerificationCodeError::LimitExceeded(String::from(error_message)),
-                    "NotAuthorizedException" => GetUserAttributeVerificationCodeError::NotAuthorized(String::from(error_message)),
-                    "PasswordResetRequiredException" => GetUserAttributeVerificationCodeError::PasswordResetRequired(String::from(error_message)),
-                    "ResourceNotFoundException" => GetUserAttributeVerificationCodeError::ResourceNotFound(String::from(error_message)),
-                    "TooManyRequestsException" => GetUserAttributeVerificationCodeError::TooManyRequests(String::from(error_message)),
-                    "UnexpectedLambdaException" => GetUserAttributeVerificationCodeError::UnexpectedLambda(String::from(error_message)),
-                    "UserLambdaValidationException" => GetUserAttributeVerificationCodeError::UserLambdaValidation(String::from(error_message)),
-                    "UserNotConfirmedException" => GetUserAttributeVerificationCodeError::UserNotConfirmed(String::from(error_message)),
-                    "UserNotFoundException" => GetUserAttributeVerificationCodeError::UserNotFound(String::from(error_message)),
+                    "CodeDeliveryFailureException" => {
+                        GetUserAttributeVerificationCodeError::CodeDeliveryFailure(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InternalErrorException" => {
+                        GetUserAttributeVerificationCodeError::InternalError(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidEmailRoleAccessPolicyException" => {
+                        GetUserAttributeVerificationCodeError::InvalidEmailRoleAccessPolicy(
+                            String::from(error_message),
+                        )
+                    }
+                    "InvalidLambdaResponseException" => {
+                        GetUserAttributeVerificationCodeError::InvalidLambdaResponse(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidParameterException" => {
+                        GetUserAttributeVerificationCodeError::InvalidParameter(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidSmsRoleAccessPolicyException" => {
+                        GetUserAttributeVerificationCodeError::InvalidSmsRoleAccessPolicy(
+                            String::from(error_message),
+                        )
+                    }
+                    "InvalidSmsRoleTrustRelationshipException" => {
+                        GetUserAttributeVerificationCodeError::InvalidSmsRoleTrustRelationship(
+                            String::from(error_message),
+                        )
+                    }
+                    "LimitExceededException" => {
+                        GetUserAttributeVerificationCodeError::LimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
+                    "NotAuthorizedException" => {
+                        GetUserAttributeVerificationCodeError::NotAuthorized(String::from(
+                            error_message,
+                        ))
+                    }
+                    "PasswordResetRequiredException" => {
+                        GetUserAttributeVerificationCodeError::PasswordResetRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundException" => {
+                        GetUserAttributeVerificationCodeError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "TooManyRequestsException" => {
+                        GetUserAttributeVerificationCodeError::TooManyRequests(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnexpectedLambdaException" => {
+                        GetUserAttributeVerificationCodeError::UnexpectedLambda(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UserLambdaValidationException" => {
+                        GetUserAttributeVerificationCodeError::UserLambdaValidation(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UserNotConfirmedException" => {
+                        GetUserAttributeVerificationCodeError::UserNotConfirmed(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UserNotFoundException" => {
+                        GetUserAttributeVerificationCodeError::UserNotFound(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         GetUserAttributeVerificationCodeError::Validation(error_message.to_string())
                     }
@@ -9681,7 +9892,6 @@ pub enum GlobalSignOutError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GlobalSignOutError {
     pub fn from_body(body: &str) -> GlobalSignOutError {
@@ -9806,7 +10016,6 @@ pub enum InitiateAuthError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl InitiateAuthError {
     pub fn from_body(body: &str) -> InitiateAuthError {
@@ -9946,7 +10155,6 @@ pub enum ListDevicesError {
     Unknown(String),
 }
 
-
 impl ListDevicesError {
     pub fn from_body(body: &str) -> ListDevicesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -10065,7 +10273,6 @@ pub enum ListGroupsError {
     Unknown(String),
 }
 
-
 impl ListGroupsError {
     pub fn from_body(body: &str) -> ListGroupsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -10165,7 +10372,6 @@ pub enum ListIdentityProvidersError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListIdentityProvidersError {
     pub fn from_body(body: &str) -> ListIdentityProvidersError {
@@ -10271,7 +10477,6 @@ pub enum ListResourceServersError {
     Unknown(String),
 }
 
-
 impl ListResourceServersError {
     pub fn from_body(body: &str) -> ListResourceServersError {
         match from_str::<SerdeJsonValue>(body) {
@@ -10375,7 +10580,6 @@ pub enum ListUserImportJobsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListUserImportJobsError {
     pub fn from_body(body: &str) -> ListUserImportJobsError {
@@ -10481,7 +10685,6 @@ pub enum ListUserPoolClientsError {
     Unknown(String),
 }
 
-
 impl ListUserPoolClientsError {
     pub fn from_body(body: &str) -> ListUserPoolClientsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -10584,7 +10787,6 @@ pub enum ListUserPoolsError {
     Unknown(String),
 }
 
-
 impl ListUserPoolsError {
     pub fn from_body(body: &str) -> ListUserPoolsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -10682,7 +10884,6 @@ pub enum ListUsersError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListUsersError {
     pub fn from_body(body: &str) -> ListUsersError {
@@ -10783,7 +10984,6 @@ pub enum ListUsersInGroupError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListUsersInGroupError {
     pub fn from_body(body: &str) -> ListUsersInGroupError {
@@ -10905,7 +11105,6 @@ pub enum ResendConfirmationCodeError {
     Unknown(String),
 }
 
-
 impl ResendConfirmationCodeError {
     pub fn from_body(body: &str) -> ResendConfirmationCodeError {
         match from_str::<SerdeJsonValue>(body) {
@@ -10919,17 +11118,37 @@ impl ResendConfirmationCodeError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "CodeDeliveryFailureException" => ResendConfirmationCodeError::CodeDeliveryFailure(String::from(error_message)),
+                    "CodeDeliveryFailureException" => {
+                        ResendConfirmationCodeError::CodeDeliveryFailure(String::from(
+                            error_message,
+                        ))
+                    }
                     "InternalErrorException" => {
                         ResendConfirmationCodeError::InternalError(String::from(error_message))
                     }
-                    "InvalidEmailRoleAccessPolicyException" => ResendConfirmationCodeError::InvalidEmailRoleAccessPolicy(String::from(error_message)),
-                    "InvalidLambdaResponseException" => ResendConfirmationCodeError::InvalidLambdaResponse(String::from(error_message)),
+                    "InvalidEmailRoleAccessPolicyException" => {
+                        ResendConfirmationCodeError::InvalidEmailRoleAccessPolicy(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidLambdaResponseException" => {
+                        ResendConfirmationCodeError::InvalidLambdaResponse(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidParameterException" => {
                         ResendConfirmationCodeError::InvalidParameter(String::from(error_message))
                     }
-                    "InvalidSmsRoleAccessPolicyException" => ResendConfirmationCodeError::InvalidSmsRoleAccessPolicy(String::from(error_message)),
-                    "InvalidSmsRoleTrustRelationshipException" => ResendConfirmationCodeError::InvalidSmsRoleTrustRelationship(String::from(error_message)),
+                    "InvalidSmsRoleAccessPolicyException" => {
+                        ResendConfirmationCodeError::InvalidSmsRoleAccessPolicy(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidSmsRoleTrustRelationshipException" => {
+                        ResendConfirmationCodeError::InvalidSmsRoleTrustRelationship(String::from(
+                            error_message,
+                        ))
+                    }
                     "LimitExceededException" => {
                         ResendConfirmationCodeError::LimitExceeded(String::from(error_message))
                     }
@@ -10945,7 +11164,11 @@ impl ResendConfirmationCodeError {
                     "UnexpectedLambdaException" => {
                         ResendConfirmationCodeError::UnexpectedLambda(String::from(error_message))
                     }
-                    "UserLambdaValidationException" => ResendConfirmationCodeError::UserLambdaValidation(String::from(error_message)),
+                    "UserLambdaValidationException" => {
+                        ResendConfirmationCodeError::UserLambdaValidation(String::from(
+                            error_message,
+                        ))
+                    }
                     "UserNotFoundException" => {
                         ResendConfirmationCodeError::UserNotFound(String::from(error_message))
                     }
@@ -11062,7 +11285,6 @@ pub enum RespondToAuthChallengeError {
     Unknown(String),
 }
 
-
 impl RespondToAuthChallengeError {
     pub fn from_body(body: &str) -> RespondToAuthChallengeError {
         match from_str::<SerdeJsonValue>(body) {
@@ -11088,23 +11310,43 @@ impl RespondToAuthChallengeError {
                     "InternalErrorException" => {
                         RespondToAuthChallengeError::InternalError(String::from(error_message))
                     }
-                    "InvalidLambdaResponseException" => RespondToAuthChallengeError::InvalidLambdaResponse(String::from(error_message)),
+                    "InvalidLambdaResponseException" => {
+                        RespondToAuthChallengeError::InvalidLambdaResponse(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidParameterException" => {
                         RespondToAuthChallengeError::InvalidParameter(String::from(error_message))
                     }
                     "InvalidPasswordException" => {
                         RespondToAuthChallengeError::InvalidPassword(String::from(error_message))
                     }
-                    "InvalidSmsRoleAccessPolicyException" => RespondToAuthChallengeError::InvalidSmsRoleAccessPolicy(String::from(error_message)),
-                    "InvalidSmsRoleTrustRelationshipException" => RespondToAuthChallengeError::InvalidSmsRoleTrustRelationship(String::from(error_message)),
-                    "InvalidUserPoolConfigurationException" => RespondToAuthChallengeError::InvalidUserPoolConfiguration(String::from(error_message)),
+                    "InvalidSmsRoleAccessPolicyException" => {
+                        RespondToAuthChallengeError::InvalidSmsRoleAccessPolicy(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidSmsRoleTrustRelationshipException" => {
+                        RespondToAuthChallengeError::InvalidSmsRoleTrustRelationship(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidUserPoolConfigurationException" => {
+                        RespondToAuthChallengeError::InvalidUserPoolConfiguration(String::from(
+                            error_message,
+                        ))
+                    }
                     "MFAMethodNotFoundException" => {
                         RespondToAuthChallengeError::MFAMethodNotFound(String::from(error_message))
                     }
                     "NotAuthorizedException" => {
                         RespondToAuthChallengeError::NotAuthorized(String::from(error_message))
                     }
-                    "PasswordResetRequiredException" => RespondToAuthChallengeError::PasswordResetRequired(String::from(error_message)),
+                    "PasswordResetRequiredException" => {
+                        RespondToAuthChallengeError::PasswordResetRequired(String::from(
+                            error_message,
+                        ))
+                    }
                     "ResourceNotFoundException" => {
                         RespondToAuthChallengeError::ResourceNotFound(String::from(error_message))
                     }
@@ -11114,7 +11356,11 @@ impl RespondToAuthChallengeError {
                     "UnexpectedLambdaException" => {
                         RespondToAuthChallengeError::UnexpectedLambda(String::from(error_message))
                     }
-                    "UserLambdaValidationException" => RespondToAuthChallengeError::UserLambdaValidation(String::from(error_message)),
+                    "UserLambdaValidationException" => {
+                        RespondToAuthChallengeError::UserLambdaValidation(String::from(
+                            error_message,
+                        ))
+                    }
                     "UserNotConfirmedException" => {
                         RespondToAuthChallengeError::UserNotConfirmed(String::from(error_message))
                     }
@@ -11210,7 +11456,6 @@ pub enum SetUICustomizationError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl SetUICustomizationError {
     pub fn from_body(body: &str) -> SetUICustomizationError {
@@ -11319,7 +11564,6 @@ pub enum SetUserSettingsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl SetUserSettingsError {
     pub fn from_body(body: &str) -> SetUserSettingsError {
@@ -11448,7 +11692,6 @@ pub enum SignUpError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl SignUpError {
     pub fn from_body(body: &str) -> SignUpError {
@@ -11588,7 +11831,6 @@ pub enum StartUserImportJobError {
     Unknown(String),
 }
 
-
 impl StartUserImportJobError {
     pub fn from_body(body: &str) -> StartUserImportJobError {
         match from_str::<SerdeJsonValue>(body) {
@@ -11698,7 +11940,6 @@ pub enum StopUserImportJobError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl StopUserImportJobError {
     pub fn from_body(body: &str) -> StopUserImportJobError {
@@ -11816,7 +12057,6 @@ pub enum UpdateDeviceStatusError {
     Unknown(String),
 }
 
-
 impl UpdateDeviceStatusError {
     pub fn from_body(body: &str) -> UpdateDeviceStatusError {
         match from_str::<SerdeJsonValue>(body) {
@@ -11836,7 +12076,11 @@ impl UpdateDeviceStatusError {
                     "InvalidParameterException" => {
                         UpdateDeviceStatusError::InvalidParameter(String::from(error_message))
                     }
-                    "InvalidUserPoolConfigurationException" => UpdateDeviceStatusError::InvalidUserPoolConfiguration(String::from(error_message)),
+                    "InvalidUserPoolConfigurationException" => {
+                        UpdateDeviceStatusError::InvalidUserPoolConfiguration(String::from(
+                            error_message,
+                        ))
+                    }
                     "NotAuthorizedException" => {
                         UpdateDeviceStatusError::NotAuthorized(String::from(error_message))
                     }
@@ -11934,7 +12178,6 @@ pub enum UpdateGroupError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl UpdateGroupError {
     pub fn from_body(body: &str) -> UpdateGroupError {
@@ -12040,7 +12283,6 @@ pub enum UpdateIdentityProviderError {
     Unknown(String),
 }
 
-
 impl UpdateIdentityProviderError {
     pub fn from_body(body: &str) -> UpdateIdentityProviderError {
         match from_str::<SerdeJsonValue>(body) {
@@ -12069,7 +12311,11 @@ impl UpdateIdentityProviderError {
                     "TooManyRequestsException" => {
                         UpdateIdentityProviderError::TooManyRequests(String::from(error_message))
                     }
-                    "UnsupportedIdentityProviderException" => UpdateIdentityProviderError::UnsupportedIdentityProvider(String::from(error_message)),
+                    "UnsupportedIdentityProviderException" => {
+                        UpdateIdentityProviderError::UnsupportedIdentityProvider(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         UpdateIdentityProviderError::Validation(error_message.to_string())
                     }
@@ -12146,7 +12392,6 @@ pub enum UpdateResourceServerError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl UpdateResourceServerError {
     pub fn from_body(body: &str) -> UpdateResourceServerError {
@@ -12278,7 +12523,6 @@ pub enum UpdateUserAttributesError {
     Unknown(String),
 }
 
-
 impl UpdateUserAttributesError {
     pub fn from_body(body: &str) -> UpdateUserAttributesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -12307,17 +12551,37 @@ impl UpdateUserAttributesError {
                     "InternalErrorException" => {
                         UpdateUserAttributesError::InternalError(String::from(error_message))
                     }
-                    "InvalidEmailRoleAccessPolicyException" => UpdateUserAttributesError::InvalidEmailRoleAccessPolicy(String::from(error_message)),
-                    "InvalidLambdaResponseException" => UpdateUserAttributesError::InvalidLambdaResponse(String::from(error_message)),
+                    "InvalidEmailRoleAccessPolicyException" => {
+                        UpdateUserAttributesError::InvalidEmailRoleAccessPolicy(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidLambdaResponseException" => {
+                        UpdateUserAttributesError::InvalidLambdaResponse(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidParameterException" => {
                         UpdateUserAttributesError::InvalidParameter(String::from(error_message))
                     }
-                    "InvalidSmsRoleAccessPolicyException" => UpdateUserAttributesError::InvalidSmsRoleAccessPolicy(String::from(error_message)),
-                    "InvalidSmsRoleTrustRelationshipException" => UpdateUserAttributesError::InvalidSmsRoleTrustRelationship(String::from(error_message)),
+                    "InvalidSmsRoleAccessPolicyException" => {
+                        UpdateUserAttributesError::InvalidSmsRoleAccessPolicy(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidSmsRoleTrustRelationshipException" => {
+                        UpdateUserAttributesError::InvalidSmsRoleTrustRelationship(String::from(
+                            error_message,
+                        ))
+                    }
                     "NotAuthorizedException" => {
                         UpdateUserAttributesError::NotAuthorized(String::from(error_message))
                     }
-                    "PasswordResetRequiredException" => UpdateUserAttributesError::PasswordResetRequired(String::from(error_message)),
+                    "PasswordResetRequiredException" => {
+                        UpdateUserAttributesError::PasswordResetRequired(String::from(
+                            error_message,
+                        ))
+                    }
                     "ResourceNotFoundException" => {
                         UpdateUserAttributesError::ResourceNotFound(String::from(error_message))
                     }
@@ -12437,7 +12701,6 @@ pub enum UpdateUserPoolError {
     Unknown(String),
 }
 
-
 impl UpdateUserPoolError {
     pub fn from_body(body: &str) -> UpdateUserPoolError {
         match from_str::<SerdeJsonValue>(body) {
@@ -12457,14 +12720,22 @@ impl UpdateUserPoolError {
                     "InternalErrorException" => {
                         UpdateUserPoolError::InternalError(String::from(error_message))
                     }
-                    "InvalidEmailRoleAccessPolicyException" => UpdateUserPoolError::InvalidEmailRoleAccessPolicy(String::from(error_message)),
+                    "InvalidEmailRoleAccessPolicyException" => {
+                        UpdateUserPoolError::InvalidEmailRoleAccessPolicy(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidParameterException" => {
                         UpdateUserPoolError::InvalidParameter(String::from(error_message))
                     }
                     "InvalidSmsRoleAccessPolicyException" => {
                         UpdateUserPoolError::InvalidSmsRoleAccessPolicy(String::from(error_message))
                     }
-                    "InvalidSmsRoleTrustRelationshipException" => UpdateUserPoolError::InvalidSmsRoleTrustRelationship(String::from(error_message)),
+                    "InvalidSmsRoleTrustRelationshipException" => {
+                        UpdateUserPoolError::InvalidSmsRoleTrustRelationship(String::from(
+                            error_message,
+                        ))
+                    }
                     "NotAuthorizedException" => {
                         UpdateUserPoolError::NotAuthorized(String::from(error_message))
                     }
@@ -12563,7 +12834,6 @@ pub enum UpdateUserPoolClientError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl UpdateUserPoolClientError {
     pub fn from_body(body: &str) -> UpdateUserPoolClientError {
@@ -12689,7 +12959,6 @@ pub enum VerifyUserAttributeError {
     Unknown(String),
 }
 
-
 impl VerifyUserAttributeError {
     pub fn from_body(body: &str) -> VerifyUserAttributeError {
         match from_str::<SerdeJsonValue>(body) {
@@ -12797,520 +13066,478 @@ impl Error for VerifyUserAttributeError {
 }
 /// Trait representing the capabilities of the Amazon Cognito Identity Provider API. Amazon Cognito Identity Provider clients implement this trait.
 pub trait CognitoIdentityProvider {
-    #[doc="<p>Adds additional user attributes to the user pool schema.</p>"]
-    fn add_custom_attributes(&self,
-                             input: &AddCustomAttributesRequest)
-                             -> Result<AddCustomAttributesResponse, AddCustomAttributesError>;
-
+    #[doc = "<p>Adds additional user attributes to the user pool schema.</p>"]
+    fn add_custom_attributes(
+        &self,
+        input: &AddCustomAttributesRequest,
+    ) -> Result<AddCustomAttributesResponse, AddCustomAttributesError>;
 
     #[doc="<p>Adds the specified user to the specified group.</p> <p>Requires developer credentials.</p>"]
-    fn admin_add_user_to_group(&self,
-                               input: &AdminAddUserToGroupRequest)
-                               -> Result<(), AdminAddUserToGroupError>;
-
+    fn admin_add_user_to_group(
+        &self,
+        input: &AdminAddUserToGroupRequest,
+    ) -> Result<(), AdminAddUserToGroupError>;
 
     #[doc="<p>Confirms user registration as an admin without using a confirmation code. Works on any user.</p> <p>Requires developer credentials.</p>"]
-    fn admin_confirm_sign_up(&self,
-                             input: &AdminConfirmSignUpRequest)
-                             -> Result<AdminConfirmSignUpResponse, AdminConfirmSignUpError>;
-
+    fn admin_confirm_sign_up(
+        &self,
+        input: &AdminConfirmSignUpRequest,
+    ) -> Result<AdminConfirmSignUpResponse, AdminConfirmSignUpError>;
 
     #[doc="<p>Creates a new user in the specified user pool and sends a welcome message via email or phone (SMS). This message is based on a template that you configured in your call to <a href=\"API_CreateUserPool.html\">CreateUserPool</a> or <a href=\"API_UpdateUserPool.html\">UpdateUserPool</a>. This template includes your custom sign-up instructions and placeholders for user name and temporary password.</p> <p>Requires developer credentials.</p>"]
-    fn admin_create_user(&self,
-                         input: &AdminCreateUserRequest)
-                         -> Result<AdminCreateUserResponse, AdminCreateUserError>;
-
+    fn admin_create_user(
+        &self,
+        input: &AdminCreateUserRequest,
+    ) -> Result<AdminCreateUserResponse, AdminCreateUserError>;
 
     #[doc="<p>Deletes a user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>"]
-    fn admin_delete_user(&self,
-                         input: &AdminDeleteUserRequest)
-                         -> Result<(), AdminDeleteUserError>;
-
+    fn admin_delete_user(&self, input: &AdminDeleteUserRequest)
+        -> Result<(), AdminDeleteUserError>;
 
     #[doc="<p>Deletes the user attributes in a user pool as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>"]
-    fn admin_delete_user_attributes
-        (&self,
-         input: &AdminDeleteUserAttributesRequest)
-         -> Result<AdminDeleteUserAttributesResponse, AdminDeleteUserAttributesError>;
-
+    fn admin_delete_user_attributes(
+        &self,
+        input: &AdminDeleteUserAttributesRequest,
+    ) -> Result<AdminDeleteUserAttributesResponse, AdminDeleteUserAttributesError>;
 
     #[doc="<p>Disables the user from signing in with the specified external (SAML or social) identity provider. If the user to disable is a Cognito User Pools native username + password user, they are not permitted to use their password to sign-in. If the user to disable is a linked external IdP user, any link between that user and an existing user is removed. The next time the external user (no longer attached to the previously linked <code>DestinationUser</code>) signs in, they must create a new user account. See <a href=\"API_AdminLinkProviderForUser.html\">AdminLinkProviderForUser</a>.</p> <p>This action is enabled only for admin access and requires developer credentials.</p> <p>The <code>ProviderName</code> must match the value specified when creating an IdP for the pool. </p> <p>To disable a native username + password user, the <code>ProviderName</code> value must be <code>Cognito</code> and the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code>, with the <code>ProviderAttributeValue</code> being the name that is used in the user pool for the user.</p> <p>The <code>ProviderAttributeName</code> must always be <code>Cognito_Subject</code> for social identity providers. The <code>ProviderAttributeValue</code> must always be the exact subject that was used when the user was originally linked as a source user.</p> <p>For de-linking a SAML identity, there are two scenarios. If the linked identity has not yet been used to sign-in, the <code>ProviderAttributeName</code> and <code>ProviderAttributeValue</code> must be the same values that were used for the <code>SourceUser</code> when the identities were originally linked in the <a href=\"API_AdminLinkProviderForUser.html\">AdminLinkProviderForUser</a> call. (If the linking was done with <code>ProviderAttributeName</code> set to <code>Cognito_Subject</code>, the same applies here). However, if the user has already signed in, the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code> and <code>ProviderAttributeValue</code> must be the subject of the SAML assertion.</p>"]
-    fn admin_disable_provider_for_user
-        (&self,
-         input: &AdminDisableProviderForUserRequest)
-         -> Result<AdminDisableProviderForUserResponse, AdminDisableProviderForUserError>;
-
+    fn admin_disable_provider_for_user(
+        &self,
+        input: &AdminDisableProviderForUserRequest,
+    ) -> Result<AdminDisableProviderForUserResponse, AdminDisableProviderForUserError>;
 
     #[doc="<p>Disables the specified user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>"]
-    fn admin_disable_user(&self,
-                          input: &AdminDisableUserRequest)
-                          -> Result<AdminDisableUserResponse, AdminDisableUserError>;
-
+    fn admin_disable_user(
+        &self,
+        input: &AdminDisableUserRequest,
+    ) -> Result<AdminDisableUserResponse, AdminDisableUserError>;
 
     #[doc="<p>Enables the specified user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>"]
-    fn admin_enable_user(&self,
-                         input: &AdminEnableUserRequest)
-                         -> Result<AdminEnableUserResponse, AdminEnableUserError>;
+    fn admin_enable_user(
+        &self,
+        input: &AdminEnableUserRequest,
+    ) -> Result<AdminEnableUserResponse, AdminEnableUserError>;
 
+    #[doc = "<p>Forgets the device, as an administrator.</p> <p>Requires developer credentials.</p>"]
+    fn admin_forget_device(
+        &self,
+        input: &AdminForgetDeviceRequest,
+    ) -> Result<(), AdminForgetDeviceError>;
 
-    #[doc="<p>Forgets the device, as an administrator.</p> <p>Requires developer credentials.</p>"]
-    fn admin_forget_device(&self,
-                           input: &AdminForgetDeviceRequest)
-                           -> Result<(), AdminForgetDeviceError>;
-
-
-    #[doc="<p>Gets the device, as an administrator.</p> <p>Requires developer credentials.</p>"]
-    fn admin_get_device(&self,
-                        input: &AdminGetDeviceRequest)
-                        -> Result<AdminGetDeviceResponse, AdminGetDeviceError>;
-
+    #[doc = "<p>Gets the device, as an administrator.</p> <p>Requires developer credentials.</p>"]
+    fn admin_get_device(
+        &self,
+        input: &AdminGetDeviceRequest,
+    ) -> Result<AdminGetDeviceResponse, AdminGetDeviceError>;
 
     #[doc="<p>Gets the specified user by user name in a user pool as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>"]
-    fn admin_get_user(&self,
-                      input: &AdminGetUserRequest)
-                      -> Result<AdminGetUserResponse, AdminGetUserError>;
-
+    fn admin_get_user(
+        &self,
+        input: &AdminGetUserRequest,
+    ) -> Result<AdminGetUserResponse, AdminGetUserError>;
 
     #[doc="<p>Initiates the authentication flow, as an administrator.</p> <p>Requires developer credentials.</p>"]
-    fn admin_initiate_auth(&self,
-                           input: &AdminInitiateAuthRequest)
-                           -> Result<AdminInitiateAuthResponse, AdminInitiateAuthError>;
-
+    fn admin_initiate_auth(
+        &self,
+        input: &AdminInitiateAuthRequest,
+    ) -> Result<AdminInitiateAuthResponse, AdminInitiateAuthError>;
 
     #[doc="<p>Links an existing user account in a user pool (<code>DestinationUser</code>) to an identity from an external identity provider (<code>SourceUser</code>) based on a specified attribute name and value from the external identity provider. This allows you to create a link from the existing user account to an external federated user identity that has not yet been used to sign in, so that the federated user identity can be used to sign in as the existing user account. </p> <p> For example, if there is an existing user with a username and password, this API links that user to a federated user identity, so that when the federated user identity is used, the user signs in as the existing user account. </p> <important> <p>Because this API allows a user with an external federated identity to sign in as an existing user in the user pool, it is critical that it only be used with external identity providers and provider attributes that have been trusted by the application owner.</p> </important> <p>See also <a href=\"API_AdminDisableProviderForUser.html\">AdminDisableProviderForUser</a>.</p> <p>This action is enabled only for admin access and requires developer credentials.</p>"]
-    fn admin_link_provider_for_user
-        (&self,
-         input: &AdminLinkProviderForUserRequest)
-         -> Result<AdminLinkProviderForUserResponse, AdminLinkProviderForUserError>;
+    fn admin_link_provider_for_user(
+        &self,
+        input: &AdminLinkProviderForUserRequest,
+    ) -> Result<AdminLinkProviderForUserResponse, AdminLinkProviderForUserError>;
 
-
-    #[doc="<p>Lists devices, as an administrator.</p> <p>Requires developer credentials.</p>"]
-    fn admin_list_devices(&self,
-                          input: &AdminListDevicesRequest)
-                          -> Result<AdminListDevicesResponse, AdminListDevicesError>;
-
+    #[doc = "<p>Lists devices, as an administrator.</p> <p>Requires developer credentials.</p>"]
+    fn admin_list_devices(
+        &self,
+        input: &AdminListDevicesRequest,
+    ) -> Result<AdminListDevicesResponse, AdminListDevicesError>;
 
     #[doc="<p>Lists the groups that the user belongs to.</p> <p>Requires developer credentials.</p>"]
-    fn admin_list_groups_for_user
-        (&self,
-         input: &AdminListGroupsForUserRequest)
-         -> Result<AdminListGroupsForUserResponse, AdminListGroupsForUserError>;
-
+    fn admin_list_groups_for_user(
+        &self,
+        input: &AdminListGroupsForUserRequest,
+    ) -> Result<AdminListGroupsForUserResponse, AdminListGroupsForUserError>;
 
     #[doc="<p>Removes the specified user from the specified group.</p> <p>Requires developer credentials.</p>"]
-    fn admin_remove_user_from_group(&self,
-                                    input: &AdminRemoveUserFromGroupRequest)
-                                    -> Result<(), AdminRemoveUserFromGroupError>;
-
+    fn admin_remove_user_from_group(
+        &self,
+        input: &AdminRemoveUserFromGroupRequest,
+    ) -> Result<(), AdminRemoveUserFromGroupError>;
 
     #[doc="<p>Resets the specified user's password in a user pool as an administrator. Works on any user.</p> <p>When a developer calls this API, the current password is invalidated, so it must be changed. If a user tries to sign in after the API is called, the app will get a PasswordResetRequiredException exception back and should direct the user down the flow to reset the password, which is the same as the forgot password flow. In addition, if the user pool has phone verification selected and a verified phone number exists for the user, or if email verification is selected and a verified email exists for the user, calling this API will also result in sending a message to the end user with the code to change their password.</p> <p>Requires developer credentials.</p>"]
-    fn admin_reset_user_password
-        (&self,
-         input: &AdminResetUserPasswordRequest)
-         -> Result<AdminResetUserPasswordResponse, AdminResetUserPasswordError>;
-
+    fn admin_reset_user_password(
+        &self,
+        input: &AdminResetUserPasswordRequest,
+    ) -> Result<AdminResetUserPasswordResponse, AdminResetUserPasswordError>;
 
     #[doc="<p>Responds to an authentication challenge, as an administrator.</p> <p>Requires developer credentials.</p>"]
-    fn admin_respond_to_auth_challenge
-        (&self,
-         input: &AdminRespondToAuthChallengeRequest)
-         -> Result<AdminRespondToAuthChallengeResponse, AdminRespondToAuthChallengeError>;
-
+    fn admin_respond_to_auth_challenge(
+        &self,
+        input: &AdminRespondToAuthChallengeRequest,
+    ) -> Result<AdminRespondToAuthChallengeResponse, AdminRespondToAuthChallengeError>;
 
     #[doc="<p>Sets all the user settings for a specified user name. Works on any user.</p> <p>Requires developer credentials.</p>"]
-    fn admin_set_user_settings
-        (&self,
-         input: &AdminSetUserSettingsRequest)
-         -> Result<AdminSetUserSettingsResponse, AdminSetUserSettingsError>;
-
+    fn admin_set_user_settings(
+        &self,
+        input: &AdminSetUserSettingsRequest,
+    ) -> Result<AdminSetUserSettingsResponse, AdminSetUserSettingsError>;
 
     #[doc="<p>Updates the device status as an administrator.</p> <p>Requires developer credentials.</p>"]
-    fn admin_update_device_status
-        (&self,
-         input: &AdminUpdateDeviceStatusRequest)
-         -> Result<AdminUpdateDeviceStatusResponse, AdminUpdateDeviceStatusError>;
-
+    fn admin_update_device_status(
+        &self,
+        input: &AdminUpdateDeviceStatusRequest,
+    ) -> Result<AdminUpdateDeviceStatusResponse, AdminUpdateDeviceStatusError>;
 
     #[doc="<p>Updates the specified user's attributes, including developer attributes, as an administrator. Works on any user.</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p> <p>In addition to updating user attributes, this API can also be used to mark phone and email as verified.</p> <p>Requires developer credentials.</p>"]
-    fn admin_update_user_attributes
-        (&self,
-         input: &AdminUpdateUserAttributesRequest)
-         -> Result<AdminUpdateUserAttributesResponse, AdminUpdateUserAttributesError>;
-
+    fn admin_update_user_attributes(
+        &self,
+        input: &AdminUpdateUserAttributesRequest,
+    ) -> Result<AdminUpdateUserAttributesResponse, AdminUpdateUserAttributesError>;
 
     #[doc="<p>Signs out users from all devices, as an administrator.</p> <p>Requires developer credentials.</p>"]
-    fn admin_user_global_sign_out
-        (&self,
-         input: &AdminUserGlobalSignOutRequest)
-         -> Result<AdminUserGlobalSignOutResponse, AdminUserGlobalSignOutError>;
+    fn admin_user_global_sign_out(
+        &self,
+        input: &AdminUserGlobalSignOutRequest,
+    ) -> Result<AdminUserGlobalSignOutResponse, AdminUserGlobalSignOutError>;
 
-
-    #[doc="<p>Changes the password for a specified user in a user pool.</p>"]
-    fn change_password(&self,
-                       input: &ChangePasswordRequest)
-                       -> Result<ChangePasswordResponse, ChangePasswordError>;
-
+    #[doc = "<p>Changes the password for a specified user in a user pool.</p>"]
+    fn change_password(
+        &self,
+        input: &ChangePasswordRequest,
+    ) -> Result<ChangePasswordResponse, ChangePasswordError>;
 
     #[doc="<p>Confirms tracking of the device. This API call is the call that begins device tracking.</p>"]
-    fn confirm_device(&self,
-                      input: &ConfirmDeviceRequest)
-                      -> Result<ConfirmDeviceResponse, ConfirmDeviceError>;
+    fn confirm_device(
+        &self,
+        input: &ConfirmDeviceRequest,
+    ) -> Result<ConfirmDeviceResponse, ConfirmDeviceError>;
 
-
-    #[doc="<p>Allows a user to enter a confirmation code to reset a forgotten password.</p>"]
-    fn confirm_forgot_password
-        (&self,
-         input: &ConfirmForgotPasswordRequest)
-         -> Result<ConfirmForgotPasswordResponse, ConfirmForgotPasswordError>;
-
+    #[doc = "<p>Allows a user to enter a confirmation code to reset a forgotten password.</p>"]
+    fn confirm_forgot_password(
+        &self,
+        input: &ConfirmForgotPasswordRequest,
+    ) -> Result<ConfirmForgotPasswordResponse, ConfirmForgotPasswordError>;
 
     #[doc="<p>Confirms registration of a user and handles the existing alias from a previous user.</p>"]
-    fn confirm_sign_up(&self,
-                       input: &ConfirmSignUpRequest)
-                       -> Result<ConfirmSignUpResponse, ConfirmSignUpError>;
-
+    fn confirm_sign_up(
+        &self,
+        input: &ConfirmSignUpRequest,
+    ) -> Result<ConfirmSignUpResponse, ConfirmSignUpError>;
 
     #[doc="<p>Creates a new group in the specified user pool.</p> <p>Requires developer credentials.</p>"]
-    fn create_group(&self,
-                    input: &CreateGroupRequest)
-                    -> Result<CreateGroupResponse, CreateGroupError>;
+    fn create_group(
+        &self,
+        input: &CreateGroupRequest,
+    ) -> Result<CreateGroupResponse, CreateGroupError>;
 
+    #[doc = "<p>Creates an identity provider for a user pool.</p>"]
+    fn create_identity_provider(
+        &self,
+        input: &CreateIdentityProviderRequest,
+    ) -> Result<CreateIdentityProviderResponse, CreateIdentityProviderError>;
 
-    #[doc="<p>Creates an identity provider for a user pool.</p>"]
-    fn create_identity_provider
-        (&self,
-         input: &CreateIdentityProviderRequest)
-         -> Result<CreateIdentityProviderResponse, CreateIdentityProviderError>;
+    #[doc = "<p>Creates a new OAuth2.0 resource server and defines custom scopes in it.</p>"]
+    fn create_resource_server(
+        &self,
+        input: &CreateResourceServerRequest,
+    ) -> Result<CreateResourceServerResponse, CreateResourceServerError>;
 
-
-    #[doc="<p>Creates a new OAuth2.0 resource server and defines custom scopes in it.</p>"]
-    fn create_resource_server
-        (&self,
-         input: &CreateResourceServerRequest)
-         -> Result<CreateResourceServerResponse, CreateResourceServerError>;
-
-
-    #[doc="<p>Creates the user import job.</p>"]
-    fn create_user_import_job(&self,
-                              input: &CreateUserImportJobRequest)
-                              -> Result<CreateUserImportJobResponse, CreateUserImportJobError>;
-
+    #[doc = "<p>Creates the user import job.</p>"]
+    fn create_user_import_job(
+        &self,
+        input: &CreateUserImportJobRequest,
+    ) -> Result<CreateUserImportJobResponse, CreateUserImportJobError>;
 
     #[doc="<p>Creates a new Amazon Cognito user pool and sets the password policy for the pool.</p>"]
-    fn create_user_pool(&self,
-                        input: &CreateUserPoolRequest)
-                        -> Result<CreateUserPoolResponse, CreateUserPoolError>;
+    fn create_user_pool(
+        &self,
+        input: &CreateUserPoolRequest,
+    ) -> Result<CreateUserPoolResponse, CreateUserPoolError>;
 
+    #[doc = "<p>Creates the user pool client.</p>"]
+    fn create_user_pool_client(
+        &self,
+        input: &CreateUserPoolClientRequest,
+    ) -> Result<CreateUserPoolClientResponse, CreateUserPoolClientError>;
 
-    #[doc="<p>Creates the user pool client.</p>"]
-    fn create_user_pool_client
-        (&self,
-         input: &CreateUserPoolClientRequest)
-         -> Result<CreateUserPoolClientResponse, CreateUserPoolClientError>;
-
-
-    #[doc="<p>Creates a new domain for a user pool.</p>"]
-    fn create_user_pool_domain
-        (&self,
-         input: &CreateUserPoolDomainRequest)
-         -> Result<CreateUserPoolDomainResponse, CreateUserPoolDomainError>;
-
+    #[doc = "<p>Creates a new domain for a user pool.</p>"]
+    fn create_user_pool_domain(
+        &self,
+        input: &CreateUserPoolDomainRequest,
+    ) -> Result<CreateUserPoolDomainResponse, CreateUserPoolDomainError>;
 
     #[doc="<p>Deletes a group. Currently only groups with no members can be deleted.</p> <p>Requires developer credentials.</p>"]
     fn delete_group(&self, input: &DeleteGroupRequest) -> Result<(), DeleteGroupError>;
 
+    #[doc = "<p>Deletes an identity provider for a user pool.</p>"]
+    fn delete_identity_provider(
+        &self,
+        input: &DeleteIdentityProviderRequest,
+    ) -> Result<(), DeleteIdentityProviderError>;
 
-    #[doc="<p>Deletes an identity provider for a user pool.</p>"]
-    fn delete_identity_provider(&self,
-                                input: &DeleteIdentityProviderRequest)
-                                -> Result<(), DeleteIdentityProviderError>;
+    #[doc = "<p>Deletes a resource server.</p>"]
+    fn delete_resource_server(
+        &self,
+        input: &DeleteResourceServerRequest,
+    ) -> Result<(), DeleteResourceServerError>;
 
-
-    #[doc="<p>Deletes a resource server.</p>"]
-    fn delete_resource_server(&self,
-                              input: &DeleteResourceServerRequest)
-                              -> Result<(), DeleteResourceServerError>;
-
-
-    #[doc="<p>Allows a user to delete himself or herself.</p>"]
+    #[doc = "<p>Allows a user to delete himself or herself.</p>"]
     fn delete_user(&self, input: &DeleteUserRequest) -> Result<(), DeleteUserError>;
 
+    #[doc = "<p>Deletes the attributes for a user.</p>"]
+    fn delete_user_attributes(
+        &self,
+        input: &DeleteUserAttributesRequest,
+    ) -> Result<DeleteUserAttributesResponse, DeleteUserAttributesError>;
 
-    #[doc="<p>Deletes the attributes for a user.</p>"]
-    fn delete_user_attributes
-        (&self,
-         input: &DeleteUserAttributesRequest)
-         -> Result<DeleteUserAttributesResponse, DeleteUserAttributesError>;
-
-
-    #[doc="<p>Deletes the specified Amazon Cognito user pool.</p>"]
+    #[doc = "<p>Deletes the specified Amazon Cognito user pool.</p>"]
     fn delete_user_pool(&self, input: &DeleteUserPoolRequest) -> Result<(), DeleteUserPoolError>;
 
+    #[doc = "<p>Allows the developer to delete the user pool client.</p>"]
+    fn delete_user_pool_client(
+        &self,
+        input: &DeleteUserPoolClientRequest,
+    ) -> Result<(), DeleteUserPoolClientError>;
 
-    #[doc="<p>Allows the developer to delete the user pool client.</p>"]
-    fn delete_user_pool_client(&self,
-                               input: &DeleteUserPoolClientRequest)
-                               -> Result<(), DeleteUserPoolClientError>;
+    #[doc = "<p>Deletes a domain for a user pool.</p>"]
+    fn delete_user_pool_domain(
+        &self,
+        input: &DeleteUserPoolDomainRequest,
+    ) -> Result<DeleteUserPoolDomainResponse, DeleteUserPoolDomainError>;
 
+    #[doc = "<p>Gets information about a specific identity provider.</p>"]
+    fn describe_identity_provider(
+        &self,
+        input: &DescribeIdentityProviderRequest,
+    ) -> Result<DescribeIdentityProviderResponse, DescribeIdentityProviderError>;
 
-    #[doc="<p>Deletes a domain for a user pool.</p>"]
-    fn delete_user_pool_domain
-        (&self,
-         input: &DeleteUserPoolDomainRequest)
-         -> Result<DeleteUserPoolDomainResponse, DeleteUserPoolDomainError>;
+    #[doc = "<p>Describes a resource server.</p>"]
+    fn describe_resource_server(
+        &self,
+        input: &DescribeResourceServerRequest,
+    ) -> Result<DescribeResourceServerResponse, DescribeResourceServerError>;
 
+    #[doc = "<p>Describes the user import job.</p>"]
+    fn describe_user_import_job(
+        &self,
+        input: &DescribeUserImportJobRequest,
+    ) -> Result<DescribeUserImportJobResponse, DescribeUserImportJobError>;
 
-    #[doc="<p>Gets information about a specific identity provider.</p>"]
-    fn describe_identity_provider
-        (&self,
-         input: &DescribeIdentityProviderRequest)
-         -> Result<DescribeIdentityProviderResponse, DescribeIdentityProviderError>;
-
-
-    #[doc="<p>Describes a resource server.</p>"]
-    fn describe_resource_server
-        (&self,
-         input: &DescribeResourceServerRequest)
-         -> Result<DescribeResourceServerResponse, DescribeResourceServerError>;
-
-
-    #[doc="<p>Describes the user import job.</p>"]
-    fn describe_user_import_job
-        (&self,
-         input: &DescribeUserImportJobRequest)
-         -> Result<DescribeUserImportJobResponse, DescribeUserImportJobError>;
-
-
-    #[doc="<p>Returns the configuration information and metadata of the specified user pool.</p>"]
-    fn describe_user_pool(&self,
-                          input: &DescribeUserPoolRequest)
-                          -> Result<DescribeUserPoolResponse, DescribeUserPoolError>;
-
+    #[doc = "<p>Returns the configuration information and metadata of the specified user pool.</p>"]
+    fn describe_user_pool(
+        &self,
+        input: &DescribeUserPoolRequest,
+    ) -> Result<DescribeUserPoolResponse, DescribeUserPoolError>;
 
     #[doc="<p>Client method for returning the configuration information and metadata of the specified user pool client.</p>"]
-    fn describe_user_pool_client
-        (&self,
-         input: &DescribeUserPoolClientRequest)
-         -> Result<DescribeUserPoolClientResponse, DescribeUserPoolClientError>;
+    fn describe_user_pool_client(
+        &self,
+        input: &DescribeUserPoolClientRequest,
+    ) -> Result<DescribeUserPoolClientResponse, DescribeUserPoolClientError>;
 
+    #[doc = "<p>Gets information about a domain.</p>"]
+    fn describe_user_pool_domain(
+        &self,
+        input: &DescribeUserPoolDomainRequest,
+    ) -> Result<DescribeUserPoolDomainResponse, DescribeUserPoolDomainError>;
 
-    #[doc="<p>Gets information about a domain.</p>"]
-    fn describe_user_pool_domain
-        (&self,
-         input: &DescribeUserPoolDomainRequest)
-         -> Result<DescribeUserPoolDomainResponse, DescribeUserPoolDomainError>;
-
-
-    #[doc="<p>Forgets the specified device.</p>"]
+    #[doc = "<p>Forgets the specified device.</p>"]
     fn forget_device(&self, input: &ForgetDeviceRequest) -> Result<(), ForgetDeviceError>;
 
-
     #[doc="<p>Calling this API causes a message to be sent to the end user with a confirmation code that is required to change the user's password. For the <code>Username</code> parameter, you can use the username or user alias. If a verified phone number exists for the user, the confirmation code is sent to the phone number. Otherwise, if a verified email exists, the confirmation code is sent to the email. If neither a verified phone number nor a verified email exists, <code>InvalidParameterException</code> is thrown. To use the confirmation code for resetting the password, call <a href=\"API_ConfirmForgotPassword.html\">ConfirmForgotPassword</a>.</p>"]
-    fn forgot_password(&self,
-                       input: &ForgotPasswordRequest)
-                       -> Result<ForgotPasswordResponse, ForgotPasswordError>;
-
+    fn forgot_password(
+        &self,
+        input: &ForgotPasswordRequest,
+    ) -> Result<ForgotPasswordResponse, ForgotPasswordError>;
 
     #[doc="<p>Gets the header information for the .csv file to be used as input for the user import job.</p>"]
-    fn get_csv_header(&self,
-                      input: &GetCSVHeaderRequest)
-                      -> Result<GetCSVHeaderResponse, GetCSVHeaderError>;
+    fn get_csv_header(
+        &self,
+        input: &GetCSVHeaderRequest,
+    ) -> Result<GetCSVHeaderResponse, GetCSVHeaderError>;
 
-
-    #[doc="<p>Gets the device.</p>"]
+    #[doc = "<p>Gets the device.</p>"]
     fn get_device(&self, input: &GetDeviceRequest) -> Result<GetDeviceResponse, GetDeviceError>;
 
-
-    #[doc="<p>Gets a group.</p> <p>Requires developer credentials.</p>"]
+    #[doc = "<p>Gets a group.</p> <p>Requires developer credentials.</p>"]
     fn get_group(&self, input: &GetGroupRequest) -> Result<GetGroupResponse, GetGroupError>;
 
-
-    #[doc="<p>Gets the specified identity provider.</p>"]
-    fn get_identity_provider_by_identifier
-        (&self,
-         input: &GetIdentityProviderByIdentifierRequest)
-         -> Result<GetIdentityProviderByIdentifierResponse, GetIdentityProviderByIdentifierError>;
-
+    #[doc = "<p>Gets the specified identity provider.</p>"]
+    fn get_identity_provider_by_identifier(
+        &self,
+        input: &GetIdentityProviderByIdentifierRequest,
+    ) -> Result<GetIdentityProviderByIdentifierResponse, GetIdentityProviderByIdentifierError>;
 
     #[doc="<p>Gets the UI Customization information for a particular app client's app UI, if there is something set. If nothing is set for the particular client, but there is an existing pool level customization (app <code>clientId</code> will be <code>ALL</code>), then that is returned. If nothing is present, then an empty shape is returned.</p>"]
-    fn get_ui_customization(&self,
-                            input: &GetUICustomizationRequest)
-                            -> Result<GetUICustomizationResponse, GetUICustomizationError>;
+    fn get_ui_customization(
+        &self,
+        input: &GetUICustomizationRequest,
+    ) -> Result<GetUICustomizationResponse, GetUICustomizationError>;
 
-
-    #[doc="<p>Gets the user attributes and metadata for a user.</p>"]
+    #[doc = "<p>Gets the user attributes and metadata for a user.</p>"]
     fn get_user(&self, input: &GetUserRequest) -> Result<GetUserResponse, GetUserError>;
 
+    #[doc = "<p>Gets the user attribute verification code for the specified attribute name.</p>"]
+    fn get_user_attribute_verification_code(
+        &self,
+        input: &GetUserAttributeVerificationCodeRequest,
+    ) -> Result<GetUserAttributeVerificationCodeResponse, GetUserAttributeVerificationCodeError>;
 
-    #[doc="<p>Gets the user attribute verification code for the specified attribute name.</p>"]
-    fn get_user_attribute_verification_code
-        (&self,
-         input: &GetUserAttributeVerificationCodeRequest)
-         -> Result<GetUserAttributeVerificationCodeResponse, GetUserAttributeVerificationCodeError>;
+    #[doc = "<p>Signs out users from all devices.</p>"]
+    fn global_sign_out(
+        &self,
+        input: &GlobalSignOutRequest,
+    ) -> Result<GlobalSignOutResponse, GlobalSignOutError>;
 
+    #[doc = "<p>Initiates the authentication flow.</p>"]
+    fn initiate_auth(
+        &self,
+        input: &InitiateAuthRequest,
+    ) -> Result<InitiateAuthResponse, InitiateAuthError>;
 
-    #[doc="<p>Signs out users from all devices.</p>"]
-    fn global_sign_out(&self,
-                       input: &GlobalSignOutRequest)
-                       -> Result<GlobalSignOutResponse, GlobalSignOutError>;
-
-
-    #[doc="<p>Initiates the authentication flow.</p>"]
-    fn initiate_auth(&self,
-                     input: &InitiateAuthRequest)
-                     -> Result<InitiateAuthResponse, InitiateAuthError>;
-
-
-    #[doc="<p>Lists the devices.</p>"]
-    fn list_devices(&self,
-                    input: &ListDevicesRequest)
-                    -> Result<ListDevicesResponse, ListDevicesError>;
-
+    #[doc = "<p>Lists the devices.</p>"]
+    fn list_devices(
+        &self,
+        input: &ListDevicesRequest,
+    ) -> Result<ListDevicesResponse, ListDevicesError>;
 
     #[doc="<p>Lists the groups associated with a user pool.</p> <p>Requires developer credentials.</p>"]
-    fn list_groups(&self,
-                   input: &ListGroupsRequest)
-                   -> Result<ListGroupsResponse, ListGroupsError>;
+    fn list_groups(&self, input: &ListGroupsRequest)
+        -> Result<ListGroupsResponse, ListGroupsError>;
 
+    #[doc = "<p>Lists information about all identity providers for a user pool.</p>"]
+    fn list_identity_providers(
+        &self,
+        input: &ListIdentityProvidersRequest,
+    ) -> Result<ListIdentityProvidersResponse, ListIdentityProvidersError>;
 
-    #[doc="<p>Lists information about all identity providers for a user pool.</p>"]
-    fn list_identity_providers
-        (&self,
-         input: &ListIdentityProvidersRequest)
-         -> Result<ListIdentityProvidersResponse, ListIdentityProvidersError>;
+    #[doc = "<p>Lists the resource servers for a user pool.</p>"]
+    fn list_resource_servers(
+        &self,
+        input: &ListResourceServersRequest,
+    ) -> Result<ListResourceServersResponse, ListResourceServersError>;
 
+    #[doc = "<p>Lists the user import jobs.</p>"]
+    fn list_user_import_jobs(
+        &self,
+        input: &ListUserImportJobsRequest,
+    ) -> Result<ListUserImportJobsResponse, ListUserImportJobsError>;
 
-    #[doc="<p>Lists the resource servers for a user pool.</p>"]
-    fn list_resource_servers(&self,
-                             input: &ListResourceServersRequest)
-                             -> Result<ListResourceServersResponse, ListResourceServersError>;
+    #[doc = "<p>Lists the clients that have been created for the specified user pool.</p>"]
+    fn list_user_pool_clients(
+        &self,
+        input: &ListUserPoolClientsRequest,
+    ) -> Result<ListUserPoolClientsResponse, ListUserPoolClientsError>;
 
+    #[doc = "<p>Lists the user pools associated with an AWS account.</p>"]
+    fn list_user_pools(
+        &self,
+        input: &ListUserPoolsRequest,
+    ) -> Result<ListUserPoolsResponse, ListUserPoolsError>;
 
-    #[doc="<p>Lists the user import jobs.</p>"]
-    fn list_user_import_jobs(&self,
-                             input: &ListUserImportJobsRequest)
-                             -> Result<ListUserImportJobsResponse, ListUserImportJobsError>;
-
-
-    #[doc="<p>Lists the clients that have been created for the specified user pool.</p>"]
-    fn list_user_pool_clients(&self,
-                              input: &ListUserPoolClientsRequest)
-                              -> Result<ListUserPoolClientsResponse, ListUserPoolClientsError>;
-
-
-    #[doc="<p>Lists the user pools associated with an AWS account.</p>"]
-    fn list_user_pools(&self,
-                       input: &ListUserPoolsRequest)
-                       -> Result<ListUserPoolsResponse, ListUserPoolsError>;
-
-
-    #[doc="<p>Lists the users in the Amazon Cognito user pool.</p>"]
+    #[doc = "<p>Lists the users in the Amazon Cognito user pool.</p>"]
     fn list_users(&self, input: &ListUsersRequest) -> Result<ListUsersResponse, ListUsersError>;
 
-
-    #[doc="<p>Lists the users in the specified group.</p> <p>Requires developer credentials.</p>"]
-    fn list_users_in_group(&self,
-                           input: &ListUsersInGroupRequest)
-                           -> Result<ListUsersInGroupResponse, ListUsersInGroupError>;
-
+    #[doc = "<p>Lists the users in the specified group.</p> <p>Requires developer credentials.</p>"]
+    fn list_users_in_group(
+        &self,
+        input: &ListUsersInGroupRequest,
+    ) -> Result<ListUsersInGroupResponse, ListUsersInGroupError>;
 
     #[doc="<p>Resends the confirmation (for confirmation of registration) to a specific user in the user pool.</p>"]
-    fn resend_confirmation_code
-        (&self,
-         input: &ResendConfirmationCodeRequest)
-         -> Result<ResendConfirmationCodeResponse, ResendConfirmationCodeError>;
+    fn resend_confirmation_code(
+        &self,
+        input: &ResendConfirmationCodeRequest,
+    ) -> Result<ResendConfirmationCodeResponse, ResendConfirmationCodeError>;
 
-
-    #[doc="<p>Responds to the authentication challenge.</p>"]
-    fn respond_to_auth_challenge
-        (&self,
-         input: &RespondToAuthChallengeRequest)
-         -> Result<RespondToAuthChallengeResponse, RespondToAuthChallengeError>;
-
+    #[doc = "<p>Responds to the authentication challenge.</p>"]
+    fn respond_to_auth_challenge(
+        &self,
+        input: &RespondToAuthChallengeRequest,
+    ) -> Result<RespondToAuthChallengeResponse, RespondToAuthChallengeError>;
 
     #[doc="<p>Sets the UI customization information for a user pool's built-in app UI.</p> <p>You can specify app UI customization settings for a single client (with a specific <code>clientId</code>) or for all clients (by setting the <code>clientId</code> to <code>ALL</code>). If you specify <code>ALL</code>, the default configuration will be used for every client that has no UI customization set previously. If you specify UI customization settings for a particular client, it will no longer fall back to the <code>ALL</code> configuration. </p> <note> <p>To use this API, your user pool must have a domain associated with it. Otherwise, there is no place to host the app's pages, and the service will throw an error.</p> </note>"]
-    fn set_ui_customization(&self,
-                            input: &SetUICustomizationRequest)
-                            -> Result<SetUICustomizationResponse, SetUICustomizationError>;
-
+    fn set_ui_customization(
+        &self,
+        input: &SetUICustomizationRequest,
+    ) -> Result<SetUICustomizationResponse, SetUICustomizationError>;
 
     #[doc="<p>Sets the user settings like multi-factor authentication (MFA). If MFA is to be removed for a particular attribute pass the attribute with code delivery as null. If null list is passed, all MFA options are removed.</p>"]
-    fn set_user_settings(&self,
-                         input: &SetUserSettingsRequest)
-                         -> Result<SetUserSettingsResponse, SetUserSettingsError>;
-
+    fn set_user_settings(
+        &self,
+        input: &SetUserSettingsRequest,
+    ) -> Result<SetUserSettingsResponse, SetUserSettingsError>;
 
     #[doc="<p>Registers the user in the specified user pool and creates a user name, password, and user attributes.</p>"]
     fn sign_up(&self, input: &SignUpRequest) -> Result<SignUpResponse, SignUpError>;
 
+    #[doc = "<p>Starts the user import.</p>"]
+    fn start_user_import_job(
+        &self,
+        input: &StartUserImportJobRequest,
+    ) -> Result<StartUserImportJobResponse, StartUserImportJobError>;
 
-    #[doc="<p>Starts the user import.</p>"]
-    fn start_user_import_job(&self,
-                             input: &StartUserImportJobRequest)
-                             -> Result<StartUserImportJobResponse, StartUserImportJobError>;
+    #[doc = "<p>Stops the user import job.</p>"]
+    fn stop_user_import_job(
+        &self,
+        input: &StopUserImportJobRequest,
+    ) -> Result<StopUserImportJobResponse, StopUserImportJobError>;
 
-
-    #[doc="<p>Stops the user import job.</p>"]
-    fn stop_user_import_job(&self,
-                            input: &StopUserImportJobRequest)
-                            -> Result<StopUserImportJobResponse, StopUserImportJobError>;
-
-
-    #[doc="<p>Updates the device status.</p>"]
-    fn update_device_status(&self,
-                            input: &UpdateDeviceStatusRequest)
-                            -> Result<UpdateDeviceStatusResponse, UpdateDeviceStatusError>;
-
+    #[doc = "<p>Updates the device status.</p>"]
+    fn update_device_status(
+        &self,
+        input: &UpdateDeviceStatusRequest,
+    ) -> Result<UpdateDeviceStatusResponse, UpdateDeviceStatusError>;
 
     #[doc="<p>Updates the specified group with the specified attributes.</p> <p>Requires developer credentials.</p>"]
-    fn update_group(&self,
-                    input: &UpdateGroupRequest)
-                    -> Result<UpdateGroupResponse, UpdateGroupError>;
+    fn update_group(
+        &self,
+        input: &UpdateGroupRequest,
+    ) -> Result<UpdateGroupResponse, UpdateGroupError>;
 
+    #[doc = "<p>Updates identity provider information for a user pool.</p>"]
+    fn update_identity_provider(
+        &self,
+        input: &UpdateIdentityProviderRequest,
+    ) -> Result<UpdateIdentityProviderResponse, UpdateIdentityProviderError>;
 
-    #[doc="<p>Updates identity provider information for a user pool.</p>"]
-    fn update_identity_provider
-        (&self,
-         input: &UpdateIdentityProviderRequest)
-         -> Result<UpdateIdentityProviderResponse, UpdateIdentityProviderError>;
+    #[doc = "<p>Updates the name and scopes of resource server. All other fields are read-only.</p>"]
+    fn update_resource_server(
+        &self,
+        input: &UpdateResourceServerRequest,
+    ) -> Result<UpdateResourceServerResponse, UpdateResourceServerError>;
 
+    #[doc = "<p>Allows a user to update a specific attribute (one at a time).</p>"]
+    fn update_user_attributes(
+        &self,
+        input: &UpdateUserAttributesRequest,
+    ) -> Result<UpdateUserAttributesResponse, UpdateUserAttributesError>;
 
-    #[doc="<p>Updates the name and scopes of resource server. All other fields are read-only.</p>"]
-    fn update_resource_server
-        (&self,
-         input: &UpdateResourceServerRequest)
-         -> Result<UpdateResourceServerResponse, UpdateResourceServerError>;
-
-
-    #[doc="<p>Allows a user to update a specific attribute (one at a time).</p>"]
-    fn update_user_attributes
-        (&self,
-         input: &UpdateUserAttributesRequest)
-         -> Result<UpdateUserAttributesResponse, UpdateUserAttributesError>;
-
-
-    #[doc="<p>Updates the specified user pool with the specified attributes.</p>"]
-    fn update_user_pool(&self,
-                        input: &UpdateUserPoolRequest)
-                        -> Result<UpdateUserPoolResponse, UpdateUserPoolError>;
-
+    #[doc = "<p>Updates the specified user pool with the specified attributes.</p>"]
+    fn update_user_pool(
+        &self,
+        input: &UpdateUserPoolRequest,
+    ) -> Result<UpdateUserPoolResponse, UpdateUserPoolError>;
 
     #[doc="<p>Allows the developer to update the specified user pool client and password policy.</p>"]
-    fn update_user_pool_client
-        (&self,
-         input: &UpdateUserPoolClientRequest)
-         -> Result<UpdateUserPoolClientResponse, UpdateUserPoolClientError>;
+    fn update_user_pool_client(
+        &self,
+        input: &UpdateUserPoolClientRequest,
+    ) -> Result<UpdateUserPoolClientResponse, UpdateUserPoolClientError>;
 
-
-    #[doc="<p>Verifies the specified user attributes in the user pool.</p>"]
-    fn verify_user_attribute(&self,
-                             input: &VerifyUserAttributeRequest)
-                             -> Result<VerifyUserAttributeResponse, VerifyUserAttributeError>;
+    #[doc = "<p>Verifies the specified user attributes in the user pool.</p>"]
+    fn verify_user_attribute(
+        &self,
+        input: &VerifyUserAttributeRequest,
+    ) -> Result<VerifyUserAttributeResponse, VerifyUserAttributeError>;
 }
 /// A client for the Amazon Cognito Identity Provider API.
 pub struct CognitoIdentityProviderClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -13318,8 +13545,9 @@ pub struct CognitoIdentityProviderClient<P, D>
 }
 
 impl<P, D> CognitoIdentityProviderClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         CognitoIdentityProviderClient {
@@ -13331,18 +13559,22 @@ impl<P, D> CognitoIdentityProviderClient<P, D>
 }
 
 impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
-    #[doc="<p>Adds additional user attributes to the user pool schema.</p>"]
-    fn add_custom_attributes(&self,
-                             input: &AddCustomAttributesRequest)
-                             -> Result<AddCustomAttributesResponse, AddCustomAttributesError> {
+    #[doc = "<p>Adds additional user attributes to the user pool schema.</p>"]
+    fn add_custom_attributes(
+        &self,
+        input: &AddCustomAttributesRequest,
+    ) -> Result<AddCustomAttributesResponse, AddCustomAttributesError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.AddCustomAttributes");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.AddCustomAttributes",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -13354,26 +13586,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AddCustomAttributesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<AddCustomAttributesResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AddCustomAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AddCustomAttributesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Adds the specified user to the specified group.</p> <p>Requires developer credentials.</p>"]
-    fn admin_add_user_to_group(&self,
-                               input: &AdminAddUserToGroupRequest)
-                               -> Result<(), AdminAddUserToGroupError> {
+    fn admin_add_user_to_group(
+        &self,
+        input: &AdminAddUserToGroupRequest,
+    ) -> Result<(), AdminAddUserToGroupError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.AdminAddUserToGroup");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.AdminAddUserToGroup",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -13386,21 +13624,25 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AdminAddUserToGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AdminAddUserToGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Confirms user registration as an admin without using a confirmation code. Works on any user.</p> <p>Requires developer credentials.</p>"]
-    fn admin_confirm_sign_up(&self,
-                             input: &AdminConfirmSignUpRequest)
-                             -> Result<AdminConfirmSignUpResponse, AdminConfirmSignUpError> {
+    fn admin_confirm_sign_up(
+        &self,
+        input: &AdminConfirmSignUpRequest,
+    ) -> Result<AdminConfirmSignUpResponse, AdminConfirmSignUpError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.AdminConfirmSignUp");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.AdminConfirmSignUp",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -13412,26 +13654,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminConfirmSignUpResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<AdminConfirmSignUpResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AdminConfirmSignUpError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AdminConfirmSignUpError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Creates a new user in the specified user pool and sends a welcome message via email or phone (SMS). This message is based on a template that you configured in your call to <a href=\"API_CreateUserPool.html\">CreateUserPool</a> or <a href=\"API_UpdateUserPool.html\">UpdateUserPool</a>. This template includes your custom sign-up instructions and placeholders for user name and temporary password.</p> <p>Requires developer credentials.</p>"]
-    fn admin_create_user(&self,
-                         input: &AdminCreateUserRequest)
-                         -> Result<AdminCreateUserResponse, AdminCreateUserError> {
+    fn admin_create_user(
+        &self,
+        input: &AdminCreateUserRequest,
+    ) -> Result<AdminCreateUserResponse, AdminCreateUserError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.AdminCreateUser");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.AdminCreateUser",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -13443,28 +13691,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminCreateUserResponse>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<AdminCreateUserResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AdminCreateUserError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AdminCreateUserError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Deletes a user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>"]
-    fn admin_delete_user(&self,
-                         input: &AdminDeleteUserRequest)
-                         -> Result<(), AdminDeleteUserError> {
+    fn admin_delete_user(
+        &self,
+        input: &AdminDeleteUserRequest,
+    ) -> Result<(), AdminDeleteUserError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.AdminDeleteUser");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.AdminDeleteUser",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -13477,22 +13729,25 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AdminDeleteUserError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AdminDeleteUserError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Deletes the user attributes in a user pool as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>"]
-    fn admin_delete_user_attributes
-        (&self,
-         input: &AdminDeleteUserAttributesRequest)
-         -> Result<AdminDeleteUserAttributesResponse, AdminDeleteUserAttributesError> {
+    fn admin_delete_user_attributes(
+        &self,
+        input: &AdminDeleteUserAttributesRequest,
+    ) -> Result<AdminDeleteUserAttributesResponse, AdminDeleteUserAttributesError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.AdminDeleteUserAttributes");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.AdminDeleteUserAttributes",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -13504,28 +13759,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminDeleteUserAttributesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<AdminDeleteUserAttributesResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AdminDeleteUserAttributesError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(AdminDeleteUserAttributesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Disables the user from signing in with the specified external (SAML or social) identity provider. If the user to disable is a Cognito User Pools native username + password user, they are not permitted to use their password to sign-in. If the user to disable is a linked external IdP user, any link between that user and an existing user is removed. The next time the external user (no longer attached to the previously linked <code>DestinationUser</code>) signs in, they must create a new user account. See <a href=\"API_AdminLinkProviderForUser.html\">AdminLinkProviderForUser</a>.</p> <p>This action is enabled only for admin access and requires developer credentials.</p> <p>The <code>ProviderName</code> must match the value specified when creating an IdP for the pool. </p> <p>To disable a native username + password user, the <code>ProviderName</code> value must be <code>Cognito</code> and the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code>, with the <code>ProviderAttributeValue</code> being the name that is used in the user pool for the user.</p> <p>The <code>ProviderAttributeName</code> must always be <code>Cognito_Subject</code> for social identity providers. The <code>ProviderAttributeValue</code> must always be the exact subject that was used when the user was originally linked as a source user.</p> <p>For de-linking a SAML identity, there are two scenarios. If the linked identity has not yet been used to sign-in, the <code>ProviderAttributeName</code> and <code>ProviderAttributeValue</code> must be the same values that were used for the <code>SourceUser</code> when the identities were originally linked in the <a href=\"API_AdminLinkProviderForUser.html\">AdminLinkProviderForUser</a> call. (If the linking was done with <code>ProviderAttributeName</code> set to <code>Cognito_Subject</code>, the same applies here). However, if the user has already signed in, the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code> and <code>ProviderAttributeValue</code> must be the subject of the SAML assertion.</p>"]
-    fn admin_disable_provider_for_user
-        (&self,
-         input: &AdminDisableProviderForUserRequest)
-         -> Result<AdminDisableProviderForUserResponse, AdminDisableProviderForUserError> {
+    fn admin_disable_provider_for_user(
+        &self,
+        input: &AdminDisableProviderForUserRequest,
+    ) -> Result<AdminDisableProviderForUserResponse, AdminDisableProviderForUserError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.AdminDisableProviderForUser");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.AdminDisableProviderForUser",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -13537,27 +13796,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminDisableProviderForUserResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<AdminDisableProviderForUserResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AdminDisableProviderForUserError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(AdminDisableProviderForUserError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Disables the specified user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>"]
-    fn admin_disable_user(&self,
-                          input: &AdminDisableUserRequest)
-                          -> Result<AdminDisableUserResponse, AdminDisableUserError> {
+    fn admin_disable_user(
+        &self,
+        input: &AdminDisableUserRequest,
+    ) -> Result<AdminDisableUserResponse, AdminDisableUserError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.AdminDisableUser");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.AdminDisableUser",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -13569,28 +13833,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminDisableUserResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<AdminDisableUserResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AdminDisableUserError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AdminDisableUserError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Enables the specified user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>"]
-    fn admin_enable_user(&self,
-                         input: &AdminEnableUserRequest)
-                         -> Result<AdminEnableUserResponse, AdminEnableUserError> {
+    fn admin_enable_user(
+        &self,
+        input: &AdminEnableUserRequest,
+    ) -> Result<AdminEnableUserResponse, AdminEnableUserError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.AdminEnableUser");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.AdminEnableUser",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -13602,28 +13870,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminEnableUserResponse>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<AdminEnableUserResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AdminEnableUserError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AdminEnableUserError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Forgets the device, as an administrator.</p> <p>Requires developer credentials.</p>"]
-    fn admin_forget_device(&self,
-                           input: &AdminForgetDeviceRequest)
-                           -> Result<(), AdminForgetDeviceError> {
+    #[doc = "<p>Forgets the device, as an administrator.</p> <p>Requires developer credentials.</p>"]
+    fn admin_forget_device(
+        &self,
+        input: &AdminForgetDeviceRequest,
+    ) -> Result<(), AdminForgetDeviceError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.AdminForgetDevice");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.AdminForgetDevice",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -13636,21 +13908,25 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AdminForgetDeviceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AdminForgetDeviceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets the device, as an administrator.</p> <p>Requires developer credentials.</p>"]
-    fn admin_get_device(&self,
-                        input: &AdminGetDeviceRequest)
-                        -> Result<AdminGetDeviceResponse, AdminGetDeviceError> {
+    #[doc = "<p>Gets the device, as an administrator.</p> <p>Requires developer credentials.</p>"]
+    fn admin_get_device(
+        &self,
+        input: &AdminGetDeviceRequest,
+    ) -> Result<AdminGetDeviceResponse, AdminGetDeviceError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.AdminGetDevice");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.AdminGetDevice",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -13662,28 +13938,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminGetDeviceResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<AdminGetDeviceResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AdminGetDeviceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AdminGetDeviceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Gets the specified user by user name in a user pool as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>"]
-    fn admin_get_user(&self,
-                      input: &AdminGetUserRequest)
-                      -> Result<AdminGetUserResponse, AdminGetUserError> {
+    fn admin_get_user(
+        &self,
+        input: &AdminGetUserRequest,
+    ) -> Result<AdminGetUserResponse, AdminGetUserError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.AdminGetUser");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.AdminGetUser",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -13695,28 +13975,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminGetUserResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<AdminGetUserResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AdminGetUserError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AdminGetUserError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Initiates the authentication flow, as an administrator.</p> <p>Requires developer credentials.</p>"]
-    fn admin_initiate_auth(&self,
-                           input: &AdminInitiateAuthRequest)
-                           -> Result<AdminInitiateAuthResponse, AdminInitiateAuthError> {
+    fn admin_initiate_auth(
+        &self,
+        input: &AdminInitiateAuthRequest,
+    ) -> Result<AdminInitiateAuthResponse, AdminInitiateAuthError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.AdminInitiateAuth");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.AdminInitiateAuth",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -13728,27 +14012,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminInitiateAuthResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<AdminInitiateAuthResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AdminInitiateAuthError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AdminInitiateAuthError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Links an existing user account in a user pool (<code>DestinationUser</code>) to an identity from an external identity provider (<code>SourceUser</code>) based on a specified attribute name and value from the external identity provider. This allows you to create a link from the existing user account to an external federated user identity that has not yet been used to sign in, so that the federated user identity can be used to sign in as the existing user account. </p> <p> For example, if there is an existing user with a username and password, this API links that user to a federated user identity, so that when the federated user identity is used, the user signs in as the existing user account. </p> <important> <p>Because this API allows a user with an external federated identity to sign in as an existing user in the user pool, it is critical that it only be used with external identity providers and provider attributes that have been trusted by the application owner.</p> </important> <p>See also <a href=\"API_AdminDisableProviderForUser.html\">AdminDisableProviderForUser</a>.</p> <p>This action is enabled only for admin access and requires developer credentials.</p>"]
-    fn admin_link_provider_for_user
-        (&self,
-         input: &AdminLinkProviderForUserRequest)
-         -> Result<AdminLinkProviderForUserResponse, AdminLinkProviderForUserError> {
+    fn admin_link_provider_for_user(
+        &self,
+        input: &AdminLinkProviderForUserRequest,
+    ) -> Result<AdminLinkProviderForUserResponse, AdminLinkProviderForUserError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.AdminLinkProviderForUser");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.AdminLinkProviderForUser",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -13760,27 +14049,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminLinkProviderForUserResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<AdminLinkProviderForUserResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AdminLinkProviderForUserError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(AdminLinkProviderForUserError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists devices, as an administrator.</p> <p>Requires developer credentials.</p>"]
-    fn admin_list_devices(&self,
-                          input: &AdminListDevicesRequest)
-                          -> Result<AdminListDevicesResponse, AdminListDevicesError> {
+    #[doc = "<p>Lists devices, as an administrator.</p> <p>Requires developer credentials.</p>"]
+    fn admin_list_devices(
+        &self,
+        input: &AdminListDevicesRequest,
+    ) -> Result<AdminListDevicesResponse, AdminListDevicesError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.AdminListDevices");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.AdminListDevices",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -13792,29 +14086,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminListDevicesResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<AdminListDevicesResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AdminListDevicesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AdminListDevicesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Lists the groups that the user belongs to.</p> <p>Requires developer credentials.</p>"]
-    fn admin_list_groups_for_user
-        (&self,
-         input: &AdminListGroupsForUserRequest)
-         -> Result<AdminListGroupsForUserResponse, AdminListGroupsForUserError> {
+    fn admin_list_groups_for_user(
+        &self,
+        input: &AdminListGroupsForUserRequest,
+    ) -> Result<AdminListGroupsForUserResponse, AdminListGroupsForUserError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.AdminListGroupsForUser");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.AdminListGroupsForUser",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -13826,26 +14123,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminListGroupsForUserResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<AdminListGroupsForUserResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AdminListGroupsForUserError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AdminListGroupsForUserError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Removes the specified user from the specified group.</p> <p>Requires developer credentials.</p>"]
-    fn admin_remove_user_from_group(&self,
-                                    input: &AdminRemoveUserFromGroupRequest)
-                                    -> Result<(), AdminRemoveUserFromGroupError> {
+    fn admin_remove_user_from_group(
+        &self,
+        input: &AdminRemoveUserFromGroupRequest,
+    ) -> Result<(), AdminRemoveUserFromGroupError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.AdminRemoveUserFromGroup");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.AdminRemoveUserFromGroup",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -13858,23 +14161,25 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AdminRemoveUserFromGroupError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(AdminRemoveUserFromGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Resets the specified user's password in a user pool as an administrator. Works on any user.</p> <p>When a developer calls this API, the current password is invalidated, so it must be changed. If a user tries to sign in after the API is called, the app will get a PasswordResetRequiredException exception back and should direct the user down the flow to reset the password, which is the same as the forgot password flow. In addition, if the user pool has phone verification selected and a verified phone number exists for the user, or if email verification is selected and a verified email exists for the user, calling this API will also result in sending a message to the end user with the code to change their password.</p> <p>Requires developer credentials.</p>"]
-    fn admin_reset_user_password
-        (&self,
-         input: &AdminResetUserPasswordRequest)
-         -> Result<AdminResetUserPasswordResponse, AdminResetUserPasswordError> {
+    fn admin_reset_user_password(
+        &self,
+        input: &AdminResetUserPasswordRequest,
+    ) -> Result<AdminResetUserPasswordResponse, AdminResetUserPasswordError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.AdminResetUserPassword");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.AdminResetUserPassword",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -13886,27 +14191,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminResetUserPasswordResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<AdminResetUserPasswordResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AdminResetUserPasswordError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AdminResetUserPasswordError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Responds to an authentication challenge, as an administrator.</p> <p>Requires developer credentials.</p>"]
-    fn admin_respond_to_auth_challenge
-        (&self,
-         input: &AdminRespondToAuthChallengeRequest)
-         -> Result<AdminRespondToAuthChallengeResponse, AdminRespondToAuthChallengeError> {
+    fn admin_respond_to_auth_challenge(
+        &self,
+        input: &AdminRespondToAuthChallengeRequest,
+    ) -> Result<AdminRespondToAuthChallengeResponse, AdminRespondToAuthChallengeError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.AdminRespondToAuthChallenge");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.AdminRespondToAuthChallenge",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -13918,28 +14228,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminRespondToAuthChallengeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<AdminRespondToAuthChallengeResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AdminRespondToAuthChallengeError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(AdminRespondToAuthChallengeError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Sets all the user settings for a specified user name. Works on any user.</p> <p>Requires developer credentials.</p>"]
-    fn admin_set_user_settings
-        (&self,
-         input: &AdminSetUserSettingsRequest)
-         -> Result<AdminSetUserSettingsResponse, AdminSetUserSettingsError> {
+    fn admin_set_user_settings(
+        &self,
+        input: &AdminSetUserSettingsRequest,
+    ) -> Result<AdminSetUserSettingsResponse, AdminSetUserSettingsError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.AdminSetUserSettings");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.AdminSetUserSettings",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -13951,27 +14265,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminSetUserSettingsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<AdminSetUserSettingsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AdminSetUserSettingsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AdminSetUserSettingsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Updates the device status as an administrator.</p> <p>Requires developer credentials.</p>"]
-    fn admin_update_device_status
-        (&self,
-         input: &AdminUpdateDeviceStatusRequest)
-         -> Result<AdminUpdateDeviceStatusResponse, AdminUpdateDeviceStatusError> {
+    fn admin_update_device_status(
+        &self,
+        input: &AdminUpdateDeviceStatusRequest,
+    ) -> Result<AdminUpdateDeviceStatusResponse, AdminUpdateDeviceStatusError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.AdminUpdateDeviceStatus");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.AdminUpdateDeviceStatus",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -13983,28 +14302,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminUpdateDeviceStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<AdminUpdateDeviceStatusResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AdminUpdateDeviceStatusError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(AdminUpdateDeviceStatusError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Updates the specified user's attributes, including developer attributes, as an administrator. Works on any user.</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p> <p>In addition to updating user attributes, this API can also be used to mark phone and email as verified.</p> <p>Requires developer credentials.</p>"]
-    fn admin_update_user_attributes
-        (&self,
-         input: &AdminUpdateUserAttributesRequest)
-         -> Result<AdminUpdateUserAttributesResponse, AdminUpdateUserAttributesError> {
+    fn admin_update_user_attributes(
+        &self,
+        input: &AdminUpdateUserAttributesRequest,
+    ) -> Result<AdminUpdateUserAttributesResponse, AdminUpdateUserAttributesError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.AdminUpdateUserAttributes");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.AdminUpdateUserAttributes",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -14016,28 +14339,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminUpdateUserAttributesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<AdminUpdateUserAttributesResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AdminUpdateUserAttributesError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(AdminUpdateUserAttributesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Signs out users from all devices, as an administrator.</p> <p>Requires developer credentials.</p>"]
-    fn admin_user_global_sign_out
-        (&self,
-         input: &AdminUserGlobalSignOutRequest)
-         -> Result<AdminUserGlobalSignOutResponse, AdminUserGlobalSignOutError> {
+    fn admin_user_global_sign_out(
+        &self,
+        input: &AdminUserGlobalSignOutRequest,
+    ) -> Result<AdminUserGlobalSignOutResponse, AdminUserGlobalSignOutError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.AdminUserGlobalSignOut");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.AdminUserGlobalSignOut",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -14049,26 +14376,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminUserGlobalSignOutResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<AdminUserGlobalSignOutResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AdminUserGlobalSignOutError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AdminUserGlobalSignOutError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Changes the password for a specified user in a user pool.</p>"]
-    fn change_password(&self,
-                       input: &ChangePasswordRequest)
-                       -> Result<ChangePasswordResponse, ChangePasswordError> {
+    #[doc = "<p>Changes the password for a specified user in a user pool.</p>"]
+    fn change_password(
+        &self,
+        input: &ChangePasswordRequest,
+    ) -> Result<ChangePasswordResponse, ChangePasswordError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.ChangePassword");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.ChangePassword",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -14080,28 +14413,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ChangePasswordResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ChangePasswordResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ChangePasswordError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ChangePasswordError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Confirms tracking of the device. This API call is the call that begins device tracking.</p>"]
-    fn confirm_device(&self,
-                      input: &ConfirmDeviceRequest)
-                      -> Result<ConfirmDeviceResponse, ConfirmDeviceError> {
+    fn confirm_device(
+        &self,
+        input: &ConfirmDeviceRequest,
+    ) -> Result<ConfirmDeviceResponse, ConfirmDeviceError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.ConfirmDevice");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.ConfirmDevice",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -14113,29 +14450,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ConfirmDeviceResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ConfirmDeviceResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ConfirmDeviceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ConfirmDeviceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Allows a user to enter a confirmation code to reset a forgotten password.</p>"]
-    fn confirm_forgot_password
-        (&self,
-         input: &ConfirmForgotPasswordRequest)
-         -> Result<ConfirmForgotPasswordResponse, ConfirmForgotPasswordError> {
+    #[doc = "<p>Allows a user to enter a confirmation code to reset a forgotten password.</p>"]
+    fn confirm_forgot_password(
+        &self,
+        input: &ConfirmForgotPasswordRequest,
+    ) -> Result<ConfirmForgotPasswordResponse, ConfirmForgotPasswordError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.ConfirmForgotPassword");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.ConfirmForgotPassword",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -14147,26 +14487,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ConfirmForgotPasswordResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ConfirmForgotPasswordResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ConfirmForgotPasswordError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ConfirmForgotPasswordError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Confirms registration of a user and handles the existing alias from a previous user.</p>"]
-    fn confirm_sign_up(&self,
-                       input: &ConfirmSignUpRequest)
-                       -> Result<ConfirmSignUpResponse, ConfirmSignUpError> {
+    fn confirm_sign_up(
+        &self,
+        input: &ConfirmSignUpRequest,
+    ) -> Result<ConfirmSignUpResponse, ConfirmSignUpError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.ConfirmSignUp");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.ConfirmSignUp",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -14178,28 +14524,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ConfirmSignUpResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ConfirmSignUpResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ConfirmSignUpError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ConfirmSignUpError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Creates a new group in the specified user pool.</p> <p>Requires developer credentials.</p>"]
-    fn create_group(&self,
-                    input: &CreateGroupRequest)
-                    -> Result<CreateGroupResponse, CreateGroupError> {
+    fn create_group(
+        &self,
+        input: &CreateGroupRequest,
+    ) -> Result<CreateGroupResponse, CreateGroupError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.CreateGroup");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.CreateGroup",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -14211,29 +14561,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateGroupResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateGroupResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates an identity provider for a user pool.</p>"]
-    fn create_identity_provider
-        (&self,
-         input: &CreateIdentityProviderRequest)
-         -> Result<CreateIdentityProviderResponse, CreateIdentityProviderError> {
+    #[doc = "<p>Creates an identity provider for a user pool.</p>"]
+    fn create_identity_provider(
+        &self,
+        input: &CreateIdentityProviderRequest,
+    ) -> Result<CreateIdentityProviderResponse, CreateIdentityProviderError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.CreateIdentityProvider");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.CreateIdentityProvider",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -14245,27 +14598,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateIdentityProviderResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreateIdentityProviderResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateIdentityProviderError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateIdentityProviderError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates a new OAuth2.0 resource server and defines custom scopes in it.</p>"]
-    fn create_resource_server
-        (&self,
-         input: &CreateResourceServerRequest)
-         -> Result<CreateResourceServerResponse, CreateResourceServerError> {
+    #[doc = "<p>Creates a new OAuth2.0 resource server and defines custom scopes in it.</p>"]
+    fn create_resource_server(
+        &self,
+        input: &CreateResourceServerRequest,
+    ) -> Result<CreateResourceServerResponse, CreateResourceServerError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.CreateResourceServer");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.CreateResourceServer",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -14277,26 +14635,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateResourceServerResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreateResourceServerResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateResourceServerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateResourceServerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates the user import job.</p>"]
-    fn create_user_import_job(&self,
-                              input: &CreateUserImportJobRequest)
-                              -> Result<CreateUserImportJobResponse, CreateUserImportJobError> {
+    #[doc = "<p>Creates the user import job.</p>"]
+    fn create_user_import_job(
+        &self,
+        input: &CreateUserImportJobRequest,
+    ) -> Result<CreateUserImportJobResponse, CreateUserImportJobError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.CreateUserImportJob");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.CreateUserImportJob",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -14308,26 +14672,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateUserImportJobResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreateUserImportJobResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateUserImportJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateUserImportJobError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Creates a new Amazon Cognito user pool and sets the password policy for the pool.</p>"]
-    fn create_user_pool(&self,
-                        input: &CreateUserPoolRequest)
-                        -> Result<CreateUserPoolResponse, CreateUserPoolError> {
+    fn create_user_pool(
+        &self,
+        input: &CreateUserPoolRequest,
+    ) -> Result<CreateUserPoolResponse, CreateUserPoolError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.CreateUserPool");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.CreateUserPool",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -14339,29 +14709,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateUserPoolResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateUserPoolResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateUserPoolError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateUserPoolError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates the user pool client.</p>"]
-    fn create_user_pool_client
-        (&self,
-         input: &CreateUserPoolClientRequest)
-         -> Result<CreateUserPoolClientResponse, CreateUserPoolClientError> {
+    #[doc = "<p>Creates the user pool client.</p>"]
+    fn create_user_pool_client(
+        &self,
+        input: &CreateUserPoolClientRequest,
+    ) -> Result<CreateUserPoolClientResponse, CreateUserPoolClientError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.CreateUserPoolClient");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.CreateUserPoolClient",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -14373,27 +14746,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateUserPoolClientResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreateUserPoolClientResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateUserPoolClientError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateUserPoolClientError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates a new domain for a user pool.</p>"]
-    fn create_user_pool_domain
-        (&self,
-         input: &CreateUserPoolDomainRequest)
-         -> Result<CreateUserPoolDomainResponse, CreateUserPoolDomainError> {
+    #[doc = "<p>Creates a new domain for a user pool.</p>"]
+    fn create_user_pool_domain(
+        &self,
+        input: &CreateUserPoolDomainRequest,
+    ) -> Result<CreateUserPoolDomainResponse, CreateUserPoolDomainError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.CreateUserPoolDomain");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.CreateUserPoolDomain",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -14405,24 +14783,29 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateUserPoolDomainResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreateUserPoolDomainResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateUserPoolDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateUserPoolDomainError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Deletes a group. Currently only groups with no members can be deleted.</p> <p>Requires developer credentials.</p>"]
     fn delete_group(&self, input: &DeleteGroupRequest) -> Result<(), DeleteGroupError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.DeleteGroup");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.DeleteGroup",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -14435,21 +14818,25 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes an identity provider for a user pool.</p>"]
-    fn delete_identity_provider(&self,
-                                input: &DeleteIdentityProviderRequest)
-                                -> Result<(), DeleteIdentityProviderError> {
+    #[doc = "<p>Deletes an identity provider for a user pool.</p>"]
+    fn delete_identity_provider(
+        &self,
+        input: &DeleteIdentityProviderRequest,
+    ) -> Result<(), DeleteIdentityProviderError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.DeleteIdentityProvider");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.DeleteIdentityProvider",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -14462,21 +14849,25 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteIdentityProviderError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteIdentityProviderError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes a resource server.</p>"]
-    fn delete_resource_server(&self,
-                              input: &DeleteResourceServerRequest)
-                              -> Result<(), DeleteResourceServerError> {
+    #[doc = "<p>Deletes a resource server.</p>"]
+    fn delete_resource_server(
+        &self,
+        input: &DeleteResourceServerRequest,
+    ) -> Result<(), DeleteResourceServerError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.DeleteResourceServer");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.DeleteResourceServer",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -14489,19 +14880,22 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteResourceServerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteResourceServerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Allows a user to delete himself or herself.</p>"]
+    #[doc = "<p>Allows a user to delete himself or herself.</p>"]
     fn delete_user(&self, input: &DeleteUserRequest) -> Result<(), DeleteUserError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.DeleteUser");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.DeleteUser",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -14514,22 +14908,25 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteUserError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteUserError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes the attributes for a user.</p>"]
-    fn delete_user_attributes
-        (&self,
-         input: &DeleteUserAttributesRequest)
-         -> Result<DeleteUserAttributesResponse, DeleteUserAttributesError> {
+    #[doc = "<p>Deletes the attributes for a user.</p>"]
+    fn delete_user_attributes(
+        &self,
+        input: &DeleteUserAttributesRequest,
+    ) -> Result<DeleteUserAttributesResponse, DeleteUserAttributesError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.DeleteUserAttributes");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.DeleteUserAttributes",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -14541,24 +14938,29 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteUserAttributesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DeleteUserAttributesResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteUserAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteUserAttributesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes the specified Amazon Cognito user pool.</p>"]
+    #[doc = "<p>Deletes the specified Amazon Cognito user pool.</p>"]
     fn delete_user_pool(&self, input: &DeleteUserPoolRequest) -> Result<(), DeleteUserPoolError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.DeleteUserPool");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.DeleteUserPool",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -14571,21 +14973,25 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteUserPoolError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteUserPoolError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Allows the developer to delete the user pool client.</p>"]
-    fn delete_user_pool_client(&self,
-                               input: &DeleteUserPoolClientRequest)
-                               -> Result<(), DeleteUserPoolClientError> {
+    #[doc = "<p>Allows the developer to delete the user pool client.</p>"]
+    fn delete_user_pool_client(
+        &self,
+        input: &DeleteUserPoolClientRequest,
+    ) -> Result<(), DeleteUserPoolClientError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.DeleteUserPoolClient");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.DeleteUserPoolClient",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -14598,22 +15004,25 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteUserPoolClientError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteUserPoolClientError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes a domain for a user pool.</p>"]
-    fn delete_user_pool_domain
-        (&self,
-         input: &DeleteUserPoolDomainRequest)
-         -> Result<DeleteUserPoolDomainResponse, DeleteUserPoolDomainError> {
+    #[doc = "<p>Deletes a domain for a user pool.</p>"]
+    fn delete_user_pool_domain(
+        &self,
+        input: &DeleteUserPoolDomainRequest,
+    ) -> Result<DeleteUserPoolDomainResponse, DeleteUserPoolDomainError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.DeleteUserPoolDomain");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.DeleteUserPoolDomain",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -14625,27 +15034,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteUserPoolDomainResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DeleteUserPoolDomainResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteUserPoolDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteUserPoolDomainError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about a specific identity provider.</p>"]
-    fn describe_identity_provider
-        (&self,
-         input: &DescribeIdentityProviderRequest)
-         -> Result<DescribeIdentityProviderResponse, DescribeIdentityProviderError> {
+    #[doc = "<p>Gets information about a specific identity provider.</p>"]
+    fn describe_identity_provider(
+        &self,
+        input: &DescribeIdentityProviderRequest,
+    ) -> Result<DescribeIdentityProviderResponse, DescribeIdentityProviderError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.DescribeIdentityProvider");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.DescribeIdentityProvider",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -14657,28 +15071,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeIdentityProviderResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeIdentityProviderResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeIdentityProviderError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(DescribeIdentityProviderError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Describes a resource server.</p>"]
-    fn describe_resource_server
-        (&self,
-         input: &DescribeResourceServerRequest)
-         -> Result<DescribeResourceServerResponse, DescribeResourceServerError> {
+    #[doc = "<p>Describes a resource server.</p>"]
+    fn describe_resource_server(
+        &self,
+        input: &DescribeResourceServerRequest,
+    ) -> Result<DescribeResourceServerResponse, DescribeResourceServerError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.DescribeResourceServer");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.DescribeResourceServer",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -14690,27 +15108,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeResourceServerResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeResourceServerResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeResourceServerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeResourceServerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Describes the user import job.</p>"]
-    fn describe_user_import_job
-        (&self,
-         input: &DescribeUserImportJobRequest)
-         -> Result<DescribeUserImportJobResponse, DescribeUserImportJobError> {
+    #[doc = "<p>Describes the user import job.</p>"]
+    fn describe_user_import_job(
+        &self,
+        input: &DescribeUserImportJobRequest,
+    ) -> Result<DescribeUserImportJobResponse, DescribeUserImportJobError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.DescribeUserImportJob");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.DescribeUserImportJob",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -14722,26 +15145,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeUserImportJobResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeUserImportJobResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeUserImportJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeUserImportJobError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Returns the configuration information and metadata of the specified user pool.</p>"]
-    fn describe_user_pool(&self,
-                          input: &DescribeUserPoolRequest)
-                          -> Result<DescribeUserPoolResponse, DescribeUserPoolError> {
+    #[doc = "<p>Returns the configuration information and metadata of the specified user pool.</p>"]
+    fn describe_user_pool(
+        &self,
+        input: &DescribeUserPoolRequest,
+    ) -> Result<DescribeUserPoolResponse, DescribeUserPoolError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.DescribeUserPool");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.DescribeUserPool",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -14753,29 +15182,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeUserPoolResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribeUserPoolResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeUserPoolError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeUserPoolError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Client method for returning the configuration information and metadata of the specified user pool client.</p>"]
-    fn describe_user_pool_client
-        (&self,
-         input: &DescribeUserPoolClientRequest)
-         -> Result<DescribeUserPoolClientResponse, DescribeUserPoolClientError> {
+    fn describe_user_pool_client(
+        &self,
+        input: &DescribeUserPoolClientRequest,
+    ) -> Result<DescribeUserPoolClientResponse, DescribeUserPoolClientError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.DescribeUserPoolClient");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.DescribeUserPoolClient",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -14787,27 +15219,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeUserPoolClientResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeUserPoolClientResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeUserPoolClientError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeUserPoolClientError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about a domain.</p>"]
-    fn describe_user_pool_domain
-        (&self,
-         input: &DescribeUserPoolDomainRequest)
-         -> Result<DescribeUserPoolDomainResponse, DescribeUserPoolDomainError> {
+    #[doc = "<p>Gets information about a domain.</p>"]
+    fn describe_user_pool_domain(
+        &self,
+        input: &DescribeUserPoolDomainRequest,
+    ) -> Result<DescribeUserPoolDomainResponse, DescribeUserPoolDomainError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.DescribeUserPoolDomain");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.DescribeUserPoolDomain",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -14819,24 +15256,29 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeUserPoolDomainResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeUserPoolDomainResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeUserPoolDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeUserPoolDomainError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Forgets the specified device.</p>"]
+    #[doc = "<p>Forgets the specified device.</p>"]
     fn forget_device(&self, input: &ForgetDeviceRequest) -> Result<(), ForgetDeviceError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.ForgetDevice");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.ForgetDevice",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -14849,21 +15291,25 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ForgetDeviceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ForgetDeviceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Calling this API causes a message to be sent to the end user with a confirmation code that is required to change the user's password. For the <code>Username</code> parameter, you can use the username or user alias. If a verified phone number exists for the user, the confirmation code is sent to the phone number. Otherwise, if a verified email exists, the confirmation code is sent to the email. If neither a verified phone number nor a verified email exists, <code>InvalidParameterException</code> is thrown. To use the confirmation code for resetting the password, call <a href=\"API_ConfirmForgotPassword.html\">ConfirmForgotPassword</a>.</p>"]
-    fn forgot_password(&self,
-                       input: &ForgotPasswordRequest)
-                       -> Result<ForgotPasswordResponse, ForgotPasswordError> {
+    fn forgot_password(
+        &self,
+        input: &ForgotPasswordRequest,
+    ) -> Result<ForgotPasswordResponse, ForgotPasswordError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.ForgotPassword");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.ForgotPassword",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -14875,28 +15321,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ForgotPasswordResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ForgotPasswordResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ForgotPasswordError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ForgotPasswordError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Gets the header information for the .csv file to be used as input for the user import job.</p>"]
-    fn get_csv_header(&self,
-                      input: &GetCSVHeaderRequest)
-                      -> Result<GetCSVHeaderResponse, GetCSVHeaderError> {
+    fn get_csv_header(
+        &self,
+        input: &GetCSVHeaderRequest,
+    ) -> Result<GetCSVHeaderResponse, GetCSVHeaderError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.GetCSVHeader");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.GetCSVHeader",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -14908,26 +15358,29 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetCSVHeaderResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetCSVHeaderResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetCSVHeaderError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetCSVHeaderError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets the device.</p>"]
+    #[doc = "<p>Gets the device.</p>"]
     fn get_device(&self, input: &GetDeviceRequest) -> Result<GetDeviceResponse, GetDeviceError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.GetDevice");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.GetDevice",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -14939,20 +15392,21 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetDeviceResponse>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetDeviceResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetDeviceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetDeviceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets a group.</p> <p>Requires developer credentials.</p>"]
+    #[doc = "<p>Gets a group.</p> <p>Requires developer credentials.</p>"]
     fn get_group(&self, input: &GetGroupRequest) -> Result<GetGroupResponse, GetGroupError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
@@ -14969,29 +15423,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetGroupResponse>(String::from_utf8_lossy(&body)
-                                                                .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetGroupResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets the specified identity provider.</p>"]
-    fn get_identity_provider_by_identifier
-        (&self,
-         input: &GetIdentityProviderByIdentifierRequest)
-         -> Result<GetIdentityProviderByIdentifierResponse, GetIdentityProviderByIdentifierError> {
+    #[doc = "<p>Gets the specified identity provider.</p>"]
+    fn get_identity_provider_by_identifier(
+        &self,
+        input: &GetIdentityProviderByIdentifierRequest,
+    ) -> Result<GetIdentityProviderByIdentifierResponse, GetIdentityProviderByIdentifierError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.GetIdentityProviderByIdentifier");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.GetIdentityProviderByIdentifier",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15003,27 +15460,34 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetIdentityProviderByIdentifierResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<GetIdentityProviderByIdentifierResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetIdentityProviderByIdentifierError::from_body(String::from_utf8_lossy(&body)
-                                                                        .as_ref()))
+                Err(GetIdentityProviderByIdentifierError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Gets the UI Customization information for a particular app client's app UI, if there is something set. If nothing is set for the particular client, but there is an existing pool level customization (app <code>clientId</code> will be <code>ALL</code>), then that is returned. If nothing is present, then an empty shape is returned.</p>"]
-    fn get_ui_customization(&self,
-                            input: &GetUICustomizationRequest)
-                            -> Result<GetUICustomizationResponse, GetUICustomizationError> {
+    fn get_ui_customization(
+        &self,
+        input: &GetUICustomizationRequest,
+    ) -> Result<GetUICustomizationResponse, GetUICustomizationError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.GetUICustomization");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.GetUICustomization",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15035,18 +15499,21 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetUICustomizationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetUICustomizationResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetUICustomizationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetUICustomizationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets the user attributes and metadata for a user.</p>"]
+    #[doc = "<p>Gets the user attributes and metadata for a user.</p>"]
     fn get_user(&self, input: &GetUserRequest) -> Result<GetUserResponse, GetUserError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
@@ -15063,28 +15530,35 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetUserResponse>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+                Ok(
+                    serde_json::from_str::<GetUserResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetUserError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetUserError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets the user attribute verification code for the specified attribute name.</p>"]
-    fn get_user_attribute_verification_code
-        (&self,
-         input: &GetUserAttributeVerificationCodeRequest)
-         -> Result<GetUserAttributeVerificationCodeResponse, GetUserAttributeVerificationCodeError> {
+    #[doc = "<p>Gets the user attribute verification code for the specified attribute name.</p>"]
+    fn get_user_attribute_verification_code(
+        &self,
+        input: &GetUserAttributeVerificationCodeRequest,
+    ) -> Result<GetUserAttributeVerificationCodeResponse, GetUserAttributeVerificationCodeError>
+    {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.GetUserAttributeVerificationCode");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.GetUserAttributeVerificationCode",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15096,26 +15570,34 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetUserAttributeVerificationCodeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<GetUserAttributeVerificationCodeResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetUserAttributeVerificationCodeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetUserAttributeVerificationCodeError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Signs out users from all devices.</p>"]
-    fn global_sign_out(&self,
-                       input: &GlobalSignOutRequest)
-                       -> Result<GlobalSignOutResponse, GlobalSignOutError> {
+    #[doc = "<p>Signs out users from all devices.</p>"]
+    fn global_sign_out(
+        &self,
+        input: &GlobalSignOutRequest,
+    ) -> Result<GlobalSignOutResponse, GlobalSignOutError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.GlobalSignOut");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.GlobalSignOut",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15127,28 +15609,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GlobalSignOutResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GlobalSignOutResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GlobalSignOutError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GlobalSignOutError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Initiates the authentication flow.</p>"]
-    fn initiate_auth(&self,
-                     input: &InitiateAuthRequest)
-                     -> Result<InitiateAuthResponse, InitiateAuthError> {
+    #[doc = "<p>Initiates the authentication flow.</p>"]
+    fn initiate_auth(
+        &self,
+        input: &InitiateAuthRequest,
+    ) -> Result<InitiateAuthResponse, InitiateAuthError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.InitiateAuth");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.InitiateAuth",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15160,28 +15646,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<InitiateAuthResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<InitiateAuthResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(InitiateAuthError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(InitiateAuthError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists the devices.</p>"]
-    fn list_devices(&self,
-                    input: &ListDevicesRequest)
-                    -> Result<ListDevicesResponse, ListDevicesError> {
+    #[doc = "<p>Lists the devices.</p>"]
+    fn list_devices(
+        &self,
+        input: &ListDevicesRequest,
+    ) -> Result<ListDevicesResponse, ListDevicesError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.ListDevices");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.ListDevices",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15193,28 +15683,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListDevicesResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListDevicesResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListDevicesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListDevicesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Lists the groups associated with a user pool.</p> <p>Requires developer credentials.</p>"]
-    fn list_groups(&self,
-                   input: &ListGroupsRequest)
-                   -> Result<ListGroupsResponse, ListGroupsError> {
+    fn list_groups(
+        &self,
+        input: &ListGroupsRequest,
+    ) -> Result<ListGroupsResponse, ListGroupsError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.ListGroups");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.ListGroups",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15226,29 +15720,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListGroupsResponse>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListGroupsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListGroupsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListGroupsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists information about all identity providers for a user pool.</p>"]
-    fn list_identity_providers
-        (&self,
-         input: &ListIdentityProvidersRequest)
-         -> Result<ListIdentityProvidersResponse, ListIdentityProvidersError> {
+    #[doc = "<p>Lists information about all identity providers for a user pool.</p>"]
+    fn list_identity_providers(
+        &self,
+        input: &ListIdentityProvidersRequest,
+    ) -> Result<ListIdentityProvidersResponse, ListIdentityProvidersError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.ListIdentityProviders");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.ListIdentityProviders",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15260,26 +15757,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListIdentityProvidersResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListIdentityProvidersResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListIdentityProvidersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListIdentityProvidersError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists the resource servers for a user pool.</p>"]
-    fn list_resource_servers(&self,
-                             input: &ListResourceServersRequest)
-                             -> Result<ListResourceServersResponse, ListResourceServersError> {
+    #[doc = "<p>Lists the resource servers for a user pool.</p>"]
+    fn list_resource_servers(
+        &self,
+        input: &ListResourceServersRequest,
+    ) -> Result<ListResourceServersResponse, ListResourceServersError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.ListResourceServers");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.ListResourceServers",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15291,26 +15794,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListResourceServersResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListResourceServersResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListResourceServersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListResourceServersError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists the user import jobs.</p>"]
-    fn list_user_import_jobs(&self,
-                             input: &ListUserImportJobsRequest)
-                             -> Result<ListUserImportJobsResponse, ListUserImportJobsError> {
+    #[doc = "<p>Lists the user import jobs.</p>"]
+    fn list_user_import_jobs(
+        &self,
+        input: &ListUserImportJobsRequest,
+    ) -> Result<ListUserImportJobsResponse, ListUserImportJobsError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.ListUserImportJobs");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.ListUserImportJobs",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15322,26 +15831,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListUserImportJobsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListUserImportJobsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListUserImportJobsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListUserImportJobsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists the clients that have been created for the specified user pool.</p>"]
-    fn list_user_pool_clients(&self,
-                              input: &ListUserPoolClientsRequest)
-                              -> Result<ListUserPoolClientsResponse, ListUserPoolClientsError> {
+    #[doc = "<p>Lists the clients that have been created for the specified user pool.</p>"]
+    fn list_user_pool_clients(
+        &self,
+        input: &ListUserPoolClientsRequest,
+    ) -> Result<ListUserPoolClientsResponse, ListUserPoolClientsError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.ListUserPoolClients");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.ListUserPoolClients",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15353,26 +15868,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListUserPoolClientsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListUserPoolClientsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListUserPoolClientsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListUserPoolClientsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists the user pools associated with an AWS account.</p>"]
-    fn list_user_pools(&self,
-                       input: &ListUserPoolsRequest)
-                       -> Result<ListUserPoolsResponse, ListUserPoolsError> {
+    #[doc = "<p>Lists the user pools associated with an AWS account.</p>"]
+    fn list_user_pools(
+        &self,
+        input: &ListUserPoolsRequest,
+    ) -> Result<ListUserPoolsResponse, ListUserPoolsError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.ListUserPools");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.ListUserPools",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15384,26 +15905,29 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListUserPoolsResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListUserPoolsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListUserPoolsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListUserPoolsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists the users in the Amazon Cognito user pool.</p>"]
+    #[doc = "<p>Lists the users in the Amazon Cognito user pool.</p>"]
     fn list_users(&self, input: &ListUsersRequest) -> Result<ListUsersResponse, ListUsersError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.ListUsers");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.ListUsers",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15415,28 +15939,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListUsersResponse>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListUsersResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListUsersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListUsersError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists the users in the specified group.</p> <p>Requires developer credentials.</p>"]
-    fn list_users_in_group(&self,
-                           input: &ListUsersInGroupRequest)
-                           -> Result<ListUsersInGroupResponse, ListUsersInGroupError> {
+    #[doc = "<p>Lists the users in the specified group.</p> <p>Requires developer credentials.</p>"]
+    fn list_users_in_group(
+        &self,
+        input: &ListUsersInGroupRequest,
+    ) -> Result<ListUsersInGroupResponse, ListUsersInGroupError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.ListUsersInGroup");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.ListUsersInGroup",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15448,29 +15976,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListUsersInGroupResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListUsersInGroupResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListUsersInGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListUsersInGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Resends the confirmation (for confirmation of registration) to a specific user in the user pool.</p>"]
-    fn resend_confirmation_code
-        (&self,
-         input: &ResendConfirmationCodeRequest)
-         -> Result<ResendConfirmationCodeResponse, ResendConfirmationCodeError> {
+    fn resend_confirmation_code(
+        &self,
+        input: &ResendConfirmationCodeRequest,
+    ) -> Result<ResendConfirmationCodeResponse, ResendConfirmationCodeError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.ResendConfirmationCode");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.ResendConfirmationCode",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15482,27 +16013,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ResendConfirmationCodeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ResendConfirmationCodeResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ResendConfirmationCodeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ResendConfirmationCodeError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Responds to the authentication challenge.</p>"]
-    fn respond_to_auth_challenge
-        (&self,
-         input: &RespondToAuthChallengeRequest)
-         -> Result<RespondToAuthChallengeResponse, RespondToAuthChallengeError> {
+    #[doc = "<p>Responds to the authentication challenge.</p>"]
+    fn respond_to_auth_challenge(
+        &self,
+        input: &RespondToAuthChallengeRequest,
+    ) -> Result<RespondToAuthChallengeResponse, RespondToAuthChallengeError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.RespondToAuthChallenge");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.RespondToAuthChallenge",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15514,26 +16050,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<RespondToAuthChallengeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<RespondToAuthChallengeResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(RespondToAuthChallengeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(RespondToAuthChallengeError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Sets the UI customization information for a user pool's built-in app UI.</p> <p>You can specify app UI customization settings for a single client (with a specific <code>clientId</code>) or for all clients (by setting the <code>clientId</code> to <code>ALL</code>). If you specify <code>ALL</code>, the default configuration will be used for every client that has no UI customization set previously. If you specify UI customization settings for a particular client, it will no longer fall back to the <code>ALL</code> configuration. </p> <note> <p>To use this API, your user pool must have a domain associated with it. Otherwise, there is no place to host the app's pages, and the service will throw an error.</p> </note>"]
-    fn set_ui_customization(&self,
-                            input: &SetUICustomizationRequest)
-                            -> Result<SetUICustomizationResponse, SetUICustomizationError> {
+    fn set_ui_customization(
+        &self,
+        input: &SetUICustomizationRequest,
+    ) -> Result<SetUICustomizationResponse, SetUICustomizationError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.SetUICustomization");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.SetUICustomization",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15545,26 +16087,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<SetUICustomizationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<SetUICustomizationResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(SetUICustomizationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(SetUICustomizationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Sets the user settings like multi-factor authentication (MFA). If MFA is to be removed for a particular attribute pass the attribute with code delivery as null. If null list is passed, all MFA options are removed.</p>"]
-    fn set_user_settings(&self,
-                         input: &SetUserSettingsRequest)
-                         -> Result<SetUserSettingsResponse, SetUserSettingsError> {
+    fn set_user_settings(
+        &self,
+        input: &SetUserSettingsRequest,
+    ) -> Result<SetUserSettingsResponse, SetUserSettingsError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.SetUserSettings");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.SetUserSettings",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15576,18 +16124,19 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<SetUserSettingsResponse>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<SetUserSettingsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(SetUserSettingsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(SetUserSettingsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Registers the user in the specified user pool and creates a user name, password, and user attributes.</p>"]
     fn sign_up(&self, input: &SignUpRequest) -> Result<SignUpResponse, SignUpError> {
@@ -15606,27 +16155,33 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<SignUpResponse>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+                Ok(
+                    serde_json::from_str::<SignUpResponse>(String::from_utf8_lossy(&body).as_ref())
+                        .unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(SignUpError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(SignUpError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Starts the user import.</p>"]
-    fn start_user_import_job(&self,
-                             input: &StartUserImportJobRequest)
-                             -> Result<StartUserImportJobResponse, StartUserImportJobError> {
+    #[doc = "<p>Starts the user import.</p>"]
+    fn start_user_import_job(
+        &self,
+        input: &StartUserImportJobRequest,
+    ) -> Result<StartUserImportJobResponse, StartUserImportJobError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.StartUserImportJob");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.StartUserImportJob",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15638,26 +16193,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StartUserImportJobResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<StartUserImportJobResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StartUserImportJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(StartUserImportJobError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Stops the user import job.</p>"]
-    fn stop_user_import_job(&self,
-                            input: &StopUserImportJobRequest)
-                            -> Result<StopUserImportJobResponse, StopUserImportJobError> {
+    #[doc = "<p>Stops the user import job.</p>"]
+    fn stop_user_import_job(
+        &self,
+        input: &StopUserImportJobRequest,
+    ) -> Result<StopUserImportJobResponse, StopUserImportJobError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.StopUserImportJob");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.StopUserImportJob",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15669,26 +16230,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StopUserImportJobResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<StopUserImportJobResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StopUserImportJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(StopUserImportJobError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Updates the device status.</p>"]
-    fn update_device_status(&self,
-                            input: &UpdateDeviceStatusRequest)
-                            -> Result<UpdateDeviceStatusResponse, UpdateDeviceStatusError> {
+    #[doc = "<p>Updates the device status.</p>"]
+    fn update_device_status(
+        &self,
+        input: &UpdateDeviceStatusRequest,
+    ) -> Result<UpdateDeviceStatusResponse, UpdateDeviceStatusError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.UpdateDeviceStatus");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.UpdateDeviceStatus",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15700,26 +16267,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateDeviceStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<UpdateDeviceStatusResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateDeviceStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateDeviceStatusError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Updates the specified group with the specified attributes.</p> <p>Requires developer credentials.</p>"]
-    fn update_group(&self,
-                    input: &UpdateGroupRequest)
-                    -> Result<UpdateGroupResponse, UpdateGroupError> {
+    fn update_group(
+        &self,
+        input: &UpdateGroupRequest,
+    ) -> Result<UpdateGroupResponse, UpdateGroupError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.UpdateGroup");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.UpdateGroup",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15731,29 +16304,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateGroupResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<UpdateGroupResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Updates identity provider information for a user pool.</p>"]
-    fn update_identity_provider
-        (&self,
-         input: &UpdateIdentityProviderRequest)
-         -> Result<UpdateIdentityProviderResponse, UpdateIdentityProviderError> {
+    #[doc = "<p>Updates identity provider information for a user pool.</p>"]
+    fn update_identity_provider(
+        &self,
+        input: &UpdateIdentityProviderRequest,
+    ) -> Result<UpdateIdentityProviderResponse, UpdateIdentityProviderError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.UpdateIdentityProvider");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.UpdateIdentityProvider",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15765,27 +16341,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateIdentityProviderResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<UpdateIdentityProviderResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateIdentityProviderError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateIdentityProviderError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Updates the name and scopes of resource server. All other fields are read-only.</p>"]
-    fn update_resource_server
-        (&self,
-         input: &UpdateResourceServerRequest)
-         -> Result<UpdateResourceServerResponse, UpdateResourceServerError> {
+    #[doc = "<p>Updates the name and scopes of resource server. All other fields are read-only.</p>"]
+    fn update_resource_server(
+        &self,
+        input: &UpdateResourceServerRequest,
+    ) -> Result<UpdateResourceServerResponse, UpdateResourceServerError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.UpdateResourceServer");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.UpdateResourceServer",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15797,27 +16378,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateResourceServerResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<UpdateResourceServerResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateResourceServerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateResourceServerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Allows a user to update a specific attribute (one at a time).</p>"]
-    fn update_user_attributes
-        (&self,
-         input: &UpdateUserAttributesRequest)
-         -> Result<UpdateUserAttributesResponse, UpdateUserAttributesError> {
+    #[doc = "<p>Allows a user to update a specific attribute (one at a time).</p>"]
+    fn update_user_attributes(
+        &self,
+        input: &UpdateUserAttributesRequest,
+    ) -> Result<UpdateUserAttributesResponse, UpdateUserAttributesError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.UpdateUserAttributes");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.UpdateUserAttributes",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15829,26 +16415,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateUserAttributesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<UpdateUserAttributesResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateUserAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateUserAttributesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Updates the specified user pool with the specified attributes.</p>"]
-    fn update_user_pool(&self,
-                        input: &UpdateUserPoolRequest)
-                        -> Result<UpdateUserPoolResponse, UpdateUserPoolError> {
+    #[doc = "<p>Updates the specified user pool with the specified attributes.</p>"]
+    fn update_user_pool(
+        &self,
+        input: &UpdateUserPoolRequest,
+    ) -> Result<UpdateUserPoolResponse, UpdateUserPoolError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.UpdateUserPool");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.UpdateUserPool",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15860,29 +16452,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateUserPoolResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<UpdateUserPoolResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateUserPoolError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateUserPoolError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Allows the developer to update the specified user pool client and password policy.</p>"]
-    fn update_user_pool_client
-        (&self,
-         input: &UpdateUserPoolClientRequest)
-         -> Result<UpdateUserPoolClientResponse, UpdateUserPoolClientError> {
+    fn update_user_pool_client(
+        &self,
+        input: &UpdateUserPoolClientRequest,
+    ) -> Result<UpdateUserPoolClientResponse, UpdateUserPoolClientError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.UpdateUserPoolClient");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.UpdateUserPoolClient",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15894,26 +16489,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateUserPoolClientResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<UpdateUserPoolClientResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateUserPoolClientError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateUserPoolClientError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Verifies the specified user attributes in the user pool.</p>"]
-    fn verify_user_attribute(&self,
-                             input: &VerifyUserAttributeRequest)
-                             -> Result<VerifyUserAttributeResponse, VerifyUserAttributeError> {
+    #[doc = "<p>Verifies the specified user attributes in the user pool.</p>"]
+    fn verify_user_attribute(
+        &self,
+        input: &VerifyUserAttributeRequest,
+    ) -> Result<VerifyUserAttributeResponse, VerifyUserAttributeError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSCognitoIdentityProviderService.VerifyUserAttribute");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.VerifyUserAttribute",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15925,12 +16526,16 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<VerifyUserAttributeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<VerifyUserAttributeResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(VerifyUserAttributeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(VerifyUserAttributeError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

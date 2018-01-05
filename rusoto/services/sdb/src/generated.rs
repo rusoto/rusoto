@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -31,7 +30,7 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use xml::reader::XmlEvent;
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
-use rusoto_core::xmlutil::{characters, end_element, start_element, skip_tree, peek_at_name};
+use rusoto_core::xmlutil::{characters, end_element, peek_at_name, skip_tree, start_element};
 use rusoto_core::xmlerror::*;
 
 enum DeserializerNext {
@@ -39,25 +38,26 @@ enum DeserializerNext {
     Skip,
     Element(String),
 }
-#[doc="<p></p>"]
-#[derive(Default,Debug,Clone)]
+/// <p></p>
+#[derive(Default, Debug, Clone)]
 pub struct Attribute {
-    #[doc="<p></p>"]
+    /// <p></p>
     pub alternate_name_encoding: Option<String>,
-    #[doc="<p></p>"]
+    /// <p></p>
     pub alternate_value_encoding: Option<String>,
-    #[doc="The name of the attribute."]
+    /// The name of the attribute.
     pub name: String,
-    #[doc="The value of the attribute."]
+    /// The value of the attribute.
     pub value: String,
 }
 
 struct AttributeDeserializer;
 impl AttributeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Attribute, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Attribute, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = Attribute::default();
@@ -72,27 +72,26 @@ impl AttributeDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "AlternateNameEncoding" => {
-                            obj.alternate_name_encoding =
-                                Some(try!(StringDeserializer::deserialize("AlternateNameEncoding",
-                                                                          stack)));
-                        }
-                        "AlternateValueEncoding" => {
-                            obj.alternate_value_encoding =
-                                Some(try!(StringDeserializer::deserialize("AlternateValueEncoding",
-                                                                          stack)));
-                        }
-                        "Name" => {
-                            obj.name = try!(StringDeserializer::deserialize("Name", stack));
-                        }
-                        "Value" => {
-                            obj.value = try!(StringDeserializer::deserialize("Value", stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AlternateNameEncoding" => {
+                        obj.alternate_name_encoding = Some(try!(StringDeserializer::deserialize(
+                            "AlternateNameEncoding",
+                            stack
+                        )));
                     }
-                }
+                    "AlternateValueEncoding" => {
+                        obj.alternate_value_encoding = Some(try!(
+                            StringDeserializer::deserialize("AlternateValueEncoding", stack)
+                        ));
+                    }
+                    "Name" => {
+                        obj.name = try!(StringDeserializer::deserialize("Name", stack));
+                    }
+                    "Value" => {
+                        obj.value = try!(StringDeserializer::deserialize("Value", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -103,7 +102,6 @@ impl AttributeDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -117,32 +115,38 @@ impl AttributeSerializer {
         }
 
         if let Some(ref field_value) = obj.alternate_name_encoding {
-            params.put(&format!("{}{}", prefix, "AlternateNameEncoding"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "AlternateNameEncoding"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.alternate_value_encoding {
-            params.put(&format!("{}{}", prefix, "AlternateValueEncoding"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "AlternateValueEncoding"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-        params.put(&format!("{}{}", prefix, "Name"),
-                   &obj.name.replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "Value"),
-                   &obj.value.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "Name"),
+            &obj.name.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "Value"),
+            &obj.value.replace("+", "%2B"),
+        );
     }
 }
 
 struct AttributeListDeserializer;
 impl AttributeListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<Attribute>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<Attribute>, XmlParseError> {
         let mut obj = vec![];
 
         loop {
-
             let consume_next_tag = match stack.peek() {
                 Some(&Ok(XmlEvent::StartElement { ref name, .. })) => name.local_name == tag_name,
                 _ => false,
@@ -153,11 +157,9 @@ impl AttributeListDeserializer {
             } else {
                 break;
             }
-
         }
 
         Ok(obj)
-
     }
 }
 
@@ -172,7 +174,6 @@ impl AttributeListSerializer {
     }
 }
 
-
 /// Serialize `AttributeNameList` contents to a `SignedRequest`.
 struct AttributeNameListSerializer;
 impl AttributeNameListSerializer {
@@ -184,14 +185,13 @@ impl AttributeNameListSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default, Debug, Clone)]
 pub struct BatchDeleteAttributesRequest {
-    #[doc="The name of the domain in which the attributes are being deleted."]
+    /// The name of the domain in which the attributes are being deleted.
     pub domain_name: String,
-    #[doc="A list of items on which to perform the operation."]
+    /// A list of items on which to perform the operation.
     pub items: Vec<DeletableItem>,
 }
-
 
 /// Serialize `BatchDeleteAttributesRequest` contents to a `SignedRequest`.
 struct BatchDeleteAttributesRequestSerializer;
@@ -202,23 +202,25 @@ impl BatchDeleteAttributesRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "DomainName"),
-                   &obj.domain_name.replace("+", "%2B"));
-        DeletableItemListSerializer::serialize(params,
-                                               &format!("{}{}", prefix, "Items"),
-                                               &obj.items);
-
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.replace("+", "%2B"),
+        );
+        DeletableItemListSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "Items"),
+            &obj.items,
+        );
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default, Debug, Clone)]
 pub struct BatchPutAttributesRequest {
-    #[doc="The name of the domain in which the attributes are being stored."]
+    /// The name of the domain in which the attributes are being stored.
     pub domain_name: String,
-    #[doc="A list of items on which to perform the operation."]
+    /// A list of items on which to perform the operation.
     pub items: Vec<ReplaceableItem>,
 }
-
 
 /// Serialize `BatchPutAttributesRequest` contents to a `SignedRequest`.
 struct BatchPutAttributesRequestSerializer;
@@ -229,21 +231,23 @@ impl BatchPutAttributesRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "DomainName"),
-                   &obj.domain_name.replace("+", "%2B"));
-        ReplaceableItemListSerializer::serialize(params,
-                                                 &format!("{}{}", prefix, "Items"),
-                                                 &obj.items);
-
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.replace("+", "%2B"),
+        );
+        ReplaceableItemListSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "Items"),
+            &obj.items,
+        );
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default, Debug, Clone)]
 pub struct CreateDomainRequest {
-    #[doc="The name of the domain to create. The name can range between 3 and 255 characters and can contain the following characters: a-z, A-Z, 0-9, '_', '-', and '.'."]
+    /// The name of the domain to create. The name can range between 3 and 255 characters and can contain the following characters: a-z, A-Z, 0-9, '_', '-', and '.'.
     pub domain_name: String,
 }
-
 
 /// Serialize `CreateDomainRequest` contents to a `SignedRequest`.
 struct CreateDomainRequestSerializer;
@@ -254,18 +258,18 @@ impl CreateDomainRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "DomainName"),
-                   &obj.domain_name.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default, Debug, Clone)]
 pub struct DeletableItem {
     pub attributes: Option<Vec<Attribute>>,
     pub name: String,
 }
-
 
 /// Serialize `DeletableItem` contents to a `SignedRequest`.
 struct DeletableItemSerializer;
@@ -277,16 +281,18 @@ impl DeletableItemSerializer {
         }
 
         if let Some(ref field_value) = obj.attributes {
-            AttributeListSerializer::serialize(params,
-                                               &format!("{}{}", prefix, "Attributes"),
-                                               field_value);
+            AttributeListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Attributes"),
+                field_value,
+            );
         }
-        params.put(&format!("{}{}", prefix, "ItemName"),
-                   &obj.name.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "ItemName"),
+            &obj.name.replace("+", "%2B"),
+        );
     }
 }
-
 
 /// Serialize `DeletableItemList` contents to a `SignedRequest`.
 struct DeletableItemListSerializer;
@@ -299,18 +305,17 @@ impl DeletableItemListSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default, Debug, Clone)]
 pub struct DeleteAttributesRequest {
-    #[doc="A list of Attributes. Similar to columns on a spreadsheet, attributes represent categories of data that can be assigned to items."]
+    /// A list of Attributes. Similar to columns on a spreadsheet, attributes represent categories of data that can be assigned to items.
     pub attributes: Option<Vec<Attribute>>,
-    #[doc="The name of the domain in which to perform the operation."]
+    /// The name of the domain in which to perform the operation.
     pub domain_name: String,
-    #[doc="The update condition which, if specified, determines whether the specified attributes will be deleted or not. The update condition must be satisfied in order for this request to be processed and the attributes to be deleted."]
+    /// The update condition which, if specified, determines whether the specified attributes will be deleted or not. The update condition must be satisfied in order for this request to be processed and the attributes to be deleted.
     pub expected: Option<UpdateCondition>,
-    #[doc="The name of the item. Similar to rows on a spreadsheet, items represent individual objects that contain one or more value-attribute pairs."]
+    /// The name of the item. Similar to rows on a spreadsheet, items represent individual objects that contain one or more value-attribute pairs.
     pub item_name: String,
 }
-
 
 /// Serialize `DeleteAttributesRequest` contents to a `SignedRequest`.
 struct DeleteAttributesRequestSerializer;
@@ -322,29 +327,35 @@ impl DeleteAttributesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.attributes {
-            AttributeListSerializer::serialize(params,
-                                               &format!("{}{}", prefix, "Attributes"),
-                                               field_value);
+            AttributeListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Attributes"),
+                field_value,
+            );
         }
-        params.put(&format!("{}{}", prefix, "DomainName"),
-                   &obj.domain_name.replace("+", "%2B"));
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.replace("+", "%2B"),
+        );
         if let Some(ref field_value) = obj.expected {
-            UpdateConditionSerializer::serialize(params,
-                                                 &format!("{}{}", prefix, "Expected"),
-                                                 field_value);
+            UpdateConditionSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Expected"),
+                field_value,
+            );
         }
-        params.put(&format!("{}{}", prefix, "ItemName"),
-                   &obj.item_name.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "ItemName"),
+            &obj.item_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default, Debug, Clone)]
 pub struct DeleteDomainRequest {
-    #[doc="The name of the domain to delete."]
+    /// The name of the domain to delete.
     pub domain_name: String,
 }
-
 
 /// Serialize `DeleteDomainRequest` contents to a `SignedRequest`.
 struct DeleteDomainRequestSerializer;
@@ -355,18 +366,18 @@ impl DeleteDomainRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "DomainName"),
-                   &obj.domain_name.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default, Debug, Clone)]
 pub struct DomainMetadataRequest {
-    #[doc="The name of the domain for which to display the metadata of."]
+    /// The name of the domain for which to display the metadata of.
     pub domain_name: String,
 }
-
 
 /// Serialize `DomainMetadataRequest` contents to a `SignedRequest`.
 struct DomainMetadataRequestSerializer;
@@ -377,36 +388,38 @@ impl DomainMetadataRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "DomainName"),
-                   &obj.domain_name.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default, Debug, Clone)]
 pub struct DomainMetadataResult {
-    #[doc="The number of unique attribute names in the domain."]
+    /// The number of unique attribute names in the domain.
     pub attribute_name_count: Option<i64>,
-    #[doc="The total size of all unique attribute names in the domain, in bytes."]
+    /// The total size of all unique attribute names in the domain, in bytes.
     pub attribute_names_size_bytes: Option<i64>,
-    #[doc="The number of all attribute name/value pairs in the domain."]
+    /// The number of all attribute name/value pairs in the domain.
     pub attribute_value_count: Option<i64>,
-    #[doc="The total size of all attribute values in the domain, in bytes."]
+    /// The total size of all attribute values in the domain, in bytes.
     pub attribute_values_size_bytes: Option<i64>,
-    #[doc="The number of all items in the domain."]
+    /// The number of all items in the domain.
     pub item_count: Option<i64>,
-    #[doc="The total size of all item names in the domain, in bytes."]
+    /// The total size of all item names in the domain, in bytes.
     pub item_names_size_bytes: Option<i64>,
-    #[doc="The data and time when metadata was calculated, in Epoch (UNIX) seconds."]
+    /// The data and time when metadata was calculated, in Epoch (UNIX) seconds.
     pub timestamp: Option<i64>,
 }
 
 struct DomainMetadataResultDeserializer;
 impl DomainMetadataResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DomainMetadataResult, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DomainMetadataResult, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DomainMetadataResult::default();
@@ -424,37 +437,38 @@ impl DomainMetadataResultDeserializer {
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "AttributeNameCount" => {
-                            obj.attribute_name_count =
-                                Some(try!(IntegerDeserializer::deserialize("AttributeNameCount",
-                                                                           stack)));
+                            obj.attribute_name_count = Some(try!(
+                                IntegerDeserializer::deserialize("AttributeNameCount", stack)
+                            ));
                         }
                         "AttributeNamesSizeBytes" => {
-                            obj.attribute_names_size_bytes =
-                                Some(try!(LongDeserializer::deserialize("AttributeNamesSizeBytes",
-                                                                        stack)));
+                            obj.attribute_names_size_bytes = Some(try!(
+                                LongDeserializer::deserialize("AttributeNamesSizeBytes", stack)
+                            ));
                         }
                         "AttributeValueCount" => {
-                            obj.attribute_value_count =
-                                Some(try!(IntegerDeserializer::deserialize("AttributeValueCount",
-                                                                           stack)));
+                            obj.attribute_value_count = Some(try!(
+                                IntegerDeserializer::deserialize("AttributeValueCount", stack)
+                            ));
                         }
                         "AttributeValuesSizeBytes" => {
-                            obj.attribute_values_size_bytes =
-                                Some(try!(LongDeserializer::deserialize("AttributeValuesSizeBytes",
-                                                                        stack)));
+                            obj.attribute_values_size_bytes = Some(try!(
+                                LongDeserializer::deserialize("AttributeValuesSizeBytes", stack)
+                            ));
                         }
                         "ItemCount" => {
-                            obj.item_count = Some(try!(IntegerDeserializer::deserialize("ItemCount",
-                                                                                        stack)));
+                            obj.item_count =
+                                Some(try!(IntegerDeserializer::deserialize("ItemCount", stack)));
                         }
                         "ItemNamesSizeBytes" => {
-                            obj.item_names_size_bytes =
-                                Some(try!(LongDeserializer::deserialize("ItemNamesSizeBytes",
-                                                                        stack)));
+                            obj.item_names_size_bytes = Some(try!(LongDeserializer::deserialize(
+                                "ItemNamesSizeBytes",
+                                stack
+                            )));
                         }
                         "Timestamp" => {
-                            obj.timestamp = Some(try!(IntegerDeserializer::deserialize("Timestamp",
-                                                                                       stack)));
+                            obj.timestamp =
+                                Some(try!(IntegerDeserializer::deserialize("Timestamp", stack)));
                         }
                         _ => skip_tree(stack),
                     }
@@ -469,20 +483,18 @@ impl DomainMetadataResultDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct DomainNameListDeserializer;
 impl DomainNameListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<String>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
 
         loop {
-
             let consume_next_tag = match stack.peek() {
                 Some(&Ok(XmlEvent::StartElement { ref name, .. })) => name.local_name == tag_name,
                 _ => false,
@@ -493,25 +505,22 @@ impl DomainNameListDeserializer {
             } else {
                 break;
             }
-
         }
 
         Ok(obj)
-
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default, Debug, Clone)]
 pub struct GetAttributesRequest {
-    #[doc="The names of the attributes."]
+    /// The names of the attributes.
     pub attribute_names: Option<Vec<String>>,
-    #[doc="Determines whether or not strong consistency should be enforced when data is read from SimpleDB. If <code>true</code>, any data previously written to SimpleDB will be returned. Otherwise, results will be consistent eventually, and the client may not see data that was written immediately before your read."]
+    /// Determines whether or not strong consistency should be enforced when data is read from SimpleDB. If <code>true</code>, any data previously written to SimpleDB will be returned. Otherwise, results will be consistent eventually, and the client may not see data that was written immediately before your read.
     pub consistent_read: Option<bool>,
-    #[doc="The name of the domain in which to perform the operation."]
+    /// The name of the domain in which to perform the operation.
     pub domain_name: String,
-    #[doc="The name of the item."]
+    /// The name of the item.
     pub item_name: String,
 }
-
 
 /// Serialize `GetAttributesRequest` contents to a `SignedRequest`.
 struct GetAttributesRequestSerializer;
@@ -523,34 +532,42 @@ impl GetAttributesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.attribute_names {
-            AttributeNameListSerializer::serialize(params,
-                                                   &format!("{}{}", prefix, "AttributeNames"),
-                                                   field_value);
+            AttributeNameListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "AttributeNames"),
+                field_value,
+            );
         }
         if let Some(ref field_value) = obj.consistent_read {
-            params.put(&format!("{}{}", prefix, "ConsistentRead"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "ConsistentRead"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
-        params.put(&format!("{}{}", prefix, "DomainName"),
-                   &obj.domain_name.replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "ItemName"),
-                   &obj.item_name.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "ItemName"),
+            &obj.item_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default, Debug, Clone)]
 pub struct GetAttributesResult {
-    #[doc="The list of attributes returned by the operation."]
+    /// The list of attributes returned by the operation.
     pub attributes: Option<Vec<Attribute>>,
 }
 
 struct GetAttributesResultDeserializer;
 impl GetAttributesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<GetAttributesResult, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetAttributesResult, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = GetAttributesResult::default();
@@ -565,16 +582,15 @@ impl GetAttributesResultDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Attribute" => {
-                            obj.attributes =
-                                Some(try!(AttributeListDeserializer::deserialize("Attribute",
-                                                                                 stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Attribute" => {
+                        obj.attributes = Some(try!(AttributeListDeserializer::deserialize(
+                            "Attribute",
+                            stack
+                        )));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -585,40 +601,40 @@ impl GetAttributesResultDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct IntegerDeserializer;
 impl IntegerDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<i64, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p></p>"]
-#[derive(Default,Debug,Clone)]
+/// <p></p>
+#[derive(Default, Debug, Clone)]
 pub struct Item {
-    #[doc="<p></p>"]
+    /// <p></p>
     pub alternate_name_encoding: Option<String>,
-    #[doc="A list of attributes."]
+    /// A list of attributes.
     pub attributes: Vec<Attribute>,
-    #[doc="The name of the item."]
+    /// The name of the item.
     pub name: String,
 }
 
 struct ItemDeserializer;
 impl ItemDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Item, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Item, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = Item::default();
@@ -633,23 +649,22 @@ impl ItemDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "AlternateNameEncoding" => {
-                            obj.alternate_name_encoding =
-                                Some(try!(StringDeserializer::deserialize("AlternateNameEncoding",
-                                                                          stack)));
-                        }
-                        "Attribute" => {
-                            obj.attributes = try!(AttributeListDeserializer::deserialize("Attribute",
-                                                                                         stack));
-                        }
-                        "Name" => {
-                            obj.name = try!(StringDeserializer::deserialize("Name", stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AlternateNameEncoding" => {
+                        obj.alternate_name_encoding = Some(try!(StringDeserializer::deserialize(
+                            "AlternateNameEncoding",
+                            stack
+                        )));
                     }
-                }
+                    "Attribute" => {
+                        obj.attributes =
+                            try!(AttributeListDeserializer::deserialize("Attribute", stack));
+                    }
+                    "Name" => {
+                        obj.name = try!(StringDeserializer::deserialize("Name", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -660,20 +675,18 @@ impl ItemDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct ItemListDeserializer;
 impl ItemListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<Item>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<Item>, XmlParseError> {
         let mut obj = vec![];
 
         loop {
-
             let consume_next_tag = match stack.peek() {
                 Some(&Ok(XmlEvent::StartElement { ref name, .. })) => name.local_name == tag_name,
                 _ => false,
@@ -684,21 +697,18 @@ impl ItemListDeserializer {
             } else {
                 break;
             }
-
         }
 
         Ok(obj)
-
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default, Debug, Clone)]
 pub struct ListDomainsRequest {
-    #[doc="The maximum number of domain names you want returned. The range is 1 to 100. The default setting is 100."]
+    /// The maximum number of domain names you want returned. The range is 1 to 100. The default setting is 100.
     pub max_number_of_domains: Option<i64>,
-    #[doc="A string informing Amazon SimpleDB where to start the next list of domain names."]
+    /// A string informing Amazon SimpleDB where to start the next list of domain names.
     pub next_token: Option<String>,
 }
-
 
 /// Serialize `ListDomainsRequest` contents to a `SignedRequest`.
 struct ListDomainsRequestSerializer;
@@ -710,31 +720,35 @@ impl ListDomainsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.max_number_of_domains {
-            params.put(&format!("{}{}", prefix, "MaxNumberOfDomains"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "MaxNumberOfDomains"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default, Debug, Clone)]
 pub struct ListDomainsResult {
-    #[doc="A list of domain names that match the expression."]
+    /// A list of domain names that match the expression.
     pub domain_names: Option<Vec<String>>,
-    #[doc="An opaque token indicating that there are more domains than the specified <code>MaxNumberOfDomains</code> still available."]
+    /// An opaque token indicating that there are more domains than the specified <code>MaxNumberOfDomains</code> still available.
     pub next_token: Option<String>,
 }
 
 struct ListDomainsResultDeserializer;
 impl ListDomainsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<ListDomainsResult, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListDomainsResult, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = ListDomainsResult::default();
@@ -749,20 +763,19 @@ impl ListDomainsResultDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "DomainName" => {
-                            obj.domain_names =
-                                Some(try!(DomainNameListDeserializer::deserialize("DomainName",
-                                                                                  stack)));
-                        }
-                        "NextToken" => {
-                            obj.next_token = Some(try!(StringDeserializer::deserialize("NextToken",
-                                                                                       stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "DomainName" => {
+                        obj.domain_names = Some(try!(DomainNameListDeserializer::deserialize(
+                            "DomainName",
+                            stack
+                        )));
                     }
-                }
+                    "NextToken" => {
+                        obj.next_token =
+                            Some(try!(StringDeserializer::deserialize("NextToken", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -773,35 +786,33 @@ impl ListDomainsResultDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct LongDeserializer;
 impl LongDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<i64, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default, Debug, Clone)]
 pub struct PutAttributesRequest {
-    #[doc="The list of attributes."]
+    /// The list of attributes.
     pub attributes: Vec<ReplaceableAttribute>,
-    #[doc="The name of the domain in which to perform the operation."]
+    /// The name of the domain in which to perform the operation.
     pub domain_name: String,
-    #[doc="The update condition which, if specified, determines whether the specified attributes will be updated or not. The update condition must be satisfied in order for this request to be processed and the attributes to be updated."]
+    /// The update condition which, if specified, determines whether the specified attributes will be updated or not. The update condition must be satisfied in order for this request to be processed and the attributes to be updated.
     pub expected: Option<UpdateCondition>,
-    #[doc="The name of the item."]
+    /// The name of the item.
     pub item_name: String,
 }
-
 
 /// Serialize `PutAttributesRequest` contents to a `SignedRequest`.
 struct PutAttributesRequestSerializer;
@@ -812,33 +823,39 @@ impl PutAttributesRequestSerializer {
             prefix.push_str(".");
         }
 
-        ReplaceableAttributeListSerializer::serialize(params,
-                                                      &format!("{}{}", prefix, "Attributes"),
-                                                      &obj.attributes);
-        params.put(&format!("{}{}", prefix, "DomainName"),
-                   &obj.domain_name.replace("+", "%2B"));
+        ReplaceableAttributeListSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "Attributes"),
+            &obj.attributes,
+        );
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.replace("+", "%2B"),
+        );
         if let Some(ref field_value) = obj.expected {
-            UpdateConditionSerializer::serialize(params,
-                                                 &format!("{}{}", prefix, "Expected"),
-                                                 field_value);
+            UpdateConditionSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Expected"),
+                field_value,
+            );
         }
-        params.put(&format!("{}{}", prefix, "ItemName"),
-                   &obj.item_name.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "ItemName"),
+            &obj.item_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p></p>"]
-#[derive(Default,Debug,Clone)]
+/// <p></p>
+#[derive(Default, Debug, Clone)]
 pub struct ReplaceableAttribute {
-    #[doc="The name of the replaceable attribute."]
+    /// The name of the replaceable attribute.
     pub name: String,
-    #[doc="A flag specifying whether or not to replace the attribute/value pair or to add a new attribute/value pair. The default setting is <code>false</code>."]
+    /// A flag specifying whether or not to replace the attribute/value pair or to add a new attribute/value pair. The default setting is <code>false</code>.
     pub replace: Option<bool>,
-    #[doc="The value of the replaceable attribute."]
+    /// The value of the replaceable attribute.
     pub value: String,
 }
-
 
 /// Serialize `ReplaceableAttribute` contents to a `SignedRequest`.
 struct ReplaceableAttributeSerializer;
@@ -849,18 +866,22 @@ impl ReplaceableAttributeSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Name"),
-                   &obj.name.replace("+", "%2B"));
+        params.put(
+            &format!("{}{}", prefix, "Name"),
+            &obj.name.replace("+", "%2B"),
+        );
         if let Some(ref field_value) = obj.replace {
-            params.put(&format!("{}{}", prefix, "Replace"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "Replace"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
-        params.put(&format!("{}{}", prefix, "Value"),
-                   &obj.value.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "Value"),
+            &obj.value.replace("+", "%2B"),
+        );
     }
 }
-
 
 /// Serialize `ReplaceableAttributeList` contents to a `SignedRequest`.
 struct ReplaceableAttributeListSerializer;
@@ -873,15 +894,14 @@ impl ReplaceableAttributeListSerializer {
     }
 }
 
-#[doc="<p></p>"]
-#[derive(Default,Debug,Clone)]
+/// <p></p>
+#[derive(Default, Debug, Clone)]
 pub struct ReplaceableItem {
-    #[doc="The list of attributes for a replaceable item."]
+    /// The list of attributes for a replaceable item.
     pub attributes: Vec<ReplaceableAttribute>,
-    #[doc="The name of the replaceable item."]
+    /// The name of the replaceable item.
     pub name: String,
 }
-
 
 /// Serialize `ReplaceableItem` contents to a `SignedRequest`.
 struct ReplaceableItemSerializer;
@@ -892,15 +912,17 @@ impl ReplaceableItemSerializer {
             prefix.push_str(".");
         }
 
-        ReplaceableAttributeListSerializer::serialize(params,
-                                                      &format!("{}{}", prefix, "Attributes"),
-                                                      &obj.attributes);
-        params.put(&format!("{}{}", prefix, "ItemName"),
-                   &obj.name.replace("+", "%2B"));
-
+        ReplaceableAttributeListSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "Attributes"),
+            &obj.attributes,
+        );
+        params.put(
+            &format!("{}{}", prefix, "ItemName"),
+            &obj.name.replace("+", "%2B"),
+        );
     }
 }
-
 
 /// Serialize `ReplaceableItemList` contents to a `SignedRequest`.
 struct ReplaceableItemListSerializer;
@@ -913,16 +935,15 @@ impl ReplaceableItemListSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default, Debug, Clone)]
 pub struct SelectRequest {
-    #[doc="Determines whether or not strong consistency should be enforced when data is read from SimpleDB. If <code>true</code>, any data previously written to SimpleDB will be returned. Otherwise, results will be consistent eventually, and the client may not see data that was written immediately before your read."]
+    /// Determines whether or not strong consistency should be enforced when data is read from SimpleDB. If <code>true</code>, any data previously written to SimpleDB will be returned. Otherwise, results will be consistent eventually, and the client may not see data that was written immediately before your read.
     pub consistent_read: Option<bool>,
-    #[doc="A string informing Amazon SimpleDB where to start the next list of <code>ItemNames</code>."]
+    /// A string informing Amazon SimpleDB where to start the next list of <code>ItemNames</code>.
     pub next_token: Option<String>,
-    #[doc="The expression used to query the domain."]
+    /// The expression used to query the domain.
     pub select_expression: String,
 }
-
 
 /// Serialize `SelectRequest` contents to a `SignedRequest`.
 struct SelectRequestSerializer;
@@ -934,33 +955,39 @@ impl SelectRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.consistent_read {
-            params.put(&format!("{}{}", prefix, "ConsistentRead"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "ConsistentRead"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-        params.put(&format!("{}{}", prefix, "SelectExpression"),
-                   &obj.select_expression.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "SelectExpression"),
+            &obj.select_expression.replace("+", "%2B"),
+        );
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default, Debug, Clone)]
 pub struct SelectResult {
-    #[doc="A list of items that match the select expression."]
+    /// A list of items that match the select expression.
     pub items: Option<Vec<Item>>,
-    #[doc="An opaque token indicating that more items than <code>MaxNumberOfItems</code> were matched, the response size exceeded 1 megabyte, or the execution time exceeded 5 seconds."]
+    /// An opaque token indicating that more items than <code>MaxNumberOfItems</code> were matched, the response size exceeded 1 megabyte, or the execution time exceeded 5 seconds.
     pub next_token: Option<String>,
 }
 
 struct SelectResultDeserializer;
 impl SelectResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<SelectResult, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SelectResult, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = SelectResult::default();
@@ -975,19 +1002,16 @@ impl SelectResultDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Item" => {
-                            obj.items = Some(try!(ItemListDeserializer::deserialize("Item",
-                                                                                    stack)));
-                        }
-                        "NextToken" => {
-                            obj.next_token = Some(try!(StringDeserializer::deserialize("NextToken",
-                                                                                       stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Item" => {
+                        obj.items = Some(try!(ItemListDeserializer::deserialize("Item", stack)));
                     }
-                }
+                    "NextToken" => {
+                        obj.next_token =
+                            Some(try!(StringDeserializer::deserialize("NextToken", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -998,34 +1022,32 @@ impl SelectResultDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct StringDeserializer;
 impl StringDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p> Specifies the conditions under which data should be updated. If an update condition is specified for a request, the data will only be updated if the condition is satisfied. For example, if an attribute with a specific name and value exists, or if a specific attribute doesn't exist. </p>"]
-#[derive(Default,Debug,Clone)]
+/// <p> Specifies the conditions under which data should be updated. If an update condition is specified for a request, the data will only be updated if the condition is satisfied. For example, if an attribute with a specific name and value exists, or if a specific attribute doesn't exist. </p>
+#[derive(Default, Debug, Clone)]
 pub struct UpdateCondition {
-    #[doc="<p>A value specifying whether or not the specified attribute must exist with the specified value in order for the update condition to be satisfied. Specify <code>true</code> if the attribute must exist for the update condition to be satisfied. Specify <code>false</code> if the attribute should not exist in order for the update condition to be satisfied.</p>"]
+    /// <p>A value specifying whether or not the specified attribute must exist with the specified value in order for the update condition to be satisfied. Specify <code>true</code> if the attribute must exist for the update condition to be satisfied. Specify <code>false</code> if the attribute should not exist in order for the update condition to be satisfied.</p>
     pub exists: Option<bool>,
-    #[doc="<p>The name of the attribute involved in the condition.</p>"]
+    /// <p>The name of the attribute involved in the condition.</p>
     pub name: Option<String>,
-    #[doc="<p>The value of an attribute. This value can only be specified when the <code>Exists</code> parameter is equal to <code>true</code>.</p>"]
+    /// <p>The value of an attribute. This value can only be specified when the <code>Exists</code> parameter is equal to <code>true</code>.</p>
     pub value: Option<String>,
 }
-
 
 /// Serialize `UpdateCondition` contents to a `SignedRequest`.
 struct UpdateConditionSerializer;
@@ -1037,18 +1059,23 @@ impl UpdateConditionSerializer {
         }
 
         if let Some(ref field_value) = obj.exists {
-            params.put(&format!("{}{}", prefix, "Exists"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "Exists"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.name {
-            params.put(&format!("{}{}", prefix, "Name"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "Name"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.value {
-            params.put(&format!("{}{}", prefix, "Value"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "Value"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-
     }
 }
 
@@ -1065,7 +1092,6 @@ pub enum BatchDeleteAttributesError {
     Unknown(String),
 }
 
-
 impl BatchDeleteAttributesError {
     pub fn from_body(body: &str) -> BatchDeleteAttributesError {
         let reader = EventReader::new(body.as_bytes());
@@ -1073,11 +1099,9 @@ impl BatchDeleteAttributesError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    _ => BatchDeleteAttributesError::Unknown(String::from(body)),
-                }
-            }
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => BatchDeleteAttributesError::Unknown(String::from(body)),
+            },
             Err(_) => BatchDeleteAttributesError::Unknown(body.to_string()),
         }
     }
@@ -1152,7 +1176,6 @@ pub enum BatchPutAttributesError {
     Unknown(String),
 }
 
-
 impl BatchPutAttributesError {
     pub fn from_body(body: &str) -> BatchPutAttributesError {
         let reader = EventReader::new(body.as_bytes());
@@ -1160,22 +1183,44 @@ impl BatchPutAttributesError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "DuplicateItemName" => BatchPutAttributesError::DuplicateItemName(String::from(parsed_error.message)),
-                    "MissingParameter" => BatchPutAttributesError::MissingParameter(String::from(parsed_error.message)),
-                    "NoSuchDomain" => {
-                        BatchPutAttributesError::NoSuchDomain(String::from(parsed_error.message))
-                    }
-                    "InvalidParameterValue" => BatchPutAttributesError::InvalidParameterValue(String::from(parsed_error.message)),
-                    "NumberSubmittedAttributesExceeded" => BatchPutAttributesError::NumberSubmittedAttributesExceeded(String::from(parsed_error.message)),
-                    "NumberDomainAttributesExceeded" => BatchPutAttributesError::NumberDomainAttributesExceeded(String::from(parsed_error.message)),
-                    "NumberItemAttributesExceeded" => BatchPutAttributesError::NumberItemAttributesExceeded(String::from(parsed_error.message)),
-                    "NumberDomainBytesExceeded" => BatchPutAttributesError::NumberDomainBytesExceeded(String::from(parsed_error.message)),
-                    "NumberSubmittedItemsExceeded" => BatchPutAttributesError::NumberSubmittedItemsExceeded(String::from(parsed_error.message)),
-                    _ => BatchPutAttributesError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "DuplicateItemName" => {
+                    BatchPutAttributesError::DuplicateItemName(String::from(parsed_error.message))
                 }
-            }
+                "MissingParameter" => {
+                    BatchPutAttributesError::MissingParameter(String::from(parsed_error.message))
+                }
+                "NoSuchDomain" => {
+                    BatchPutAttributesError::NoSuchDomain(String::from(parsed_error.message))
+                }
+                "InvalidParameterValue" => BatchPutAttributesError::InvalidParameterValue(
+                    String::from(parsed_error.message),
+                ),
+                "NumberSubmittedAttributesExceeded" => {
+                    BatchPutAttributesError::NumberSubmittedAttributesExceeded(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "NumberDomainAttributesExceeded" => {
+                    BatchPutAttributesError::NumberDomainAttributesExceeded(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "NumberItemAttributesExceeded" => {
+                    BatchPutAttributesError::NumberItemAttributesExceeded(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "NumberDomainBytesExceeded" => BatchPutAttributesError::NumberDomainBytesExceeded(
+                    String::from(parsed_error.message),
+                ),
+                "NumberSubmittedItemsExceeded" => {
+                    BatchPutAttributesError::NumberSubmittedItemsExceeded(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => BatchPutAttributesError::Unknown(String::from(body)),
+            },
             Err(_) => BatchPutAttributesError::Unknown(body.to_string()),
         }
     }
@@ -1247,7 +1292,6 @@ pub enum CreateDomainError {
     Unknown(String),
 }
 
-
 impl CreateDomainError {
     pub fn from_body(body: &str) -> CreateDomainError {
         let reader = EventReader::new(body.as_bytes());
@@ -1255,20 +1299,18 @@ impl CreateDomainError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "MissingParameter" => {
-                        CreateDomainError::MissingParameter(String::from(parsed_error.message))
-                    }
-                    "InvalidParameterValue" => {
-                        CreateDomainError::InvalidParameterValue(String::from(parsed_error.message))
-                    }
-                    "NumberDomainsExceeded" => {
-                        CreateDomainError::NumberDomainsExceeded(String::from(parsed_error.message))
-                    }
-                    _ => CreateDomainError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "MissingParameter" => {
+                    CreateDomainError::MissingParameter(String::from(parsed_error.message))
                 }
-            }
+                "InvalidParameterValue" => {
+                    CreateDomainError::InvalidParameterValue(String::from(parsed_error.message))
+                }
+                "NumberDomainsExceeded" => {
+                    CreateDomainError::NumberDomainsExceeded(String::from(parsed_error.message))
+                }
+                _ => CreateDomainError::Unknown(String::from(body)),
+            },
             Err(_) => CreateDomainError::Unknown(body.to_string()),
         }
     }
@@ -1334,7 +1376,6 @@ pub enum DeleteAttributesError {
     Unknown(String),
 }
 
-
 impl DeleteAttributesError {
     pub fn from_body(body: &str) -> DeleteAttributesError {
         let reader = EventReader::new(body.as_bytes());
@@ -1342,19 +1383,21 @@ impl DeleteAttributesError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "MissingParameter" => {
-                        DeleteAttributesError::MissingParameter(String::from(parsed_error.message))
-                    }
-                    "AttributeDoesNotExist" => DeleteAttributesError::AttributeDoesNotExist(String::from(parsed_error.message)),
-                    "NoSuchDomain" => {
-                        DeleteAttributesError::NoSuchDomain(String::from(parsed_error.message))
-                    }
-                    "InvalidParameterValue" => DeleteAttributesError::InvalidParameterValue(String::from(parsed_error.message)),
-                    _ => DeleteAttributesError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "MissingParameter" => {
+                    DeleteAttributesError::MissingParameter(String::from(parsed_error.message))
                 }
-            }
+                "AttributeDoesNotExist" => {
+                    DeleteAttributesError::AttributeDoesNotExist(String::from(parsed_error.message))
+                }
+                "NoSuchDomain" => {
+                    DeleteAttributesError::NoSuchDomain(String::from(parsed_error.message))
+                }
+                "InvalidParameterValue" => {
+                    DeleteAttributesError::InvalidParameterValue(String::from(parsed_error.message))
+                }
+                _ => DeleteAttributesError::Unknown(String::from(body)),
+            },
             Err(_) => DeleteAttributesError::Unknown(body.to_string()),
         }
     }
@@ -1415,7 +1458,6 @@ pub enum DeleteDomainError {
     Unknown(String),
 }
 
-
 impl DeleteDomainError {
     pub fn from_body(body: &str) -> DeleteDomainError {
         let reader = EventReader::new(body.as_bytes());
@@ -1423,14 +1465,12 @@ impl DeleteDomainError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "MissingParameter" => {
-                        DeleteDomainError::MissingParameter(String::from(parsed_error.message))
-                    }
-                    _ => DeleteDomainError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "MissingParameter" => {
+                    DeleteDomainError::MissingParameter(String::from(parsed_error.message))
                 }
-            }
+                _ => DeleteDomainError::Unknown(String::from(body)),
+            },
             Err(_) => DeleteDomainError::Unknown(body.to_string()),
         }
     }
@@ -1490,7 +1530,6 @@ pub enum DomainMetadataError {
     Unknown(String),
 }
 
-
 impl DomainMetadataError {
     pub fn from_body(body: &str) -> DomainMetadataError {
         let reader = EventReader::new(body.as_bytes());
@@ -1498,17 +1537,15 @@ impl DomainMetadataError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "MissingParameter" => {
-                        DomainMetadataError::MissingParameter(String::from(parsed_error.message))
-                    }
-                    "NoSuchDomain" => {
-                        DomainMetadataError::NoSuchDomain(String::from(parsed_error.message))
-                    }
-                    _ => DomainMetadataError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "MissingParameter" => {
+                    DomainMetadataError::MissingParameter(String::from(parsed_error.message))
                 }
-            }
+                "NoSuchDomain" => {
+                    DomainMetadataError::NoSuchDomain(String::from(parsed_error.message))
+                }
+                _ => DomainMetadataError::Unknown(String::from(body)),
+            },
             Err(_) => DomainMetadataError::Unknown(body.to_string()),
         }
     }
@@ -1571,7 +1608,6 @@ pub enum GetAttributesError {
     Unknown(String),
 }
 
-
 impl GetAttributesError {
     pub fn from_body(body: &str) -> GetAttributesError {
         let reader = EventReader::new(body.as_bytes());
@@ -1579,18 +1615,18 @@ impl GetAttributesError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "MissingParameter" => {
-                        GetAttributesError::MissingParameter(String::from(parsed_error.message))
-                    }
-                    "NoSuchDomain" => {
-                        GetAttributesError::NoSuchDomain(String::from(parsed_error.message))
-                    }
-                    "InvalidParameterValue" => GetAttributesError::InvalidParameterValue(String::from(parsed_error.message)),
-                    _ => GetAttributesError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "MissingParameter" => {
+                    GetAttributesError::MissingParameter(String::from(parsed_error.message))
                 }
-            }
+                "NoSuchDomain" => {
+                    GetAttributesError::NoSuchDomain(String::from(parsed_error.message))
+                }
+                "InvalidParameterValue" => {
+                    GetAttributesError::InvalidParameterValue(String::from(parsed_error.message))
+                }
+                _ => GetAttributesError::Unknown(String::from(body)),
+            },
             Err(_) => GetAttributesError::Unknown(body.to_string()),
         }
     }
@@ -1652,7 +1688,6 @@ pub enum ListDomainsError {
     Unknown(String),
 }
 
-
 impl ListDomainsError {
     pub fn from_body(body: &str) -> ListDomainsError {
         let reader = EventReader::new(body.as_bytes());
@@ -1660,17 +1695,15 @@ impl ListDomainsError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "InvalidNextToken" => {
-                        ListDomainsError::InvalidNextToken(String::from(parsed_error.message))
-                    }
-                    "InvalidParameterValue" => {
-                        ListDomainsError::InvalidParameterValue(String::from(parsed_error.message))
-                    }
-                    _ => ListDomainsError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "InvalidNextToken" => {
+                    ListDomainsError::InvalidNextToken(String::from(parsed_error.message))
                 }
-            }
+                "InvalidParameterValue" => {
+                    ListDomainsError::InvalidParameterValue(String::from(parsed_error.message))
+                }
+                _ => ListDomainsError::Unknown(String::from(body)),
+            },
             Err(_) => ListDomainsError::Unknown(body.to_string()),
         }
     }
@@ -1741,7 +1774,6 @@ pub enum PutAttributesError {
     Unknown(String),
 }
 
-
 impl PutAttributesError {
     pub fn from_body(body: &str) -> PutAttributesError {
         let reader = EventReader::new(body.as_bytes());
@@ -1749,22 +1781,34 @@ impl PutAttributesError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "MissingParameter" => {
-                        PutAttributesError::MissingParameter(String::from(parsed_error.message))
-                    }
-                    "AttributeDoesNotExist" => PutAttributesError::AttributeDoesNotExist(String::from(parsed_error.message)),
-                    "NoSuchDomain" => {
-                        PutAttributesError::NoSuchDomain(String::from(parsed_error.message))
-                    }
-                    "InvalidParameterValue" => PutAttributesError::InvalidParameterValue(String::from(parsed_error.message)),
-                    "NumberDomainAttributesExceeded" => PutAttributesError::NumberDomainAttributesExceeded(String::from(parsed_error.message)),
-                    "NumberItemAttributesExceeded" => PutAttributesError::NumberItemAttributesExceeded(String::from(parsed_error.message)),
-                    "NumberDomainBytesExceeded" => PutAttributesError::NumberDomainBytesExceeded(String::from(parsed_error.message)),
-                    _ => PutAttributesError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "MissingParameter" => {
+                    PutAttributesError::MissingParameter(String::from(parsed_error.message))
                 }
-            }
+                "AttributeDoesNotExist" => {
+                    PutAttributesError::AttributeDoesNotExist(String::from(parsed_error.message))
+                }
+                "NoSuchDomain" => {
+                    PutAttributesError::NoSuchDomain(String::from(parsed_error.message))
+                }
+                "InvalidParameterValue" => {
+                    PutAttributesError::InvalidParameterValue(String::from(parsed_error.message))
+                }
+                "NumberDomainAttributesExceeded" => {
+                    PutAttributesError::NumberDomainAttributesExceeded(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "NumberItemAttributesExceeded" => {
+                    PutAttributesError::NumberItemAttributesExceeded(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "NumberDomainBytesExceeded" => PutAttributesError::NumberDomainBytesExceeded(
+                    String::from(parsed_error.message),
+                ),
+                _ => PutAttributesError::Unknown(String::from(body)),
+            },
             Err(_) => PutAttributesError::Unknown(body.to_string()),
         }
     }
@@ -1844,7 +1888,6 @@ pub enum SelectError {
     Unknown(String),
 }
 
-
 impl SelectError {
     pub fn from_body(body: &str) -> SelectError {
         let reader = EventReader::new(body.as_bytes());
@@ -1852,36 +1895,32 @@ impl SelectError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "RequestTimeout" => {
-                        SelectError::RequestTimeout(String::from(parsed_error.message))
-                    }
-                    "MissingParameter" => {
-                        SelectError::MissingParameter(String::from(parsed_error.message))
-                    }
-                    "InvalidNextToken" => {
-                        SelectError::InvalidNextToken(String::from(parsed_error.message))
-                    }
-                    "NoSuchDomain" => SelectError::NoSuchDomain(String::from(parsed_error.message)),
-                    "InvalidQueryExpression" => {
-                        SelectError::InvalidQueryExpression(String::from(parsed_error.message))
-                    }
-                    "InvalidParameterValue" => {
-                        SelectError::InvalidParameterValue(String::from(parsed_error.message))
-                    }
-                    "TooManyRequestedAttributes" => {
-                        SelectError::TooManyRequestedAttributes(String::from(parsed_error.message))
-                    }
-                    "InvalidNumberPredicates" => {
-                        SelectError::InvalidNumberPredicates(String::from(parsed_error.message))
-                    }
-                    "InvalidNumberValueTests" => {
-                        SelectError::InvalidNumberValueTests(String::from(parsed_error.message))
-                    }
-                    _ => SelectError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "RequestTimeout" => SelectError::RequestTimeout(String::from(parsed_error.message)),
+                "MissingParameter" => {
+                    SelectError::MissingParameter(String::from(parsed_error.message))
                 }
-            }
+                "InvalidNextToken" => {
+                    SelectError::InvalidNextToken(String::from(parsed_error.message))
+                }
+                "NoSuchDomain" => SelectError::NoSuchDomain(String::from(parsed_error.message)),
+                "InvalidQueryExpression" => {
+                    SelectError::InvalidQueryExpression(String::from(parsed_error.message))
+                }
+                "InvalidParameterValue" => {
+                    SelectError::InvalidParameterValue(String::from(parsed_error.message))
+                }
+                "TooManyRequestedAttributes" => {
+                    SelectError::TooManyRequestedAttributes(String::from(parsed_error.message))
+                }
+                "InvalidNumberPredicates" => {
+                    SelectError::InvalidNumberPredicates(String::from(parsed_error.message))
+                }
+                "InvalidNumberValueTests" => {
+                    SelectError::InvalidNumberValueTests(String::from(parsed_error.message))
+                }
+                _ => SelectError::Unknown(String::from(body)),
+            },
             Err(_) => SelectError::Unknown(body.to_string()),
         }
     }
@@ -1935,60 +1974,58 @@ impl Error for SelectError {
 /// Trait representing the capabilities of the Amazon SimpleDB API. Amazon SimpleDB clients implement this trait.
 pub trait SimpleDb {
     #[doc="<p> Performs multiple DeleteAttributes operations in a single call, which reduces round trips and latencies. This enables Amazon SimpleDB to optimize requests, which generally yields better throughput. </p> <p> The following limitations are enforced for this operation: <ul> <li>1 MB request size</li> <li>25 item limit per BatchDeleteAttributes operation</li> </ul> </p>"]
-    fn batch_delete_attributes(&self,
-                               input: &BatchDeleteAttributesRequest)
-                               -> Result<(), BatchDeleteAttributesError>;
-
+    fn batch_delete_attributes(
+        &self,
+        input: &BatchDeleteAttributesRequest,
+    ) -> Result<(), BatchDeleteAttributesError>;
 
     #[doc="<p> The <code>BatchPutAttributes</code> operation creates or replaces attributes within one or more items. By using this operation, the client can perform multiple <a>PutAttribute</a> operation with a single call. This helps yield savings in round trips and latencies, enabling Amazon SimpleDB to optimize requests and generally produce better throughput. </p> <p> The client may specify the item name with the <code>Item.X.ItemName</code> parameter. The client may specify new attributes using a combination of the <code>Item.X.Attribute.Y.Name</code> and <code>Item.X.Attribute.Y.Value</code> parameters. The client may specify the first attribute for the first item using the parameters <code>Item.0.Attribute.0.Name</code> and <code>Item.0.Attribute.0.Value</code>, and for the second attribute for the first item by the parameters <code>Item.0.Attribute.1.Name</code> and <code>Item.0.Attribute.1.Value</code>, and so on. </p> <p> Attributes are uniquely identified within an item by their name/value combination. For example, a single item can have the attributes <code>{ \"first_name\", \"first_value\" }</code> and <code>{ \"first_name\", \"second_value\" }</code>. However, it cannot have two attribute instances where both the <code>Item.X.Attribute.Y.Name</code> and <code>Item.X.Attribute.Y.Value</code> are the same. </p> <p> Optionally, the requester can supply the <code>Replace</code> parameter for each individual value. Setting this value to <code>true</code> will cause the new attribute values to replace the existing attribute values. For example, if an item <code>I</code> has the attributes <code>{ 'a', '1' }, { 'b', '2'}</code> and <code>{ 'b', '3' }</code> and the requester does a BatchPutAttributes of <code>{'I', 'b', '4' }</code> with the Replace parameter set to true, the final attributes of the item will be <code>{ 'a', '1' }</code> and <code>{ 'b', '4' }</code>, replacing the previous values of the 'b' attribute with the new value. </p> <important> This operation is vulnerable to exceeding the maximum URL size when making a REST request using the HTTP GET method. This operation does not support conditions using <code>Expected.X.Name</code>, <code>Expected.X.Value</code>, or <code>Expected.X.Exists</code>. </important> <p> You can execute multiple <code>BatchPutAttributes</code> operations and other operations in parallel. However, large numbers of concurrent <code>BatchPutAttributes</code> calls can result in Service Unavailable (503) responses. </p> <p> The following limitations are enforced for this operation: <ul> <li>256 attribute name-value pairs per item</li> <li>1 MB request size</li> <li>1 billion attributes per domain</li> <li>10 GB of total user data storage per domain</li> <li>25 item limit per <code>BatchPutAttributes</code> operation</li> </ul> </p>"]
-    fn batch_put_attributes(&self,
-                            input: &BatchPutAttributesRequest)
-                            -> Result<(), BatchPutAttributesError>;
-
+    fn batch_put_attributes(
+        &self,
+        input: &BatchPutAttributesRequest,
+    ) -> Result<(), BatchPutAttributesError>;
 
     #[doc="<p> The <code>CreateDomain</code> operation creates a new domain. The domain name should be unique among the domains associated with the Access Key ID provided in the request. The <code>CreateDomain</code> operation may take 10 or more seconds to complete. </p> <p> The client can create up to 100 domains per account. </p> <p> If the client requires additional domains, go to <a href=\"http://aws.amazon.com/contact-us/simpledb-limit-request/\"> http://aws.amazon.com/contact-us/simpledb-limit-request/</a>. </p>"]
     fn create_domain(&self, input: &CreateDomainRequest) -> Result<(), CreateDomainError>;
 
-
     #[doc="<p> Deletes one or more attributes associated with an item. If all attributes of the item are deleted, the item is deleted. </p> <p> <code>DeleteAttributes</code> is an idempotent operation; running it multiple times on the same item or attribute does not result in an error response. </p> <p> Because Amazon SimpleDB makes multiple copies of item data and uses an eventual consistency update model, performing a <a>GetAttributes</a> or <a>Select</a> operation (read) immediately after a <code>DeleteAttributes</code> or <a>PutAttributes</a> operation (write) might not return updated item data. </p>"]
-    fn delete_attributes(&self,
-                         input: &DeleteAttributesRequest)
-                         -> Result<(), DeleteAttributesError>;
-
+    fn delete_attributes(
+        &self,
+        input: &DeleteAttributesRequest,
+    ) -> Result<(), DeleteAttributesError>;
 
     #[doc="<p> The <code>DeleteDomain</code> operation deletes a domain. Any items (and their attributes) in the domain are deleted as well. The <code>DeleteDomain</code> operation might take 10 or more seconds to complete. </p>"]
     fn delete_domain(&self, input: &DeleteDomainRequest) -> Result<(), DeleteDomainError>;
 
-
     #[doc="<p> Returns information about the domain, including when the domain was created, the number of items and attributes in the domain, and the size of the attribute names and values. </p>"]
-    fn domain_metadata(&self,
-                       input: &DomainMetadataRequest)
-                       -> Result<DomainMetadataResult, DomainMetadataError>;
-
+    fn domain_metadata(
+        &self,
+        input: &DomainMetadataRequest,
+    ) -> Result<DomainMetadataResult, DomainMetadataError>;
 
     #[doc="<p> Returns all of the attributes associated with the specified item. Optionally, the attributes returned can be limited to one or more attributes by specifying an attribute name parameter. </p> <p> If the item does not exist on the replica that was accessed for this operation, an empty set is returned. The system does not return an error as it cannot guarantee the item does not exist on other replicas. </p>"]
-    fn get_attributes(&self,
-                      input: &GetAttributesRequest)
-                      -> Result<GetAttributesResult, GetAttributesError>;
-
+    fn get_attributes(
+        &self,
+        input: &GetAttributesRequest,
+    ) -> Result<GetAttributesResult, GetAttributesError>;
 
     #[doc="<p> The <code>ListDomains</code> operation lists all domains associated with the Access Key ID. It returns domain names up to the limit set by <a href=\"#MaxNumberOfDomains\">MaxNumberOfDomains</a>. A <a href=\"#NextToken\">NextToken</a> is returned if there are more than <code>MaxNumberOfDomains</code> domains. Calling <code>ListDomains</code> successive times with the <code>NextToken</code> provided by the operation returns up to <code>MaxNumberOfDomains</code> more domain names with each successive operation call. </p>"]
-    fn list_domains(&self,
-                    input: &ListDomainsRequest)
-                    -> Result<ListDomainsResult, ListDomainsError>;
-
+    fn list_domains(
+        &self,
+        input: &ListDomainsRequest,
+    ) -> Result<ListDomainsResult, ListDomainsError>;
 
     #[doc="<p> The PutAttributes operation creates or replaces attributes in an item. The client may specify new attributes using a combination of the <code>Attribute.X.Name</code> and <code>Attribute.X.Value</code> parameters. The client specifies the first attribute by the parameters <code>Attribute.0.Name</code> and <code>Attribute.0.Value</code>, the second attribute by the parameters <code>Attribute.1.Name</code> and <code>Attribute.1.Value</code>, and so on. </p> <p> Attributes are uniquely identified in an item by their name/value combination. For example, a single item can have the attributes <code>{ \"first_name\", \"first_value\" }</code> and <code>{ \"first_name\", second_value\" }</code>. However, it cannot have two attribute instances where both the <code>Attribute.X.Name</code> and <code>Attribute.X.Value</code> are the same. </p> <p> Optionally, the requestor can supply the <code>Replace</code> parameter for each individual attribute. Setting this value to <code>true</code> causes the new attribute value to replace the existing attribute value(s). For example, if an item has the attributes <code>{ 'a', '1' }</code>, <code>{ 'b', '2'}</code> and <code>{ 'b', '3' }</code> and the requestor calls <code>PutAttributes</code> using the attributes <code>{ 'b', '4' }</code> with the <code>Replace</code> parameter set to true, the final attributes of the item are changed to <code>{ 'a', '1' }</code> and <code>{ 'b', '4' }</code>, which replaces the previous values of the 'b' attribute with the new value. </p> <p> You cannot specify an empty string as an attribute name. </p> <p> Because Amazon SimpleDB makes multiple copies of client data and uses an eventual consistency update model, an immediate <a>GetAttributes</a> or <a>Select</a> operation (read) immediately after a <a>PutAttributes</a> or <a>DeleteAttributes</a> operation (write) might not return the updated data. </p> <p> The following limitations are enforced for this operation: <ul> <li>256 total attribute name-value pairs per item</li> <li>One billion attributes per domain</li> <li>10 GB of total user data storage per domain</li> </ul> </p>"]
     fn put_attributes(&self, input: &PutAttributesRequest) -> Result<(), PutAttributesError>;
-
 
     #[doc="<p> The <code>Select</code> operation returns a set of attributes for <code>ItemNames</code> that match the select expression. <code>Select</code> is similar to the standard SQL SELECT statement. </p> <p> The total size of the response cannot exceed 1 MB in total size. Amazon SimpleDB automatically adjusts the number of items returned per page to enforce this limit. For example, if the client asks to retrieve 2500 items, but each individual item is 10 kB in size, the system returns 100 items and an appropriate <code>NextToken</code> so the client can access the next page of results. </p> <p> For information on how to construct select expressions, see Using Select to Create Amazon SimpleDB Queries in the Developer Guide. </p>"]
     fn select(&self, input: &SelectRequest) -> Result<SelectResult, SelectError>;
 }
 /// A client for the Amazon SimpleDB API.
 pub struct SimpleDbClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -1996,8 +2033,9 @@ pub struct SimpleDbClient<P, D>
 }
 
 impl<P, D> SimpleDbClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         SimpleDbClient {
@@ -2009,13 +2047,15 @@ impl<P, D> SimpleDbClient<P, D>
 }
 
 impl<P, D> SimpleDb for SimpleDbClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     #[doc="<p> Performs multiple DeleteAttributes operations in a single call, which reduces round trips and latencies. This enables Amazon SimpleDB to optimize requests, which generally yields better throughput. </p> <p> The following limitations are enforced for this operation: <ul> <li>1 MB request size</li> <li>25 item limit per BatchDeleteAttributes operation</li> </ul> </p>"]
-    fn batch_delete_attributes(&self,
-                               input: &BatchDeleteAttributesRequest)
-                               -> Result<(), BatchDeleteAttributesError> {
+    fn batch_delete_attributes(
+        &self,
+        input: &BatchDeleteAttributesRequest,
+    ) -> Result<(), BatchDeleteAttributesError> {
         let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
         let mut params = Params::new();
 
@@ -2034,16 +2074,18 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(BatchDeleteAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(BatchDeleteAttributesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p> The <code>BatchPutAttributes</code> operation creates or replaces attributes within one or more items. By using this operation, the client can perform multiple <a>PutAttribute</a> operation with a single call. This helps yield savings in round trips and latencies, enabling Amazon SimpleDB to optimize requests and generally produce better throughput. </p> <p> The client may specify the item name with the <code>Item.X.ItemName</code> parameter. The client may specify new attributes using a combination of the <code>Item.X.Attribute.Y.Name</code> and <code>Item.X.Attribute.Y.Value</code> parameters. The client may specify the first attribute for the first item using the parameters <code>Item.0.Attribute.0.Name</code> and <code>Item.0.Attribute.0.Value</code>, and for the second attribute for the first item by the parameters <code>Item.0.Attribute.1.Name</code> and <code>Item.0.Attribute.1.Value</code>, and so on. </p> <p> Attributes are uniquely identified within an item by their name/value combination. For example, a single item can have the attributes <code>{ \"first_name\", \"first_value\" }</code> and <code>{ \"first_name\", \"second_value\" }</code>. However, it cannot have two attribute instances where both the <code>Item.X.Attribute.Y.Name</code> and <code>Item.X.Attribute.Y.Value</code> are the same. </p> <p> Optionally, the requester can supply the <code>Replace</code> parameter for each individual value. Setting this value to <code>true</code> will cause the new attribute values to replace the existing attribute values. For example, if an item <code>I</code> has the attributes <code>{ 'a', '1' }, { 'b', '2'}</code> and <code>{ 'b', '3' }</code> and the requester does a BatchPutAttributes of <code>{'I', 'b', '4' }</code> with the Replace parameter set to true, the final attributes of the item will be <code>{ 'a', '1' }</code> and <code>{ 'b', '4' }</code>, replacing the previous values of the 'b' attribute with the new value. </p> <important> This operation is vulnerable to exceeding the maximum URL size when making a REST request using the HTTP GET method. This operation does not support conditions using <code>Expected.X.Name</code>, <code>Expected.X.Value</code>, or <code>Expected.X.Exists</code>. </important> <p> You can execute multiple <code>BatchPutAttributes</code> operations and other operations in parallel. However, large numbers of concurrent <code>BatchPutAttributes</code> calls can result in Service Unavailable (503) responses. </p> <p> The following limitations are enforced for this operation: <ul> <li>256 attribute name-value pairs per item</li> <li>1 MB request size</li> <li>1 billion attributes per domain</li> <li>10 GB of total user data storage per domain</li> <li>25 item limit per <code>BatchPutAttributes</code> operation</li> </ul> </p>"]
-    fn batch_put_attributes(&self,
-                            input: &BatchPutAttributesRequest)
-                            -> Result<(), BatchPutAttributesError> {
+    fn batch_put_attributes(
+        &self,
+        input: &BatchPutAttributesRequest,
+    ) -> Result<(), BatchPutAttributesError> {
         let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
         let mut params = Params::new();
 
@@ -2062,11 +2104,12 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(BatchPutAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(BatchPutAttributesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p> The <code>CreateDomain</code> operation creates a new domain. The domain name should be unique among the domains associated with the Access Key ID provided in the request. The <code>CreateDomain</code> operation may take 10 or more seconds to complete. </p> <p> The client can create up to 100 domains per account. </p> <p> If the client requires additional domains, go to <a href=\"http://aws.amazon.com/contact-us/simpledb-limit-request/\"> http://aws.amazon.com/contact-us/simpledb-limit-request/</a>. </p>"]
     fn create_domain(&self, input: &CreateDomainRequest) -> Result<(), CreateDomainError> {
@@ -2088,16 +2131,18 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateDomainError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p> Deletes one or more attributes associated with an item. If all attributes of the item are deleted, the item is deleted. </p> <p> <code>DeleteAttributes</code> is an idempotent operation; running it multiple times on the same item or attribute does not result in an error response. </p> <p> Because Amazon SimpleDB makes multiple copies of item data and uses an eventual consistency update model, performing a <a>GetAttributes</a> or <a>Select</a> operation (read) immediately after a <code>DeleteAttributes</code> or <a>PutAttributes</a> operation (write) might not return updated item data. </p>"]
-    fn delete_attributes(&self,
-                         input: &DeleteAttributesRequest)
-                         -> Result<(), DeleteAttributesError> {
+    fn delete_attributes(
+        &self,
+        input: &DeleteAttributesRequest,
+    ) -> Result<(), DeleteAttributesError> {
         let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
         let mut params = Params::new();
 
@@ -2116,11 +2161,12 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteAttributesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p> The <code>DeleteDomain</code> operation deletes a domain. Any items (and their attributes) in the domain are deleted as well. The <code>DeleteDomain</code> operation might take 10 or more seconds to complete. </p>"]
     fn delete_domain(&self, input: &DeleteDomainRequest) -> Result<(), DeleteDomainError> {
@@ -2142,16 +2188,18 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteDomainError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p> Returns information about the domain, including when the domain was created, the number of items and attributes in the domain, and the size of the attribute names and values. </p>"]
-    fn domain_metadata(&self,
-                       input: &DomainMetadataRequest)
-                       -> Result<DomainMetadataResult, DomainMetadataError> {
+    fn domain_metadata(
+        &self,
+        input: &DomainMetadataRequest,
+    ) -> Result<DomainMetadataResult, DomainMetadataError> {
         let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
         let mut params = Params::new();
 
@@ -2164,7 +2212,6 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2172,15 +2219,18 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
                 if body.is_empty() {
                     result = DomainMetadataResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DomainMetadataResultDeserializer::deserialize("DomainMetadataResult",
-                                                                                &mut stack));
+                    result = try!(DomainMetadataResultDeserializer::deserialize(
+                        "DomainMetadataResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -2189,16 +2239,18 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DomainMetadataError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DomainMetadataError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p> Returns all of the attributes associated with the specified item. Optionally, the attributes returned can be limited to one or more attributes by specifying an attribute name parameter. </p> <p> If the item does not exist on the replica that was accessed for this operation, an empty set is returned. The system does not return an error as it cannot guarantee the item does not exist on other replicas. </p>"]
-    fn get_attributes(&self,
-                      input: &GetAttributesRequest)
-                      -> Result<GetAttributesResult, GetAttributesError> {
+    fn get_attributes(
+        &self,
+        input: &GetAttributesRequest,
+    ) -> Result<GetAttributesResult, GetAttributesError> {
         let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
         let mut params = Params::new();
 
@@ -2211,7 +2263,6 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2219,15 +2270,18 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
                 if body.is_empty() {
                     result = GetAttributesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetAttributesResultDeserializer::deserialize("GetAttributesResult",
-                                                                               &mut stack));
+                    result = try!(GetAttributesResultDeserializer::deserialize(
+                        "GetAttributesResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -2236,16 +2290,18 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetAttributesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p> The <code>ListDomains</code> operation lists all domains associated with the Access Key ID. It returns domain names up to the limit set by <a href=\"#MaxNumberOfDomains\">MaxNumberOfDomains</a>. A <a href=\"#NextToken\">NextToken</a> is returned if there are more than <code>MaxNumberOfDomains</code> domains. Calling <code>ListDomains</code> successive times with the <code>NextToken</code> provided by the operation returns up to <code>MaxNumberOfDomains</code> more domain names with each successive operation call. </p>"]
-    fn list_domains(&self,
-                    input: &ListDomainsRequest)
-                    -> Result<ListDomainsResult, ListDomainsError> {
+    fn list_domains(
+        &self,
+        input: &ListDomainsRequest,
+    ) -> Result<ListDomainsResult, ListDomainsError> {
         let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
         let mut params = Params::new();
 
@@ -2258,7 +2314,6 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2266,15 +2321,18 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
                 if body.is_empty() {
                     result = ListDomainsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListDomainsResultDeserializer::deserialize("ListDomainsResult",
-                                                                             &mut stack));
+                    result = try!(ListDomainsResultDeserializer::deserialize(
+                        "ListDomainsResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -2283,11 +2341,12 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListDomainsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListDomainsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p> The PutAttributes operation creates or replaces attributes in an item. The client may specify new attributes using a combination of the <code>Attribute.X.Name</code> and <code>Attribute.X.Value</code> parameters. The client specifies the first attribute by the parameters <code>Attribute.0.Name</code> and <code>Attribute.0.Value</code>, the second attribute by the parameters <code>Attribute.1.Name</code> and <code>Attribute.1.Value</code>, and so on. </p> <p> Attributes are uniquely identified in an item by their name/value combination. For example, a single item can have the attributes <code>{ \"first_name\", \"first_value\" }</code> and <code>{ \"first_name\", second_value\" }</code>. However, it cannot have two attribute instances where both the <code>Attribute.X.Name</code> and <code>Attribute.X.Value</code> are the same. </p> <p> Optionally, the requestor can supply the <code>Replace</code> parameter for each individual attribute. Setting this value to <code>true</code> causes the new attribute value to replace the existing attribute value(s). For example, if an item has the attributes <code>{ 'a', '1' }</code>, <code>{ 'b', '2'}</code> and <code>{ 'b', '3' }</code> and the requestor calls <code>PutAttributes</code> using the attributes <code>{ 'b', '4' }</code> with the <code>Replace</code> parameter set to true, the final attributes of the item are changed to <code>{ 'a', '1' }</code> and <code>{ 'b', '4' }</code>, which replaces the previous values of the 'b' attribute with the new value. </p> <p> You cannot specify an empty string as an attribute name. </p> <p> Because Amazon SimpleDB makes multiple copies of client data and uses an eventual consistency update model, an immediate <a>GetAttributes</a> or <a>Select</a> operation (read) immediately after a <a>PutAttributes</a> or <a>DeleteAttributes</a> operation (write) might not return the updated data. </p> <p> The following limitations are enforced for this operation: <ul> <li>256 total attribute name-value pairs per item</li> <li>One billion attributes per domain</li> <li>10 GB of total user data storage per domain</li> </ul> </p>"]
     fn put_attributes(&self, input: &PutAttributesRequest) -> Result<(), PutAttributesError> {
@@ -2309,11 +2368,12 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(PutAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(PutAttributesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p> The <code>Select</code> operation returns a set of attributes for <code>ItemNames</code> that match the select expression. <code>Select</code> is similar to the standard SQL SELECT statement. </p> <p> The total size of the response cannot exceed 1 MB in total size. Amazon SimpleDB automatically adjusts the number of items returned per page to enforce this limit. For example, if the client asks to retrieve 2500 items, but each individual item is 10 kB in size, the system returns 100 items and an appropriate <code>NextToken</code> so the client can access the next page of results. </p> <p> For information on how to construct select expressions, see Using Select to Create Amazon SimpleDB Queries in the Developer Guide. </p>"]
     fn select(&self, input: &SelectRequest) -> Result<SelectResult, SelectError> {
@@ -2329,7 +2389,6 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2337,15 +2396,18 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
                 if body.is_empty() {
                     result = SelectResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(SelectResultDeserializer::deserialize("SelectResult",
-                                                                        &mut stack));
+                    result = try!(SelectResultDeserializer::deserialize(
+                        "SelectResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -2354,7 +2416,9 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(SelectError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(SelectError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

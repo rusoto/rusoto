@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -28,839 +27,839 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[doc="<p>Contains all of the attributes of a specific DAX cluster.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains all of the attributes of a specific DAX cluster.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Cluster {
-    #[doc="<p>The number of nodes in the cluster that are active (i.e., capable of serving requests).</p>"]
-    #[serde(rename="ActiveNodes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of nodes in the cluster that are active (i.e., capable of serving requests).</p>
+    #[serde(rename = "ActiveNodes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub active_nodes: Option<i64>,
-    #[doc="<p>The Amazon Resource Name (ARN) that uniquely identifies the cluster. </p>"]
-    #[serde(rename="ClusterArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) that uniquely identifies the cluster. </p>
+    #[serde(rename = "ClusterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster_arn: Option<String>,
-    #[doc="<p>The configuration endpoint for this DAX cluster, consisting of a DNS name and a port number. Client applications can specify this endpoint, rather than an individual node endpoint, and allow the DAX client software to intelligently route requests and responses to nodes in the DAX cluster.</p>"]
-    #[serde(rename="ClusterDiscoveryEndpoint")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The configuration endpoint for this DAX cluster, consisting of a DNS name and a port number. Client applications can specify this endpoint, rather than an individual node endpoint, and allow the DAX client software to intelligently route requests and responses to nodes in the DAX cluster.</p>
+    #[serde(rename = "ClusterDiscoveryEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster_discovery_endpoint: Option<Endpoint>,
-    #[doc="<p>The name of the DAX cluster.</p>"]
-    #[serde(rename="ClusterName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the DAX cluster.</p>
+    #[serde(rename = "ClusterName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster_name: Option<String>,
-    #[doc="<p>The description of the cluster.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The description of the cluster.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>A valid Amazon Resource Name (ARN) that identifies an IAM role. At runtime, DAX will assume this role and use the role's permissions to access DynamoDB on your behalf.</p>"]
-    #[serde(rename="IamRoleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A valid Amazon Resource Name (ARN) that identifies an IAM role. At runtime, DAX will assume this role and use the role's permissions to access DynamoDB on your behalf.</p>
+    #[serde(rename = "IamRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_role_arn: Option<String>,
-    #[doc="<p>A list of nodes to be removed from the cluster.</p>"]
-    #[serde(rename="NodeIdsToRemove")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of nodes to be removed from the cluster.</p>
+    #[serde(rename = "NodeIdsToRemove")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub node_ids_to_remove: Option<Vec<String>>,
-    #[doc="<p>The node type for the nodes in the cluster. (All nodes in a DAX cluster are of the same type.)</p>"]
-    #[serde(rename="NodeType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The node type for the nodes in the cluster. (All nodes in a DAX cluster are of the same type.)</p>
+    #[serde(rename = "NodeType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub node_type: Option<String>,
-    #[doc="<p>A list of nodes that are currently in the cluster.</p>"]
-    #[serde(rename="Nodes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of nodes that are currently in the cluster.</p>
+    #[serde(rename = "Nodes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub nodes: Option<Vec<Node>>,
-    #[doc="<p>Describes a notification topic and its status. Notification topics are used for publishing DAX events to subscribers using Amazon Simple Notification Service (SNS).</p>"]
-    #[serde(rename="NotificationConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Describes a notification topic and its status. Notification topics are used for publishing DAX events to subscribers using Amazon Simple Notification Service (SNS).</p>
+    #[serde(rename = "NotificationConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_configuration: Option<NotificationConfiguration>,
-    #[doc="<p>The parameter group being used by nodes in the cluster.</p>"]
-    #[serde(rename="ParameterGroup")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The parameter group being used by nodes in the cluster.</p>
+    #[serde(rename = "ParameterGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_group: Option<ParameterGroupStatus>,
-    #[doc="<p>A range of time when maintenance of DAX cluster software will be performed. For example: <code>sun:01:00-sun:09:00</code>. Cluster maintenance normally takes less than 30 minutes, and is performed automatically within the maintenance window.</p>"]
-    #[serde(rename="PreferredMaintenanceWindow")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A range of time when maintenance of DAX cluster software will be performed. For example: <code>sun:01:00-sun:09:00</code>. Cluster maintenance normally takes less than 30 minutes, and is performed automatically within the maintenance window.</p>
+    #[serde(rename = "PreferredMaintenanceWindow")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub preferred_maintenance_window: Option<String>,
-    #[doc="<p>A list of security groups, and the status of each, for the nodes in the cluster.</p>"]
-    #[serde(rename="SecurityGroups")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of security groups, and the status of each, for the nodes in the cluster.</p>
+    #[serde(rename = "SecurityGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub security_groups: Option<Vec<SecurityGroupMembership>>,
-    #[doc="<p>The current status of the cluster.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The current status of the cluster.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The subnet group where the DAX cluster is running.</p>"]
-    #[serde(rename="SubnetGroup")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The subnet group where the DAX cluster is running.</p>
+    #[serde(rename = "SubnetGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_group: Option<String>,
-    #[doc="<p>The total number of nodes in the cluster.</p>"]
-    #[serde(rename="TotalNodes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The total number of nodes in the cluster.</p>
+    #[serde(rename = "TotalNodes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub total_nodes: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateClusterRequest {
-    #[doc="<p>The Availability Zones (AZs) in which the cluster nodes will be created. All nodes belonging to the cluster are placed in these Availability Zones. Use this parameter if you want to distribute the nodes across multiple AZs.</p>"]
-    #[serde(rename="AvailabilityZones")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Availability Zones (AZs) in which the cluster nodes will be created. All nodes belonging to the cluster are placed in these Availability Zones. Use this parameter if you want to distribute the nodes across multiple AZs.</p>
+    #[serde(rename = "AvailabilityZones")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zones: Option<Vec<String>>,
-    #[doc="<p>The cluster identifier. This parameter is stored as a lowercase string.</p> <p> <b>Constraints:</b> </p> <ul> <li> <p>A name must contain from 1 to 20 alphanumeric characters or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>A name cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>"]
-    #[serde(rename="ClusterName")]
+    /// <p>The cluster identifier. This parameter is stored as a lowercase string.</p> <p> <b>Constraints:</b> </p> <ul> <li> <p>A name must contain from 1 to 20 alphanumeric characters or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>A name cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>
+    #[serde(rename = "ClusterName")]
     pub cluster_name: String,
-    #[doc="<p>A description of the cluster.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the cluster.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>A valid Amazon Resource Name (ARN) that identifies an IAM role. At runtime, DAX will assume this role and use the role's permissions to access DynamoDB on your behalf.</p>"]
-    #[serde(rename="IamRoleArn")]
+    /// <p>A valid Amazon Resource Name (ARN) that identifies an IAM role. At runtime, DAX will assume this role and use the role's permissions to access DynamoDB on your behalf.</p>
+    #[serde(rename = "IamRoleArn")]
     pub iam_role_arn: String,
-    #[doc="<p>The compute and memory capacity of the nodes in the cluster.</p>"]
-    #[serde(rename="NodeType")]
+    /// <p>The compute and memory capacity of the nodes in the cluster.</p>
+    #[serde(rename = "NodeType")]
     pub node_type: String,
-    #[doc="<p>The Amazon Resource Name (ARN) of the Amazon SNS topic to which notifications will be sent.</p> <note> <p>The Amazon SNS topic owner must be same as the DAX cluster owner.</p> </note>"]
-    #[serde(rename="NotificationTopicArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the Amazon SNS topic to which notifications will be sent.</p> <note> <p>The Amazon SNS topic owner must be same as the DAX cluster owner.</p> </note>
+    #[serde(rename = "NotificationTopicArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_topic_arn: Option<String>,
-    #[doc="<p>The parameter group to be associated with the DAX cluster.</p>"]
-    #[serde(rename="ParameterGroupName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The parameter group to be associated with the DAX cluster.</p>
+    #[serde(rename = "ParameterGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_group_name: Option<String>,
-    #[doc="<p>Specifies the weekly time range during which maintenance on the DAX cluster is performed. It is specified as a range in the format ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period. Valid values for <code>ddd</code> are:</p> <ul> <li> <p> <code>sun</code> </p> </li> <li> <p> <code>mon</code> </p> </li> <li> <p> <code>tue</code> </p> </li> <li> <p> <code>wed</code> </p> </li> <li> <p> <code>thu</code> </p> </li> <li> <p> <code>fri</code> </p> </li> <li> <p> <code>sat</code> </p> </li> </ul> <p>Example: <code>sun:05:00-sun:09:00</code> </p> <note> <p>If you don't specify a preferred maintenance window when you create or modify a cache cluster, DAX assigns a 60-minute maintenance window on a randomly selected day of the week.</p> </note>"]
-    #[serde(rename="PreferredMaintenanceWindow")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies the weekly time range during which maintenance on the DAX cluster is performed. It is specified as a range in the format ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period. Valid values for <code>ddd</code> are:</p> <ul> <li> <p> <code>sun</code> </p> </li> <li> <p> <code>mon</code> </p> </li> <li> <p> <code>tue</code> </p> </li> <li> <p> <code>wed</code> </p> </li> <li> <p> <code>thu</code> </p> </li> <li> <p> <code>fri</code> </p> </li> <li> <p> <code>sat</code> </p> </li> </ul> <p>Example: <code>sun:05:00-sun:09:00</code> </p> <note> <p>If you don't specify a preferred maintenance window when you create or modify a cache cluster, DAX assigns a 60-minute maintenance window on a randomly selected day of the week.</p> </note>
+    #[serde(rename = "PreferredMaintenanceWindow")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub preferred_maintenance_window: Option<String>,
-    #[doc="<p>The number of nodes in the DAX cluster. A replication factor of 1 will create a single-node cluster, without any read replicas. For additional fault tolerance, you can create a multiple node cluster with one or more read replicas. To do this, set <i>ReplicationFactor</i> to 2 or more.</p> <note> <p>AWS recommends that you have at least two read replicas per cluster.</p> </note>"]
-    #[serde(rename="ReplicationFactor")]
+    /// <p>The number of nodes in the DAX cluster. A replication factor of 1 will create a single-node cluster, without any read replicas. For additional fault tolerance, you can create a multiple node cluster with one or more read replicas. To do this, set <i>ReplicationFactor</i> to 2 or more.</p> <note> <p>AWS recommends that you have at least two read replicas per cluster.</p> </note>
+    #[serde(rename = "ReplicationFactor")]
     pub replication_factor: i64,
-    #[doc="<p>A list of security group IDs to be assigned to each node in the DAX cluster. (Each of the security group ID is system-generated.)</p> <p>If this parameter is not specified, DAX assigns the default VPC security group to each node.</p>"]
-    #[serde(rename="SecurityGroupIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of security group IDs to be assigned to each node in the DAX cluster. (Each of the security group ID is system-generated.)</p> <p>If this parameter is not specified, DAX assigns the default VPC security group to each node.</p>
+    #[serde(rename = "SecurityGroupIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub security_group_ids: Option<Vec<String>>,
-    #[doc="<p>The name of the subnet group to be used for the replication group.</p> <important> <p>DAX clusters can only run in an Amazon VPC environment. All of the subnets that you specify in a subnet group must exist in the same VPC.</p> </important>"]
-    #[serde(rename="SubnetGroupName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the subnet group to be used for the replication group.</p> <important> <p>DAX clusters can only run in an Amazon VPC environment. All of the subnets that you specify in a subnet group must exist in the same VPC.</p> </important>
+    #[serde(rename = "SubnetGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_group_name: Option<String>,
-    #[doc="<p>A set of tags to associate with the DAX cluster. </p>"]
-    #[serde(rename="Tags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A set of tags to associate with the DAX cluster. </p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateClusterResponse {
-    #[doc="<p>A description of the DAX cluster that you have created.</p>"]
-    #[serde(rename="Cluster")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the DAX cluster that you have created.</p>
+    #[serde(rename = "Cluster")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster: Option<Cluster>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateParameterGroupRequest {
-    #[doc="<p>A description of the parameter group.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the parameter group.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The name of the parameter group to apply to all of the clusters in this replication group.</p>"]
-    #[serde(rename="ParameterGroupName")]
+    /// <p>The name of the parameter group to apply to all of the clusters in this replication group.</p>
+    #[serde(rename = "ParameterGroupName")]
     pub parameter_group_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateParameterGroupResponse {
-    #[doc="<p>Represents the output of a <i>CreateParameterGroup</i> action.</p>"]
-    #[serde(rename="ParameterGroup")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Represents the output of a <i>CreateParameterGroup</i> action.</p>
+    #[serde(rename = "ParameterGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_group: Option<ParameterGroup>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateSubnetGroupRequest {
-    #[doc="<p>A description for the subnet group</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description for the subnet group</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>A name for the subnet group. This value is stored as a lowercase string. </p>"]
-    #[serde(rename="SubnetGroupName")]
+    /// <p>A name for the subnet group. This value is stored as a lowercase string. </p>
+    #[serde(rename = "SubnetGroupName")]
     pub subnet_group_name: String,
-    #[doc="<p>A list of VPC subnet IDs for the subnet group.</p>"]
-    #[serde(rename="SubnetIds")]
+    /// <p>A list of VPC subnet IDs for the subnet group.</p>
+    #[serde(rename = "SubnetIds")]
     pub subnet_ids: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateSubnetGroupResponse {
-    #[doc="<p>Represents the output of a <i>CreateSubnetGroup</i> operation.</p>"]
-    #[serde(rename="SubnetGroup")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Represents the output of a <i>CreateSubnetGroup</i> operation.</p>
+    #[serde(rename = "SubnetGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_group: Option<SubnetGroup>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DecreaseReplicationFactorRequest {
-    #[doc="<p>The Availability Zone(s) from which to remove nodes.</p>"]
-    #[serde(rename="AvailabilityZones")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Availability Zone(s) from which to remove nodes.</p>
+    #[serde(rename = "AvailabilityZones")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zones: Option<Vec<String>>,
-    #[doc="<p>The name of the DAX cluster from which you want to remove nodes.</p>"]
-    #[serde(rename="ClusterName")]
+    /// <p>The name of the DAX cluster from which you want to remove nodes.</p>
+    #[serde(rename = "ClusterName")]
     pub cluster_name: String,
-    #[doc="<p>The new number of nodes for the DAX cluster.</p>"]
-    #[serde(rename="NewReplicationFactor")]
+    /// <p>The new number of nodes for the DAX cluster.</p>
+    #[serde(rename = "NewReplicationFactor")]
     pub new_replication_factor: i64,
-    #[doc="<p>The unique identifiers of the nodes to be removed from the cluster.</p>"]
-    #[serde(rename="NodeIdsToRemove")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique identifiers of the nodes to be removed from the cluster.</p>
+    #[serde(rename = "NodeIdsToRemove")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub node_ids_to_remove: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DecreaseReplicationFactorResponse {
-    #[doc="<p>A description of the DAX cluster, after you have decreased its replication factor.</p>"]
-    #[serde(rename="Cluster")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the DAX cluster, after you have decreased its replication factor.</p>
+    #[serde(rename = "Cluster")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster: Option<Cluster>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteClusterRequest {
-    #[doc="<p>The name of the cluster to be deleted.</p>"]
-    #[serde(rename="ClusterName")]
+    /// <p>The name of the cluster to be deleted.</p>
+    #[serde(rename = "ClusterName")]
     pub cluster_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteClusterResponse {
-    #[doc="<p>A description of the DAX cluster that is being deleted.</p>"]
-    #[serde(rename="Cluster")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the DAX cluster that is being deleted.</p>
+    #[serde(rename = "Cluster")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster: Option<Cluster>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteParameterGroupRequest {
-    #[doc="<p>The name of the parameter group to delete.</p>"]
-    #[serde(rename="ParameterGroupName")]
+    /// <p>The name of the parameter group to delete.</p>
+    #[serde(rename = "ParameterGroupName")]
     pub parameter_group_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteParameterGroupResponse {
-    #[doc="<p>A user-specified message for this action (i.e., a reason for deleting the parameter group).</p>"]
-    #[serde(rename="DeletionMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A user-specified message for this action (i.e., a reason for deleting the parameter group).</p>
+    #[serde(rename = "DeletionMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deletion_message: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteSubnetGroupRequest {
-    #[doc="<p>The name of the subnet group to delete.</p>"]
-    #[serde(rename="SubnetGroupName")]
+    /// <p>The name of the subnet group to delete.</p>
+    #[serde(rename = "SubnetGroupName")]
     pub subnet_group_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteSubnetGroupResponse {
-    #[doc="<p>A user-specified message for this action (i.e., a reason for deleting the subnet group).</p>"]
-    #[serde(rename="DeletionMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A user-specified message for this action (i.e., a reason for deleting the subnet group).</p>
+    #[serde(rename = "DeletionMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deletion_message: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeClustersRequest {
-    #[doc="<p>The names of the DAX clusters being described.</p>"]
-    #[serde(rename="ClusterNames")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The names of the DAX clusters being described.</p>
+    #[serde(rename = "ClusterNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster_names: Option<Vec<String>>,
-    #[doc="<p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved.</p> <p>The value for <code>MaxResults</code> must be between 20 and 100.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved.</p> <p>The value for <code>MaxResults</code> must be between 20 and 100.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response includes only results beyond the token, up to the value specified by <code>MaxResults</code>.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response includes only results beyond the token, up to the value specified by <code>MaxResults</code>.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeClustersResponse {
-    #[doc="<p>The descriptions of your DAX clusters, in response to a <i>DescribeClusters</i> request.</p>"]
-    #[serde(rename="Clusters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The descriptions of your DAX clusters, in response to a <i>DescribeClusters</i> request.</p>
+    #[serde(rename = "Clusters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub clusters: Option<Vec<Cluster>>,
-    #[doc="<p>Provides an identifier to allow retrieval of paginated results.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Provides an identifier to allow retrieval of paginated results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeDefaultParametersRequest {
-    #[doc="<p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved.</p> <p>The value for <code>MaxResults</code> must be between 20 and 100.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved.</p> <p>The value for <code>MaxResults</code> must be between 20 and 100.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response includes only results beyond the token, up to the value specified by <code>MaxResults</code>.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response includes only results beyond the token, up to the value specified by <code>MaxResults</code>.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeDefaultParametersResponse {
-    #[doc="<p>Provides an identifier to allow retrieval of paginated results.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Provides an identifier to allow retrieval of paginated results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>A list of parameters. Each element in the list represents one parameter.</p>"]
-    #[serde(rename="Parameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of parameters. Each element in the list represents one parameter.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<Vec<Parameter>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeEventsRequest {
-    #[doc="<p>The number of minutes' worth of events to retrieve.</p>"]
-    #[serde(rename="Duration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of minutes' worth of events to retrieve.</p>
+    #[serde(rename = "Duration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub duration: Option<i64>,
-    #[doc="<p>The end of the time interval for which to retrieve events, specified in ISO 8601 format.</p>"]
-    #[serde(rename="EndTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The end of the time interval for which to retrieve events, specified in ISO 8601 format.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
-    #[doc="<p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved.</p> <p>The value for <code>MaxResults</code> must be between 20 and 100.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved.</p> <p>The value for <code>MaxResults</code> must be between 20 and 100.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response includes only results beyond the token, up to the value specified by <code>MaxResults</code>.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response includes only results beyond the token, up to the value specified by <code>MaxResults</code>.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The identifier of the event source for which events will be returned. If not specified, then all sources are included in the response.</p>"]
-    #[serde(rename="SourceName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier of the event source for which events will be returned. If not specified, then all sources are included in the response.</p>
+    #[serde(rename = "SourceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub source_name: Option<String>,
-    #[doc="<p>The event source to retrieve events for. If no value is specified, all events are returned.</p>"]
-    #[serde(rename="SourceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The event source to retrieve events for. If no value is specified, all events are returned.</p>
+    #[serde(rename = "SourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub source_type: Option<String>,
-    #[doc="<p>The beginning of the time interval to retrieve events for, specified in ISO 8601 format.</p>"]
-    #[serde(rename="StartTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The beginning of the time interval to retrieve events for, specified in ISO 8601 format.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeEventsResponse {
-    #[doc="<p>An array of events. Each element in the array represents one event.</p>"]
-    #[serde(rename="Events")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of events. Each element in the array represents one event.</p>
+    #[serde(rename = "Events")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub events: Option<Vec<Event>>,
-    #[doc="<p>Provides an identifier to allow retrieval of paginated results.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Provides an identifier to allow retrieval of paginated results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeParameterGroupsRequest {
-    #[doc="<p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved.</p> <p>The value for <code>MaxResults</code> must be between 20 and 100.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved.</p> <p>The value for <code>MaxResults</code> must be between 20 and 100.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response includes only results beyond the token, up to the value specified by <code>MaxResults</code>.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response includes only results beyond the token, up to the value specified by <code>MaxResults</code>.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The names of the parameter groups.</p>"]
-    #[serde(rename="ParameterGroupNames")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The names of the parameter groups.</p>
+    #[serde(rename = "ParameterGroupNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_group_names: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeParameterGroupsResponse {
-    #[doc="<p>Provides an identifier to allow retrieval of paginated results.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Provides an identifier to allow retrieval of paginated results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>An array of parameter groups. Each element in the array represents one parameter group.</p>"]
-    #[serde(rename="ParameterGroups")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of parameter groups. Each element in the array represents one parameter group.</p>
+    #[serde(rename = "ParameterGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_groups: Option<Vec<ParameterGroup>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeParametersRequest {
-    #[doc="<p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved.</p> <p>The value for <code>MaxResults</code> must be between 20 and 100.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved.</p> <p>The value for <code>MaxResults</code> must be between 20 and 100.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response includes only results beyond the token, up to the value specified by <code>MaxResults</code>.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response includes only results beyond the token, up to the value specified by <code>MaxResults</code>.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The name of the parameter group.</p>"]
-    #[serde(rename="ParameterGroupName")]
+    /// <p>The name of the parameter group.</p>
+    #[serde(rename = "ParameterGroupName")]
     pub parameter_group_name: String,
-    #[doc="<p>How the parameter is defined. For example, <code>system</code> denotes a system-defined parameter.</p>"]
-    #[serde(rename="Source")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>How the parameter is defined. For example, <code>system</code> denotes a system-defined parameter.</p>
+    #[serde(rename = "Source")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeParametersResponse {
-    #[doc="<p>Provides an identifier to allow retrieval of paginated results.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Provides an identifier to allow retrieval of paginated results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>A list of parameters within a parameter group. Each element in the list represents one parameter.</p>"]
-    #[serde(rename="Parameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of parameters within a parameter group. Each element in the list represents one parameter.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<Vec<Parameter>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeSubnetGroupsRequest {
-    #[doc="<p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved.</p> <p>The value for <code>MaxResults</code> must be between 20 and 100.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved.</p> <p>The value for <code>MaxResults</code> must be between 20 and 100.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response includes only results beyond the token, up to the value specified by <code>MaxResults</code>.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response includes only results beyond the token, up to the value specified by <code>MaxResults</code>.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The name of the subnet group.</p>"]
-    #[serde(rename="SubnetGroupNames")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the subnet group.</p>
+    #[serde(rename = "SubnetGroupNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_group_names: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeSubnetGroupsResponse {
-    #[doc="<p>Provides an identifier to allow retrieval of paginated results.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Provides an identifier to allow retrieval of paginated results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>An array of subnet groups. Each element in the array represents a single subnet group.</p>"]
-    #[serde(rename="SubnetGroups")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of subnet groups. Each element in the array represents a single subnet group.</p>
+    #[serde(rename = "SubnetGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_groups: Option<Vec<SubnetGroup>>,
 }
 
-#[doc="<p>Represents the information required for client programs to connect to the configuration endpoint for a DAX cluster, or to an individual node within the cluster.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the information required for client programs to connect to the configuration endpoint for a DAX cluster, or to an individual node within the cluster.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Endpoint {
-    #[doc="<p>The DNS hostname of the endpoint.</p>"]
-    #[serde(rename="Address")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The DNS hostname of the endpoint.</p>
+    #[serde(rename = "Address")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub address: Option<String>,
-    #[doc="<p>The port number that applications should use to connect to the endpoint.</p>"]
-    #[serde(rename="Port")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The port number that applications should use to connect to the endpoint.</p>
+    #[serde(rename = "Port")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub port: Option<i64>,
 }
 
-#[doc="<p>Represents a single occurrence of something interesting within the system. Some examples of events are creating a DAX cluster, adding or removing a node, or rebooting a node.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents a single occurrence of something interesting within the system. Some examples of events are creating a DAX cluster, adding or removing a node, or rebooting a node.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Event {
-    #[doc="<p>The date and time when the event occurred.</p>"]
-    #[serde(rename="Date")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time when the event occurred.</p>
+    #[serde(rename = "Date")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub date: Option<f64>,
-    #[doc="<p>A user-defined message associated with the event.</p>"]
-    #[serde(rename="Message")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A user-defined message associated with the event.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
-    #[doc="<p>The source of the event. For example, if the event occurred at the node level, the source would be the node ID.</p>"]
-    #[serde(rename="SourceName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The source of the event. For example, if the event occurred at the node level, the source would be the node ID.</p>
+    #[serde(rename = "SourceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub source_name: Option<String>,
-    #[doc="<p>Specifies the origin of this event - a cluster, a parameter group, a node ID, etc.</p>"]
-    #[serde(rename="SourceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies the origin of this event - a cluster, a parameter group, a node ID, etc.</p>
+    #[serde(rename = "SourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub source_type: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct IncreaseReplicationFactorRequest {
-    #[doc="<p>The Availability Zones (AZs) in which the cluster nodes will be created. All nodes belonging to the cluster are placed in these Availability Zones. Use this parameter if you want to distribute the nodes across multiple AZs.</p>"]
-    #[serde(rename="AvailabilityZones")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Availability Zones (AZs) in which the cluster nodes will be created. All nodes belonging to the cluster are placed in these Availability Zones. Use this parameter if you want to distribute the nodes across multiple AZs.</p>
+    #[serde(rename = "AvailabilityZones")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zones: Option<Vec<String>>,
-    #[doc="<p>The name of the DAX cluster that will receive additional nodes.</p>"]
-    #[serde(rename="ClusterName")]
+    /// <p>The name of the DAX cluster that will receive additional nodes.</p>
+    #[serde(rename = "ClusterName")]
     pub cluster_name: String,
-    #[doc="<p>The new number of nodes for the DAX cluster.</p>"]
-    #[serde(rename="NewReplicationFactor")]
+    /// <p>The new number of nodes for the DAX cluster.</p>
+    #[serde(rename = "NewReplicationFactor")]
     pub new_replication_factor: i64,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct IncreaseReplicationFactorResponse {
-    #[doc="<p>A description of the DAX cluster. with its new replication factor.</p>"]
-    #[serde(rename="Cluster")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the DAX cluster. with its new replication factor.</p>
+    #[serde(rename = "Cluster")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster: Option<Cluster>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListTagsRequest {
-    #[doc="<p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response includes only results beyond the token.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response includes only results beyond the token.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The name of the DAX resource to which the tags belong.</p>"]
-    #[serde(rename="ResourceName")]
+    /// <p>The name of the DAX resource to which the tags belong.</p>
+    #[serde(rename = "ResourceName")]
     pub resource_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListTagsResponse {
-    #[doc="<p>If this value is present, there are additional results to be displayed. To retrieve them, call <code>ListTags</code> again, with <code>NextToken</code> set to this value.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If this value is present, there are additional results to be displayed. To retrieve them, call <code>ListTags</code> again, with <code>NextToken</code> set to this value.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>A list of tags currently associated with the DAX cluster.</p>"]
-    #[serde(rename="Tags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of tags currently associated with the DAX cluster.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
-#[doc="<p>Represents an individual node within a DAX cluster.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents an individual node within a DAX cluster.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Node {
-    #[doc="<p>The Availability Zone (AZ) in which the node has been deployed.</p>"]
-    #[serde(rename="AvailabilityZone")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Availability Zone (AZ) in which the node has been deployed.</p>
+    #[serde(rename = "AvailabilityZone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zone: Option<String>,
-    #[doc="<p>The endpoint for the node, consisting of a DNS name and a port number. Client applications can connect directly to a node endpoint, if desired (as an alternative to allowing DAX client software to intelligently route requests and responses to nodes in the DAX cluster.</p>"]
-    #[serde(rename="Endpoint")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The endpoint for the node, consisting of a DNS name and a port number. Client applications can connect directly to a node endpoint, if desired (as an alternative to allowing DAX client software to intelligently route requests and responses to nodes in the DAX cluster.</p>
+    #[serde(rename = "Endpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint: Option<Endpoint>,
-    #[doc="<p>The date and time (in UNIX epoch format) when the node was launched.</p>"]
-    #[serde(rename="NodeCreateTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time (in UNIX epoch format) when the node was launched.</p>
+    #[serde(rename = "NodeCreateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub node_create_time: Option<f64>,
-    #[doc="<p>A system-generated identifier for the node.</p>"]
-    #[serde(rename="NodeId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A system-generated identifier for the node.</p>
+    #[serde(rename = "NodeId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub node_id: Option<String>,
-    #[doc="<p>The current status of the node. For example: <code>available</code>.</p>"]
-    #[serde(rename="NodeStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The current status of the node. For example: <code>available</code>.</p>
+    #[serde(rename = "NodeStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub node_status: Option<String>,
-    #[doc="<p>The status of the parameter group associated with this node. For example, <code>in-sync</code>.</p>"]
-    #[serde(rename="ParameterGroupStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the parameter group associated with this node. For example, <code>in-sync</code>.</p>
+    #[serde(rename = "ParameterGroupStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_group_status: Option<String>,
 }
 
-#[doc="<p>Represents a parameter value that is applicable to a particular node type.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents a parameter value that is applicable to a particular node type.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct NodeTypeSpecificValue {
-    #[doc="<p>A node type to which the parameter value applies.</p>"]
-    #[serde(rename="NodeType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A node type to which the parameter value applies.</p>
+    #[serde(rename = "NodeType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub node_type: Option<String>,
-    #[doc="<p>The parameter value for this node type.</p>"]
-    #[serde(rename="Value")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The parameter value for this node type.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
-#[doc="<p>Describes a notification topic and its status. Notification topics are used for publishing DAX events to subscribers using Amazon Simple Notification Service (SNS).</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes a notification topic and its status. Notification topics are used for publishing DAX events to subscribers using Amazon Simple Notification Service (SNS).</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct NotificationConfiguration {
-    #[doc="<p>The Amazon Resource Name (ARN) that identifies the topic. </p>"]
-    #[serde(rename="TopicArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) that identifies the topic. </p>
+    #[serde(rename = "TopicArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub topic_arn: Option<String>,
-    #[doc="<p>The current state of the topic.</p>"]
-    #[serde(rename="TopicStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The current state of the topic.</p>
+    #[serde(rename = "TopicStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub topic_status: Option<String>,
 }
 
-#[doc="<p>Describes an individual setting that controls some aspect of DAX behavior.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes an individual setting that controls some aspect of DAX behavior.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Parameter {
-    #[doc="<p>A range of values within which the parameter can be set.</p>"]
-    #[serde(rename="AllowedValues")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A range of values within which the parameter can be set.</p>
+    #[serde(rename = "AllowedValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_values: Option<String>,
-    #[doc="<p>The conditions under which changes to this parameter can be applied. For example, <code>requires-reboot</code> indicates that a new value for this parameter will only take effect if a node is rebooted.</p>"]
-    #[serde(rename="ChangeType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The conditions under which changes to this parameter can be applied. For example, <code>requires-reboot</code> indicates that a new value for this parameter will only take effect if a node is rebooted.</p>
+    #[serde(rename = "ChangeType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub change_type: Option<String>,
-    #[doc="<p>The data type of the parameter. For example, <code>integer</code>:</p>"]
-    #[serde(rename="DataType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The data type of the parameter. For example, <code>integer</code>:</p>
+    #[serde(rename = "DataType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub data_type: Option<String>,
-    #[doc="<p>A description of the parameter</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the parameter</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>Whether the customer is allowed to modify the parameter.</p>"]
-    #[serde(rename="IsModifiable")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Whether the customer is allowed to modify the parameter.</p>
+    #[serde(rename = "IsModifiable")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub is_modifiable: Option<String>,
-    #[doc="<p>A list of node types, and specific parameter values for each node.</p>"]
-    #[serde(rename="NodeTypeSpecificValues")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of node types, and specific parameter values for each node.</p>
+    #[serde(rename = "NodeTypeSpecificValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub node_type_specific_values: Option<Vec<NodeTypeSpecificValue>>,
-    #[doc="<p>The name of the parameter.</p>"]
-    #[serde(rename="ParameterName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the parameter.</p>
+    #[serde(rename = "ParameterName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_name: Option<String>,
-    #[doc="<p>Determines whether the parameter can be applied to any nodes, or only nodes of a particular type.</p>"]
-    #[serde(rename="ParameterType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Determines whether the parameter can be applied to any nodes, or only nodes of a particular type.</p>
+    #[serde(rename = "ParameterType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_type: Option<String>,
-    #[doc="<p>The value for the parameter.</p>"]
-    #[serde(rename="ParameterValue")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The value for the parameter.</p>
+    #[serde(rename = "ParameterValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_value: Option<String>,
-    #[doc="<p>How the parameter is defined. For example, <code>system</code> denotes a system-defined parameter.</p>"]
-    #[serde(rename="Source")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>How the parameter is defined. For example, <code>system</code> denotes a system-defined parameter.</p>
+    #[serde(rename = "Source")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<String>,
 }
 
-#[doc="<p>A named set of parameters that are applied to all of the nodes in a DAX cluster.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A named set of parameters that are applied to all of the nodes in a DAX cluster.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ParameterGroup {
-    #[doc="<p>A description of the parameter group.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the parameter group.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The name of the parameter group.</p>"]
-    #[serde(rename="ParameterGroupName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the parameter group.</p>
+    #[serde(rename = "ParameterGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_group_name: Option<String>,
 }
 
-#[doc="<p>The status of a parameter group.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The status of a parameter group.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ParameterGroupStatus {
-    #[doc="<p>The node IDs of one or more nodes to be rebooted.</p>"]
-    #[serde(rename="NodeIdsToReboot")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The node IDs of one or more nodes to be rebooted.</p>
+    #[serde(rename = "NodeIdsToReboot")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub node_ids_to_reboot: Option<Vec<String>>,
-    #[doc="<p>The status of parameter updates. </p>"]
-    #[serde(rename="ParameterApplyStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of parameter updates. </p>
+    #[serde(rename = "ParameterApplyStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_apply_status: Option<String>,
-    #[doc="<p>The name of the parameter group.</p>"]
-    #[serde(rename="ParameterGroupName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the parameter group.</p>
+    #[serde(rename = "ParameterGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_group_name: Option<String>,
 }
 
-#[doc="<p>An individual DAX parameter.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>An individual DAX parameter.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ParameterNameValue {
-    #[doc="<p>The name of the parameter.</p>"]
-    #[serde(rename="ParameterName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the parameter.</p>
+    #[serde(rename = "ParameterName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_name: Option<String>,
-    #[doc="<p>The value of the parameter.</p>"]
-    #[serde(rename="ParameterValue")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The value of the parameter.</p>
+    #[serde(rename = "ParameterValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_value: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct RebootNodeRequest {
-    #[doc="<p>The name of the DAX cluster containing the node to be rebooted.</p>"]
-    #[serde(rename="ClusterName")]
+    /// <p>The name of the DAX cluster containing the node to be rebooted.</p>
+    #[serde(rename = "ClusterName")]
     pub cluster_name: String,
-    #[doc="<p>The system-assigned ID of the node to be rebooted.</p>"]
-    #[serde(rename="NodeId")]
+    /// <p>The system-assigned ID of the node to be rebooted.</p>
+    #[serde(rename = "NodeId")]
     pub node_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RebootNodeResponse {
-    #[doc="<p>A description of the DAX cluster after a node has been rebooted.</p>"]
-    #[serde(rename="Cluster")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the DAX cluster after a node has been rebooted.</p>
+    #[serde(rename = "Cluster")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster: Option<Cluster>,
 }
 
-#[doc="<p>An individual VPC security group and its status.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>An individual VPC security group and its status.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct SecurityGroupMembership {
-    #[doc="<p>The unique ID for this security group.</p>"]
-    #[serde(rename="SecurityGroupIdentifier")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique ID for this security group.</p>
+    #[serde(rename = "SecurityGroupIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub security_group_identifier: Option<String>,
-    #[doc="<p>The status of this security group.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of this security group.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
 
-#[doc="<p>Represents the subnet associated with a DAX cluster. This parameter refers to subnets defined in Amazon Virtual Private Cloud (Amazon VPC) and used with DAX.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the subnet associated with a DAX cluster. This parameter refers to subnets defined in Amazon Virtual Private Cloud (Amazon VPC) and used with DAX.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Subnet {
-    #[doc="<p>The Availability Zone (AZ) for subnet subnet.</p>"]
-    #[serde(rename="SubnetAvailabilityZone")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Availability Zone (AZ) for subnet subnet.</p>
+    #[serde(rename = "SubnetAvailabilityZone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_availability_zone: Option<String>,
-    #[doc="<p>The system-assigned identifier for the subnet.</p>"]
-    #[serde(rename="SubnetIdentifier")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The system-assigned identifier for the subnet.</p>
+    #[serde(rename = "SubnetIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_identifier: Option<String>,
 }
 
-#[doc="<p>Represents the output of one of the following actions:</p> <ul> <li> <p> <i>CreateSubnetGroup</i> </p> </li> <li> <p> <i>ModifySubnetGroup</i> </p> </li> </ul>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the output of one of the following actions:</p> <ul> <li> <p> <i>CreateSubnetGroup</i> </p> </li> <li> <p> <i>ModifySubnetGroup</i> </p> </li> </ul>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct SubnetGroup {
-    #[doc="<p>The description of the subnet group.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The description of the subnet group.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The name of the subnet group.</p>"]
-    #[serde(rename="SubnetGroupName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the subnet group.</p>
+    #[serde(rename = "SubnetGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_group_name: Option<String>,
-    #[doc="<p>A list of subnets associated with the subnet group. </p>"]
-    #[serde(rename="Subnets")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of subnets associated with the subnet group. </p>
+    #[serde(rename = "Subnets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subnets: Option<Vec<Subnet>>,
-    #[doc="<p>The Amazon Virtual Private Cloud identifier (VPC ID) of the subnet group.</p>"]
-    #[serde(rename="VpcId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Virtual Private Cloud identifier (VPC ID) of the subnet group.</p>
+    #[serde(rename = "VpcId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
-#[doc="<p>A description of a tag. Every tag is a key-value pair. You can add up to 50 tags to a single DAX cluster.</p> <p>AWS-assigned tag names and values are automatically assigned the <code>aws:</code> prefix, which the user cannot assign. AWS-assigned tag names do not count towards the tag limit of 50. User-assigned tag names have the prefix <code>user:</code>.</p> <p>You cannot backdate the application of a tag.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>A description of a tag. Every tag is a key-value pair. You can add up to 50 tags to a single DAX cluster.</p> <p>AWS-assigned tag names and values are automatically assigned the <code>aws:</code> prefix, which the user cannot assign. AWS-assigned tag names do not count towards the tag limit of 50. User-assigned tag names have the prefix <code>user:</code>.</p> <p>You cannot backdate the application of a tag.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Tag {
-    #[doc="<p>The key for the tag. Tag keys are case sensitive. Every DAX cluster can only have one tag with the same key. If you try to add an existing tag (same key), the existing tag value will be updated to the new value.</p>"]
-    #[serde(rename="Key")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The key for the tag. Tag keys are case sensitive. Every DAX cluster can only have one tag with the same key. If you try to add an existing tag (same key), the existing tag value will be updated to the new value.</p>
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    #[doc="<p>The value of the tag. Tag values are case-sensitive and can be null. </p>"]
-    #[serde(rename="Value")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The value of the tag. Tag values are case-sensitive and can be null. </p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct TagResourceRequest {
-    #[doc="<p>The name of the DAX resource to which tags should be added.</p>"]
-    #[serde(rename="ResourceName")]
+    /// <p>The name of the DAX resource to which tags should be added.</p>
+    #[serde(rename = "ResourceName")]
     pub resource_name: String,
-    #[doc="<p>The tags to be assigned to the DAX resource. </p>"]
-    #[serde(rename="Tags")]
+    /// <p>The tags to be assigned to the DAX resource. </p>
+    #[serde(rename = "Tags")]
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct TagResourceResponse {
-    #[doc="<p>The list of tags that are associated with the DAX resource.</p>"]
-    #[serde(rename="Tags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of tags that are associated with the DAX resource.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UntagResourceRequest {
-    #[doc="<p>The name of the DAX resource from which the tags should be removed.</p>"]
-    #[serde(rename="ResourceName")]
+    /// <p>The name of the DAX resource from which the tags should be removed.</p>
+    #[serde(rename = "ResourceName")]
     pub resource_name: String,
-    #[doc="<p>A list of tag keys. If the DAX cluster has any tags with these keys, then the tags are removed from the cluster.</p>"]
-    #[serde(rename="TagKeys")]
+    /// <p>A list of tag keys. If the DAX cluster has any tags with these keys, then the tags are removed from the cluster.</p>
+    #[serde(rename = "TagKeys")]
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UntagResourceResponse {
-    #[doc="<p>The tag keys that have been removed from the cluster.</p>"]
-    #[serde(rename="Tags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The tag keys that have been removed from the cluster.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateClusterRequest {
-    #[doc="<p>The name of the DAX cluster to be modified.</p>"]
-    #[serde(rename="ClusterName")]
+    /// <p>The name of the DAX cluster to be modified.</p>
+    #[serde(rename = "ClusterName")]
     pub cluster_name: String,
-    #[doc="<p>A description of the changes being made to the cluster.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the changes being made to the cluster.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) that identifies the topic.</p>"]
-    #[serde(rename="NotificationTopicArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) that identifies the topic.</p>
+    #[serde(rename = "NotificationTopicArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_topic_arn: Option<String>,
-    #[doc="<p>The current state of the topic.</p>"]
-    #[serde(rename="NotificationTopicStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The current state of the topic.</p>
+    #[serde(rename = "NotificationTopicStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_topic_status: Option<String>,
-    #[doc="<p>The name of a parameter group for this cluster.</p>"]
-    #[serde(rename="ParameterGroupName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of a parameter group for this cluster.</p>
+    #[serde(rename = "ParameterGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_group_name: Option<String>,
-    #[doc="<p>A range of time when maintenance of DAX cluster software will be performed. For example: <code>sun:01:00-sun:09:00</code>. Cluster maintenance normally takes less than 30 minutes, and is performed automatically within the maintenance window.</p>"]
-    #[serde(rename="PreferredMaintenanceWindow")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A range of time when maintenance of DAX cluster software will be performed. For example: <code>sun:01:00-sun:09:00</code>. Cluster maintenance normally takes less than 30 minutes, and is performed automatically within the maintenance window.</p>
+    #[serde(rename = "PreferredMaintenanceWindow")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub preferred_maintenance_window: Option<String>,
-    #[doc="<p>A list of user-specified security group IDs to be assigned to each node in the DAX cluster. If this parameter is not specified, DAX assigns the default VPC security group to each node.</p>"]
-    #[serde(rename="SecurityGroupIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of user-specified security group IDs to be assigned to each node in the DAX cluster. If this parameter is not specified, DAX assigns the default VPC security group to each node.</p>
+    #[serde(rename = "SecurityGroupIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub security_group_ids: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateClusterResponse {
-    #[doc="<p>A description of the DAX cluster, after it has been modified.</p>"]
-    #[serde(rename="Cluster")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the DAX cluster, after it has been modified.</p>
+    #[serde(rename = "Cluster")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster: Option<Cluster>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateParameterGroupRequest {
-    #[doc="<p>The name of the parameter group.</p>"]
-    #[serde(rename="ParameterGroupName")]
+    /// <p>The name of the parameter group.</p>
+    #[serde(rename = "ParameterGroupName")]
     pub parameter_group_name: String,
-    #[doc="<p>An array of name-value pairs for the parameters in the group. Each element in the array represents a single parameter.</p>"]
-    #[serde(rename="ParameterNameValues")]
+    /// <p>An array of name-value pairs for the parameters in the group. Each element in the array represents a single parameter.</p>
+    #[serde(rename = "ParameterNameValues")]
     pub parameter_name_values: Vec<ParameterNameValue>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateParameterGroupResponse {
-    #[doc="<p>The parameter group that has been modified.</p>"]
-    #[serde(rename="ParameterGroup")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The parameter group that has been modified.</p>
+    #[serde(rename = "ParameterGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_group: Option<ParameterGroup>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateSubnetGroupRequest {
-    #[doc="<p>A description of the subnet group.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the subnet group.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The name of the subnet group.</p>"]
-    #[serde(rename="SubnetGroupName")]
+    /// <p>The name of the subnet group.</p>
+    #[serde(rename = "SubnetGroupName")]
     pub subnet_group_name: String,
-    #[doc="<p>A list of subnet IDs in the subnet group.</p>"]
-    #[serde(rename="SubnetIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of subnet IDs in the subnet group.</p>
+    #[serde(rename = "SubnetIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_ids: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateSubnetGroupResponse {
-    #[doc="<p>The subnet group that has been modified.</p>"]
-    #[serde(rename="SubnetGroup")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The subnet group that has been modified.</p>
+    #[serde(rename = "SubnetGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_group: Option<SubnetGroup>,
 }
 
@@ -903,7 +902,6 @@ pub enum CreateClusterError {
     Unknown(String),
 }
 
-
 impl CreateClusterError {
     pub fn from_body(body: &str) -> CreateClusterError {
         match from_str::<SerdeJsonValue>(body) {
@@ -920,23 +918,43 @@ impl CreateClusterError {
                     "ClusterAlreadyExistsFault" => {
                         CreateClusterError::ClusterAlreadyExistsFault(String::from(error_message))
                     }
-                    "ClusterQuotaForCustomerExceededFault" => CreateClusterError::ClusterQuotaForCustomerExceededFault(String::from(error_message)),
-                    "InsufficientClusterCapacityFault" => CreateClusterError::InsufficientClusterCapacityFault(String::from(error_message)),
+                    "ClusterQuotaForCustomerExceededFault" => {
+                        CreateClusterError::ClusterQuotaForCustomerExceededFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InsufficientClusterCapacityFault" => {
+                        CreateClusterError::InsufficientClusterCapacityFault(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidClusterStateFault" => {
                         CreateClusterError::InvalidClusterStateFault(String::from(error_message))
                     }
                     "InvalidParameterCombinationException" => {
                         CreateClusterError::InvalidParameterCombination(String::from(error_message))
                     }
-                    "InvalidParameterGroupStateFault" => CreateClusterError::InvalidParameterGroupStateFault(String::from(error_message)),
+                    "InvalidParameterGroupStateFault" => {
+                        CreateClusterError::InvalidParameterGroupStateFault(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidParameterValueException" => {
                         CreateClusterError::InvalidParameterValue(String::from(error_message))
                     }
                     "InvalidVPCNetworkStateFault" => {
                         CreateClusterError::InvalidVPCNetworkStateFault(String::from(error_message))
                     }
-                    "NodeQuotaForClusterExceededFault" => CreateClusterError::NodeQuotaForClusterExceededFault(String::from(error_message)),
-                    "NodeQuotaForCustomerExceededFault" => CreateClusterError::NodeQuotaForCustomerExceededFault(String::from(error_message)),
+                    "NodeQuotaForClusterExceededFault" => {
+                        CreateClusterError::NodeQuotaForClusterExceededFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "NodeQuotaForCustomerExceededFault" => {
+                        CreateClusterError::NodeQuotaForCustomerExceededFault(String::from(
+                            error_message,
+                        ))
+                    }
                     "ParameterGroupNotFoundFault" => {
                         CreateClusterError::ParameterGroupNotFoundFault(String::from(error_message))
                     }
@@ -1028,7 +1046,6 @@ pub enum CreateParameterGroupError {
     Unknown(String),
 }
 
-
 impl CreateParameterGroupError {
     pub fn from_body(body: &str) -> CreateParameterGroupError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1042,11 +1059,31 @@ impl CreateParameterGroupError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidParameterCombinationException" => CreateParameterGroupError::InvalidParameterCombination(String::from(error_message)),
-                    "InvalidParameterGroupStateFault" => CreateParameterGroupError::InvalidParameterGroupStateFault(String::from(error_message)),
-                    "InvalidParameterValueException" => CreateParameterGroupError::InvalidParameterValue(String::from(error_message)),
-                    "ParameterGroupAlreadyExistsFault" => CreateParameterGroupError::ParameterGroupAlreadyExistsFault(String::from(error_message)),
-                    "ParameterGroupQuotaExceededFault" => CreateParameterGroupError::ParameterGroupQuotaExceededFault(String::from(error_message)),
+                    "InvalidParameterCombinationException" => {
+                        CreateParameterGroupError::InvalidParameterCombination(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidParameterGroupStateFault" => {
+                        CreateParameterGroupError::InvalidParameterGroupStateFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidParameterValueException" => {
+                        CreateParameterGroupError::InvalidParameterValue(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ParameterGroupAlreadyExistsFault" => {
+                        CreateParameterGroupError::ParameterGroupAlreadyExistsFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ParameterGroupQuotaExceededFault" => {
+                        CreateParameterGroupError::ParameterGroupQuotaExceededFault(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         CreateParameterGroupError::Validation(error_message.to_string())
                     }
@@ -1121,7 +1158,6 @@ pub enum CreateSubnetGroupError {
     Unknown(String),
 }
 
-
 impl CreateSubnetGroupError {
     pub fn from_body(body: &str) -> CreateSubnetGroupError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1138,9 +1174,21 @@ impl CreateSubnetGroupError {
                     "InvalidSubnet" => {
                         CreateSubnetGroupError::InvalidSubnet(String::from(error_message))
                     }
-                    "SubnetGroupAlreadyExistsFault" => CreateSubnetGroupError::SubnetGroupAlreadyExistsFault(String::from(error_message)),
-                    "SubnetGroupQuotaExceededFault" => CreateSubnetGroupError::SubnetGroupQuotaExceededFault(String::from(error_message)),
-                    "SubnetQuotaExceededFault" => CreateSubnetGroupError::SubnetQuotaExceededFault(String::from(error_message)),
+                    "SubnetGroupAlreadyExistsFault" => {
+                        CreateSubnetGroupError::SubnetGroupAlreadyExistsFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "SubnetGroupQuotaExceededFault" => {
+                        CreateSubnetGroupError::SubnetGroupQuotaExceededFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "SubnetQuotaExceededFault" => {
+                        CreateSubnetGroupError::SubnetQuotaExceededFault(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         CreateSubnetGroupError::Validation(error_message.to_string())
                     }
@@ -1216,7 +1264,6 @@ pub enum DecreaseReplicationFactorError {
     Unknown(String),
 }
 
-
 impl DecreaseReplicationFactorError {
     pub fn from_body(body: &str) -> DecreaseReplicationFactorError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1230,11 +1277,29 @@ impl DecreaseReplicationFactorError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ClusterNotFoundFault" => DecreaseReplicationFactorError::ClusterNotFoundFault(String::from(error_message)),
-                    "InvalidClusterStateFault" => DecreaseReplicationFactorError::InvalidClusterStateFault(String::from(error_message)),
-                    "InvalidParameterCombinationException" => DecreaseReplicationFactorError::InvalidParameterCombination(String::from(error_message)),
-                    "InvalidParameterValueException" => DecreaseReplicationFactorError::InvalidParameterValue(String::from(error_message)),
-                    "NodeNotFoundFault" => DecreaseReplicationFactorError::NodeNotFoundFault(String::from(error_message)),
+                    "ClusterNotFoundFault" => {
+                        DecreaseReplicationFactorError::ClusterNotFoundFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidClusterStateFault" => {
+                        DecreaseReplicationFactorError::InvalidClusterStateFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidParameterCombinationException" => {
+                        DecreaseReplicationFactorError::InvalidParameterCombination(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidParameterValueException" => {
+                        DecreaseReplicationFactorError::InvalidParameterValue(String::from(
+                            error_message,
+                        ))
+                    }
+                    "NodeNotFoundFault" => DecreaseReplicationFactorError::NodeNotFoundFault(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         DecreaseReplicationFactorError::Validation(error_message.to_string())
                     }
@@ -1308,7 +1373,6 @@ pub enum DeleteClusterError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteClusterError {
     pub fn from_body(body: &str) -> DeleteClusterError {
@@ -1406,7 +1470,6 @@ pub enum DeleteParameterGroupError {
     Unknown(String),
 }
 
-
 impl DeleteParameterGroupError {
     pub fn from_body(body: &str) -> DeleteParameterGroupError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1420,10 +1483,26 @@ impl DeleteParameterGroupError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidParameterCombinationException" => DeleteParameterGroupError::InvalidParameterCombination(String::from(error_message)),
-                    "InvalidParameterGroupStateFault" => DeleteParameterGroupError::InvalidParameterGroupStateFault(String::from(error_message)),
-                    "InvalidParameterValueException" => DeleteParameterGroupError::InvalidParameterValue(String::from(error_message)),
-                    "ParameterGroupNotFoundFault" => DeleteParameterGroupError::ParameterGroupNotFoundFault(String::from(error_message)),
+                    "InvalidParameterCombinationException" => {
+                        DeleteParameterGroupError::InvalidParameterCombination(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidParameterGroupStateFault" => {
+                        DeleteParameterGroupError::InvalidParameterGroupStateFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidParameterValueException" => {
+                        DeleteParameterGroupError::InvalidParameterValue(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ParameterGroupNotFoundFault" => {
+                        DeleteParameterGroupError::ParameterGroupNotFoundFault(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DeleteParameterGroupError::Validation(error_message.to_string())
                     }
@@ -1493,7 +1572,6 @@ pub enum DeleteSubnetGroupError {
     Unknown(String),
 }
 
-
 impl DeleteSubnetGroupError {
     pub fn from_body(body: &str) -> DeleteSubnetGroupError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1510,7 +1588,11 @@ impl DeleteSubnetGroupError {
                     "SubnetGroupInUseFault" => {
                         DeleteSubnetGroupError::SubnetGroupInUseFault(String::from(error_message))
                     }
-                    "SubnetGroupNotFoundFault" => DeleteSubnetGroupError::SubnetGroupNotFoundFault(String::from(error_message)),
+                    "SubnetGroupNotFoundFault" => {
+                        DeleteSubnetGroupError::SubnetGroupNotFoundFault(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DeleteSubnetGroupError::Validation(error_message.to_string())
                     }
@@ -1580,7 +1662,6 @@ pub enum DescribeClustersError {
     Unknown(String),
 }
 
-
 impl DescribeClustersError {
     pub fn from_body(body: &str) -> DescribeClustersError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1597,7 +1678,11 @@ impl DescribeClustersError {
                     "ClusterNotFoundFault" => {
                         DescribeClustersError::ClusterNotFoundFault(String::from(error_message))
                     }
-                    "InvalidParameterCombinationException" => DescribeClustersError::InvalidParameterCombination(String::from(error_message)),
+                    "InvalidParameterCombinationException" => {
+                        DescribeClustersError::InvalidParameterCombination(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidParameterValueException" => {
                         DescribeClustersError::InvalidParameterValue(String::from(error_message))
                     }
@@ -1667,7 +1752,6 @@ pub enum DescribeDefaultParametersError {
     Unknown(String),
 }
 
-
 impl DescribeDefaultParametersError {
     pub fn from_body(body: &str) -> DescribeDefaultParametersError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1681,8 +1765,16 @@ impl DescribeDefaultParametersError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidParameterCombinationException" => DescribeDefaultParametersError::InvalidParameterCombination(String::from(error_message)),
-                    "InvalidParameterValueException" => DescribeDefaultParametersError::InvalidParameterValue(String::from(error_message)),
+                    "InvalidParameterCombinationException" => {
+                        DescribeDefaultParametersError::InvalidParameterCombination(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidParameterValueException" => {
+                        DescribeDefaultParametersError::InvalidParameterValue(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeDefaultParametersError::Validation(error_message.to_string())
                     }
@@ -1750,7 +1842,6 @@ pub enum DescribeEventsError {
     Unknown(String),
 }
 
-
 impl DescribeEventsError {
     pub fn from_body(body: &str) -> DescribeEventsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1764,7 +1855,11 @@ impl DescribeEventsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidParameterCombinationException" => DescribeEventsError::InvalidParameterCombination(String::from(error_message)),
+                    "InvalidParameterCombinationException" => {
+                        DescribeEventsError::InvalidParameterCombination(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidParameterValueException" => {
                         DescribeEventsError::InvalidParameterValue(String::from(error_message))
                     }
@@ -1835,7 +1930,6 @@ pub enum DescribeParameterGroupsError {
     Unknown(String),
 }
 
-
 impl DescribeParameterGroupsError {
     pub fn from_body(body: &str) -> DescribeParameterGroupsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1849,9 +1943,21 @@ impl DescribeParameterGroupsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidParameterCombinationException" => DescribeParameterGroupsError::InvalidParameterCombination(String::from(error_message)),
-                    "InvalidParameterValueException" => DescribeParameterGroupsError::InvalidParameterValue(String::from(error_message)),
-                    "ParameterGroupNotFoundFault" => DescribeParameterGroupsError::ParameterGroupNotFoundFault(String::from(error_message)),
+                    "InvalidParameterCombinationException" => {
+                        DescribeParameterGroupsError::InvalidParameterCombination(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidParameterValueException" => {
+                        DescribeParameterGroupsError::InvalidParameterValue(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ParameterGroupNotFoundFault" => {
+                        DescribeParameterGroupsError::ParameterGroupNotFoundFault(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeParameterGroupsError::Validation(error_message.to_string())
                     }
@@ -1922,7 +2028,6 @@ pub enum DescribeParametersError {
     Unknown(String),
 }
 
-
 impl DescribeParametersError {
     pub fn from_body(body: &str) -> DescribeParametersError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1936,11 +2041,19 @@ impl DescribeParametersError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidParameterCombinationException" => DescribeParametersError::InvalidParameterCombination(String::from(error_message)),
+                    "InvalidParameterCombinationException" => {
+                        DescribeParametersError::InvalidParameterCombination(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidParameterValueException" => {
                         DescribeParametersError::InvalidParameterValue(String::from(error_message))
                     }
-                    "ParameterGroupNotFoundFault" => DescribeParametersError::ParameterGroupNotFoundFault(String::from(error_message)),
+                    "ParameterGroupNotFoundFault" => {
+                        DescribeParametersError::ParameterGroupNotFoundFault(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeParametersError::Validation(error_message.to_string())
                     }
@@ -2007,7 +2120,6 @@ pub enum DescribeSubnetGroupsError {
     Unknown(String),
 }
 
-
 impl DescribeSubnetGroupsError {
     pub fn from_body(body: &str) -> DescribeSubnetGroupsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2021,7 +2133,11 @@ impl DescribeSubnetGroupsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "SubnetGroupNotFoundFault" => DescribeSubnetGroupsError::SubnetGroupNotFoundFault(String::from(error_message)),
+                    "SubnetGroupNotFoundFault" => {
+                        DescribeSubnetGroupsError::SubnetGroupNotFoundFault(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeSubnetGroupsError::Validation(error_message.to_string())
                     }
@@ -2100,7 +2216,6 @@ pub enum IncreaseReplicationFactorError {
     Unknown(String),
 }
 
-
 impl IncreaseReplicationFactorError {
     pub fn from_body(body: &str) -> IncreaseReplicationFactorError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2114,14 +2229,46 @@ impl IncreaseReplicationFactorError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ClusterNotFoundFault" => IncreaseReplicationFactorError::ClusterNotFoundFault(String::from(error_message)),
-                    "InsufficientClusterCapacityFault" => IncreaseReplicationFactorError::InsufficientClusterCapacityFault(String::from(error_message)),
-                    "InvalidClusterStateFault" => IncreaseReplicationFactorError::InvalidClusterStateFault(String::from(error_message)),
-                    "InvalidParameterCombinationException" => IncreaseReplicationFactorError::InvalidParameterCombination(String::from(error_message)),
-                    "InvalidParameterValueException" => IncreaseReplicationFactorError::InvalidParameterValue(String::from(error_message)),
-                    "InvalidVPCNetworkStateFault" => IncreaseReplicationFactorError::InvalidVPCNetworkStateFault(String::from(error_message)),
-                    "NodeQuotaForClusterExceededFault" => IncreaseReplicationFactorError::NodeQuotaForClusterExceededFault(String::from(error_message)),
-                    "NodeQuotaForCustomerExceededFault" => IncreaseReplicationFactorError::NodeQuotaForCustomerExceededFault(String::from(error_message)),
+                    "ClusterNotFoundFault" => {
+                        IncreaseReplicationFactorError::ClusterNotFoundFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InsufficientClusterCapacityFault" => {
+                        IncreaseReplicationFactorError::InsufficientClusterCapacityFault(
+                            String::from(error_message),
+                        )
+                    }
+                    "InvalidClusterStateFault" => {
+                        IncreaseReplicationFactorError::InvalidClusterStateFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidParameterCombinationException" => {
+                        IncreaseReplicationFactorError::InvalidParameterCombination(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidParameterValueException" => {
+                        IncreaseReplicationFactorError::InvalidParameterValue(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidVPCNetworkStateFault" => {
+                        IncreaseReplicationFactorError::InvalidVPCNetworkStateFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "NodeQuotaForClusterExceededFault" => {
+                        IncreaseReplicationFactorError::NodeQuotaForClusterExceededFault(
+                            String::from(error_message),
+                        )
+                    }
+                    "NodeQuotaForCustomerExceededFault" => {
+                        IncreaseReplicationFactorError::NodeQuotaForCustomerExceededFault(
+                            String::from(error_message),
+                        )
+                    }
                     "ValidationException" => {
                         IncreaseReplicationFactorError::Validation(error_message.to_string())
                     }
@@ -2200,7 +2347,6 @@ pub enum ListTagsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListTagsError {
     pub fn from_body(body: &str) -> ListTagsError {
@@ -2301,7 +2447,6 @@ pub enum RebootNodeError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl RebootNodeError {
     pub fn from_body(body: &str) -> RebootNodeError {
@@ -2404,7 +2549,6 @@ pub enum TagResourceError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl TagResourceError {
     pub fn from_body(body: &str) -> TagResourceError {
@@ -2514,7 +2658,6 @@ pub enum UntagResourceError {
     Unknown(String),
 }
 
-
 impl UntagResourceError {
     pub fn from_body(body: &str) -> UntagResourceError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2623,7 +2766,6 @@ pub enum UpdateClusterError {
     Unknown(String),
 }
 
-
 impl UpdateClusterError {
     pub fn from_body(body: &str) -> UpdateClusterError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2646,7 +2788,11 @@ impl UpdateClusterError {
                     "InvalidParameterCombinationException" => {
                         UpdateClusterError::InvalidParameterCombination(String::from(error_message))
                     }
-                    "InvalidParameterGroupStateFault" => UpdateClusterError::InvalidParameterGroupStateFault(String::from(error_message)),
+                    "InvalidParameterGroupStateFault" => {
+                        UpdateClusterError::InvalidParameterGroupStateFault(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidParameterValueException" => {
                         UpdateClusterError::InvalidParameterValue(String::from(error_message))
                     }
@@ -2726,7 +2872,6 @@ pub enum UpdateParameterGroupError {
     Unknown(String),
 }
 
-
 impl UpdateParameterGroupError {
     pub fn from_body(body: &str) -> UpdateParameterGroupError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2740,10 +2885,26 @@ impl UpdateParameterGroupError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidParameterCombinationException" => UpdateParameterGroupError::InvalidParameterCombination(String::from(error_message)),
-                    "InvalidParameterGroupStateFault" => UpdateParameterGroupError::InvalidParameterGroupStateFault(String::from(error_message)),
-                    "InvalidParameterValueException" => UpdateParameterGroupError::InvalidParameterValue(String::from(error_message)),
-                    "ParameterGroupNotFoundFault" => UpdateParameterGroupError::ParameterGroupNotFoundFault(String::from(error_message)),
+                    "InvalidParameterCombinationException" => {
+                        UpdateParameterGroupError::InvalidParameterCombination(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidParameterGroupStateFault" => {
+                        UpdateParameterGroupError::InvalidParameterGroupStateFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidParameterValueException" => {
+                        UpdateParameterGroupError::InvalidParameterValue(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ParameterGroupNotFoundFault" => {
+                        UpdateParameterGroupError::ParameterGroupNotFoundFault(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         UpdateParameterGroupError::Validation(error_message.to_string())
                     }
@@ -2817,7 +2978,6 @@ pub enum UpdateSubnetGroupError {
     Unknown(String),
 }
 
-
 impl UpdateSubnetGroupError {
     pub fn from_body(body: &str) -> UpdateSubnetGroupError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2834,11 +2994,19 @@ impl UpdateSubnetGroupError {
                     "InvalidSubnet" => {
                         UpdateSubnetGroupError::InvalidSubnet(String::from(error_message))
                     }
-                    "SubnetGroupNotFoundFault" => UpdateSubnetGroupError::SubnetGroupNotFoundFault(String::from(error_message)),
+                    "SubnetGroupNotFoundFault" => {
+                        UpdateSubnetGroupError::SubnetGroupNotFoundFault(String::from(
+                            error_message,
+                        ))
+                    }
                     "SubnetInUse" => {
                         UpdateSubnetGroupError::SubnetInUse(String::from(error_message))
                     }
-                    "SubnetQuotaExceededFault" => UpdateSubnetGroupError::SubnetQuotaExceededFault(String::from(error_message)),
+                    "SubnetQuotaExceededFault" => {
+                        UpdateSubnetGroupError::SubnetQuotaExceededFault(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         UpdateSubnetGroupError::Validation(error_message.to_string())
                     }
@@ -2894,140 +3062,131 @@ impl Error for UpdateSubnetGroupError {
 /// Trait representing the capabilities of the Amazon DAX API. Amazon DAX clients implement this trait.
 pub trait DynamodbAccelerator {
     #[doc="<p>Creates a DAX cluster. All nodes in the cluster run the same DAX caching software.</p>"]
-    fn create_cluster(&self,
-                      input: &CreateClusterRequest)
-                      -> Result<CreateClusterResponse, CreateClusterError>;
-
+    fn create_cluster(
+        &self,
+        input: &CreateClusterRequest,
+    ) -> Result<CreateClusterResponse, CreateClusterError>;
 
     #[doc="<p>Creates a new parameter group. A parameter group is a collection of parameters that you apply to all of the nodes in a DAX cluster.</p>"]
-    fn create_parameter_group
-        (&self,
-         input: &CreateParameterGroupRequest)
-         -> Result<CreateParameterGroupResponse, CreateParameterGroupError>;
+    fn create_parameter_group(
+        &self,
+        input: &CreateParameterGroupRequest,
+    ) -> Result<CreateParameterGroupResponse, CreateParameterGroupError>;
 
-
-    #[doc="<p>Creates a new subnet group.</p>"]
-    fn create_subnet_group(&self,
-                           input: &CreateSubnetGroupRequest)
-                           -> Result<CreateSubnetGroupResponse, CreateSubnetGroupError>;
-
+    #[doc = "<p>Creates a new subnet group.</p>"]
+    fn create_subnet_group(
+        &self,
+        input: &CreateSubnetGroupRequest,
+    ) -> Result<CreateSubnetGroupResponse, CreateSubnetGroupError>;
 
     #[doc="<p>Removes one or more nodes from a DAX cluster.</p> <note> <p>You cannot use <code>DecreaseReplicationFactor</code> to remove the last node in a DAX cluster. If you need to do this, use <code>DeleteCluster</code> instead.</p> </note>"]
-    fn decrease_replication_factor
-        (&self,
-         input: &DecreaseReplicationFactorRequest)
-         -> Result<DecreaseReplicationFactorResponse, DecreaseReplicationFactorError>;
-
+    fn decrease_replication_factor(
+        &self,
+        input: &DecreaseReplicationFactorRequest,
+    ) -> Result<DecreaseReplicationFactorResponse, DecreaseReplicationFactorError>;
 
     #[doc="<p>Deletes a previously provisioned DAX cluster. <i>DeleteCluster</i> deletes all associated nodes, node endpoints and the DAX cluster itself. When you receive a successful response from this action, DAX immediately begins deleting the cluster; you cannot cancel or revert this action.</p>"]
-    fn delete_cluster(&self,
-                      input: &DeleteClusterRequest)
-                      -> Result<DeleteClusterResponse, DeleteClusterError>;
-
+    fn delete_cluster(
+        &self,
+        input: &DeleteClusterRequest,
+    ) -> Result<DeleteClusterResponse, DeleteClusterError>;
 
     #[doc="<p>Deletes the specified parameter group. You cannot delete a parameter group if it is associated with any DAX clusters.</p>"]
-    fn delete_parameter_group
-        (&self,
-         input: &DeleteParameterGroupRequest)
-         -> Result<DeleteParameterGroupResponse, DeleteParameterGroupError>;
-
+    fn delete_parameter_group(
+        &self,
+        input: &DeleteParameterGroupRequest,
+    ) -> Result<DeleteParameterGroupResponse, DeleteParameterGroupError>;
 
     #[doc="<p>Deletes a subnet group.</p> <note> <p>You cannot delete a subnet group if it is associated with any DAX clusters.</p> </note>"]
-    fn delete_subnet_group(&self,
-                           input: &DeleteSubnetGroupRequest)
-                           -> Result<DeleteSubnetGroupResponse, DeleteSubnetGroupError>;
-
+    fn delete_subnet_group(
+        &self,
+        input: &DeleteSubnetGroupRequest,
+    ) -> Result<DeleteSubnetGroupResponse, DeleteSubnetGroupError>;
 
     #[doc="<p>Returns information about all provisioned DAX clusters if no cluster identifier is specified, or about a specific DAX cluster if a cluster identifier is supplied.</p> <p>If the cluster is in the CREATING state, only cluster level information will be displayed until all of the nodes are successfully provisioned.</p> <p>If the cluster is in the DELETING state, only cluster level information will be displayed.</p> <p>If nodes are currently being added to the DAX cluster, node endpoint information and creation time for the additional nodes will not be displayed until they are completely provisioned. When the DAX cluster state is <i>available</i>, the cluster is ready for use.</p> <p>If nodes are currently being removed from the DAX cluster, no endpoint information for the removed nodes is displayed.</p>"]
-    fn describe_clusters(&self,
-                         input: &DescribeClustersRequest)
-                         -> Result<DescribeClustersResponse, DescribeClustersError>;
+    fn describe_clusters(
+        &self,
+        input: &DescribeClustersRequest,
+    ) -> Result<DescribeClustersResponse, DescribeClustersError>;
 
-
-    #[doc="<p>Returns the default system parameter information for the DAX caching software.</p>"]
-    fn describe_default_parameters
-        (&self,
-         input: &DescribeDefaultParametersRequest)
-         -> Result<DescribeDefaultParametersResponse, DescribeDefaultParametersError>;
-
+    #[doc = "<p>Returns the default system parameter information for the DAX caching software.</p>"]
+    fn describe_default_parameters(
+        &self,
+        input: &DescribeDefaultParametersRequest,
+    ) -> Result<DescribeDefaultParametersResponse, DescribeDefaultParametersError>;
 
     #[doc="<p>Returns events related to DAX clusters and parameter groups. You can obtain events specific to a particular DAX cluster or parameter group by providing the name as a parameter.</p> <p>By default, only the events occurring within the last hour are returned; however, you can retrieve up to 14 days' worth of events if necessary.</p>"]
-    fn describe_events(&self,
-                       input: &DescribeEventsRequest)
-                       -> Result<DescribeEventsResponse, DescribeEventsError>;
-
+    fn describe_events(
+        &self,
+        input: &DescribeEventsRequest,
+    ) -> Result<DescribeEventsResponse, DescribeEventsError>;
 
     #[doc="<p>Returns a list of parameter group descriptions. If a parameter group name is specified, the list will contain only the descriptions for that group.</p>"]
-    fn describe_parameter_groups
-        (&self,
-         input: &DescribeParameterGroupsRequest)
-         -> Result<DescribeParameterGroupsResponse, DescribeParameterGroupsError>;
+    fn describe_parameter_groups(
+        &self,
+        input: &DescribeParameterGroupsRequest,
+    ) -> Result<DescribeParameterGroupsResponse, DescribeParameterGroupsError>;
 
-
-    #[doc="<p>Returns the detailed parameter list for a particular parameter group.</p>"]
-    fn describe_parameters(&self,
-                           input: &DescribeParametersRequest)
-                           -> Result<DescribeParametersResponse, DescribeParametersError>;
-
+    #[doc = "<p>Returns the detailed parameter list for a particular parameter group.</p>"]
+    fn describe_parameters(
+        &self,
+        input: &DescribeParametersRequest,
+    ) -> Result<DescribeParametersResponse, DescribeParametersError>;
 
     #[doc="<p>Returns a list of subnet group descriptions. If a subnet group name is specified, the list will contain only the description of that group.</p>"]
-    fn describe_subnet_groups
-        (&self,
-         input: &DescribeSubnetGroupsRequest)
-         -> Result<DescribeSubnetGroupsResponse, DescribeSubnetGroupsError>;
+    fn describe_subnet_groups(
+        &self,
+        input: &DescribeSubnetGroupsRequest,
+    ) -> Result<DescribeSubnetGroupsResponse, DescribeSubnetGroupsError>;
 
-
-    #[doc="<p>Adds one or more nodes to a DAX cluster.</p>"]
-    fn increase_replication_factor
-        (&self,
-         input: &IncreaseReplicationFactorRequest)
-         -> Result<IncreaseReplicationFactorResponse, IncreaseReplicationFactorError>;
-
+    #[doc = "<p>Adds one or more nodes to a DAX cluster.</p>"]
+    fn increase_replication_factor(
+        &self,
+        input: &IncreaseReplicationFactorRequest,
+    ) -> Result<IncreaseReplicationFactorResponse, IncreaseReplicationFactorError>;
 
     #[doc="<p>List all of the tags for a DAX cluster. You can call <code>ListTags</code> up to 10 times per second, per account.</p>"]
     fn list_tags(&self, input: &ListTagsRequest) -> Result<ListTagsResponse, ListTagsError>;
 
-
     #[doc="<p>Reboots a single node of a DAX cluster. The reboot action takes place as soon as possible. During the reboot, the node status is set to REBOOTING.</p>"]
-    fn reboot_node(&self,
-                   input: &RebootNodeRequest)
-                   -> Result<RebootNodeResponse, RebootNodeError>;
-
+    fn reboot_node(&self, input: &RebootNodeRequest)
+        -> Result<RebootNodeResponse, RebootNodeError>;
 
     #[doc="<p>Associates a set of tags with a DAX resource. You can call <code>TagResource</code> up to 5 times per second, per account. </p>"]
-    fn tag_resource(&self,
-                    input: &TagResourceRequest)
-                    -> Result<TagResourceResponse, TagResourceError>;
-
+    fn tag_resource(
+        &self,
+        input: &TagResourceRequest,
+    ) -> Result<TagResourceResponse, TagResourceError>;
 
     #[doc="<p>Removes the association of tags from a DAX resource. You can call <code>UntagResource</code> up to 5 times per second, per account. </p>"]
-    fn untag_resource(&self,
-                      input: &UntagResourceRequest)
-                      -> Result<UntagResourceResponse, UntagResourceError>;
-
+    fn untag_resource(
+        &self,
+        input: &UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, UntagResourceError>;
 
     #[doc="<p>Modifies the settings for a DAX cluster. You can use this action to change one or more cluster configuration parameters by specifying the parameters and the new values.</p>"]
-    fn update_cluster(&self,
-                      input: &UpdateClusterRequest)
-                      -> Result<UpdateClusterResponse, UpdateClusterError>;
-
+    fn update_cluster(
+        &self,
+        input: &UpdateClusterRequest,
+    ) -> Result<UpdateClusterResponse, UpdateClusterError>;
 
     #[doc="<p>Modifies the parameters of a parameter group. You can modify up to 20 parameters in a single request by submitting a list parameter name and value pairs.</p>"]
-    fn update_parameter_group
-        (&self,
-         input: &UpdateParameterGroupRequest)
-         -> Result<UpdateParameterGroupResponse, UpdateParameterGroupError>;
+    fn update_parameter_group(
+        &self,
+        input: &UpdateParameterGroupRequest,
+    ) -> Result<UpdateParameterGroupResponse, UpdateParameterGroupError>;
 
-
-    #[doc="<p>Modifies an existing subnet group.</p>"]
-    fn update_subnet_group(&self,
-                           input: &UpdateSubnetGroupRequest)
-                           -> Result<UpdateSubnetGroupResponse, UpdateSubnetGroupError>;
+    #[doc = "<p>Modifies an existing subnet group.</p>"]
+    fn update_subnet_group(
+        &self,
+        input: &UpdateSubnetGroupRequest,
+    ) -> Result<UpdateSubnetGroupResponse, UpdateSubnetGroupError>;
 }
 /// A client for the Amazon DAX API.
 pub struct DynamodbAcceleratorClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -3035,8 +3194,9 @@ pub struct DynamodbAcceleratorClient<P, D>
 }
 
 impl<P, D> DynamodbAcceleratorClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         DynamodbAcceleratorClient {
@@ -3048,13 +3208,15 @@ impl<P, D> DynamodbAcceleratorClient<P, D>
 }
 
 impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     #[doc="<p>Creates a DAX cluster. All nodes in the cluster run the same DAX caching software.</p>"]
-    fn create_cluster(&self,
-                      input: &CreateClusterRequest)
-                      -> Result<CreateClusterResponse, CreateClusterError> {
+    fn create_cluster(
+        &self,
+        input: &CreateClusterRequest,
+    ) -> Result<CreateClusterResponse, CreateClusterError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3070,24 +3232,25 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateClusterResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateClusterResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateClusterError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateClusterError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a new parameter group. A parameter group is a collection of parameters that you apply to all of the nodes in a DAX cluster.</p>"]
-    fn create_parameter_group
-        (&self,
-         input: &CreateParameterGroupRequest)
-         -> Result<CreateParameterGroupResponse, CreateParameterGroupError> {
+    fn create_parameter_group(
+        &self,
+        input: &CreateParameterGroupRequest,
+    ) -> Result<CreateParameterGroupResponse, CreateParameterGroupError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3103,21 +3266,25 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateParameterGroupResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreateParameterGroupResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateParameterGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateParameterGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates a new subnet group.</p>"]
-    fn create_subnet_group(&self,
-                           input: &CreateSubnetGroupRequest)
-                           -> Result<CreateSubnetGroupResponse, CreateSubnetGroupError> {
+    #[doc = "<p>Creates a new subnet group.</p>"]
+    fn create_subnet_group(
+        &self,
+        input: &CreateSubnetGroupRequest,
+    ) -> Result<CreateSubnetGroupResponse, CreateSubnetGroupError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3133,22 +3300,25 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateSubnetGroupResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreateSubnetGroupResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateSubnetGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateSubnetGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Removes one or more nodes from a DAX cluster.</p> <note> <p>You cannot use <code>DecreaseReplicationFactor</code> to remove the last node in a DAX cluster. If you need to do this, use <code>DeleteCluster</code> instead.</p> </note>"]
-    fn decrease_replication_factor
-        (&self,
-         input: &DecreaseReplicationFactorRequest)
-         -> Result<DecreaseReplicationFactorResponse, DecreaseReplicationFactorError> {
+    fn decrease_replication_factor(
+        &self,
+        input: &DecreaseReplicationFactorRequest,
+    ) -> Result<DecreaseReplicationFactorResponse, DecreaseReplicationFactorError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3164,22 +3334,25 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DecreaseReplicationFactorResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DecreaseReplicationFactorResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DecreaseReplicationFactorError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(DecreaseReplicationFactorError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes a previously provisioned DAX cluster. <i>DeleteCluster</i> deletes all associated nodes, node endpoints and the DAX cluster itself. When you receive a successful response from this action, DAX immediately begins deleting the cluster; you cannot cancel or revert this action.</p>"]
-    fn delete_cluster(&self,
-                      input: &DeleteClusterRequest)
-                      -> Result<DeleteClusterResponse, DeleteClusterError> {
+    fn delete_cluster(
+        &self,
+        input: &DeleteClusterRequest,
+    ) -> Result<DeleteClusterResponse, DeleteClusterError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3195,24 +3368,25 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteClusterResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteClusterResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteClusterError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteClusterError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes the specified parameter group. You cannot delete a parameter group if it is associated with any DAX clusters.</p>"]
-    fn delete_parameter_group
-        (&self,
-         input: &DeleteParameterGroupRequest)
-         -> Result<DeleteParameterGroupResponse, DeleteParameterGroupError> {
+    fn delete_parameter_group(
+        &self,
+        input: &DeleteParameterGroupRequest,
+    ) -> Result<DeleteParameterGroupResponse, DeleteParameterGroupError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3228,21 +3402,25 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteParameterGroupResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DeleteParameterGroupResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteParameterGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteParameterGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes a subnet group.</p> <note> <p>You cannot delete a subnet group if it is associated with any DAX clusters.</p> </note>"]
-    fn delete_subnet_group(&self,
-                           input: &DeleteSubnetGroupRequest)
-                           -> Result<DeleteSubnetGroupResponse, DeleteSubnetGroupError> {
+    fn delete_subnet_group(
+        &self,
+        input: &DeleteSubnetGroupRequest,
+    ) -> Result<DeleteSubnetGroupResponse, DeleteSubnetGroupError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3258,21 +3436,25 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteSubnetGroupResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DeleteSubnetGroupResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteSubnetGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteSubnetGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns information about all provisioned DAX clusters if no cluster identifier is specified, or about a specific DAX cluster if a cluster identifier is supplied.</p> <p>If the cluster is in the CREATING state, only cluster level information will be displayed until all of the nodes are successfully provisioned.</p> <p>If the cluster is in the DELETING state, only cluster level information will be displayed.</p> <p>If nodes are currently being added to the DAX cluster, node endpoint information and creation time for the additional nodes will not be displayed until they are completely provisioned. When the DAX cluster state is <i>available</i>, the cluster is ready for use.</p> <p>If nodes are currently being removed from the DAX cluster, no endpoint information for the removed nodes is displayed.</p>"]
-    fn describe_clusters(&self,
-                         input: &DescribeClustersRequest)
-                         -> Result<DescribeClustersResponse, DescribeClustersError> {
+    fn describe_clusters(
+        &self,
+        input: &DescribeClustersRequest,
+    ) -> Result<DescribeClustersResponse, DescribeClustersError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3288,24 +3470,25 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeClustersResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribeClustersResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeClustersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeClustersError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Returns the default system parameter information for the DAX caching software.</p>"]
-    fn describe_default_parameters
-        (&self,
-         input: &DescribeDefaultParametersRequest)
-         -> Result<DescribeDefaultParametersResponse, DescribeDefaultParametersError> {
+    #[doc = "<p>Returns the default system parameter information for the DAX caching software.</p>"]
+    fn describe_default_parameters(
+        &self,
+        input: &DescribeDefaultParametersRequest,
+    ) -> Result<DescribeDefaultParametersResponse, DescribeDefaultParametersError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3321,22 +3504,25 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeDefaultParametersResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeDefaultParametersResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeDefaultParametersError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(DescribeDefaultParametersError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns events related to DAX clusters and parameter groups. You can obtain events specific to a particular DAX cluster or parameter group by providing the name as a parameter.</p> <p>By default, only the events occurring within the last hour are returned; however, you can retrieve up to 14 days' worth of events if necessary.</p>"]
-    fn describe_events(&self,
-                       input: &DescribeEventsRequest)
-                       -> Result<DescribeEventsResponse, DescribeEventsError> {
+    fn describe_events(
+        &self,
+        input: &DescribeEventsRequest,
+    ) -> Result<DescribeEventsResponse, DescribeEventsError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3352,24 +3538,25 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeEventsResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribeEventsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeEventsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeEventsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns a list of parameter group descriptions. If a parameter group name is specified, the list will contain only the descriptions for that group.</p>"]
-    fn describe_parameter_groups
-        (&self,
-         input: &DescribeParameterGroupsRequest)
-         -> Result<DescribeParameterGroupsResponse, DescribeParameterGroupsError> {
+    fn describe_parameter_groups(
+        &self,
+        input: &DescribeParameterGroupsRequest,
+    ) -> Result<DescribeParameterGroupsResponse, DescribeParameterGroupsError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3385,22 +3572,25 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeParameterGroupsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeParameterGroupsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeParameterGroupsError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(DescribeParameterGroupsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Returns the detailed parameter list for a particular parameter group.</p>"]
-    fn describe_parameters(&self,
-                           input: &DescribeParametersRequest)
-                           -> Result<DescribeParametersResponse, DescribeParametersError> {
+    #[doc = "<p>Returns the detailed parameter list for a particular parameter group.</p>"]
+    fn describe_parameters(
+        &self,
+        input: &DescribeParametersRequest,
+    ) -> Result<DescribeParametersResponse, DescribeParametersError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3416,22 +3606,25 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeParametersResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeParametersResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeParametersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeParametersError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns a list of subnet group descriptions. If a subnet group name is specified, the list will contain only the description of that group.</p>"]
-    fn describe_subnet_groups
-        (&self,
-         input: &DescribeSubnetGroupsRequest)
-         -> Result<DescribeSubnetGroupsResponse, DescribeSubnetGroupsError> {
+    fn describe_subnet_groups(
+        &self,
+        input: &DescribeSubnetGroupsRequest,
+    ) -> Result<DescribeSubnetGroupsResponse, DescribeSubnetGroupsError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3447,22 +3640,25 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeSubnetGroupsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeSubnetGroupsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeSubnetGroupsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeSubnetGroupsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Adds one or more nodes to a DAX cluster.</p>"]
-    fn increase_replication_factor
-        (&self,
-         input: &IncreaseReplicationFactorRequest)
-         -> Result<IncreaseReplicationFactorResponse, IncreaseReplicationFactorError> {
+    #[doc = "<p>Adds one or more nodes to a DAX cluster.</p>"]
+    fn increase_replication_factor(
+        &self,
+        input: &IncreaseReplicationFactorRequest,
+    ) -> Result<IncreaseReplicationFactorResponse, IncreaseReplicationFactorError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3478,17 +3674,19 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<IncreaseReplicationFactorResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<IncreaseReplicationFactorResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(IncreaseReplicationFactorError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(IncreaseReplicationFactorError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>List all of the tags for a DAX cluster. You can call <code>ListTags</code> up to 10 times per second, per account.</p>"]
     fn list_tags(&self, input: &ListTagsRequest) -> Result<ListTagsResponse, ListTagsError> {
@@ -3507,23 +3705,25 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListTagsResponse>(String::from_utf8_lossy(&body)
-                                                                .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListTagsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListTagsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Reboots a single node of a DAX cluster. The reboot action takes place as soon as possible. During the reboot, the node status is set to REBOOTING.</p>"]
-    fn reboot_node(&self,
-                   input: &RebootNodeRequest)
-                   -> Result<RebootNodeResponse, RebootNodeError> {
+    fn reboot_node(
+        &self,
+        input: &RebootNodeRequest,
+    ) -> Result<RebootNodeResponse, RebootNodeError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3539,23 +3739,25 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<RebootNodeResponse>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<RebootNodeResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(RebootNodeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(RebootNodeError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Associates a set of tags with a DAX resource. You can call <code>TagResource</code> up to 5 times per second, per account. </p>"]
-    fn tag_resource(&self,
-                    input: &TagResourceRequest)
-                    -> Result<TagResourceResponse, TagResourceError> {
+    fn tag_resource(
+        &self,
+        input: &TagResourceRequest,
+    ) -> Result<TagResourceResponse, TagResourceError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3571,23 +3773,25 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<TagResourceResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<TagResourceResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(TagResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(TagResourceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Removes the association of tags from a DAX resource. You can call <code>UntagResource</code> up to 5 times per second, per account. </p>"]
-    fn untag_resource(&self,
-                      input: &UntagResourceRequest)
-                      -> Result<UntagResourceResponse, UntagResourceError> {
+    fn untag_resource(
+        &self,
+        input: &UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, UntagResourceError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3603,23 +3807,25 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UntagResourceResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<UntagResourceResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UntagResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UntagResourceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Modifies the settings for a DAX cluster. You can use this action to change one or more cluster configuration parameters by specifying the parameters and the new values.</p>"]
-    fn update_cluster(&self,
-                      input: &UpdateClusterRequest)
-                      -> Result<UpdateClusterResponse, UpdateClusterError> {
+    fn update_cluster(
+        &self,
+        input: &UpdateClusterRequest,
+    ) -> Result<UpdateClusterResponse, UpdateClusterError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3635,24 +3841,25 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateClusterResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<UpdateClusterResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateClusterError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateClusterError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Modifies the parameters of a parameter group. You can modify up to 20 parameters in a single request by submitting a list parameter name and value pairs.</p>"]
-    fn update_parameter_group
-        (&self,
-         input: &UpdateParameterGroupRequest)
-         -> Result<UpdateParameterGroupResponse, UpdateParameterGroupError> {
+    fn update_parameter_group(
+        &self,
+        input: &UpdateParameterGroupRequest,
+    ) -> Result<UpdateParameterGroupResponse, UpdateParameterGroupError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3668,21 +3875,25 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateParameterGroupResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<UpdateParameterGroupResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateParameterGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateParameterGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Modifies an existing subnet group.</p>"]
-    fn update_subnet_group(&self,
-                           input: &UpdateSubnetGroupRequest)
-                           -> Result<UpdateSubnetGroupResponse, UpdateSubnetGroupError> {
+    #[doc = "<p>Modifies an existing subnet group.</p>"]
+    fn update_subnet_group(
+        &self,
+        input: &UpdateSubnetGroupRequest,
+    ) -> Result<UpdateSubnetGroupResponse, UpdateSubnetGroupError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3698,12 +3909,16 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateSubnetGroupResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<UpdateSubnetGroupResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateSubnetGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateSubnetGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

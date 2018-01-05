@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -28,1157 +27,1156 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AddAttributesToFindingsRequest {
-    #[doc="<p>The array of attributes that you want to assign to specified findings.</p>"]
-    #[serde(rename="attributes")]
+    /// <p>The array of attributes that you want to assign to specified findings.</p>
+    #[serde(rename = "attributes")]
     pub attributes: Vec<Attribute>,
-    #[doc="<p>The ARNs that specify the findings that you want to assign attributes to.</p>"]
-    #[serde(rename="findingArns")]
+    /// <p>The ARNs that specify the findings that you want to assign attributes to.</p>
+    #[serde(rename = "findingArns")]
     pub finding_arns: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AddAttributesToFindingsResponse {
-    #[doc="<p>Attribute details that cannot be described. An error code is provided for each failed item.</p>"]
-    #[serde(rename="failedItems")]
+    /// <p>Attribute details that cannot be described. An error code is provided for each failed item.</p>
+    #[serde(rename = "failedItems")]
     pub failed_items: ::std::collections::HashMap<String, FailedItemDetails>,
 }
 
-#[doc="<p>Used in the exception error that is thrown if you start an assessment run for an assessment target that includes an EC2 instance that is already participating in another started assessment run.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Used in the exception error that is thrown if you start an assessment run for an assessment target that includes an EC2 instance that is already participating in another started assessment run.</p>
+#[derive(Default, Debug, Clone)]
 pub struct AgentAlreadyRunningAssessment {
-    #[doc="<p>ID of the agent that is running on an EC2 instance that is already participating in another started assessment run.</p>"]
+    /// <p>ID of the agent that is running on an EC2 instance that is already participating in another started assessment run.</p>
     pub agent_id: String,
-    #[doc="<p>The ARN of the assessment run that has already been started.</p>"]
+    /// <p>The ARN of the assessment run that has already been started.</p>
     pub assessment_run_arn: String,
 }
 
-#[doc="<p>Contains information about an Amazon Inspector agent. This data type is used as a request parameter in the <a>ListAssessmentRunAgents</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Contains information about an Amazon Inspector agent. This data type is used as a request parameter in the <a>ListAssessmentRunAgents</a> action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AgentFilter {
-    #[doc="<p>The detailed health state of the agent. Values can be set to <b>IDLE</b>, <b>RUNNING</b>, <b>SHUTDOWN</b>, <b>UNHEALTHY</b>, <b>THROTTLED</b>, and <b>UNKNOWN</b>. </p>"]
-    #[serde(rename="agentHealthCodes")]
+    /// <p>The detailed health state of the agent. Values can be set to <b>IDLE</b>, <b>RUNNING</b>, <b>SHUTDOWN</b>, <b>UNHEALTHY</b>, <b>THROTTLED</b>, and <b>UNKNOWN</b>. </p>
+    #[serde(rename = "agentHealthCodes")]
     pub agent_health_codes: Vec<String>,
-    #[doc="<p>The current health state of the agent. Values can be set to <b>HEALTHY</b> or <b>UNHEALTHY</b>.</p>"]
-    #[serde(rename="agentHealths")]
+    /// <p>The current health state of the agent. Values can be set to <b>HEALTHY</b> or <b>UNHEALTHY</b>.</p>
+    #[serde(rename = "agentHealths")]
     pub agent_healths: Vec<String>,
 }
 
-#[doc="<p>Used as a response element in the <a>PreviewAgents</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Used as a response element in the <a>PreviewAgents</a> action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AgentPreview {
-    #[doc="<p>The ID of the EC2 instance where the agent is installed.</p>"]
-    #[serde(rename="agentId")]
+    /// <p>The ID of the EC2 instance where the agent is installed.</p>
+    #[serde(rename = "agentId")]
     pub agent_id: String,
-    #[doc="<p>The Auto Scaling group for the EC2 instance where the agent is installed.</p>"]
-    #[serde(rename="autoScalingGroup")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Auto Scaling group for the EC2 instance where the agent is installed.</p>
+    #[serde(rename = "autoScalingGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_scaling_group: Option<String>,
 }
 
-#[doc="<p>A snapshot of an Amazon Inspector assessment run that contains the findings of the assessment run .</p> <p>Used as the response element in the <a>DescribeAssessmentRuns</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A snapshot of an Amazon Inspector assessment run that contains the findings of the assessment run .</p> <p>Used as the response element in the <a>DescribeAssessmentRuns</a> action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AssessmentRun {
-    #[doc="<p>The ARN of the assessment run.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The ARN of the assessment run.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
-    #[doc="<p>The ARN of the assessment template that is associated with the assessment run.</p>"]
-    #[serde(rename="assessmentTemplateArn")]
+    /// <p>The ARN of the assessment template that is associated with the assessment run.</p>
+    #[serde(rename = "assessmentTemplateArn")]
     pub assessment_template_arn: String,
-    #[doc="<p>The assessment run completion time that corresponds to the rules packages evaluation completion time or failure.</p>"]
-    #[serde(rename="completedAt")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The assessment run completion time that corresponds to the rules packages evaluation completion time or failure.</p>
+    #[serde(rename = "completedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub completed_at: Option<f64>,
-    #[doc="<p>The time when <a>StartAssessmentRun</a> was called.</p>"]
-    #[serde(rename="createdAt")]
+    /// <p>The time when <a>StartAssessmentRun</a> was called.</p>
+    #[serde(rename = "createdAt")]
     pub created_at: f64,
-    #[doc="<p>A Boolean value (true or false) that specifies whether the process of collecting data from the agents is completed.</p>"]
-    #[serde(rename="dataCollected")]
+    /// <p>A Boolean value (true or false) that specifies whether the process of collecting data from the agents is completed.</p>
+    #[serde(rename = "dataCollected")]
     pub data_collected: bool,
-    #[doc="<p>The duration of the assessment run.</p>"]
-    #[serde(rename="durationInSeconds")]
+    /// <p>The duration of the assessment run.</p>
+    #[serde(rename = "durationInSeconds")]
     pub duration_in_seconds: i64,
-    #[doc="<p>Provides a total count of generated findings per severity.</p>"]
-    #[serde(rename="findingCounts")]
+    /// <p>Provides a total count of generated findings per severity.</p>
+    #[serde(rename = "findingCounts")]
     pub finding_counts: ::std::collections::HashMap<String, i64>,
-    #[doc="<p>The auto-generated name for the assessment run.</p>"]
-    #[serde(rename="name")]
+    /// <p>The auto-generated name for the assessment run.</p>
+    #[serde(rename = "name")]
     pub name: String,
-    #[doc="<p>A list of notifications for the event subscriptions. A notification about a particular generated finding is added to this list only once.</p>"]
-    #[serde(rename="notifications")]
+    /// <p>A list of notifications for the event subscriptions. A notification about a particular generated finding is added to this list only once.</p>
+    #[serde(rename = "notifications")]
     pub notifications: Vec<AssessmentRunNotification>,
-    #[doc="<p>The rules packages selected for the assessment run.</p>"]
-    #[serde(rename="rulesPackageArns")]
+    /// <p>The rules packages selected for the assessment run.</p>
+    #[serde(rename = "rulesPackageArns")]
     pub rules_package_arns: Vec<String>,
-    #[doc="<p>The time when <a>StartAssessmentRun</a> was called.</p>"]
-    #[serde(rename="startedAt")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time when <a>StartAssessmentRun</a> was called.</p>
+    #[serde(rename = "startedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub started_at: Option<f64>,
-    #[doc="<p>The state of the assessment run.</p>"]
-    #[serde(rename="state")]
+    /// <p>The state of the assessment run.</p>
+    #[serde(rename = "state")]
     pub state: String,
-    #[doc="<p>The last time when the assessment run's state changed.</p>"]
-    #[serde(rename="stateChangedAt")]
+    /// <p>The last time when the assessment run's state changed.</p>
+    #[serde(rename = "stateChangedAt")]
     pub state_changed_at: f64,
-    #[doc="<p>A list of the assessment run state changes.</p>"]
-    #[serde(rename="stateChanges")]
+    /// <p>A list of the assessment run state changes.</p>
+    #[serde(rename = "stateChanges")]
     pub state_changes: Vec<AssessmentRunStateChange>,
-    #[doc="<p>The user-defined attributes that are assigned to every generated finding.</p>"]
-    #[serde(rename="userAttributesForFindings")]
+    /// <p>The user-defined attributes that are assigned to every generated finding.</p>
+    #[serde(rename = "userAttributesForFindings")]
     pub user_attributes_for_findings: Vec<Attribute>,
 }
 
-#[doc="<p>Contains information about an Amazon Inspector agent. This data type is used as a response element in the <a>ListAssessmentRunAgents</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains information about an Amazon Inspector agent. This data type is used as a response element in the <a>ListAssessmentRunAgents</a> action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AssessmentRunAgent {
-    #[doc="<p>The current health state of the agent.</p>"]
-    #[serde(rename="agentHealth")]
+    /// <p>The current health state of the agent.</p>
+    #[serde(rename = "agentHealth")]
     pub agent_health: String,
-    #[doc="<p>The detailed health state of the agent.</p>"]
-    #[serde(rename="agentHealthCode")]
+    /// <p>The detailed health state of the agent.</p>
+    #[serde(rename = "agentHealthCode")]
     pub agent_health_code: String,
-    #[doc="<p>The description for the agent health code.</p>"]
-    #[serde(rename="agentHealthDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The description for the agent health code.</p>
+    #[serde(rename = "agentHealthDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub agent_health_details: Option<String>,
-    #[doc="<p>The AWS account of the EC2 instance where the agent is installed.</p>"]
-    #[serde(rename="agentId")]
+    /// <p>The AWS account of the EC2 instance where the agent is installed.</p>
+    #[serde(rename = "agentId")]
     pub agent_id: String,
-    #[doc="<p>The ARN of the assessment run that is associated with the agent.</p>"]
-    #[serde(rename="assessmentRunArn")]
+    /// <p>The ARN of the assessment run that is associated with the agent.</p>
+    #[serde(rename = "assessmentRunArn")]
     pub assessment_run_arn: String,
-    #[doc="<p>The Auto Scaling group of the EC2 instance that is specified by the agent ID.</p>"]
-    #[serde(rename="autoScalingGroup")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Auto Scaling group of the EC2 instance that is specified by the agent ID.</p>
+    #[serde(rename = "autoScalingGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_scaling_group: Option<String>,
-    #[doc="<p>The Amazon Inspector application data metrics that are collected by the agent.</p>"]
-    #[serde(rename="telemetryMetadata")]
+    /// <p>The Amazon Inspector application data metrics that are collected by the agent.</p>
+    #[serde(rename = "telemetryMetadata")]
     pub telemetry_metadata: Vec<TelemetryMetadata>,
 }
 
-#[doc="<p>Used as the request parameter in the <a>ListAssessmentRuns</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Used as the request parameter in the <a>ListAssessmentRuns</a> action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AssessmentRunFilter {
-    #[doc="<p>For a record to match a filter, the value that is specified for this data type property must inclusively match any value between the specified minimum and maximum values of the <b>completedAt</b> property of the <a>AssessmentRun</a> data type.</p>"]
-    #[serde(rename="completionTimeRange")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For a record to match a filter, the value that is specified for this data type property must inclusively match any value between the specified minimum and maximum values of the <b>completedAt</b> property of the <a>AssessmentRun</a> data type.</p>
+    #[serde(rename = "completionTimeRange")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub completion_time_range: Option<TimestampRange>,
-    #[doc="<p>For a record to match a filter, the value that is specified for this data type property must inclusively match any value between the specified minimum and maximum values of the <b>durationInSeconds</b> property of the <a>AssessmentRun</a> data type.</p>"]
-    #[serde(rename="durationRange")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For a record to match a filter, the value that is specified for this data type property must inclusively match any value between the specified minimum and maximum values of the <b>durationInSeconds</b> property of the <a>AssessmentRun</a> data type.</p>
+    #[serde(rename = "durationRange")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub duration_range: Option<DurationRange>,
-    #[doc="<p>For a record to match a filter, an explicit value or a string containing a wildcard that is specified for this data type property must match the value of the <b>assessmentRunName</b> property of the <a>AssessmentRun</a> data type.</p>"]
-    #[serde(rename="namePattern")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For a record to match a filter, an explicit value or a string containing a wildcard that is specified for this data type property must match the value of the <b>assessmentRunName</b> property of the <a>AssessmentRun</a> data type.</p>
+    #[serde(rename = "namePattern")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name_pattern: Option<String>,
-    #[doc="<p>For a record to match a filter, the value that is specified for this data type property must be contained in the list of values of the <b>rulesPackages</b> property of the <a>AssessmentRun</a> data type.</p>"]
-    #[serde(rename="rulesPackageArns")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For a record to match a filter, the value that is specified for this data type property must be contained in the list of values of the <b>rulesPackages</b> property of the <a>AssessmentRun</a> data type.</p>
+    #[serde(rename = "rulesPackageArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rules_package_arns: Option<Vec<String>>,
-    #[doc="<p>For a record to match a filter, the value that is specified for this data type property must inclusively match any value between the specified minimum and maximum values of the <b>startTime</b> property of the <a>AssessmentRun</a> data type.</p>"]
-    #[serde(rename="startTimeRange")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For a record to match a filter, the value that is specified for this data type property must inclusively match any value between the specified minimum and maximum values of the <b>startTime</b> property of the <a>AssessmentRun</a> data type.</p>
+    #[serde(rename = "startTimeRange")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time_range: Option<TimestampRange>,
-    #[doc="<p>For a record to match a filter, the value that is specified for this data type property must match the <b>stateChangedAt</b> property of the <a>AssessmentRun</a> data type.</p>"]
-    #[serde(rename="stateChangeTimeRange")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For a record to match a filter, the value that is specified for this data type property must match the <b>stateChangedAt</b> property of the <a>AssessmentRun</a> data type.</p>
+    #[serde(rename = "stateChangeTimeRange")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub state_change_time_range: Option<TimestampRange>,
-    #[doc="<p>For a record to match a filter, one of the values specified for this data type property must be the exact match of the value of the <b>assessmentRunState</b> property of the <a>AssessmentRun</a> data type.</p>"]
-    #[serde(rename="states")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For a record to match a filter, one of the values specified for this data type property must be the exact match of the value of the <b>assessmentRunState</b> property of the <a>AssessmentRun</a> data type.</p>
+    #[serde(rename = "states")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub states: Option<Vec<String>>,
 }
 
-#[doc="<p>Used as one of the elements of the <a>AssessmentRun</a> data type.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Used as one of the elements of the <a>AssessmentRun</a> data type.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AssessmentRunNotification {
-    #[doc="<p>The date of the notification.</p>"]
-    #[serde(rename="date")]
+    /// <p>The date of the notification.</p>
+    #[serde(rename = "date")]
     pub date: f64,
-    #[doc="<p>The Boolean value that specifies whether the notification represents an error.</p>"]
-    #[serde(rename="error")]
+    /// <p>The Boolean value that specifies whether the notification represents an error.</p>
+    #[serde(rename = "error")]
     pub error: bool,
-    #[doc="<p>The event for which a notification is sent.</p>"]
-    #[serde(rename="event")]
+    /// <p>The event for which a notification is sent.</p>
+    #[serde(rename = "event")]
     pub event: String,
-    #[doc="<p>The message included in the notification.</p>"]
-    #[serde(rename="message")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The message included in the notification.</p>
+    #[serde(rename = "message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
-    #[doc="<p>The status code of the SNS notification.</p>"]
-    #[serde(rename="snsPublishStatusCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status code of the SNS notification.</p>
+    #[serde(rename = "snsPublishStatusCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sns_publish_status_code: Option<String>,
-    #[doc="<p>The SNS topic to which the SNS notification is sent.</p>"]
-    #[serde(rename="snsTopicArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The SNS topic to which the SNS notification is sent.</p>
+    #[serde(rename = "snsTopicArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sns_topic_arn: Option<String>,
 }
 
-#[doc="<p>Used as one of the elements of the <a>AssessmentRun</a> data type.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Used as one of the elements of the <a>AssessmentRun</a> data type.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AssessmentRunStateChange {
-    #[doc="<p>The assessment run state.</p>"]
-    #[serde(rename="state")]
+    /// <p>The assessment run state.</p>
+    #[serde(rename = "state")]
     pub state: String,
-    #[doc="<p>The last time the assessment run state changed.</p>"]
-    #[serde(rename="stateChangedAt")]
+    /// <p>The last time the assessment run state changed.</p>
+    #[serde(rename = "stateChangedAt")]
     pub state_changed_at: f64,
 }
 
-#[doc="<p>Contains information about an Amazon Inspector application. This data type is used as the response element in the <a>DescribeAssessmentTargets</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains information about an Amazon Inspector application. This data type is used as the response element in the <a>DescribeAssessmentTargets</a> action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AssessmentTarget {
-    #[doc="<p>The ARN that specifies the Amazon Inspector assessment target.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The ARN that specifies the Amazon Inspector assessment target.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
-    #[doc="<p>The time at which the assessment target is created.</p>"]
-    #[serde(rename="createdAt")]
+    /// <p>The time at which the assessment target is created.</p>
+    #[serde(rename = "createdAt")]
     pub created_at: f64,
-    #[doc="<p>The name of the Amazon Inspector assessment target.</p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the Amazon Inspector assessment target.</p>
+    #[serde(rename = "name")]
     pub name: String,
-    #[doc="<p>The ARN that specifies the resource group that is associated with the assessment target.</p>"]
-    #[serde(rename="resourceGroupArn")]
+    /// <p>The ARN that specifies the resource group that is associated with the assessment target.</p>
+    #[serde(rename = "resourceGroupArn")]
     pub resource_group_arn: String,
-    #[doc="<p>The time at which <a>UpdateAssessmentTarget</a> is called.</p>"]
-    #[serde(rename="updatedAt")]
+    /// <p>The time at which <a>UpdateAssessmentTarget</a> is called.</p>
+    #[serde(rename = "updatedAt")]
     pub updated_at: f64,
 }
 
-#[doc="<p>Used as the request parameter in the <a>ListAssessmentTargets</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Used as the request parameter in the <a>ListAssessmentTargets</a> action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AssessmentTargetFilter {
-    #[doc="<p>For a record to match a filter, an explicit value or a string that contains a wildcard that is specified for this data type property must match the value of the <b>assessmentTargetName</b> property of the <a>AssessmentTarget</a> data type.</p>"]
-    #[serde(rename="assessmentTargetNamePattern")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For a record to match a filter, an explicit value or a string that contains a wildcard that is specified for this data type property must match the value of the <b>assessmentTargetName</b> property of the <a>AssessmentTarget</a> data type.</p>
+    #[serde(rename = "assessmentTargetNamePattern")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub assessment_target_name_pattern: Option<String>,
 }
 
-#[doc="<p>Contains information about an Amazon Inspector assessment template. This data type is used as the response element in the <a>DescribeAssessmentTemplates</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains information about an Amazon Inspector assessment template. This data type is used as the response element in the <a>DescribeAssessmentTemplates</a> action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AssessmentTemplate {
-    #[doc="<p>The ARN of the assessment template.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The ARN of the assessment template.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
-    #[doc="<p>The ARN of the assessment target that corresponds to this assessment template.</p>"]
-    #[serde(rename="assessmentTargetArn")]
+    /// <p>The ARN of the assessment target that corresponds to this assessment template.</p>
+    #[serde(rename = "assessmentTargetArn")]
     pub assessment_target_arn: String,
-    #[doc="<p>The time at which the assessment template is created.</p>"]
-    #[serde(rename="createdAt")]
+    /// <p>The time at which the assessment template is created.</p>
+    #[serde(rename = "createdAt")]
     pub created_at: f64,
-    #[doc="<p>The duration in seconds specified for this assessment tempate. The default value is 3600 seconds (one hour). The maximum value is 86400 seconds (one day).</p>"]
-    #[serde(rename="durationInSeconds")]
+    /// <p>The duration in seconds specified for this assessment tempate. The default value is 3600 seconds (one hour). The maximum value is 86400 seconds (one day).</p>
+    #[serde(rename = "durationInSeconds")]
     pub duration_in_seconds: i64,
-    #[doc="<p>The name of the assessment template.</p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the assessment template.</p>
+    #[serde(rename = "name")]
     pub name: String,
-    #[doc="<p>The rules packages that are specified for this assessment template.</p>"]
-    #[serde(rename="rulesPackageArns")]
+    /// <p>The rules packages that are specified for this assessment template.</p>
+    #[serde(rename = "rulesPackageArns")]
     pub rules_package_arns: Vec<String>,
-    #[doc="<p>The user-defined attributes that are assigned to every generated finding from the assessment run that uses this assessment template.</p>"]
-    #[serde(rename="userAttributesForFindings")]
+    /// <p>The user-defined attributes that are assigned to every generated finding from the assessment run that uses this assessment template.</p>
+    #[serde(rename = "userAttributesForFindings")]
     pub user_attributes_for_findings: Vec<Attribute>,
 }
 
-#[doc="<p>Used as the request parameter in the <a>ListAssessmentTemplates</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Used as the request parameter in the <a>ListAssessmentTemplates</a> action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AssessmentTemplateFilter {
-    #[doc="<p>For a record to match a filter, the value specified for this data type property must inclusively match any value between the specified minimum and maximum values of the <b>durationInSeconds</b> property of the <a>AssessmentTemplate</a> data type.</p>"]
-    #[serde(rename="durationRange")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For a record to match a filter, the value specified for this data type property must inclusively match any value between the specified minimum and maximum values of the <b>durationInSeconds</b> property of the <a>AssessmentTemplate</a> data type.</p>
+    #[serde(rename = "durationRange")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub duration_range: Option<DurationRange>,
-    #[doc="<p>For a record to match a filter, an explicit value or a string that contains a wildcard that is specified for this data type property must match the value of the <b>assessmentTemplateName</b> property of the <a>AssessmentTemplate</a> data type.</p>"]
-    #[serde(rename="namePattern")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For a record to match a filter, an explicit value or a string that contains a wildcard that is specified for this data type property must match the value of the <b>assessmentTemplateName</b> property of the <a>AssessmentTemplate</a> data type.</p>
+    #[serde(rename = "namePattern")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name_pattern: Option<String>,
-    #[doc="<p>For a record to match a filter, the values that are specified for this data type property must be contained in the list of values of the <b>rulesPackageArns</b> property of the <a>AssessmentTemplate</a> data type.</p>"]
-    #[serde(rename="rulesPackageArns")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For a record to match a filter, the values that are specified for this data type property must be contained in the list of values of the <b>rulesPackageArns</b> property of the <a>AssessmentTemplate</a> data type.</p>
+    #[serde(rename = "rulesPackageArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rules_package_arns: Option<Vec<String>>,
 }
 
-#[doc="<p>A collection of attributes of the host from which the finding is generated.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A collection of attributes of the host from which the finding is generated.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AssetAttributes {
-    #[doc="<p>The ID of the agent that is installed on the EC2 instance where the finding is generated.</p>"]
-    #[serde(rename="agentId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the agent that is installed on the EC2 instance where the finding is generated.</p>
+    #[serde(rename = "agentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub agent_id: Option<String>,
-    #[doc="<p>The ID of the Amazon Machine Image (AMI) that is installed on the EC2 instance where the finding is generated.</p>"]
-    #[serde(rename="amiId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Amazon Machine Image (AMI) that is installed on the EC2 instance where the finding is generated.</p>
+    #[serde(rename = "amiId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ami_id: Option<String>,
-    #[doc="<p>The Auto Scaling group of the EC2 instance where the finding is generated.</p>"]
-    #[serde(rename="autoScalingGroup")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Auto Scaling group of the EC2 instance where the finding is generated.</p>
+    #[serde(rename = "autoScalingGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_scaling_group: Option<String>,
-    #[doc="<p>The hostname of the EC2 instance where the finding is generated.</p>"]
-    #[serde(rename="hostname")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The hostname of the EC2 instance where the finding is generated.</p>
+    #[serde(rename = "hostname")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hostname: Option<String>,
-    #[doc="<p>The list of IP v4 addresses of the EC2 instance where the finding is generated.</p>"]
-    #[serde(rename="ipv4Addresses")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of IP v4 addresses of the EC2 instance where the finding is generated.</p>
+    #[serde(rename = "ipv4Addresses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ipv_4_addresses: Option<Vec<String>>,
-    #[doc="<p>The schema version of this data type.</p>"]
-    #[serde(rename="schemaVersion")]
+    /// <p>The schema version of this data type.</p>
+    #[serde(rename = "schemaVersion")]
     pub schema_version: i64,
 }
 
-#[doc="<p>This data type is used as a request parameter in the <a>AddAttributesToFindings</a> and <a>CreateAssessmentTemplate</a> actions.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>This data type is used as a request parameter in the <a>AddAttributesToFindings</a> and <a>CreateAssessmentTemplate</a> actions.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Attribute {
-    #[doc="<p>The attribute key.</p>"]
-    #[serde(rename="key")]
+    /// <p>The attribute key.</p>
+    #[serde(rename = "key")]
     pub key: String,
-    #[doc="<p>The value assigned to the attribute key.</p>"]
-    #[serde(rename="value")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The value assigned to the attribute key.</p>
+    #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateAssessmentTargetRequest {
-    #[doc="<p>The user-defined name that identifies the assessment target that you want to create. The name must be unique within the AWS account.</p>"]
-    #[serde(rename="assessmentTargetName")]
+    /// <p>The user-defined name that identifies the assessment target that you want to create. The name must be unique within the AWS account.</p>
+    #[serde(rename = "assessmentTargetName")]
     pub assessment_target_name: String,
-    #[doc="<p>The ARN that specifies the resource group that is used to create the assessment target.</p>"]
-    #[serde(rename="resourceGroupArn")]
+    /// <p>The ARN that specifies the resource group that is used to create the assessment target.</p>
+    #[serde(rename = "resourceGroupArn")]
     pub resource_group_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateAssessmentTargetResponse {
-    #[doc="<p>The ARN that specifies the assessment target that is created.</p>"]
-    #[serde(rename="assessmentTargetArn")]
+    /// <p>The ARN that specifies the assessment target that is created.</p>
+    #[serde(rename = "assessmentTargetArn")]
     pub assessment_target_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateAssessmentTemplateRequest {
-    #[doc="<p>The ARN that specifies the assessment target for which you want to create the assessment template.</p>"]
-    #[serde(rename="assessmentTargetArn")]
+    /// <p>The ARN that specifies the assessment target for which you want to create the assessment template.</p>
+    #[serde(rename = "assessmentTargetArn")]
     pub assessment_target_arn: String,
-    #[doc="<p>The user-defined name that identifies the assessment template that you want to create. You can create several assessment templates for an assessment target. The names of the assessment templates that correspond to a particular assessment target must be unique.</p>"]
-    #[serde(rename="assessmentTemplateName")]
+    /// <p>The user-defined name that identifies the assessment template that you want to create. You can create several assessment templates for an assessment target. The names of the assessment templates that correspond to a particular assessment target must be unique.</p>
+    #[serde(rename = "assessmentTemplateName")]
     pub assessment_template_name: String,
-    #[doc="<p>The duration of the assessment run in seconds. The default value is 3600 seconds (one hour).</p>"]
-    #[serde(rename="durationInSeconds")]
+    /// <p>The duration of the assessment run in seconds. The default value is 3600 seconds (one hour).</p>
+    #[serde(rename = "durationInSeconds")]
     pub duration_in_seconds: i64,
-    #[doc="<p>The ARNs that specify the rules packages that you want to attach to the assessment template.</p>"]
-    #[serde(rename="rulesPackageArns")]
+    /// <p>The ARNs that specify the rules packages that you want to attach to the assessment template.</p>
+    #[serde(rename = "rulesPackageArns")]
     pub rules_package_arns: Vec<String>,
-    #[doc="<p>The user-defined attributes that are assigned to every finding that is generated by the assessment run that uses this assessment template. An attribute is a key and value pair (an <a>Attribute</a> object). Within an assessment template, each key must be unique.</p>"]
-    #[serde(rename="userAttributesForFindings")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user-defined attributes that are assigned to every finding that is generated by the assessment run that uses this assessment template. An attribute is a key and value pair (an <a>Attribute</a> object). Within an assessment template, each key must be unique.</p>
+    #[serde(rename = "userAttributesForFindings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_attributes_for_findings: Option<Vec<Attribute>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateAssessmentTemplateResponse {
-    #[doc="<p>The ARN that specifies the assessment template that is created.</p>"]
-    #[serde(rename="assessmentTemplateArn")]
+    /// <p>The ARN that specifies the assessment template that is created.</p>
+    #[serde(rename = "assessmentTemplateArn")]
     pub assessment_template_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateResourceGroupRequest {
-    #[doc="<p>A collection of keys and an array of possible values, '[{\"key\":\"key1\",\"values\":[\"Value1\",\"Value2\"]},{\"key\":\"Key2\",\"values\":[\"Value3\"]}]'.</p> <p>For example,'[{\"key\":\"Name\",\"values\":[\"TestEC2Instance\"]}]'.</p>"]
-    #[serde(rename="resourceGroupTags")]
+    /// <p>A collection of keys and an array of possible values, '[{"key":"key1","values":["Value1","Value2"]},{"key":"Key2","values":["Value3"]}]'.</p> <p>For example,'[{"key":"Name","values":["TestEC2Instance"]}]'.</p>
+    #[serde(rename = "resourceGroupTags")]
     pub resource_group_tags: Vec<ResourceGroupTag>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateResourceGroupResponse {
-    #[doc="<p>The ARN that specifies the resource group that is created.</p>"]
-    #[serde(rename="resourceGroupArn")]
+    /// <p>The ARN that specifies the resource group that is created.</p>
+    #[serde(rename = "resourceGroupArn")]
     pub resource_group_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteAssessmentRunRequest {
-    #[doc="<p>The ARN that specifies the assessment run that you want to delete.</p>"]
-    #[serde(rename="assessmentRunArn")]
+    /// <p>The ARN that specifies the assessment run that you want to delete.</p>
+    #[serde(rename = "assessmentRunArn")]
     pub assessment_run_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteAssessmentTargetRequest {
-    #[doc="<p>The ARN that specifies the assessment target that you want to delete.</p>"]
-    #[serde(rename="assessmentTargetArn")]
+    /// <p>The ARN that specifies the assessment target that you want to delete.</p>
+    #[serde(rename = "assessmentTargetArn")]
     pub assessment_target_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteAssessmentTemplateRequest {
-    #[doc="<p>The ARN that specifies the assessment template that you want to delete.</p>"]
-    #[serde(rename="assessmentTemplateArn")]
+    /// <p>The ARN that specifies the assessment template that you want to delete.</p>
+    #[serde(rename = "assessmentTemplateArn")]
     pub assessment_template_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeAssessmentRunsRequest {
-    #[doc="<p>The ARN that specifies the assessment run that you want to describe.</p>"]
-    #[serde(rename="assessmentRunArns")]
+    /// <p>The ARN that specifies the assessment run that you want to describe.</p>
+    #[serde(rename = "assessmentRunArns")]
     pub assessment_run_arns: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeAssessmentRunsResponse {
-    #[doc="<p>Information about the assessment run.</p>"]
-    #[serde(rename="assessmentRuns")]
+    /// <p>Information about the assessment run.</p>
+    #[serde(rename = "assessmentRuns")]
     pub assessment_runs: Vec<AssessmentRun>,
-    #[doc="<p>Assessment run details that cannot be described. An error code is provided for each failed item.</p>"]
-    #[serde(rename="failedItems")]
+    /// <p>Assessment run details that cannot be described. An error code is provided for each failed item.</p>
+    #[serde(rename = "failedItems")]
     pub failed_items: ::std::collections::HashMap<String, FailedItemDetails>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeAssessmentTargetsRequest {
-    #[doc="<p>The ARNs that specifies the assessment targets that you want to describe.</p>"]
-    #[serde(rename="assessmentTargetArns")]
+    /// <p>The ARNs that specifies the assessment targets that you want to describe.</p>
+    #[serde(rename = "assessmentTargetArns")]
     pub assessment_target_arns: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeAssessmentTargetsResponse {
-    #[doc="<p>Information about the assessment targets.</p>"]
-    #[serde(rename="assessmentTargets")]
+    /// <p>Information about the assessment targets.</p>
+    #[serde(rename = "assessmentTargets")]
     pub assessment_targets: Vec<AssessmentTarget>,
-    #[doc="<p>Assessment target details that cannot be described. An error code is provided for each failed item.</p>"]
-    #[serde(rename="failedItems")]
+    /// <p>Assessment target details that cannot be described. An error code is provided for each failed item.</p>
+    #[serde(rename = "failedItems")]
     pub failed_items: ::std::collections::HashMap<String, FailedItemDetails>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeAssessmentTemplatesRequest {
-    #[serde(rename="assessmentTemplateArns")]
-    pub assessment_template_arns: Vec<String>,
+    #[serde(rename = "assessmentTemplateArns")] pub assessment_template_arns: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeAssessmentTemplatesResponse {
-    #[doc="<p>Information about the assessment templates.</p>"]
-    #[serde(rename="assessmentTemplates")]
+    /// <p>Information about the assessment templates.</p>
+    #[serde(rename = "assessmentTemplates")]
     pub assessment_templates: Vec<AssessmentTemplate>,
-    #[doc="<p>Assessment template details that cannot be described. An error code is provided for each failed item.</p>"]
-    #[serde(rename="failedItems")]
+    /// <p>Assessment template details that cannot be described. An error code is provided for each failed item.</p>
+    #[serde(rename = "failedItems")]
     pub failed_items: ::std::collections::HashMap<String, FailedItemDetails>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeCrossAccountAccessRoleResponse {
-    #[doc="<p>The date when the cross-account access role was registered.</p>"]
-    #[serde(rename="registeredAt")]
+    /// <p>The date when the cross-account access role was registered.</p>
+    #[serde(rename = "registeredAt")]
     pub registered_at: f64,
-    #[doc="<p>The ARN that specifies the IAM role that Amazon Inspector uses to access your AWS account.</p>"]
-    #[serde(rename="roleArn")]
+    /// <p>The ARN that specifies the IAM role that Amazon Inspector uses to access your AWS account.</p>
+    #[serde(rename = "roleArn")]
     pub role_arn: String,
-    #[doc="<p>A Boolean value that specifies whether the IAM role has the necessary policies attached to enable Amazon Inspector to access your AWS account.</p>"]
-    #[serde(rename="valid")]
+    /// <p>A Boolean value that specifies whether the IAM role has the necessary policies attached to enable Amazon Inspector to access your AWS account.</p>
+    #[serde(rename = "valid")]
     pub valid: bool,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeFindingsRequest {
-    #[doc="<p>The ARN that specifies the finding that you want to describe.</p>"]
-    #[serde(rename="findingArns")]
+    /// <p>The ARN that specifies the finding that you want to describe.</p>
+    #[serde(rename = "findingArns")]
     pub finding_arns: Vec<String>,
-    #[doc="<p>The locale into which you want to translate a finding description, recommendation, and the short description that identifies the finding.</p>"]
-    #[serde(rename="locale")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The locale into which you want to translate a finding description, recommendation, and the short description that identifies the finding.</p>
+    #[serde(rename = "locale")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub locale: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeFindingsResponse {
-    #[doc="<p>Finding details that cannot be described. An error code is provided for each failed item.</p>"]
-    #[serde(rename="failedItems")]
+    /// <p>Finding details that cannot be described. An error code is provided for each failed item.</p>
+    #[serde(rename = "failedItems")]
     pub failed_items: ::std::collections::HashMap<String, FailedItemDetails>,
-    #[doc="<p>Information about the finding.</p>"]
-    #[serde(rename="findings")]
+    /// <p>Information about the finding.</p>
+    #[serde(rename = "findings")]
     pub findings: Vec<Finding>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeResourceGroupsRequest {
-    #[doc="<p>The ARN that specifies the resource group that you want to describe.</p>"]
-    #[serde(rename="resourceGroupArns")]
+    /// <p>The ARN that specifies the resource group that you want to describe.</p>
+    #[serde(rename = "resourceGroupArns")]
     pub resource_group_arns: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeResourceGroupsResponse {
-    #[doc="<p>Resource group details that cannot be described. An error code is provided for each failed item.</p>"]
-    #[serde(rename="failedItems")]
+    /// <p>Resource group details that cannot be described. An error code is provided for each failed item.</p>
+    #[serde(rename = "failedItems")]
     pub failed_items: ::std::collections::HashMap<String, FailedItemDetails>,
-    #[doc="<p>Information about a resource group.</p>"]
-    #[serde(rename="resourceGroups")]
+    /// <p>Information about a resource group.</p>
+    #[serde(rename = "resourceGroups")]
     pub resource_groups: Vec<ResourceGroup>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeRulesPackagesRequest {
-    #[doc="<p>The locale that you want to translate a rules package description into.</p>"]
-    #[serde(rename="locale")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The locale that you want to translate a rules package description into.</p>
+    #[serde(rename = "locale")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub locale: Option<String>,
-    #[doc="<p>The ARN that specifies the rules package that you want to describe.</p>"]
-    #[serde(rename="rulesPackageArns")]
+    /// <p>The ARN that specifies the rules package that you want to describe.</p>
+    #[serde(rename = "rulesPackageArns")]
     pub rules_package_arns: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeRulesPackagesResponse {
-    #[doc="<p>Rules package details that cannot be described. An error code is provided for each failed item.</p>"]
-    #[serde(rename="failedItems")]
+    /// <p>Rules package details that cannot be described. An error code is provided for each failed item.</p>
+    #[serde(rename = "failedItems")]
     pub failed_items: ::std::collections::HashMap<String, FailedItemDetails>,
-    #[doc="<p>Information about the rules package.</p>"]
-    #[serde(rename="rulesPackages")]
+    /// <p>Information about the rules package.</p>
+    #[serde(rename = "rulesPackages")]
     pub rules_packages: Vec<RulesPackage>,
 }
 
-#[doc="<p>This data type is used in the <a>AssessmentTemplateFilter</a> data type.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>This data type is used in the <a>AssessmentTemplateFilter</a> data type.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DurationRange {
-    #[doc="<p>The maximum value of the duration range. Must be less than or equal to 604800 seconds (1 week).</p>"]
-    #[serde(rename="maxSeconds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum value of the duration range. Must be less than or equal to 604800 seconds (1 week).</p>
+    #[serde(rename = "maxSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_seconds: Option<i64>,
-    #[doc="<p>The minimum value of the duration range. Must be greater than zero.</p>"]
-    #[serde(rename="minSeconds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The minimum value of the duration range. Must be greater than zero.</p>
+    #[serde(rename = "minSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub min_seconds: Option<i64>,
 }
 
-#[doc="<p>This data type is used in the <a>Subscription</a> data type.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>This data type is used in the <a>Subscription</a> data type.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct EventSubscription {
-    #[doc="<p>The event for which Amazon Simple Notification Service (SNS) notifications are sent.</p>"]
-    #[serde(rename="event")]
+    /// <p>The event for which Amazon Simple Notification Service (SNS) notifications are sent.</p>
+    #[serde(rename = "event")]
     pub event: String,
-    #[doc="<p>The time at which <a>SubscribeToEvent</a> is called.</p>"]
-    #[serde(rename="subscribedAt")]
+    /// <p>The time at which <a>SubscribeToEvent</a> is called.</p>
+    #[serde(rename = "subscribedAt")]
     pub subscribed_at: f64,
 }
 
-#[doc="<p>Includes details about the failed items.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Includes details about the failed items.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct FailedItemDetails {
-    #[doc="<p>The status code of a failed item.</p>"]
-    #[serde(rename="failureCode")]
+    /// <p>The status code of a failed item.</p>
+    #[serde(rename = "failureCode")]
     pub failure_code: String,
-    #[doc="<p>Indicates whether you can immediately retry a request for this item for a specified resource.</p>"]
-    #[serde(rename="retryable")]
+    /// <p>Indicates whether you can immediately retry a request for this item for a specified resource.</p>
+    #[serde(rename = "retryable")]
     pub retryable: bool,
 }
 
-#[doc="<p>Contains information about an Amazon Inspector finding. This data type is used as the response element in the <a>DescribeFindings</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains information about an Amazon Inspector finding. This data type is used as the response element in the <a>DescribeFindings</a> action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Finding {
-    #[doc="<p>The ARN that specifies the finding.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The ARN that specifies the finding.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
-    #[doc="<p>A collection of attributes of the host from which the finding is generated.</p>"]
-    #[serde(rename="assetAttributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A collection of attributes of the host from which the finding is generated.</p>
+    #[serde(rename = "assetAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub asset_attributes: Option<AssetAttributes>,
-    #[doc="<p>The type of the host from which the finding is generated.</p>"]
-    #[serde(rename="assetType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of the host from which the finding is generated.</p>
+    #[serde(rename = "assetType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub asset_type: Option<String>,
-    #[doc="<p>The system-defined attributes for the finding.</p>"]
-    #[serde(rename="attributes")]
+    /// <p>The system-defined attributes for the finding.</p>
+    #[serde(rename = "attributes")]
     pub attributes: Vec<Attribute>,
-    #[doc="<p>This data element is currently not used.</p>"]
-    #[serde(rename="confidence")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>This data element is currently not used.</p>
+    #[serde(rename = "confidence")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub confidence: Option<i64>,
-    #[doc="<p>The time when the finding was generated.</p>"]
-    #[serde(rename="createdAt")]
+    /// <p>The time when the finding was generated.</p>
+    #[serde(rename = "createdAt")]
     pub created_at: f64,
-    #[doc="<p>The description of the finding.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The description of the finding.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The ID of the finding.</p>"]
-    #[serde(rename="id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the finding.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>This data element is currently not used.</p>"]
-    #[serde(rename="indicatorOfCompromise")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>This data element is currently not used.</p>
+    #[serde(rename = "indicatorOfCompromise")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub indicator_of_compromise: Option<bool>,
-    #[doc="<p>The numeric value of the finding severity.</p>"]
-    #[serde(rename="numericSeverity")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The numeric value of the finding severity.</p>
+    #[serde(rename = "numericSeverity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub numeric_severity: Option<f64>,
-    #[doc="<p>The recommendation for the finding.</p>"]
-    #[serde(rename="recommendation")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The recommendation for the finding.</p>
+    #[serde(rename = "recommendation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub recommendation: Option<String>,
-    #[doc="<p>The schema version of this data type.</p>"]
-    #[serde(rename="schemaVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The schema version of this data type.</p>
+    #[serde(rename = "schemaVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schema_version: Option<i64>,
-    #[doc="<p>The data element is set to \"Inspector\".</p>"]
-    #[serde(rename="service")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The data element is set to "Inspector".</p>
+    #[serde(rename = "service")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub service: Option<String>,
-    #[doc="<p>This data type is used in the <a>Finding</a> data type.</p>"]
-    #[serde(rename="serviceAttributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>This data type is used in the <a>Finding</a> data type.</p>
+    #[serde(rename = "serviceAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub service_attributes: Option<InspectorServiceAttributes>,
-    #[doc="<p>The finding severity. Values can be set to High, Medium, Low, and Informational.</p>"]
-    #[serde(rename="severity")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The finding severity. Values can be set to High, Medium, Low, and Informational.</p>
+    #[serde(rename = "severity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub severity: Option<String>,
-    #[doc="<p>The name of the finding.</p>"]
-    #[serde(rename="title")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the finding.</p>
+    #[serde(rename = "title")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
-    #[doc="<p>The time when <a>AddAttributesToFindings</a> is called.</p>"]
-    #[serde(rename="updatedAt")]
+    /// <p>The time when <a>AddAttributesToFindings</a> is called.</p>
+    #[serde(rename = "updatedAt")]
     pub updated_at: f64,
-    #[doc="<p>The user-defined attributes that are assigned to the finding.</p>"]
-    #[serde(rename="userAttributes")]
+    /// <p>The user-defined attributes that are assigned to the finding.</p>
+    #[serde(rename = "userAttributes")]
     pub user_attributes: Vec<Attribute>,
 }
 
-#[doc="<p>This data type is used as a request parameter in the <a>ListFindings</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>This data type is used as a request parameter in the <a>ListFindings</a> action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct FindingFilter {
-    #[doc="<p>For a record to match a filter, one of the values that is specified for this data type property must be the exact match of the value of the <b>agentId</b> property of the <a>Finding</a> data type.</p>"]
-    #[serde(rename="agentIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For a record to match a filter, one of the values that is specified for this data type property must be the exact match of the value of the <b>agentId</b> property of the <a>Finding</a> data type.</p>
+    #[serde(rename = "agentIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub agent_ids: Option<Vec<String>>,
-    #[doc="<p>For a record to match a filter, the list of values that are specified for this data type property must be contained in the list of values of the <b>attributes</b> property of the <a>Finding</a> data type.</p>"]
-    #[serde(rename="attributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For a record to match a filter, the list of values that are specified for this data type property must be contained in the list of values of the <b>attributes</b> property of the <a>Finding</a> data type.</p>
+    #[serde(rename = "attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub attributes: Option<Vec<Attribute>>,
-    #[doc="<p>For a record to match a filter, one of the values that is specified for this data type property must be the exact match of the value of the <b>autoScalingGroup</b> property of the <a>Finding</a> data type.</p>"]
-    #[serde(rename="autoScalingGroups")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For a record to match a filter, one of the values that is specified for this data type property must be the exact match of the value of the <b>autoScalingGroup</b> property of the <a>Finding</a> data type.</p>
+    #[serde(rename = "autoScalingGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_scaling_groups: Option<Vec<String>>,
-    #[doc="<p>The time range during which the finding is generated.</p>"]
-    #[serde(rename="creationTimeRange")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time range during which the finding is generated.</p>
+    #[serde(rename = "creationTimeRange")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time_range: Option<TimestampRange>,
-    #[doc="<p>For a record to match a filter, one of the values that is specified for this data type property must be the exact match of the value of the <b>ruleName</b> property of the <a>Finding</a> data type.</p>"]
-    #[serde(rename="ruleNames")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For a record to match a filter, one of the values that is specified for this data type property must be the exact match of the value of the <b>ruleName</b> property of the <a>Finding</a> data type.</p>
+    #[serde(rename = "ruleNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rule_names: Option<Vec<String>>,
-    #[doc="<p>For a record to match a filter, one of the values that is specified for this data type property must be the exact match of the value of the <b>rulesPackageArn</b> property of the <a>Finding</a> data type.</p>"]
-    #[serde(rename="rulesPackageArns")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For a record to match a filter, one of the values that is specified for this data type property must be the exact match of the value of the <b>rulesPackageArn</b> property of the <a>Finding</a> data type.</p>
+    #[serde(rename = "rulesPackageArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rules_package_arns: Option<Vec<String>>,
-    #[doc="<p>For a record to match a filter, one of the values that is specified for this data type property must be the exact match of the value of the <b>severity</b> property of the <a>Finding</a> data type.</p>"]
-    #[serde(rename="severities")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For a record to match a filter, one of the values that is specified for this data type property must be the exact match of the value of the <b>severity</b> property of the <a>Finding</a> data type.</p>
+    #[serde(rename = "severities")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub severities: Option<Vec<String>>,
-    #[doc="<p>For a record to match a filter, the value that is specified for this data type property must be contained in the list of values of the <b>userAttributes</b> property of the <a>Finding</a> data type.</p>"]
-    #[serde(rename="userAttributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For a record to match a filter, the value that is specified for this data type property must be contained in the list of values of the <b>userAttributes</b> property of the <a>Finding</a> data type.</p>
+    #[serde(rename = "userAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_attributes: Option<Vec<Attribute>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetAssessmentReportRequest {
-    #[doc="<p>The ARN that specifies the assessment run for which you want to generate a report.</p>"]
-    #[serde(rename="assessmentRunArn")]
+    /// <p>The ARN that specifies the assessment run for which you want to generate a report.</p>
+    #[serde(rename = "assessmentRunArn")]
     pub assessment_run_arn: String,
-    #[doc="<p>Specifies the file format (html or pdf) of the assessment report that you want to generate.</p>"]
-    #[serde(rename="reportFileFormat")]
+    /// <p>Specifies the file format (html or pdf) of the assessment report that you want to generate.</p>
+    #[serde(rename = "reportFileFormat")]
     pub report_file_format: String,
-    #[doc="<p>Specifies the type of the assessment report that you want to generate. There are two types of assessment reports: a finding report and a full report. For more information, see <a href=\"http://docs.aws.amazon.com/inspector/latest/userguide/inspector_reports.html\">Assessment Reports</a>. </p>"]
-    #[serde(rename="reportType")]
+    /// <p>Specifies the type of the assessment report that you want to generate. There are two types of assessment reports: a finding report and a full report. For more information, see <a href="http://docs.aws.amazon.com/inspector/latest/userguide/inspector_reports.html">Assessment Reports</a>. </p>
+    #[serde(rename = "reportType")]
     pub report_type: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetAssessmentReportResponse {
-    #[doc="<p>Specifies the status of the request to generate an assessment report. </p>"]
-    #[serde(rename="status")]
+    /// <p>Specifies the status of the request to generate an assessment report. </p>
+    #[serde(rename = "status")]
     pub status: String,
-    #[doc="<p>Specifies the URL where you can find the generated assessment report. This parameter is only returned if the report is successfully generated.</p>"]
-    #[serde(rename="url")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies the URL where you can find the generated assessment report. This parameter is only returned if the report is successfully generated.</p>
+    #[serde(rename = "url")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetTelemetryMetadataRequest {
-    #[doc="<p>The ARN that specifies the assessment run that has the telemetry data that you want to obtain.</p>"]
-    #[serde(rename="assessmentRunArn")]
+    /// <p>The ARN that specifies the assessment run that has the telemetry data that you want to obtain.</p>
+    #[serde(rename = "assessmentRunArn")]
     pub assessment_run_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetTelemetryMetadataResponse {
-    #[doc="<p>Telemetry details.</p>"]
-    #[serde(rename="telemetryMetadata")]
+    /// <p>Telemetry details.</p>
+    #[serde(rename = "telemetryMetadata")]
     pub telemetry_metadata: Vec<TelemetryMetadata>,
 }
 
-#[doc="<p>This data type is used in the <a>Finding</a> data type.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>This data type is used in the <a>Finding</a> data type.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct InspectorServiceAttributes {
-    #[doc="<p>The ARN of the assessment run during which the finding is generated.</p>"]
-    #[serde(rename="assessmentRunArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the assessment run during which the finding is generated.</p>
+    #[serde(rename = "assessmentRunArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub assessment_run_arn: Option<String>,
-    #[doc="<p>The ARN of the rules package that is used to generate the finding.</p>"]
-    #[serde(rename="rulesPackageArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the rules package that is used to generate the finding.</p>
+    #[serde(rename = "rulesPackageArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rules_package_arn: Option<String>,
-    #[doc="<p>The schema version of this data type.</p>"]
-    #[serde(rename="schemaVersion")]
+    /// <p>The schema version of this data type.</p>
+    #[serde(rename = "schemaVersion")]
     pub schema_version: i64,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListAssessmentRunAgentsRequest {
-    #[doc="<p>The ARN that specifies the assessment run whose agents you want to list.</p>"]
-    #[serde(rename="assessmentRunArn")]
+    /// <p>The ARN that specifies the assessment run whose agents you want to list.</p>
+    #[serde(rename = "assessmentRunArn")]
     pub assessment_run_arn: String,
-    #[doc="<p>You can use this parameter to specify a subset of data to be included in the action's response.</p> <p>For a record to match a filter, all specified filter attributes must match. When multiple values are specified for a filter attribute, any of the values can match.</p>"]
-    #[serde(rename="filter")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>You can use this parameter to specify a subset of data to be included in the action's response.</p> <p>For a record to match a filter, all specified filter attributes must match. When multiple values are specified for a filter attribute, any of the values can match.</p>
+    #[serde(rename = "filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<AgentFilter>,
-    #[doc="<p>You can use this parameter to indicate the maximum number of items that you want in the response. The default value is 10. The maximum value is 500.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>You can use this parameter to indicate the maximum number of items that you want in the response. The default value is 10. The maximum value is 500.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the <b>ListAssessmentRunAgents</b> action. Subsequent calls to the action fill <b>nextToken</b> in the request with the value of <b>NextToken</b> from the previous response to continue listing data.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the <b>ListAssessmentRunAgents</b> action. Subsequent calls to the action fill <b>nextToken</b> in the request with the value of <b>NextToken</b> from the previous response to continue listing data.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListAssessmentRunAgentsResponse {
-    #[doc="<p>A list of ARNs that specifies the agents returned by the action.</p>"]
-    #[serde(rename="assessmentRunAgents")]
+    /// <p>A list of ARNs that specifies the agents returned by the action.</p>
+    #[serde(rename = "assessmentRunAgents")]
     pub assessment_run_agents: Vec<AssessmentRunAgent>,
-    #[doc="<p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListAssessmentRunsRequest {
-    #[doc="<p>The ARNs that specify the assessment templates whose assessment runs you want to list.</p>"]
-    #[serde(rename="assessmentTemplateArns")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARNs that specify the assessment templates whose assessment runs you want to list.</p>
+    #[serde(rename = "assessmentTemplateArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub assessment_template_arns: Option<Vec<String>>,
-    #[doc="<p>You can use this parameter to specify a subset of data to be included in the action's response.</p> <p>For a record to match a filter, all specified filter attributes must match. When multiple values are specified for a filter attribute, any of the values can match.</p>"]
-    #[serde(rename="filter")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>You can use this parameter to specify a subset of data to be included in the action's response.</p> <p>For a record to match a filter, all specified filter attributes must match. When multiple values are specified for a filter attribute, any of the values can match.</p>
+    #[serde(rename = "filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<AssessmentRunFilter>,
-    #[doc="<p>You can use this parameter to indicate the maximum number of items that you want in the response. The default value is 10. The maximum value is 500.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>You can use this parameter to indicate the maximum number of items that you want in the response. The default value is 10. The maximum value is 500.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the <b>ListAssessmentRuns</b> action. Subsequent calls to the action fill <b>nextToken</b> in the request with the value of <b>NextToken</b> from the previous response to continue listing data.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the <b>ListAssessmentRuns</b> action. Subsequent calls to the action fill <b>nextToken</b> in the request with the value of <b>NextToken</b> from the previous response to continue listing data.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListAssessmentRunsResponse {
-    #[doc="<p>A list of ARNs that specifies the assessment runs that are returned by the action.</p>"]
-    #[serde(rename="assessmentRunArns")]
+    /// <p>A list of ARNs that specifies the assessment runs that are returned by the action.</p>
+    #[serde(rename = "assessmentRunArns")]
     pub assessment_run_arns: Vec<String>,
-    #[doc="<p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListAssessmentTargetsRequest {
-    #[doc="<p>You can use this parameter to specify a subset of data to be included in the action's response.</p> <p>For a record to match a filter, all specified filter attributes must match. When multiple values are specified for a filter attribute, any of the values can match.</p>"]
-    #[serde(rename="filter")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>You can use this parameter to specify a subset of data to be included in the action's response.</p> <p>For a record to match a filter, all specified filter attributes must match. When multiple values are specified for a filter attribute, any of the values can match.</p>
+    #[serde(rename = "filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<AssessmentTargetFilter>,
-    #[doc="<p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the <b>ListAssessmentTargets</b> action. Subsequent calls to the action fill <b>nextToken</b> in the request with the value of <b>NextToken</b> from the previous response to continue listing data.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the <b>ListAssessmentTargets</b> action. Subsequent calls to the action fill <b>nextToken</b> in the request with the value of <b>NextToken</b> from the previous response to continue listing data.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListAssessmentTargetsResponse {
-    #[doc="<p>A list of ARNs that specifies the assessment targets that are returned by the action.</p>"]
-    #[serde(rename="assessmentTargetArns")]
+    /// <p>A list of ARNs that specifies the assessment targets that are returned by the action.</p>
+    #[serde(rename = "assessmentTargetArns")]
     pub assessment_target_arns: Vec<String>,
-    #[doc="<p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListAssessmentTemplatesRequest {
-    #[doc="<p>A list of ARNs that specifies the assessment targets whose assessment templates you want to list.</p>"]
-    #[serde(rename="assessmentTargetArns")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of ARNs that specifies the assessment targets whose assessment templates you want to list.</p>
+    #[serde(rename = "assessmentTargetArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub assessment_target_arns: Option<Vec<String>>,
-    #[doc="<p>You can use this parameter to specify a subset of data to be included in the action's response.</p> <p>For a record to match a filter, all specified filter attributes must match. When multiple values are specified for a filter attribute, any of the values can match.</p>"]
-    #[serde(rename="filter")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>You can use this parameter to specify a subset of data to be included in the action's response.</p> <p>For a record to match a filter, all specified filter attributes must match. When multiple values are specified for a filter attribute, any of the values can match.</p>
+    #[serde(rename = "filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<AssessmentTemplateFilter>,
-    #[doc="<p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the <b>ListAssessmentTemplates</b> action. Subsequent calls to the action fill <b>nextToken</b> in the request with the value of <b>NextToken</b> from the previous response to continue listing data.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the <b>ListAssessmentTemplates</b> action. Subsequent calls to the action fill <b>nextToken</b> in the request with the value of <b>NextToken</b> from the previous response to continue listing data.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListAssessmentTemplatesResponse {
-    #[doc="<p>A list of ARNs that specifies the assessment templates returned by the action.</p>"]
-    #[serde(rename="assessmentTemplateArns")]
+    /// <p>A list of ARNs that specifies the assessment templates returned by the action.</p>
+    #[serde(rename = "assessmentTemplateArns")]
     pub assessment_template_arns: Vec<String>,
-    #[doc="<p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListEventSubscriptionsRequest {
-    #[doc="<p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the <b>ListEventSubscriptions</b> action. Subsequent calls to the action fill <b>nextToken</b> in the request with the value of <b>NextToken</b> from the previous response to continue listing data.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the <b>ListEventSubscriptions</b> action. Subsequent calls to the action fill <b>nextToken</b> in the request with the value of <b>NextToken</b> from the previous response to continue listing data.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The ARN of the assessment template for which you want to list the existing event subscriptions.</p>"]
-    #[serde(rename="resourceArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the assessment template for which you want to list the existing event subscriptions.</p>
+    #[serde(rename = "resourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListEventSubscriptionsResponse {
-    #[doc="<p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Details of the returned event subscriptions.</p>"]
-    #[serde(rename="subscriptions")]
+    /// <p>Details of the returned event subscriptions.</p>
+    #[serde(rename = "subscriptions")]
     pub subscriptions: Vec<Subscription>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListFindingsRequest {
-    #[doc="<p>The ARNs of the assessment runs that generate the findings that you want to list.</p>"]
-    #[serde(rename="assessmentRunArns")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARNs of the assessment runs that generate the findings that you want to list.</p>
+    #[serde(rename = "assessmentRunArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub assessment_run_arns: Option<Vec<String>>,
-    #[doc="<p>You can use this parameter to specify a subset of data to be included in the action's response.</p> <p>For a record to match a filter, all specified filter attributes must match. When multiple values are specified for a filter attribute, any of the values can match.</p>"]
-    #[serde(rename="filter")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>You can use this parameter to specify a subset of data to be included in the action's response.</p> <p>For a record to match a filter, all specified filter attributes must match. When multiple values are specified for a filter attribute, any of the values can match.</p>
+    #[serde(rename = "filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<FindingFilter>,
-    #[doc="<p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the <b>ListFindings</b> action. Subsequent calls to the action fill <b>nextToken</b> in the request with the value of <b>NextToken</b> from the previous response to continue listing data.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the <b>ListFindings</b> action. Subsequent calls to the action fill <b>nextToken</b> in the request with the value of <b>NextToken</b> from the previous response to continue listing data.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListFindingsResponse {
-    #[doc="<p>A list of ARNs that specifies the findings returned by the action.</p>"]
-    #[serde(rename="findingArns")]
+    /// <p>A list of ARNs that specifies the findings returned by the action.</p>
+    #[serde(rename = "findingArns")]
     pub finding_arns: Vec<String>,
-    #[doc="<p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListRulesPackagesRequest {
-    #[doc="<p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the <b>ListRulesPackages</b> action. Subsequent calls to the action fill <b>nextToken</b> in the request with the value of <b>NextToken</b> from the previous response to continue listing data.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the <b>ListRulesPackages</b> action. Subsequent calls to the action fill <b>nextToken</b> in the request with the value of <b>NextToken</b> from the previous response to continue listing data.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListRulesPackagesResponse {
-    #[doc="<p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The list of ARNs that specifies the rules packages returned by the action.</p>"]
-    #[serde(rename="rulesPackageArns")]
+    /// <p>The list of ARNs that specifies the rules packages returned by the action.</p>
+    #[serde(rename = "rulesPackageArns")]
     pub rules_package_arns: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListTagsForResourceRequest {
-    #[doc="<p>The ARN that specifies the assessment template whose tags you want to list.</p>"]
-    #[serde(rename="resourceArn")]
+    /// <p>The ARN that specifies the assessment template whose tags you want to list.</p>
+    #[serde(rename = "resourceArn")]
     pub resource_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListTagsForResourceResponse {
-    #[doc="<p>A collection of key and value pairs.</p>"]
-    #[serde(rename="tags")]
+    /// <p>A collection of key and value pairs.</p>
+    #[serde(rename = "tags")]
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct PreviewAgentsRequest {
-    #[doc="<p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the <b>PreviewAgents</b> action. Subsequent calls to the action fill <b>nextToken</b> in the request with the value of <b>NextToken</b> from the previous response to continue listing data.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the <b>PreviewAgents</b> action. Subsequent calls to the action fill <b>nextToken</b> in the request with the value of <b>NextToken</b> from the previous response to continue listing data.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The ARN of the assessment target whose agents you want to preview.</p>"]
-    #[serde(rename="previewAgentsArn")]
+    /// <p>The ARN of the assessment target whose agents you want to preview.</p>
+    #[serde(rename = "previewAgentsArn")]
     pub preview_agents_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PreviewAgentsResponse {
-    #[doc="<p>The resulting list of agents.</p>"]
-    #[serde(rename="agentPreviews")]
+    /// <p>The resulting list of agents.</p>
+    #[serde(rename = "agentPreviews")]
     pub agent_previews: Vec<AgentPreview>,
-    #[doc="<p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct RegisterCrossAccountAccessRoleRequest {
-    #[doc="<p>The ARN of the IAM role that Amazon Inspector uses to list your EC2 instances during the assessment run or when you call the <a>PreviewAgents</a> action. </p>"]
-    #[serde(rename="roleArn")]
+    /// <p>The ARN of the IAM role that Amazon Inspector uses to list your EC2 instances during the assessment run or when you call the <a>PreviewAgents</a> action. </p>
+    #[serde(rename = "roleArn")]
     pub role_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct RemoveAttributesFromFindingsRequest {
-    #[doc="<p>The array of attribute keys that you want to remove from specified findings.</p>"]
-    #[serde(rename="attributeKeys")]
+    /// <p>The array of attribute keys that you want to remove from specified findings.</p>
+    #[serde(rename = "attributeKeys")]
     pub attribute_keys: Vec<String>,
-    #[doc="<p>The ARNs that specify the findings that you want to remove attributes from.</p>"]
-    #[serde(rename="findingArns")]
+    /// <p>The ARNs that specify the findings that you want to remove attributes from.</p>
+    #[serde(rename = "findingArns")]
     pub finding_arns: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RemoveAttributesFromFindingsResponse {
-    #[doc="<p>Attributes details that cannot be described. An error code is provided for each failed item.</p>"]
-    #[serde(rename="failedItems")]
+    /// <p>Attributes details that cannot be described. An error code is provided for each failed item.</p>
+    #[serde(rename = "failedItems")]
     pub failed_items: ::std::collections::HashMap<String, FailedItemDetails>,
 }
 
-#[doc="<p>Contains information about a resource group. The resource group defines a set of tags that, when queried, identify the AWS resources that make up the assessment target. This data type is used as the response element in the <a>DescribeResourceGroups</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains information about a resource group. The resource group defines a set of tags that, when queried, identify the AWS resources that make up the assessment target. This data type is used as the response element in the <a>DescribeResourceGroups</a> action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ResourceGroup {
-    #[doc="<p>The ARN of the resource group.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The ARN of the resource group.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
-    #[doc="<p>The time at which resource group is created.</p>"]
-    #[serde(rename="createdAt")]
+    /// <p>The time at which resource group is created.</p>
+    #[serde(rename = "createdAt")]
     pub created_at: f64,
-    #[doc="<p>The tags (key and value pairs) of the resource group. This data type property is used in the <a>CreateResourceGroup</a> action.</p>"]
-    #[serde(rename="tags")]
+    /// <p>The tags (key and value pairs) of the resource group. This data type property is used in the <a>CreateResourceGroup</a> action.</p>
+    #[serde(rename = "tags")]
     pub tags: Vec<ResourceGroupTag>,
 }
 
-#[doc="<p>This data type is used as one of the elements of the <a>ResourceGroup</a> data type.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>This data type is used as one of the elements of the <a>ResourceGroup</a> data type.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ResourceGroupTag {
-    #[doc="<p>A tag key.</p>"]
-    #[serde(rename="key")]
+    /// <p>A tag key.</p>
+    #[serde(rename = "key")]
     pub key: String,
-    #[doc="<p>The value assigned to a tag key.</p>"]
-    #[serde(rename="value")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The value assigned to a tag key.</p>
+    #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
-#[doc="<p>Contains information about an Amazon Inspector rules package. This data type is used as the response element in the <a>DescribeRulesPackages</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains information about an Amazon Inspector rules package. This data type is used as the response element in the <a>DescribeRulesPackages</a> action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RulesPackage {
-    #[doc="<p>The ARN of the rules package.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The ARN of the rules package.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
-    #[doc="<p>The description of the rules package.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The description of the rules package.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The name of the rules package.</p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the rules package.</p>
+    #[serde(rename = "name")]
     pub name: String,
-    #[doc="<p>The provider of the rules package.</p>"]
-    #[serde(rename="provider")]
+    /// <p>The provider of the rules package.</p>
+    #[serde(rename = "provider")]
     pub provider: String,
-    #[doc="<p>The version ID of the rules package.</p>"]
-    #[serde(rename="version")]
+    /// <p>The version ID of the rules package.</p>
+    #[serde(rename = "version")]
     pub version: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct SetTagsForResourceRequest {
-    #[doc="<p>The ARN of the assessment template that you want to set tags to.</p>"]
-    #[serde(rename="resourceArn")]
+    /// <p>The ARN of the assessment template that you want to set tags to.</p>
+    #[serde(rename = "resourceArn")]
     pub resource_arn: String,
-    #[doc="<p>A collection of key and value pairs that you want to set to the assessment template.</p>"]
-    #[serde(rename="tags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A collection of key and value pairs that you want to set to the assessment template.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StartAssessmentRunRequest {
-    #[doc="<p>You can specify the name for the assessment run. The name must be unique for the assessment template whose ARN is used to start the assessment run.</p>"]
-    #[serde(rename="assessmentRunName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>You can specify the name for the assessment run. The name must be unique for the assessment template whose ARN is used to start the assessment run.</p>
+    #[serde(rename = "assessmentRunName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub assessment_run_name: Option<String>,
-    #[doc="<p>The ARN of the assessment template of the assessment run that you want to start.</p>"]
-    #[serde(rename="assessmentTemplateArn")]
+    /// <p>The ARN of the assessment template of the assessment run that you want to start.</p>
+    #[serde(rename = "assessmentTemplateArn")]
     pub assessment_template_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StartAssessmentRunResponse {
-    #[doc="<p>The ARN of the assessment run that has been started.</p>"]
-    #[serde(rename="assessmentRunArn")]
+    /// <p>The ARN of the assessment run that has been started.</p>
+    #[serde(rename = "assessmentRunArn")]
     pub assessment_run_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StopAssessmentRunRequest {
-    #[doc="<p>The ARN of the assessment run that you want to stop.</p>"]
-    #[serde(rename="assessmentRunArn")]
+    /// <p>The ARN of the assessment run that you want to stop.</p>
+    #[serde(rename = "assessmentRunArn")]
     pub assessment_run_arn: String,
-    #[doc="<p>An input option that can be set to either START_EVALUATION or SKIP_EVALUATION. START_EVALUATION (the default value), stops the AWS agent from collecting data and begins the results evaluation and the findings generation process. SKIP_EVALUATION cancels the assessment run immediately, after which no findings are generated.</p>"]
-    #[serde(rename="stopAction")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An input option that can be set to either START_EVALUATION or SKIP_EVALUATION. START_EVALUATION (the default value), stops the AWS agent from collecting data and begins the results evaluation and the findings generation process. SKIP_EVALUATION cancels the assessment run immediately, after which no findings are generated.</p>
+    #[serde(rename = "stopAction")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub stop_action: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct SubscribeToEventRequest {
-    #[doc="<p>The event for which you want to receive SNS notifications.</p>"]
-    #[serde(rename="event")]
+    /// <p>The event for which you want to receive SNS notifications.</p>
+    #[serde(rename = "event")]
     pub event: String,
-    #[doc="<p>The ARN of the assessment template that is used during the event for which you want to receive SNS notifications.</p>"]
-    #[serde(rename="resourceArn")]
+    /// <p>The ARN of the assessment template that is used during the event for which you want to receive SNS notifications.</p>
+    #[serde(rename = "resourceArn")]
     pub resource_arn: String,
-    #[doc="<p>The ARN of the SNS topic to which the SNS notifications are sent.</p>"]
-    #[serde(rename="topicArn")]
+    /// <p>The ARN of the SNS topic to which the SNS notifications are sent.</p>
+    #[serde(rename = "topicArn")]
     pub topic_arn: String,
 }
 
-#[doc="<p>This data type is used as a response element in the <a>ListEventSubscriptions</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>This data type is used as a response element in the <a>ListEventSubscriptions</a> action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Subscription {
-    #[doc="<p>The list of existing event subscriptions.</p>"]
-    #[serde(rename="eventSubscriptions")]
+    /// <p>The list of existing event subscriptions.</p>
+    #[serde(rename = "eventSubscriptions")]
     pub event_subscriptions: Vec<EventSubscription>,
-    #[doc="<p>The ARN of the assessment template that is used during the event for which the SNS notification is sent.</p>"]
-    #[serde(rename="resourceArn")]
+    /// <p>The ARN of the assessment template that is used during the event for which the SNS notification is sent.</p>
+    #[serde(rename = "resourceArn")]
     pub resource_arn: String,
-    #[doc="<p>The ARN of the Amazon Simple Notification Service (SNS) topic to which the SNS notifications are sent.</p>"]
-    #[serde(rename="topicArn")]
+    /// <p>The ARN of the Amazon Simple Notification Service (SNS) topic to which the SNS notifications are sent.</p>
+    #[serde(rename = "topicArn")]
     pub topic_arn: String,
 }
 
-#[doc="<p>A key and value pair. This data type is used as a request parameter in the <a>SetTagsForResource</a> action and a response element in the <a>ListTagsForResource</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>A key and value pair. This data type is used as a request parameter in the <a>SetTagsForResource</a> action and a response element in the <a>ListTagsForResource</a> action.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Tag {
-    #[doc="<p>A tag key.</p>"]
-    #[serde(rename="key")]
+    /// <p>A tag key.</p>
+    #[serde(rename = "key")]
     pub key: String,
-    #[doc="<p>A value assigned to a tag key.</p>"]
-    #[serde(rename="value")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A value assigned to a tag key.</p>
+    #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
-#[doc="<p>The metadata about the Amazon Inspector application data metrics collected by the agent. This data type is used as the response element in the <a>GetTelemetryMetadata</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The metadata about the Amazon Inspector application data metrics collected by the agent. This data type is used as the response element in the <a>GetTelemetryMetadata</a> action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct TelemetryMetadata {
-    #[doc="<p>The count of messages that the agent sends to the Amazon Inspector service.</p>"]
-    #[serde(rename="count")]
+    /// <p>The count of messages that the agent sends to the Amazon Inspector service.</p>
+    #[serde(rename = "count")]
     pub count: i64,
-    #[doc="<p>The data size of messages that the agent sends to the Amazon Inspector service.</p>"]
-    #[serde(rename="dataSize")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The data size of messages that the agent sends to the Amazon Inspector service.</p>
+    #[serde(rename = "dataSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub data_size: Option<i64>,
-    #[doc="<p>A specific type of behavioral data that is collected by the agent.</p>"]
-    #[serde(rename="messageType")]
+    /// <p>A specific type of behavioral data that is collected by the agent.</p>
+    #[serde(rename = "messageType")]
     pub message_type: String,
 }
 
-#[doc="<p>This data type is used in the <a>AssessmentRunFilter</a> data type.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>This data type is used in the <a>AssessmentRunFilter</a> data type.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct TimestampRange {
-    #[doc="<p>The minimum value of the timestamp range.</p>"]
-    #[serde(rename="beginDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The minimum value of the timestamp range.</p>
+    #[serde(rename = "beginDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub begin_date: Option<f64>,
-    #[doc="<p>The maximum value of the timestamp range.</p>"]
-    #[serde(rename="endDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum value of the timestamp range.</p>
+    #[serde(rename = "endDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub end_date: Option<f64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UnsubscribeFromEventRequest {
-    #[doc="<p>The event for which you want to stop receiving SNS notifications.</p>"]
-    #[serde(rename="event")]
+    /// <p>The event for which you want to stop receiving SNS notifications.</p>
+    #[serde(rename = "event")]
     pub event: String,
-    #[doc="<p>The ARN of the assessment template that is used during the event for which you want to stop receiving SNS notifications.</p>"]
-    #[serde(rename="resourceArn")]
+    /// <p>The ARN of the assessment template that is used during the event for which you want to stop receiving SNS notifications.</p>
+    #[serde(rename = "resourceArn")]
     pub resource_arn: String,
-    #[doc="<p>The ARN of the SNS topic to which SNS notifications are sent.</p>"]
-    #[serde(rename="topicArn")]
+    /// <p>The ARN of the SNS topic to which SNS notifications are sent.</p>
+    #[serde(rename = "topicArn")]
     pub topic_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateAssessmentTargetRequest {
-    #[doc="<p>The ARN of the assessment target that you want to update.</p>"]
-    #[serde(rename="assessmentTargetArn")]
+    /// <p>The ARN of the assessment target that you want to update.</p>
+    #[serde(rename = "assessmentTargetArn")]
     pub assessment_target_arn: String,
-    #[doc="<p>The name of the assessment target that you want to update.</p>"]
-    #[serde(rename="assessmentTargetName")]
+    /// <p>The name of the assessment target that you want to update.</p>
+    #[serde(rename = "assessmentTargetName")]
     pub assessment_target_name: String,
-    #[doc="<p>The ARN of the resource group that is used to specify the new resource group to associate with the assessment target.</p>"]
-    #[serde(rename="resourceGroupArn")]
+    /// <p>The ARN of the resource group that is used to specify the new resource group to associate with the assessment target.</p>
+    #[serde(rename = "resourceGroupArn")]
     pub resource_group_arn: String,
 }
 
@@ -1202,7 +1200,6 @@ pub enum AddAttributesToFindingsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl AddAttributesToFindingsError {
     pub fn from_body(body: &str) -> AddAttributesToFindingsError {
@@ -1303,7 +1300,6 @@ pub enum CreateAssessmentTargetError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateAssessmentTargetError {
     pub fn from_body(body: &str) -> CreateAssessmentTargetError {
@@ -1409,7 +1405,6 @@ pub enum CreateAssessmentTemplateError {
     Unknown(String),
 }
 
-
 impl CreateAssessmentTemplateError {
     pub fn from_body(body: &str) -> CreateAssessmentTemplateError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1512,7 +1507,6 @@ pub enum CreateResourceGroupError {
     Unknown(String),
 }
 
-
 impl CreateResourceGroupError {
     pub fn from_body(body: &str) -> CreateResourceGroupError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1613,7 +1607,6 @@ pub enum DeleteAssessmentRunError {
     Unknown(String),
 }
 
-
 impl DeleteAssessmentRunError {
     pub fn from_body(body: &str) -> DeleteAssessmentRunError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1630,7 +1623,11 @@ impl DeleteAssessmentRunError {
                     "AccessDeniedException" => {
                         DeleteAssessmentRunError::AccessDenied(String::from(error_message))
                     }
-                    "AssessmentRunInProgressException" => DeleteAssessmentRunError::AssessmentRunInProgress(String::from(error_message)),
+                    "AssessmentRunInProgressException" => {
+                        DeleteAssessmentRunError::AssessmentRunInProgress(String::from(
+                            error_message,
+                        ))
+                    }
                     "InternalException" => {
                         DeleteAssessmentRunError::Internal(String::from(error_message))
                     }
@@ -1716,7 +1713,6 @@ pub enum DeleteAssessmentTargetError {
     Unknown(String),
 }
 
-
 impl DeleteAssessmentTargetError {
     pub fn from_body(body: &str) -> DeleteAssessmentTargetError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1733,7 +1729,11 @@ impl DeleteAssessmentTargetError {
                     "AccessDeniedException" => {
                         DeleteAssessmentTargetError::AccessDenied(String::from(error_message))
                     }
-                    "AssessmentRunInProgressException" => DeleteAssessmentTargetError::AssessmentRunInProgress(String::from(error_message)),
+                    "AssessmentRunInProgressException" => {
+                        DeleteAssessmentTargetError::AssessmentRunInProgress(String::from(
+                            error_message,
+                        ))
+                    }
                     "InternalException" => {
                         DeleteAssessmentTargetError::Internal(String::from(error_message))
                     }
@@ -1819,7 +1819,6 @@ pub enum DeleteAssessmentTemplateError {
     Unknown(String),
 }
 
-
 impl DeleteAssessmentTemplateError {
     pub fn from_body(body: &str) -> DeleteAssessmentTemplateError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1836,7 +1835,11 @@ impl DeleteAssessmentTemplateError {
                     "AccessDeniedException" => {
                         DeleteAssessmentTemplateError::AccessDenied(String::from(error_message))
                     }
-                    "AssessmentRunInProgressException" => DeleteAssessmentTemplateError::AssessmentRunInProgress(String::from(error_message)),
+                    "AssessmentRunInProgressException" => {
+                        DeleteAssessmentTemplateError::AssessmentRunInProgress(String::from(
+                            error_message,
+                        ))
+                    }
                     "InternalException" => {
                         DeleteAssessmentTemplateError::Internal(String::from(error_message))
                     }
@@ -1915,7 +1918,6 @@ pub enum DescribeAssessmentRunsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeAssessmentRunsError {
     pub fn from_body(body: &str) -> DescribeAssessmentRunsError {
@@ -2003,7 +2005,6 @@ pub enum DescribeAssessmentTargetsError {
     Unknown(String),
 }
 
-
 impl DescribeAssessmentTargetsError {
     pub fn from_body(body: &str) -> DescribeAssessmentTargetsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2090,7 +2091,6 @@ pub enum DescribeAssessmentTemplatesError {
     Unknown(String),
 }
 
-
 impl DescribeAssessmentTemplatesError {
     pub fn from_body(body: &str) -> DescribeAssessmentTemplatesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2175,7 +2175,6 @@ pub enum DescribeCrossAccountAccessRoleError {
     Unknown(String),
 }
 
-
 impl DescribeCrossAccountAccessRoleError {
     pub fn from_body(body: &str) -> DescribeCrossAccountAccessRoleError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2257,7 +2256,6 @@ pub enum DescribeFindingsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeFindingsError {
     pub fn from_body(body: &str) -> DescribeFindingsError {
@@ -2342,7 +2340,6 @@ pub enum DescribeResourceGroupsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeResourceGroupsError {
     pub fn from_body(body: &str) -> DescribeResourceGroupsError {
@@ -2429,7 +2426,6 @@ pub enum DescribeRulesPackagesError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeRulesPackagesError {
     pub fn from_body(body: &str) -> DescribeRulesPackagesError {
@@ -2525,7 +2521,6 @@ pub enum GetAssessmentReportError {
     Unknown(String),
 }
 
-
 impl GetAssessmentReportError {
     pub fn from_body(body: &str) -> GetAssessmentReportError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2542,7 +2537,11 @@ impl GetAssessmentReportError {
                     "AccessDeniedException" => {
                         GetAssessmentReportError::AccessDenied(String::from(error_message))
                     }
-                    "AssessmentRunInProgressException" => GetAssessmentReportError::AssessmentRunInProgress(String::from(error_message)),
+                    "AssessmentRunInProgressException" => {
+                        GetAssessmentReportError::AssessmentRunInProgress(String::from(
+                            error_message,
+                        ))
+                    }
                     "InternalException" => {
                         GetAssessmentReportError::Internal(String::from(error_message))
                     }
@@ -2629,7 +2628,6 @@ pub enum GetTelemetryMetadataError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetTelemetryMetadataError {
     pub fn from_body(body: &str) -> GetTelemetryMetadataError {
@@ -2729,7 +2727,6 @@ pub enum ListAssessmentRunAgentsError {
     Unknown(String),
 }
 
-
 impl ListAssessmentRunAgentsError {
     pub fn from_body(body: &str) -> ListAssessmentRunAgentsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2828,7 +2825,6 @@ pub enum ListAssessmentRunsError {
     Unknown(String),
 }
 
-
 impl ListAssessmentRunsError {
     pub fn from_body(body: &str) -> ListAssessmentRunsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2925,7 +2921,6 @@ pub enum ListAssessmentTargetsError {
     Unknown(String),
 }
 
-
 impl ListAssessmentTargetsError {
     pub fn from_body(body: &str) -> ListAssessmentTargetsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3019,7 +3014,6 @@ pub enum ListAssessmentTemplatesError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListAssessmentTemplatesError {
     pub fn from_body(body: &str) -> ListAssessmentTemplatesError {
@@ -3119,7 +3113,6 @@ pub enum ListEventSubscriptionsError {
     Unknown(String),
 }
 
-
 impl ListEventSubscriptionsError {
     pub fn from_body(body: &str) -> ListEventSubscriptionsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3218,7 +3211,6 @@ pub enum ListFindingsError {
     Unknown(String),
 }
 
-
 impl ListFindingsError {
     pub fn from_body(body: &str) -> ListFindingsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3310,7 +3302,6 @@ pub enum ListRulesPackagesError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListRulesPackagesError {
     pub fn from_body(body: &str) -> ListRulesPackagesError {
@@ -3405,7 +3396,6 @@ pub enum ListTagsForResourceError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListTagsForResourceError {
     pub fn from_body(body: &str) -> ListTagsForResourceError {
@@ -3507,7 +3497,6 @@ pub enum PreviewAgentsError {
     Unknown(String),
 }
 
-
 impl PreviewAgentsError {
     pub fn from_body(body: &str) -> PreviewAgentsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3608,7 +3597,6 @@ pub enum RegisterCrossAccountAccessRoleError {
     Unknown(String),
 }
 
-
 impl RegisterCrossAccountAccessRoleError {
     pub fn from_body(body: &str) -> RegisterCrossAccountAccessRoleError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3622,12 +3610,20 @@ impl RegisterCrossAccountAccessRoleError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AccessDeniedException" => RegisterCrossAccountAccessRoleError::AccessDenied(String::from(error_message)),
+                    "AccessDeniedException" => RegisterCrossAccountAccessRoleError::AccessDenied(
+                        String::from(error_message),
+                    ),
                     "InternalException" => {
                         RegisterCrossAccountAccessRoleError::Internal(String::from(error_message))
                     }
-                    "InvalidCrossAccountRoleException" => RegisterCrossAccountAccessRoleError::InvalidCrossAccountRole(String::from(error_message)),
-                    "InvalidInputException" => RegisterCrossAccountAccessRoleError::InvalidInput(String::from(error_message)),
+                    "InvalidCrossAccountRoleException" => {
+                        RegisterCrossAccountAccessRoleError::InvalidCrossAccountRole(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidInputException" => RegisterCrossAccountAccessRoleError::InvalidInput(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         RegisterCrossAccountAccessRoleError::Validation(error_message.to_string())
                     }
@@ -3700,7 +3696,6 @@ pub enum RemoveAttributesFromFindingsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl RemoveAttributesFromFindingsError {
     pub fn from_body(body: &str) -> RemoveAttributesFromFindingsError {
@@ -3799,7 +3794,6 @@ pub enum SetTagsForResourceError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl SetTagsForResourceError {
     pub fn from_body(body: &str) -> SetTagsForResourceError {
@@ -3905,7 +3899,6 @@ pub enum StartAssessmentRunError {
     Unknown(String),
 }
 
-
 impl StartAssessmentRunError {
     pub fn from_body(body: &str) -> StartAssessmentRunError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3922,11 +3915,19 @@ impl StartAssessmentRunError {
                     "AccessDeniedException" => {
                         StartAssessmentRunError::AccessDenied(String::from(error_message))
                     }
-                    "AgentsAlreadyRunningAssessmentException" => StartAssessmentRunError::AgentsAlreadyRunningAssessment(String::from(error_message)),
+                    "AgentsAlreadyRunningAssessmentException" => {
+                        StartAssessmentRunError::AgentsAlreadyRunningAssessment(String::from(
+                            error_message,
+                        ))
+                    }
                     "InternalException" => {
                         StartAssessmentRunError::Internal(String::from(error_message))
                     }
-                    "InvalidCrossAccountRoleException" => StartAssessmentRunError::InvalidCrossAccountRole(String::from(error_message)),
+                    "InvalidCrossAccountRoleException" => {
+                        StartAssessmentRunError::InvalidCrossAccountRole(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidInputException" => {
                         StartAssessmentRunError::InvalidInput(String::from(error_message))
                     }
@@ -4011,7 +4012,6 @@ pub enum StopAssessmentRunError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl StopAssessmentRunError {
     pub fn from_body(body: &str) -> StopAssessmentRunError {
@@ -4113,7 +4113,6 @@ pub enum SubscribeToEventError {
     Unknown(String),
 }
 
-
 impl SubscribeToEventError {
     pub fn from_body(body: &str) -> SubscribeToEventError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4214,7 +4213,6 @@ pub enum UnsubscribeFromEventError {
     Unknown(String),
 }
 
-
 impl UnsubscribeFromEventError {
     pub fn from_body(body: &str) -> UnsubscribeFromEventError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4313,7 +4311,6 @@ pub enum UpdateAssessmentTargetError {
     Unknown(String),
 }
 
-
 impl UpdateAssessmentTargetError {
     pub fn from_body(body: &str) -> UpdateAssessmentTargetError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4394,220 +4391,207 @@ impl Error for UpdateAssessmentTargetError {
 /// Trait representing the capabilities of the Amazon Inspector API. Amazon Inspector clients implement this trait.
 pub trait Inspector {
     #[doc="<p>Assigns attributes (key and value pairs) to the findings that are specified by the ARNs of the findings.</p>"]
-    fn add_attributes_to_findings
-        (&self,
-         input: &AddAttributesToFindingsRequest)
-         -> Result<AddAttributesToFindingsResponse, AddAttributesToFindingsError>;
-
+    fn add_attributes_to_findings(
+        &self,
+        input: &AddAttributesToFindingsRequest,
+    ) -> Result<AddAttributesToFindingsResponse, AddAttributesToFindingsError>;
 
     #[doc="<p>Creates a new assessment target using the ARN of the resource group that is generated by <a>CreateResourceGroup</a>. You can create up to 50 assessment targets per AWS account. You can run up to 500 concurrent agents per AWS account. For more information, see <a href=\"http://docs.aws.amazon.com/inspector/latest/userguide/inspector_applications.html\"> Amazon Inspector Assessment Targets</a>.</p>"]
-    fn create_assessment_target
-        (&self,
-         input: &CreateAssessmentTargetRequest)
-         -> Result<CreateAssessmentTargetResponse, CreateAssessmentTargetError>;
-
+    fn create_assessment_target(
+        &self,
+        input: &CreateAssessmentTargetRequest,
+    ) -> Result<CreateAssessmentTargetResponse, CreateAssessmentTargetError>;
 
     #[doc="<p>Creates an assessment template for the assessment target that is specified by the ARN of the assessment target.</p>"]
-    fn create_assessment_template
-        (&self,
-         input: &CreateAssessmentTemplateRequest)
-         -> Result<CreateAssessmentTemplateResponse, CreateAssessmentTemplateError>;
-
+    fn create_assessment_template(
+        &self,
+        input: &CreateAssessmentTemplateRequest,
+    ) -> Result<CreateAssessmentTemplateResponse, CreateAssessmentTemplateError>;
 
     #[doc="<p>Creates a resource group using the specified set of tags (key and value pairs) that are used to select the EC2 instances to be included in an Amazon Inspector assessment target. The created resource group is then used to create an Amazon Inspector assessment target. For more information, see <a>CreateAssessmentTarget</a>.</p>"]
-    fn create_resource_group(&self,
-                             input: &CreateResourceGroupRequest)
-                             -> Result<CreateResourceGroupResponse, CreateResourceGroupError>;
+    fn create_resource_group(
+        &self,
+        input: &CreateResourceGroupRequest,
+    ) -> Result<CreateResourceGroupResponse, CreateResourceGroupError>;
 
-
-    #[doc="<p>Deletes the assessment run that is specified by the ARN of the assessment run.</p>"]
-    fn delete_assessment_run(&self,
-                             input: &DeleteAssessmentRunRequest)
-                             -> Result<(), DeleteAssessmentRunError>;
-
+    #[doc = "<p>Deletes the assessment run that is specified by the ARN of the assessment run.</p>"]
+    fn delete_assessment_run(
+        &self,
+        input: &DeleteAssessmentRunRequest,
+    ) -> Result<(), DeleteAssessmentRunError>;
 
     #[doc="<p>Deletes the assessment target that is specified by the ARN of the assessment target.</p>"]
-    fn delete_assessment_target(&self,
-                                input: &DeleteAssessmentTargetRequest)
-                                -> Result<(), DeleteAssessmentTargetError>;
-
+    fn delete_assessment_target(
+        &self,
+        input: &DeleteAssessmentTargetRequest,
+    ) -> Result<(), DeleteAssessmentTargetError>;
 
     #[doc="<p>Deletes the assessment template that is specified by the ARN of the assessment template.</p>"]
-    fn delete_assessment_template(&self,
-                                  input: &DeleteAssessmentTemplateRequest)
-                                  -> Result<(), DeleteAssessmentTemplateError>;
-
+    fn delete_assessment_template(
+        &self,
+        input: &DeleteAssessmentTemplateRequest,
+    ) -> Result<(), DeleteAssessmentTemplateError>;
 
     #[doc="<p>Describes the assessment runs that are specified by the ARNs of the assessment runs.</p>"]
-    fn describe_assessment_runs
-        (&self,
-         input: &DescribeAssessmentRunsRequest)
-         -> Result<DescribeAssessmentRunsResponse, DescribeAssessmentRunsError>;
-
+    fn describe_assessment_runs(
+        &self,
+        input: &DescribeAssessmentRunsRequest,
+    ) -> Result<DescribeAssessmentRunsResponse, DescribeAssessmentRunsError>;
 
     #[doc="<p>Describes the assessment targets that are specified by the ARNs of the assessment targets.</p>"]
-    fn describe_assessment_targets
-        (&self,
-         input: &DescribeAssessmentTargetsRequest)
-         -> Result<DescribeAssessmentTargetsResponse, DescribeAssessmentTargetsError>;
-
+    fn describe_assessment_targets(
+        &self,
+        input: &DescribeAssessmentTargetsRequest,
+    ) -> Result<DescribeAssessmentTargetsResponse, DescribeAssessmentTargetsError>;
 
     #[doc="<p>Describes the assessment templates that are specified by the ARNs of the assessment templates.</p>"]
-    fn describe_assessment_templates
-        (&self,
-         input: &DescribeAssessmentTemplatesRequest)
-         -> Result<DescribeAssessmentTemplatesResponse, DescribeAssessmentTemplatesError>;
-
+    fn describe_assessment_templates(
+        &self,
+        input: &DescribeAssessmentTemplatesRequest,
+    ) -> Result<DescribeAssessmentTemplatesResponse, DescribeAssessmentTemplatesError>;
 
     #[doc="<p>Describes the IAM role that enables Amazon Inspector to access your AWS account.</p>"]
-    fn describe_cross_account_access_role
-        (&self)
-         -> Result<DescribeCrossAccountAccessRoleResponse, DescribeCrossAccountAccessRoleError>;
+    fn describe_cross_account_access_role(
+        &self,
+    ) -> Result<DescribeCrossAccountAccessRoleResponse, DescribeCrossAccountAccessRoleError>;
 
-
-    #[doc="<p>Describes the findings that are specified by the ARNs of the findings.</p>"]
-    fn describe_findings(&self,
-                         input: &DescribeFindingsRequest)
-                         -> Result<DescribeFindingsResponse, DescribeFindingsError>;
-
+    #[doc = "<p>Describes the findings that are specified by the ARNs of the findings.</p>"]
+    fn describe_findings(
+        &self,
+        input: &DescribeFindingsRequest,
+    ) -> Result<DescribeFindingsResponse, DescribeFindingsError>;
 
     #[doc="<p>Describes the resource groups that are specified by the ARNs of the resource groups.</p>"]
-    fn describe_resource_groups
-        (&self,
-         input: &DescribeResourceGroupsRequest)
-         -> Result<DescribeResourceGroupsResponse, DescribeResourceGroupsError>;
-
+    fn describe_resource_groups(
+        &self,
+        input: &DescribeResourceGroupsRequest,
+    ) -> Result<DescribeResourceGroupsResponse, DescribeResourceGroupsError>;
 
     #[doc="<p>Describes the rules packages that are specified by the ARNs of the rules packages.</p>"]
-    fn describe_rules_packages
-        (&self,
-         input: &DescribeRulesPackagesRequest)
-         -> Result<DescribeRulesPackagesResponse, DescribeRulesPackagesError>;
-
+    fn describe_rules_packages(
+        &self,
+        input: &DescribeRulesPackagesRequest,
+    ) -> Result<DescribeRulesPackagesResponse, DescribeRulesPackagesError>;
 
     #[doc="<p>Produces an assessment report that includes detailed and comprehensive results of a specified assessment run. </p>"]
-    fn get_assessment_report(&self,
-                             input: &GetAssessmentReportRequest)
-                             -> Result<GetAssessmentReportResponse, GetAssessmentReportError>;
+    fn get_assessment_report(
+        &self,
+        input: &GetAssessmentReportRequest,
+    ) -> Result<GetAssessmentReportResponse, GetAssessmentReportError>;
 
-
-    #[doc="<p>Information about the data that is collected for the specified assessment run.</p>"]
-    fn get_telemetry_metadata
-        (&self,
-         input: &GetTelemetryMetadataRequest)
-         -> Result<GetTelemetryMetadataResponse, GetTelemetryMetadataError>;
-
+    #[doc = "<p>Information about the data that is collected for the specified assessment run.</p>"]
+    fn get_telemetry_metadata(
+        &self,
+        input: &GetTelemetryMetadataRequest,
+    ) -> Result<GetTelemetryMetadataResponse, GetTelemetryMetadataError>;
 
     #[doc="<p>Lists the agents of the assessment runs that are specified by the ARNs of the assessment runs.</p>"]
-    fn list_assessment_run_agents
-        (&self,
-         input: &ListAssessmentRunAgentsRequest)
-         -> Result<ListAssessmentRunAgentsResponse, ListAssessmentRunAgentsError>;
-
+    fn list_assessment_run_agents(
+        &self,
+        input: &ListAssessmentRunAgentsRequest,
+    ) -> Result<ListAssessmentRunAgentsResponse, ListAssessmentRunAgentsError>;
 
     #[doc="<p>Lists the assessment runs that correspond to the assessment templates that are specified by the ARNs of the assessment templates.</p>"]
-    fn list_assessment_runs(&self,
-                            input: &ListAssessmentRunsRequest)
-                            -> Result<ListAssessmentRunsResponse, ListAssessmentRunsError>;
-
+    fn list_assessment_runs(
+        &self,
+        input: &ListAssessmentRunsRequest,
+    ) -> Result<ListAssessmentRunsResponse, ListAssessmentRunsError>;
 
     #[doc="<p>Lists the ARNs of the assessment targets within this AWS account. For more information about assessment targets, see <a href=\"http://docs.aws.amazon.com/inspector/latest/userguide/inspector_applications.html\">Amazon Inspector Assessment Targets</a>.</p>"]
-    fn list_assessment_targets
-        (&self,
-         input: &ListAssessmentTargetsRequest)
-         -> Result<ListAssessmentTargetsResponse, ListAssessmentTargetsError>;
-
+    fn list_assessment_targets(
+        &self,
+        input: &ListAssessmentTargetsRequest,
+    ) -> Result<ListAssessmentTargetsResponse, ListAssessmentTargetsError>;
 
     #[doc="<p>Lists the assessment templates that correspond to the assessment targets that are specified by the ARNs of the assessment targets.</p>"]
-    fn list_assessment_templates
-        (&self,
-         input: &ListAssessmentTemplatesRequest)
-         -> Result<ListAssessmentTemplatesResponse, ListAssessmentTemplatesError>;
-
+    fn list_assessment_templates(
+        &self,
+        input: &ListAssessmentTemplatesRequest,
+    ) -> Result<ListAssessmentTemplatesResponse, ListAssessmentTemplatesError>;
 
     #[doc="<p>Lists all the event subscriptions for the assessment template that is specified by the ARN of the assessment template. For more information, see <a>SubscribeToEvent</a> and <a>UnsubscribeFromEvent</a>.</p>"]
-    fn list_event_subscriptions
-        (&self,
-         input: &ListEventSubscriptionsRequest)
-         -> Result<ListEventSubscriptionsResponse, ListEventSubscriptionsError>;
-
+    fn list_event_subscriptions(
+        &self,
+        input: &ListEventSubscriptionsRequest,
+    ) -> Result<ListEventSubscriptionsResponse, ListEventSubscriptionsError>;
 
     #[doc="<p>Lists findings that are generated by the assessment runs that are specified by the ARNs of the assessment runs.</p>"]
-    fn list_findings(&self,
-                     input: &ListFindingsRequest)
-                     -> Result<ListFindingsResponse, ListFindingsError>;
+    fn list_findings(
+        &self,
+        input: &ListFindingsRequest,
+    ) -> Result<ListFindingsResponse, ListFindingsError>;
 
+    #[doc = "<p>Lists all available Amazon Inspector rules packages.</p>"]
+    fn list_rules_packages(
+        &self,
+        input: &ListRulesPackagesRequest,
+    ) -> Result<ListRulesPackagesResponse, ListRulesPackagesError>;
 
-    #[doc="<p>Lists all available Amazon Inspector rules packages.</p>"]
-    fn list_rules_packages(&self,
-                           input: &ListRulesPackagesRequest)
-                           -> Result<ListRulesPackagesResponse, ListRulesPackagesError>;
-
-
-    #[doc="<p>Lists all tags associated with an assessment template.</p>"]
-    fn list_tags_for_resource(&self,
-                              input: &ListTagsForResourceRequest)
-                              -> Result<ListTagsForResourceResponse, ListTagsForResourceError>;
-
+    #[doc = "<p>Lists all tags associated with an assessment template.</p>"]
+    fn list_tags_for_resource(
+        &self,
+        input: &ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, ListTagsForResourceError>;
 
     #[doc="<p>Previews the agents installed on the EC2 instances that are part of the specified assessment target.</p>"]
-    fn preview_agents(&self,
-                      input: &PreviewAgentsRequest)
-                      -> Result<PreviewAgentsResponse, PreviewAgentsError>;
-
+    fn preview_agents(
+        &self,
+        input: &PreviewAgentsRequest,
+    ) -> Result<PreviewAgentsResponse, PreviewAgentsError>;
 
     #[doc="<p>Registers the IAM role that Amazon Inspector uses to list your EC2 instances at the start of the assessment run or when you call the <a>PreviewAgents</a> action.</p>"]
-    fn register_cross_account_access_role(&self,
-                                          input: &RegisterCrossAccountAccessRoleRequest)
-                                          -> Result<(), RegisterCrossAccountAccessRoleError>;
-
+    fn register_cross_account_access_role(
+        &self,
+        input: &RegisterCrossAccountAccessRoleRequest,
+    ) -> Result<(), RegisterCrossAccountAccessRoleError>;
 
     #[doc="<p>Removes entire attributes (key and value pairs) from the findings that are specified by the ARNs of the findings where an attribute with the specified key exists.</p>"]
-    fn remove_attributes_from_findings
-        (&self,
-         input: &RemoveAttributesFromFindingsRequest)
-         -> Result<RemoveAttributesFromFindingsResponse, RemoveAttributesFromFindingsError>;
-
+    fn remove_attributes_from_findings(
+        &self,
+        input: &RemoveAttributesFromFindingsRequest,
+    ) -> Result<RemoveAttributesFromFindingsResponse, RemoveAttributesFromFindingsError>;
 
     #[doc="<p>Sets tags (key and value pairs) to the assessment template that is specified by the ARN of the assessment template.</p>"]
-    fn set_tags_for_resource(&self,
-                             input: &SetTagsForResourceRequest)
-                             -> Result<(), SetTagsForResourceError>;
-
+    fn set_tags_for_resource(
+        &self,
+        input: &SetTagsForResourceRequest,
+    ) -> Result<(), SetTagsForResourceError>;
 
     #[doc="<p>Starts the assessment run specified by the ARN of the assessment template. For this API to function properly, you must not exceed the limit of running up to 500 concurrent agents per AWS account.</p>"]
-    fn start_assessment_run(&self,
-                            input: &StartAssessmentRunRequest)
-                            -> Result<StartAssessmentRunResponse, StartAssessmentRunError>;
+    fn start_assessment_run(
+        &self,
+        input: &StartAssessmentRunRequest,
+    ) -> Result<StartAssessmentRunResponse, StartAssessmentRunError>;
 
-
-    #[doc="<p>Stops the assessment run that is specified by the ARN of the assessment run.</p>"]
-    fn stop_assessment_run(&self,
-                           input: &StopAssessmentRunRequest)
-                           -> Result<(), StopAssessmentRunError>;
-
+    #[doc = "<p>Stops the assessment run that is specified by the ARN of the assessment run.</p>"]
+    fn stop_assessment_run(
+        &self,
+        input: &StopAssessmentRunRequest,
+    ) -> Result<(), StopAssessmentRunError>;
 
     #[doc="<p>Enables the process of sending Amazon Simple Notification Service (SNS) notifications about a specified event to a specified SNS topic.</p>"]
-    fn subscribe_to_event(&self,
-                          input: &SubscribeToEventRequest)
-                          -> Result<(), SubscribeToEventError>;
-
+    fn subscribe_to_event(
+        &self,
+        input: &SubscribeToEventRequest,
+    ) -> Result<(), SubscribeToEventError>;
 
     #[doc="<p>Disables the process of sending Amazon Simple Notification Service (SNS) notifications about a specified event to a specified SNS topic.</p>"]
-    fn unsubscribe_from_event(&self,
-                              input: &UnsubscribeFromEventRequest)
-                              -> Result<(), UnsubscribeFromEventError>;
-
+    fn unsubscribe_from_event(
+        &self,
+        input: &UnsubscribeFromEventRequest,
+    ) -> Result<(), UnsubscribeFromEventError>;
 
     #[doc="<p>Updates the assessment target that is specified by the ARN of the assessment target.</p>"]
-    fn update_assessment_target(&self,
-                                input: &UpdateAssessmentTargetRequest)
-                                -> Result<(), UpdateAssessmentTargetError>;
+    fn update_assessment_target(
+        &self,
+        input: &UpdateAssessmentTargetRequest,
+    ) -> Result<(), UpdateAssessmentTargetError>;
 }
 /// A client for the Amazon Inspector API.
 pub struct InspectorClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -4615,8 +4599,9 @@ pub struct InspectorClient<P, D>
 }
 
 impl<P, D> InspectorClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         InspectorClient {
@@ -4628,14 +4613,15 @@ impl<P, D> InspectorClient<P, D>
 }
 
 impl<P, D> Inspector for InspectorClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     #[doc="<p>Assigns attributes (key and value pairs) to the findings that are specified by the ARNs of the findings.</p>"]
-    fn add_attributes_to_findings
-        (&self,
-         input: &AddAttributesToFindingsRequest)
-         -> Result<AddAttributesToFindingsResponse, AddAttributesToFindingsError> {
+    fn add_attributes_to_findings(
+        &self,
+        input: &AddAttributesToFindingsRequest,
+    ) -> Result<AddAttributesToFindingsResponse, AddAttributesToFindingsError> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4651,23 +4637,25 @@ impl<P, D> Inspector for InspectorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AddAttributesToFindingsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<AddAttributesToFindingsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AddAttributesToFindingsError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(AddAttributesToFindingsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a new assessment target using the ARN of the resource group that is generated by <a>CreateResourceGroup</a>. You can create up to 50 assessment targets per AWS account. You can run up to 500 concurrent agents per AWS account. For more information, see <a href=\"http://docs.aws.amazon.com/inspector/latest/userguide/inspector_applications.html\"> Amazon Inspector Assessment Targets</a>.</p>"]
-    fn create_assessment_target
-        (&self,
-         input: &CreateAssessmentTargetRequest)
-         -> Result<CreateAssessmentTargetResponse, CreateAssessmentTargetError> {
+    fn create_assessment_target(
+        &self,
+        input: &CreateAssessmentTargetRequest,
+    ) -> Result<CreateAssessmentTargetResponse, CreateAssessmentTargetError> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4683,22 +4671,25 @@ impl<P, D> Inspector for InspectorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateAssessmentTargetResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreateAssessmentTargetResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateAssessmentTargetError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateAssessmentTargetError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates an assessment template for the assessment target that is specified by the ARN of the assessment target.</p>"]
-    fn create_assessment_template
-        (&self,
-         input: &CreateAssessmentTemplateRequest)
-         -> Result<CreateAssessmentTemplateResponse, CreateAssessmentTemplateError> {
+    fn create_assessment_template(
+        &self,
+        input: &CreateAssessmentTemplateRequest,
+    ) -> Result<CreateAssessmentTemplateResponse, CreateAssessmentTemplateError> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4714,22 +4705,25 @@ impl<P, D> Inspector for InspectorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateAssessmentTemplateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreateAssessmentTemplateResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateAssessmentTemplateError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(CreateAssessmentTemplateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a resource group using the specified set of tags (key and value pairs) that are used to select the EC2 instances to be included in an Amazon Inspector assessment target. The created resource group is then used to create an Amazon Inspector assessment target. For more information, see <a>CreateAssessmentTarget</a>.</p>"]
-    fn create_resource_group(&self,
-                             input: &CreateResourceGroupRequest)
-                             -> Result<CreateResourceGroupResponse, CreateResourceGroupError> {
+    fn create_resource_group(
+        &self,
+        input: &CreateResourceGroupRequest,
+    ) -> Result<CreateResourceGroupResponse, CreateResourceGroupError> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4745,21 +4739,25 @@ impl<P, D> Inspector for InspectorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateResourceGroupResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreateResourceGroupResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateResourceGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateResourceGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes the assessment run that is specified by the ARN of the assessment run.</p>"]
-    fn delete_assessment_run(&self,
-                             input: &DeleteAssessmentRunRequest)
-                             -> Result<(), DeleteAssessmentRunError> {
+    #[doc = "<p>Deletes the assessment run that is specified by the ARN of the assessment run.</p>"]
+    fn delete_assessment_run(
+        &self,
+        input: &DeleteAssessmentRunRequest,
+    ) -> Result<(), DeleteAssessmentRunError> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4776,16 +4774,18 @@ impl<P, D> Inspector for InspectorClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteAssessmentRunError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteAssessmentRunError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes the assessment target that is specified by the ARN of the assessment target.</p>"]
-    fn delete_assessment_target(&self,
-                                input: &DeleteAssessmentTargetRequest)
-                                -> Result<(), DeleteAssessmentTargetError> {
+    fn delete_assessment_target(
+        &self,
+        input: &DeleteAssessmentTargetRequest,
+    ) -> Result<(), DeleteAssessmentTargetError> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4802,16 +4802,18 @@ impl<P, D> Inspector for InspectorClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteAssessmentTargetError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteAssessmentTargetError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes the assessment template that is specified by the ARN of the assessment template.</p>"]
-    fn delete_assessment_template(&self,
-                                  input: &DeleteAssessmentTemplateRequest)
-                                  -> Result<(), DeleteAssessmentTemplateError> {
+    fn delete_assessment_template(
+        &self,
+        input: &DeleteAssessmentTemplateRequest,
+    ) -> Result<(), DeleteAssessmentTemplateError> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4828,18 +4830,18 @@ impl<P, D> Inspector for InspectorClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteAssessmentTemplateError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(DeleteAssessmentTemplateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Describes the assessment runs that are specified by the ARNs of the assessment runs.</p>"]
-    fn describe_assessment_runs
-        (&self,
-         input: &DescribeAssessmentRunsRequest)
-         -> Result<DescribeAssessmentRunsResponse, DescribeAssessmentRunsError> {
+    fn describe_assessment_runs(
+        &self,
+        input: &DescribeAssessmentRunsRequest,
+    ) -> Result<DescribeAssessmentRunsResponse, DescribeAssessmentRunsError> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4855,22 +4857,25 @@ impl<P, D> Inspector for InspectorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeAssessmentRunsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeAssessmentRunsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeAssessmentRunsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeAssessmentRunsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Describes the assessment targets that are specified by the ARNs of the assessment targets.</p>"]
-    fn describe_assessment_targets
-        (&self,
-         input: &DescribeAssessmentTargetsRequest)
-         -> Result<DescribeAssessmentTargetsResponse, DescribeAssessmentTargetsError> {
+    fn describe_assessment_targets(
+        &self,
+        input: &DescribeAssessmentTargetsRequest,
+    ) -> Result<DescribeAssessmentTargetsResponse, DescribeAssessmentTargetsError> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4886,28 +4891,32 @@ impl<P, D> Inspector for InspectorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeAssessmentTargetsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeAssessmentTargetsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeAssessmentTargetsError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(DescribeAssessmentTargetsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Describes the assessment templates that are specified by the ARNs of the assessment templates.</p>"]
-    fn describe_assessment_templates
-        (&self,
-         input: &DescribeAssessmentTemplatesRequest)
-         -> Result<DescribeAssessmentTemplatesResponse, DescribeAssessmentTemplatesError> {
+    fn describe_assessment_templates(
+        &self,
+        input: &DescribeAssessmentTemplatesRequest,
+    ) -> Result<DescribeAssessmentTemplatesResponse, DescribeAssessmentTemplatesError> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "InspectorService.DescribeAssessmentTemplates");
+        request.add_header(
+            "x-amz-target",
+            "InspectorService.DescribeAssessmentTemplates",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -4919,27 +4928,31 @@ impl<P, D> Inspector for InspectorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeAssessmentTemplatesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeAssessmentTemplatesResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeAssessmentTemplatesError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(DescribeAssessmentTemplatesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Describes the IAM role that enables Amazon Inspector to access your AWS account.</p>"]
-    fn describe_cross_account_access_role
-        (&self)
-         -> Result<DescribeCrossAccountAccessRoleResponse, DescribeCrossAccountAccessRoleError> {
+    fn describe_cross_account_access_role(
+        &self,
+    ) -> Result<DescribeCrossAccountAccessRoleResponse, DescribeCrossAccountAccessRoleError> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "InspectorService.DescribeCrossAccountAccessRole");
+        request.add_header(
+            "x-amz-target",
+            "InspectorService.DescribeCrossAccountAccessRole",
+        );
         request.set_payload(Some(b"{}".to_vec()));
 
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
@@ -4950,22 +4963,27 @@ impl<P, D> Inspector for InspectorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeCrossAccountAccessRoleResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<DescribeCrossAccountAccessRoleResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeCrossAccountAccessRoleError::from_body(String::from_utf8_lossy(&body)
-                                                                       .as_ref()))
+                Err(DescribeCrossAccountAccessRoleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Describes the findings that are specified by the ARNs of the findings.</p>"]
-    fn describe_findings(&self,
-                         input: &DescribeFindingsRequest)
-                         -> Result<DescribeFindingsResponse, DescribeFindingsError> {
+    #[doc = "<p>Describes the findings that are specified by the ARNs of the findings.</p>"]
+    fn describe_findings(
+        &self,
+        input: &DescribeFindingsRequest,
+    ) -> Result<DescribeFindingsResponse, DescribeFindingsError> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4981,24 +4999,25 @@ impl<P, D> Inspector for InspectorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeFindingsResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribeFindingsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeFindingsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeFindingsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Describes the resource groups that are specified by the ARNs of the resource groups.</p>"]
-    fn describe_resource_groups
-        (&self,
-         input: &DescribeResourceGroupsRequest)
-         -> Result<DescribeResourceGroupsResponse, DescribeResourceGroupsError> {
+    fn describe_resource_groups(
+        &self,
+        input: &DescribeResourceGroupsRequest,
+    ) -> Result<DescribeResourceGroupsResponse, DescribeResourceGroupsError> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5014,22 +5033,25 @@ impl<P, D> Inspector for InspectorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeResourceGroupsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeResourceGroupsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeResourceGroupsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeResourceGroupsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Describes the rules packages that are specified by the ARNs of the rules packages.</p>"]
-    fn describe_rules_packages
-        (&self,
-         input: &DescribeRulesPackagesRequest)
-         -> Result<DescribeRulesPackagesResponse, DescribeRulesPackagesError> {
+    fn describe_rules_packages(
+        &self,
+        input: &DescribeRulesPackagesRequest,
+    ) -> Result<DescribeRulesPackagesResponse, DescribeRulesPackagesError> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5045,21 +5067,25 @@ impl<P, D> Inspector for InspectorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeRulesPackagesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeRulesPackagesResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeRulesPackagesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeRulesPackagesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Produces an assessment report that includes detailed and comprehensive results of a specified assessment run. </p>"]
-    fn get_assessment_report(&self,
-                             input: &GetAssessmentReportRequest)
-                             -> Result<GetAssessmentReportResponse, GetAssessmentReportError> {
+    fn get_assessment_report(
+        &self,
+        input: &GetAssessmentReportRequest,
+    ) -> Result<GetAssessmentReportResponse, GetAssessmentReportError> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5075,22 +5101,25 @@ impl<P, D> Inspector for InspectorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetAssessmentReportResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetAssessmentReportResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetAssessmentReportError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetAssessmentReportError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Information about the data that is collected for the specified assessment run.</p>"]
-    fn get_telemetry_metadata
-        (&self,
-         input: &GetTelemetryMetadataRequest)
-         -> Result<GetTelemetryMetadataResponse, GetTelemetryMetadataError> {
+    #[doc = "<p>Information about the data that is collected for the specified assessment run.</p>"]
+    fn get_telemetry_metadata(
+        &self,
+        input: &GetTelemetryMetadataRequest,
+    ) -> Result<GetTelemetryMetadataResponse, GetTelemetryMetadataError> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5106,22 +5135,25 @@ impl<P, D> Inspector for InspectorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetTelemetryMetadataResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetTelemetryMetadataResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetTelemetryMetadataError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetTelemetryMetadataError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists the agents of the assessment runs that are specified by the ARNs of the assessment runs.</p>"]
-    fn list_assessment_run_agents
-        (&self,
-         input: &ListAssessmentRunAgentsRequest)
-         -> Result<ListAssessmentRunAgentsResponse, ListAssessmentRunAgentsError> {
+    fn list_assessment_run_agents(
+        &self,
+        input: &ListAssessmentRunAgentsRequest,
+    ) -> Result<ListAssessmentRunAgentsResponse, ListAssessmentRunAgentsError> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5137,22 +5169,25 @@ impl<P, D> Inspector for InspectorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListAssessmentRunAgentsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListAssessmentRunAgentsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListAssessmentRunAgentsError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(ListAssessmentRunAgentsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists the assessment runs that correspond to the assessment templates that are specified by the ARNs of the assessment templates.</p>"]
-    fn list_assessment_runs(&self,
-                            input: &ListAssessmentRunsRequest)
-                            -> Result<ListAssessmentRunsResponse, ListAssessmentRunsError> {
+    fn list_assessment_runs(
+        &self,
+        input: &ListAssessmentRunsRequest,
+    ) -> Result<ListAssessmentRunsResponse, ListAssessmentRunsError> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5168,22 +5203,25 @@ impl<P, D> Inspector for InspectorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListAssessmentRunsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListAssessmentRunsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListAssessmentRunsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListAssessmentRunsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists the ARNs of the assessment targets within this AWS account. For more information about assessment targets, see <a href=\"http://docs.aws.amazon.com/inspector/latest/userguide/inspector_applications.html\">Amazon Inspector Assessment Targets</a>.</p>"]
-    fn list_assessment_targets
-        (&self,
-         input: &ListAssessmentTargetsRequest)
-         -> Result<ListAssessmentTargetsResponse, ListAssessmentTargetsError> {
+    fn list_assessment_targets(
+        &self,
+        input: &ListAssessmentTargetsRequest,
+    ) -> Result<ListAssessmentTargetsResponse, ListAssessmentTargetsError> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5199,22 +5237,25 @@ impl<P, D> Inspector for InspectorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListAssessmentTargetsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListAssessmentTargetsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListAssessmentTargetsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListAssessmentTargetsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists the assessment templates that correspond to the assessment targets that are specified by the ARNs of the assessment targets.</p>"]
-    fn list_assessment_templates
-        (&self,
-         input: &ListAssessmentTemplatesRequest)
-         -> Result<ListAssessmentTemplatesResponse, ListAssessmentTemplatesError> {
+    fn list_assessment_templates(
+        &self,
+        input: &ListAssessmentTemplatesRequest,
+    ) -> Result<ListAssessmentTemplatesResponse, ListAssessmentTemplatesError> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5230,23 +5271,25 @@ impl<P, D> Inspector for InspectorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListAssessmentTemplatesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListAssessmentTemplatesResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListAssessmentTemplatesError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(ListAssessmentTemplatesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists all the event subscriptions for the assessment template that is specified by the ARN of the assessment template. For more information, see <a>SubscribeToEvent</a> and <a>UnsubscribeFromEvent</a>.</p>"]
-    fn list_event_subscriptions
-        (&self,
-         input: &ListEventSubscriptionsRequest)
-         -> Result<ListEventSubscriptionsResponse, ListEventSubscriptionsError> {
+    fn list_event_subscriptions(
+        &self,
+        input: &ListEventSubscriptionsRequest,
+    ) -> Result<ListEventSubscriptionsResponse, ListEventSubscriptionsError> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5262,21 +5305,25 @@ impl<P, D> Inspector for InspectorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListEventSubscriptionsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListEventSubscriptionsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListEventSubscriptionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListEventSubscriptionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists findings that are generated by the assessment runs that are specified by the ARNs of the assessment runs.</p>"]
-    fn list_findings(&self,
-                     input: &ListFindingsRequest)
-                     -> Result<ListFindingsResponse, ListFindingsError> {
+    fn list_findings(
+        &self,
+        input: &ListFindingsRequest,
+    ) -> Result<ListFindingsResponse, ListFindingsError> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5292,23 +5339,25 @@ impl<P, D> Inspector for InspectorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListFindingsResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListFindingsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListFindingsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListFindingsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists all available Amazon Inspector rules packages.</p>"]
-    fn list_rules_packages(&self,
-                           input: &ListRulesPackagesRequest)
-                           -> Result<ListRulesPackagesResponse, ListRulesPackagesError> {
+    #[doc = "<p>Lists all available Amazon Inspector rules packages.</p>"]
+    fn list_rules_packages(
+        &self,
+        input: &ListRulesPackagesRequest,
+    ) -> Result<ListRulesPackagesResponse, ListRulesPackagesError> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5324,21 +5373,25 @@ impl<P, D> Inspector for InspectorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListRulesPackagesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListRulesPackagesResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListRulesPackagesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListRulesPackagesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists all tags associated with an assessment template.</p>"]
-    fn list_tags_for_resource(&self,
-                              input: &ListTagsForResourceRequest)
-                              -> Result<ListTagsForResourceResponse, ListTagsForResourceError> {
+    #[doc = "<p>Lists all tags associated with an assessment template.</p>"]
+    fn list_tags_for_resource(
+        &self,
+        input: &ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, ListTagsForResourceError> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5354,21 +5407,25 @@ impl<P, D> Inspector for InspectorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListTagsForResourceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListTagsForResourceResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListTagsForResourceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Previews the agents installed on the EC2 instances that are part of the specified assessment target.</p>"]
-    fn preview_agents(&self,
-                      input: &PreviewAgentsRequest)
-                      -> Result<PreviewAgentsResponse, PreviewAgentsError> {
+    fn preview_agents(
+        &self,
+        input: &PreviewAgentsRequest,
+    ) -> Result<PreviewAgentsResponse, PreviewAgentsError> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5384,28 +5441,32 @@ impl<P, D> Inspector for InspectorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<PreviewAgentsResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<PreviewAgentsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(PreviewAgentsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(PreviewAgentsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Registers the IAM role that Amazon Inspector uses to list your EC2 instances at the start of the assessment run or when you call the <a>PreviewAgents</a> action.</p>"]
-    fn register_cross_account_access_role(&self,
-                                          input: &RegisterCrossAccountAccessRoleRequest)
-                                          -> Result<(), RegisterCrossAccountAccessRoleError> {
+    fn register_cross_account_access_role(
+        &self,
+        input: &RegisterCrossAccountAccessRoleRequest,
+    ) -> Result<(), RegisterCrossAccountAccessRoleError> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "InspectorService.RegisterCrossAccountAccessRole");
+        request.add_header(
+            "x-amz-target",
+            "InspectorService.RegisterCrossAccountAccessRole",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -5418,23 +5479,25 @@ impl<P, D> Inspector for InspectorClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(RegisterCrossAccountAccessRoleError::from_body(String::from_utf8_lossy(&body)
-                                                                       .as_ref()))
+                Err(RegisterCrossAccountAccessRoleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Removes entire attributes (key and value pairs) from the findings that are specified by the ARNs of the findings where an attribute with the specified key exists.</p>"]
-    fn remove_attributes_from_findings
-        (&self,
-         input: &RemoveAttributesFromFindingsRequest)
-         -> Result<RemoveAttributesFromFindingsResponse, RemoveAttributesFromFindingsError> {
+    fn remove_attributes_from_findings(
+        &self,
+        input: &RemoveAttributesFromFindingsRequest,
+    ) -> Result<RemoveAttributesFromFindingsResponse, RemoveAttributesFromFindingsError> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "InspectorService.RemoveAttributesFromFindings");
+        request.add_header(
+            "x-amz-target",
+            "InspectorService.RemoveAttributesFromFindings",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -5446,22 +5509,27 @@ impl<P, D> Inspector for InspectorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<RemoveAttributesFromFindingsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<RemoveAttributesFromFindingsResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(RemoveAttributesFromFindingsError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+                Err(RemoveAttributesFromFindingsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Sets tags (key and value pairs) to the assessment template that is specified by the ARN of the assessment template.</p>"]
-    fn set_tags_for_resource(&self,
-                             input: &SetTagsForResourceRequest)
-                             -> Result<(), SetTagsForResourceError> {
+    fn set_tags_for_resource(
+        &self,
+        input: &SetTagsForResourceRequest,
+    ) -> Result<(), SetTagsForResourceError> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5478,16 +5546,18 @@ impl<P, D> Inspector for InspectorClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(SetTagsForResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(SetTagsForResourceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Starts the assessment run specified by the ARN of the assessment template. For this API to function properly, you must not exceed the limit of running up to 500 concurrent agents per AWS account.</p>"]
-    fn start_assessment_run(&self,
-                            input: &StartAssessmentRunRequest)
-                            -> Result<StartAssessmentRunResponse, StartAssessmentRunError> {
+    fn start_assessment_run(
+        &self,
+        input: &StartAssessmentRunRequest,
+    ) -> Result<StartAssessmentRunResponse, StartAssessmentRunError> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5503,21 +5573,25 @@ impl<P, D> Inspector for InspectorClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StartAssessmentRunResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<StartAssessmentRunResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StartAssessmentRunError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(StartAssessmentRunError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Stops the assessment run that is specified by the ARN of the assessment run.</p>"]
-    fn stop_assessment_run(&self,
-                           input: &StopAssessmentRunRequest)
-                           -> Result<(), StopAssessmentRunError> {
+    #[doc = "<p>Stops the assessment run that is specified by the ARN of the assessment run.</p>"]
+    fn stop_assessment_run(
+        &self,
+        input: &StopAssessmentRunRequest,
+    ) -> Result<(), StopAssessmentRunError> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5534,16 +5608,18 @@ impl<P, D> Inspector for InspectorClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StopAssessmentRunError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(StopAssessmentRunError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Enables the process of sending Amazon Simple Notification Service (SNS) notifications about a specified event to a specified SNS topic.</p>"]
-    fn subscribe_to_event(&self,
-                          input: &SubscribeToEventRequest)
-                          -> Result<(), SubscribeToEventError> {
+    fn subscribe_to_event(
+        &self,
+        input: &SubscribeToEventRequest,
+    ) -> Result<(), SubscribeToEventError> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5560,16 +5636,18 @@ impl<P, D> Inspector for InspectorClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(SubscribeToEventError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(SubscribeToEventError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Disables the process of sending Amazon Simple Notification Service (SNS) notifications about a specified event to a specified SNS topic.</p>"]
-    fn unsubscribe_from_event(&self,
-                              input: &UnsubscribeFromEventRequest)
-                              -> Result<(), UnsubscribeFromEventError> {
+    fn unsubscribe_from_event(
+        &self,
+        input: &UnsubscribeFromEventRequest,
+    ) -> Result<(), UnsubscribeFromEventError> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5586,16 +5664,18 @@ impl<P, D> Inspector for InspectorClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UnsubscribeFromEventError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UnsubscribeFromEventError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Updates the assessment target that is specified by the ARN of the assessment target.</p>"]
-    fn update_assessment_target(&self,
-                                input: &UpdateAssessmentTargetRequest)
-                                -> Result<(), UpdateAssessmentTargetError> {
+    fn update_assessment_target(
+        &self,
+        input: &UpdateAssessmentTargetRequest,
+    ) -> Result<(), UpdateAssessmentTargetError> {
         let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5612,7 +5692,9 @@ impl<P, D> Inspector for InspectorClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateAssessmentTargetError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateAssessmentTargetError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

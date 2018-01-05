@@ -8,7 +8,7 @@ use std::path::Path;
 
 use self::stopwatch::Stopwatch;
 use rayon::prelude::*;
-use rustfmt;
+use rustfmt_nightly;
 use toml;
 
 mod codegen;
@@ -247,11 +247,10 @@ pub use custom::*;
             let src_dir = crate_dir.join("src");
             let gen_file_path = src_dir.join("generated.rs");
 
-            let _ = rustfmt::run(rustfmt::Input::File(gen_file_path), &rustfmt::config::Config {
-                write_mode: rustfmt::config::WriteMode::Overwrite,
-                error_on_line_overflow: false,
-                ..rustfmt::config::Config::default()
-            });
+            let mut fmt_config = rustfmt_nightly::config::Config::default();
+            fmt_config.set().write_mode(rustfmt_nightly::config::WriteMode::Overwrite);
+            fmt_config.set().error_on_line_overflow(false);
+            let _ = rustfmt_nightly::run(rustfmt_nightly::Input::File(gen_file_path), &fmt_config);
             debug!("Rustfmt of {} took {}ms", service.full_name(), sw.elapsed_ms());
         }
 

@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -31,7 +30,7 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use xml::reader::XmlEvent;
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
-use rusoto_core::xmlutil::{characters, end_element, start_element, skip_tree, peek_at_name};
+use rusoto_core::xmlutil::{characters, end_element, peek_at_name, skip_tree, start_element};
 use rusoto_core::xmlerror::*;
 
 enum DeserializerNext {
@@ -42,77 +41,76 @@ enum DeserializerNext {
 struct AccessKeyIdTypeDeserializer;
 impl AccessKeyIdTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct AccessKeySecretTypeDeserializer;
 impl AccessKeySecretTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct AccountTypeDeserializer;
 impl AccountTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct ArnTypeDeserializer;
 impl ArnTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default, Debug, Clone)]
 pub struct AssumeRoleRequest {
-    #[doc="<p>The duration, in seconds, of the role session. The value can range from 900 seconds (15 minutes) to 3600 seconds (1 hour). By default, the value is set to 3600 seconds.</p> <note> <p>This is separate from the duration of a console session that you might request using the returned credentials. The request to the federation endpoint for a console sign-in token takes a <code>SessionDuration</code> parameter that specifies the maximum length of the console session, separately from the <code>DurationSeconds</code> parameter on this API. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-custom-url.html\">Creating a URL that Enables Federated Users to Access the AWS Management Console</a> in the <i>IAM User Guide</i>.</p> </note>"]
+    /// <p>The duration, in seconds, of the role session. The value can range from 900 seconds (15 minutes) to 3600 seconds (1 hour). By default, the value is set to 3600 seconds.</p> <note> <p>This is separate from the duration of a console session that you might request using the returned credentials. The request to the federation endpoint for a console sign-in token takes a <code>SessionDuration</code> parameter that specifies the maximum length of the console session, separately from the <code>DurationSeconds</code> parameter on this API. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-custom-url.html">Creating a URL that Enables Federated Users to Access the AWS Management Console</a> in the <i>IAM User Guide</i>.</p> </note>
     pub duration_seconds: Option<i64>,
-    #[doc="<p>A unique identifier that is used by third parties when assuming roles in their customers' accounts. For each role that the third party can assume, they should instruct their customers to ensure the role's trust policy checks for the external ID that the third party generated. Each time the third party assumes the role, they should pass the customer's external ID. The external ID is useful in order to help third parties bind a role to the customer who created it. For more information about the external ID, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user_externalid.html\">How to Use an External ID When Granting Access to Your AWS Resources to a Third Party</a> in the <i>IAM User Guide</i>.</p> <p>The regex used to validated this parameter is a string of characters consisting of upper- and lower-case alphanumeric characters with no spaces. You can also include underscores or any of the following characters: =,.@:/-</p>"]
+    /// <p>A unique identifier that is used by third parties when assuming roles in their customers' accounts. For each role that the third party can assume, they should instruct their customers to ensure the role's trust policy checks for the external ID that the third party generated. Each time the third party assumes the role, they should pass the customer's external ID. The external ID is useful in order to help third parties bind a role to the customer who created it. For more information about the external ID, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user_externalid.html">How to Use an External ID When Granting Access to Your AWS Resources to a Third Party</a> in the <i>IAM User Guide</i>.</p> <p>The regex used to validated this parameter is a string of characters consisting of upper- and lower-case alphanumeric characters with no spaces. You can also include underscores or any of the following characters: =,.@:/-</p>
     pub external_id: Option<String>,
-    #[doc="<p>An IAM policy in JSON format.</p> <p>This parameter is optional. If you pass a policy, the temporary security credentials that are returned by the operation have the permissions that are allowed by both (the intersection of) the access policy of the role that is being assumed, <i>and</i> the policy that you pass. This gives you a way to further restrict the permissions for the resulting temporary security credentials. You cannot use the passed policy to grant permissions that are in excess of those allowed by the access policy of the role that is being assumed. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_control-access_assumerole.html\">Permissions for AssumeRole, AssumeRoleWithSAML, and AssumeRoleWithWebIdentity</a> in the <i>IAM User Guide</i>.</p> <p>The format for this parameter, as described by its regex pattern, is a string of characters up to 2048 characters in length. The characters can be any ASCII character from the space character to the end of the valid character list (\\u0020-\\u00FF). It can also include the tab (\\u0009), linefeed (\\u000A), and carriage return (\\u000D) characters.</p> <note> <p>The policy plain text must be 2048 bytes or shorter. However, an internal conversion compresses it into a packed binary format with a separate limit. The PackedPolicySize response element indicates by percentage how close to the upper size limit the policy is, with 100% equaling the maximum allowed size.</p> </note>"]
+    /// <p>An IAM policy in JSON format.</p> <p>This parameter is optional. If you pass a policy, the temporary security credentials that are returned by the operation have the permissions that are allowed by both (the intersection of) the access policy of the role that is being assumed, <i>and</i> the policy that you pass. This gives you a way to further restrict the permissions for the resulting temporary security credentials. You cannot use the passed policy to grant permissions that are in excess of those allowed by the access policy of the role that is being assumed. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_control-access_assumerole.html">Permissions for AssumeRole, AssumeRoleWithSAML, and AssumeRoleWithWebIdentity</a> in the <i>IAM User Guide</i>.</p> <p>The format for this parameter, as described by its regex pattern, is a string of characters up to 2048 characters in length. The characters can be any ASCII character from the space character to the end of the valid character list (\u0020-\u00FF). It can also include the tab (\u0009), linefeed (\u000A), and carriage return (\u000D) characters.</p> <note> <p>The policy plain text must be 2048 bytes or shorter. However, an internal conversion compresses it into a packed binary format with a separate limit. The PackedPolicySize response element indicates by percentage how close to the upper size limit the policy is, with 100% equaling the maximum allowed size.</p> </note>
     pub policy: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the role to assume.</p>"]
+    /// <p>The Amazon Resource Name (ARN) of the role to assume.</p>
     pub role_arn: String,
-    #[doc="<p>An identifier for the assumed role session.</p> <p>Use the role session name to uniquely identify a session when the same role is assumed by different principals or for different reasons. In cross-account scenarios, the role session name is visible to, and can be logged by the account that owns the role. The role session name is also used in the ARN of the assumed role principal. This means that subsequent cross-account API requests using the temporary security credentials will expose the role session name to the external account in their CloudTrail logs.</p> <p>The regex used to validate this parameter is a string of characters consisting of upper- and lower-case alphanumeric characters with no spaces. You can also include underscores or any of the following characters: =,.@-</p>"]
+    /// <p>An identifier for the assumed role session.</p> <p>Use the role session name to uniquely identify a session when the same role is assumed by different principals or for different reasons. In cross-account scenarios, the role session name is visible to, and can be logged by the account that owns the role. The role session name is also used in the ARN of the assumed role principal. This means that subsequent cross-account API requests using the temporary security credentials will expose the role session name to the external account in their CloudTrail logs.</p> <p>The regex used to validate this parameter is a string of characters consisting of upper- and lower-case alphanumeric characters with no spaces. You can also include underscores or any of the following characters: =,.@-</p>
     pub role_session_name: String,
-    #[doc="<p>The identification number of the MFA device that is associated with the user who is making the <code>AssumeRole</code> call. Specify this value if the trust policy of the role being assumed includes a condition that requires MFA authentication. The value is either the serial number for a hardware device (such as <code>GAHT12345678</code>) or an Amazon Resource Name (ARN) for a virtual device (such as <code>arn:aws:iam::123456789012:mfa/user</code>).</p> <p>The regex used to validate this parameter is a string of characters consisting of upper- and lower-case alphanumeric characters with no spaces. You can also include underscores or any of the following characters: =,.@-</p>"]
+    /// <p>The identification number of the MFA device that is associated with the user who is making the <code>AssumeRole</code> call. Specify this value if the trust policy of the role being assumed includes a condition that requires MFA authentication. The value is either the serial number for a hardware device (such as <code>GAHT12345678</code>) or an Amazon Resource Name (ARN) for a virtual device (such as <code>arn:aws:iam::123456789012:mfa/user</code>).</p> <p>The regex used to validate this parameter is a string of characters consisting of upper- and lower-case alphanumeric characters with no spaces. You can also include underscores or any of the following characters: =,.@-</p>
     pub serial_number: Option<String>,
-    #[doc="<p>The value provided by the MFA device, if the trust policy of the role being assumed requires MFA (that is, if the policy includes a condition that tests for MFA). If the role being assumed requires MFA and if the <code>TokenCode</code> value is missing or expired, the <code>AssumeRole</code> call returns an \"access denied\" error.</p> <p>The format for this parameter, as described by its regex pattern, is a sequence of six numeric digits.</p>"]
+    /// <p>The value provided by the MFA device, if the trust policy of the role being assumed requires MFA (that is, if the policy includes a condition that tests for MFA). If the role being assumed requires MFA and if the <code>TokenCode</code> value is missing or expired, the <code>AssumeRole</code> call returns an "access denied" error.</p> <p>The format for this parameter, as described by its regex pattern, is a sequence of six numeric digits.</p>
     pub token_code: Option<String>,
 }
-
 
 /// Serialize `AssumeRoleRequest` contents to a `SignedRequest`.
 struct AssumeRoleRequestSerializer;
@@ -124,50 +122,64 @@ impl AssumeRoleRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.duration_seconds {
-            params.put(&format!("{}{}", prefix, "DurationSeconds"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "DurationSeconds"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.external_id {
-            params.put(&format!("{}{}", prefix, "ExternalId"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "ExternalId"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.policy {
-            params.put(&format!("{}{}", prefix, "Policy"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "Policy"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-        params.put(&format!("{}{}", prefix, "RoleArn"),
-                   &obj.role_arn.replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "RoleSessionName"),
-                   &obj.role_session_name.replace("+", "%2B"));
+        params.put(
+            &format!("{}{}", prefix, "RoleArn"),
+            &obj.role_arn.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "RoleSessionName"),
+            &obj.role_session_name.replace("+", "%2B"),
+        );
         if let Some(ref field_value) = obj.serial_number {
-            params.put(&format!("{}{}", prefix, "SerialNumber"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "SerialNumber"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.token_code {
-            params.put(&format!("{}{}", prefix, "TokenCode"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "TokenCode"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-
     }
 }
 
-#[doc="<p>Contains the response to a successful <a>AssumeRole</a> request, including temporary AWS credentials that can be used to make AWS requests. </p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the response to a successful <a>AssumeRole</a> request, including temporary AWS credentials that can be used to make AWS requests. </p>
+#[derive(Default, Debug, Clone)]
 pub struct AssumeRoleResponse {
-    #[doc="<p>The Amazon Resource Name (ARN) and the assumed role ID, which are identifiers that you can use to refer to the resulting temporary security credentials. For example, you can reference these credentials as a principal in a resource-based policy by using the ARN or assumed role ID. The ARN and ID include the <code>RoleSessionName</code> that you specified when you called <code>AssumeRole</code>. </p>"]
+    /// <p>The Amazon Resource Name (ARN) and the assumed role ID, which are identifiers that you can use to refer to the resulting temporary security credentials. For example, you can reference these credentials as a principal in a resource-based policy by using the ARN or assumed role ID. The ARN and ID include the <code>RoleSessionName</code> that you specified when you called <code>AssumeRole</code>. </p>
     pub assumed_role_user: Option<AssumedRoleUser>,
-    #[doc="<p>The temporary security credentials, which include an access key ID, a secret access key, and a security (or session) token.</p> <p> <b>Note:</b> The size of the security token that STS APIs return is not fixed. We strongly recommend that you make no assumptions about the maximum size. As of this writing, the typical size is less than 4096 bytes, but that can vary. Also, future updates to AWS might require larger sizes.</p>"]
+    /// <p>The temporary security credentials, which include an access key ID, a secret access key, and a security (or session) token.</p> <p> <b>Note:</b> The size of the security token that STS APIs return is not fixed. We strongly recommend that you make no assumptions about the maximum size. As of this writing, the typical size is less than 4096 bytes, but that can vary. Also, future updates to AWS might require larger sizes.</p>
     pub credentials: Option<Credentials>,
-    #[doc="<p>A percentage value that indicates the size of the policy in packed form. The service rejects any policy with a packed size greater than 100 percent, which means the policy exceeded the allowed space.</p>"]
+    /// <p>A percentage value that indicates the size of the policy in packed form. The service rejects any policy with a packed size greater than 100 percent, which means the policy exceeded the allowed space.</p>
     pub packed_policy_size: Option<i64>,
 }
 
 struct AssumeRoleResponseDeserializer;
 impl AssumeRoleResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<AssumeRoleResponse, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AssumeRoleResponse, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = AssumeRoleResponse::default();
@@ -182,26 +194,27 @@ impl AssumeRoleResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "AssumedRoleUser" => {
-                            obj.assumed_role_user =
-                                Some(try!(AssumedRoleUserDeserializer::deserialize("AssumedRoleUser",
-                                                                                   stack)));
-                        }
-                        "Credentials" => {
-                            obj.credentials =
-                                Some(try!(CredentialsDeserializer::deserialize("Credentials",
-                                                                               stack)));
-                        }
-                        "PackedPolicySize" => {
-                            obj.packed_policy_size =
-                                Some(try!(NonNegativeIntegerTypeDeserializer::deserialize("PackedPolicySize",
-                                                                                          stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AssumedRoleUser" => {
+                        obj.assumed_role_user = Some(try!(
+                            AssumedRoleUserDeserializer::deserialize("AssumedRoleUser", stack)
+                        ));
                     }
-                }
+                    "Credentials" => {
+                        obj.credentials = Some(try!(CredentialsDeserializer::deserialize(
+                            "Credentials",
+                            stack
+                        )));
+                    }
+                    "PackedPolicySize" => {
+                        obj.packed_policy_size =
+                            Some(try!(NonNegativeIntegerTypeDeserializer::deserialize(
+                                "PackedPolicySize",
+                                stack
+                            )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -212,23 +225,21 @@ impl AssumeRoleResponseDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default, Debug, Clone)]
 pub struct AssumeRoleWithSAMLRequest {
-    #[doc="<p>The duration, in seconds, of the role session. The value can range from 900 seconds (15 minutes) to 3600 seconds (1 hour). By default, the value is set to 3600 seconds. An expiration can also be specified in the SAML authentication response's <code>SessionNotOnOrAfter</code> value. The actual expiration time is whichever value is shorter. </p> <note> <p>This is separate from the duration of a console session that you might request using the returned credentials. The request to the federation endpoint for a console sign-in token takes a <code>SessionDuration</code> parameter that specifies the maximum length of the console session, separately from the <code>DurationSeconds</code> parameter on this API. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-saml.html\">Enabling SAML 2.0 Federated Users to Access the AWS Management Console</a> in the <i>IAM User Guide</i>.</p> </note>"]
+    /// <p>The duration, in seconds, of the role session. The value can range from 900 seconds (15 minutes) to 3600 seconds (1 hour). By default, the value is set to 3600 seconds. An expiration can also be specified in the SAML authentication response's <code>SessionNotOnOrAfter</code> value. The actual expiration time is whichever value is shorter. </p> <note> <p>This is separate from the duration of a console session that you might request using the returned credentials. The request to the federation endpoint for a console sign-in token takes a <code>SessionDuration</code> parameter that specifies the maximum length of the console session, separately from the <code>DurationSeconds</code> parameter on this API. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-saml.html">Enabling SAML 2.0 Federated Users to Access the AWS Management Console</a> in the <i>IAM User Guide</i>.</p> </note>
     pub duration_seconds: Option<i64>,
-    #[doc="<p>An IAM policy in JSON format.</p> <p>The policy parameter is optional. If you pass a policy, the temporary security credentials that are returned by the operation have the permissions that are allowed by both the access policy of the role that is being assumed, <i> <b>and</b> </i> the policy that you pass. This gives you a way to further restrict the permissions for the resulting temporary security credentials. You cannot use the passed policy to grant permissions that are in excess of those allowed by the access policy of the role that is being assumed. For more information, <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_control-access_assumerole.html\">Permissions for AssumeRole, AssumeRoleWithSAML, and AssumeRoleWithWebIdentity</a> in the <i>IAM User Guide</i>. </p> <p>The format for this parameter, as described by its regex pattern, is a string of characters up to 2048 characters in length. The characters can be any ASCII character from the space character to the end of the valid character list (\\u0020-\\u00FF). It can also include the tab (\\u0009), linefeed (\\u000A), and carriage return (\\u000D) characters.</p> <note> <p>The policy plain text must be 2048 bytes or shorter. However, an internal conversion compresses it into a packed binary format with a separate limit. The PackedPolicySize response element indicates by percentage how close to the upper size limit the policy is, with 100% equaling the maximum allowed size.</p> </note>"]
+    /// <p>An IAM policy in JSON format.</p> <p>The policy parameter is optional. If you pass a policy, the temporary security credentials that are returned by the operation have the permissions that are allowed by both the access policy of the role that is being assumed, <i> <b>and</b> </i> the policy that you pass. This gives you a way to further restrict the permissions for the resulting temporary security credentials. You cannot use the passed policy to grant permissions that are in excess of those allowed by the access policy of the role that is being assumed. For more information, <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_control-access_assumerole.html">Permissions for AssumeRole, AssumeRoleWithSAML, and AssumeRoleWithWebIdentity</a> in the <i>IAM User Guide</i>. </p> <p>The format for this parameter, as described by its regex pattern, is a string of characters up to 2048 characters in length. The characters can be any ASCII character from the space character to the end of the valid character list (\u0020-\u00FF). It can also include the tab (\u0009), linefeed (\u000A), and carriage return (\u000D) characters.</p> <note> <p>The policy plain text must be 2048 bytes or shorter. However, an internal conversion compresses it into a packed binary format with a separate limit. The PackedPolicySize response element indicates by percentage how close to the upper size limit the policy is, with 100% equaling the maximum allowed size.</p> </note>
     pub policy: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the SAML provider in IAM that describes the IdP.</p>"]
+    /// <p>The Amazon Resource Name (ARN) of the SAML provider in IAM that describes the IdP.</p>
     pub principal_arn: String,
-    #[doc="<p>The Amazon Resource Name (ARN) of the role that the caller is assuming.</p>"]
+    /// <p>The Amazon Resource Name (ARN) of the role that the caller is assuming.</p>
     pub role_arn: String,
-    #[doc="<p>The base-64 encoded SAML authentication response provided by the IdP.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/create-role-saml-IdP-tasks.html\">Configuring a Relying Party and Adding Claims</a> in the <i>Using IAM</i> guide. </p>"]
+    /// <p>The base-64 encoded SAML authentication response provided by the IdP.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/create-role-saml-IdP-tasks.html">Configuring a Relying Party and Adding Claims</a> in the <i>Using IAM</i> guide. </p>
     pub saml_assertion: String,
 }
-
 
 /// Serialize `AssumeRoleWithSAMLRequest` contents to a `SignedRequest`.
 struct AssumeRoleWithSAMLRequestSerializer;
@@ -240,50 +251,60 @@ impl AssumeRoleWithSAMLRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.duration_seconds {
-            params.put(&format!("{}{}", prefix, "DurationSeconds"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "DurationSeconds"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.policy {
-            params.put(&format!("{}{}", prefix, "Policy"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "Policy"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-        params.put(&format!("{}{}", prefix, "PrincipalArn"),
-                   &obj.principal_arn.replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "RoleArn"),
-                   &obj.role_arn.replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "SAMLAssertion"),
-                   &obj.saml_assertion.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "PrincipalArn"),
+            &obj.principal_arn.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "RoleArn"),
+            &obj.role_arn.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "SAMLAssertion"),
+            &obj.saml_assertion.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>Contains the response to a successful <a>AssumeRoleWithSAML</a> request, including temporary AWS credentials that can be used to make AWS requests. </p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the response to a successful <a>AssumeRoleWithSAML</a> request, including temporary AWS credentials that can be used to make AWS requests. </p>
+#[derive(Default, Debug, Clone)]
 pub struct AssumeRoleWithSAMLResponse {
-    #[doc="<p>The identifiers for the temporary security credentials that the operation returns.</p>"]
+    /// <p>The identifiers for the temporary security credentials that the operation returns.</p>
     pub assumed_role_user: Option<AssumedRoleUser>,
-    #[doc="<p> The value of the <code>Recipient</code> attribute of the <code>SubjectConfirmationData</code> element of the SAML assertion. </p>"]
+    /// <p> The value of the <code>Recipient</code> attribute of the <code>SubjectConfirmationData</code> element of the SAML assertion. </p>
     pub audience: Option<String>,
-    #[doc="<p>The temporary security credentials, which include an access key ID, a secret access key, and a security (or session) token.</p> <p> <b>Note:</b> The size of the security token that STS APIs return is not fixed. We strongly recommend that you make no assumptions about the maximum size. As of this writing, the typical size is less than 4096 bytes, but that can vary. Also, future updates to AWS might require larger sizes.</p>"]
+    /// <p>The temporary security credentials, which include an access key ID, a secret access key, and a security (or session) token.</p> <p> <b>Note:</b> The size of the security token that STS APIs return is not fixed. We strongly recommend that you make no assumptions about the maximum size. As of this writing, the typical size is less than 4096 bytes, but that can vary. Also, future updates to AWS might require larger sizes.</p>
     pub credentials: Option<Credentials>,
-    #[doc="<p>The value of the <code>Issuer</code> element of the SAML assertion.</p>"]
+    /// <p>The value of the <code>Issuer</code> element of the SAML assertion.</p>
     pub issuer: Option<String>,
-    #[doc="<p>A hash value based on the concatenation of the <code>Issuer</code> response value, the AWS account ID, and the friendly name (the last part of the ARN) of the SAML provider in IAM. The combination of <code>NameQualifier</code> and <code>Subject</code> can be used to uniquely identify a federated user. </p> <p>The following pseudocode shows how the hash value is calculated:</p> <p> <code>BASE64 ( SHA1 ( \"https://example.com/saml\" + \"123456789012\" + \"/MySAMLIdP\" ) )</code> </p>"]
+    /// <p>A hash value based on the concatenation of the <code>Issuer</code> response value, the AWS account ID, and the friendly name (the last part of the ARN) of the SAML provider in IAM. The combination of <code>NameQualifier</code> and <code>Subject</code> can be used to uniquely identify a federated user. </p> <p>The following pseudocode shows how the hash value is calculated:</p> <p> <code>BASE64 ( SHA1 ( "https://example.com/saml" + "123456789012" + "/MySAMLIdP" ) )</code> </p>
     pub name_qualifier: Option<String>,
-    #[doc="<p>A percentage value that indicates the size of the policy in packed form. The service rejects any policy with a packed size greater than 100 percent, which means the policy exceeded the allowed space.</p>"]
+    /// <p>A percentage value that indicates the size of the policy in packed form. The service rejects any policy with a packed size greater than 100 percent, which means the policy exceeded the allowed space.</p>
     pub packed_policy_size: Option<i64>,
-    #[doc="<p>The value of the <code>NameID</code> element in the <code>Subject</code> element of the SAML assertion.</p>"]
+    /// <p>The value of the <code>NameID</code> element in the <code>Subject</code> element of the SAML assertion.</p>
     pub subject: Option<String>,
-    #[doc="<p> The format of the name ID, as defined by the <code>Format</code> attribute in the <code>NameID</code> element of the SAML assertion. Typical examples of the format are <code>transient</code> or <code>persistent</code>. </p> <p> If the format includes the prefix <code>urn:oasis:names:tc:SAML:2.0:nameid-format</code>, that prefix is removed. For example, <code>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</code> is returned as <code>transient</code>. If the format includes any other prefix, the format is returned with no modifications.</p>"]
+    /// <p> The format of the name ID, as defined by the <code>Format</code> attribute in the <code>NameID</code> element of the SAML assertion. Typical examples of the format are <code>transient</code> or <code>persistent</code>. </p> <p> If the format includes the prefix <code>urn:oasis:names:tc:SAML:2.0:nameid-format</code>, that prefix is removed. For example, <code>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</code> is returned as <code>transient</code>. If the format includes any other prefix, the format is returned with no modifications.</p>
     pub subject_type: Option<String>,
 }
 
 struct AssumeRoleWithSAMLResponseDeserializer;
 impl AssumeRoleWithSAMLResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<AssumeRoleWithSAMLResponse, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AssumeRoleWithSAMLResponse, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = AssumeRoleWithSAMLResponse::default();
@@ -298,48 +319,50 @@ impl AssumeRoleWithSAMLResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "AssumedRoleUser" => {
-                            obj.assumed_role_user =
-                                Some(try!(AssumedRoleUserDeserializer::deserialize("AssumedRoleUser",
-                                                                                   stack)));
-                        }
-                        "Audience" => {
-                            obj.audience = Some(try!(AudienceDeserializer::deserialize("Audience",
-                                                                                       stack)));
-                        }
-                        "Credentials" => {
-                            obj.credentials =
-                                Some(try!(CredentialsDeserializer::deserialize("Credentials",
-                                                                               stack)));
-                        }
-                        "Issuer" => {
-                            obj.issuer = Some(try!(IssuerDeserializer::deserialize("Issuer",
-                                                                                   stack)));
-                        }
-                        "NameQualifier" => {
-                            obj.name_qualifier =
-                                Some(try!(NameQualifierDeserializer::deserialize("NameQualifier",
-                                                                                 stack)));
-                        }
-                        "PackedPolicySize" => {
-                            obj.packed_policy_size =
-                                Some(try!(NonNegativeIntegerTypeDeserializer::deserialize("PackedPolicySize",
-                                                                                          stack)));
-                        }
-                        "Subject" => {
-                            obj.subject = Some(try!(SubjectDeserializer::deserialize("Subject",
-                                                                                     stack)));
-                        }
-                        "SubjectType" => {
-                            obj.subject_type =
-                                Some(try!(SubjectTypeDeserializer::deserialize("SubjectType",
-                                                                               stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AssumedRoleUser" => {
+                        obj.assumed_role_user = Some(try!(
+                            AssumedRoleUserDeserializer::deserialize("AssumedRoleUser", stack)
+                        ));
                     }
-                }
+                    "Audience" => {
+                        obj.audience =
+                            Some(try!(AudienceDeserializer::deserialize("Audience", stack)));
+                    }
+                    "Credentials" => {
+                        obj.credentials = Some(try!(CredentialsDeserializer::deserialize(
+                            "Credentials",
+                            stack
+                        )));
+                    }
+                    "Issuer" => {
+                        obj.issuer = Some(try!(IssuerDeserializer::deserialize("Issuer", stack)));
+                    }
+                    "NameQualifier" => {
+                        obj.name_qualifier = Some(try!(NameQualifierDeserializer::deserialize(
+                            "NameQualifier",
+                            stack
+                        )));
+                    }
+                    "PackedPolicySize" => {
+                        obj.packed_policy_size =
+                            Some(try!(NonNegativeIntegerTypeDeserializer::deserialize(
+                                "PackedPolicySize",
+                                stack
+                            )));
+                    }
+                    "Subject" => {
+                        obj.subject =
+                            Some(try!(SubjectDeserializer::deserialize("Subject", stack)));
+                    }
+                    "SubjectType" => {
+                        obj.subject_type = Some(try!(SubjectTypeDeserializer::deserialize(
+                            "SubjectType",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -350,25 +373,23 @@ impl AssumeRoleWithSAMLResponseDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default, Debug, Clone)]
 pub struct AssumeRoleWithWebIdentityRequest {
-    #[doc="<p>The duration, in seconds, of the role session. The value can range from 900 seconds (15 minutes) to 3600 seconds (1 hour). By default, the value is set to 3600 seconds.</p> <note> <p>This is separate from the duration of a console session that you might request using the returned credentials. The request to the federation endpoint for a console sign-in token takes a <code>SessionDuration</code> parameter that specifies the maximum length of the console session, separately from the <code>DurationSeconds</code> parameter on this API. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-custom-url.html\">Creating a URL that Enables Federated Users to Access the AWS Management Console</a> in the <i>IAM User Guide</i>.</p> </note>"]
+    /// <p>The duration, in seconds, of the role session. The value can range from 900 seconds (15 minutes) to 3600 seconds (1 hour). By default, the value is set to 3600 seconds.</p> <note> <p>This is separate from the duration of a console session that you might request using the returned credentials. The request to the federation endpoint for a console sign-in token takes a <code>SessionDuration</code> parameter that specifies the maximum length of the console session, separately from the <code>DurationSeconds</code> parameter on this API. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-custom-url.html">Creating a URL that Enables Federated Users to Access the AWS Management Console</a> in the <i>IAM User Guide</i>.</p> </note>
     pub duration_seconds: Option<i64>,
-    #[doc="<p>An IAM policy in JSON format.</p> <p>The policy parameter is optional. If you pass a policy, the temporary security credentials that are returned by the operation have the permissions that are allowed by both the access policy of the role that is being assumed, <i> <b>and</b> </i> the policy that you pass. This gives you a way to further restrict the permissions for the resulting temporary security credentials. You cannot use the passed policy to grant permissions that are in excess of those allowed by the access policy of the role that is being assumed. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_control-access_assumerole.html\">Permissions for AssumeRoleWithWebIdentity</a> in the <i>IAM User Guide</i>. </p> <p>The format for this parameter, as described by its regex pattern, is a string of characters up to 2048 characters in length. The characters can be any ASCII character from the space character to the end of the valid character list (\\u0020-\\u00FF). It can also include the tab (\\u0009), linefeed (\\u000A), and carriage return (\\u000D) characters.</p> <note> <p>The policy plain text must be 2048 bytes or shorter. However, an internal conversion compresses it into a packed binary format with a separate limit. The PackedPolicySize response element indicates by percentage how close to the upper size limit the policy is, with 100% equaling the maximum allowed size.</p> </note>"]
+    /// <p>An IAM policy in JSON format.</p> <p>The policy parameter is optional. If you pass a policy, the temporary security credentials that are returned by the operation have the permissions that are allowed by both the access policy of the role that is being assumed, <i> <b>and</b> </i> the policy that you pass. This gives you a way to further restrict the permissions for the resulting temporary security credentials. You cannot use the passed policy to grant permissions that are in excess of those allowed by the access policy of the role that is being assumed. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_control-access_assumerole.html">Permissions for AssumeRoleWithWebIdentity</a> in the <i>IAM User Guide</i>. </p> <p>The format for this parameter, as described by its regex pattern, is a string of characters up to 2048 characters in length. The characters can be any ASCII character from the space character to the end of the valid character list (\u0020-\u00FF). It can also include the tab (\u0009), linefeed (\u000A), and carriage return (\u000D) characters.</p> <note> <p>The policy plain text must be 2048 bytes or shorter. However, an internal conversion compresses it into a packed binary format with a separate limit. The PackedPolicySize response element indicates by percentage how close to the upper size limit the policy is, with 100% equaling the maximum allowed size.</p> </note>
     pub policy: Option<String>,
-    #[doc="<p>The fully qualified host component of the domain name of the identity provider.</p> <p>Specify this value only for OAuth 2.0 access tokens. Currently <code>www.amazon.com</code> and <code>graph.facebook.com</code> are the only supported identity providers for OAuth 2.0 access tokens. Do not include URL schemes and port numbers.</p> <p>Do not specify this value for OpenID Connect ID tokens.</p>"]
+    /// <p>The fully qualified host component of the domain name of the identity provider.</p> <p>Specify this value only for OAuth 2.0 access tokens. Currently <code>www.amazon.com</code> and <code>graph.facebook.com</code> are the only supported identity providers for OAuth 2.0 access tokens. Do not include URL schemes and port numbers.</p> <p>Do not specify this value for OpenID Connect ID tokens.</p>
     pub provider_id: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the role that the caller is assuming.</p>"]
+    /// <p>The Amazon Resource Name (ARN) of the role that the caller is assuming.</p>
     pub role_arn: String,
-    #[doc="<p>An identifier for the assumed role session. Typically, you pass the name or identifier that is associated with the user who is using your application. That way, the temporary security credentials that your application will use are associated with that user. This session name is included as part of the ARN and assumed role ID in the <code>AssumedRoleUser</code> response element.</p> <p>The regex used to validate this parameter is a string of characters consisting of upper- and lower-case alphanumeric characters with no spaces. You can also include underscores or any of the following characters: =,.@-</p>"]
+    /// <p>An identifier for the assumed role session. Typically, you pass the name or identifier that is associated with the user who is using your application. That way, the temporary security credentials that your application will use are associated with that user. This session name is included as part of the ARN and assumed role ID in the <code>AssumedRoleUser</code> response element.</p> <p>The regex used to validate this parameter is a string of characters consisting of upper- and lower-case alphanumeric characters with no spaces. You can also include underscores or any of the following characters: =,.@-</p>
     pub role_session_name: String,
-    #[doc="<p>The OAuth 2.0 access token or OpenID Connect ID token that is provided by the identity provider. Your application must get this token by authenticating the user who is using your application with a web identity provider before the application makes an <code>AssumeRoleWithWebIdentity</code> call. </p>"]
+    /// <p>The OAuth 2.0 access token or OpenID Connect ID token that is provided by the identity provider. Your application must get this token by authenticating the user who is using your application with a web identity provider before the application makes an <code>AssumeRoleWithWebIdentity</code> call. </p>
     pub web_identity_token: String,
 }
-
 
 /// Serialize `AssumeRoleWithWebIdentityRequest` contents to a `SignedRequest`.
 struct AssumeRoleWithWebIdentityRequestSerializer;
@@ -380,51 +401,62 @@ impl AssumeRoleWithWebIdentityRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.duration_seconds {
-            params.put(&format!("{}{}", prefix, "DurationSeconds"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "DurationSeconds"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.policy {
-            params.put(&format!("{}{}", prefix, "Policy"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "Policy"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.provider_id {
-            params.put(&format!("{}{}", prefix, "ProviderId"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "ProviderId"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-        params.put(&format!("{}{}", prefix, "RoleArn"),
-                   &obj.role_arn.replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "RoleSessionName"),
-                   &obj.role_session_name.replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "WebIdentityToken"),
-                   &obj.web_identity_token.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "RoleArn"),
+            &obj.role_arn.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "RoleSessionName"),
+            &obj.role_session_name.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "WebIdentityToken"),
+            &obj.web_identity_token.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>Contains the response to a successful <a>AssumeRoleWithWebIdentity</a> request, including temporary AWS credentials that can be used to make AWS requests. </p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the response to a successful <a>AssumeRoleWithWebIdentity</a> request, including temporary AWS credentials that can be used to make AWS requests. </p>
+#[derive(Default, Debug, Clone)]
 pub struct AssumeRoleWithWebIdentityResponse {
-    #[doc="<p>The Amazon Resource Name (ARN) and the assumed role ID, which are identifiers that you can use to refer to the resulting temporary security credentials. For example, you can reference these credentials as a principal in a resource-based policy by using the ARN or assumed role ID. The ARN and ID include the <code>RoleSessionName</code> that you specified when you called <code>AssumeRole</code>. </p>"]
+    /// <p>The Amazon Resource Name (ARN) and the assumed role ID, which are identifiers that you can use to refer to the resulting temporary security credentials. For example, you can reference these credentials as a principal in a resource-based policy by using the ARN or assumed role ID. The ARN and ID include the <code>RoleSessionName</code> that you specified when you called <code>AssumeRole</code>. </p>
     pub assumed_role_user: Option<AssumedRoleUser>,
-    #[doc="<p>The intended audience (also known as client ID) of the web identity token. This is traditionally the client identifier issued to the application that requested the web identity token.</p>"]
+    /// <p>The intended audience (also known as client ID) of the web identity token. This is traditionally the client identifier issued to the application that requested the web identity token.</p>
     pub audience: Option<String>,
-    #[doc="<p>The temporary security credentials, which include an access key ID, a secret access key, and a security token.</p> <p> <b>Note:</b> The size of the security token that STS APIs return is not fixed. We strongly recommend that you make no assumptions about the maximum size. As of this writing, the typical size is less than 4096 bytes, but that can vary. Also, future updates to AWS might require larger sizes.</p>"]
+    /// <p>The temporary security credentials, which include an access key ID, a secret access key, and a security token.</p> <p> <b>Note:</b> The size of the security token that STS APIs return is not fixed. We strongly recommend that you make no assumptions about the maximum size. As of this writing, the typical size is less than 4096 bytes, but that can vary. Also, future updates to AWS might require larger sizes.</p>
     pub credentials: Option<Credentials>,
-    #[doc="<p>A percentage value that indicates the size of the policy in packed form. The service rejects any policy with a packed size greater than 100 percent, which means the policy exceeded the allowed space.</p>"]
+    /// <p>A percentage value that indicates the size of the policy in packed form. The service rejects any policy with a packed size greater than 100 percent, which means the policy exceeded the allowed space.</p>
     pub packed_policy_size: Option<i64>,
-    #[doc="<p> The issuing authority of the web identity token presented. For OpenID Connect ID Tokens this contains the value of the <code>iss</code> field. For OAuth 2.0 access tokens, this contains the value of the <code>ProviderId</code> parameter that was passed in the <code>AssumeRoleWithWebIdentity</code> request.</p>"]
+    /// <p> The issuing authority of the web identity token presented. For OpenID Connect ID Tokens this contains the value of the <code>iss</code> field. For OAuth 2.0 access tokens, this contains the value of the <code>ProviderId</code> parameter that was passed in the <code>AssumeRoleWithWebIdentity</code> request.</p>
     pub provider: Option<String>,
-    #[doc="<p>The unique user identifier that is returned by the identity provider. This identifier is associated with the <code>WebIdentityToken</code> that was submitted with the <code>AssumeRoleWithWebIdentity</code> call. The identifier is typically unique to the user and the application that acquired the <code>WebIdentityToken</code> (pairwise identifier). For OpenID Connect ID tokens, this field contains the value returned by the identity provider as the token's <code>sub</code> (Subject) claim. </p>"]
+    /// <p>The unique user identifier that is returned by the identity provider. This identifier is associated with the <code>WebIdentityToken</code> that was submitted with the <code>AssumeRoleWithWebIdentity</code> call. The identifier is typically unique to the user and the application that acquired the <code>WebIdentityToken</code> (pairwise identifier). For OpenID Connect ID tokens, this field contains the value returned by the identity provider as the token's <code>sub</code> (Subject) claim. </p>
     pub subject_from_web_identity_token: Option<String>,
 }
 
 struct AssumeRoleWithWebIdentityResponseDeserializer;
 impl AssumeRoleWithWebIdentityResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<AssumeRoleWithWebIdentityResponse, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AssumeRoleWithWebIdentityResponse, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = AssumeRoleWithWebIdentityResponse::default();
@@ -439,39 +471,42 @@ impl AssumeRoleWithWebIdentityResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "AssumedRoleUser" => {
-                            obj.assumed_role_user =
-                                Some(try!(AssumedRoleUserDeserializer::deserialize("AssumedRoleUser",
-                                                                                   stack)));
-                        }
-                        "Audience" => {
-                            obj.audience = Some(try!(AudienceDeserializer::deserialize("Audience",
-                                                                                       stack)));
-                        }
-                        "Credentials" => {
-                            obj.credentials =
-                                Some(try!(CredentialsDeserializer::deserialize("Credentials",
-                                                                               stack)));
-                        }
-                        "PackedPolicySize" => {
-                            obj.packed_policy_size =
-                                Some(try!(NonNegativeIntegerTypeDeserializer::deserialize("PackedPolicySize",
-                                                                                          stack)));
-                        }
-                        "Provider" => {
-                            obj.provider = Some(try!(IssuerDeserializer::deserialize("Provider",
-                                                                                     stack)));
-                        }
-                        "SubjectFromWebIdentityToken" => {
-                            obj.subject_from_web_identity_token =
-                                Some(try!(WebIdentitySubjectTypeDeserializer::deserialize("SubjectFromWebIdentityToken",
-                                                                                          stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AssumedRoleUser" => {
+                        obj.assumed_role_user = Some(try!(
+                            AssumedRoleUserDeserializer::deserialize("AssumedRoleUser", stack)
+                        ));
                     }
-                }
+                    "Audience" => {
+                        obj.audience =
+                            Some(try!(AudienceDeserializer::deserialize("Audience", stack)));
+                    }
+                    "Credentials" => {
+                        obj.credentials = Some(try!(CredentialsDeserializer::deserialize(
+                            "Credentials",
+                            stack
+                        )));
+                    }
+                    "PackedPolicySize" => {
+                        obj.packed_policy_size =
+                            Some(try!(NonNegativeIntegerTypeDeserializer::deserialize(
+                                "PackedPolicySize",
+                                stack
+                            )));
+                    }
+                    "Provider" => {
+                        obj.provider =
+                            Some(try!(IssuerDeserializer::deserialize("Provider", stack)));
+                    }
+                    "SubjectFromWebIdentityToken" => {
+                        obj.subject_from_web_identity_token =
+                            Some(try!(WebIdentitySubjectTypeDeserializer::deserialize(
+                                "SubjectFromWebIdentityToken",
+                                stack
+                            )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -482,38 +517,38 @@ impl AssumeRoleWithWebIdentityResponseDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct AssumedRoleIdTypeDeserializer;
 impl AssumedRoleIdTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>The identifiers for the temporary security credentials that the operation returns.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The identifiers for the temporary security credentials that the operation returns.</p>
+#[derive(Default, Debug, Clone)]
 pub struct AssumedRoleUser {
-    #[doc="<p>The ARN of the temporary security credentials that are returned from the <a>AssumeRole</a> action. For more information about ARNs and how to use them in policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html\">IAM Identifiers</a> in <i>Using IAM</i>. </p>"]
+    /// <p>The ARN of the temporary security credentials that are returned from the <a>AssumeRole</a> action. For more information about ARNs and how to use them in policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html">IAM Identifiers</a> in <i>Using IAM</i>. </p>
     pub arn: String,
-    #[doc="<p>A unique identifier that contains the role ID and the role session name of the role that is being assumed. The role ID is generated by AWS when the role is created.</p>"]
+    /// <p>A unique identifier that contains the role ID and the role session name of the role that is being assumed. The role ID is generated by AWS when the role is created.</p>
     pub assumed_role_id: String,
 }
 
 struct AssumedRoleUserDeserializer;
 impl AssumedRoleUserDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<AssumedRoleUser, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AssumedRoleUser, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = AssumedRoleUser::default();
@@ -528,19 +563,18 @@ impl AssumedRoleUserDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Arn" => {
-                            obj.arn = try!(ArnTypeDeserializer::deserialize("Arn", stack));
-                        }
-                        "AssumedRoleId" => {
-                            obj.assumed_role_id =
-                                try!(AssumedRoleIdTypeDeserializer::deserialize("AssumedRoleId",
-                                                                                stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Arn" => {
+                        obj.arn = try!(ArnTypeDeserializer::deserialize("Arn", stack));
                     }
-                }
+                    "AssumedRoleId" => {
+                        obj.assumed_role_id = try!(AssumedRoleIdTypeDeserializer::deserialize(
+                            "AssumedRoleId",
+                            stack
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -551,42 +585,42 @@ impl AssumedRoleUserDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct AudienceDeserializer;
 impl AudienceDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>AWS credentials for API authentication.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>AWS credentials for API authentication.</p>
+#[derive(Default, Debug, Clone)]
 pub struct Credentials {
-    #[doc="<p>The access key ID that identifies the temporary security credentials.</p>"]
+    /// <p>The access key ID that identifies the temporary security credentials.</p>
     pub access_key_id: String,
-    #[doc="<p>The date on which the current credentials expire.</p>"]
+    /// <p>The date on which the current credentials expire.</p>
     pub expiration: String,
-    #[doc="<p>The secret access key that can be used to sign requests.</p>"]
+    /// <p>The secret access key that can be used to sign requests.</p>
     pub secret_access_key: String,
-    #[doc="<p>The token that users must pass to the service API to use the temporary credentials.</p>"]
+    /// <p>The token that users must pass to the service API to use the temporary credentials.</p>
     pub session_token: String,
 }
 
 struct CredentialsDeserializer;
 impl CredentialsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Credentials, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Credentials, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = Credentials::default();
@@ -601,29 +635,28 @@ impl CredentialsDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "AccessKeyId" => {
-                            obj.access_key_id =
-                                try!(AccessKeyIdTypeDeserializer::deserialize("AccessKeyId",
-                                                                              stack));
-                        }
-                        "Expiration" => {
-                            obj.expiration = try!(DateTypeDeserializer::deserialize("Expiration",
-                                                                                    stack));
-                        }
-                        "SecretAccessKey" => {
-                            obj.secret_access_key =
-                                try!(AccessKeySecretTypeDeserializer::deserialize("SecretAccessKey",
-                                                                                  stack));
-                        }
-                        "SessionToken" => {
-                            obj.session_token = try!(TokenTypeDeserializer::deserialize("SessionToken",
-                                                                                        stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AccessKeyId" => {
+                        obj.access_key_id = try!(AccessKeyIdTypeDeserializer::deserialize(
+                            "AccessKeyId",
+                            stack
+                        ));
                     }
-                }
+                    "Expiration" => {
+                        obj.expiration =
+                            try!(DateTypeDeserializer::deserialize("Expiration", stack));
+                    }
+                    "SecretAccessKey" => {
+                        obj.secret_access_key = try!(
+                            AccessKeySecretTypeDeserializer::deserialize("SecretAccessKey", stack)
+                        );
+                    }
+                    "SessionToken" => {
+                        obj.session_token =
+                            try!(TokenTypeDeserializer::deserialize("SessionToken", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -634,29 +667,27 @@ impl CredentialsDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct DateTypeDeserializer;
 impl DateTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default, Debug, Clone)]
 pub struct DecodeAuthorizationMessageRequest {
-    #[doc="<p>The encoded message that was returned with the response.</p>"]
+    /// <p>The encoded message that was returned with the response.</p>
     pub encoded_message: String,
 }
-
 
 /// Serialize `DecodeAuthorizationMessageRequest` contents to a `SignedRequest`.
 struct DecodeAuthorizationMessageRequestSerializer;
@@ -667,26 +698,27 @@ impl DecodeAuthorizationMessageRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "EncodedMessage"),
-                   &obj.encoded_message.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "EncodedMessage"),
+            &obj.encoded_message.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>A document that contains additional information about the authorization status of a request from an encoded message that is returned in response to an AWS request.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>A document that contains additional information about the authorization status of a request from an encoded message that is returned in response to an AWS request.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DecodeAuthorizationMessageResponse {
-    #[doc="<p>An XML document that contains the decoded message.</p>"]
+    /// <p>An XML document that contains the decoded message.</p>
     pub decoded_message: Option<String>,
 }
 
 struct DecodeAuthorizationMessageResponseDeserializer;
 impl DecodeAuthorizationMessageResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<DecodeAuthorizationMessageResponse, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DecodeAuthorizationMessageResponse, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DecodeAuthorizationMessageResponse::default();
@@ -701,16 +733,14 @@ impl DecodeAuthorizationMessageResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "DecodedMessage" => {
-                            obj.decoded_message =
-                                Some(try!(DecodedMessageTypeDeserializer::deserialize("DecodedMessage",
-                                                                                      stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "DecodedMessage" => {
+                        obj.decoded_message = Some(try!(
+                            DecodedMessageTypeDeserializer::deserialize("DecodedMessage", stack)
+                        ));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -721,52 +751,52 @@ impl DecodeAuthorizationMessageResponseDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct DecodedMessageTypeDeserializer;
 impl DecodedMessageTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct FederatedIdTypeDeserializer;
 impl FederatedIdTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Identifiers for the federated user that is associated with the credentials.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Identifiers for the federated user that is associated with the credentials.</p>
+#[derive(Default, Debug, Clone)]
 pub struct FederatedUser {
-    #[doc="<p>The ARN that specifies the federated user that is associated with the credentials. For more information about ARNs and how to use them in policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html\">IAM Identifiers</a> in <i>Using IAM</i>. </p>"]
+    /// <p>The ARN that specifies the federated user that is associated with the credentials. For more information about ARNs and how to use them in policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html">IAM Identifiers</a> in <i>Using IAM</i>. </p>
     pub arn: String,
-    #[doc="<p>The string that identifies the federated user associated with the credentials, similar to the unique ID of an IAM user.</p>"]
+    /// <p>The string that identifies the federated user associated with the credentials, similar to the unique ID of an IAM user.</p>
     pub federated_user_id: String,
 }
 
 struct FederatedUserDeserializer;
 impl FederatedUserDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<FederatedUser, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<FederatedUser, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = FederatedUser::default();
@@ -781,19 +811,18 @@ impl FederatedUserDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Arn" => {
-                            obj.arn = try!(ArnTypeDeserializer::deserialize("Arn", stack));
-                        }
-                        "FederatedUserId" => {
-                            obj.federated_user_id =
-                                try!(FederatedIdTypeDeserializer::deserialize("FederatedUserId",
-                                                                              stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Arn" => {
+                        obj.arn = try!(ArnTypeDeserializer::deserialize("Arn", stack));
                     }
-                }
+                    "FederatedUserId" => {
+                        obj.federated_user_id = try!(FederatedIdTypeDeserializer::deserialize(
+                            "FederatedUserId",
+                            stack
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -804,12 +833,10 @@ impl FederatedUserDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default, Debug, Clone)]
 pub struct GetCallerIdentityRequest;
-
 
 /// Serialize `GetCallerIdentityRequest` contents to a `SignedRequest`.
 struct GetCallerIdentityRequestSerializer;
@@ -819,29 +846,27 @@ impl GetCallerIdentityRequestSerializer {
         if prefix != "" {
             prefix.push_str(".");
         }
-
-
-
     }
 }
 
-#[doc="<p>Contains the response to a successful <a>GetCallerIdentity</a> request, including information about the entity making the request.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the response to a successful <a>GetCallerIdentity</a> request, including information about the entity making the request.</p>
+#[derive(Default, Debug, Clone)]
 pub struct GetCallerIdentityResponse {
-    #[doc="<p>The AWS account ID number of the account that owns or contains the calling entity.</p>"]
+    /// <p>The AWS account ID number of the account that owns or contains the calling entity.</p>
     pub account: Option<String>,
-    #[doc="<p>The AWS ARN associated with the calling entity.</p>"]
+    /// <p>The AWS ARN associated with the calling entity.</p>
     pub arn: Option<String>,
-    #[doc="<p>The unique identifier of the calling entity. The exact value depends on the type of entity making the call. The values returned are those listed in the <b>aws:userid</b> column in the <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_variables.html#principaltable\">Principal table</a> found on the <b>Policy Variables</b> reference page in the <i>IAM User Guide</i>.</p>"]
+    /// <p>The unique identifier of the calling entity. The exact value depends on the type of entity making the call. The values returned are those listed in the <b>aws:userid</b> column in the <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_variables.html#principaltable">Principal table</a> found on the <b>Policy Variables</b> reference page in the <i>IAM User Guide</i>.</p>
     pub user_id: Option<String>,
 }
 
 struct GetCallerIdentityResponseDeserializer;
 impl GetCallerIdentityResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<GetCallerIdentityResponse, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetCallerIdentityResponse, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = GetCallerIdentityResponse::default();
@@ -856,22 +881,20 @@ impl GetCallerIdentityResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Account" => {
-                            obj.account = Some(try!(AccountTypeDeserializer::deserialize("Account",
-                                                                                         stack)));
-                        }
-                        "Arn" => {
-                            obj.arn = Some(try!(ArnTypeDeserializer::deserialize("Arn", stack)));
-                        }
-                        "UserId" => {
-                            obj.user_id = Some(try!(UserIdTypeDeserializer::deserialize("UserId",
-                                                                                        stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Account" => {
+                        obj.account =
+                            Some(try!(AccountTypeDeserializer::deserialize("Account", stack)));
                     }
-                }
+                    "Arn" => {
+                        obj.arn = Some(try!(ArnTypeDeserializer::deserialize("Arn", stack)));
+                    }
+                    "UserId" => {
+                        obj.user_id =
+                            Some(try!(UserIdTypeDeserializer::deserialize("UserId", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -882,19 +905,17 @@ impl GetCallerIdentityResponseDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default, Debug, Clone)]
 pub struct GetFederationTokenRequest {
-    #[doc="<p>The duration, in seconds, that the session should last. Acceptable durations for federation sessions range from 900 seconds (15 minutes) to 129600 seconds (36 hours), with 43200 seconds (12 hours) as the default. Sessions obtained using AWS account (root) credentials are restricted to a maximum of 3600 seconds (one hour). If the specified duration is longer than one hour, the session obtained by using AWS account (root) credentials defaults to one hour.</p>"]
+    /// <p>The duration, in seconds, that the session should last. Acceptable durations for federation sessions range from 900 seconds (15 minutes) to 129600 seconds (36 hours), with 43200 seconds (12 hours) as the default. Sessions obtained using AWS account (root) credentials are restricted to a maximum of 3600 seconds (one hour). If the specified duration is longer than one hour, the session obtained by using AWS account (root) credentials defaults to one hour.</p>
     pub duration_seconds: Option<i64>,
-    #[doc="<p>The name of the federated user. The name is used as an identifier for the temporary security credentials (such as <code>Bob</code>). For example, you can reference the federated user name in a resource-based policy, such as in an Amazon S3 bucket policy.</p> <p>The regex used to validate this parameter is a string of characters consisting of upper- and lower-case alphanumeric characters with no spaces. You can also include underscores or any of the following characters: =,.@-</p>"]
+    /// <p>The name of the federated user. The name is used as an identifier for the temporary security credentials (such as <code>Bob</code>). For example, you can reference the federated user name in a resource-based policy, such as in an Amazon S3 bucket policy.</p> <p>The regex used to validate this parameter is a string of characters consisting of upper- and lower-case alphanumeric characters with no spaces. You can also include underscores or any of the following characters: =,.@-</p>
     pub name: String,
-    #[doc="<p>An IAM policy in JSON format that is passed with the <code>GetFederationToken</code> call and evaluated along with the policy or policies that are attached to the IAM user whose credentials are used to call <code>GetFederationToken</code>. The passed policy is used to scope down the permissions that are available to the IAM user, by allowing only a subset of the permissions that are granted to the IAM user. The passed policy cannot grant more permissions than those granted to the IAM user. The final permissions for the federated user are the most restrictive set based on the intersection of the passed policy and the IAM user policy.</p> <p>If you do not pass a policy, the resulting temporary security credentials have no effective permissions. The only exception is when the temporary security credentials are used to access a resource that has a resource-based policy that specifically allows the federated user to access the resource.</p> <p>The format for this parameter, as described by its regex pattern, is a string of characters up to 2048 characters in length. The characters can be any ASCII character from the space character to the end of the valid character list (\\u0020-\\u00FF). It can also include the tab (\\u0009), linefeed (\\u000A), and carriage return (\\u000D) characters.</p> <note> <p>The policy plain text must be 2048 bytes or shorter. However, an internal conversion compresses it into a packed binary format with a separate limit. The PackedPolicySize response element indicates by percentage how close to the upper size limit the policy is, with 100% equaling the maximum allowed size.</p> </note> <p>For more information about how permissions work, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_control-access_getfederationtoken.html\">Permissions for GetFederationToken</a>.</p>"]
+    /// <p>An IAM policy in JSON format that is passed with the <code>GetFederationToken</code> call and evaluated along with the policy or policies that are attached to the IAM user whose credentials are used to call <code>GetFederationToken</code>. The passed policy is used to scope down the permissions that are available to the IAM user, by allowing only a subset of the permissions that are granted to the IAM user. The passed policy cannot grant more permissions than those granted to the IAM user. The final permissions for the federated user are the most restrictive set based on the intersection of the passed policy and the IAM user policy.</p> <p>If you do not pass a policy, the resulting temporary security credentials have no effective permissions. The only exception is when the temporary security credentials are used to access a resource that has a resource-based policy that specifically allows the federated user to access the resource.</p> <p>The format for this parameter, as described by its regex pattern, is a string of characters up to 2048 characters in length. The characters can be any ASCII character from the space character to the end of the valid character list (\u0020-\u00FF). It can also include the tab (\u0009), linefeed (\u000A), and carriage return (\u000D) characters.</p> <note> <p>The policy plain text must be 2048 bytes or shorter. However, an internal conversion compresses it into a packed binary format with a separate limit. The PackedPolicySize response element indicates by percentage how close to the upper size limit the policy is, with 100% equaling the maximum allowed size.</p> </note> <p>For more information about how permissions work, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_control-access_getfederationtoken.html">Permissions for GetFederationToken</a>.</p>
     pub policy: Option<String>,
 }
-
 
 /// Serialize `GetFederationTokenRequest` contents to a `SignedRequest`.
 struct GetFederationTokenRequestSerializer;
@@ -906,36 +927,42 @@ impl GetFederationTokenRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.duration_seconds {
-            params.put(&format!("{}{}", prefix, "DurationSeconds"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "DurationSeconds"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
-        params.put(&format!("{}{}", prefix, "Name"),
-                   &obj.name.replace("+", "%2B"));
+        params.put(
+            &format!("{}{}", prefix, "Name"),
+            &obj.name.replace("+", "%2B"),
+        );
         if let Some(ref field_value) = obj.policy {
-            params.put(&format!("{}{}", prefix, "Policy"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "Policy"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-
     }
 }
 
-#[doc="<p>Contains the response to a successful <a>GetFederationToken</a> request, including temporary AWS credentials that can be used to make AWS requests. </p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the response to a successful <a>GetFederationToken</a> request, including temporary AWS credentials that can be used to make AWS requests. </p>
+#[derive(Default, Debug, Clone)]
 pub struct GetFederationTokenResponse {
-    #[doc="<p>The temporary security credentials, which include an access key ID, a secret access key, and a security (or session) token.</p> <p> <b>Note:</b> The size of the security token that STS APIs return is not fixed. We strongly recommend that you make no assumptions about the maximum size. As of this writing, the typical size is less than 4096 bytes, but that can vary. Also, future updates to AWS might require larger sizes.</p>"]
+    /// <p>The temporary security credentials, which include an access key ID, a secret access key, and a security (or session) token.</p> <p> <b>Note:</b> The size of the security token that STS APIs return is not fixed. We strongly recommend that you make no assumptions about the maximum size. As of this writing, the typical size is less than 4096 bytes, but that can vary. Also, future updates to AWS might require larger sizes.</p>
     pub credentials: Option<Credentials>,
-    #[doc="<p>Identifiers for the federated user associated with the credentials (such as <code>arn:aws:sts::123456789012:federated-user/Bob</code> or <code>123456789012:Bob</code>). You can use the federated user's ARN in your resource-based policies, such as an Amazon S3 bucket policy. </p>"]
+    /// <p>Identifiers for the federated user associated with the credentials (such as <code>arn:aws:sts::123456789012:federated-user/Bob</code> or <code>123456789012:Bob</code>). You can use the federated user's ARN in your resource-based policies, such as an Amazon S3 bucket policy. </p>
     pub federated_user: Option<FederatedUser>,
-    #[doc="<p>A percentage value indicating the size of the policy in packed form. The service rejects policies for which the packed size is greater than 100 percent of the allowed value.</p>"]
+    /// <p>A percentage value indicating the size of the policy in packed form. The service rejects policies for which the packed size is greater than 100 percent of the allowed value.</p>
     pub packed_policy_size: Option<i64>,
 }
 
 struct GetFederationTokenResponseDeserializer;
 impl GetFederationTokenResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<GetFederationTokenResponse, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetFederationTokenResponse, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = GetFederationTokenResponse::default();
@@ -950,26 +977,28 @@ impl GetFederationTokenResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Credentials" => {
-                            obj.credentials =
-                                Some(try!(CredentialsDeserializer::deserialize("Credentials",
-                                                                               stack)));
-                        }
-                        "FederatedUser" => {
-                            obj.federated_user =
-                                Some(try!(FederatedUserDeserializer::deserialize("FederatedUser",
-                                                                                 stack)));
-                        }
-                        "PackedPolicySize" => {
-                            obj.packed_policy_size =
-                                Some(try!(NonNegativeIntegerTypeDeserializer::deserialize("PackedPolicySize",
-                                                                                          stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Credentials" => {
+                        obj.credentials = Some(try!(CredentialsDeserializer::deserialize(
+                            "Credentials",
+                            stack
+                        )));
                     }
-                }
+                    "FederatedUser" => {
+                        obj.federated_user = Some(try!(FederatedUserDeserializer::deserialize(
+                            "FederatedUser",
+                            stack
+                        )));
+                    }
+                    "PackedPolicySize" => {
+                        obj.packed_policy_size =
+                            Some(try!(NonNegativeIntegerTypeDeserializer::deserialize(
+                                "PackedPolicySize",
+                                stack
+                            )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -980,19 +1009,17 @@ impl GetFederationTokenResponseDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default, Debug, Clone)]
 pub struct GetSessionTokenRequest {
-    #[doc="<p>The duration, in seconds, that the credentials should remain valid. Acceptable durations for IAM user sessions range from 900 seconds (15 minutes) to 129600 seconds (36 hours), with 43200 seconds (12 hours) as the default. Sessions for AWS account owners are restricted to a maximum of 3600 seconds (one hour). If the duration is longer than one hour, the session for AWS account owners defaults to one hour.</p>"]
+    /// <p>The duration, in seconds, that the credentials should remain valid. Acceptable durations for IAM user sessions range from 900 seconds (15 minutes) to 129600 seconds (36 hours), with 43200 seconds (12 hours) as the default. Sessions for AWS account owners are restricted to a maximum of 3600 seconds (one hour). If the duration is longer than one hour, the session for AWS account owners defaults to one hour.</p>
     pub duration_seconds: Option<i64>,
-    #[doc="<p>The identification number of the MFA device that is associated with the IAM user who is making the <code>GetSessionToken</code> call. Specify this value if the IAM user has a policy that requires MFA authentication. The value is either the serial number for a hardware device (such as <code>GAHT12345678</code>) or an Amazon Resource Name (ARN) for a virtual device (such as <code>arn:aws:iam::123456789012:mfa/user</code>). You can find the device for an IAM user by going to the AWS Management Console and viewing the user's security credentials. </p> <p>The regex used to validated this parameter is a string of characters consisting of upper- and lower-case alphanumeric characters with no spaces. You can also include underscores or any of the following characters: =,.@:/-</p>"]
+    /// <p>The identification number of the MFA device that is associated with the IAM user who is making the <code>GetSessionToken</code> call. Specify this value if the IAM user has a policy that requires MFA authentication. The value is either the serial number for a hardware device (such as <code>GAHT12345678</code>) or an Amazon Resource Name (ARN) for a virtual device (such as <code>arn:aws:iam::123456789012:mfa/user</code>). You can find the device for an IAM user by going to the AWS Management Console and viewing the user's security credentials. </p> <p>The regex used to validated this parameter is a string of characters consisting of upper- and lower-case alphanumeric characters with no spaces. You can also include underscores or any of the following characters: =,.@:/-</p>
     pub serial_number: Option<String>,
-    #[doc="<p>The value provided by the MFA device, if MFA is required. If any policy requires the IAM user to submit an MFA code, specify this value. If MFA authentication is required, and the user does not provide a code when requesting a set of temporary security credentials, the user will receive an \"access denied\" response when requesting resources that require MFA authentication.</p> <p>The format for this parameter, as described by its regex pattern, is a sequence of six numeric digits.</p>"]
+    /// <p>The value provided by the MFA device, if MFA is required. If any policy requires the IAM user to submit an MFA code, specify this value. If MFA authentication is required, and the user does not provide a code when requesting a set of temporary security credentials, the user will receive an "access denied" response when requesting resources that require MFA authentication.</p> <p>The format for this parameter, as described by its regex pattern, is a sequence of six numeric digits.</p>
     pub token_code: Option<String>,
 }
-
 
 /// Serialize `GetSessionTokenRequest` contents to a `SignedRequest`.
 struct GetSessionTokenRequestSerializer;
@@ -1004,34 +1031,40 @@ impl GetSessionTokenRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.duration_seconds {
-            params.put(&format!("{}{}", prefix, "DurationSeconds"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "DurationSeconds"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.serial_number {
-            params.put(&format!("{}{}", prefix, "SerialNumber"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "SerialNumber"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.token_code {
-            params.put(&format!("{}{}", prefix, "TokenCode"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "TokenCode"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-
     }
 }
 
-#[doc="<p>Contains the response to a successful <a>GetSessionToken</a> request, including temporary AWS credentials that can be used to make AWS requests. </p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the response to a successful <a>GetSessionToken</a> request, including temporary AWS credentials that can be used to make AWS requests. </p>
+#[derive(Default, Debug, Clone)]
 pub struct GetSessionTokenResponse {
-    #[doc="<p>The temporary security credentials, which include an access key ID, a secret access key, and a security (or session) token.</p> <p> <b>Note:</b> The size of the security token that STS APIs return is not fixed. We strongly recommend that you make no assumptions about the maximum size. As of this writing, the typical size is less than 4096 bytes, but that can vary. Also, future updates to AWS might require larger sizes.</p>"]
+    /// <p>The temporary security credentials, which include an access key ID, a secret access key, and a security (or session) token.</p> <p> <b>Note:</b> The size of the security token that STS APIs return is not fixed. We strongly recommend that you make no assumptions about the maximum size. As of this writing, the typical size is less than 4096 bytes, but that can vary. Also, future updates to AWS might require larger sizes.</p>
     pub credentials: Option<Credentials>,
 }
 
 struct GetSessionTokenResponseDeserializer;
 impl GetSessionTokenResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<GetSessionTokenResponse, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetSessionTokenResponse, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = GetSessionTokenResponse::default();
@@ -1046,16 +1079,15 @@ impl GetSessionTokenResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Credentials" => {
-                            obj.credentials =
-                                Some(try!(CredentialsDeserializer::deserialize("Credentials",
-                                                                               stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Credentials" => {
+                        obj.credentials = Some(try!(CredentialsDeserializer::deserialize(
+                            "Credentials",
+                            stack
+                        )));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1066,119 +1098,118 @@ impl GetSessionTokenResponseDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct IssuerDeserializer;
 impl IssuerDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct NameQualifierDeserializer;
 impl NameQualifierDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct NonNegativeIntegerTypeDeserializer;
 impl NonNegativeIntegerTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<i64, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct SubjectDeserializer;
 impl SubjectDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct SubjectTypeDeserializer;
 impl SubjectTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct TokenTypeDeserializer;
 impl TokenTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct UserIdTypeDeserializer;
 impl UserIdTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct WebIdentitySubjectTypeDeserializer;
 impl WebIdentitySubjectTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 /// Errors returned by AssumeRole
@@ -1200,7 +1231,6 @@ pub enum AssumeRoleError {
     Unknown(String),
 }
 
-
 impl AssumeRoleError {
     pub fn from_body(body: &str) -> AssumeRoleError {
         let reader = EventReader::new(body.as_bytes());
@@ -1208,20 +1238,18 @@ impl AssumeRoleError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "MalformedPolicyDocumentException" => {
-                        AssumeRoleError::MalformedPolicyDocument(String::from(parsed_error.message))
-                    }
-                    "PackedPolicyTooLargeException" => {
-                        AssumeRoleError::PackedPolicyTooLarge(String::from(parsed_error.message))
-                    }
-                    "RegionDisabledException" => {
-                        AssumeRoleError::RegionDisabled(String::from(parsed_error.message))
-                    }
-                    _ => AssumeRoleError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "MalformedPolicyDocumentException" => {
+                    AssumeRoleError::MalformedPolicyDocument(String::from(parsed_error.message))
                 }
-            }
+                "PackedPolicyTooLargeException" => {
+                    AssumeRoleError::PackedPolicyTooLarge(String::from(parsed_error.message))
+                }
+                "RegionDisabledException" => {
+                    AssumeRoleError::RegionDisabled(String::from(parsed_error.message))
+                }
+                _ => AssumeRoleError::Unknown(String::from(body)),
+            },
             Err(_) => AssumeRoleError::Unknown(body.to_string()),
         }
     }
@@ -1291,7 +1319,6 @@ pub enum AssumeRoleWithSAMLError {
     Unknown(String),
 }
 
-
 impl AssumeRoleWithSAMLError {
     pub fn from_body(body: &str) -> AssumeRoleWithSAMLError {
         let reader = EventReader::new(body.as_bytes());
@@ -1299,21 +1326,29 @@ impl AssumeRoleWithSAMLError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "ExpiredTokenException" => {
-                        AssumeRoleWithSAMLError::ExpiredToken(String::from(parsed_error.message))
-                    }
-                    "IDPRejectedClaimException" => AssumeRoleWithSAMLError::IDPRejectedClaim(String::from(parsed_error.message)),
-                    "InvalidIdentityTokenException" => AssumeRoleWithSAMLError::InvalidIdentityToken(String::from(parsed_error.message)),
-                    "MalformedPolicyDocumentException" => AssumeRoleWithSAMLError::MalformedPolicyDocument(String::from(parsed_error.message)),
-                    "PackedPolicyTooLargeException" => AssumeRoleWithSAMLError::PackedPolicyTooLarge(String::from(parsed_error.message)),
-                    "RegionDisabledException" => {
-                        AssumeRoleWithSAMLError::RegionDisabled(String::from(parsed_error.message))
-                    }
-                    _ => AssumeRoleWithSAMLError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "ExpiredTokenException" => {
+                    AssumeRoleWithSAMLError::ExpiredToken(String::from(parsed_error.message))
                 }
-            }
+                "IDPRejectedClaimException" => {
+                    AssumeRoleWithSAMLError::IDPRejectedClaim(String::from(parsed_error.message))
+                }
+                "InvalidIdentityTokenException" => AssumeRoleWithSAMLError::InvalidIdentityToken(
+                    String::from(parsed_error.message),
+                ),
+                "MalformedPolicyDocumentException" => {
+                    AssumeRoleWithSAMLError::MalformedPolicyDocument(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "PackedPolicyTooLargeException" => AssumeRoleWithSAMLError::PackedPolicyTooLarge(
+                    String::from(parsed_error.message),
+                ),
+                "RegionDisabledException" => {
+                    AssumeRoleWithSAMLError::RegionDisabled(String::from(parsed_error.message))
+                }
+                _ => AssumeRoleWithSAMLError::Unknown(String::from(body)),
+            },
             Err(_) => AssumeRoleWithSAMLError::Unknown(body.to_string()),
         }
     }
@@ -1390,7 +1425,6 @@ pub enum AssumeRoleWithWebIdentityError {
     Unknown(String),
 }
 
-
 impl AssumeRoleWithWebIdentityError {
     pub fn from_body(body: &str) -> AssumeRoleWithWebIdentityError {
         let reader = EventReader::new(body.as_bytes());
@@ -1398,18 +1432,38 @@ impl AssumeRoleWithWebIdentityError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "ExpiredTokenException" => AssumeRoleWithWebIdentityError::ExpiredToken(String::from(parsed_error.message)),
-                    "IDPCommunicationErrorException" => AssumeRoleWithWebIdentityError::IDPCommunicationError(String::from(parsed_error.message)),
-                    "IDPRejectedClaimException" => AssumeRoleWithWebIdentityError::IDPRejectedClaim(String::from(parsed_error.message)),
-                    "InvalidIdentityTokenException" => AssumeRoleWithWebIdentityError::InvalidIdentityToken(String::from(parsed_error.message)),
-                    "MalformedPolicyDocumentException" => AssumeRoleWithWebIdentityError::MalformedPolicyDocument(String::from(parsed_error.message)),
-                    "PackedPolicyTooLargeException" => AssumeRoleWithWebIdentityError::PackedPolicyTooLarge(String::from(parsed_error.message)),
-                    "RegionDisabledException" => AssumeRoleWithWebIdentityError::RegionDisabled(String::from(parsed_error.message)),
-                    _ => AssumeRoleWithWebIdentityError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "ExpiredTokenException" => {
+                    AssumeRoleWithWebIdentityError::ExpiredToken(String::from(parsed_error.message))
                 }
-            }
+                "IDPCommunicationErrorException" => {
+                    AssumeRoleWithWebIdentityError::IDPCommunicationError(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "IDPRejectedClaimException" => AssumeRoleWithWebIdentityError::IDPRejectedClaim(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidIdentityTokenException" => {
+                    AssumeRoleWithWebIdentityError::InvalidIdentityToken(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "MalformedPolicyDocumentException" => {
+                    AssumeRoleWithWebIdentityError::MalformedPolicyDocument(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "PackedPolicyTooLargeException" => {
+                    AssumeRoleWithWebIdentityError::PackedPolicyTooLarge(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "RegionDisabledException" => AssumeRoleWithWebIdentityError::RegionDisabled(
+                    String::from(parsed_error.message),
+                ),
+                _ => AssumeRoleWithWebIdentityError::Unknown(String::from(body)),
+            },
             Err(_) => AssumeRoleWithWebIdentityError::Unknown(body.to_string()),
         }
     }
@@ -1475,7 +1529,6 @@ pub enum DecodeAuthorizationMessageError {
     Unknown(String),
 }
 
-
 impl DecodeAuthorizationMessageError {
     pub fn from_body(body: &str) -> DecodeAuthorizationMessageError {
         let reader = EventReader::new(body.as_bytes());
@@ -1483,12 +1536,14 @@ impl DecodeAuthorizationMessageError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "InvalidAuthorizationMessageException" => DecodeAuthorizationMessageError::InvalidAuthorizationMessage(String::from(parsed_error.message)),
-                    _ => DecodeAuthorizationMessageError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "InvalidAuthorizationMessageException" => {
+                    DecodeAuthorizationMessageError::InvalidAuthorizationMessage(String::from(
+                        parsed_error.message,
+                    ))
                 }
-            }
+                _ => DecodeAuthorizationMessageError::Unknown(String::from(body)),
+            },
             Err(_) => DecodeAuthorizationMessageError::Unknown(body.to_string()),
         }
     }
@@ -1546,7 +1601,6 @@ pub enum GetCallerIdentityError {
     Unknown(String),
 }
 
-
 impl GetCallerIdentityError {
     pub fn from_body(body: &str) -> GetCallerIdentityError {
         let reader = EventReader::new(body.as_bytes());
@@ -1554,11 +1608,9 @@ impl GetCallerIdentityError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    _ => GetCallerIdentityError::Unknown(String::from(body)),
-                }
-            }
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => GetCallerIdentityError::Unknown(String::from(body)),
+            },
             Err(_) => GetCallerIdentityError::Unknown(body.to_string()),
         }
     }
@@ -1621,7 +1673,6 @@ pub enum GetFederationTokenError {
     Unknown(String),
 }
 
-
 impl GetFederationTokenError {
     pub fn from_body(body: &str) -> GetFederationTokenError {
         let reader = EventReader::new(body.as_bytes());
@@ -1629,16 +1680,20 @@ impl GetFederationTokenError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "MalformedPolicyDocumentException" => GetFederationTokenError::MalformedPolicyDocument(String::from(parsed_error.message)),
-                    "PackedPolicyTooLargeException" => GetFederationTokenError::PackedPolicyTooLarge(String::from(parsed_error.message)),
-                    "RegionDisabledException" => {
-                        GetFederationTokenError::RegionDisabled(String::from(parsed_error.message))
-                    }
-                    _ => GetFederationTokenError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "MalformedPolicyDocumentException" => {
+                    GetFederationTokenError::MalformedPolicyDocument(String::from(
+                        parsed_error.message,
+                    ))
                 }
-            }
+                "PackedPolicyTooLargeException" => GetFederationTokenError::PackedPolicyTooLarge(
+                    String::from(parsed_error.message),
+                ),
+                "RegionDisabledException" => {
+                    GetFederationTokenError::RegionDisabled(String::from(parsed_error.message))
+                }
+                _ => GetFederationTokenError::Unknown(String::from(body)),
+            },
             Err(_) => GetFederationTokenError::Unknown(body.to_string()),
         }
     }
@@ -1700,7 +1755,6 @@ pub enum GetSessionTokenError {
     Unknown(String),
 }
 
-
 impl GetSessionTokenError {
     pub fn from_body(body: &str) -> GetSessionTokenError {
         let reader = EventReader::new(body.as_bytes());
@@ -1708,14 +1762,12 @@ impl GetSessionTokenError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "RegionDisabledException" => {
-                        GetSessionTokenError::RegionDisabled(String::from(parsed_error.message))
-                    }
-                    _ => GetSessionTokenError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "RegionDisabledException" => {
+                    GetSessionTokenError::RegionDisabled(String::from(parsed_error.message))
                 }
-            }
+                _ => GetSessionTokenError::Unknown(String::from(body)),
+            },
             Err(_) => GetSessionTokenError::Unknown(body.to_string()),
         }
     }
@@ -1761,52 +1813,50 @@ impl Error for GetSessionTokenError {
 /// Trait representing the capabilities of the AWS STS API. AWS STS clients implement this trait.
 pub trait Sts {
     #[doc="<p>Returns a set of temporary security credentials (consisting of an access key ID, a secret access key, and a security token) that you can use to access AWS resources that you might not normally have access to. Typically, you use <code>AssumeRole</code> for cross-account access or federation. For a comparison of <code>AssumeRole</code> with the other APIs that produce temporary credentials, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html\">Requesting Temporary Security Credentials</a> and <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html#stsapi_comparison\">Comparing the AWS STS APIs</a> in the <i>IAM User Guide</i>.</p> <p> <b>Important:</b> You cannot call <code>AssumeRole</code> by using AWS root account credentials; access is denied. You must use credentials for an IAM user or an IAM role to call <code>AssumeRole</code>. </p> <p>For cross-account access, imagine that you own multiple accounts and need to access resources in each account. You could create long-term credentials in each account to access those resources. However, managing all those credentials and remembering which one can access which account can be time consuming. Instead, you can create one set of long-term credentials in one account and then use temporary security credentials to access all the other accounts by assuming roles in those accounts. For more information about roles, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html\">IAM Roles (Delegation and Federation)</a> in the <i>IAM User Guide</i>. </p> <p>For federation, you can, for example, grant single sign-on access to the AWS Management Console. If you already have an identity and authentication system in your corporate network, you don't have to recreate user identities in AWS in order to grant those user identities access to AWS. Instead, after a user has been authenticated, you call <code>AssumeRole</code> (and specify the role with the appropriate permissions) to get temporary security credentials for that user. With those temporary security credentials, you construct a sign-in URL that users can use to access the console. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp.html#sts-introduction\">Common Scenarios for Temporary Credentials</a> in the <i>IAM User Guide</i>.</p> <p>The temporary security credentials are valid for the duration that you specified when calling <code>AssumeRole</code>, which can be from 900 seconds (15 minutes) to a maximum of 3600 seconds (1 hour). The default is 1 hour. </p> <p>The temporary security credentials created by <code>AssumeRole</code> can be used to make API calls to any AWS service with the following exception: you cannot call the STS service's <code>GetFederationToken</code> or <code>GetSessionToken</code> APIs.</p> <p>Optionally, you can pass an IAM access policy to this operation. If you choose not to pass a policy, the temporary security credentials that are returned by the operation have the permissions that are defined in the access policy of the role that is being assumed. If you pass a policy to this operation, the temporary security credentials that are returned by the operation have the permissions that are allowed by both the access policy of the role that is being assumed, <i> <b>and</b> </i> the policy that you pass. This gives you a way to further restrict the permissions for the resulting temporary security credentials. You cannot use the passed policy to grant permissions that are in excess of those allowed by the access policy of the role that is being assumed. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_control-access_assumerole.html\">Permissions for AssumeRole, AssumeRoleWithSAML, and AssumeRoleWithWebIdentity</a> in the <i>IAM User Guide</i>.</p> <p>To assume a role, your AWS account must be trusted by the role. The trust relationship is defined in the role's trust policy when the role is created. That trust policy states which accounts are allowed to delegate access to this account's role.</p> <p>The user who wants to access the role must also have permissions delegated from the role's administrator. If the user is in a different account than the role, then the user's administrator must attach a policy that allows the user to call AssumeRole on the ARN of the role in the other account. If the user is in the same account as the role, then you can either attach a policy to the user (identical to the previous different account user), or you can add the user as a principal directly in the role's trust policy</p> <p> <b>Using MFA with AssumeRole</b> </p> <p>You can optionally include multi-factor authentication (MFA) information when you call <code>AssumeRole</code>. This is useful for cross-account scenarios in which you want to make sure that the user who is assuming the role has been authenticated using an AWS MFA device. In that scenario, the trust policy of the role being assumed includes a condition that tests for MFA authentication; if the caller does not include valid MFA information, the request to assume the role is denied. The condition in a trust policy that tests for MFA authentication might look like the following example.</p> <p> <code>\"Condition\": {\"Bool\": {\"aws:MultiFactorAuthPresent\": true}}</code> </p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/MFAProtectedAPI.html\">Configuring MFA-Protected API Access</a> in the <i>IAM User Guide</i> guide.</p> <p>To use MFA with <code>AssumeRole</code>, you pass values for the <code>SerialNumber</code> and <code>TokenCode</code> parameters. The <code>SerialNumber</code> value identifies the user's hardware or virtual MFA device. The <code>TokenCode</code> is the time-based one-time password (TOTP) that the MFA devices produces. </p>"]
-    fn assume_role(&self,
-                   input: &AssumeRoleRequest)
-                   -> Result<AssumeRoleResponse, AssumeRoleError>;
-
+    fn assume_role(&self, input: &AssumeRoleRequest)
+        -> Result<AssumeRoleResponse, AssumeRoleError>;
 
     #[doc="<p>Returns a set of temporary security credentials for users who have been authenticated via a SAML authentication response. This operation provides a mechanism for tying an enterprise identity store or directory to role-based AWS access without user-specific credentials or configuration. For a comparison of <code>AssumeRoleWithSAML</code> with the other APIs that produce temporary credentials, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html\">Requesting Temporary Security Credentials</a> and <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html#stsapi_comparison\">Comparing the AWS STS APIs</a> in the <i>IAM User Guide</i>.</p> <p>The temporary security credentials returned by this operation consist of an access key ID, a secret access key, and a security token. Applications can use these temporary security credentials to sign calls to AWS services.</p> <p>The temporary security credentials are valid for the duration that you specified when calling <code>AssumeRole</code>, or until the time specified in the SAML authentication response's <code>SessionNotOnOrAfter</code> value, whichever is shorter. The duration can be from 900 seconds (15 minutes) to a maximum of 3600 seconds (1 hour). The default is 1 hour.</p> <p>The temporary security credentials created by <code>AssumeRoleWithSAML</code> can be used to make API calls to any AWS service with the following exception: you cannot call the STS service's <code>GetFederationToken</code> or <code>GetSessionToken</code> APIs.</p> <p>Optionally, you can pass an IAM access policy to this operation. If you choose not to pass a policy, the temporary security credentials that are returned by the operation have the permissions that are defined in the access policy of the role that is being assumed. If you pass a policy to this operation, the temporary security credentials that are returned by the operation have the permissions that are allowed by the intersection of both the access policy of the role that is being assumed, <i> <b>and</b> </i> the policy that you pass. This means that both policies must grant the permission for the action to be allowed. This gives you a way to further restrict the permissions for the resulting temporary security credentials. You cannot use the passed policy to grant permissions that are in excess of those allowed by the access policy of the role that is being assumed. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_control-access_assumerole.html\">Permissions for AssumeRole, AssumeRoleWithSAML, and AssumeRoleWithWebIdentity</a> in the <i>IAM User Guide</i>.</p> <p>Before your application can call <code>AssumeRoleWithSAML</code>, you must configure your SAML identity provider (IdP) to issue the claims required by AWS. Additionally, you must use AWS Identity and Access Management (IAM) to create a SAML provider entity in your AWS account that represents your identity provider, and create an IAM role that specifies this SAML provider in its trust policy. </p> <p>Calling <code>AssumeRoleWithSAML</code> does not require the use of AWS security credentials. The identity of the caller is validated by using keys in the metadata document that is uploaded for the SAML provider entity for your identity provider. </p> <important> <p>Calling <code>AssumeRoleWithSAML</code> can result in an entry in your AWS CloudTrail logs. The entry includes the value in the <code>NameID</code> element of the SAML assertion. We recommend that you use a NameIDType that is not associated with any personally identifiable information (PII). For example, you could instead use the Persistent Identifier (<code>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</code>).</p> </important> <p>For more information, see the following resources:</p> <ul> <li> <p> <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_saml.html\">About SAML 2.0-based Federation</a> in the <i>IAM User Guide</i>. </p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_saml.html\">Creating SAML Identity Providers</a> in the <i>IAM User Guide</i>. </p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_saml_relying-party.html\">Configuring a Relying Party and Claims</a> in the <i>IAM User Guide</i>. </p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-idp_saml.html\">Creating a Role for SAML 2.0 Federation</a> in the <i>IAM User Guide</i>. </p> </li> </ul>"]
-    fn assume_role_with_saml(&self,
-                             input: &AssumeRoleWithSAMLRequest)
-                             -> Result<AssumeRoleWithSAMLResponse, AssumeRoleWithSAMLError>;
-
+    fn assume_role_with_saml(
+        &self,
+        input: &AssumeRoleWithSAMLRequest,
+    ) -> Result<AssumeRoleWithSAMLResponse, AssumeRoleWithSAMLError>;
 
     #[doc="<p>Returns a set of temporary security credentials for users who have been authenticated in a mobile or web application with a web identity provider, such as Amazon Cognito, Login with Amazon, Facebook, Google, or any OpenID Connect-compatible identity provider.</p> <note> <p>For mobile applications, we recommend that you use Amazon Cognito. You can use Amazon Cognito with the <a href=\"http://aws.amazon.com/sdkforios/\">AWS SDK for iOS</a> and the <a href=\"http://aws.amazon.com/sdkforandroid/\">AWS SDK for Android</a> to uniquely identify a user and supply the user with a consistent identity throughout the lifetime of an application.</p> <p>To learn more about Amazon Cognito, see <a href=\"http://docs.aws.amazon.com/mobile/sdkforandroid/developerguide/cognito-auth.html#d0e840\">Amazon Cognito Overview</a> in the <i>AWS SDK for Android Developer Guide</i> guide and <a href=\"http://docs.aws.amazon.com/mobile/sdkforios/developerguide/cognito-auth.html#d0e664\">Amazon Cognito Overview</a> in the <i>AWS SDK for iOS Developer Guide</i>.</p> </note> <p>Calling <code>AssumeRoleWithWebIdentity</code> does not require the use of AWS security credentials. Therefore, you can distribute an application (for example, on mobile devices) that requests temporary security credentials without including long-term AWS credentials in the application, and without deploying server-based proxy services that use long-term AWS credentials. Instead, the identity of the caller is validated by using a token from the web identity provider. For a comparison of <code>AssumeRoleWithWebIdentity</code> with the other APIs that produce temporary credentials, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html\">Requesting Temporary Security Credentials</a> and <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html#stsapi_comparison\">Comparing the AWS STS APIs</a> in the <i>IAM User Guide</i>.</p> <p>The temporary security credentials returned by this API consist of an access key ID, a secret access key, and a security token. Applications can use these temporary security credentials to sign calls to AWS service APIs.</p> <p>The credentials are valid for the duration that you specified when calling <code>AssumeRoleWithWebIdentity</code>, which can be from 900 seconds (15 minutes) to a maximum of 3600 seconds (1 hour). The default is 1 hour. </p> <p>The temporary security credentials created by <code>AssumeRoleWithWebIdentity</code> can be used to make API calls to any AWS service with the following exception: you cannot call the STS service's <code>GetFederationToken</code> or <code>GetSessionToken</code> APIs.</p> <p>Optionally, you can pass an IAM access policy to this operation. If you choose not to pass a policy, the temporary security credentials that are returned by the operation have the permissions that are defined in the access policy of the role that is being assumed. If you pass a policy to this operation, the temporary security credentials that are returned by the operation have the permissions that are allowed by both the access policy of the role that is being assumed, <i> <b>and</b> </i> the policy that you pass. This gives you a way to further restrict the permissions for the resulting temporary security credentials. You cannot use the passed policy to grant permissions that are in excess of those allowed by the access policy of the role that is being assumed. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_control-access_assumerole.html\">Permissions for AssumeRole, AssumeRoleWithSAML, and AssumeRoleWithWebIdentity</a> in the <i>IAM User Guide</i>.</p> <p>Before your application can call <code>AssumeRoleWithWebIdentity</code>, you must have an identity token from a supported identity provider and create a role that the application can assume. The role that your application assumes must trust the identity provider that is associated with the identity token. In other words, the identity provider must be specified in the role's trust policy. </p> <important> <p>Calling <code>AssumeRoleWithWebIdentity</code> can result in an entry in your AWS CloudTrail logs. The entry includes the <a href=\"http://openid.net/specs/openid-connect-core-1_0.html#Claims\">Subject</a> of the provided Web Identity Token. We recommend that you avoid using any personally identifiable information (PII) in this field. For example, you could instead use a GUID or a pairwise identifier, as <a href=\"http://openid.net/specs/openid-connect-core-1_0.html#SubjectIDTypes\">suggested in the OIDC specification</a>.</p> </important> <p>For more information about how to use web identity federation and the <code>AssumeRoleWithWebIdentity</code> API, see the following resources: </p> <ul> <li> <p> <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_oidc_manual.html\">Using Web Identity Federation APIs for Mobile Apps</a> and <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html#api_assumerolewithwebidentity\">Federation Through a Web-based Identity Provider</a>. </p> </li> <li> <p> <a href=\"https://web-identity-federation-playground.s3.amazonaws.com/index.html\"> Web Identity Federation Playground</a>. This interactive website lets you walk through the process of authenticating via Login with Amazon, Facebook, or Google, getting temporary security credentials, and then using those credentials to make a request to AWS. </p> </li> <li> <p> <a href=\"http://aws.amazon.com/sdkforios/\">AWS SDK for iOS</a> and <a href=\"http://aws.amazon.com/sdkforandroid/\">AWS SDK for Android</a>. These toolkits contain sample apps that show how to invoke the identity providers, and then how to use the information from these providers to get and use temporary security credentials. </p> </li> <li> <p> <a href=\"http://aws.amazon.com/articles/4617974389850313\">Web Identity Federation with Mobile Applications</a>. This article discusses web identity federation and shows an example of how to use web identity federation to get access to content in Amazon S3. </p> </li> </ul>"]
-    fn assume_role_with_web_identity
-        (&self,
-         input: &AssumeRoleWithWebIdentityRequest)
-         -> Result<AssumeRoleWithWebIdentityResponse, AssumeRoleWithWebIdentityError>;
-
+    fn assume_role_with_web_identity(
+        &self,
+        input: &AssumeRoleWithWebIdentityRequest,
+    ) -> Result<AssumeRoleWithWebIdentityResponse, AssumeRoleWithWebIdentityError>;
 
     #[doc="<p>Decodes additional information about the authorization status of a request from an encoded message returned in response to an AWS request.</p> <p>For example, if a user is not authorized to perform an action that he or she has requested, the request returns a <code>Client.UnauthorizedOperation</code> response (an HTTP 403 response). Some AWS actions additionally return an encoded message that can provide details about this authorization failure. </p> <note> <p>Only certain AWS actions return an encoded authorization message. The documentation for an individual action indicates whether that action returns an encoded message in addition to returning an HTTP code.</p> </note> <p>The message is encoded because the details of the authorization status can constitute privileged information that the user who requested the action should not see. To decode an authorization status message, a user must be granted permissions via an IAM policy to request the <code>DecodeAuthorizationMessage</code> (<code>sts:DecodeAuthorizationMessage</code>) action. </p> <p>The decoded message includes the following type of information:</p> <ul> <li> <p>Whether the request was denied due to an explicit deny or due to the absence of an explicit allow. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html#policy-eval-denyallow\">Determining Whether a Request is Allowed or Denied</a> in the <i>IAM User Guide</i>. </p> </li> <li> <p>The principal who made the request.</p> </li> <li> <p>The requested action.</p> </li> <li> <p>The requested resource.</p> </li> <li> <p>The values of condition keys in the context of the user's request.</p> </li> </ul>"]
-    fn decode_authorization_message
-        (&self,
-         input: &DecodeAuthorizationMessageRequest)
-         -> Result<DecodeAuthorizationMessageResponse, DecodeAuthorizationMessageError>;
-
+    fn decode_authorization_message(
+        &self,
+        input: &DecodeAuthorizationMessageRequest,
+    ) -> Result<DecodeAuthorizationMessageResponse, DecodeAuthorizationMessageError>;
 
     #[doc="<p>Returns details about the IAM identity whose credentials are used to call the API.</p>"]
-    fn get_caller_identity(&self,
-                           input: &GetCallerIdentityRequest)
-                           -> Result<GetCallerIdentityResponse, GetCallerIdentityError>;
-
+    fn get_caller_identity(
+        &self,
+        input: &GetCallerIdentityRequest,
+    ) -> Result<GetCallerIdentityResponse, GetCallerIdentityError>;
 
     #[doc="<p>Returns a set of temporary security credentials (consisting of an access key ID, a secret access key, and a security token) for a federated user. A typical use is in a proxy application that gets temporary security credentials on behalf of distributed applications inside a corporate network. Because you must call the <code>GetFederationToken</code> action using the long-term security credentials of an IAM user, this call is appropriate in contexts where those credentials can be safely stored, usually in a server-based application. For a comparison of <code>GetFederationToken</code> with the other APIs that produce temporary credentials, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html\">Requesting Temporary Security Credentials</a> and <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html#stsapi_comparison\">Comparing the AWS STS APIs</a> in the <i>IAM User Guide</i>.</p> <note> <p>If you are creating a mobile-based or browser-based app that can authenticate users using a web identity provider like Login with Amazon, Facebook, Google, or an OpenID Connect-compatible identity provider, we recommend that you use <a href=\"http://aws.amazon.com/cognito/\">Amazon Cognito</a> or <code>AssumeRoleWithWebIdentity</code>. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html#api_assumerolewithwebidentity\">Federation Through a Web-based Identity Provider</a>.</p> </note> <p>The <code>GetFederationToken</code> action must be called by using the long-term AWS security credentials of an IAM user. You can also call <code>GetFederationToken</code> using the security credentials of an AWS root account, but we do not recommended it. Instead, we recommend that you create an IAM user for the purpose of the proxy application and then attach a policy to the IAM user that limits federated users to only the actions and resources that they need access to. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html\">IAM Best Practices</a> in the <i>IAM User Guide</i>. </p> <p>The temporary security credentials that are obtained by using the long-term credentials of an IAM user are valid for the specified duration, from 900 seconds (15 minutes) up to a maximium of 129600 seconds (36 hours). The default is 43200 seconds (12 hours). Temporary credentials that are obtained by using AWS root account credentials have a maximum duration of 3600 seconds (1 hour).</p> <p>The temporary security credentials created by <code>GetFederationToken</code> can be used to make API calls to any AWS service with the following exceptions:</p> <ul> <li> <p>You cannot use these credentials to call any IAM APIs.</p> </li> <li> <p>You cannot call any STS APIs except <code>GetCallerIdentity</code>.</p> </li> </ul> <p> <b>Permissions</b> </p> <p>The permissions for the temporary security credentials returned by <code>GetFederationToken</code> are determined by a combination of the following: </p> <ul> <li> <p>The policy or policies that are attached to the IAM user whose credentials are used to call <code>GetFederationToken</code>.</p> </li> <li> <p>The policy that is passed as a parameter in the call.</p> </li> </ul> <p>The passed policy is attached to the temporary security credentials that result from the <code>GetFederationToken</code> API call--that is, to the <i>federated user</i>. When the federated user makes an AWS request, AWS evaluates the policy attached to the federated user in combination with the policy or policies attached to the IAM user whose credentials were used to call <code>GetFederationToken</code>. AWS allows the federated user's request only when both the federated user <i> <b>and</b> </i> the IAM user are explicitly allowed to perform the requested action. The passed policy cannot grant more permissions than those that are defined in the IAM user policy.</p> <p>A typical use case is that the permissions of the IAM user whose credentials are used to call <code>GetFederationToken</code> are designed to allow access to all the actions and resources that any federated user will need. Then, for individual users, you pass a policy to the operation that scopes down the permissions to a level that's appropriate to that individual user, using a policy that allows only a subset of permissions that are granted to the IAM user. </p> <p>If you do not pass a policy, the resulting temporary security credentials have no effective permissions. The only exception is when the temporary security credentials are used to access a resource that has a resource-based policy that specifically allows the federated user to access the resource.</p> <p>For more information about how permissions work, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_control-access_getfederationtoken.html\">Permissions for GetFederationToken</a>. For information about using <code>GetFederationToken</code> to create temporary security credentials, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html#api_getfederationtoken\">GetFederationToken—Federation Through a Custom Identity Broker</a>. </p>"]
-    fn get_federation_token(&self,
-                            input: &GetFederationTokenRequest)
-                            -> Result<GetFederationTokenResponse, GetFederationTokenError>;
-
+    fn get_federation_token(
+        &self,
+        input: &GetFederationTokenRequest,
+    ) -> Result<GetFederationTokenResponse, GetFederationTokenError>;
 
     #[doc="<p>Returns a set of temporary credentials for an AWS account or IAM user. The credentials consist of an access key ID, a secret access key, and a security token. Typically, you use <code>GetSessionToken</code> if you want to use MFA to protect programmatic calls to specific AWS APIs like Amazon EC2 <code>StopInstances</code>. MFA-enabled IAM users would need to call <code>GetSessionToken</code> and submit an MFA code that is associated with their MFA device. Using the temporary security credentials that are returned from the call, IAM users can then make programmatic calls to APIs that require MFA authentication. If you do not supply a correct MFA code, then the API returns an access denied error. For a comparison of <code>GetSessionToken</code> with the other APIs that produce temporary credentials, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html\">Requesting Temporary Security Credentials</a> and <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html#stsapi_comparison\">Comparing the AWS STS APIs</a> in the <i>IAM User Guide</i>.</p> <p>The <code>GetSessionToken</code> action must be called by using the long-term AWS security credentials of the AWS account or an IAM user. Credentials that are created by IAM users are valid for the duration that you specify, from 900 seconds (15 minutes) up to a maximum of 129600 seconds (36 hours), with a default of 43200 seconds (12 hours); credentials that are created by using account credentials can range from 900 seconds (15 minutes) up to a maximum of 3600 seconds (1 hour), with a default of 1 hour. </p> <p>The temporary security credentials created by <code>GetSessionToken</code> can be used to make API calls to any AWS service with the following exceptions:</p> <ul> <li> <p>You cannot call any IAM APIs unless MFA authentication information is included in the request.</p> </li> <li> <p>You cannot call any STS API <i>except</i> <code>AssumeRole</code> or <code>GetCallerIdentity</code>.</p> </li> </ul> <note> <p>We recommend that you do not call <code>GetSessionToken</code> with root account credentials. Instead, follow our <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#create-iam-users\">best practices</a> by creating one or more IAM users, giving them the necessary permissions, and using IAM users for everyday interaction with AWS. </p> </note> <p>The permissions associated with the temporary security credentials returned by <code>GetSessionToken</code> are based on the permissions associated with account or IAM user whose credentials are used to call the action. If <code>GetSessionToken</code> is called using root account credentials, the temporary credentials have root account permissions. Similarly, if <code>GetSessionToken</code> is called using the credentials of an IAM user, the temporary credentials have the same permissions as the IAM user. </p> <p>For more information about using <code>GetSessionToken</code> to create temporary credentials, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html#api_getsessiontoken\">Temporary Credentials for Users in Untrusted Environments</a> in the <i>IAM User Guide</i>. </p>"]
-    fn get_session_token(&self,
-                         input: &GetSessionTokenRequest)
-                         -> Result<GetSessionTokenResponse, GetSessionTokenError>;
+    fn get_session_token(
+        &self,
+        input: &GetSessionTokenRequest,
+    ) -> Result<GetSessionTokenResponse, GetSessionTokenError>;
 }
 /// A client for the AWS STS API.
 pub struct StsClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -1814,8 +1864,9 @@ pub struct StsClient<P, D>
 }
 
 impl<P, D> StsClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         StsClient {
@@ -1827,13 +1878,15 @@ impl<P, D> StsClient<P, D>
 }
 
 impl<P, D> Sts for StsClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     #[doc="<p>Returns a set of temporary security credentials (consisting of an access key ID, a secret access key, and a security token) that you can use to access AWS resources that you might not normally have access to. Typically, you use <code>AssumeRole</code> for cross-account access or federation. For a comparison of <code>AssumeRole</code> with the other APIs that produce temporary credentials, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html\">Requesting Temporary Security Credentials</a> and <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html#stsapi_comparison\">Comparing the AWS STS APIs</a> in the <i>IAM User Guide</i>.</p> <p> <b>Important:</b> You cannot call <code>AssumeRole</code> by using AWS root account credentials; access is denied. You must use credentials for an IAM user or an IAM role to call <code>AssumeRole</code>. </p> <p>For cross-account access, imagine that you own multiple accounts and need to access resources in each account. You could create long-term credentials in each account to access those resources. However, managing all those credentials and remembering which one can access which account can be time consuming. Instead, you can create one set of long-term credentials in one account and then use temporary security credentials to access all the other accounts by assuming roles in those accounts. For more information about roles, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html\">IAM Roles (Delegation and Federation)</a> in the <i>IAM User Guide</i>. </p> <p>For federation, you can, for example, grant single sign-on access to the AWS Management Console. If you already have an identity and authentication system in your corporate network, you don't have to recreate user identities in AWS in order to grant those user identities access to AWS. Instead, after a user has been authenticated, you call <code>AssumeRole</code> (and specify the role with the appropriate permissions) to get temporary security credentials for that user. With those temporary security credentials, you construct a sign-in URL that users can use to access the console. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp.html#sts-introduction\">Common Scenarios for Temporary Credentials</a> in the <i>IAM User Guide</i>.</p> <p>The temporary security credentials are valid for the duration that you specified when calling <code>AssumeRole</code>, which can be from 900 seconds (15 minutes) to a maximum of 3600 seconds (1 hour). The default is 1 hour. </p> <p>The temporary security credentials created by <code>AssumeRole</code> can be used to make API calls to any AWS service with the following exception: you cannot call the STS service's <code>GetFederationToken</code> or <code>GetSessionToken</code> APIs.</p> <p>Optionally, you can pass an IAM access policy to this operation. If you choose not to pass a policy, the temporary security credentials that are returned by the operation have the permissions that are defined in the access policy of the role that is being assumed. If you pass a policy to this operation, the temporary security credentials that are returned by the operation have the permissions that are allowed by both the access policy of the role that is being assumed, <i> <b>and</b> </i> the policy that you pass. This gives you a way to further restrict the permissions for the resulting temporary security credentials. You cannot use the passed policy to grant permissions that are in excess of those allowed by the access policy of the role that is being assumed. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_control-access_assumerole.html\">Permissions for AssumeRole, AssumeRoleWithSAML, and AssumeRoleWithWebIdentity</a> in the <i>IAM User Guide</i>.</p> <p>To assume a role, your AWS account must be trusted by the role. The trust relationship is defined in the role's trust policy when the role is created. That trust policy states which accounts are allowed to delegate access to this account's role.</p> <p>The user who wants to access the role must also have permissions delegated from the role's administrator. If the user is in a different account than the role, then the user's administrator must attach a policy that allows the user to call AssumeRole on the ARN of the role in the other account. If the user is in the same account as the role, then you can either attach a policy to the user (identical to the previous different account user), or you can add the user as a principal directly in the role's trust policy</p> <p> <b>Using MFA with AssumeRole</b> </p> <p>You can optionally include multi-factor authentication (MFA) information when you call <code>AssumeRole</code>. This is useful for cross-account scenarios in which you want to make sure that the user who is assuming the role has been authenticated using an AWS MFA device. In that scenario, the trust policy of the role being assumed includes a condition that tests for MFA authentication; if the caller does not include valid MFA information, the request to assume the role is denied. The condition in a trust policy that tests for MFA authentication might look like the following example.</p> <p> <code>\"Condition\": {\"Bool\": {\"aws:MultiFactorAuthPresent\": true}}</code> </p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/MFAProtectedAPI.html\">Configuring MFA-Protected API Access</a> in the <i>IAM User Guide</i> guide.</p> <p>To use MFA with <code>AssumeRole</code>, you pass values for the <code>SerialNumber</code> and <code>TokenCode</code> parameters. The <code>SerialNumber</code> value identifies the user's hardware or virtual MFA device. The <code>TokenCode</code> is the time-based one-time password (TOTP) that the MFA devices produces. </p>"]
-    fn assume_role(&self,
-                   input: &AssumeRoleRequest)
-                   -> Result<AssumeRoleResponse, AssumeRoleError> {
+    fn assume_role(
+        &self,
+        input: &AssumeRoleRequest,
+    ) -> Result<AssumeRoleResponse, AssumeRoleError> {
         let mut request = SignedRequest::new("POST", "sts", &self.region, "/");
         let mut params = Params::new();
 
@@ -1846,7 +1899,6 @@ impl<P, D> Sts for StsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -1854,15 +1906,18 @@ impl<P, D> Sts for StsClient<P, D>
                 if body.is_empty() {
                     result = AssumeRoleResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(AssumeRoleResponseDeserializer::deserialize("AssumeRoleResult",
-                                                                              &mut stack));
+                    result = try!(AssumeRoleResponseDeserializer::deserialize(
+                        "AssumeRoleResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -1871,16 +1926,18 @@ impl<P, D> Sts for StsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AssumeRoleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AssumeRoleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns a set of temporary security credentials for users who have been authenticated via a SAML authentication response. This operation provides a mechanism for tying an enterprise identity store or directory to role-based AWS access without user-specific credentials or configuration. For a comparison of <code>AssumeRoleWithSAML</code> with the other APIs that produce temporary credentials, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html\">Requesting Temporary Security Credentials</a> and <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html#stsapi_comparison\">Comparing the AWS STS APIs</a> in the <i>IAM User Guide</i>.</p> <p>The temporary security credentials returned by this operation consist of an access key ID, a secret access key, and a security token. Applications can use these temporary security credentials to sign calls to AWS services.</p> <p>The temporary security credentials are valid for the duration that you specified when calling <code>AssumeRole</code>, or until the time specified in the SAML authentication response's <code>SessionNotOnOrAfter</code> value, whichever is shorter. The duration can be from 900 seconds (15 minutes) to a maximum of 3600 seconds (1 hour). The default is 1 hour.</p> <p>The temporary security credentials created by <code>AssumeRoleWithSAML</code> can be used to make API calls to any AWS service with the following exception: you cannot call the STS service's <code>GetFederationToken</code> or <code>GetSessionToken</code> APIs.</p> <p>Optionally, you can pass an IAM access policy to this operation. If you choose not to pass a policy, the temporary security credentials that are returned by the operation have the permissions that are defined in the access policy of the role that is being assumed. If you pass a policy to this operation, the temporary security credentials that are returned by the operation have the permissions that are allowed by the intersection of both the access policy of the role that is being assumed, <i> <b>and</b> </i> the policy that you pass. This means that both policies must grant the permission for the action to be allowed. This gives you a way to further restrict the permissions for the resulting temporary security credentials. You cannot use the passed policy to grant permissions that are in excess of those allowed by the access policy of the role that is being assumed. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_control-access_assumerole.html\">Permissions for AssumeRole, AssumeRoleWithSAML, and AssumeRoleWithWebIdentity</a> in the <i>IAM User Guide</i>.</p> <p>Before your application can call <code>AssumeRoleWithSAML</code>, you must configure your SAML identity provider (IdP) to issue the claims required by AWS. Additionally, you must use AWS Identity and Access Management (IAM) to create a SAML provider entity in your AWS account that represents your identity provider, and create an IAM role that specifies this SAML provider in its trust policy. </p> <p>Calling <code>AssumeRoleWithSAML</code> does not require the use of AWS security credentials. The identity of the caller is validated by using keys in the metadata document that is uploaded for the SAML provider entity for your identity provider. </p> <important> <p>Calling <code>AssumeRoleWithSAML</code> can result in an entry in your AWS CloudTrail logs. The entry includes the value in the <code>NameID</code> element of the SAML assertion. We recommend that you use a NameIDType that is not associated with any personally identifiable information (PII). For example, you could instead use the Persistent Identifier (<code>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</code>).</p> </important> <p>For more information, see the following resources:</p> <ul> <li> <p> <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_saml.html\">About SAML 2.0-based Federation</a> in the <i>IAM User Guide</i>. </p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_saml.html\">Creating SAML Identity Providers</a> in the <i>IAM User Guide</i>. </p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_saml_relying-party.html\">Configuring a Relying Party and Claims</a> in the <i>IAM User Guide</i>. </p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-idp_saml.html\">Creating a Role for SAML 2.0 Federation</a> in the <i>IAM User Guide</i>. </p> </li> </ul>"]
-    fn assume_role_with_saml(&self,
-                             input: &AssumeRoleWithSAMLRequest)
-                             -> Result<AssumeRoleWithSAMLResponse, AssumeRoleWithSAMLError> {
+    fn assume_role_with_saml(
+        &self,
+        input: &AssumeRoleWithSAMLRequest,
+    ) -> Result<AssumeRoleWithSAMLResponse, AssumeRoleWithSAMLError> {
         let mut request = SignedRequest::new("POST", "sts", &self.region, "/");
         let mut params = Params::new();
 
@@ -1893,7 +1950,6 @@ impl<P, D> Sts for StsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -1901,15 +1957,18 @@ impl<P, D> Sts for StsClient<P, D>
                 if body.is_empty() {
                     result = AssumeRoleWithSAMLResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(AssumeRoleWithSAMLResponseDeserializer::deserialize("AssumeRoleWithSAMLResult",
-                                                                                      &mut stack));
+                    result = try!(AssumeRoleWithSAMLResponseDeserializer::deserialize(
+                        "AssumeRoleWithSAMLResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -1918,17 +1977,18 @@ impl<P, D> Sts for StsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AssumeRoleWithSAMLError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AssumeRoleWithSAMLError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns a set of temporary security credentials for users who have been authenticated in a mobile or web application with a web identity provider, such as Amazon Cognito, Login with Amazon, Facebook, Google, or any OpenID Connect-compatible identity provider.</p> <note> <p>For mobile applications, we recommend that you use Amazon Cognito. You can use Amazon Cognito with the <a href=\"http://aws.amazon.com/sdkforios/\">AWS SDK for iOS</a> and the <a href=\"http://aws.amazon.com/sdkforandroid/\">AWS SDK for Android</a> to uniquely identify a user and supply the user with a consistent identity throughout the lifetime of an application.</p> <p>To learn more about Amazon Cognito, see <a href=\"http://docs.aws.amazon.com/mobile/sdkforandroid/developerguide/cognito-auth.html#d0e840\">Amazon Cognito Overview</a> in the <i>AWS SDK for Android Developer Guide</i> guide and <a href=\"http://docs.aws.amazon.com/mobile/sdkforios/developerguide/cognito-auth.html#d0e664\">Amazon Cognito Overview</a> in the <i>AWS SDK for iOS Developer Guide</i>.</p> </note> <p>Calling <code>AssumeRoleWithWebIdentity</code> does not require the use of AWS security credentials. Therefore, you can distribute an application (for example, on mobile devices) that requests temporary security credentials without including long-term AWS credentials in the application, and without deploying server-based proxy services that use long-term AWS credentials. Instead, the identity of the caller is validated by using a token from the web identity provider. For a comparison of <code>AssumeRoleWithWebIdentity</code> with the other APIs that produce temporary credentials, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html\">Requesting Temporary Security Credentials</a> and <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html#stsapi_comparison\">Comparing the AWS STS APIs</a> in the <i>IAM User Guide</i>.</p> <p>The temporary security credentials returned by this API consist of an access key ID, a secret access key, and a security token. Applications can use these temporary security credentials to sign calls to AWS service APIs.</p> <p>The credentials are valid for the duration that you specified when calling <code>AssumeRoleWithWebIdentity</code>, which can be from 900 seconds (15 minutes) to a maximum of 3600 seconds (1 hour). The default is 1 hour. </p> <p>The temporary security credentials created by <code>AssumeRoleWithWebIdentity</code> can be used to make API calls to any AWS service with the following exception: you cannot call the STS service's <code>GetFederationToken</code> or <code>GetSessionToken</code> APIs.</p> <p>Optionally, you can pass an IAM access policy to this operation. If you choose not to pass a policy, the temporary security credentials that are returned by the operation have the permissions that are defined in the access policy of the role that is being assumed. If you pass a policy to this operation, the temporary security credentials that are returned by the operation have the permissions that are allowed by both the access policy of the role that is being assumed, <i> <b>and</b> </i> the policy that you pass. This gives you a way to further restrict the permissions for the resulting temporary security credentials. You cannot use the passed policy to grant permissions that are in excess of those allowed by the access policy of the role that is being assumed. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_control-access_assumerole.html\">Permissions for AssumeRole, AssumeRoleWithSAML, and AssumeRoleWithWebIdentity</a> in the <i>IAM User Guide</i>.</p> <p>Before your application can call <code>AssumeRoleWithWebIdentity</code>, you must have an identity token from a supported identity provider and create a role that the application can assume. The role that your application assumes must trust the identity provider that is associated with the identity token. In other words, the identity provider must be specified in the role's trust policy. </p> <important> <p>Calling <code>AssumeRoleWithWebIdentity</code> can result in an entry in your AWS CloudTrail logs. The entry includes the <a href=\"http://openid.net/specs/openid-connect-core-1_0.html#Claims\">Subject</a> of the provided Web Identity Token. We recommend that you avoid using any personally identifiable information (PII) in this field. For example, you could instead use a GUID or a pairwise identifier, as <a href=\"http://openid.net/specs/openid-connect-core-1_0.html#SubjectIDTypes\">suggested in the OIDC specification</a>.</p> </important> <p>For more information about how to use web identity federation and the <code>AssumeRoleWithWebIdentity</code> API, see the following resources: </p> <ul> <li> <p> <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_oidc_manual.html\">Using Web Identity Federation APIs for Mobile Apps</a> and <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html#api_assumerolewithwebidentity\">Federation Through a Web-based Identity Provider</a>. </p> </li> <li> <p> <a href=\"https://web-identity-federation-playground.s3.amazonaws.com/index.html\"> Web Identity Federation Playground</a>. This interactive website lets you walk through the process of authenticating via Login with Amazon, Facebook, or Google, getting temporary security credentials, and then using those credentials to make a request to AWS. </p> </li> <li> <p> <a href=\"http://aws.amazon.com/sdkforios/\">AWS SDK for iOS</a> and <a href=\"http://aws.amazon.com/sdkforandroid/\">AWS SDK for Android</a>. These toolkits contain sample apps that show how to invoke the identity providers, and then how to use the information from these providers to get and use temporary security credentials. </p> </li> <li> <p> <a href=\"http://aws.amazon.com/articles/4617974389850313\">Web Identity Federation with Mobile Applications</a>. This article discusses web identity federation and shows an example of how to use web identity federation to get access to content in Amazon S3. </p> </li> </ul>"]
-    fn assume_role_with_web_identity
-        (&self,
-         input: &AssumeRoleWithWebIdentityRequest)
-         -> Result<AssumeRoleWithWebIdentityResponse, AssumeRoleWithWebIdentityError> {
+    fn assume_role_with_web_identity(
+        &self,
+        input: &AssumeRoleWithWebIdentityRequest,
+    ) -> Result<AssumeRoleWithWebIdentityResponse, AssumeRoleWithWebIdentityError> {
         let mut request = SignedRequest::new("POST", "sts", &self.region, "/");
         let mut params = Params::new();
 
@@ -1941,7 +2001,6 @@ impl<P, D> Sts for StsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -1949,14 +2008,18 @@ impl<P, D> Sts for StsClient<P, D>
                 if body.is_empty() {
                     result = AssumeRoleWithWebIdentityResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(AssumeRoleWithWebIdentityResponseDeserializer::deserialize("AssumeRoleWithWebIdentityResult", &mut stack));
+                    result = try!(AssumeRoleWithWebIdentityResponseDeserializer::deserialize(
+                        "AssumeRoleWithWebIdentityResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -1965,18 +2028,18 @@ impl<P, D> Sts for StsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AssumeRoleWithWebIdentityError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(AssumeRoleWithWebIdentityError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Decodes additional information about the authorization status of a request from an encoded message returned in response to an AWS request.</p> <p>For example, if a user is not authorized to perform an action that he or she has requested, the request returns a <code>Client.UnauthorizedOperation</code> response (an HTTP 403 response). Some AWS actions additionally return an encoded message that can provide details about this authorization failure. </p> <note> <p>Only certain AWS actions return an encoded authorization message. The documentation for an individual action indicates whether that action returns an encoded message in addition to returning an HTTP code.</p> </note> <p>The message is encoded because the details of the authorization status can constitute privileged information that the user who requested the action should not see. To decode an authorization status message, a user must be granted permissions via an IAM policy to request the <code>DecodeAuthorizationMessage</code> (<code>sts:DecodeAuthorizationMessage</code>) action. </p> <p>The decoded message includes the following type of information:</p> <ul> <li> <p>Whether the request was denied due to an explicit deny or due to the absence of an explicit allow. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html#policy-eval-denyallow\">Determining Whether a Request is Allowed or Denied</a> in the <i>IAM User Guide</i>. </p> </li> <li> <p>The principal who made the request.</p> </li> <li> <p>The requested action.</p> </li> <li> <p>The requested resource.</p> </li> <li> <p>The values of condition keys in the context of the user's request.</p> </li> </ul>"]
-    fn decode_authorization_message
-        (&self,
-         input: &DecodeAuthorizationMessageRequest)
-         -> Result<DecodeAuthorizationMessageResponse, DecodeAuthorizationMessageError> {
+    fn decode_authorization_message(
+        &self,
+        input: &DecodeAuthorizationMessageRequest,
+    ) -> Result<DecodeAuthorizationMessageResponse, DecodeAuthorizationMessageError> {
         let mut request = SignedRequest::new("POST", "sts", &self.region, "/");
         let mut params = Params::new();
 
@@ -1989,7 +2052,6 @@ impl<P, D> Sts for StsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -1997,14 +2059,20 @@ impl<P, D> Sts for StsClient<P, D>
                 if body.is_empty() {
                     result = DecodeAuthorizationMessageResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DecodeAuthorizationMessageResponseDeserializer::deserialize("DecodeAuthorizationMessageResult", &mut stack));
+                    result = try!(
+                        DecodeAuthorizationMessageResponseDeserializer::deserialize(
+                            "DecodeAuthorizationMessageResult",
+                            &mut stack
+                        )
+                    );
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -2013,17 +2081,18 @@ impl<P, D> Sts for StsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DecodeAuthorizationMessageError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+                Err(DecodeAuthorizationMessageError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns details about the IAM identity whose credentials are used to call the API.</p>"]
-    fn get_caller_identity(&self,
-                           input: &GetCallerIdentityRequest)
-                           -> Result<GetCallerIdentityResponse, GetCallerIdentityError> {
+    fn get_caller_identity(
+        &self,
+        input: &GetCallerIdentityRequest,
+    ) -> Result<GetCallerIdentityResponse, GetCallerIdentityError> {
         let mut request = SignedRequest::new("POST", "sts", &self.region, "/");
         let mut params = Params::new();
 
@@ -2036,7 +2105,6 @@ impl<P, D> Sts for StsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2044,15 +2112,18 @@ impl<P, D> Sts for StsClient<P, D>
                 if body.is_empty() {
                     result = GetCallerIdentityResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetCallerIdentityResponseDeserializer::deserialize("GetCallerIdentityResult",
-                                                                                     &mut stack));
+                    result = try!(GetCallerIdentityResponseDeserializer::deserialize(
+                        "GetCallerIdentityResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -2061,16 +2132,18 @@ impl<P, D> Sts for StsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetCallerIdentityError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetCallerIdentityError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns a set of temporary security credentials (consisting of an access key ID, a secret access key, and a security token) for a federated user. A typical use is in a proxy application that gets temporary security credentials on behalf of distributed applications inside a corporate network. Because you must call the <code>GetFederationToken</code> action using the long-term security credentials of an IAM user, this call is appropriate in contexts where those credentials can be safely stored, usually in a server-based application. For a comparison of <code>GetFederationToken</code> with the other APIs that produce temporary credentials, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html\">Requesting Temporary Security Credentials</a> and <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html#stsapi_comparison\">Comparing the AWS STS APIs</a> in the <i>IAM User Guide</i>.</p> <note> <p>If you are creating a mobile-based or browser-based app that can authenticate users using a web identity provider like Login with Amazon, Facebook, Google, or an OpenID Connect-compatible identity provider, we recommend that you use <a href=\"http://aws.amazon.com/cognito/\">Amazon Cognito</a> or <code>AssumeRoleWithWebIdentity</code>. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html#api_assumerolewithwebidentity\">Federation Through a Web-based Identity Provider</a>.</p> </note> <p>The <code>GetFederationToken</code> action must be called by using the long-term AWS security credentials of an IAM user. You can also call <code>GetFederationToken</code> using the security credentials of an AWS root account, but we do not recommended it. Instead, we recommend that you create an IAM user for the purpose of the proxy application and then attach a policy to the IAM user that limits federated users to only the actions and resources that they need access to. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html\">IAM Best Practices</a> in the <i>IAM User Guide</i>. </p> <p>The temporary security credentials that are obtained by using the long-term credentials of an IAM user are valid for the specified duration, from 900 seconds (15 minutes) up to a maximium of 129600 seconds (36 hours). The default is 43200 seconds (12 hours). Temporary credentials that are obtained by using AWS root account credentials have a maximum duration of 3600 seconds (1 hour).</p> <p>The temporary security credentials created by <code>GetFederationToken</code> can be used to make API calls to any AWS service with the following exceptions:</p> <ul> <li> <p>You cannot use these credentials to call any IAM APIs.</p> </li> <li> <p>You cannot call any STS APIs except <code>GetCallerIdentity</code>.</p> </li> </ul> <p> <b>Permissions</b> </p> <p>The permissions for the temporary security credentials returned by <code>GetFederationToken</code> are determined by a combination of the following: </p> <ul> <li> <p>The policy or policies that are attached to the IAM user whose credentials are used to call <code>GetFederationToken</code>.</p> </li> <li> <p>The policy that is passed as a parameter in the call.</p> </li> </ul> <p>The passed policy is attached to the temporary security credentials that result from the <code>GetFederationToken</code> API call--that is, to the <i>federated user</i>. When the federated user makes an AWS request, AWS evaluates the policy attached to the federated user in combination with the policy or policies attached to the IAM user whose credentials were used to call <code>GetFederationToken</code>. AWS allows the federated user's request only when both the federated user <i> <b>and</b> </i> the IAM user are explicitly allowed to perform the requested action. The passed policy cannot grant more permissions than those that are defined in the IAM user policy.</p> <p>A typical use case is that the permissions of the IAM user whose credentials are used to call <code>GetFederationToken</code> are designed to allow access to all the actions and resources that any federated user will need. Then, for individual users, you pass a policy to the operation that scopes down the permissions to a level that's appropriate to that individual user, using a policy that allows only a subset of permissions that are granted to the IAM user. </p> <p>If you do not pass a policy, the resulting temporary security credentials have no effective permissions. The only exception is when the temporary security credentials are used to access a resource that has a resource-based policy that specifically allows the federated user to access the resource.</p> <p>For more information about how permissions work, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_control-access_getfederationtoken.html\">Permissions for GetFederationToken</a>. For information about using <code>GetFederationToken</code> to create temporary security credentials, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html#api_getfederationtoken\">GetFederationToken—Federation Through a Custom Identity Broker</a>. </p>"]
-    fn get_federation_token(&self,
-                            input: &GetFederationTokenRequest)
-                            -> Result<GetFederationTokenResponse, GetFederationTokenError> {
+    fn get_federation_token(
+        &self,
+        input: &GetFederationTokenRequest,
+    ) -> Result<GetFederationTokenResponse, GetFederationTokenError> {
         let mut request = SignedRequest::new("POST", "sts", &self.region, "/");
         let mut params = Params::new();
 
@@ -2083,7 +2156,6 @@ impl<P, D> Sts for StsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2091,15 +2163,18 @@ impl<P, D> Sts for StsClient<P, D>
                 if body.is_empty() {
                     result = GetFederationTokenResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetFederationTokenResponseDeserializer::deserialize("GetFederationTokenResult",
-                                                                                      &mut stack));
+                    result = try!(GetFederationTokenResponseDeserializer::deserialize(
+                        "GetFederationTokenResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -2108,16 +2183,18 @@ impl<P, D> Sts for StsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetFederationTokenError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetFederationTokenError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns a set of temporary credentials for an AWS account or IAM user. The credentials consist of an access key ID, a secret access key, and a security token. Typically, you use <code>GetSessionToken</code> if you want to use MFA to protect programmatic calls to specific AWS APIs like Amazon EC2 <code>StopInstances</code>. MFA-enabled IAM users would need to call <code>GetSessionToken</code> and submit an MFA code that is associated with their MFA device. Using the temporary security credentials that are returned from the call, IAM users can then make programmatic calls to APIs that require MFA authentication. If you do not supply a correct MFA code, then the API returns an access denied error. For a comparison of <code>GetSessionToken</code> with the other APIs that produce temporary credentials, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html\">Requesting Temporary Security Credentials</a> and <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html#stsapi_comparison\">Comparing the AWS STS APIs</a> in the <i>IAM User Guide</i>.</p> <p>The <code>GetSessionToken</code> action must be called by using the long-term AWS security credentials of the AWS account or an IAM user. Credentials that are created by IAM users are valid for the duration that you specify, from 900 seconds (15 minutes) up to a maximum of 129600 seconds (36 hours), with a default of 43200 seconds (12 hours); credentials that are created by using account credentials can range from 900 seconds (15 minutes) up to a maximum of 3600 seconds (1 hour), with a default of 1 hour. </p> <p>The temporary security credentials created by <code>GetSessionToken</code> can be used to make API calls to any AWS service with the following exceptions:</p> <ul> <li> <p>You cannot call any IAM APIs unless MFA authentication information is included in the request.</p> </li> <li> <p>You cannot call any STS API <i>except</i> <code>AssumeRole</code> or <code>GetCallerIdentity</code>.</p> </li> </ul> <note> <p>We recommend that you do not call <code>GetSessionToken</code> with root account credentials. Instead, follow our <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#create-iam-users\">best practices</a> by creating one or more IAM users, giving them the necessary permissions, and using IAM users for everyday interaction with AWS. </p> </note> <p>The permissions associated with the temporary security credentials returned by <code>GetSessionToken</code> are based on the permissions associated with account or IAM user whose credentials are used to call the action. If <code>GetSessionToken</code> is called using root account credentials, the temporary credentials have root account permissions. Similarly, if <code>GetSessionToken</code> is called using the credentials of an IAM user, the temporary credentials have the same permissions as the IAM user. </p> <p>For more information about using <code>GetSessionToken</code> to create temporary credentials, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html#api_getsessiontoken\">Temporary Credentials for Users in Untrusted Environments</a> in the <i>IAM User Guide</i>. </p>"]
-    fn get_session_token(&self,
-                         input: &GetSessionTokenRequest)
-                         -> Result<GetSessionTokenResponse, GetSessionTokenError> {
+    fn get_session_token(
+        &self,
+        input: &GetSessionTokenRequest,
+    ) -> Result<GetSessionTokenResponse, GetSessionTokenError> {
         let mut request = SignedRequest::new("POST", "sts", &self.region, "/");
         let mut params = Params::new();
 
@@ -2130,7 +2207,6 @@ impl<P, D> Sts for StsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2138,15 +2214,18 @@ impl<P, D> Sts for StsClient<P, D>
                 if body.is_empty() {
                     result = GetSessionTokenResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetSessionTokenResponseDeserializer::deserialize("GetSessionTokenResult",
-                                                                                   &mut stack));
+                    result = try!(GetSessionTokenResponseDeserializer::deserialize(
+                        "GetSessionTokenResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -2155,7 +2234,9 @@ impl<P, D> Sts for StsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetSessionTokenError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetSessionTokenError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
@@ -2170,11 +2251,12 @@ mod protocol_tests {
     use self::rusoto_mock::*;
     use rusoto_core::Region as rusoto_region;
 
-
     #[test]
     fn test_parse_error_sts_get_session_token() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/error",
-                                                              "sts-get-session-token.xml");
+        let mock_response = MockResponseReader::read_response(
+            "test_resources/generated/error",
+            "sts-get-session-token.xml",
+        );
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
         let client = StsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetSessionTokenRequest::default();
@@ -2184,8 +2266,10 @@ mod protocol_tests {
 
     #[test]
     fn test_parse_valid_sts_get_session_token() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "sts-get-session-token.xml");
+        let mock_response = MockResponseReader::read_response(
+            "test_resources/generated/valid",
+            "sts-get-session-token.xml",
+        );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = StsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetSessionTokenRequest::default();

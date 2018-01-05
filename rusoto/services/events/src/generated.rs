@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -28,499 +27,499 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteRuleRequest {
-    #[doc="<p>The name of the rule.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the rule.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeEventBusRequest;
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeEventBusResponse {
-    #[doc="<p>The Amazon Resource Name (ARN) of the account permitted to write events to the current account.</p>"]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the account permitted to write events to the current account.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>The name of the event bus. Currently, this is always <code>default</code>.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the event bus. Currently, this is always <code>default</code>.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The policy that enables the external account to send events to your account.</p>"]
-    #[serde(rename="Policy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The policy that enables the external account to send events to your account.</p>
+    #[serde(rename = "Policy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policy: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeRuleRequest {
-    #[doc="<p>The name of the rule.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the rule.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeRuleResponse {
-    #[doc="<p>The Amazon Resource Name (ARN) of the rule.</p>"]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the rule.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>The description of the rule.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The description of the rule.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The event pattern. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/CloudWatchEventsandEventPatterns.html\">Events and Event Patterns</a> in the <i>Amazon CloudWatch Events User Guide</i>.</p>"]
-    #[serde(rename="EventPattern")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The event pattern. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/CloudWatchEventsandEventPatterns.html">Events and Event Patterns</a> in the <i>Amazon CloudWatch Events User Guide</i>.</p>
+    #[serde(rename = "EventPattern")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_pattern: Option<String>,
-    #[doc="<p>The name of the rule.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the rule.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the IAM role associated with the rule.</p>"]
-    #[serde(rename="RoleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the IAM role associated with the rule.</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
-    #[doc="<p>The scheduling expression. For example, \"cron(0 20 * * ? *)\", \"rate(5 minutes)\".</p>"]
-    #[serde(rename="ScheduleExpression")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The scheduling expression. For example, "cron(0 20 * * ? *)", "rate(5 minutes)".</p>
+    #[serde(rename = "ScheduleExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_expression: Option<String>,
-    #[doc="<p>Specifies whether the rule is enabled or disabled.</p>"]
-    #[serde(rename="State")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether the rule is enabled or disabled.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DisableRuleRequest {
-    #[doc="<p>The name of the rule.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the rule.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[doc="<p>The custom parameters to be used when the target is an Amazon ECS cluster.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>The custom parameters to be used when the target is an Amazon ECS cluster.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct EcsParameters {
-    #[doc="<p>The number of tasks to create based on the <code>TaskDefinition</code>. The default is one.</p>"]
-    #[serde(rename="TaskCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of tasks to create based on the <code>TaskDefinition</code>. The default is one.</p>
+    #[serde(rename = "TaskCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task_count: Option<i64>,
-    #[doc="<p>The ARN of the task definition to use if the event target is an Amazon ECS cluster. </p>"]
-    #[serde(rename="TaskDefinitionArn")]
+    /// <p>The ARN of the task definition to use if the event target is an Amazon ECS cluster. </p>
+    #[serde(rename = "TaskDefinitionArn")]
     pub task_definition_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct EnableRuleRequest {
-    #[doc="<p>The name of the rule.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the rule.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[doc="<p>Contains the parameters needed for you to provide custom input to a target based on one or more pieces of data extracted from the event.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Contains the parameters needed for you to provide custom input to a target based on one or more pieces of data extracted from the event.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct InputTransformer {
-    #[doc="<p>Map of JSON paths to be extracted from the event. These are key-value pairs, where each value is a JSON path. You must use JSON dot notation, not bracket notation.</p>"]
-    #[serde(rename="InputPathsMap")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Map of JSON paths to be extracted from the event. These are key-value pairs, where each value is a JSON path. You must use JSON dot notation, not bracket notation.</p>
+    #[serde(rename = "InputPathsMap")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub input_paths_map: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>Input template where you can use the values of the keys from <code>InputPathsMap</code> to customize the data sent to the target.</p>"]
-    #[serde(rename="InputTemplate")]
+    /// <p>Input template where you can use the values of the keys from <code>InputPathsMap</code> to customize the data sent to the target.</p>
+    #[serde(rename = "InputTemplate")]
     pub input_template: String,
 }
 
-#[doc="<p>This object enables you to specify a JSON path to extract from the event and use as the partition key for the Amazon Kinesis stream, so that you can control the shard to which the event goes. If you do not include this parameter, the default is to use the <code>eventId</code> as the partition key.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>This object enables you to specify a JSON path to extract from the event and use as the partition key for the Amazon Kinesis stream, so that you can control the shard to which the event goes. If you do not include this parameter, the default is to use the <code>eventId</code> as the partition key.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct KinesisParameters {
-    #[doc="<p>The JSON path to be extracted from the event and used as the partition key. For more information, see <a href=\"http://docs.aws.amazon.com/streams/latest/dev/key-concepts.html#partition-key\">Amazon Kinesis Streams Key Concepts</a> in the <i>Amazon Kinesis Streams Developer Guide</i>.</p>"]
-    #[serde(rename="PartitionKeyPath")]
+    /// <p>The JSON path to be extracted from the event and used as the partition key. For more information, see <a href="http://docs.aws.amazon.com/streams/latest/dev/key-concepts.html#partition-key">Amazon Kinesis Streams Key Concepts</a> in the <i>Amazon Kinesis Streams Developer Guide</i>.</p>
+    #[serde(rename = "PartitionKeyPath")]
     pub partition_key_path: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListRuleNamesByTargetRequest {
-    #[doc="<p>The maximum number of results to return.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of results to return.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>The token returned by a previous call to retrieve the next set of results.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token returned by a previous call to retrieve the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the target resource.</p>"]
-    #[serde(rename="TargetArn")]
+    /// <p>The Amazon Resource Name (ARN) of the target resource.</p>
+    #[serde(rename = "TargetArn")]
     pub target_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListRuleNamesByTargetResponse {
-    #[doc="<p>Indicates whether there are additional results to retrieve. If there are no more results, the value is null.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether there are additional results to retrieve. If there are no more results, the value is null.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The names of the rules that can invoke the given target.</p>"]
-    #[serde(rename="RuleNames")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The names of the rules that can invoke the given target.</p>
+    #[serde(rename = "RuleNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rule_names: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListRulesRequest {
-    #[doc="<p>The maximum number of results to return.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of results to return.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>The prefix matching the rule name.</p>"]
-    #[serde(rename="NamePrefix")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The prefix matching the rule name.</p>
+    #[serde(rename = "NamePrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name_prefix: Option<String>,
-    #[doc="<p>The token returned by a previous call to retrieve the next set of results.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token returned by a previous call to retrieve the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListRulesResponse {
-    #[doc="<p>Indicates whether there are additional results to retrieve. If there are no more results, the value is null.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether there are additional results to retrieve. If there are no more results, the value is null.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The rules that match the specified criteria.</p>"]
-    #[serde(rename="Rules")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The rules that match the specified criteria.</p>
+    #[serde(rename = "Rules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rules: Option<Vec<Rule>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListTargetsByRuleRequest {
-    #[doc="<p>The maximum number of results to return.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of results to return.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>The token returned by a previous call to retrieve the next set of results.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token returned by a previous call to retrieve the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The name of the rule.</p>"]
-    #[serde(rename="Rule")]
+    /// <p>The name of the rule.</p>
+    #[serde(rename = "Rule")]
     pub rule: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListTargetsByRuleResponse {
-    #[doc="<p>Indicates whether there are additional results to retrieve. If there are no more results, the value is null.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether there are additional results to retrieve. If there are no more results, the value is null.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The targets assigned to the rule.</p>"]
-    #[serde(rename="Targets")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The targets assigned to the rule.</p>
+    #[serde(rename = "Targets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct PutEventsRequest {
-    #[doc="<p>The entry that defines an event in your system. You can specify several parameters for the entry such as the source and type of the event, resources associated with the event, and so on.</p>"]
-    #[serde(rename="Entries")]
+    /// <p>The entry that defines an event in your system. You can specify several parameters for the entry such as the source and type of the event, resources associated with the event, and so on.</p>
+    #[serde(rename = "Entries")]
     pub entries: Vec<PutEventsRequestEntry>,
 }
 
-#[doc="<p>Represents an event to be submitted.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents an event to be submitted.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct PutEventsRequestEntry {
-    #[doc="<p>In the JSON sense, an object containing fields, which may also contain nested subobjects. No constraints are imposed on its contents.</p>"]
-    #[serde(rename="Detail")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>In the JSON sense, an object containing fields, which may also contain nested subobjects. No constraints are imposed on its contents.</p>
+    #[serde(rename = "Detail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub detail: Option<String>,
-    #[doc="<p>Free-form string used to decide what fields to expect in the event detail.</p>"]
-    #[serde(rename="DetailType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Free-form string used to decide what fields to expect in the event detail.</p>
+    #[serde(rename = "DetailType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub detail_type: Option<String>,
-    #[doc="<p>AWS resources, identified by Amazon Resource Name (ARN), which the event primarily concerns. Any number, including zero, may be present.</p>"]
-    #[serde(rename="Resources")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>AWS resources, identified by Amazon Resource Name (ARN), which the event primarily concerns. Any number, including zero, may be present.</p>
+    #[serde(rename = "Resources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resources: Option<Vec<String>>,
-    #[doc="<p>The source of the event.</p>"]
-    #[serde(rename="Source")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The source of the event.</p>
+    #[serde(rename = "Source")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<String>,
-    #[doc="<p>The timestamp of the event, per <a href=\"https://www.rfc-editor.org/rfc/rfc3339.txt\">RFC3339</a>. If no timestamp is provided, the timestamp of the <a>PutEvents</a> call is used.</p>"]
-    #[serde(rename="Time")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The timestamp of the event, per <a href="https://www.rfc-editor.org/rfc/rfc3339.txt">RFC3339</a>. If no timestamp is provided, the timestamp of the <a>PutEvents</a> call is used.</p>
+    #[serde(rename = "Time")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub time: Option<f64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PutEventsResponse {
-    #[doc="<p>The successfully and unsuccessfully ingested events results. If the ingestion was successful, the entry has the event ID in it. Otherwise, you can use the error code and error message to identify the problem with the entry.</p>"]
-    #[serde(rename="Entries")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The successfully and unsuccessfully ingested events results. If the ingestion was successful, the entry has the event ID in it. Otherwise, you can use the error code and error message to identify the problem with the entry.</p>
+    #[serde(rename = "Entries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub entries: Option<Vec<PutEventsResultEntry>>,
-    #[doc="<p>The number of failed entries.</p>"]
-    #[serde(rename="FailedEntryCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of failed entries.</p>
+    #[serde(rename = "FailedEntryCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_entry_count: Option<i64>,
 }
 
-#[doc="<p>Represents an event that failed to be submitted.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents an event that failed to be submitted.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PutEventsResultEntry {
-    #[doc="<p>The error code that indicates why the event submission failed.</p>"]
-    #[serde(rename="ErrorCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The error code that indicates why the event submission failed.</p>
+    #[serde(rename = "ErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_code: Option<String>,
-    #[doc="<p>The error message that explains why the event submission failed.</p>"]
-    #[serde(rename="ErrorMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The error message that explains why the event submission failed.</p>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
-    #[doc="<p>The ID of the event.</p>"]
-    #[serde(rename="EventId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the event.</p>
+    #[serde(rename = "EventId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct PutPermissionRequest {
-    #[doc="<p>The action that you are enabling the other account to perform. Currently, this must be <code>events:PutEvents</code>.</p>"]
-    #[serde(rename="Action")]
+    /// <p>The action that you are enabling the other account to perform. Currently, this must be <code>events:PutEvents</code>.</p>
+    #[serde(rename = "Action")]
     pub action: String,
-    #[doc="<p>The 12-digit AWS account ID that you are permitting to put events to your default event bus. Specify \"*\" to permit any account to put events to your default event bus.</p> <p>If you specify \"*\", avoid creating rules that may match undesirable events. To create more secure rules, make sure that the event pattern for each rule contains an <code>account</code> field with a specific account ID from which to receive events. Rules with an account field do not match any events sent from other accounts.</p>"]
-    #[serde(rename="Principal")]
+    /// <p>The 12-digit AWS account ID that you are permitting to put events to your default event bus. Specify "*" to permit any account to put events to your default event bus.</p> <p>If you specify "*", avoid creating rules that may match undesirable events. To create more secure rules, make sure that the event pattern for each rule contains an <code>account</code> field with a specific account ID from which to receive events. Rules with an account field do not match any events sent from other accounts.</p>
+    #[serde(rename = "Principal")]
     pub principal: String,
-    #[doc="<p>An identifier string for the external account that you are granting permissions to. If you later want to revoke the permission for this external account, specify this <code>StatementId</code> when you run <a>RemovePermission</a>.</p>"]
-    #[serde(rename="StatementId")]
+    /// <p>An identifier string for the external account that you are granting permissions to. If you later want to revoke the permission for this external account, specify this <code>StatementId</code> when you run <a>RemovePermission</a>.</p>
+    #[serde(rename = "StatementId")]
     pub statement_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct PutRuleRequest {
-    #[doc="<p>A description of the rule.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the rule.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The event pattern. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/CloudWatchEventsandEventPatterns.html\">Events and Event Patterns</a> in the <i>Amazon CloudWatch Events User Guide</i>.</p>"]
-    #[serde(rename="EventPattern")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The event pattern. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/CloudWatchEventsandEventPatterns.html">Events and Event Patterns</a> in the <i>Amazon CloudWatch Events User Guide</i>.</p>
+    #[serde(rename = "EventPattern")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_pattern: Option<String>,
-    #[doc="<p>The name of the rule that you are creating or updating.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the rule that you are creating or updating.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>The Amazon Resource Name (ARN) of the IAM role associated with the rule.</p>"]
-    #[serde(rename="RoleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the IAM role associated with the rule.</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
-    #[doc="<p>The scheduling expression. For example, \"cron(0 20 * * ? *)\" or \"rate(5 minutes)\".</p>"]
-    #[serde(rename="ScheduleExpression")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The scheduling expression. For example, "cron(0 20 * * ? *)" or "rate(5 minutes)".</p>
+    #[serde(rename = "ScheduleExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_expression: Option<String>,
-    #[doc="<p>Indicates whether the rule is enabled or disabled.</p>"]
-    #[serde(rename="State")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether the rule is enabled or disabled.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PutRuleResponse {
-    #[doc="<p>The Amazon Resource Name (ARN) of the rule.</p>"]
-    #[serde(rename="RuleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the rule.</p>
+    #[serde(rename = "RuleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rule_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct PutTargetsRequest {
-    #[doc="<p>The name of the rule.</p>"]
-    #[serde(rename="Rule")]
+    /// <p>The name of the rule.</p>
+    #[serde(rename = "Rule")]
     pub rule: String,
-    #[doc="<p>The targets to update or add to the rule.</p>"]
-    #[serde(rename="Targets")]
+    /// <p>The targets to update or add to the rule.</p>
+    #[serde(rename = "Targets")]
     pub targets: Vec<Target>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PutTargetsResponse {
-    #[doc="<p>The failed target entries.</p>"]
-    #[serde(rename="FailedEntries")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The failed target entries.</p>
+    #[serde(rename = "FailedEntries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_entries: Option<Vec<PutTargetsResultEntry>>,
-    #[doc="<p>The number of failed entries.</p>"]
-    #[serde(rename="FailedEntryCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of failed entries.</p>
+    #[serde(rename = "FailedEntryCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_entry_count: Option<i64>,
 }
 
-#[doc="<p>Represents a target that failed to be added to a rule.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents a target that failed to be added to a rule.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PutTargetsResultEntry {
-    #[doc="<p>The error code that indicates why the target addition failed. If the value is <code>ConcurrentModificationException</code>, too many requests were made at the same time.</p>"]
-    #[serde(rename="ErrorCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The error code that indicates why the target addition failed. If the value is <code>ConcurrentModificationException</code>, too many requests were made at the same time.</p>
+    #[serde(rename = "ErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_code: Option<String>,
-    #[doc="<p>The error message that explains why the target addition failed.</p>"]
-    #[serde(rename="ErrorMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The error message that explains why the target addition failed.</p>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
-    #[doc="<p>The ID of the target.</p>"]
-    #[serde(rename="TargetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the target.</p>
+    #[serde(rename = "TargetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub target_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct RemovePermissionRequest {
-    #[doc="<p>The statement ID corresponding to the account that is no longer allowed to put events to the default event bus.</p>"]
-    #[serde(rename="StatementId")]
+    /// <p>The statement ID corresponding to the account that is no longer allowed to put events to the default event bus.</p>
+    #[serde(rename = "StatementId")]
     pub statement_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct RemoveTargetsRequest {
-    #[doc="<p>The IDs of the targets to remove from the rule.</p>"]
-    #[serde(rename="Ids")]
+    /// <p>The IDs of the targets to remove from the rule.</p>
+    #[serde(rename = "Ids")]
     pub ids: Vec<String>,
-    #[doc="<p>The name of the rule.</p>"]
-    #[serde(rename="Rule")]
+    /// <p>The name of the rule.</p>
+    #[serde(rename = "Rule")]
     pub rule: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RemoveTargetsResponse {
-    #[doc="<p>The failed target entries.</p>"]
-    #[serde(rename="FailedEntries")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The failed target entries.</p>
+    #[serde(rename = "FailedEntries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_entries: Option<Vec<RemoveTargetsResultEntry>>,
-    #[doc="<p>The number of failed entries.</p>"]
-    #[serde(rename="FailedEntryCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of failed entries.</p>
+    #[serde(rename = "FailedEntryCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_entry_count: Option<i64>,
 }
 
-#[doc="<p>Represents a target that failed to be removed from a rule.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents a target that failed to be removed from a rule.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RemoveTargetsResultEntry {
-    #[doc="<p>The error code that indicates why the target removal failed. If the value is <code>ConcurrentModificationException</code>, too many requests were made at the same time.</p>"]
-    #[serde(rename="ErrorCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The error code that indicates why the target removal failed. If the value is <code>ConcurrentModificationException</code>, too many requests were made at the same time.</p>
+    #[serde(rename = "ErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_code: Option<String>,
-    #[doc="<p>The error message that explains why the target removal failed.</p>"]
-    #[serde(rename="ErrorMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The error message that explains why the target removal failed.</p>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
-    #[doc="<p>The ID of the target.</p>"]
-    #[serde(rename="TargetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the target.</p>
+    #[serde(rename = "TargetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub target_id: Option<String>,
 }
 
-#[doc="<p>Contains information about a rule in Amazon CloudWatch Events.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains information about a rule in Amazon CloudWatch Events.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Rule {
-    #[doc="<p>The Amazon Resource Name (ARN) of the rule.</p>"]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the rule.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>The description of the rule.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The description of the rule.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The event pattern of the rule. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/CloudWatchEventsandEventPatterns.html\">Events and Event Patterns</a> in the <i>Amazon CloudWatch Events User Guide</i>.</p>"]
-    #[serde(rename="EventPattern")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The event pattern of the rule. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/CloudWatchEventsandEventPatterns.html">Events and Event Patterns</a> in the <i>Amazon CloudWatch Events User Guide</i>.</p>
+    #[serde(rename = "EventPattern")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_pattern: Option<String>,
-    #[doc="<p>The name of the rule.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the rule.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the role that is used for target invocation.</p>"]
-    #[serde(rename="RoleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the role that is used for target invocation.</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
-    #[doc="<p>The scheduling expression. For example, \"cron(0 20 * * ? *)\", \"rate(5 minutes)\".</p>"]
-    #[serde(rename="ScheduleExpression")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The scheduling expression. For example, "cron(0 20 * * ? *)", "rate(5 minutes)".</p>
+    #[serde(rename = "ScheduleExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_expression: Option<String>,
-    #[doc="<p>The state of the rule.</p>"]
-    #[serde(rename="State")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The state of the rule.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
 }
 
-#[doc="<p>This parameter contains the criteria (either InstanceIds or a tag) used to specify which EC2 instances are to be sent the command. </p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>This parameter contains the criteria (either InstanceIds or a tag) used to specify which EC2 instances are to be sent the command. </p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct RunCommandParameters {
-    #[doc="<p>Currently, we support including only one RunCommandTarget block, which specifies either an array of InstanceIds or a tag.</p>"]
-    #[serde(rename="RunCommandTargets")]
+    /// <p>Currently, we support including only one RunCommandTarget block, which specifies either an array of InstanceIds or a tag.</p>
+    #[serde(rename = "RunCommandTargets")]
     pub run_command_targets: Vec<RunCommandTarget>,
 }
 
-#[doc="<p>Information about the EC2 instances that are to be sent the command, specified as key-value pairs. Each <code>RunCommandTarget</code> block can include only one key, but this key may specify multiple values.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Information about the EC2 instances that are to be sent the command, specified as key-value pairs. Each <code>RunCommandTarget</code> block can include only one key, but this key may specify multiple values.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct RunCommandTarget {
-    #[doc="<p>Can be either <code>tag:</code> <i>tag-key</i> or <code>InstanceIds</code>.</p>"]
-    #[serde(rename="Key")]
+    /// <p>Can be either <code>tag:</code> <i>tag-key</i> or <code>InstanceIds</code>.</p>
+    #[serde(rename = "Key")]
     pub key: String,
-    #[doc="<p>If <code>Key</code> is <code>tag:</code> <i>tag-key</i>, <code>Values</code> is a list of tag values. If <code>Key</code> is <code>InstanceIds</code>, <code>Values</code> is a list of Amazon EC2 instance IDs.</p>"]
-    #[serde(rename="Values")]
+    /// <p>If <code>Key</code> is <code>tag:</code> <i>tag-key</i>, <code>Values</code> is a list of tag values. If <code>Key</code> is <code>InstanceIds</code>, <code>Values</code> is a list of Amazon EC2 instance IDs.</p>
+    #[serde(rename = "Values")]
     pub values: Vec<String>,
 }
 
-#[doc="<p>Targets are the resources to be invoked when a rule is triggered. Target types include EC2 instances, AWS Lambda functions, Amazon Kinesis streams, Amazon ECS tasks, AWS Step Functions state machines, Run Command, and built-in targets.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Targets are the resources to be invoked when a rule is triggered. Target types include EC2 instances, AWS Lambda functions, Amazon Kinesis streams, Amazon ECS tasks, AWS Step Functions state machines, Run Command, and built-in targets.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Target {
-    #[doc="<p>The Amazon Resource Name (ARN) of the target.</p>"]
-    #[serde(rename="Arn")]
+    /// <p>The Amazon Resource Name (ARN) of the target.</p>
+    #[serde(rename = "Arn")]
     pub arn: String,
-    #[doc="<p>Contains the Amazon ECS task definition and task count to be used, if the event target is an Amazon ECS task. For more information about Amazon ECS tasks, see <a href=\"http://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_defintions.html\">Task Definitions </a> in the <i>Amazon EC2 Container Service Developer Guide</i>.</p>"]
-    #[serde(rename="EcsParameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Contains the Amazon ECS task definition and task count to be used, if the event target is an Amazon ECS task. For more information about Amazon ECS tasks, see <a href="http://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_defintions.html">Task Definitions </a> in the <i>Amazon EC2 Container Service Developer Guide</i>.</p>
+    #[serde(rename = "EcsParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ecs_parameters: Option<EcsParameters>,
-    #[doc="<p>The ID of the target.</p>"]
-    #[serde(rename="Id")]
+    /// <p>The ID of the target.</p>
+    #[serde(rename = "Id")]
     pub id: String,
-    #[doc="<p>Valid JSON text passed to the target. In this case, nothing from the event itself is passed to the target. You must use JSON dot notation, not bracket notation. For more information, see <a href=\"http://www.rfc-editor.org/rfc/rfc7159.txt\">The JavaScript Object Notation (JSON) Data Interchange Format</a>.</p>"]
-    #[serde(rename="Input")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Valid JSON text passed to the target. In this case, nothing from the event itself is passed to the target. You must use JSON dot notation, not bracket notation. For more information, see <a href="http://www.rfc-editor.org/rfc/rfc7159.txt">The JavaScript Object Notation (JSON) Data Interchange Format</a>.</p>
+    #[serde(rename = "Input")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub input: Option<String>,
-    #[doc="<p>The value of the JSONPath that is used for extracting part of the matched event when passing it to the target. You must use JSON dot notation, not bracket notation. For more information about JSON paths, see <a href=\"http://goessner.net/articles/JsonPath/\">JSONPath</a>.</p>"]
-    #[serde(rename="InputPath")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The value of the JSONPath that is used for extracting part of the matched event when passing it to the target. You must use JSON dot notation, not bracket notation. For more information about JSON paths, see <a href="http://goessner.net/articles/JsonPath/">JSONPath</a>.</p>
+    #[serde(rename = "InputPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub input_path: Option<String>,
-    #[doc="<p>Settings to enable you to provide custom input to a target based on certain event data. You can extract one or more key-value pairs from the event and then use that data to send customized input to the target.</p>"]
-    #[serde(rename="InputTransformer")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Settings to enable you to provide custom input to a target based on certain event data. You can extract one or more key-value pairs from the event and then use that data to send customized input to the target.</p>
+    #[serde(rename = "InputTransformer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub input_transformer: Option<InputTransformer>,
-    #[doc="<p>The custom parameter you can use to control shard assignment, when the target is an Amazon Kinesis stream. If you do not include this parameter, the default is to use the <code>eventId</code> as the partition key.</p>"]
-    #[serde(rename="KinesisParameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The custom parameter you can use to control shard assignment, when the target is an Amazon Kinesis stream. If you do not include this parameter, the default is to use the <code>eventId</code> as the partition key.</p>
+    #[serde(rename = "KinesisParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub kinesis_parameters: Option<KinesisParameters>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the IAM role to be used for this target when the rule is triggered. If one rule triggers multiple targets, you can use a different IAM role for each target.</p>"]
-    #[serde(rename="RoleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the IAM role to be used for this target when the rule is triggered. If one rule triggers multiple targets, you can use a different IAM role for each target.</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
-    #[doc="<p>Parameters used when you are using the rule to invoke Amazon EC2 Run Command.</p>"]
-    #[serde(rename="RunCommandParameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Parameters used when you are using the rule to invoke Amazon EC2 Run Command.</p>
+    #[serde(rename = "RunCommandParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub run_command_parameters: Option<RunCommandParameters>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct TestEventPatternRequest {
-    #[doc="<p>The event, in JSON format, to test against the event pattern.</p>"]
-    #[serde(rename="Event")]
+    /// <p>The event, in JSON format, to test against the event pattern.</p>
+    #[serde(rename = "Event")]
     pub event: String,
-    #[doc="<p>The event pattern. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/CloudWatchEventsandEventPatterns.html\">Events and Event Patterns</a> in the <i>Amazon CloudWatch Events User Guide</i>.</p>"]
-    #[serde(rename="EventPattern")]
+    /// <p>The event pattern. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/CloudWatchEventsandEventPatterns.html">Events and Event Patterns</a> in the <i>Amazon CloudWatch Events User Guide</i>.</p>
+    #[serde(rename = "EventPattern")]
     pub event_pattern: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct TestEventPatternResponse {
-    #[doc="<p>Indicates whether the event matches the event pattern.</p>"]
-    #[serde(rename="Result")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether the event matches the event pattern.</p>
+    #[serde(rename = "Result")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub result: Option<bool>,
 }
 
@@ -540,7 +539,6 @@ pub enum DeleteRuleError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteRuleError {
     pub fn from_body(body: &str) -> DeleteRuleError {
@@ -621,7 +619,6 @@ pub enum DescribeEventBusError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeEventBusError {
     pub fn from_body(body: &str) -> DescribeEventBusError {
@@ -707,7 +704,6 @@ pub enum DescribeRuleError {
     Unknown(String),
 }
 
-
 impl DescribeRuleError {
     pub fn from_body(body: &str) -> DescribeRuleError {
         match from_str::<SerdeJsonValue>(body) {
@@ -791,7 +787,6 @@ pub enum DisableRuleError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DisableRuleError {
     pub fn from_body(body: &str) -> DisableRuleError {
@@ -881,7 +876,6 @@ pub enum EnableRuleError {
     Unknown(String),
 }
 
-
 impl EnableRuleError {
     pub fn from_body(body: &str) -> EnableRuleError {
         match from_str::<SerdeJsonValue>(body) {
@@ -964,7 +958,6 @@ pub enum ListRuleNamesByTargetError {
     Unknown(String),
 }
 
-
 impl ListRuleNamesByTargetError {
     pub fn from_body(body: &str) -> ListRuleNamesByTargetError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1045,7 +1038,6 @@ pub enum ListRulesError {
     Unknown(String),
 }
 
-
 impl ListRulesError {
     pub fn from_body(body: &str) -> ListRulesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1121,7 +1113,6 @@ pub enum ListTargetsByRuleError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListTargetsByRuleError {
     pub fn from_body(body: &str) -> ListTargetsByRuleError {
@@ -1207,7 +1198,6 @@ pub enum PutEventsError {
     Unknown(String),
 }
 
-
 impl PutEventsError {
     pub fn from_body(body: &str) -> PutEventsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1285,7 +1275,6 @@ pub enum PutPermissionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl PutPermissionError {
     pub fn from_body(body: &str) -> PutPermissionError {
@@ -1379,7 +1368,6 @@ pub enum PutRuleError {
     Unknown(String),
 }
 
-
 impl PutRuleError {
     pub fn from_body(body: &str) -> PutRuleError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1472,7 +1460,6 @@ pub enum PutTargetsError {
     Unknown(String),
 }
 
-
 impl PutTargetsError {
     pub fn from_body(body: &str) -> PutTargetsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1561,7 +1548,6 @@ pub enum RemovePermissionError {
     Unknown(String),
 }
 
-
 impl RemovePermissionError {
     pub fn from_body(body: &str) -> RemovePermissionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1647,7 +1633,6 @@ pub enum RemoveTargetsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl RemoveTargetsError {
     pub fn from_body(body: &str) -> RemoveTargetsError {
@@ -1737,7 +1722,6 @@ pub enum TestEventPatternError {
     Unknown(String),
 }
 
-
 impl TestEventPatternError {
     pub fn from_body(body: &str) -> TestEventPatternError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1810,81 +1794,72 @@ pub trait CloudWatchEvents {
     #[doc="<p>Deletes the specified rule.</p> <p>You must remove all targets from a rule using <a>RemoveTargets</a> before you can delete the rule.</p> <p>When you delete a rule, incoming events might continue to match to the deleted rule. Please allow a short period of time for changes to take effect.</p>"]
     fn delete_rule(&self, input: &DeleteRuleRequest) -> Result<(), DeleteRuleError>;
 
-
     #[doc="<p>Displays the external AWS accounts that are permitted to write events to your account using your account's event bus, and the associated policy. To enable your account to receive events from other accounts, use <a>PutPermission</a>.</p>"]
     fn describe_event_bus(&self) -> Result<DescribeEventBusResponse, DescribeEventBusError>;
 
-
-    #[doc="<p>Describes the specified rule.</p>"]
-    fn describe_rule(&self,
-                     input: &DescribeRuleRequest)
-                     -> Result<DescribeRuleResponse, DescribeRuleError>;
-
+    #[doc = "<p>Describes the specified rule.</p>"]
+    fn describe_rule(
+        &self,
+        input: &DescribeRuleRequest,
+    ) -> Result<DescribeRuleResponse, DescribeRuleError>;
 
     #[doc="<p>Disables the specified rule. A disabled rule won't match any events, and won't self-trigger if it has a schedule expression.</p> <p>When you disable a rule, incoming events might continue to match to the disabled rule. Please allow a short period of time for changes to take effect.</p>"]
     fn disable_rule(&self, input: &DisableRuleRequest) -> Result<(), DisableRuleError>;
 
-
     #[doc="<p>Enables the specified rule. If the rule does not exist, the operation fails.</p> <p>When you enable a rule, incoming events might not immediately start matching to a newly enabled rule. Please allow a short period of time for changes to take effect.</p>"]
     fn enable_rule(&self, input: &EnableRuleRequest) -> Result<(), EnableRuleError>;
 
-
     #[doc="<p>Lists the rules for the specified target. You can see which of the rules in Amazon CloudWatch Events can invoke a specific target in your account.</p>"]
-    fn list_rule_names_by_target
-        (&self,
-         input: &ListRuleNamesByTargetRequest)
-         -> Result<ListRuleNamesByTargetResponse, ListRuleNamesByTargetError>;
-
+    fn list_rule_names_by_target(
+        &self,
+        input: &ListRuleNamesByTargetRequest,
+    ) -> Result<ListRuleNamesByTargetResponse, ListRuleNamesByTargetError>;
 
     #[doc="<p>Lists your Amazon CloudWatch Events rules. You can either list all the rules or you can provide a prefix to match to the rule names.</p>"]
     fn list_rules(&self, input: &ListRulesRequest) -> Result<ListRulesResponse, ListRulesError>;
 
-
-    #[doc="<p>Lists the targets assigned to the specified rule.</p>"]
-    fn list_targets_by_rule(&self,
-                            input: &ListTargetsByRuleRequest)
-                            -> Result<ListTargetsByRuleResponse, ListTargetsByRuleError>;
-
+    #[doc = "<p>Lists the targets assigned to the specified rule.</p>"]
+    fn list_targets_by_rule(
+        &self,
+        input: &ListTargetsByRuleRequest,
+    ) -> Result<ListTargetsByRuleResponse, ListTargetsByRuleError>;
 
     #[doc="<p>Sends custom events to Amazon CloudWatch Events so that they can be matched to rules.</p>"]
     fn put_events(&self, input: &PutEventsRequest) -> Result<PutEventsResponse, PutEventsError>;
 
-
     #[doc="<p>Running <code>PutPermission</code> permits the specified AWS account to put events to your account's default <i>event bus</i>. CloudWatch Events rules in your account are triggered by these events arriving to your default event bus. </p> <p>For another account to send events to your account, that external account must have a CloudWatch Events rule with your account's default event bus as a target.</p> <p>To enable multiple AWS accounts to put events to your default event bus, run <code>PutPermission</code> once for each of these accounts.</p>"]
     fn put_permission(&self, input: &PutPermissionRequest) -> Result<(), PutPermissionError>;
-
 
     #[doc="<p>Creates or updates the specified rule. Rules are enabled by default, or based on value of the state. You can disable a rule using <a>DisableRule</a>.</p> <p>When you create or update a rule, incoming events might not immediately start matching to new or updated rules. Please allow a short period of time for changes to take effect.</p> <p>A rule must contain at least an EventPattern or ScheduleExpression. Rules with EventPatterns are triggered when a matching event is observed. Rules with ScheduleExpressions self-trigger based on the given schedule. A rule can have both an EventPattern and a ScheduleExpression, in which case the rule triggers on matching events as well as on a schedule.</p> <p>Most services in AWS treat : or / as the same character in Amazon Resource Names (ARNs). However, CloudWatch Events uses an exact match in event patterns and rules. Be sure to use the correct ARN characters when creating event patterns so that they match the ARN syntax in the event you want to match.</p>"]
     fn put_rule(&self, input: &PutRuleRequest) -> Result<PutRuleResponse, PutRuleError>;
 
-
     #[doc="<p>Adds the specified targets to the specified rule, or updates the targets if they are already associated with the rule.</p> <p>Targets are the resources that are invoked when a rule is triggered.</p> <p>You can configure the following as targets for CloudWatch Events:</p> <ul> <li> <p>EC2 instances</p> </li> <li> <p>AWS Lambda functions</p> </li> <li> <p>Streams in Amazon Kinesis Streams</p> </li> <li> <p>Delivery streams in Amazon Kinesis Firehose</p> </li> <li> <p>Amazon ECS tasks</p> </li> <li> <p>AWS Step Functions state machines</p> </li> <li> <p>Amazon SNS topics</p> </li> <li> <p>Amazon SQS queues</p> </li> </ul> <p>Note that creating rules with built-in targets is supported only in the AWS Management Console.</p> <p>For some target types, <code>PutTargets</code> provides target-specific parameters. If the target is an Amazon Kinesis stream, you can optionally specify which shard the event goes to by using the <code>KinesisParameters</code> argument. To invoke a command on multiple EC2 instances with one rule, you can use the <code>RunCommandParameters</code> field.</p> <p>To be able to make API calls against the resources that you own, Amazon CloudWatch Events needs the appropriate permissions. For AWS Lambda and Amazon SNS resources, CloudWatch Events relies on resource-based policies. For EC2 instances, Amazon Kinesis streams, and AWS Step Functions state machines, CloudWatch Events relies on IAM roles that you specify in the <code>RoleARN</code> argument in <code>PutTargets</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/auth-and-access-control-cwe.html\">Authentication and Access Control</a> in the <i>Amazon CloudWatch Events User Guide</i>.</p> <p>If another AWS account is in the same region and has granted you permission (using <code>PutPermission</code>), you can set that account's event bus as a target of the rules in your account. To send the matched events to the other account, specify that account's event bus as the <code>Arn</code> when you run <code>PutTargets</code>. For more information about enabling cross-account events, see <a>PutPermission</a>.</p> <p> <b>Input</b>, <b>InputPath</b> and <b>InputTransformer</b> are mutually exclusive and optional parameters of a target. When a rule is triggered due to a matched event:</p> <ul> <li> <p>If none of the following arguments are specified for a target, then the entire event is passed to the target in JSON form (unless the target is Amazon EC2 Run Command or Amazon ECS task, in which case nothing from the event is passed to the target).</p> </li> <li> <p>If <b>Input</b> is specified in the form of valid JSON, then the matched event is overridden with this constant.</p> </li> <li> <p>If <b>InputPath</b> is specified in the form of JSONPath (for example, <code>$.detail</code>), then only the part of the event specified in the path is passed to the target (for example, only the detail part of the event is passed).</p> </li> <li> <p>If <b>InputTransformer</b> is specified, then one or more specified JSONPaths are extracted from the event and used as values in a template that you specify as the input to the target.</p> </li> </ul> <p>When you specify <code>Input</code>, <code>InputPath</code>, or <code>InputTransformer</code>, you must use JSON dot notation, not bracket notation.</p> <p>When you add targets to a rule and the associated rule triggers soon after, new or updated targets might not be immediately invoked. Please allow a short period of time for changes to take effect.</p> <p>This action can partially fail if too many requests are made at the same time. If that happens, <code>FailedEntryCount</code> is non-zero in the response and each entry in <code>FailedEntries</code> provides the ID of the failed target and the error code.</p>"]
-    fn put_targets(&self,
-                   input: &PutTargetsRequest)
-                   -> Result<PutTargetsResponse, PutTargetsError>;
-
+    fn put_targets(&self, input: &PutTargetsRequest)
+        -> Result<PutTargetsResponse, PutTargetsError>;
 
     #[doc="<p>Revokes the permission of another AWS account to be able to put events to your default event bus. Specify the account to revoke by the <code>StatementId</code> value that you associated with the account when you granted it permission with <code>PutPermission</code>. You can find the <code>StatementId</code> by using <a>DescribeEventBus</a>.</p>"]
-    fn remove_permission(&self,
-                         input: &RemovePermissionRequest)
-                         -> Result<(), RemovePermissionError>;
-
+    fn remove_permission(
+        &self,
+        input: &RemovePermissionRequest,
+    ) -> Result<(), RemovePermissionError>;
 
     #[doc="<p>Removes the specified targets from the specified rule. When the rule is triggered, those targets are no longer be invoked.</p> <p>When you remove a target, when the associated rule triggers, removed targets might continue to be invoked. Please allow a short period of time for changes to take effect.</p> <p>This action can partially fail if too many requests are made at the same time. If that happens, <code>FailedEntryCount</code> is non-zero in the response and each entry in <code>FailedEntries</code> provides the ID of the failed target and the error code.</p>"]
-    fn remove_targets(&self,
-                      input: &RemoveTargetsRequest)
-                      -> Result<RemoveTargetsResponse, RemoveTargetsError>;
-
+    fn remove_targets(
+        &self,
+        input: &RemoveTargetsRequest,
+    ) -> Result<RemoveTargetsResponse, RemoveTargetsError>;
 
     #[doc="<p>Tests whether the specified event pattern matches the provided event.</p> <p>Most services in AWS treat : or / as the same character in Amazon Resource Names (ARNs). However, CloudWatch Events uses an exact match in event patterns and rules. Be sure to use the correct ARN characters when creating event patterns so that they match the ARN syntax in the event you want to match.</p>"]
-    fn test_event_pattern(&self,
-                          input: &TestEventPatternRequest)
-                          -> Result<TestEventPatternResponse, TestEventPatternError>;
+    fn test_event_pattern(
+        &self,
+        input: &TestEventPatternRequest,
+    ) -> Result<TestEventPatternResponse, TestEventPatternError>;
 }
 /// A client for the Amazon CloudWatch Events API.
 pub struct CloudWatchEventsClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -1892,8 +1867,9 @@ pub struct CloudWatchEventsClient<P, D>
 }
 
 impl<P, D> CloudWatchEventsClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         CloudWatchEventsClient {
@@ -1905,8 +1881,9 @@ impl<P, D> CloudWatchEventsClient<P, D>
 }
 
 impl<P, D> CloudWatchEvents for CloudWatchEventsClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     #[doc="<p>Deletes the specified rule.</p> <p>You must remove all targets from a rule using <a>RemoveTargets</a> before you can delete the rule.</p> <p>When you delete a rule, incoming events might continue to match to the deleted rule. Please allow a short period of time for changes to take effect.</p>"]
     fn delete_rule(&self, input: &DeleteRuleRequest) -> Result<(), DeleteRuleError> {
@@ -1926,11 +1903,12 @@ impl<P, D> CloudWatchEvents for CloudWatchEventsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteRuleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Displays the external AWS accounts that are permitted to write events to your account using your account's event bus, and the associated policy. To enable your account to receive events from other accounts, use <a>PutPermission</a>.</p>"]
     fn describe_event_bus(&self) -> Result<DescribeEventBusResponse, DescribeEventBusError> {
@@ -1948,23 +1926,25 @@ impl<P, D> CloudWatchEvents for CloudWatchEventsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeEventBusResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribeEventBusResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeEventBusError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeEventBusError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Describes the specified rule.</p>"]
-    fn describe_rule(&self,
-                     input: &DescribeRuleRequest)
-                     -> Result<DescribeRuleResponse, DescribeRuleError> {
+    #[doc = "<p>Describes the specified rule.</p>"]
+    fn describe_rule(
+        &self,
+        input: &DescribeRuleRequest,
+    ) -> Result<DescribeRuleResponse, DescribeRuleError> {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1980,18 +1960,19 @@ impl<P, D> CloudWatchEvents for CloudWatchEventsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeRuleResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribeRuleResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeRuleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Disables the specified rule. A disabled rule won't match any events, and won't self-trigger if it has a schedule expression.</p> <p>When you disable a rule, incoming events might continue to match to the disabled rule. Please allow a short period of time for changes to take effect.</p>"]
     fn disable_rule(&self, input: &DisableRuleRequest) -> Result<(), DisableRuleError> {
@@ -2011,11 +1992,12 @@ impl<P, D> CloudWatchEvents for CloudWatchEventsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DisableRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DisableRuleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Enables the specified rule. If the rule does not exist, the operation fails.</p> <p>When you enable a rule, incoming events might not immediately start matching to a newly enabled rule. Please allow a short period of time for changes to take effect.</p>"]
     fn enable_rule(&self, input: &EnableRuleRequest) -> Result<(), EnableRuleError> {
@@ -2035,17 +2017,18 @@ impl<P, D> CloudWatchEvents for CloudWatchEventsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(EnableRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(EnableRuleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists the rules for the specified target. You can see which of the rules in Amazon CloudWatch Events can invoke a specific target in your account.</p>"]
-    fn list_rule_names_by_target
-        (&self,
-         input: &ListRuleNamesByTargetRequest)
-         -> Result<ListRuleNamesByTargetResponse, ListRuleNamesByTargetError> {
+    fn list_rule_names_by_target(
+        &self,
+        input: &ListRuleNamesByTargetRequest,
+    ) -> Result<ListRuleNamesByTargetResponse, ListRuleNamesByTargetError> {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2061,16 +2044,19 @@ impl<P, D> CloudWatchEvents for CloudWatchEventsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListRuleNamesByTargetResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListRuleNamesByTargetResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListRuleNamesByTargetError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListRuleNamesByTargetError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Lists your Amazon CloudWatch Events rules. You can either list all the rules or you can provide a prefix to match to the rule names.</p>"]
     fn list_rules(&self, input: &ListRulesRequest) -> Result<ListRulesResponse, ListRulesError> {
@@ -2089,23 +2075,25 @@ impl<P, D> CloudWatchEvents for CloudWatchEventsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListRulesResponse>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListRulesResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListRulesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListRulesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists the targets assigned to the specified rule.</p>"]
-    fn list_targets_by_rule(&self,
-                            input: &ListTargetsByRuleRequest)
-                            -> Result<ListTargetsByRuleResponse, ListTargetsByRuleError> {
+    #[doc = "<p>Lists the targets assigned to the specified rule.</p>"]
+    fn list_targets_by_rule(
+        &self,
+        input: &ListTargetsByRuleRequest,
+    ) -> Result<ListTargetsByRuleResponse, ListTargetsByRuleError> {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2121,16 +2109,19 @@ impl<P, D> CloudWatchEvents for CloudWatchEventsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListTargetsByRuleResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListTargetsByRuleResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListTargetsByRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListTargetsByRuleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Sends custom events to Amazon CloudWatch Events so that they can be matched to rules.</p>"]
     fn put_events(&self, input: &PutEventsRequest) -> Result<PutEventsResponse, PutEventsError> {
@@ -2149,18 +2140,19 @@ impl<P, D> CloudWatchEvents for CloudWatchEventsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<PutEventsResponse>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<PutEventsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(PutEventsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(PutEventsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Running <code>PutPermission</code> permits the specified AWS account to put events to your account's default <i>event bus</i>. CloudWatch Events rules in your account are triggered by these events arriving to your default event bus. </p> <p>For another account to send events to your account, that external account must have a CloudWatch Events rule with your account's default event bus as a target.</p> <p>To enable multiple AWS accounts to put events to your default event bus, run <code>PutPermission</code> once for each of these accounts.</p>"]
     fn put_permission(&self, input: &PutPermissionRequest) -> Result<(), PutPermissionError> {
@@ -2180,11 +2172,12 @@ impl<P, D> CloudWatchEvents for CloudWatchEventsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(PutPermissionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(PutPermissionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Creates or updates the specified rule. Rules are enabled by default, or based on value of the state. You can disable a rule using <a>DisableRule</a>.</p> <p>When you create or update a rule, incoming events might not immediately start matching to new or updated rules. Please allow a short period of time for changes to take effect.</p> <p>A rule must contain at least an EventPattern or ScheduleExpression. Rules with EventPatterns are triggered when a matching event is observed. Rules with ScheduleExpressions self-trigger based on the given schedule. A rule can have both an EventPattern and a ScheduleExpression, in which case the rule triggers on matching events as well as on a schedule.</p> <p>Most services in AWS treat : or / as the same character in Amazon Resource Names (ARNs). However, CloudWatch Events uses an exact match in event patterns and rules. Be sure to use the correct ARN characters when creating event patterns so that they match the ARN syntax in the event you want to match.</p>"]
     fn put_rule(&self, input: &PutRuleRequest) -> Result<PutRuleResponse, PutRuleError> {
@@ -2203,22 +2196,27 @@ impl<P, D> CloudWatchEvents for CloudWatchEventsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<PutRuleResponse>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+                Ok(
+                    serde_json::from_str::<PutRuleResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(PutRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(PutRuleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Adds the specified targets to the specified rule, or updates the targets if they are already associated with the rule.</p> <p>Targets are the resources that are invoked when a rule is triggered.</p> <p>You can configure the following as targets for CloudWatch Events:</p> <ul> <li> <p>EC2 instances</p> </li> <li> <p>AWS Lambda functions</p> </li> <li> <p>Streams in Amazon Kinesis Streams</p> </li> <li> <p>Delivery streams in Amazon Kinesis Firehose</p> </li> <li> <p>Amazon ECS tasks</p> </li> <li> <p>AWS Step Functions state machines</p> </li> <li> <p>Amazon SNS topics</p> </li> <li> <p>Amazon SQS queues</p> </li> </ul> <p>Note that creating rules with built-in targets is supported only in the AWS Management Console.</p> <p>For some target types, <code>PutTargets</code> provides target-specific parameters. If the target is an Amazon Kinesis stream, you can optionally specify which shard the event goes to by using the <code>KinesisParameters</code> argument. To invoke a command on multiple EC2 instances with one rule, you can use the <code>RunCommandParameters</code> field.</p> <p>To be able to make API calls against the resources that you own, Amazon CloudWatch Events needs the appropriate permissions. For AWS Lambda and Amazon SNS resources, CloudWatch Events relies on resource-based policies. For EC2 instances, Amazon Kinesis streams, and AWS Step Functions state machines, CloudWatch Events relies on IAM roles that you specify in the <code>RoleARN</code> argument in <code>PutTargets</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/auth-and-access-control-cwe.html\">Authentication and Access Control</a> in the <i>Amazon CloudWatch Events User Guide</i>.</p> <p>If another AWS account is in the same region and has granted you permission (using <code>PutPermission</code>), you can set that account's event bus as a target of the rules in your account. To send the matched events to the other account, specify that account's event bus as the <code>Arn</code> when you run <code>PutTargets</code>. For more information about enabling cross-account events, see <a>PutPermission</a>.</p> <p> <b>Input</b>, <b>InputPath</b> and <b>InputTransformer</b> are mutually exclusive and optional parameters of a target. When a rule is triggered due to a matched event:</p> <ul> <li> <p>If none of the following arguments are specified for a target, then the entire event is passed to the target in JSON form (unless the target is Amazon EC2 Run Command or Amazon ECS task, in which case nothing from the event is passed to the target).</p> </li> <li> <p>If <b>Input</b> is specified in the form of valid JSON, then the matched event is overridden with this constant.</p> </li> <li> <p>If <b>InputPath</b> is specified in the form of JSONPath (for example, <code>$.detail</code>), then only the part of the event specified in the path is passed to the target (for example, only the detail part of the event is passed).</p> </li> <li> <p>If <b>InputTransformer</b> is specified, then one or more specified JSONPaths are extracted from the event and used as values in a template that you specify as the input to the target.</p> </li> </ul> <p>When you specify <code>Input</code>, <code>InputPath</code>, or <code>InputTransformer</code>, you must use JSON dot notation, not bracket notation.</p> <p>When you add targets to a rule and the associated rule triggers soon after, new or updated targets might not be immediately invoked. Please allow a short period of time for changes to take effect.</p> <p>This action can partially fail if too many requests are made at the same time. If that happens, <code>FailedEntryCount</code> is non-zero in the response and each entry in <code>FailedEntries</code> provides the ID of the failed target and the error code.</p>"]
-    fn put_targets(&self,
-                   input: &PutTargetsRequest)
-                   -> Result<PutTargetsResponse, PutTargetsError> {
+    fn put_targets(
+        &self,
+        input: &PutTargetsRequest,
+    ) -> Result<PutTargetsResponse, PutTargetsError> {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2234,23 +2232,25 @@ impl<P, D> CloudWatchEvents for CloudWatchEventsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<PutTargetsResponse>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<PutTargetsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(PutTargetsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(PutTargetsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Revokes the permission of another AWS account to be able to put events to your default event bus. Specify the account to revoke by the <code>StatementId</code> value that you associated with the account when you granted it permission with <code>PutPermission</code>. You can find the <code>StatementId</code> by using <a>DescribeEventBus</a>.</p>"]
-    fn remove_permission(&self,
-                         input: &RemovePermissionRequest)
-                         -> Result<(), RemovePermissionError> {
+    fn remove_permission(
+        &self,
+        input: &RemovePermissionRequest,
+    ) -> Result<(), RemovePermissionError> {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2267,16 +2267,18 @@ impl<P, D> CloudWatchEvents for CloudWatchEventsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(RemovePermissionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(RemovePermissionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Removes the specified targets from the specified rule. When the rule is triggered, those targets are no longer be invoked.</p> <p>When you remove a target, when the associated rule triggers, removed targets might continue to be invoked. Please allow a short period of time for changes to take effect.</p> <p>This action can partially fail if too many requests are made at the same time. If that happens, <code>FailedEntryCount</code> is non-zero in the response and each entry in <code>FailedEntries</code> provides the ID of the failed target and the error code.</p>"]
-    fn remove_targets(&self,
-                      input: &RemoveTargetsRequest)
-                      -> Result<RemoveTargetsResponse, RemoveTargetsError> {
+    fn remove_targets(
+        &self,
+        input: &RemoveTargetsRequest,
+    ) -> Result<RemoveTargetsResponse, RemoveTargetsError> {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2292,23 +2294,25 @@ impl<P, D> CloudWatchEvents for CloudWatchEventsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<RemoveTargetsResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<RemoveTargetsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(RemoveTargetsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(RemoveTargetsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Tests whether the specified event pattern matches the provided event.</p> <p>Most services in AWS treat : or / as the same character in Amazon Resource Names (ARNs). However, CloudWatch Events uses an exact match in event patterns and rules. Be sure to use the correct ARN characters when creating event patterns so that they match the ARN syntax in the event you want to match.</p>"]
-    fn test_event_pattern(&self,
-                          input: &TestEventPatternRequest)
-                          -> Result<TestEventPatternResponse, TestEventPatternError> {
+    fn test_event_pattern(
+        &self,
+        input: &TestEventPatternRequest,
+    ) -> Result<TestEventPatternResponse, TestEventPatternError> {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2324,14 +2328,16 @@ impl<P, D> CloudWatchEvents for CloudWatchEventsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<TestEventPatternResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<TestEventPatternResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(TestEventPatternError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(TestEventPatternError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

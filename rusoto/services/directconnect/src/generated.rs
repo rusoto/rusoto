@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -28,959 +27,930 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[doc="<p>Container for the parameters to the AllocateConnectionOnInterconnect operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the AllocateConnectionOnInterconnect operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AllocateConnectionOnInterconnectRequest {
-    #[doc="<p>Bandwidth of the connection.</p> <p>Example: \"<i>500Mbps</i>\"</p> <p>Default: None</p> <p>Values: 50Mbps, 100Mbps, 200Mbps, 300Mbps, 400Mbps, or 500Mbps</p>"]
-    #[serde(rename="bandwidth")]
+    /// <p>Bandwidth of the connection.</p> <p>Example: "<i>500Mbps</i>"</p> <p>Default: None</p> <p>Values: 50Mbps, 100Mbps, 200Mbps, 300Mbps, 400Mbps, or 500Mbps</p>
+    #[serde(rename = "bandwidth")]
     pub bandwidth: String,
-    #[doc="<p>Name of the provisioned connection.</p> <p>Example: \"<i>500M Connection to AWS</i>\"</p> <p>Default: None</p>"]
-    #[serde(rename="connectionName")]
+    /// <p>Name of the provisioned connection.</p> <p>Example: "<i>500M Connection to AWS</i>"</p> <p>Default: None</p>
+    #[serde(rename = "connectionName")]
     pub connection_name: String,
-    #[doc="<p>ID of the interconnect on which the connection will be provisioned.</p> <p>Example: dxcon-456abc78</p> <p>Default: None</p>"]
-    #[serde(rename="interconnectId")]
+    /// <p>ID of the interconnect on which the connection will be provisioned.</p> <p>Example: dxcon-456abc78</p> <p>Default: None</p>
+    #[serde(rename = "interconnectId")]
     pub interconnect_id: String,
-    #[doc="<p>Numeric account Id of the customer for whom the connection will be provisioned.</p> <p>Example: 123443215678</p> <p>Default: None</p>"]
-    #[serde(rename="ownerAccount")]
+    /// <p>Numeric account Id of the customer for whom the connection will be provisioned.</p> <p>Example: 123443215678</p> <p>Default: None</p>
+    #[serde(rename = "ownerAccount")]
     pub owner_account: String,
-    #[doc="<p>The dedicated VLAN provisioned to the connection.</p> <p>Example: 101</p> <p>Default: None</p>"]
-    #[serde(rename="vlan")]
+    /// <p>The dedicated VLAN provisioned to the connection.</p> <p>Example: 101</p> <p>Default: None</p>
+    #[serde(rename = "vlan")]
     pub vlan: i64,
 }
 
-#[doc="<p>Container for the parameters to theHostedConnection operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to theHostedConnection operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AllocateHostedConnectionRequest {
-    #[doc="<p>The bandwidth of the connection.</p> <p>Example: <code>500Mbps</code> </p> <p>Default: None</p> <p>Values: 50Mbps, 100Mbps, 200Mbps, 300Mbps, 400Mbps, or 500Mbps</p>"]
-    #[serde(rename="bandwidth")]
+    /// <p>The bandwidth of the connection.</p> <p>Example: <code>500Mbps</code> </p> <p>Default: None</p> <p>Values: 50Mbps, 100Mbps, 200Mbps, 300Mbps, 400Mbps, or 500Mbps</p>
+    #[serde(rename = "bandwidth")]
     pub bandwidth: String,
-    #[doc="<p>The ID of the interconnect or LAG on which the connection will be provisioned.</p> <p>Example: dxcon-456abc78 or dxlag-abc123</p> <p>Default: None</p>"]
-    #[serde(rename="connectionId")]
+    /// <p>The ID of the interconnect or LAG on which the connection will be provisioned.</p> <p>Example: dxcon-456abc78 or dxlag-abc123</p> <p>Default: None</p>
+    #[serde(rename = "connectionId")]
     pub connection_id: String,
-    #[doc="<p>The name of the provisioned connection.</p> <p>Example: \"<code>500M Connection to AWS</code>\"</p> <p>Default: None</p>"]
-    #[serde(rename="connectionName")]
+    /// <p>The name of the provisioned connection.</p> <p>Example: "<code>500M Connection to AWS</code>"</p> <p>Default: None</p>
+    #[serde(rename = "connectionName")]
     pub connection_name: String,
-    #[doc="<p>The numeric account ID of the customer for whom the connection will be provisioned.</p> <p>Example: 123443215678</p> <p>Default: None</p>"]
-    #[serde(rename="ownerAccount")]
+    /// <p>The numeric account ID of the customer for whom the connection will be provisioned.</p> <p>Example: 123443215678</p> <p>Default: None</p>
+    #[serde(rename = "ownerAccount")]
     pub owner_account: String,
-    #[doc="<p>The dedicated VLAN provisioned to the hosted connection.</p> <p>Example: 101</p> <p>Default: None</p>"]
-    #[serde(rename="vlan")]
+    /// <p>The dedicated VLAN provisioned to the hosted connection.</p> <p>Example: 101</p> <p>Default: None</p>
+    #[serde(rename = "vlan")]
     pub vlan: i64,
 }
 
-#[doc="<p>Container for the parameters to the AllocatePrivateVirtualInterface operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the AllocatePrivateVirtualInterface operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AllocatePrivateVirtualInterfaceRequest {
-    #[doc="<p>The connection ID on which the private virtual interface is provisioned.</p> <p>Default: None</p>"]
-    #[serde(rename="connectionId")]
+    /// <p>The connection ID on which the private virtual interface is provisioned.</p> <p>Default: None</p>
+    #[serde(rename = "connectionId")]
     pub connection_id: String,
-    #[doc="<p>Detailed information for the private virtual interface to be provisioned.</p> <p>Default: None</p>"]
-    #[serde(rename="newPrivateVirtualInterfaceAllocation")]
+    /// <p>Detailed information for the private virtual interface to be provisioned.</p> <p>Default: None</p>
+    #[serde(rename = "newPrivateVirtualInterfaceAllocation")]
     pub new_private_virtual_interface_allocation: NewPrivateVirtualInterfaceAllocation,
-    #[doc="<p>The AWS account that will own the new private virtual interface.</p> <p>Default: None</p>"]
-    #[serde(rename="ownerAccount")]
+    /// <p>The AWS account that will own the new private virtual interface.</p> <p>Default: None</p>
+    #[serde(rename = "ownerAccount")]
     pub owner_account: String,
 }
 
-#[doc="<p>Container for the parameters to the AllocatePublicVirtualInterface operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the AllocatePublicVirtualInterface operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AllocatePublicVirtualInterfaceRequest {
-    #[doc="<p>The connection ID on which the public virtual interface is provisioned.</p> <p>Default: None</p>"]
-    #[serde(rename="connectionId")]
+    /// <p>The connection ID on which the public virtual interface is provisioned.</p> <p>Default: None</p>
+    #[serde(rename = "connectionId")]
     pub connection_id: String,
-    #[doc="<p>Detailed information for the public virtual interface to be provisioned.</p> <p>Default: None</p>"]
-    #[serde(rename="newPublicVirtualInterfaceAllocation")]
+    /// <p>Detailed information for the public virtual interface to be provisioned.</p> <p>Default: None</p>
+    #[serde(rename = "newPublicVirtualInterfaceAllocation")]
     pub new_public_virtual_interface_allocation: NewPublicVirtualInterfaceAllocation,
-    #[doc="<p>The AWS account that will own the new public virtual interface.</p> <p>Default: None</p>"]
-    #[serde(rename="ownerAccount")]
+    /// <p>The AWS account that will own the new public virtual interface.</p> <p>Default: None</p>
+    #[serde(rename = "ownerAccount")]
     pub owner_account: String,
 }
 
-#[doc="<p>Container for the parameters to the AssociateConnectionWithLag operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the AssociateConnectionWithLag operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AssociateConnectionWithLagRequest {
-    #[doc="<p>The ID of the connection.</p> <p>Example: dxcon-abc123</p> <p>Default: None</p>"]
-    #[serde(rename="connectionId")]
+    /// <p>The ID of the connection.</p> <p>Example: dxcon-abc123</p> <p>Default: None</p>
+    #[serde(rename = "connectionId")]
     pub connection_id: String,
-    #[doc="<p>The ID of the LAG with which to associate the connection.</p> <p>Example: dxlag-abc123</p> <p>Default: None</p>"]
-    #[serde(rename="lagId")]
+    /// <p>The ID of the LAG with which to associate the connection.</p> <p>Example: dxlag-abc123</p> <p>Default: None</p>
+    #[serde(rename = "lagId")]
     pub lag_id: String,
 }
 
-#[doc="<p>Container for the parameters to the AssociateHostedConnection operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the AssociateHostedConnection operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AssociateHostedConnectionRequest {
-    #[doc="<p>The ID of the hosted connection.</p> <p>Example: dxcon-abc123</p> <p>Default: None</p>"]
-    #[serde(rename="connectionId")]
+    /// <p>The ID of the hosted connection.</p> <p>Example: dxcon-abc123</p> <p>Default: None</p>
+    #[serde(rename = "connectionId")]
     pub connection_id: String,
-    #[doc="<p>The ID of the interconnect or the LAG.</p> <p>Example: dxcon-abc123 or dxlag-abc123</p> <p>Default: None</p>"]
-    #[serde(rename="parentConnectionId")]
+    /// <p>The ID of the interconnect or the LAG.</p> <p>Example: dxcon-abc123 or dxlag-abc123</p> <p>Default: None</p>
+    #[serde(rename = "parentConnectionId")]
     pub parent_connection_id: String,
 }
 
-#[doc="<p>Container for the parameters to the AssociateVirtualInterface operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the AssociateVirtualInterface operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AssociateVirtualInterfaceRequest {
-    #[doc="<p>The ID of the LAG or connection with which to associate the virtual interface.</p> <p>Example: dxlag-abc123 or dxcon-abc123</p> <p>Default: None</p>"]
-    #[serde(rename="connectionId")]
+    /// <p>The ID of the LAG or connection with which to associate the virtual interface.</p> <p>Example: dxlag-abc123 or dxcon-abc123</p> <p>Default: None</p>
+    #[serde(rename = "connectionId")]
     pub connection_id: String,
-    #[doc="<p>The ID of the virtual interface.</p> <p>Example: dxvif-123dfg56</p> <p>Default: None</p>"]
-    #[serde(rename="virtualInterfaceId")]
+    /// <p>The ID of the virtual interface.</p> <p>Example: dxvif-123dfg56</p> <p>Default: None</p>
+    #[serde(rename = "virtualInterfaceId")]
     pub virtual_interface_id: String,
 }
 
-#[doc="<p>A structure containing information about a BGP peer.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A structure containing information about a BGP peer.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct BGPPeer {
-    #[serde(rename="addressFamily")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "addressFamily")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub address_family: Option<String>,
-    #[serde(rename="amazonAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "amazonAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub amazon_address: Option<String>,
-    #[serde(rename="asn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "asn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub asn: Option<i64>,
-    #[serde(rename="authKey")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "authKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_key: Option<String>,
-    #[serde(rename="bgpPeerState")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "bgpPeerState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bgp_peer_state: Option<String>,
-    #[serde(rename="bgpStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "bgpStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bgp_status: Option<String>,
-    #[serde(rename="customerAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "customerAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_address: Option<String>,
 }
 
-#[doc="<p>Container for the parameters to the ConfirmConnection operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the ConfirmConnection operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ConfirmConnectionRequest {
-    #[serde(rename="connectionId")]
-    pub connection_id: String,
+    #[serde(rename = "connectionId")] pub connection_id: String,
 }
 
-#[doc="<p>The response received when ConfirmConnection is called.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The response received when ConfirmConnection is called.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ConfirmConnectionResponse {
-    #[serde(rename="connectionState")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "connectionState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_state: Option<String>,
 }
 
-#[doc="<p>Container for the parameters to the ConfirmPrivateVirtualInterface operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the ConfirmPrivateVirtualInterface operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ConfirmPrivateVirtualInterfaceRequest {
-    #[doc="<p>ID of the virtual private gateway that will be attached to the virtual interface.</p> <p> A virtual private gateway can be managed via the Amazon Virtual Private Cloud (VPC) console or the <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-CreateVpnGateway.html\">EC2 CreateVpnGateway</a> action.</p> <p>Default: None</p>"]
-    #[serde(rename="virtualGatewayId")]
+    /// <p>ID of the virtual private gateway that will be attached to the virtual interface.</p> <p> A virtual private gateway can be managed via the Amazon Virtual Private Cloud (VPC) console or the <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-CreateVpnGateway.html">EC2 CreateVpnGateway</a> action.</p> <p>Default: None</p>
+    #[serde(rename = "virtualGatewayId")]
     pub virtual_gateway_id: String,
-    #[serde(rename="virtualInterfaceId")]
-    pub virtual_interface_id: String,
+    #[serde(rename = "virtualInterfaceId")] pub virtual_interface_id: String,
 }
 
-#[doc="<p>The response received when ConfirmPrivateVirtualInterface is called.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The response received when ConfirmPrivateVirtualInterface is called.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ConfirmPrivateVirtualInterfaceResponse {
-    #[serde(rename="virtualInterfaceState")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "virtualInterfaceState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interface_state: Option<String>,
 }
 
-#[doc="<p>Container for the parameters to the ConfirmPublicVirtualInterface operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the ConfirmPublicVirtualInterface operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ConfirmPublicVirtualInterfaceRequest {
-    #[serde(rename="virtualInterfaceId")]
-    pub virtual_interface_id: String,
+    #[serde(rename = "virtualInterfaceId")] pub virtual_interface_id: String,
 }
 
-#[doc="<p>The response received when ConfirmPublicVirtualInterface is called.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The response received when ConfirmPublicVirtualInterface is called.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ConfirmPublicVirtualInterfaceResponse {
-    #[serde(rename="virtualInterfaceState")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "virtualInterfaceState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interface_state: Option<String>,
 }
 
-#[doc="<p>A connection represents the physical network connection between the AWS Direct Connect location and the customer.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A connection represents the physical network connection between the AWS Direct Connect location and the customer.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Connection {
-    #[doc="<p>The Direct Connection endpoint which the physical connection terminates on.</p>"]
-    #[serde(rename="awsDevice")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Direct Connection endpoint which the physical connection terminates on.</p>
+    #[serde(rename = "awsDevice")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_device: Option<String>,
-    #[doc="<p>Bandwidth of the connection.</p> <p>Example: 1Gbps (for regular connections), or 500Mbps (for hosted connections)</p> <p>Default: None</p>"]
-    #[serde(rename="bandwidth")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Bandwidth of the connection.</p> <p>Example: 1Gbps (for regular connections), or 500Mbps (for hosted connections)</p> <p>Default: None</p>
+    #[serde(rename = "bandwidth")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bandwidth: Option<String>,
-    #[serde(rename="connectionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "connectionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_id: Option<String>,
-    #[serde(rename="connectionName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "connectionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_name: Option<String>,
-    #[serde(rename="connectionState")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "connectionState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_state: Option<String>,
-    #[serde(rename="lagId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "lagId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub lag_id: Option<String>,
-    #[doc="<p>The time of the most recent call to <a>DescribeLoa</a> for this connection.</p>"]
-    #[serde(rename="loaIssueTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time of the most recent call to <a>DescribeLoa</a> for this connection.</p>
+    #[serde(rename = "loaIssueTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub loa_issue_time: Option<f64>,
-    #[serde(rename="location")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
-    #[doc="<p>The AWS account that will own the new connection.</p>"]
-    #[serde(rename="ownerAccount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS account that will own the new connection.</p>
+    #[serde(rename = "ownerAccount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_account: Option<String>,
-    #[doc="<p>The name of the AWS Direct Connect service provider associated with the connection.</p>"]
-    #[serde(rename="partnerName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the AWS Direct Connect service provider associated with the connection.</p>
+    #[serde(rename = "partnerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub partner_name: Option<String>,
-    #[serde(rename="region")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "region")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub region: Option<String>,
-    #[serde(rename="vlan")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "vlan")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub vlan: Option<i64>,
 }
 
-#[doc="<p>A structure containing a list of connections.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A structure containing a list of connections.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Connections {
-    #[doc="<p>A list of connections.</p>"]
-    #[serde(rename="connections")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of connections.</p>
+    #[serde(rename = "connections")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub connections: Option<Vec<Connection>>,
 }
 
-#[doc="<p>Container for the parameters to the CreateBGPPeer operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the CreateBGPPeer operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateBGPPeerRequest {
-    #[doc="<p>Detailed information for the BGP peer to be created.</p> <p>Default: None</p>"]
-    #[serde(rename="newBGPPeer")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Detailed information for the BGP peer to be created.</p> <p>Default: None</p>
+    #[serde(rename = "newBGPPeer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub new_bgp_peer: Option<NewBGPPeer>,
-    #[doc="<p>The ID of the virtual interface on which the BGP peer will be provisioned.</p> <p>Example: dxvif-456abc78</p> <p>Default: None</p>"]
-    #[serde(rename="virtualInterfaceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the virtual interface on which the BGP peer will be provisioned.</p> <p>Example: dxvif-456abc78</p> <p>Default: None</p>
+    #[serde(rename = "virtualInterfaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interface_id: Option<String>,
 }
 
-#[doc="<p>The response received when CreateBGPPeer is called.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The response received when CreateBGPPeer is called.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateBGPPeerResponse {
-    #[serde(rename="virtualInterface")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "virtualInterface")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interface: Option<VirtualInterface>,
 }
 
-#[doc="<p>Container for the parameters to the CreateConnection operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the CreateConnection operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateConnectionRequest {
-    #[serde(rename="bandwidth")]
-    pub bandwidth: String,
-    #[serde(rename="connectionName")]
-    pub connection_name: String,
-    #[serde(rename="lagId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "bandwidth")] pub bandwidth: String,
+    #[serde(rename = "connectionName")] pub connection_name: String,
+    #[serde(rename = "lagId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub lag_id: Option<String>,
-    #[serde(rename="location")]
-    pub location: String,
+    #[serde(rename = "location")] pub location: String,
 }
 
-#[doc="<p>Container for the parameters to the CreateInterconnect operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the CreateInterconnect operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateInterconnectRequest {
-    #[doc="<p>The port bandwidth</p> <p>Example: 1Gbps</p> <p>Default: None</p> <p>Available values: 1Gbps,10Gbps</p>"]
-    #[serde(rename="bandwidth")]
+    /// <p>The port bandwidth</p> <p>Example: 1Gbps</p> <p>Default: None</p> <p>Available values: 1Gbps,10Gbps</p>
+    #[serde(rename = "bandwidth")]
     pub bandwidth: String,
-    #[doc="<p>The name of the interconnect.</p> <p>Example: \"<i>1G Interconnect to AWS</i>\"</p> <p>Default: None</p>"]
-    #[serde(rename="interconnectName")]
+    /// <p>The name of the interconnect.</p> <p>Example: "<i>1G Interconnect to AWS</i>"</p> <p>Default: None</p>
+    #[serde(rename = "interconnectName")]
     pub interconnect_name: String,
-    #[serde(rename="lagId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "lagId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub lag_id: Option<String>,
-    #[doc="<p>Where the interconnect is located</p> <p>Example: EqSV5</p> <p>Default: None</p>"]
-    #[serde(rename="location")]
+    /// <p>Where the interconnect is located</p> <p>Example: EqSV5</p> <p>Default: None</p>
+    #[serde(rename = "location")]
     pub location: String,
 }
 
-#[doc="<p>Container for the parameters to the CreateLag operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the CreateLag operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateLagRequest {
-    #[doc="<p>The ID of an existing connection to migrate to the LAG.</p> <p>Default: None</p>"]
-    #[serde(rename="connectionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of an existing connection to migrate to the LAG.</p> <p>Default: None</p>
+    #[serde(rename = "connectionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_id: Option<String>,
-    #[doc="<p>The bandwidth of the individual physical connections bundled by the LAG.</p> <p>Default: None</p> <p>Available values: 1Gbps, 10Gbps</p>"]
-    #[serde(rename="connectionsBandwidth")]
+    /// <p>The bandwidth of the individual physical connections bundled by the LAG.</p> <p>Default: None</p> <p>Available values: 1Gbps, 10Gbps</p>
+    #[serde(rename = "connectionsBandwidth")]
     pub connections_bandwidth: String,
-    #[doc="<p>The name of the LAG.</p> <p>Example: \"<code>3x10G LAG to AWS</code>\"</p> <p>Default: None</p>"]
-    #[serde(rename="lagName")]
+    /// <p>The name of the LAG.</p> <p>Example: "<code>3x10G LAG to AWS</code>"</p> <p>Default: None</p>
+    #[serde(rename = "lagName")]
     pub lag_name: String,
-    #[doc="<p>The AWS Direct Connect location in which the LAG should be allocated.</p> <p>Example: EqSV5</p> <p>Default: None</p>"]
-    #[serde(rename="location")]
+    /// <p>The AWS Direct Connect location in which the LAG should be allocated.</p> <p>Example: EqSV5</p> <p>Default: None</p>
+    #[serde(rename = "location")]
     pub location: String,
-    #[doc="<p>The number of physical connections initially provisioned and bundled by the LAG.</p> <p>Default: None</p>"]
-    #[serde(rename="numberOfConnections")]
+    /// <p>The number of physical connections initially provisioned and bundled by the LAG.</p> <p>Default: None</p>
+    #[serde(rename = "numberOfConnections")]
     pub number_of_connections: i64,
 }
 
-#[doc="<p>Container for the parameters to the CreatePrivateVirtualInterface operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the CreatePrivateVirtualInterface operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreatePrivateVirtualInterfaceRequest {
-    #[serde(rename="connectionId")]
-    pub connection_id: String,
-    #[doc="<p>Detailed information for the private virtual interface to be created.</p> <p>Default: None</p>"]
-    #[serde(rename="newPrivateVirtualInterface")]
+    #[serde(rename = "connectionId")] pub connection_id: String,
+    /// <p>Detailed information for the private virtual interface to be created.</p> <p>Default: None</p>
+    #[serde(rename = "newPrivateVirtualInterface")]
     pub new_private_virtual_interface: NewPrivateVirtualInterface,
 }
 
-#[doc="<p>Container for the parameters to the CreatePublicVirtualInterface operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the CreatePublicVirtualInterface operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreatePublicVirtualInterfaceRequest {
-    #[serde(rename="connectionId")]
-    pub connection_id: String,
-    #[doc="<p>Detailed information for the public virtual interface to be created.</p> <p>Default: None</p>"]
-    #[serde(rename="newPublicVirtualInterface")]
+    #[serde(rename = "connectionId")] pub connection_id: String,
+    /// <p>Detailed information for the public virtual interface to be created.</p> <p>Default: None</p>
+    #[serde(rename = "newPublicVirtualInterface")]
     pub new_public_virtual_interface: NewPublicVirtualInterface,
 }
 
-#[doc="<p>Container for the parameters to the DeleteBGPPeer operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the DeleteBGPPeer operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteBGPPeerRequest {
-    #[serde(rename="asn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "asn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub asn: Option<i64>,
-    #[serde(rename="customerAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "customerAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_address: Option<String>,
-    #[doc="<p>The ID of the virtual interface from which the BGP peer will be deleted.</p> <p>Example: dxvif-456abc78</p> <p>Default: None</p>"]
-    #[serde(rename="virtualInterfaceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the virtual interface from which the BGP peer will be deleted.</p> <p>Example: dxvif-456abc78</p> <p>Default: None</p>
+    #[serde(rename = "virtualInterfaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interface_id: Option<String>,
 }
 
-#[doc="<p>The response received when DeleteBGPPeer is called.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The response received when DeleteBGPPeer is called.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteBGPPeerResponse {
-    #[serde(rename="virtualInterface")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "virtualInterface")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interface: Option<VirtualInterface>,
 }
 
-#[doc="<p>Container for the parameters to the DeleteConnection operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the DeleteConnection operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteConnectionRequest {
-    #[serde(rename="connectionId")]
-    pub connection_id: String,
+    #[serde(rename = "connectionId")] pub connection_id: String,
 }
 
-#[doc="<p>Container for the parameters to the DeleteInterconnect operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the DeleteInterconnect operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteInterconnectRequest {
-    #[serde(rename="interconnectId")]
-    pub interconnect_id: String,
+    #[serde(rename = "interconnectId")] pub interconnect_id: String,
 }
 
-#[doc="<p>The response received when DeleteInterconnect is called.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The response received when DeleteInterconnect is called.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteInterconnectResponse {
-    #[serde(rename="interconnectState")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "interconnectState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub interconnect_state: Option<String>,
 }
 
-#[doc="<p>Container for the parameters to the DeleteLag operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the DeleteLag operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteLagRequest {
-    #[doc="<p>The ID of the LAG to delete.</p> <p>Example: dxlag-abc123</p> <p>Default: None</p>"]
-    #[serde(rename="lagId")]
+    /// <p>The ID of the LAG to delete.</p> <p>Example: dxlag-abc123</p> <p>Default: None</p>
+    #[serde(rename = "lagId")]
     pub lag_id: String,
 }
 
-#[doc="<p>Container for the parameters to the DeleteVirtualInterface operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the DeleteVirtualInterface operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteVirtualInterfaceRequest {
-    #[serde(rename="virtualInterfaceId")]
-    pub virtual_interface_id: String,
+    #[serde(rename = "virtualInterfaceId")] pub virtual_interface_id: String,
 }
 
-#[doc="<p>The response received when DeleteVirtualInterface is called.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The response received when DeleteVirtualInterface is called.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteVirtualInterfaceResponse {
-    #[serde(rename="virtualInterfaceState")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "virtualInterfaceState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interface_state: Option<String>,
 }
 
-#[doc="<p>Container for the parameters to the DescribeConnectionLoa operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the DescribeConnectionLoa operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeConnectionLoaRequest {
-    #[serde(rename="connectionId")]
-    pub connection_id: String,
-    #[serde(rename="loaContentType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "connectionId")] pub connection_id: String,
+    #[serde(rename = "loaContentType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub loa_content_type: Option<String>,
-    #[doc="<p>The name of the APN partner or service provider who establishes connectivity on your behalf. If you supply this parameter, the LOA-CFA lists the provider name alongside your company name as the requester of the cross connect.</p> <p>Default: None</p>"]
-    #[serde(rename="providerName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the APN partner or service provider who establishes connectivity on your behalf. If you supply this parameter, the LOA-CFA lists the provider name alongside your company name as the requester of the cross connect.</p> <p>Default: None</p>
+    #[serde(rename = "providerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_name: Option<String>,
 }
 
-#[doc="<p>The response received when DescribeConnectionLoa is called.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The response received when DescribeConnectionLoa is called.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeConnectionLoaResponse {
-    #[serde(rename="loa")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "loa")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub loa: Option<Loa>,
 }
 
-#[doc="<p>Container for the parameters to the DescribeConnectionsOnInterconnect operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the DescribeConnectionsOnInterconnect operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeConnectionsOnInterconnectRequest {
-    #[doc="<p>ID of the interconnect on which a list of connection is provisioned.</p> <p>Example: dxcon-abc123</p> <p>Default: None</p>"]
-    #[serde(rename="interconnectId")]
+    /// <p>ID of the interconnect on which a list of connection is provisioned.</p> <p>Example: dxcon-abc123</p> <p>Default: None</p>
+    #[serde(rename = "interconnectId")]
     pub interconnect_id: String,
 }
 
-#[doc="<p>Container for the parameters to the DescribeConnections operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the DescribeConnections operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeConnectionsRequest {
-    #[serde(rename="connectionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "connectionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_id: Option<String>,
 }
 
-#[doc="<p>Container for the parameters to the DescribeHostedConnections operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the DescribeHostedConnections operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeHostedConnectionsRequest {
-    #[doc="<p>The ID of the interconnect or LAG on which the hosted connections are provisioned.</p> <p>Example: dxcon-abc123 or dxlag-abc123</p> <p>Default: None</p>"]
-    #[serde(rename="connectionId")]
+    /// <p>The ID of the interconnect or LAG on which the hosted connections are provisioned.</p> <p>Example: dxcon-abc123 or dxlag-abc123</p> <p>Default: None</p>
+    #[serde(rename = "connectionId")]
     pub connection_id: String,
 }
 
-#[doc="<p>Container for the parameters to the DescribeInterconnectLoa operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the DescribeInterconnectLoa operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeInterconnectLoaRequest {
-    #[serde(rename="interconnectId")]
-    pub interconnect_id: String,
-    #[serde(rename="loaContentType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "interconnectId")] pub interconnect_id: String,
+    #[serde(rename = "loaContentType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub loa_content_type: Option<String>,
-    #[doc="<p>The name of the service provider who establishes connectivity on your behalf. If you supply this parameter, the LOA-CFA lists the provider name alongside your company name as the requester of the cross connect.</p> <p>Default: None</p>"]
-    #[serde(rename="providerName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the service provider who establishes connectivity on your behalf. If you supply this parameter, the LOA-CFA lists the provider name alongside your company name as the requester of the cross connect.</p> <p>Default: None</p>
+    #[serde(rename = "providerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_name: Option<String>,
 }
 
-#[doc="<p>The response received when DescribeInterconnectLoa is called.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The response received when DescribeInterconnectLoa is called.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeInterconnectLoaResponse {
-    #[serde(rename="loa")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "loa")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub loa: Option<Loa>,
 }
 
-#[doc="<p>Container for the parameters to the DescribeInterconnects operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the DescribeInterconnects operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeInterconnectsRequest {
-    #[serde(rename="interconnectId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "interconnectId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub interconnect_id: Option<String>,
 }
 
-#[doc="<p>Container for the parameters to the DescribeLags operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the DescribeLags operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeLagsRequest {
-    #[doc="<p>The ID of the LAG.</p> <p>Example: dxlag-abc123</p> <p>Default: None</p>"]
-    #[serde(rename="lagId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the LAG.</p> <p>Example: dxlag-abc123</p> <p>Default: None</p>
+    #[serde(rename = "lagId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub lag_id: Option<String>,
 }
 
-#[doc="<p>Container for the parameters to the DescribeLoa operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the DescribeLoa operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeLoaRequest {
-    #[doc="<p>The ID of a connection, LAG, or interconnect for which to get the LOA-CFA information.</p> <p>Example: dxcon-abc123 or dxlag-abc123</p> <p>Default: None</p>"]
-    #[serde(rename="connectionId")]
+    /// <p>The ID of a connection, LAG, or interconnect for which to get the LOA-CFA information.</p> <p>Example: dxcon-abc123 or dxlag-abc123</p> <p>Default: None</p>
+    #[serde(rename = "connectionId")]
     pub connection_id: String,
-    #[doc="<p>A standard media type indicating the content type of the LOA-CFA document. Currently, the only supported value is \"application/pdf\".</p> <p>Default: application/pdf</p>"]
-    #[serde(rename="loaContentType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A standard media type indicating the content type of the LOA-CFA document. Currently, the only supported value is "application/pdf".</p> <p>Default: application/pdf</p>
+    #[serde(rename = "loaContentType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub loa_content_type: Option<String>,
-    #[doc="<p>The name of the service provider who establishes connectivity on your behalf. If you supply this parameter, the LOA-CFA lists the provider name alongside your company name as the requester of the cross connect.</p> <p>Default: None</p>"]
-    #[serde(rename="providerName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the service provider who establishes connectivity on your behalf. If you supply this parameter, the LOA-CFA lists the provider name alongside your company name as the requester of the cross connect.</p> <p>Default: None</p>
+    #[serde(rename = "providerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_name: Option<String>,
 }
 
-#[doc="<p>Container for the parameters to the DescribeTags operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the DescribeTags operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeTagsRequest {
-    #[doc="<p>The Amazon Resource Names (ARNs) of the Direct Connect resources.</p>"]
-    #[serde(rename="resourceArns")]
+    /// <p>The Amazon Resource Names (ARNs) of the Direct Connect resources.</p>
+    #[serde(rename = "resourceArns")]
     pub resource_arns: Vec<String>,
 }
 
-#[doc="<p>The response received when DescribeTags is called.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The response received when DescribeTags is called.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeTagsResponse {
-    #[doc="<p>Information about the tags.</p>"]
-    #[serde(rename="resourceTags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the tags.</p>
+    #[serde(rename = "resourceTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_tags: Option<Vec<ResourceTag>>,
 }
 
-#[doc="<p>Container for the parameters to the DescribeVirtualInterfaces operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the DescribeVirtualInterfaces operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeVirtualInterfacesRequest {
-    #[serde(rename="connectionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "connectionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_id: Option<String>,
-    #[serde(rename="virtualInterfaceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "virtualInterfaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interface_id: Option<String>,
 }
 
-#[doc="<p>Container for the parameters to the DisassociateConnectionFromLag operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the DisassociateConnectionFromLag operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DisassociateConnectionFromLagRequest {
-    #[doc="<p>The ID of the connection to disassociate from the LAG.</p> <p>Example: dxcon-abc123</p> <p>Default: None</p>"]
-    #[serde(rename="connectionId")]
+    /// <p>The ID of the connection to disassociate from the LAG.</p> <p>Example: dxcon-abc123</p> <p>Default: None</p>
+    #[serde(rename = "connectionId")]
     pub connection_id: String,
-    #[doc="<p>The ID of the LAG.</p> <p>Example: dxlag-abc123</p> <p>Default: None</p>"]
-    #[serde(rename="lagId")]
+    /// <p>The ID of the LAG.</p> <p>Example: dxlag-abc123</p> <p>Default: None</p>
+    #[serde(rename = "lagId")]
     pub lag_id: String,
 }
 
-#[doc="<p>An interconnect is a connection that can host other connections.</p> <p>Like a standard AWS Direct Connect connection, an interconnect represents the physical connection between an AWS Direct Connect partner's network and a specific Direct Connect location. An AWS Direct Connect partner who owns an interconnect can provision hosted connections on the interconnect for their end customers, thereby providing the end customers with connectivity to AWS services.</p> <p>The resources of the interconnect, including bandwidth and VLAN numbers, are shared by all of the hosted connections on the interconnect, and the owner of the interconnect determines how these resources are assigned.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>An interconnect is a connection that can host other connections.</p> <p>Like a standard AWS Direct Connect connection, an interconnect represents the physical connection between an AWS Direct Connect partner's network and a specific Direct Connect location. An AWS Direct Connect partner who owns an interconnect can provision hosted connections on the interconnect for their end customers, thereby providing the end customers with connectivity to AWS services.</p> <p>The resources of the interconnect, including bandwidth and VLAN numbers, are shared by all of the hosted connections on the interconnect, and the owner of the interconnect determines how these resources are assigned.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Interconnect {
-    #[doc="<p>The Direct Connection endpoint which the physical connection terminates on.</p>"]
-    #[serde(rename="awsDevice")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Direct Connection endpoint which the physical connection terminates on.</p>
+    #[serde(rename = "awsDevice")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_device: Option<String>,
-    #[serde(rename="bandwidth")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "bandwidth")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bandwidth: Option<String>,
-    #[serde(rename="interconnectId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "interconnectId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub interconnect_id: Option<String>,
-    #[serde(rename="interconnectName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "interconnectName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub interconnect_name: Option<String>,
-    #[serde(rename="interconnectState")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "interconnectState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub interconnect_state: Option<String>,
-    #[serde(rename="lagId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "lagId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub lag_id: Option<String>,
-    #[doc="<p>The time of the most recent call to DescribeInterconnectLoa for this Interconnect.</p>"]
-    #[serde(rename="loaIssueTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time of the most recent call to DescribeInterconnectLoa for this Interconnect.</p>
+    #[serde(rename = "loaIssueTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub loa_issue_time: Option<f64>,
-    #[serde(rename="location")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
-    #[serde(rename="region")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "region")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub region: Option<String>,
 }
 
-#[doc="<p>A structure containing a list of interconnects.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A structure containing a list of interconnects.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Interconnects {
-    #[doc="<p>A list of interconnects.</p>"]
-    #[serde(rename="interconnects")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of interconnects.</p>
+    #[serde(rename = "interconnects")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub interconnects: Option<Vec<Interconnect>>,
 }
 
-#[doc="<p>Describes a link aggregation group (LAG). A LAG is a connection that uses the Link Aggregation Control Protocol (LACP) to logically aggregate a bundle of physical connections. Like an interconnect, it can host other connections. All connections in a LAG must terminate on the same physical AWS Direct Connect endpoint, and must be the same bandwidth.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes a link aggregation group (LAG). A LAG is a connection that uses the Link Aggregation Control Protocol (LACP) to logically aggregate a bundle of physical connections. Like an interconnect, it can host other connections. All connections in a LAG must terminate on the same physical AWS Direct Connect endpoint, and must be the same bandwidth.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Lag {
-    #[doc="<p>Indicates whether the LAG can host other connections.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
-    #[serde(rename="allowsHostedConnections")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether the LAG can host other connections.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>
+    #[serde(rename = "allowsHostedConnections")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub allows_hosted_connections: Option<bool>,
-    #[doc="<p>The AWS Direct Connection endpoint that hosts the LAG.</p>"]
-    #[serde(rename="awsDevice")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS Direct Connection endpoint that hosts the LAG.</p>
+    #[serde(rename = "awsDevice")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_device: Option<String>,
-    #[doc="<p>A list of connections bundled by this LAG.</p>"]
-    #[serde(rename="connections")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of connections bundled by this LAG.</p>
+    #[serde(rename = "connections")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub connections: Option<Vec<Connection>>,
-    #[doc="<p>The individual bandwidth of the physical connections bundled by the LAG.</p> <p>Available values: 1Gbps, 10Gbps</p>"]
-    #[serde(rename="connectionsBandwidth")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The individual bandwidth of the physical connections bundled by the LAG.</p> <p>Available values: 1Gbps, 10Gbps</p>
+    #[serde(rename = "connectionsBandwidth")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub connections_bandwidth: Option<String>,
-    #[serde(rename="lagId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "lagId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub lag_id: Option<String>,
-    #[doc="<p>The name of the LAG.</p>"]
-    #[serde(rename="lagName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the LAG.</p>
+    #[serde(rename = "lagName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub lag_name: Option<String>,
-    #[serde(rename="lagState")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "lagState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub lag_state: Option<String>,
-    #[serde(rename="location")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
-    #[doc="<p>The minimum number of physical connections that must be operational for the LAG itself to be operational. If the number of operational connections drops below this setting, the LAG state changes to <code>down</code>. This value can help to ensure that a LAG is not overutilized if a significant number of its bundled connections go down.</p>"]
-    #[serde(rename="minimumLinks")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The minimum number of physical connections that must be operational for the LAG itself to be operational. If the number of operational connections drops below this setting, the LAG state changes to <code>down</code>. This value can help to ensure that a LAG is not overutilized if a significant number of its bundled connections go down.</p>
+    #[serde(rename = "minimumLinks")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub minimum_links: Option<i64>,
-    #[doc="<p>The number of physical connections bundled by the LAG, up to a maximum of 10.</p>"]
-    #[serde(rename="numberOfConnections")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of physical connections bundled by the LAG, up to a maximum of 10.</p>
+    #[serde(rename = "numberOfConnections")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_connections: Option<i64>,
-    #[doc="<p>The owner of the LAG.</p>"]
-    #[serde(rename="ownerAccount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The owner of the LAG.</p>
+    #[serde(rename = "ownerAccount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_account: Option<String>,
-    #[serde(rename="region")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "region")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub region: Option<String>,
 }
 
-#[doc="<p>A structure containing a list of LAGs.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A structure containing a list of LAGs.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Lags {
-    #[doc="<p>A list of LAGs.</p>"]
-    #[serde(rename="lags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of LAGs.</p>
+    #[serde(rename = "lags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub lags: Option<Vec<Lag>>,
 }
 
-#[doc="<p>A structure containing the Letter of Authorization - Connecting Facility Assignment (LOA-CFA) for a connection.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A structure containing the Letter of Authorization - Connecting Facility Assignment (LOA-CFA) for a connection.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Loa {
-    #[serde(rename="loaContent")]
-    #[serde(
-                            deserialize_with="::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-                            serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
-                            default,
-                        )]
+    #[serde(rename = "loaContent")]
+    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
     pub loa_content: Option<Vec<u8>>,
-    #[serde(rename="loaContentType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "loaContentType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub loa_content_type: Option<String>,
 }
 
-#[doc="<p>An AWS Direct Connect location where connections and interconnects can be requested.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>An AWS Direct Connect location where connections and interconnects can be requested.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Location {
-    #[doc="<p>The code used to indicate the AWS Direct Connect location.</p>"]
-    #[serde(rename="locationCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The code used to indicate the AWS Direct Connect location.</p>
+    #[serde(rename = "locationCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub location_code: Option<String>,
-    #[doc="<p>The name of the AWS Direct Connect location. The name includes the colocation partner name and the physical site of the lit building.</p>"]
-    #[serde(rename="locationName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the AWS Direct Connect location. The name includes the colocation partner name and the physical site of the lit building.</p>
+    #[serde(rename = "locationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub location_name: Option<String>,
 }
 
-#[doc="<p>A location is a network facility where AWS Direct Connect routers are available to be connected. Generally, these are colocation hubs where many network providers have equipment, and where cross connects can be delivered. Locations include a name and facility code, and must be provided when creating a connection.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A location is a network facility where AWS Direct Connect routers are available to be connected. Generally, these are colocation hubs where many network providers have equipment, and where cross connects can be delivered. Locations include a name and facility code, and must be provided when creating a connection.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Locations {
-    #[doc="<p>A list of colocation hubs where network providers have equipment. Most regions have multiple locations available.</p>"]
-    #[serde(rename="locations")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of colocation hubs where network providers have equipment. Most regions have multiple locations available.</p>
+    #[serde(rename = "locations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub locations: Option<Vec<Location>>,
 }
 
-#[doc="<p>A structure containing information about a new BGP peer.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>A structure containing information about a new BGP peer.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct NewBGPPeer {
-    #[serde(rename="addressFamily")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "addressFamily")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub address_family: Option<String>,
-    #[serde(rename="amazonAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "amazonAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub amazon_address: Option<String>,
-    #[serde(rename="asn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "asn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub asn: Option<i64>,
-    #[serde(rename="authKey")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "authKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_key: Option<String>,
-    #[serde(rename="customerAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "customerAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_address: Option<String>,
 }
 
-#[doc="<p>A structure containing information about a new private virtual interface.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>A structure containing information about a new private virtual interface.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct NewPrivateVirtualInterface {
-    #[serde(rename="addressFamily")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "addressFamily")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub address_family: Option<String>,
-    #[serde(rename="amazonAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "amazonAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub amazon_address: Option<String>,
-    #[serde(rename="asn")]
-    pub asn: i64,
-    #[serde(rename="authKey")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "asn")] pub asn: i64,
+    #[serde(rename = "authKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_key: Option<String>,
-    #[serde(rename="customerAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "customerAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_address: Option<String>,
-    #[serde(rename="virtualGatewayId")]
-    pub virtual_gateway_id: String,
-    #[serde(rename="virtualInterfaceName")]
-    pub virtual_interface_name: String,
-    #[serde(rename="vlan")]
-    pub vlan: i64,
+    #[serde(rename = "virtualGatewayId")] pub virtual_gateway_id: String,
+    #[serde(rename = "virtualInterfaceName")] pub virtual_interface_name: String,
+    #[serde(rename = "vlan")] pub vlan: i64,
 }
 
-#[doc="<p>A structure containing information about a private virtual interface that will be provisioned on a connection.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>A structure containing information about a private virtual interface that will be provisioned on a connection.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct NewPrivateVirtualInterfaceAllocation {
-    #[serde(rename="addressFamily")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "addressFamily")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub address_family: Option<String>,
-    #[serde(rename="amazonAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "amazonAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub amazon_address: Option<String>,
-    #[serde(rename="asn")]
-    pub asn: i64,
-    #[serde(rename="authKey")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "asn")] pub asn: i64,
+    #[serde(rename = "authKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_key: Option<String>,
-    #[serde(rename="customerAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "customerAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_address: Option<String>,
-    #[serde(rename="virtualInterfaceName")]
-    pub virtual_interface_name: String,
-    #[serde(rename="vlan")]
-    pub vlan: i64,
+    #[serde(rename = "virtualInterfaceName")] pub virtual_interface_name: String,
+    #[serde(rename = "vlan")] pub vlan: i64,
 }
 
-#[doc="<p>A structure containing information about a new public virtual interface.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>A structure containing information about a new public virtual interface.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct NewPublicVirtualInterface {
-    #[serde(rename="addressFamily")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "addressFamily")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub address_family: Option<String>,
-    #[serde(rename="amazonAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "amazonAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub amazon_address: Option<String>,
-    #[serde(rename="asn")]
-    pub asn: i64,
-    #[serde(rename="authKey")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "asn")] pub asn: i64,
+    #[serde(rename = "authKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_key: Option<String>,
-    #[serde(rename="customerAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "customerAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_address: Option<String>,
-    #[serde(rename="routeFilterPrefixes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "routeFilterPrefixes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub route_filter_prefixes: Option<Vec<RouteFilterPrefix>>,
-    #[serde(rename="virtualInterfaceName")]
-    pub virtual_interface_name: String,
-    #[serde(rename="vlan")]
-    pub vlan: i64,
+    #[serde(rename = "virtualInterfaceName")] pub virtual_interface_name: String,
+    #[serde(rename = "vlan")] pub vlan: i64,
 }
 
-#[doc="<p>A structure containing information about a public virtual interface that will be provisioned on a connection.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>A structure containing information about a public virtual interface that will be provisioned on a connection.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct NewPublicVirtualInterfaceAllocation {
-    #[serde(rename="addressFamily")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "addressFamily")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub address_family: Option<String>,
-    #[serde(rename="amazonAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "amazonAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub amazon_address: Option<String>,
-    #[serde(rename="asn")]
-    pub asn: i64,
-    #[serde(rename="authKey")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "asn")] pub asn: i64,
+    #[serde(rename = "authKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_key: Option<String>,
-    #[serde(rename="customerAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "customerAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_address: Option<String>,
-    #[serde(rename="routeFilterPrefixes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "routeFilterPrefixes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub route_filter_prefixes: Option<Vec<RouteFilterPrefix>>,
-    #[serde(rename="virtualInterfaceName")]
-    pub virtual_interface_name: String,
-    #[serde(rename="vlan")]
-    pub vlan: i64,
+    #[serde(rename = "virtualInterfaceName")] pub virtual_interface_name: String,
+    #[serde(rename = "vlan")] pub vlan: i64,
 }
 
-#[doc="<p>The tags associated with a Direct Connect resource.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The tags associated with a Direct Connect resource.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ResourceTag {
-    #[doc="<p>The Amazon Resource Name (ARN) of the Direct Connect resource.</p>"]
-    #[serde(rename="resourceArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the Direct Connect resource.</p>
+    #[serde(rename = "resourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_arn: Option<String>,
-    #[doc="<p>The tags.</p>"]
-    #[serde(rename="tags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The tags.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
-#[doc="<p>A route filter prefix that the customer can advertise through Border Gateway Protocol (BGP) over a public virtual interface.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>A route filter prefix that the customer can advertise through Border Gateway Protocol (BGP) over a public virtual interface.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct RouteFilterPrefix {
-    #[doc="<p>CIDR notation for the advertised route. Multiple routes are separated by commas.</p> <p>IPv6 CIDRs must be at least a /64 or shorter</p> <p>Example: 10.10.10.0/24,10.10.11.0/24,2001:db8::/64</p>"]
-    #[serde(rename="cidr")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>CIDR notation for the advertised route. Multiple routes are separated by commas.</p> <p>IPv6 CIDRs must be at least a /64 or shorter</p> <p>Example: 10.10.10.0/24,10.10.11.0/24,2001:db8::/64</p>
+    #[serde(rename = "cidr")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cidr: Option<String>,
 }
 
-#[doc="<p>Information about a tag.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Information about a tag.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Tag {
-    #[doc="<p>The key of the tag.</p>"]
-    #[serde(rename="key")]
+    /// <p>The key of the tag.</p>
+    #[serde(rename = "key")]
     pub key: String,
-    #[doc="<p>The value of the tag.</p>"]
-    #[serde(rename="value")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The value of the tag.</p>
+    #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
-#[doc="<p>Container for the parameters to the TagResource operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the TagResource operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct TagResourceRequest {
-    #[doc="<p>The Amazon Resource Name (ARN) of the Direct Connect resource.</p> <p>Example: arn:aws:directconnect:us-east-1:123456789012:dxcon/dxcon-fg5678gh</p>"]
-    #[serde(rename="resourceArn")]
+    /// <p>The Amazon Resource Name (ARN) of the Direct Connect resource.</p> <p>Example: arn:aws:directconnect:us-east-1:123456789012:dxcon/dxcon-fg5678gh</p>
+    #[serde(rename = "resourceArn")]
     pub resource_arn: String,
-    #[doc="<p>The list of tags to add.</p>"]
-    #[serde(rename="tags")]
+    /// <p>The list of tags to add.</p>
+    #[serde(rename = "tags")]
     pub tags: Vec<Tag>,
 }
 
-#[doc="<p>The response received when TagResource is called.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The response received when TagResource is called.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct TagResourceResponse;
 
-#[doc="<p>Container for the parameters to the UntagResource operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the UntagResource operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UntagResourceRequest {
-    #[doc="<p>The Amazon Resource Name (ARN) of the Direct Connect resource.</p>"]
-    #[serde(rename="resourceArn")]
+    /// <p>The Amazon Resource Name (ARN) of the Direct Connect resource.</p>
+    #[serde(rename = "resourceArn")]
     pub resource_arn: String,
-    #[doc="<p>The list of tag keys to remove.</p>"]
-    #[serde(rename="tagKeys")]
+    /// <p>The list of tag keys to remove.</p>
+    #[serde(rename = "tagKeys")]
     pub tag_keys: Vec<String>,
 }
 
-#[doc="<p>The response received when UntagResource is called.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The response received when UntagResource is called.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UntagResourceResponse;
 
-#[doc="<p>Container for the parameters to the UpdateLag operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Container for the parameters to the UpdateLag operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateLagRequest {
-    #[doc="<p>The ID of the LAG to update.</p> <p>Example: dxlag-abc123</p> <p>Default: None</p>"]
-    #[serde(rename="lagId")]
+    /// <p>The ID of the LAG to update.</p> <p>Example: dxlag-abc123</p> <p>Default: None</p>
+    #[serde(rename = "lagId")]
     pub lag_id: String,
-    #[doc="<p>The name for the LAG.</p> <p>Example: \"<code>3x10G LAG to AWS</code>\"</p> <p>Default: None</p>"]
-    #[serde(rename="lagName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name for the LAG.</p> <p>Example: "<code>3x10G LAG to AWS</code>"</p> <p>Default: None</p>
+    #[serde(rename = "lagName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub lag_name: Option<String>,
-    #[doc="<p>The minimum number of physical connections that must be operational for the LAG itself to be operational.</p> <p>Default: None</p>"]
-    #[serde(rename="minimumLinks")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The minimum number of physical connections that must be operational for the LAG itself to be operational.</p> <p>Default: None</p>
+    #[serde(rename = "minimumLinks")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub minimum_links: Option<i64>,
 }
 
-#[doc="<p>You can create one or more AWS Direct Connect private virtual interfaces linking to your virtual private gateway.</p> <p>Virtual private gateways can be managed using the Amazon Virtual Private Cloud (Amazon VPC) console or the <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-CreateVpnGateway.html\">Amazon EC2 CreateVpnGateway action</a>.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>You can create one or more AWS Direct Connect private virtual interfaces linking to your virtual private gateway.</p> <p>Virtual private gateways can be managed using the Amazon Virtual Private Cloud (Amazon VPC) console or the <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-CreateVpnGateway.html">Amazon EC2 CreateVpnGateway action</a>.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct VirtualGateway {
-    #[serde(rename="virtualGatewayId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "virtualGatewayId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_gateway_id: Option<String>,
-    #[serde(rename="virtualGatewayState")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "virtualGatewayState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_gateway_state: Option<String>,
 }
 
-#[doc="<p>A structure containing a list of virtual private gateways.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A structure containing a list of virtual private gateways.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct VirtualGateways {
-    #[doc="<p>A list of virtual private gateways.</p>"]
-    #[serde(rename="virtualGateways")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of virtual private gateways.</p>
+    #[serde(rename = "virtualGateways")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_gateways: Option<Vec<VirtualGateway>>,
 }
 
-#[doc="<p>A virtual interface (VLAN) transmits the traffic between the AWS Direct Connect location and the customer.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A virtual interface (VLAN) transmits the traffic between the AWS Direct Connect location and the customer.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct VirtualInterface {
-    #[serde(rename="addressFamily")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "addressFamily")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub address_family: Option<String>,
-    #[serde(rename="amazonAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "amazonAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub amazon_address: Option<String>,
-    #[serde(rename="asn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "asn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub asn: Option<i64>,
-    #[serde(rename="authKey")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "authKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_key: Option<String>,
-    #[serde(rename="bgpPeers")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "bgpPeers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bgp_peers: Option<Vec<BGPPeer>>,
-    #[serde(rename="connectionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "connectionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_id: Option<String>,
-    #[serde(rename="customerAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "customerAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_address: Option<String>,
-    #[doc="<p>Information for generating the customer router configuration.</p>"]
-    #[serde(rename="customerRouterConfig")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information for generating the customer router configuration.</p>
+    #[serde(rename = "customerRouterConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_router_config: Option<String>,
-    #[serde(rename="location")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
-    #[doc="<p>The AWS account that will own the new virtual interface.</p>"]
-    #[serde(rename="ownerAccount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS account that will own the new virtual interface.</p>
+    #[serde(rename = "ownerAccount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_account: Option<String>,
-    #[serde(rename="routeFilterPrefixes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "routeFilterPrefixes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub route_filter_prefixes: Option<Vec<RouteFilterPrefix>>,
-    #[serde(rename="virtualGatewayId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "virtualGatewayId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_gateway_id: Option<String>,
-    #[serde(rename="virtualInterfaceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "virtualInterfaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interface_id: Option<String>,
-    #[serde(rename="virtualInterfaceName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "virtualInterfaceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interface_name: Option<String>,
-    #[serde(rename="virtualInterfaceState")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "virtualInterfaceState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interface_state: Option<String>,
-    #[serde(rename="virtualInterfaceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "virtualInterfaceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interface_type: Option<String>,
-    #[serde(rename="vlan")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "vlan")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub vlan: Option<i64>,
 }
 
-#[doc="<p>A structure containing a list of virtual interfaces.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A structure containing a list of virtual interfaces.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct VirtualInterfaces {
-    #[doc="<p>A list of virtual interfaces.</p>"]
-    #[serde(rename="virtualInterfaces")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of virtual interfaces.</p>
+    #[serde(rename = "virtualInterfaces")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interfaces: Option<Vec<VirtualInterface>>,
 }
 
@@ -1001,7 +971,6 @@ pub enum AllocateConnectionOnInterconnectError {
     Unknown(String),
 }
 
-
 impl AllocateConnectionOnInterconnectError {
     pub fn from_body(body: &str) -> AllocateConnectionOnInterconnectError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1015,8 +984,16 @@ impl AllocateConnectionOnInterconnectError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DirectConnectClientException" => AllocateConnectionOnInterconnectError::DirectConnectClient(String::from(error_message)),
-                    "DirectConnectServerException" => AllocateConnectionOnInterconnectError::DirectConnectServer(String::from(error_message)),
+                    "DirectConnectClientException" => {
+                        AllocateConnectionOnInterconnectError::DirectConnectClient(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DirectConnectServerException" => {
+                        AllocateConnectionOnInterconnectError::DirectConnectServer(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         AllocateConnectionOnInterconnectError::Validation(error_message.to_string())
                     }
@@ -1084,7 +1061,6 @@ pub enum AllocateHostedConnectionError {
     Unknown(String),
 }
 
-
 impl AllocateHostedConnectionError {
     pub fn from_body(body: &str) -> AllocateHostedConnectionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1098,8 +1074,16 @@ impl AllocateHostedConnectionError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DirectConnectClientException" => AllocateHostedConnectionError::DirectConnectClient(String::from(error_message)),
-                    "DirectConnectServerException" => AllocateHostedConnectionError::DirectConnectServer(String::from(error_message)),
+                    "DirectConnectClientException" => {
+                        AllocateHostedConnectionError::DirectConnectClient(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DirectConnectServerException" => {
+                        AllocateHostedConnectionError::DirectConnectServer(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         AllocateHostedConnectionError::Validation(error_message.to_string())
                     }
@@ -1167,7 +1151,6 @@ pub enum AllocatePrivateVirtualInterfaceError {
     Unknown(String),
 }
 
-
 impl AllocatePrivateVirtualInterfaceError {
     pub fn from_body(body: &str) -> AllocatePrivateVirtualInterfaceError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1181,8 +1164,16 @@ impl AllocatePrivateVirtualInterfaceError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DirectConnectClientException" => AllocatePrivateVirtualInterfaceError::DirectConnectClient(String::from(error_message)),
-                    "DirectConnectServerException" => AllocatePrivateVirtualInterfaceError::DirectConnectServer(String::from(error_message)),
+                    "DirectConnectClientException" => {
+                        AllocatePrivateVirtualInterfaceError::DirectConnectClient(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DirectConnectServerException" => {
+                        AllocatePrivateVirtualInterfaceError::DirectConnectServer(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         AllocatePrivateVirtualInterfaceError::Validation(error_message.to_string())
                     }
@@ -1250,7 +1241,6 @@ pub enum AllocatePublicVirtualInterfaceError {
     Unknown(String),
 }
 
-
 impl AllocatePublicVirtualInterfaceError {
     pub fn from_body(body: &str) -> AllocatePublicVirtualInterfaceError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1264,8 +1254,16 @@ impl AllocatePublicVirtualInterfaceError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DirectConnectClientException" => AllocatePublicVirtualInterfaceError::DirectConnectClient(String::from(error_message)),
-                    "DirectConnectServerException" => AllocatePublicVirtualInterfaceError::DirectConnectServer(String::from(error_message)),
+                    "DirectConnectClientException" => {
+                        AllocatePublicVirtualInterfaceError::DirectConnectClient(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DirectConnectServerException" => {
+                        AllocatePublicVirtualInterfaceError::DirectConnectServer(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         AllocatePublicVirtualInterfaceError::Validation(error_message.to_string())
                     }
@@ -1333,7 +1331,6 @@ pub enum AssociateConnectionWithLagError {
     Unknown(String),
 }
 
-
 impl AssociateConnectionWithLagError {
     pub fn from_body(body: &str) -> AssociateConnectionWithLagError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1347,8 +1344,16 @@ impl AssociateConnectionWithLagError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DirectConnectClientException" => AssociateConnectionWithLagError::DirectConnectClient(String::from(error_message)),
-                    "DirectConnectServerException" => AssociateConnectionWithLagError::DirectConnectServer(String::from(error_message)),
+                    "DirectConnectClientException" => {
+                        AssociateConnectionWithLagError::DirectConnectClient(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DirectConnectServerException" => {
+                        AssociateConnectionWithLagError::DirectConnectServer(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         AssociateConnectionWithLagError::Validation(error_message.to_string())
                     }
@@ -1416,7 +1421,6 @@ pub enum AssociateHostedConnectionError {
     Unknown(String),
 }
 
-
 impl AssociateHostedConnectionError {
     pub fn from_body(body: &str) -> AssociateHostedConnectionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1430,8 +1434,16 @@ impl AssociateHostedConnectionError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DirectConnectClientException" => AssociateHostedConnectionError::DirectConnectClient(String::from(error_message)),
-                    "DirectConnectServerException" => AssociateHostedConnectionError::DirectConnectServer(String::from(error_message)),
+                    "DirectConnectClientException" => {
+                        AssociateHostedConnectionError::DirectConnectClient(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DirectConnectServerException" => {
+                        AssociateHostedConnectionError::DirectConnectServer(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         AssociateHostedConnectionError::Validation(error_message.to_string())
                     }
@@ -1499,7 +1511,6 @@ pub enum AssociateVirtualInterfaceError {
     Unknown(String),
 }
 
-
 impl AssociateVirtualInterfaceError {
     pub fn from_body(body: &str) -> AssociateVirtualInterfaceError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1513,8 +1524,16 @@ impl AssociateVirtualInterfaceError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DirectConnectClientException" => AssociateVirtualInterfaceError::DirectConnectClient(String::from(error_message)),
-                    "DirectConnectServerException" => AssociateVirtualInterfaceError::DirectConnectServer(String::from(error_message)),
+                    "DirectConnectClientException" => {
+                        AssociateVirtualInterfaceError::DirectConnectClient(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DirectConnectServerException" => {
+                        AssociateVirtualInterfaceError::DirectConnectServer(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         AssociateVirtualInterfaceError::Validation(error_message.to_string())
                     }
@@ -1581,7 +1600,6 @@ pub enum ConfirmConnectionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ConfirmConnectionError {
     pub fn from_body(body: &str) -> ConfirmConnectionError {
@@ -1669,7 +1687,6 @@ pub enum ConfirmPrivateVirtualInterfaceError {
     Unknown(String),
 }
 
-
 impl ConfirmPrivateVirtualInterfaceError {
     pub fn from_body(body: &str) -> ConfirmPrivateVirtualInterfaceError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1683,8 +1700,16 @@ impl ConfirmPrivateVirtualInterfaceError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DirectConnectClientException" => ConfirmPrivateVirtualInterfaceError::DirectConnectClient(String::from(error_message)),
-                    "DirectConnectServerException" => ConfirmPrivateVirtualInterfaceError::DirectConnectServer(String::from(error_message)),
+                    "DirectConnectClientException" => {
+                        ConfirmPrivateVirtualInterfaceError::DirectConnectClient(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DirectConnectServerException" => {
+                        ConfirmPrivateVirtualInterfaceError::DirectConnectServer(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         ConfirmPrivateVirtualInterfaceError::Validation(error_message.to_string())
                     }
@@ -1752,7 +1777,6 @@ pub enum ConfirmPublicVirtualInterfaceError {
     Unknown(String),
 }
 
-
 impl ConfirmPublicVirtualInterfaceError {
     pub fn from_body(body: &str) -> ConfirmPublicVirtualInterfaceError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1766,8 +1790,16 @@ impl ConfirmPublicVirtualInterfaceError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DirectConnectClientException" => ConfirmPublicVirtualInterfaceError::DirectConnectClient(String::from(error_message)),
-                    "DirectConnectServerException" => ConfirmPublicVirtualInterfaceError::DirectConnectServer(String::from(error_message)),
+                    "DirectConnectClientException" => {
+                        ConfirmPublicVirtualInterfaceError::DirectConnectClient(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DirectConnectServerException" => {
+                        ConfirmPublicVirtualInterfaceError::DirectConnectServer(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         ConfirmPublicVirtualInterfaceError::Validation(error_message.to_string())
                     }
@@ -1834,7 +1866,6 @@ pub enum CreateBGPPeerError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateBGPPeerError {
     pub fn from_body(body: &str) -> CreateBGPPeerError {
@@ -1920,7 +1951,6 @@ pub enum CreateConnectionError {
     Unknown(String),
 }
 
-
 impl CreateConnectionError {
     pub fn from_body(body: &str) -> CreateConnectionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2004,7 +2034,6 @@ pub enum CreateInterconnectError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateInterconnectError {
     pub fn from_body(body: &str) -> CreateInterconnectError {
@@ -2092,7 +2121,6 @@ pub enum CreateLagError {
     Unknown(String),
 }
 
-
 impl CreateLagError {
     pub fn from_body(body: &str) -> CreateLagError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2175,7 +2203,6 @@ pub enum CreatePrivateVirtualInterfaceError {
     Unknown(String),
 }
 
-
 impl CreatePrivateVirtualInterfaceError {
     pub fn from_body(body: &str) -> CreatePrivateVirtualInterfaceError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2189,8 +2216,16 @@ impl CreatePrivateVirtualInterfaceError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DirectConnectClientException" => CreatePrivateVirtualInterfaceError::DirectConnectClient(String::from(error_message)),
-                    "DirectConnectServerException" => CreatePrivateVirtualInterfaceError::DirectConnectServer(String::from(error_message)),
+                    "DirectConnectClientException" => {
+                        CreatePrivateVirtualInterfaceError::DirectConnectClient(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DirectConnectServerException" => {
+                        CreatePrivateVirtualInterfaceError::DirectConnectServer(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         CreatePrivateVirtualInterfaceError::Validation(error_message.to_string())
                     }
@@ -2258,7 +2293,6 @@ pub enum CreatePublicVirtualInterfaceError {
     Unknown(String),
 }
 
-
 impl CreatePublicVirtualInterfaceError {
     pub fn from_body(body: &str) -> CreatePublicVirtualInterfaceError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2272,8 +2306,16 @@ impl CreatePublicVirtualInterfaceError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DirectConnectClientException" => CreatePublicVirtualInterfaceError::DirectConnectClient(String::from(error_message)),
-                    "DirectConnectServerException" => CreatePublicVirtualInterfaceError::DirectConnectServer(String::from(error_message)),
+                    "DirectConnectClientException" => {
+                        CreatePublicVirtualInterfaceError::DirectConnectClient(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DirectConnectServerException" => {
+                        CreatePublicVirtualInterfaceError::DirectConnectServer(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         CreatePublicVirtualInterfaceError::Validation(error_message.to_string())
                     }
@@ -2340,7 +2382,6 @@ pub enum DeleteBGPPeerError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteBGPPeerError {
     pub fn from_body(body: &str) -> DeleteBGPPeerError {
@@ -2426,7 +2467,6 @@ pub enum DeleteConnectionError {
     Unknown(String),
 }
 
-
 impl DeleteConnectionError {
     pub fn from_body(body: &str) -> DeleteConnectionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2510,7 +2550,6 @@ pub enum DeleteInterconnectError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteInterconnectError {
     pub fn from_body(body: &str) -> DeleteInterconnectError {
@@ -2598,7 +2637,6 @@ pub enum DeleteLagError {
     Unknown(String),
 }
 
-
 impl DeleteLagError {
     pub fn from_body(body: &str) -> DeleteLagError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2681,7 +2719,6 @@ pub enum DeleteVirtualInterfaceError {
     Unknown(String),
 }
 
-
 impl DeleteVirtualInterfaceError {
     pub fn from_body(body: &str) -> DeleteVirtualInterfaceError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2695,8 +2732,16 @@ impl DeleteVirtualInterfaceError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DirectConnectClientException" => DeleteVirtualInterfaceError::DirectConnectClient(String::from(error_message)),
-                    "DirectConnectServerException" => DeleteVirtualInterfaceError::DirectConnectServer(String::from(error_message)),
+                    "DirectConnectClientException" => {
+                        DeleteVirtualInterfaceError::DirectConnectClient(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DirectConnectServerException" => {
+                        DeleteVirtualInterfaceError::DirectConnectServer(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DeleteVirtualInterfaceError::Validation(error_message.to_string())
                     }
@@ -2763,7 +2808,6 @@ pub enum DescribeConnectionLoaError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeConnectionLoaError {
     pub fn from_body(body: &str) -> DescribeConnectionLoaError {
@@ -2851,7 +2895,6 @@ pub enum DescribeConnectionsError {
     Unknown(String),
 }
 
-
 impl DescribeConnectionsError {
     pub fn from_body(body: &str) -> DescribeConnectionsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2938,7 +2981,6 @@ pub enum DescribeConnectionsOnInterconnectError {
     Unknown(String),
 }
 
-
 impl DescribeConnectionsOnInterconnectError {
     pub fn from_body(body: &str) -> DescribeConnectionsOnInterconnectError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2952,12 +2994,19 @@ impl DescribeConnectionsOnInterconnectError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DirectConnectClientException" => DescribeConnectionsOnInterconnectError::DirectConnectClient(String::from(error_message)),
-                    "DirectConnectServerException" => DescribeConnectionsOnInterconnectError::DirectConnectServer(String::from(error_message)),
-                    "ValidationException" => {
-                        DescribeConnectionsOnInterconnectError::Validation(error_message
-                                                                               .to_string())
+                    "DirectConnectClientException" => {
+                        DescribeConnectionsOnInterconnectError::DirectConnectClient(String::from(
+                            error_message,
+                        ))
                     }
+                    "DirectConnectServerException" => {
+                        DescribeConnectionsOnInterconnectError::DirectConnectServer(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => DescribeConnectionsOnInterconnectError::Validation(
+                        error_message.to_string(),
+                    ),
                     _ => DescribeConnectionsOnInterconnectError::Unknown(String::from(body)),
                 }
             }
@@ -3022,7 +3071,6 @@ pub enum DescribeHostedConnectionsError {
     Unknown(String),
 }
 
-
 impl DescribeHostedConnectionsError {
     pub fn from_body(body: &str) -> DescribeHostedConnectionsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3036,8 +3084,16 @@ impl DescribeHostedConnectionsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DirectConnectClientException" => DescribeHostedConnectionsError::DirectConnectClient(String::from(error_message)),
-                    "DirectConnectServerException" => DescribeHostedConnectionsError::DirectConnectServer(String::from(error_message)),
+                    "DirectConnectClientException" => {
+                        DescribeHostedConnectionsError::DirectConnectClient(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DirectConnectServerException" => {
+                        DescribeHostedConnectionsError::DirectConnectServer(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeHostedConnectionsError::Validation(error_message.to_string())
                     }
@@ -3105,7 +3161,6 @@ pub enum DescribeInterconnectLoaError {
     Unknown(String),
 }
 
-
 impl DescribeInterconnectLoaError {
     pub fn from_body(body: &str) -> DescribeInterconnectLoaError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3119,8 +3174,16 @@ impl DescribeInterconnectLoaError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DirectConnectClientException" => DescribeInterconnectLoaError::DirectConnectClient(String::from(error_message)),
-                    "DirectConnectServerException" => DescribeInterconnectLoaError::DirectConnectServer(String::from(error_message)),
+                    "DirectConnectClientException" => {
+                        DescribeInterconnectLoaError::DirectConnectClient(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DirectConnectServerException" => {
+                        DescribeInterconnectLoaError::DirectConnectServer(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeInterconnectLoaError::Validation(error_message.to_string())
                     }
@@ -3187,7 +3250,6 @@ pub enum DescribeInterconnectsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeInterconnectsError {
     pub fn from_body(body: &str) -> DescribeInterconnectsError {
@@ -3275,7 +3337,6 @@ pub enum DescribeLagsError {
     Unknown(String),
 }
 
-
 impl DescribeLagsError {
     pub fn from_body(body: &str) -> DescribeLagsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3360,7 +3421,6 @@ pub enum DescribeLoaError {
     Unknown(String),
 }
 
-
 impl DescribeLoaError {
     pub fn from_body(body: &str) -> DescribeLoaError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3444,7 +3504,6 @@ pub enum DescribeLocationsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeLocationsError {
     pub fn from_body(body: &str) -> DescribeLocationsError {
@@ -3532,7 +3591,6 @@ pub enum DescribeTagsError {
     Unknown(String),
 }
 
-
 impl DescribeTagsError {
     pub fn from_body(body: &str) -> DescribeTagsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3617,7 +3675,6 @@ pub enum DescribeVirtualGatewaysError {
     Unknown(String),
 }
 
-
 impl DescribeVirtualGatewaysError {
     pub fn from_body(body: &str) -> DescribeVirtualGatewaysError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3631,8 +3688,16 @@ impl DescribeVirtualGatewaysError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DirectConnectClientException" => DescribeVirtualGatewaysError::DirectConnectClient(String::from(error_message)),
-                    "DirectConnectServerException" => DescribeVirtualGatewaysError::DirectConnectServer(String::from(error_message)),
+                    "DirectConnectClientException" => {
+                        DescribeVirtualGatewaysError::DirectConnectClient(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DirectConnectServerException" => {
+                        DescribeVirtualGatewaysError::DirectConnectServer(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeVirtualGatewaysError::Validation(error_message.to_string())
                     }
@@ -3700,7 +3765,6 @@ pub enum DescribeVirtualInterfacesError {
     Unknown(String),
 }
 
-
 impl DescribeVirtualInterfacesError {
     pub fn from_body(body: &str) -> DescribeVirtualInterfacesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3714,8 +3778,16 @@ impl DescribeVirtualInterfacesError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DirectConnectClientException" => DescribeVirtualInterfacesError::DirectConnectClient(String::from(error_message)),
-                    "DirectConnectServerException" => DescribeVirtualInterfacesError::DirectConnectServer(String::from(error_message)),
+                    "DirectConnectClientException" => {
+                        DescribeVirtualInterfacesError::DirectConnectClient(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DirectConnectServerException" => {
+                        DescribeVirtualInterfacesError::DirectConnectServer(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeVirtualInterfacesError::Validation(error_message.to_string())
                     }
@@ -3783,7 +3855,6 @@ pub enum DisassociateConnectionFromLagError {
     Unknown(String),
 }
 
-
 impl DisassociateConnectionFromLagError {
     pub fn from_body(body: &str) -> DisassociateConnectionFromLagError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3797,8 +3868,16 @@ impl DisassociateConnectionFromLagError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DirectConnectClientException" => DisassociateConnectionFromLagError::DirectConnectClient(String::from(error_message)),
-                    "DirectConnectServerException" => DisassociateConnectionFromLagError::DirectConnectServer(String::from(error_message)),
+                    "DirectConnectClientException" => {
+                        DisassociateConnectionFromLagError::DirectConnectClient(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DirectConnectServerException" => {
+                        DisassociateConnectionFromLagError::DirectConnectServer(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DisassociateConnectionFromLagError::Validation(error_message.to_string())
                     }
@@ -3869,7 +3948,6 @@ pub enum TagResourceError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl TagResourceError {
     pub fn from_body(body: &str) -> TagResourceError {
@@ -3963,7 +4041,6 @@ pub enum UntagResourceError {
     Unknown(String),
 }
 
-
 impl UntagResourceError {
     pub fn from_body(body: &str) -> UntagResourceError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4048,7 +4125,6 @@ pub enum UpdateLagError {
     Unknown(String),
 }
 
-
 impl UpdateLagError {
     pub fn from_body(body: &str) -> UpdateLagError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4117,228 +4193,211 @@ impl Error for UpdateLagError {
 /// Trait representing the capabilities of the AWS Direct Connect API. AWS Direct Connect clients implement this trait.
 pub trait DirectConnect {
     #[doc="<p>Deprecated in favor of <a>AllocateHostedConnection</a>.</p> <p>Creates a hosted connection on an interconnect.</p> <p>Allocates a VLAN number and a specified amount of bandwidth for use by a hosted connection on the given interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
-    fn allocate_connection_on_interconnect
-        (&self,
-         input: &AllocateConnectionOnInterconnectRequest)
-         -> Result<Connection, AllocateConnectionOnInterconnectError>;
-
+    fn allocate_connection_on_interconnect(
+        &self,
+        input: &AllocateConnectionOnInterconnectRequest,
+    ) -> Result<Connection, AllocateConnectionOnInterconnectError>;
 
     #[doc="<p>Creates a hosted connection on an interconnect or a link aggregation group (LAG).</p> <p>Allocates a VLAN number and a specified amount of bandwidth for use by a hosted connection on the given interconnect or LAG.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
-    fn allocate_hosted_connection(&self,
-                                  input: &AllocateHostedConnectionRequest)
-                                  -> Result<Connection, AllocateHostedConnectionError>;
-
+    fn allocate_hosted_connection(
+        &self,
+        input: &AllocateHostedConnectionRequest,
+    ) -> Result<Connection, AllocateHostedConnectionError>;
 
     #[doc="<p>Provisions a private virtual interface to be owned by another AWS customer.</p> <p>Virtual interfaces created using this action must be confirmed by the virtual interface owner by using the <a>ConfirmPrivateVirtualInterface</a> action. Until then, the virtual interface will be in 'Confirming' state, and will not be available for handling traffic.</p>"]
-    fn allocate_private_virtual_interface
-        (&self,
-         input: &AllocatePrivateVirtualInterfaceRequest)
-         -> Result<VirtualInterface, AllocatePrivateVirtualInterfaceError>;
-
+    fn allocate_private_virtual_interface(
+        &self,
+        input: &AllocatePrivateVirtualInterfaceRequest,
+    ) -> Result<VirtualInterface, AllocatePrivateVirtualInterfaceError>;
 
     #[doc="<p>Provisions a public virtual interface to be owned by a different customer.</p> <p>The owner of a connection calls this function to provision a public virtual interface which will be owned by another AWS customer.</p> <p>Virtual interfaces created using this function must be confirmed by the virtual interface owner by calling ConfirmPublicVirtualInterface. Until this step has been completed, the virtual interface will be in 'Confirming' state, and will not be available for handling traffic.</p> <p>When creating an IPv6 public virtual interface (addressFamily is 'ipv6'), the customer and amazon address fields should be left blank to use auto-assigned IPv6 space. Custom IPv6 Addresses are currently not supported.</p>"]
-    fn allocate_public_virtual_interface
-        (&self,
-         input: &AllocatePublicVirtualInterfaceRequest)
-         -> Result<VirtualInterface, AllocatePublicVirtualInterfaceError>;
-
+    fn allocate_public_virtual_interface(
+        &self,
+        input: &AllocatePublicVirtualInterfaceRequest,
+    ) -> Result<VirtualInterface, AllocatePublicVirtualInterfaceError>;
 
     #[doc="<p>Associates an existing connection with a link aggregation group (LAG). The connection is interrupted and re-established as a member of the LAG (connectivity to AWS will be interrupted). The connection must be hosted on the same AWS Direct Connect endpoint as the LAG, and its bandwidth must match the bandwidth for the LAG. You can reassociate a connection that's currently associated with a different LAG; however, if removing the connection will cause the original LAG to fall below its setting for minimum number of operational connections, the request fails.</p> <p>Any virtual interfaces that are directly associated with the connection are automatically re-associated with the LAG. If the connection was originally associated with a different LAG, the virtual interfaces remain associated with the original LAG.</p> <p>For interconnects, any hosted connections are automatically re-associated with the LAG. If the interconnect was originally associated with a different LAG, the hosted connections remain associated with the original LAG.</p>"]
-    fn associate_connection_with_lag(&self,
-                                     input: &AssociateConnectionWithLagRequest)
-                                     -> Result<Connection, AssociateConnectionWithLagError>;
-
+    fn associate_connection_with_lag(
+        &self,
+        input: &AssociateConnectionWithLagRequest,
+    ) -> Result<Connection, AssociateConnectionWithLagError>;
 
     #[doc="<p>Associates a hosted connection and its virtual interfaces with a link aggregation group (LAG) or interconnect. If the target interconnect or LAG has an existing hosted connection with a conflicting VLAN number or IP address, the operation fails. This action temporarily interrupts the hosted connection's connectivity to AWS as it is being migrated.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
-    fn associate_hosted_connection(&self,
-                                   input: &AssociateHostedConnectionRequest)
-                                   -> Result<Connection, AssociateHostedConnectionError>;
-
+    fn associate_hosted_connection(
+        &self,
+        input: &AssociateHostedConnectionRequest,
+    ) -> Result<Connection, AssociateHostedConnectionError>;
 
     #[doc="<p>Associates a virtual interface with a specified link aggregation group (LAG) or connection. Connectivity to AWS is temporarily interrupted as the virtual interface is being migrated. If the target connection or LAG has an associated virtual interface with a conflicting VLAN number or a conflicting IP address, the operation fails. </p> <p>Virtual interfaces associated with a hosted connection cannot be associated with a LAG; hosted connections must be migrated along with their virtual interfaces using <a>AssociateHostedConnection</a>.</p> <p>Hosted virtual interfaces (an interface for which the owner of the connection is not the owner of physical connection) can only be reassociated by the owner of the physical connection.</p>"]
-    fn associate_virtual_interface(&self,
-                                   input: &AssociateVirtualInterfaceRequest)
-                                   -> Result<VirtualInterface, AssociateVirtualInterfaceError>;
-
+    fn associate_virtual_interface(
+        &self,
+        input: &AssociateVirtualInterfaceRequest,
+    ) -> Result<VirtualInterface, AssociateVirtualInterfaceError>;
 
     #[doc="<p>Confirm the creation of a hosted connection on an interconnect.</p> <p>Upon creation, the hosted connection is initially in the 'Ordering' state, and will remain in this state until the owner calls ConfirmConnection to confirm creation of the hosted connection.</p>"]
-    fn confirm_connection(&self,
-                          input: &ConfirmConnectionRequest)
-                          -> Result<ConfirmConnectionResponse, ConfirmConnectionError>;
-
+    fn confirm_connection(
+        &self,
+        input: &ConfirmConnectionRequest,
+    ) -> Result<ConfirmConnectionResponse, ConfirmConnectionError>;
 
     #[doc="<p>Accept ownership of a private virtual interface created by another customer.</p> <p>After the virtual interface owner calls this function, the virtual interface will be created and attached to the given virtual private gateway, and will be available for handling traffic.</p>"]
-    fn confirm_private_virtual_interface
-        (&self,
-         input: &ConfirmPrivateVirtualInterfaceRequest)
-         -> Result<ConfirmPrivateVirtualInterfaceResponse, ConfirmPrivateVirtualInterfaceError>;
-
+    fn confirm_private_virtual_interface(
+        &self,
+        input: &ConfirmPrivateVirtualInterfaceRequest,
+    ) -> Result<ConfirmPrivateVirtualInterfaceResponse, ConfirmPrivateVirtualInterfaceError>;
 
     #[doc="<p>Accept ownership of a public virtual interface created by another customer.</p> <p>After the virtual interface owner calls this function, the specified virtual interface will be created and made available for handling traffic.</p>"]
-    fn confirm_public_virtual_interface
-        (&self,
-         input: &ConfirmPublicVirtualInterfaceRequest)
-         -> Result<ConfirmPublicVirtualInterfaceResponse, ConfirmPublicVirtualInterfaceError>;
-
+    fn confirm_public_virtual_interface(
+        &self,
+        input: &ConfirmPublicVirtualInterfaceRequest,
+    ) -> Result<ConfirmPublicVirtualInterfaceResponse, ConfirmPublicVirtualInterfaceError>;
 
     #[doc="<p>Creates a new BGP peer on a specified virtual interface. The BGP peer cannot be in the same address family (IPv4/IPv6) of an existing BGP peer on the virtual interface.</p> <p>You must create a BGP peer for the corresponding address family in order to access AWS resources that also use that address family.</p> <p>When creating a IPv6 BGP peer, the Amazon address and customer address fields must be left blank. IPv6 addresses are automatically assigned from Amazon's pool of IPv6 addresses; you cannot specify custom IPv6 addresses.</p> <p>For a public virtual interface, the Autonomous System Number (ASN) must be private or already whitelisted for the virtual interface.</p>"]
-    fn create_bgp_peer(&self,
-                       input: &CreateBGPPeerRequest)
-                       -> Result<CreateBGPPeerResponse, CreateBGPPeerError>;
-
+    fn create_bgp_peer(
+        &self,
+        input: &CreateBGPPeerRequest,
+    ) -> Result<CreateBGPPeerResponse, CreateBGPPeerError>;
 
     #[doc="<p>Creates a new connection between the customer network and a specific AWS Direct Connect location.</p> <p>A connection links your internal network to an AWS Direct Connect location over a standard 1 gigabit or 10 gigabit Ethernet fiber-optic cable. One end of the cable is connected to your router, the other to an AWS Direct Connect router. An AWS Direct Connect location provides access to Amazon Web Services in the region it is associated with. You can establish connections with AWS Direct Connect locations in multiple regions, but a connection in one region does not provide connectivity to other regions.</p> <p>You can automatically add the new connection to a link aggregation group (LAG) by specifying a LAG ID in the request. This ensures that the new connection is allocated on the same AWS Direct Connect endpoint that hosts the specified LAG. If there are no available ports on the endpoint, the request fails and no connection will be created.</p>"]
-    fn create_connection(&self,
-                         input: &CreateConnectionRequest)
-                         -> Result<Connection, CreateConnectionError>;
-
+    fn create_connection(
+        &self,
+        input: &CreateConnectionRequest,
+    ) -> Result<Connection, CreateConnectionError>;
 
     #[doc="<p>Creates a new interconnect between a AWS Direct Connect partner's network and a specific AWS Direct Connect location.</p> <p>An interconnect is a connection which is capable of hosting other connections. The AWS Direct Connect partner can use an interconnect to provide sub-1Gbps AWS Direct Connect service to tier 2 customers who do not have their own connections. Like a standard connection, an interconnect links the AWS Direct Connect partner's network to an AWS Direct Connect location over a standard 1 Gbps or 10 Gbps Ethernet fiber-optic cable. One end is connected to the partner's router, the other to an AWS Direct Connect router.</p> <p>You can automatically add the new interconnect to a link aggregation group (LAG) by specifying a LAG ID in the request. This ensures that the new interconnect is allocated on the same AWS Direct Connect endpoint that hosts the specified LAG. If there are no available ports on the endpoint, the request fails and no interconnect will be created.</p> <p>For each end customer, the AWS Direct Connect partner provisions a connection on their interconnect by calling AllocateConnectionOnInterconnect. The end customer can then connect to AWS resources by creating a virtual interface on their connection, using the VLAN assigned to them by the AWS Direct Connect partner.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
-    fn create_interconnect(&self,
-                           input: &CreateInterconnectRequest)
-                           -> Result<Interconnect, CreateInterconnectError>;
-
+    fn create_interconnect(
+        &self,
+        input: &CreateInterconnectRequest,
+    ) -> Result<Interconnect, CreateInterconnectError>;
 
     #[doc="<p>Creates a new link aggregation group (LAG) with the specified number of bundled physical connections between the customer network and a specific AWS Direct Connect location. A LAG is a logical interface that uses the Link Aggregation Control Protocol (LACP) to aggregate multiple 1 gigabit or 10 gigabit interfaces, allowing you to treat them as a single interface.</p> <p>All connections in a LAG must use the same bandwidth (for example, 10 Gbps), and must terminate at the same AWS Direct Connect endpoint.</p> <p>You can have up to 10 connections per LAG. Regardless of this limit, if you request more connections for the LAG than AWS Direct Connect can allocate on a single endpoint, no LAG is created.</p> <p>You can specify an existing physical connection or interconnect to include in the LAG (which counts towards the total number of connections). Doing so interrupts the current physical connection or hosted connections, and re-establishes them as a member of the LAG. The LAG will be created on the same AWS Direct Connect endpoint to which the connection terminates. Any virtual interfaces associated with the connection are automatically disassociated and re-associated with the LAG. The connection ID does not change.</p> <p>If the AWS account used to create a LAG is a registered AWS Direct Connect partner, the LAG is automatically enabled to host sub-connections. For a LAG owned by a partner, any associated virtual interfaces cannot be directly configured.</p>"]
     fn create_lag(&self, input: &CreateLagRequest) -> Result<Lag, CreateLagError>;
 
-
     #[doc="<p>Creates a new private virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A private virtual interface supports sending traffic to a single virtual private cloud (VPC).</p>"]
-    fn create_private_virtual_interface
-        (&self,
-         input: &CreatePrivateVirtualInterfaceRequest)
-         -> Result<VirtualInterface, CreatePrivateVirtualInterfaceError>;
-
+    fn create_private_virtual_interface(
+        &self,
+        input: &CreatePrivateVirtualInterfaceRequest,
+    ) -> Result<VirtualInterface, CreatePrivateVirtualInterfaceError>;
 
     #[doc="<p>Creates a new public virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A public virtual interface supports sending traffic to public services of AWS such as Amazon Simple Storage Service (Amazon S3).</p> <p>When creating an IPv6 public virtual interface (addressFamily is 'ipv6'), the customer and amazon address fields should be left blank to use auto-assigned IPv6 space. Custom IPv6 Addresses are currently not supported.</p>"]
-    fn create_public_virtual_interface
-        (&self,
-         input: &CreatePublicVirtualInterfaceRequest)
-         -> Result<VirtualInterface, CreatePublicVirtualInterfaceError>;
-
+    fn create_public_virtual_interface(
+        &self,
+        input: &CreatePublicVirtualInterfaceRequest,
+    ) -> Result<VirtualInterface, CreatePublicVirtualInterfaceError>;
 
     #[doc="<p>Deletes a BGP peer on the specified virtual interface that matches the specified customer address and ASN. You cannot delete the last BGP peer from a virtual interface.</p>"]
-    fn delete_bgp_peer(&self,
-                       input: &DeleteBGPPeerRequest)
-                       -> Result<DeleteBGPPeerResponse, DeleteBGPPeerError>;
-
+    fn delete_bgp_peer(
+        &self,
+        input: &DeleteBGPPeerRequest,
+    ) -> Result<DeleteBGPPeerResponse, DeleteBGPPeerError>;
 
     #[doc="<p>Deletes the connection.</p> <p>Deleting a connection only stops the AWS Direct Connect port hour and data transfer charges. You need to cancel separately with the providers any services or charges for cross-connects or network circuits that connect you to the AWS Direct Connect location.</p>"]
-    fn delete_connection(&self,
-                         input: &DeleteConnectionRequest)
-                         -> Result<Connection, DeleteConnectionError>;
-
+    fn delete_connection(
+        &self,
+        input: &DeleteConnectionRequest,
+    ) -> Result<Connection, DeleteConnectionError>;
 
     #[doc="<p>Deletes the specified interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
-    fn delete_interconnect(&self,
-                           input: &DeleteInterconnectRequest)
-                           -> Result<DeleteInterconnectResponse, DeleteInterconnectError>;
-
+    fn delete_interconnect(
+        &self,
+        input: &DeleteInterconnectRequest,
+    ) -> Result<DeleteInterconnectResponse, DeleteInterconnectError>;
 
     #[doc="<p>Deletes a link aggregation group (LAG). You cannot delete a LAG if it has active virtual interfaces or hosted connections.</p>"]
     fn delete_lag(&self, input: &DeleteLagRequest) -> Result<Lag, DeleteLagError>;
 
-
-    #[doc="<p>Deletes a virtual interface.</p>"]
-    fn delete_virtual_interface
-        (&self,
-         input: &DeleteVirtualInterfaceRequest)
-         -> Result<DeleteVirtualInterfaceResponse, DeleteVirtualInterfaceError>;
-
+    #[doc = "<p>Deletes a virtual interface.</p>"]
+    fn delete_virtual_interface(
+        &self,
+        input: &DeleteVirtualInterfaceRequest,
+    ) -> Result<DeleteVirtualInterfaceResponse, DeleteVirtualInterfaceError>;
 
     #[doc="<p>Deprecated in favor of <a>DescribeLoa</a>.</p> <p>Returns the LOA-CFA for a Connection.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that your APN partner or service provider uses when establishing your cross connect to AWS at the colocation facility. For more information, see <a href=\"http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html\">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>"]
-    fn describe_connection_loa
-        (&self,
-         input: &DescribeConnectionLoaRequest)
-         -> Result<DescribeConnectionLoaResponse, DescribeConnectionLoaError>;
-
+    fn describe_connection_loa(
+        &self,
+        input: &DescribeConnectionLoaRequest,
+    ) -> Result<DescribeConnectionLoaResponse, DescribeConnectionLoaError>;
 
     #[doc="<p>Displays all connections in this region.</p> <p>If a connection ID is provided, the call returns only that particular connection.</p>"]
-    fn describe_connections(&self,
-                            input: &DescribeConnectionsRequest)
-                            -> Result<Connections, DescribeConnectionsError>;
-
+    fn describe_connections(
+        &self,
+        input: &DescribeConnectionsRequest,
+    ) -> Result<Connections, DescribeConnectionsError>;
 
     #[doc="<p>Deprecated in favor of <a>DescribeHostedConnections</a>.</p> <p>Returns a list of connections that have been provisioned on the given interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
-    fn describe_connections_on_interconnect
-        (&self,
-         input: &DescribeConnectionsOnInterconnectRequest)
-         -> Result<Connections, DescribeConnectionsOnInterconnectError>;
-
+    fn describe_connections_on_interconnect(
+        &self,
+        input: &DescribeConnectionsOnInterconnectRequest,
+    ) -> Result<Connections, DescribeConnectionsOnInterconnectError>;
 
     #[doc="<p>Returns a list of hosted connections that have been provisioned on the given interconnect or link aggregation group (LAG).</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
-    fn describe_hosted_connections(&self,
-                                   input: &DescribeHostedConnectionsRequest)
-                                   -> Result<Connections, DescribeHostedConnectionsError>;
-
+    fn describe_hosted_connections(
+        &self,
+        input: &DescribeHostedConnectionsRequest,
+    ) -> Result<Connections, DescribeHostedConnectionsError>;
 
     #[doc="<p>Deprecated in favor of <a>DescribeLoa</a>.</p> <p>Returns the LOA-CFA for an Interconnect.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href=\"http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html\">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>"]
-    fn describe_interconnect_loa
-        (&self,
-         input: &DescribeInterconnectLoaRequest)
-         -> Result<DescribeInterconnectLoaResponse, DescribeInterconnectLoaError>;
-
+    fn describe_interconnect_loa(
+        &self,
+        input: &DescribeInterconnectLoaRequest,
+    ) -> Result<DescribeInterconnectLoaResponse, DescribeInterconnectLoaError>;
 
     #[doc="<p>Returns a list of interconnects owned by the AWS account.</p> <p>If an interconnect ID is provided, it will only return this particular interconnect.</p>"]
-    fn describe_interconnects(&self,
-                              input: &DescribeInterconnectsRequest)
-                              -> Result<Interconnects, DescribeInterconnectsError>;
-
+    fn describe_interconnects(
+        &self,
+        input: &DescribeInterconnectsRequest,
+    ) -> Result<Interconnects, DescribeInterconnectsError>;
 
     #[doc="<p>Describes the link aggregation groups (LAGs) in your account. </p> <p>If a LAG ID is provided, only information about the specified LAG is returned.</p>"]
     fn describe_lags(&self, input: &DescribeLagsRequest) -> Result<Lags, DescribeLagsError>;
 
-
     #[doc="<p>Returns the LOA-CFA for a connection, interconnect, or link aggregation group (LAG).</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href=\"http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html\">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>"]
     fn describe_loa(&self, input: &DescribeLoaRequest) -> Result<Loa, DescribeLoaError>;
-
 
     #[doc="<p>Returns the list of AWS Direct Connect locations in the current AWS region. These are the locations that may be selected when calling CreateConnection or CreateInterconnect.</p>"]
     fn describe_locations(&self) -> Result<Locations, DescribeLocationsError>;
 
-
-    #[doc="<p>Describes the tags associated with the specified Direct Connect resources.</p>"]
-    fn describe_tags(&self,
-                     input: &DescribeTagsRequest)
-                     -> Result<DescribeTagsResponse, DescribeTagsError>;
-
+    #[doc = "<p>Describes the tags associated with the specified Direct Connect resources.</p>"]
+    fn describe_tags(
+        &self,
+        input: &DescribeTagsRequest,
+    ) -> Result<DescribeTagsResponse, DescribeTagsError>;
 
     #[doc="<p>Returns a list of virtual private gateways owned by the AWS account.</p> <p>You can create one or more AWS Direct Connect private virtual interfaces linking to a virtual private gateway. A virtual private gateway can be managed via Amazon Virtual Private Cloud (VPC) console or the <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-CreateVpnGateway.html\">EC2 CreateVpnGateway</a> action.</p>"]
     fn describe_virtual_gateways(&self) -> Result<VirtualGateways, DescribeVirtualGatewaysError>;
 
-
     #[doc="<p>Displays all virtual interfaces for an AWS account. Virtual interfaces deleted fewer than 15 minutes before you make the request are also returned. If you specify a connection ID, only the virtual interfaces associated with the connection are returned. If you specify a virtual interface ID, then only a single virtual interface is returned.</p> <p>A virtual interface (VLAN) transmits the traffic between the AWS Direct Connect location and the customer.</p>"]
-    fn describe_virtual_interfaces(&self,
-                                   input: &DescribeVirtualInterfacesRequest)
-                                   -> Result<VirtualInterfaces, DescribeVirtualInterfacesError>;
-
+    fn describe_virtual_interfaces(
+        &self,
+        input: &DescribeVirtualInterfacesRequest,
+    ) -> Result<VirtualInterfaces, DescribeVirtualInterfacesError>;
 
     #[doc="<p>Disassociates a connection from a link aggregation group (LAG). The connection is interrupted and re-established as a standalone connection (the connection is not deleted; to delete the connection, use the <a>DeleteConnection</a> request). If the LAG has associated virtual interfaces or hosted connections, they remain associated with the LAG. A disassociated connection owned by an AWS Direct Connect partner is automatically converted to an interconnect.</p> <p>If disassociating the connection will cause the LAG to fall below its setting for minimum number of operational connections, the request fails, except when it's the last member of the LAG. If all connections are disassociated, the LAG continues to exist as an empty LAG with no physical connections. </p>"]
-    fn disassociate_connection_from_lag
-        (&self,
-         input: &DisassociateConnectionFromLagRequest)
-         -> Result<Connection, DisassociateConnectionFromLagError>;
-
+    fn disassociate_connection_from_lag(
+        &self,
+        input: &DisassociateConnectionFromLagRequest,
+    ) -> Result<Connection, DisassociateConnectionFromLagError>;
 
     #[doc="<p>Adds the specified tags to the specified Direct Connect resource. Each Direct Connect resource can have a maximum of 50 tags.</p> <p>Each tag consists of a key and an optional value. If a tag with the same key is already associated with the Direct Connect resource, this action updates its value.</p>"]
-    fn tag_resource(&self,
-                    input: &TagResourceRequest)
-                    -> Result<TagResourceResponse, TagResourceError>;
+    fn tag_resource(
+        &self,
+        input: &TagResourceRequest,
+    ) -> Result<TagResourceResponse, TagResourceError>;
 
-
-    #[doc="<p>Removes one or more tags from the specified Direct Connect resource.</p>"]
-    fn untag_resource(&self,
-                      input: &UntagResourceRequest)
-                      -> Result<UntagResourceResponse, UntagResourceError>;
-
+    #[doc = "<p>Removes one or more tags from the specified Direct Connect resource.</p>"]
+    fn untag_resource(
+        &self,
+        input: &UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, UntagResourceError>;
 
     #[doc="<p>Updates the attributes of a link aggregation group (LAG). </p> <p>You can update the following attributes: </p> <ul> <li> <p>The name of the LAG.</p> </li> <li> <p>The value for the minimum number of connections that must be operational for the LAG itself to be operational. </p> </li> </ul> <p>When you create a LAG, the default value for the minimum number of operational connections is zero (0). If you update this value, and the number of operational connections falls below the specified value, the LAG will automatically go down to avoid overutilization of the remaining connections. Adjusting this value should be done with care as it could force the LAG down if the value is set higher than the current number of operational connections.</p>"]
     fn update_lag(&self, input: &UpdateLagRequest) -> Result<Lag, UpdateLagError>;
 }
 /// A client for the AWS Direct Connect API.
 pub struct DirectConnectClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -4346,8 +4405,9 @@ pub struct DirectConnectClient<P, D>
 }
 
 impl<P, D> DirectConnectClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         DirectConnectClient {
@@ -4359,19 +4419,22 @@ impl<P, D> DirectConnectClient<P, D>
 }
 
 impl<P, D> DirectConnect for DirectConnectClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     #[doc="<p>Deprecated in favor of <a>AllocateHostedConnection</a>.</p> <p>Creates a hosted connection on an interconnect.</p> <p>Allocates a VLAN number and a specified amount of bandwidth for use by a hosted connection on the given interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
-    fn allocate_connection_on_interconnect
-        (&self,
-         input: &AllocateConnectionOnInterconnectRequest)
-         -> Result<Connection, AllocateConnectionOnInterconnectError> {
+    fn allocate_connection_on_interconnect(
+        &self,
+        input: &AllocateConnectionOnInterconnectRequest,
+    ) -> Result<Connection, AllocateConnectionOnInterconnectError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "OvertureService.AllocateConnectionOnInterconnect");
+        request.add_header(
+            "x-amz-target",
+            "OvertureService.AllocateConnectionOnInterconnect",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -4383,22 +4446,26 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+                Ok(
+                    serde_json::from_str::<Connection>(String::from_utf8_lossy(&body).as_ref())
+                        .unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AllocateConnectionOnInterconnectError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AllocateConnectionOnInterconnectError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a hosted connection on an interconnect or a link aggregation group (LAG).</p> <p>Allocates a VLAN number and a specified amount of bandwidth for use by a hosted connection on the given interconnect or LAG.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
-    fn allocate_hosted_connection(&self,
-                                  input: &AllocateHostedConnectionRequest)
-                                  -> Result<Connection, AllocateHostedConnectionError> {
+    fn allocate_hosted_connection(
+        &self,
+        input: &AllocateHostedConnectionRequest,
+    ) -> Result<Connection, AllocateHostedConnectionError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4414,29 +4481,33 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+                Ok(
+                    serde_json::from_str::<Connection>(String::from_utf8_lossy(&body).as_ref())
+                        .unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AllocateHostedConnectionError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(AllocateHostedConnectionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Provisions a private virtual interface to be owned by another AWS customer.</p> <p>Virtual interfaces created using this action must be confirmed by the virtual interface owner by using the <a>ConfirmPrivateVirtualInterface</a> action. Until then, the virtual interface will be in 'Confirming' state, and will not be available for handling traffic.</p>"]
-    fn allocate_private_virtual_interface
-        (&self,
-         input: &AllocatePrivateVirtualInterfaceRequest)
-         -> Result<VirtualInterface, AllocatePrivateVirtualInterfaceError> {
+    fn allocate_private_virtual_interface(
+        &self,
+        input: &AllocatePrivateVirtualInterfaceRequest,
+    ) -> Result<VirtualInterface, AllocatePrivateVirtualInterfaceError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "OvertureService.AllocatePrivateVirtualInterface");
+        request.add_header(
+            "x-amz-target",
+            "OvertureService.AllocatePrivateVirtualInterface",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -4448,30 +4519,32 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&body)
-                                                                .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<VirtualInterface>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AllocatePrivateVirtualInterfaceError::from_body(String::from_utf8_lossy(&body)
-                                                                        .as_ref()))
+                Err(AllocatePrivateVirtualInterfaceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Provisions a public virtual interface to be owned by a different customer.</p> <p>The owner of a connection calls this function to provision a public virtual interface which will be owned by another AWS customer.</p> <p>Virtual interfaces created using this function must be confirmed by the virtual interface owner by calling ConfirmPublicVirtualInterface. Until this step has been completed, the virtual interface will be in 'Confirming' state, and will not be available for handling traffic.</p> <p>When creating an IPv6 public virtual interface (addressFamily is 'ipv6'), the customer and amazon address fields should be left blank to use auto-assigned IPv6 space. Custom IPv6 Addresses are currently not supported.</p>"]
-    fn allocate_public_virtual_interface
-        (&self,
-         input: &AllocatePublicVirtualInterfaceRequest)
-         -> Result<VirtualInterface, AllocatePublicVirtualInterfaceError> {
+    fn allocate_public_virtual_interface(
+        &self,
+        input: &AllocatePublicVirtualInterfaceRequest,
+    ) -> Result<VirtualInterface, AllocatePublicVirtualInterfaceError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "OvertureService.AllocatePublicVirtualInterface");
+        request.add_header(
+            "x-amz-target",
+            "OvertureService.AllocatePublicVirtualInterface",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -4483,24 +4556,25 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&body)
-                                                                .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<VirtualInterface>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AllocatePublicVirtualInterfaceError::from_body(String::from_utf8_lossy(&body)
-                                                                       .as_ref()))
+                Err(AllocatePublicVirtualInterfaceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Associates an existing connection with a link aggregation group (LAG). The connection is interrupted and re-established as a member of the LAG (connectivity to AWS will be interrupted). The connection must be hosted on the same AWS Direct Connect endpoint as the LAG, and its bandwidth must match the bandwidth for the LAG. You can reassociate a connection that's currently associated with a different LAG; however, if removing the connection will cause the original LAG to fall below its setting for minimum number of operational connections, the request fails.</p> <p>Any virtual interfaces that are directly associated with the connection are automatically re-associated with the LAG. If the connection was originally associated with a different LAG, the virtual interfaces remain associated with the original LAG.</p> <p>For interconnects, any hosted connections are automatically re-associated with the LAG. If the interconnect was originally associated with a different LAG, the hosted connections remain associated with the original LAG.</p>"]
-    fn associate_connection_with_lag(&self,
-                                     input: &AssociateConnectionWithLagRequest)
-                                     -> Result<Connection, AssociateConnectionWithLagError> {
+    fn associate_connection_with_lag(
+        &self,
+        input: &AssociateConnectionWithLagRequest,
+    ) -> Result<Connection, AssociateConnectionWithLagError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4516,23 +4590,26 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+                Ok(
+                    serde_json::from_str::<Connection>(String::from_utf8_lossy(&body).as_ref())
+                        .unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AssociateConnectionWithLagError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+                Err(AssociateConnectionWithLagError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Associates a hosted connection and its virtual interfaces with a link aggregation group (LAG) or interconnect. If the target interconnect or LAG has an existing hosted connection with a conflicting VLAN number or IP address, the operation fails. This action temporarily interrupts the hosted connection's connectivity to AWS as it is being migrated.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
-    fn associate_hosted_connection(&self,
-                                   input: &AssociateHostedConnectionRequest)
-                                   -> Result<Connection, AssociateHostedConnectionError> {
+    fn associate_hosted_connection(
+        &self,
+        input: &AssociateHostedConnectionRequest,
+    ) -> Result<Connection, AssociateHostedConnectionError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4548,23 +4625,26 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+                Ok(
+                    serde_json::from_str::<Connection>(String::from_utf8_lossy(&body).as_ref())
+                        .unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AssociateHostedConnectionError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(AssociateHostedConnectionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Associates a virtual interface with a specified link aggregation group (LAG) or connection. Connectivity to AWS is temporarily interrupted as the virtual interface is being migrated. If the target connection or LAG has an associated virtual interface with a conflicting VLAN number or a conflicting IP address, the operation fails. </p> <p>Virtual interfaces associated with a hosted connection cannot be associated with a LAG; hosted connections must be migrated along with their virtual interfaces using <a>AssociateHostedConnection</a>.</p> <p>Hosted virtual interfaces (an interface for which the owner of the connection is not the owner of physical connection) can only be reassociated by the owner of the physical connection.</p>"]
-    fn associate_virtual_interface(&self,
-                                   input: &AssociateVirtualInterfaceRequest)
-                                   -> Result<VirtualInterface, AssociateVirtualInterfaceError> {
+    fn associate_virtual_interface(
+        &self,
+        input: &AssociateVirtualInterfaceRequest,
+    ) -> Result<VirtualInterface, AssociateVirtualInterfaceError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4580,24 +4660,25 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&body)
-                                                                .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<VirtualInterface>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AssociateVirtualInterfaceError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(AssociateVirtualInterfaceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Confirm the creation of a hosted connection on an interconnect.</p> <p>Upon creation, the hosted connection is initially in the 'Ordering' state, and will remain in this state until the owner calls ConfirmConnection to confirm creation of the hosted connection.</p>"]
-    fn confirm_connection(&self,
-                          input: &ConfirmConnectionRequest)
-                          -> Result<ConfirmConnectionResponse, ConfirmConnectionError> {
+    fn confirm_connection(
+        &self,
+        input: &ConfirmConnectionRequest,
+    ) -> Result<ConfirmConnectionResponse, ConfirmConnectionError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4613,27 +4694,32 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ConfirmConnectionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ConfirmConnectionResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ConfirmConnectionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ConfirmConnectionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Accept ownership of a private virtual interface created by another customer.</p> <p>After the virtual interface owner calls this function, the virtual interface will be created and attached to the given virtual private gateway, and will be available for handling traffic.</p>"]
-    fn confirm_private_virtual_interface
-        (&self,
-         input: &ConfirmPrivateVirtualInterfaceRequest)
-         -> Result<ConfirmPrivateVirtualInterfaceResponse, ConfirmPrivateVirtualInterfaceError> {
+    fn confirm_private_virtual_interface(
+        &self,
+        input: &ConfirmPrivateVirtualInterfaceRequest,
+    ) -> Result<ConfirmPrivateVirtualInterfaceResponse, ConfirmPrivateVirtualInterfaceError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "OvertureService.ConfirmPrivateVirtualInterface");
+        request.add_header(
+            "x-amz-target",
+            "OvertureService.ConfirmPrivateVirtualInterface",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -4645,28 +4731,34 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ConfirmPrivateVirtualInterfaceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<ConfirmPrivateVirtualInterfaceResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ConfirmPrivateVirtualInterfaceError::from_body(String::from_utf8_lossy(&body)
-                                                                       .as_ref()))
+                Err(ConfirmPrivateVirtualInterfaceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Accept ownership of a public virtual interface created by another customer.</p> <p>After the virtual interface owner calls this function, the specified virtual interface will be created and made available for handling traffic.</p>"]
-    fn confirm_public_virtual_interface
-        (&self,
-         input: &ConfirmPublicVirtualInterfaceRequest)
-         -> Result<ConfirmPublicVirtualInterfaceResponse, ConfirmPublicVirtualInterfaceError> {
+    fn confirm_public_virtual_interface(
+        &self,
+        input: &ConfirmPublicVirtualInterfaceRequest,
+    ) -> Result<ConfirmPublicVirtualInterfaceResponse, ConfirmPublicVirtualInterfaceError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "OvertureService.ConfirmPublicVirtualInterface");
+        request.add_header(
+            "x-amz-target",
+            "OvertureService.ConfirmPublicVirtualInterface",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -4678,22 +4770,27 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ConfirmPublicVirtualInterfaceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<ConfirmPublicVirtualInterfaceResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ConfirmPublicVirtualInterfaceError::from_body(String::from_utf8_lossy(&body)
-                                                                      .as_ref()))
+                Err(ConfirmPublicVirtualInterfaceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a new BGP peer on a specified virtual interface. The BGP peer cannot be in the same address family (IPv4/IPv6) of an existing BGP peer on the virtual interface.</p> <p>You must create a BGP peer for the corresponding address family in order to access AWS resources that also use that address family.</p> <p>When creating a IPv6 BGP peer, the Amazon address and customer address fields must be left blank. IPv6 addresses are automatically assigned from Amazon's pool of IPv6 addresses; you cannot specify custom IPv6 addresses.</p> <p>For a public virtual interface, the Autonomous System Number (ASN) must be private or already whitelisted for the virtual interface.</p>"]
-    fn create_bgp_peer(&self,
-                       input: &CreateBGPPeerRequest)
-                       -> Result<CreateBGPPeerResponse, CreateBGPPeerError> {
+    fn create_bgp_peer(
+        &self,
+        input: &CreateBGPPeerRequest,
+    ) -> Result<CreateBGPPeerResponse, CreateBGPPeerError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4709,23 +4806,25 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateBGPPeerResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateBGPPeerResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateBGPPeerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateBGPPeerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a new connection between the customer network and a specific AWS Direct Connect location.</p> <p>A connection links your internal network to an AWS Direct Connect location over a standard 1 gigabit or 10 gigabit Ethernet fiber-optic cable. One end of the cable is connected to your router, the other to an AWS Direct Connect router. An AWS Direct Connect location provides access to Amazon Web Services in the region it is associated with. You can establish connections with AWS Direct Connect locations in multiple regions, but a connection in one region does not provide connectivity to other regions.</p> <p>You can automatically add the new connection to a link aggregation group (LAG) by specifying a LAG ID in the request. This ensures that the new connection is allocated on the same AWS Direct Connect endpoint that hosts the specified LAG. If there are no available ports on the endpoint, the request fails and no connection will be created.</p>"]
-    fn create_connection(&self,
-                         input: &CreateConnectionRequest)
-                         -> Result<Connection, CreateConnectionError> {
+    fn create_connection(
+        &self,
+        input: &CreateConnectionRequest,
+    ) -> Result<Connection, CreateConnectionError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4741,22 +4840,26 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+                Ok(
+                    serde_json::from_str::<Connection>(String::from_utf8_lossy(&body).as_ref())
+                        .unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateConnectionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateConnectionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a new interconnect between a AWS Direct Connect partner's network and a specific AWS Direct Connect location.</p> <p>An interconnect is a connection which is capable of hosting other connections. The AWS Direct Connect partner can use an interconnect to provide sub-1Gbps AWS Direct Connect service to tier 2 customers who do not have their own connections. Like a standard connection, an interconnect links the AWS Direct Connect partner's network to an AWS Direct Connect location over a standard 1 Gbps or 10 Gbps Ethernet fiber-optic cable. One end is connected to the partner's router, the other to an AWS Direct Connect router.</p> <p>You can automatically add the new interconnect to a link aggregation group (LAG) by specifying a LAG ID in the request. This ensures that the new interconnect is allocated on the same AWS Direct Connect endpoint that hosts the specified LAG. If there are no available ports on the endpoint, the request fails and no interconnect will be created.</p> <p>For each end customer, the AWS Direct Connect partner provisions a connection on their interconnect by calling AllocateConnectionOnInterconnect. The end customer can then connect to AWS resources by creating a virtual interface on their connection, using the VLAN assigned to them by the AWS Direct Connect partner.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
-    fn create_interconnect(&self,
-                           input: &CreateInterconnectRequest)
-                           -> Result<Interconnect, CreateInterconnectError> {
+    fn create_interconnect(
+        &self,
+        input: &CreateInterconnectRequest,
+    ) -> Result<Interconnect, CreateInterconnectError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4772,17 +4875,20 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<Interconnect>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+                Ok(
+                    serde_json::from_str::<Interconnect>(String::from_utf8_lossy(&body).as_ref())
+                        .unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateInterconnectError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateInterconnectError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Creates a new link aggregation group (LAG) with the specified number of bundled physical connections between the customer network and a specific AWS Direct Connect location. A LAG is a logical interface that uses the Link Aggregation Control Protocol (LACP) to aggregate multiple 1 gigabit or 10 gigabit interfaces, allowing you to treat them as a single interface.</p> <p>All connections in a LAG must use the same bandwidth (for example, 10 Gbps), and must terminate at the same AWS Direct Connect endpoint.</p> <p>You can have up to 10 connections per LAG. Regardless of this limit, if you request more connections for the LAG than AWS Direct Connect can allocate on a single endpoint, no LAG is created.</p> <p>You can specify an existing physical connection or interconnect to include in the LAG (which counts towards the total number of connections). Doing so interrupts the current physical connection or hosted connections, and re-establishes them as a member of the LAG. The LAG will be created on the same AWS Direct Connect endpoint to which the connection terminates. Any virtual interfaces associated with the connection are automatically disassociated and re-associated with the LAG. The connection ID does not change.</p> <p>If the AWS account used to create a LAG is a registered AWS Direct Connect partner, the LAG is automatically enabled to host sub-connections. For a LAG owned by a partner, any associated virtual interfaces cannot be directly configured.</p>"]
     fn create_lag(&self, input: &CreateLagRequest) -> Result<Lag, CreateLagError> {
@@ -4806,22 +4912,25 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateLagError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateLagError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Creates a new private virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A private virtual interface supports sending traffic to a single virtual private cloud (VPC).</p>"]
-    fn create_private_virtual_interface
-        (&self,
-         input: &CreatePrivateVirtualInterfaceRequest)
-         -> Result<VirtualInterface, CreatePrivateVirtualInterfaceError> {
+    fn create_private_virtual_interface(
+        &self,
+        input: &CreatePrivateVirtualInterfaceRequest,
+    ) -> Result<VirtualInterface, CreatePrivateVirtualInterfaceError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "OvertureService.CreatePrivateVirtualInterface");
+        request.add_header(
+            "x-amz-target",
+            "OvertureService.CreatePrivateVirtualInterface",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -4833,30 +4942,32 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&body)
-                                                                .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<VirtualInterface>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreatePrivateVirtualInterfaceError::from_body(String::from_utf8_lossy(&body)
-                                                                      .as_ref()))
+                Err(CreatePrivateVirtualInterfaceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Creates a new public virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A public virtual interface supports sending traffic to public services of AWS such as Amazon Simple Storage Service (Amazon S3).</p> <p>When creating an IPv6 public virtual interface (addressFamily is 'ipv6'), the customer and amazon address fields should be left blank to use auto-assigned IPv6 space. Custom IPv6 Addresses are currently not supported.</p>"]
-    fn create_public_virtual_interface
-        (&self,
-         input: &CreatePublicVirtualInterfaceRequest)
-         -> Result<VirtualInterface, CreatePublicVirtualInterfaceError> {
+    fn create_public_virtual_interface(
+        &self,
+        input: &CreatePublicVirtualInterfaceRequest,
+    ) -> Result<VirtualInterface, CreatePublicVirtualInterfaceError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "OvertureService.CreatePublicVirtualInterface");
+        request.add_header(
+            "x-amz-target",
+            "OvertureService.CreatePublicVirtualInterface",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -4868,24 +4979,25 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&body)
-                                                                .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<VirtualInterface>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreatePublicVirtualInterfaceError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+                Err(CreatePublicVirtualInterfaceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes a BGP peer on the specified virtual interface that matches the specified customer address and ASN. You cannot delete the last BGP peer from a virtual interface.</p>"]
-    fn delete_bgp_peer(&self,
-                       input: &DeleteBGPPeerRequest)
-                       -> Result<DeleteBGPPeerResponse, DeleteBGPPeerError> {
+    fn delete_bgp_peer(
+        &self,
+        input: &DeleteBGPPeerRequest,
+    ) -> Result<DeleteBGPPeerResponse, DeleteBGPPeerError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4901,23 +5013,25 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteBGPPeerResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteBGPPeerResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteBGPPeerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteBGPPeerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes the connection.</p> <p>Deleting a connection only stops the AWS Direct Connect port hour and data transfer charges. You need to cancel separately with the providers any services or charges for cross-connects or network circuits that connect you to the AWS Direct Connect location.</p>"]
-    fn delete_connection(&self,
-                         input: &DeleteConnectionRequest)
-                         -> Result<Connection, DeleteConnectionError> {
+    fn delete_connection(
+        &self,
+        input: &DeleteConnectionRequest,
+    ) -> Result<Connection, DeleteConnectionError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4933,22 +5047,26 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+                Ok(
+                    serde_json::from_str::<Connection>(String::from_utf8_lossy(&body).as_ref())
+                        .unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteConnectionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteConnectionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes the specified interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
-    fn delete_interconnect(&self,
-                           input: &DeleteInterconnectRequest)
-                           -> Result<DeleteInterconnectResponse, DeleteInterconnectError> {
+    fn delete_interconnect(
+        &self,
+        input: &DeleteInterconnectRequest,
+    ) -> Result<DeleteInterconnectResponse, DeleteInterconnectError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4964,16 +5082,19 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteInterconnectResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DeleteInterconnectResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteInterconnectError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteInterconnectError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Deletes a link aggregation group (LAG). You cannot delete a LAG if it has active virtual interfaces or hosted connections.</p>"]
     fn delete_lag(&self, input: &DeleteLagRequest) -> Result<Lag, DeleteLagError> {
@@ -4997,17 +5118,18 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteLagError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteLagError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes a virtual interface.</p>"]
-    fn delete_virtual_interface
-        (&self,
-         input: &DeleteVirtualInterfaceRequest)
-         -> Result<DeleteVirtualInterfaceResponse, DeleteVirtualInterfaceError> {
+    #[doc = "<p>Deletes a virtual interface.</p>"]
+    fn delete_virtual_interface(
+        &self,
+        input: &DeleteVirtualInterfaceRequest,
+    ) -> Result<DeleteVirtualInterfaceResponse, DeleteVirtualInterfaceError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5023,22 +5145,25 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteVirtualInterfaceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DeleteVirtualInterfaceResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteVirtualInterfaceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteVirtualInterfaceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deprecated in favor of <a>DescribeLoa</a>.</p> <p>Returns the LOA-CFA for a Connection.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that your APN partner or service provider uses when establishing your cross connect to AWS at the colocation facility. For more information, see <a href=\"http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html\">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>"]
-    fn describe_connection_loa
-        (&self,
-         input: &DescribeConnectionLoaRequest)
-         -> Result<DescribeConnectionLoaResponse, DescribeConnectionLoaError> {
+    fn describe_connection_loa(
+        &self,
+        input: &DescribeConnectionLoaRequest,
+    ) -> Result<DescribeConnectionLoaResponse, DescribeConnectionLoaError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5054,21 +5179,25 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeConnectionLoaResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeConnectionLoaResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeConnectionLoaError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeConnectionLoaError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Displays all connections in this region.</p> <p>If a connection ID is provided, the call returns only that particular connection.</p>"]
-    fn describe_connections(&self,
-                            input: &DescribeConnectionsRequest)
-                            -> Result<Connections, DescribeConnectionsError> {
+    fn describe_connections(
+        &self,
+        input: &DescribeConnectionsRequest,
+    ) -> Result<Connections, DescribeConnectionsError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5084,28 +5213,33 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<Connections>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+                Ok(
+                    serde_json::from_str::<Connections>(String::from_utf8_lossy(&body).as_ref())
+                        .unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeConnectionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeConnectionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deprecated in favor of <a>DescribeHostedConnections</a>.</p> <p>Returns a list of connections that have been provisioned on the given interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
-    fn describe_connections_on_interconnect
-        (&self,
-         input: &DescribeConnectionsOnInterconnectRequest)
-         -> Result<Connections, DescribeConnectionsOnInterconnectError> {
+    fn describe_connections_on_interconnect(
+        &self,
+        input: &DescribeConnectionsOnInterconnectRequest,
+    ) -> Result<Connections, DescribeConnectionsOnInterconnectError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "OvertureService.DescribeConnectionsOnInterconnect");
+        request.add_header(
+            "x-amz-target",
+            "OvertureService.DescribeConnectionsOnInterconnect",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -5117,22 +5251,26 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<Connections>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+                Ok(
+                    serde_json::from_str::<Connections>(String::from_utf8_lossy(&body).as_ref())
+                        .unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeConnectionsOnInterconnectError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeConnectionsOnInterconnectError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns a list of hosted connections that have been provisioned on the given interconnect or link aggregation group (LAG).</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
-    fn describe_hosted_connections(&self,
-                                   input: &DescribeHostedConnectionsRequest)
-                                   -> Result<Connections, DescribeHostedConnectionsError> {
+    fn describe_hosted_connections(
+        &self,
+        input: &DescribeHostedConnectionsRequest,
+    ) -> Result<Connections, DescribeHostedConnectionsError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5148,24 +5286,26 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<Connections>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+                Ok(
+                    serde_json::from_str::<Connections>(String::from_utf8_lossy(&body).as_ref())
+                        .unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeHostedConnectionsError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(DescribeHostedConnectionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deprecated in favor of <a>DescribeLoa</a>.</p> <p>Returns the LOA-CFA for an Interconnect.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href=\"http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html\">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>"]
-    fn describe_interconnect_loa
-        (&self,
-         input: &DescribeInterconnectLoaRequest)
-         -> Result<DescribeInterconnectLoaResponse, DescribeInterconnectLoaError> {
+    fn describe_interconnect_loa(
+        &self,
+        input: &DescribeInterconnectLoaRequest,
+    ) -> Result<DescribeInterconnectLoaResponse, DescribeInterconnectLoaError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5181,22 +5321,25 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeInterconnectLoaResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeInterconnectLoaResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeInterconnectLoaError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(DescribeInterconnectLoaError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns a list of interconnects owned by the AWS account.</p> <p>If an interconnect ID is provided, it will only return this particular interconnect.</p>"]
-    fn describe_interconnects(&self,
-                              input: &DescribeInterconnectsRequest)
-                              -> Result<Interconnects, DescribeInterconnectsError> {
+    fn describe_interconnects(
+        &self,
+        input: &DescribeInterconnectsRequest,
+    ) -> Result<Interconnects, DescribeInterconnectsError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5212,17 +5355,20 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<Interconnects>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+                Ok(
+                    serde_json::from_str::<Interconnects>(String::from_utf8_lossy(&body).as_ref())
+                        .unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeInterconnectsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeInterconnectsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Describes the link aggregation groups (LAGs) in your account. </p> <p>If a LAG ID is provided, only information about the specified LAG is returned.</p>"]
     fn describe_lags(&self, input: &DescribeLagsRequest) -> Result<Lags, DescribeLagsError> {
@@ -5246,11 +5392,12 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeLagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeLagsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Returns the LOA-CFA for a connection, interconnect, or link aggregation group (LAG).</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href=\"http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html\">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>"]
     fn describe_loa(&self, input: &DescribeLoaRequest) -> Result<Loa, DescribeLoaError> {
@@ -5274,11 +5421,12 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeLoaError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeLoaError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Returns the list of AWS Direct Connect locations in the current AWS region. These are the locations that may be selected when calling CreateConnection or CreateInterconnect.</p>"]
     fn describe_locations(&self) -> Result<Locations, DescribeLocationsError> {
@@ -5296,22 +5444,26 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<Locations>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+                Ok(
+                    serde_json::from_str::<Locations>(String::from_utf8_lossy(&body).as_ref())
+                        .unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeLocationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeLocationsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Describes the tags associated with the specified Direct Connect resources.</p>"]
-    fn describe_tags(&self,
-                     input: &DescribeTagsRequest)
-                     -> Result<DescribeTagsResponse, DescribeTagsError> {
+    #[doc = "<p>Describes the tags associated with the specified Direct Connect resources.</p>"]
+    fn describe_tags(
+        &self,
+        input: &DescribeTagsRequest,
+    ) -> Result<DescribeTagsResponse, DescribeTagsError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5327,18 +5479,19 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeTagsResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribeTagsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeTagsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Returns a list of virtual private gateways owned by the AWS account.</p> <p>You can create one or more AWS Direct Connect private virtual interfaces linking to a virtual private gateway. A virtual private gateway can be managed via Amazon Virtual Private Cloud (VPC) console or the <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-CreateVpnGateway.html\">EC2 CreateVpnGateway</a> action.</p>"]
     fn describe_virtual_gateways(&self) -> Result<VirtualGateways, DescribeVirtualGatewaysError> {
@@ -5356,23 +5509,27 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<VirtualGateways>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+                Ok(
+                    serde_json::from_str::<VirtualGateways>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeVirtualGatewaysError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(DescribeVirtualGatewaysError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Displays all virtual interfaces for an AWS account. Virtual interfaces deleted fewer than 15 minutes before you make the request are also returned. If you specify a connection ID, only the virtual interfaces associated with the connection are returned. If you specify a virtual interface ID, then only a single virtual interface is returned.</p> <p>A virtual interface (VLAN) transmits the traffic between the AWS Direct Connect location and the customer.</p>"]
-    fn describe_virtual_interfaces(&self,
-                                   input: &DescribeVirtualInterfacesRequest)
-                                   -> Result<VirtualInterfaces, DescribeVirtualInterfacesError> {
+    fn describe_virtual_interfaces(
+        &self,
+        input: &DescribeVirtualInterfacesRequest,
+    ) -> Result<VirtualInterfaces, DescribeVirtualInterfacesError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5388,30 +5545,32 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<VirtualInterfaces>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<VirtualInterfaces>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeVirtualInterfacesError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(DescribeVirtualInterfacesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Disassociates a connection from a link aggregation group (LAG). The connection is interrupted and re-established as a standalone connection (the connection is not deleted; to delete the connection, use the <a>DeleteConnection</a> request). If the LAG has associated virtual interfaces or hosted connections, they remain associated with the LAG. A disassociated connection owned by an AWS Direct Connect partner is automatically converted to an interconnect.</p> <p>If disassociating the connection will cause the LAG to fall below its setting for minimum number of operational connections, the request fails, except when it's the last member of the LAG. If all connections are disassociated, the LAG continues to exist as an empty LAG with no physical connections. </p>"]
-    fn disassociate_connection_from_lag
-        (&self,
-         input: &DisassociateConnectionFromLagRequest)
-         -> Result<Connection, DisassociateConnectionFromLagError> {
+    fn disassociate_connection_from_lag(
+        &self,
+        input: &DisassociateConnectionFromLagRequest,
+    ) -> Result<Connection, DisassociateConnectionFromLagError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "OvertureService.DisassociateConnectionFromLag");
+        request.add_header(
+            "x-amz-target",
+            "OvertureService.DisassociateConnectionFromLag",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -5423,23 +5582,26 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+                Ok(
+                    serde_json::from_str::<Connection>(String::from_utf8_lossy(&body).as_ref())
+                        .unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DisassociateConnectionFromLagError::from_body(String::from_utf8_lossy(&body)
-                                                                      .as_ref()))
+                Err(DisassociateConnectionFromLagError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Adds the specified tags to the specified Direct Connect resource. Each Direct Connect resource can have a maximum of 50 tags.</p> <p>Each tag consists of a key and an optional value. If a tag with the same key is already associated with the Direct Connect resource, this action updates its value.</p>"]
-    fn tag_resource(&self,
-                    input: &TagResourceRequest)
-                    -> Result<TagResourceResponse, TagResourceError> {
+    fn tag_resource(
+        &self,
+        input: &TagResourceRequest,
+    ) -> Result<TagResourceResponse, TagResourceError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5455,23 +5617,25 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<TagResourceResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<TagResourceResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(TagResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(TagResourceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Removes one or more tags from the specified Direct Connect resource.</p>"]
-    fn untag_resource(&self,
-                      input: &UntagResourceRequest)
-                      -> Result<UntagResourceResponse, UntagResourceError> {
+    #[doc = "<p>Removes one or more tags from the specified Direct Connect resource.</p>"]
+    fn untag_resource(
+        &self,
+        input: &UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, UntagResourceError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5487,18 +5651,19 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UntagResourceResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<UntagResourceResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UntagResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UntagResourceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Updates the attributes of a link aggregation group (LAG). </p> <p>You can update the following attributes: </p> <ul> <li> <p>The name of the LAG.</p> </li> <li> <p>The value for the minimum number of connections that must be operational for the LAG itself to be operational. </p> </li> </ul> <p>When you create a LAG, the default value for the minimum number of operational connections is zero (0). If you update this value, and the number of operational connections falls below the specified value, the LAG will automatically go down to avoid overutilization of the remaining connections. Adjusting this value should be done with care as it could force the LAG down if the value is set higher than the current number of operational connections.</p>"]
     fn update_lag(&self, input: &UpdateLagRequest) -> Result<Lag, UpdateLagError> {
@@ -5522,7 +5687,9 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateLagError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateLagError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

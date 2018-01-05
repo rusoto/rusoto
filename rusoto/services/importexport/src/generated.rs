@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -31,7 +30,7 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use xml::reader::XmlEvent;
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
-use rusoto_core::xmlutil::{characters, end_element, start_element, skip_tree, peek_at_name};
+use rusoto_core::xmlutil::{characters, end_element, peek_at_name, skip_tree, start_element};
 use rusoto_core::xmlerror::*;
 
 enum DeserializerNext {
@@ -39,8 +38,8 @@ enum DeserializerNext {
     Skip,
     Element(String),
 }
-#[doc="A discrete item that contains the description and URL of an artifact (such as a PDF)."]
-#[derive(Default,Debug,Clone)]
+/// A discrete item that contains the description and URL of an artifact (such as a PDF).
+#[derive(Default, Debug, Clone)]
 pub struct Artifact {
     pub description: Option<String>,
     pub url: Option<String>,
@@ -49,9 +48,10 @@ pub struct Artifact {
 struct ArtifactDeserializer;
 impl ArtifactDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Artifact, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Artifact, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = Artifact::default();
@@ -66,19 +66,18 @@ impl ArtifactDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Description" => {
-                            obj.description =
-                                Some(try!(DescriptionDeserializer::deserialize("Description",
-                                                                               stack)));
-                        }
-                        "URL" => {
-                            obj.url = Some(try!(URLDeserializer::deserialize("URL", stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Description" => {
+                        obj.description = Some(try!(DescriptionDeserializer::deserialize(
+                            "Description",
+                            stack
+                        )));
                     }
-                }
+                    "URL" => {
+                        obj.url = Some(try!(URLDeserializer::deserialize("URL", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -89,16 +88,15 @@ impl ArtifactDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct ArtifactListDeserializer;
 impl ArtifactListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<Artifact>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<Artifact>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -130,16 +128,14 @@ impl ArtifactListDeserializer {
         }
 
         Ok(obj)
-
     }
 }
-#[doc="Input structure for the CancelJob operation."]
-#[derive(Default,Debug,Clone)]
+/// Input structure for the CancelJob operation.
+#[derive(Default, Debug, Clone)]
 pub struct CancelJobInput {
     pub api_version: Option<String>,
     pub job_id: String,
 }
-
 
 /// Serialize `CancelJobInput` contents to a `SignedRequest`.
 struct CancelJobInputSerializer;
@@ -151,17 +147,20 @@ impl CancelJobInputSerializer {
         }
 
         if let Some(ref field_value) = obj.api_version {
-            params.put(&format!("{}{}", prefix, "APIVersion"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "APIVersion"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-        params.put(&format!("{}{}", prefix, "JobId"),
-                   &obj.job_id.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "JobId"),
+            &obj.job_id.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="Output structure for the CancelJob operation."]
-#[derive(Default,Debug,Clone)]
+/// Output structure for the CancelJob operation.
+#[derive(Default, Debug, Clone)]
 pub struct CancelJobOutput {
     pub success: Option<bool>,
 }
@@ -169,9 +168,10 @@ pub struct CancelJobOutput {
 struct CancelJobOutputDeserializer;
 impl CancelJobOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<CancelJobOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CancelJobOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = CancelJobOutput::default();
@@ -186,15 +186,13 @@ impl CancelJobOutputDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Success" => {
-                            obj.success = Some(try!(SuccessDeserializer::deserialize("Success",
-                                                                                     stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Success" => {
+                        obj.success =
+                            Some(try!(SuccessDeserializer::deserialize("Success", stack)));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -205,25 +203,24 @@ impl CancelJobOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct CarrierDeserializer;
 impl CarrierDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="Input structure for the CreateJob operation."]
-#[derive(Default,Debug,Clone)]
+/// Input structure for the CreateJob operation.
+#[derive(Default, Debug, Clone)]
 pub struct CreateJobInput {
     pub api_version: Option<String>,
     pub job_type: String,
@@ -231,7 +228,6 @@ pub struct CreateJobInput {
     pub manifest_addendum: Option<String>,
     pub validate_only: bool,
 }
-
 
 /// Serialize `CreateJobInput` contents to a `SignedRequest`.
 struct CreateJobInputSerializer;
@@ -243,25 +239,34 @@ impl CreateJobInputSerializer {
         }
 
         if let Some(ref field_value) = obj.api_version {
-            params.put(&format!("{}{}", prefix, "APIVersion"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "APIVersion"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-        params.put(&format!("{}{}", prefix, "JobType"),
-                   &obj.job_type.replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "Manifest"),
-                   &obj.manifest.replace("+", "%2B"));
+        params.put(
+            &format!("{}{}", prefix, "JobType"),
+            &obj.job_type.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "Manifest"),
+            &obj.manifest.replace("+", "%2B"),
+        );
         if let Some(ref field_value) = obj.manifest_addendum {
-            params.put(&format!("{}{}", prefix, "ManifestAddendum"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "ManifestAddendum"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-        params.put(&format!("{}{}", prefix, "ValidateOnly"),
-                   &obj.validate_only.to_string().replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "ValidateOnly"),
+            &obj.validate_only.to_string().replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="Output structure for the CreateJob operation."]
-#[derive(Default,Debug,Clone)]
+/// Output structure for the CreateJob operation.
+#[derive(Default, Debug, Clone)]
 pub struct CreateJobOutput {
     pub artifact_list: Option<Vec<Artifact>>,
     pub job_id: Option<String>,
@@ -274,9 +279,10 @@ pub struct CreateJobOutput {
 struct CreateJobOutputDeserializer;
 impl CreateJobOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<CreateJobOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateJobOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = CreateJobOutput::default();
@@ -291,37 +297,39 @@ impl CreateJobOutputDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "ArtifactList" => {
-                            obj.artifact_list =
-                                Some(try!(ArtifactListDeserializer::deserialize("ArtifactList",
-                                                                                stack)));
-                        }
-                        "JobId" => {
-                            obj.job_id = Some(try!(JobIdDeserializer::deserialize("JobId", stack)));
-                        }
-                        "JobType" => {
-                            obj.job_type = Some(try!(JobTypeDeserializer::deserialize("JobType",
-                                                                                      stack)));
-                        }
-                        "Signature" => {
-                            obj.signature = Some(try!(SignatureDeserializer::deserialize("Signature",
-                                                                                         stack)));
-                        }
-                        "SignatureFileContents" => {
-                            obj.signature_file_contents =
-                                Some(try!(SignatureFileContentsDeserializer::deserialize("SignatureFileContents",
-                                                                                         stack)));
-                        }
-                        "WarningMessage" => {
-                            obj.warning_message =
-                                Some(try!(WarningMessageDeserializer::deserialize("WarningMessage",
-                                                                                  stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "ArtifactList" => {
+                        obj.artifact_list = Some(try!(ArtifactListDeserializer::deserialize(
+                            "ArtifactList",
+                            stack
+                        )));
                     }
-                }
+                    "JobId" => {
+                        obj.job_id = Some(try!(JobIdDeserializer::deserialize("JobId", stack)));
+                    }
+                    "JobType" => {
+                        obj.job_type =
+                            Some(try!(JobTypeDeserializer::deserialize("JobType", stack)));
+                    }
+                    "Signature" => {
+                        obj.signature =
+                            Some(try!(SignatureDeserializer::deserialize("Signature", stack)));
+                    }
+                    "SignatureFileContents" => {
+                        obj.signature_file_contents =
+                            Some(try!(SignatureFileContentsDeserializer::deserialize(
+                                "SignatureFileContents",
+                                stack
+                            )));
+                    }
+                    "WarningMessage" => {
+                        obj.warning_message = Some(try!(WarningMessageDeserializer::deserialize(
+                            "WarningMessage",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -332,80 +340,79 @@ impl CreateJobOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct CreationDateDeserializer;
 impl CreationDateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct CurrentManifestDeserializer;
 impl CurrentManifestDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct DescriptionDeserializer;
 impl DescriptionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct ErrorCountDeserializer;
 impl ErrorCountDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<i64, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct GenericStringDeserializer;
 impl GenericStringDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default, Debug, Clone)]
 pub struct GetShippingLabelInput {
     pub api_version: Option<String>,
     pub city: Option<String>,
@@ -421,7 +428,6 @@ pub struct GetShippingLabelInput {
     pub street_3: Option<String>,
 }
 
-
 /// Serialize `GetShippingLabelInput` contents to a `SignedRequest`.
 struct GetShippingLabelInputSerializer;
 impl GetShippingLabelInputSerializer {
@@ -432,55 +438,76 @@ impl GetShippingLabelInputSerializer {
         }
 
         if let Some(ref field_value) = obj.api_version {
-            params.put(&format!("{}{}", prefix, "APIVersion"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "APIVersion"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.city {
-            params.put(&format!("{}{}", prefix, "city"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "city"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.company {
-            params.put(&format!("{}{}", prefix, "company"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "company"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.country {
-            params.put(&format!("{}{}", prefix, "country"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "country"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         JobIdListSerializer::serialize(params, &format!("{}{}", prefix, "jobIds"), &obj.job_ids);
         if let Some(ref field_value) = obj.name {
-            params.put(&format!("{}{}", prefix, "name"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "name"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.phone_number {
-            params.put(&format!("{}{}", prefix, "phoneNumber"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "phoneNumber"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.postal_code {
-            params.put(&format!("{}{}", prefix, "postalCode"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "postalCode"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.state_or_province {
-            params.put(&format!("{}{}", prefix, "stateOrProvince"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "stateOrProvince"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.street_1 {
-            params.put(&format!("{}{}", prefix, "street1"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "street1"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.street_2 {
-            params.put(&format!("{}{}", prefix, "street2"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "street2"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.street_3 {
-            params.put(&format!("{}{}", prefix, "street3"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "street3"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default, Debug, Clone)]
 pub struct GetShippingLabelOutput {
     pub shipping_label_url: Option<String>,
     pub warning: Option<String>,
@@ -489,9 +516,10 @@ pub struct GetShippingLabelOutput {
 struct GetShippingLabelOutputDeserializer;
 impl GetShippingLabelOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<GetShippingLabelOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetShippingLabelOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = GetShippingLabelOutput::default();
@@ -506,20 +534,20 @@ impl GetShippingLabelOutputDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "ShippingLabelURL" => {
-                            obj.shipping_label_url =
-                                Some(try!(GenericStringDeserializer::deserialize("ShippingLabelURL",
-                                                                                 stack)));
-                        }
-                        "Warning" => {
-                            obj.warning = Some(try!(GenericStringDeserializer::deserialize("Warning",
-                                                                                           stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "ShippingLabelURL" => {
+                        obj.shipping_label_url = Some(try!(
+                            GenericStringDeserializer::deserialize("ShippingLabelURL", stack)
+                        ));
                     }
-                }
+                    "Warning" => {
+                        obj.warning = Some(try!(GenericStringDeserializer::deserialize(
+                            "Warning",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -530,16 +558,14 @@ impl GetShippingLabelOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="Input structure for the GetStatus operation."]
-#[derive(Default,Debug,Clone)]
+/// Input structure for the GetStatus operation.
+#[derive(Default, Debug, Clone)]
 pub struct GetStatusInput {
     pub api_version: Option<String>,
     pub job_id: String,
 }
-
 
 /// Serialize `GetStatusInput` contents to a `SignedRequest`.
 struct GetStatusInputSerializer;
@@ -551,17 +577,20 @@ impl GetStatusInputSerializer {
         }
 
         if let Some(ref field_value) = obj.api_version {
-            params.put(&format!("{}{}", prefix, "APIVersion"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "APIVersion"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-        params.put(&format!("{}{}", prefix, "JobId"),
-                   &obj.job_id.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "JobId"),
+            &obj.job_id.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="Output structure for the GetStatus operation."]
-#[derive(Default,Debug,Clone)]
+/// Output structure for the GetStatus operation.
+#[derive(Default, Debug, Clone)]
 pub struct GetStatusOutput {
     pub artifact_list: Option<Vec<Artifact>>,
     pub carrier: Option<String>,
@@ -584,9 +613,10 @@ pub struct GetStatusOutput {
 struct GetStatusOutputDeserializer;
 impl GetStatusOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<GetStatusOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetStatusOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = GetStatusOutput::default();
@@ -601,84 +631,87 @@ impl GetStatusOutputDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "ArtifactList" => {
-                            obj.artifact_list =
-                                Some(try!(ArtifactListDeserializer::deserialize("ArtifactList",
-                                                                                stack)));
-                        }
-                        "Carrier" => {
-                            obj.carrier = Some(try!(CarrierDeserializer::deserialize("Carrier",
-                                                                                     stack)));
-                        }
-                        "CreationDate" => {
-                            obj.creation_date =
-                                Some(try!(CreationDateDeserializer::deserialize("CreationDate",
-                                                                                stack)));
-                        }
-                        "CurrentManifest" => {
-                            obj.current_manifest =
-                                Some(try!(CurrentManifestDeserializer::deserialize("CurrentManifest",
-                                                                                   stack)));
-                        }
-                        "ErrorCount" => {
-                            obj.error_count =
-                                Some(try!(ErrorCountDeserializer::deserialize("ErrorCount",
-                                                                              stack)));
-                        }
-                        "JobId" => {
-                            obj.job_id = Some(try!(JobIdDeserializer::deserialize("JobId", stack)));
-                        }
-                        "JobType" => {
-                            obj.job_type = Some(try!(JobTypeDeserializer::deserialize("JobType",
-                                                                                      stack)));
-                        }
-                        "LocationCode" => {
-                            obj.location_code =
-                                Some(try!(LocationCodeDeserializer::deserialize("LocationCode",
-                                                                                stack)));
-                        }
-                        "LocationMessage" => {
-                            obj.location_message =
-                                Some(try!(LocationMessageDeserializer::deserialize("LocationMessage",
-                                                                                   stack)));
-                        }
-                        "LogBucket" => {
-                            obj.log_bucket = Some(try!(LogBucketDeserializer::deserialize("LogBucket",
-                                                                                          stack)));
-                        }
-                        "LogKey" => {
-                            obj.log_key = Some(try!(LogKeyDeserializer::deserialize("LogKey",
-                                                                                    stack)));
-                        }
-                        "ProgressCode" => {
-                            obj.progress_code =
-                                Some(try!(ProgressCodeDeserializer::deserialize("ProgressCode",
-                                                                                stack)));
-                        }
-                        "ProgressMessage" => {
-                            obj.progress_message =
-                                Some(try!(ProgressMessageDeserializer::deserialize("ProgressMessage",
-                                                                                   stack)));
-                        }
-                        "Signature" => {
-                            obj.signature = Some(try!(SignatureDeserializer::deserialize("Signature",
-                                                                                         stack)));
-                        }
-                        "SignatureFileContents" => {
-                            obj.signature_file_contents =
-                                Some(try!(SignatureDeserializer::deserialize("SignatureFileContents",
-                                                                             stack)));
-                        }
-                        "TrackingNumber" => {
-                            obj.tracking_number =
-                                Some(try!(TrackingNumberDeserializer::deserialize("TrackingNumber",
-                                                                                  stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "ArtifactList" => {
+                        obj.artifact_list = Some(try!(ArtifactListDeserializer::deserialize(
+                            "ArtifactList",
+                            stack
+                        )));
                     }
-                }
+                    "Carrier" => {
+                        obj.carrier =
+                            Some(try!(CarrierDeserializer::deserialize("Carrier", stack)));
+                    }
+                    "CreationDate" => {
+                        obj.creation_date = Some(try!(CreationDateDeserializer::deserialize(
+                            "CreationDate",
+                            stack
+                        )));
+                    }
+                    "CurrentManifest" => {
+                        obj.current_manifest = Some(try!(
+                            CurrentManifestDeserializer::deserialize("CurrentManifest", stack)
+                        ));
+                    }
+                    "ErrorCount" => {
+                        obj.error_count = Some(try!(ErrorCountDeserializer::deserialize(
+                            "ErrorCount",
+                            stack
+                        )));
+                    }
+                    "JobId" => {
+                        obj.job_id = Some(try!(JobIdDeserializer::deserialize("JobId", stack)));
+                    }
+                    "JobType" => {
+                        obj.job_type =
+                            Some(try!(JobTypeDeserializer::deserialize("JobType", stack)));
+                    }
+                    "LocationCode" => {
+                        obj.location_code = Some(try!(LocationCodeDeserializer::deserialize(
+                            "LocationCode",
+                            stack
+                        )));
+                    }
+                    "LocationMessage" => {
+                        obj.location_message = Some(try!(
+                            LocationMessageDeserializer::deserialize("LocationMessage", stack)
+                        ));
+                    }
+                    "LogBucket" => {
+                        obj.log_bucket =
+                            Some(try!(LogBucketDeserializer::deserialize("LogBucket", stack)));
+                    }
+                    "LogKey" => {
+                        obj.log_key = Some(try!(LogKeyDeserializer::deserialize("LogKey", stack)));
+                    }
+                    "ProgressCode" => {
+                        obj.progress_code = Some(try!(ProgressCodeDeserializer::deserialize(
+                            "ProgressCode",
+                            stack
+                        )));
+                    }
+                    "ProgressMessage" => {
+                        obj.progress_message = Some(try!(
+                            ProgressMessageDeserializer::deserialize("ProgressMessage", stack)
+                        ));
+                    }
+                    "Signature" => {
+                        obj.signature =
+                            Some(try!(SignatureDeserializer::deserialize("Signature", stack)));
+                    }
+                    "SignatureFileContents" => {
+                        obj.signature_file_contents = Some(try!(
+                            SignatureDeserializer::deserialize("SignatureFileContents", stack)
+                        ));
+                    }
+                    "TrackingNumber" => {
+                        obj.tracking_number = Some(try!(TrackingNumberDeserializer::deserialize(
+                            "TrackingNumber",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -689,39 +722,38 @@ impl GetStatusOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct IsCanceledDeserializer;
 impl IsCanceledDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<bool, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct IsTruncatedDeserializer;
 impl IsTruncatedDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<bool, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="Representation of a job returned by the ListJobs operation."]
-#[derive(Default,Debug,Clone)]
+/// Representation of a job returned by the ListJobs operation.
+#[derive(Default, Debug, Clone)]
 pub struct Job {
     pub creation_date: Option<String>,
     pub is_canceled: Option<bool>,
@@ -732,9 +764,10 @@ pub struct Job {
 struct JobDeserializer;
 impl JobDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Job, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Job, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = Job::default();
@@ -749,28 +782,28 @@ impl JobDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "CreationDate" => {
-                            obj.creation_date =
-                                Some(try!(CreationDateDeserializer::deserialize("CreationDate",
-                                                                                stack)));
-                        }
-                        "IsCanceled" => {
-                            obj.is_canceled =
-                                Some(try!(IsCanceledDeserializer::deserialize("IsCanceled",
-                                                                              stack)));
-                        }
-                        "JobId" => {
-                            obj.job_id = Some(try!(JobIdDeserializer::deserialize("JobId", stack)));
-                        }
-                        "JobType" => {
-                            obj.job_type = Some(try!(JobTypeDeserializer::deserialize("JobType",
-                                                                                      stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "CreationDate" => {
+                        obj.creation_date = Some(try!(CreationDateDeserializer::deserialize(
+                            "CreationDate",
+                            stack
+                        )));
                     }
-                }
+                    "IsCanceled" => {
+                        obj.is_canceled = Some(try!(IsCanceledDeserializer::deserialize(
+                            "IsCanceled",
+                            stack
+                        )));
+                    }
+                    "JobId" => {
+                        obj.job_id = Some(try!(JobIdDeserializer::deserialize("JobId", stack)));
+                    }
+                    "JobType" => {
+                        obj.job_type =
+                            Some(try!(JobTypeDeserializer::deserialize("JobType", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -781,21 +814,20 @@ impl JobDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct JobIdDeserializer;
 impl JobIdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -813,24 +845,24 @@ impl JobIdListSerializer {
 struct JobTypeDeserializer;
 impl JobTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct JobsListDeserializer;
 impl JobsListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<Job>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<Job>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -862,17 +894,15 @@ impl JobsListDeserializer {
         }
 
         Ok(obj)
-
     }
 }
-#[doc="Input structure for the ListJobs operation."]
-#[derive(Default,Debug,Clone)]
+/// Input structure for the ListJobs operation.
+#[derive(Default, Debug, Clone)]
 pub struct ListJobsInput {
     pub api_version: Option<String>,
     pub marker: Option<String>,
     pub max_jobs: Option<i64>,
 }
-
 
 /// Serialize `ListJobsInput` contents to a `SignedRequest`.
 struct ListJobsInputSerializer;
@@ -884,23 +914,28 @@ impl ListJobsInputSerializer {
         }
 
         if let Some(ref field_value) = obj.api_version {
-            params.put(&format!("{}{}", prefix, "APIVersion"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "APIVersion"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "Marker"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.max_jobs {
-            params.put(&format!("{}{}", prefix, "MaxJobs"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "MaxJobs"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
-
     }
 }
 
-#[doc="Output structure for the ListJobs operation."]
-#[derive(Default,Debug,Clone)]
+/// Output structure for the ListJobs operation.
+#[derive(Default, Debug, Clone)]
 pub struct ListJobsOutput {
     pub is_truncated: Option<bool>,
     pub jobs: Option<Vec<Job>>,
@@ -909,9 +944,10 @@ pub struct ListJobsOutput {
 struct ListJobsOutputDeserializer;
 impl ListJobsOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<ListJobsOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListJobsOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = ListJobsOutput::default();
@@ -926,19 +962,18 @@ impl ListJobsOutputDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "IsTruncated" => {
-                            obj.is_truncated =
-                                Some(try!(IsTruncatedDeserializer::deserialize("IsTruncated",
-                                                                               stack)));
-                        }
-                        "Jobs" => {
-                            obj.jobs = Some(try!(JobsListDeserializer::deserialize("Jobs", stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "IsTruncated" => {
+                        obj.is_truncated = Some(try!(IsTruncatedDeserializer::deserialize(
+                            "IsTruncated",
+                            stack
+                        )));
                     }
-                }
+                    "Jobs" => {
+                        obj.jobs = Some(try!(JobsListDeserializer::deserialize("Jobs", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -949,165 +984,164 @@ impl ListJobsOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct LocationCodeDeserializer;
 impl LocationCodeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct LocationMessageDeserializer;
 impl LocationMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct LogBucketDeserializer;
 impl LogBucketDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct LogKeyDeserializer;
 impl LogKeyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct ProgressCodeDeserializer;
 impl ProgressCodeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct ProgressMessageDeserializer;
 impl ProgressMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct SignatureDeserializer;
 impl SignatureDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct SignatureFileContentsDeserializer;
 impl SignatureFileContentsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct SuccessDeserializer;
 impl SuccessDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<bool, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct TrackingNumberDeserializer;
 impl TrackingNumberDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct URLDeserializer;
 impl URLDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="Input structure for the UpateJob operation."]
-#[derive(Default,Debug,Clone)]
+/// Input structure for the UpateJob operation.
+#[derive(Default, Debug, Clone)]
 pub struct UpdateJobInput {
     pub api_version: Option<String>,
     pub job_id: String,
@@ -1115,7 +1149,6 @@ pub struct UpdateJobInput {
     pub manifest: String,
     pub validate_only: bool,
 }
-
 
 /// Serialize `UpdateJobInput` contents to a `SignedRequest`.
 struct UpdateJobInputSerializer;
@@ -1127,23 +1160,32 @@ impl UpdateJobInputSerializer {
         }
 
         if let Some(ref field_value) = obj.api_version {
-            params.put(&format!("{}{}", prefix, "APIVersion"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "APIVersion"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-        params.put(&format!("{}{}", prefix, "JobId"),
-                   &obj.job_id.replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "JobType"),
-                   &obj.job_type.replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "Manifest"),
-                   &obj.manifest.replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "ValidateOnly"),
-                   &obj.validate_only.to_string().replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "JobId"),
+            &obj.job_id.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "JobType"),
+            &obj.job_type.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "Manifest"),
+            &obj.manifest.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "ValidateOnly"),
+            &obj.validate_only.to_string().replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="Output structure for the UpateJob operation."]
-#[derive(Default,Debug,Clone)]
+/// Output structure for the UpateJob operation.
+#[derive(Default, Debug, Clone)]
 pub struct UpdateJobOutput {
     pub artifact_list: Option<Vec<Artifact>>,
     pub success: Option<bool>,
@@ -1153,9 +1195,10 @@ pub struct UpdateJobOutput {
 struct UpdateJobOutputDeserializer;
 impl UpdateJobOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<UpdateJobOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateJobOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = UpdateJobOutput::default();
@@ -1170,25 +1213,25 @@ impl UpdateJobOutputDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "ArtifactList" => {
-                            obj.artifact_list =
-                                Some(try!(ArtifactListDeserializer::deserialize("ArtifactList",
-                                                                                stack)));
-                        }
-                        "Success" => {
-                            obj.success = Some(try!(SuccessDeserializer::deserialize("Success",
-                                                                                     stack)));
-                        }
-                        "WarningMessage" => {
-                            obj.warning_message =
-                                Some(try!(WarningMessageDeserializer::deserialize("WarningMessage",
-                                                                                  stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "ArtifactList" => {
+                        obj.artifact_list = Some(try!(ArtifactListDeserializer::deserialize(
+                            "ArtifactList",
+                            stack
+                        )));
                     }
-                }
+                    "Success" => {
+                        obj.success =
+                            Some(try!(SuccessDeserializer::deserialize("Success", stack)));
+                    }
+                    "WarningMessage" => {
+                        obj.warning_message = Some(try!(WarningMessageDeserializer::deserialize(
+                            "WarningMessage",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1199,21 +1242,20 @@ impl UpdateJobOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct WarningMessageDeserializer;
 impl WarningMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 /// Errors returned by CancelJob
@@ -1241,7 +1283,6 @@ pub enum CancelJobError {
     Unknown(String),
 }
 
-
 impl CancelJobError {
     pub fn from_body(body: &str) -> CancelJobError {
         let reader = EventReader::new(body.as_bytes());
@@ -1249,29 +1290,27 @@ impl CancelJobError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "UnableToCancelJobIdException" => {
-                        CancelJobError::UnableToCancelJobId(String::from(parsed_error.message))
-                    }
-                    "ExpiredJobIdException" => {
-                        CancelJobError::ExpiredJobId(String::from(parsed_error.message))
-                    }
-                    "InvalidAccessKeyIdException" => {
-                        CancelJobError::InvalidAccessKeyId(String::from(parsed_error.message))
-                    }
-                    "InvalidJobIdException" => {
-                        CancelJobError::InvalidJobId(String::from(parsed_error.message))
-                    }
-                    "InvalidVersionException" => {
-                        CancelJobError::InvalidVersion(String::from(parsed_error.message))
-                    }
-                    "CanceledJobIdException" => {
-                        CancelJobError::CanceledJobId(String::from(parsed_error.message))
-                    }
-                    _ => CancelJobError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "UnableToCancelJobIdException" => {
+                    CancelJobError::UnableToCancelJobId(String::from(parsed_error.message))
                 }
-            }
+                "ExpiredJobIdException" => {
+                    CancelJobError::ExpiredJobId(String::from(parsed_error.message))
+                }
+                "InvalidAccessKeyIdException" => {
+                    CancelJobError::InvalidAccessKeyId(String::from(parsed_error.message))
+                }
+                "InvalidJobIdException" => {
+                    CancelJobError::InvalidJobId(String::from(parsed_error.message))
+                }
+                "InvalidVersionException" => {
+                    CancelJobError::InvalidVersion(String::from(parsed_error.message))
+                }
+                "CanceledJobIdException" => {
+                    CancelJobError::CanceledJobId(String::from(parsed_error.message))
+                }
+                _ => CancelJobError::Unknown(String::from(body)),
+            },
             Err(_) => CancelJobError::Unknown(body.to_string()),
         }
     }
@@ -1364,7 +1403,6 @@ pub enum CreateJobError {
     Unknown(String),
 }
 
-
 impl CreateJobError {
     pub fn from_body(body: &str) -> CreateJobError {
         let reader = EventReader::new(body.as_bytes());
@@ -1372,59 +1410,57 @@ impl CreateJobError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "CreateJobQuotaExceededException" => {
-                        CreateJobError::CreateJobQuotaExceeded(String::from(parsed_error.message))
-                    }
-                    "InvalidFileSystemException" => {
-                        CreateJobError::InvalidFileSystem(String::from(parsed_error.message))
-                    }
-                    "InvalidCustomsException" => {
-                        CreateJobError::InvalidCustoms(String::from(parsed_error.message))
-                    }
-                    "InvalidManifestFieldException" => {
-                        CreateJobError::InvalidManifestField(String::from(parsed_error.message))
-                    }
-                    "InvalidParameterException" => {
-                        CreateJobError::InvalidParameter(String::from(parsed_error.message))
-                    }
-                    "MissingCustomsException" => {
-                        CreateJobError::MissingCustoms(String::from(parsed_error.message))
-                    }
-                    "MissingManifestFieldException" => {
-                        CreateJobError::MissingManifestField(String::from(parsed_error.message))
-                    }
-                    "MissingParameterException" => {
-                        CreateJobError::MissingParameter(String::from(parsed_error.message))
-                    }
-                    "InvalidAccessKeyIdException" => {
-                        CreateJobError::InvalidAccessKeyId(String::from(parsed_error.message))
-                    }
-                    "InvalidJobIdException" => {
-                        CreateJobError::InvalidJobId(String::from(parsed_error.message))
-                    }
-                    "BucketPermissionException" => {
-                        CreateJobError::BucketPermission(String::from(parsed_error.message))
-                    }
-                    "InvalidAddressException" => {
-                        CreateJobError::InvalidAddress(String::from(parsed_error.message))
-                    }
-                    "InvalidVersionException" => {
-                        CreateJobError::InvalidVersion(String::from(parsed_error.message))
-                    }
-                    "NoSuchBucketException" => {
-                        CreateJobError::NoSuchBucket(String::from(parsed_error.message))
-                    }
-                    "MultipleRegionsException" => {
-                        CreateJobError::MultipleRegions(String::from(parsed_error.message))
-                    }
-                    "MalformedManifestException" => {
-                        CreateJobError::MalformedManifest(String::from(parsed_error.message))
-                    }
-                    _ => CreateJobError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "CreateJobQuotaExceededException" => {
+                    CreateJobError::CreateJobQuotaExceeded(String::from(parsed_error.message))
                 }
-            }
+                "InvalidFileSystemException" => {
+                    CreateJobError::InvalidFileSystem(String::from(parsed_error.message))
+                }
+                "InvalidCustomsException" => {
+                    CreateJobError::InvalidCustoms(String::from(parsed_error.message))
+                }
+                "InvalidManifestFieldException" => {
+                    CreateJobError::InvalidManifestField(String::from(parsed_error.message))
+                }
+                "InvalidParameterException" => {
+                    CreateJobError::InvalidParameter(String::from(parsed_error.message))
+                }
+                "MissingCustomsException" => {
+                    CreateJobError::MissingCustoms(String::from(parsed_error.message))
+                }
+                "MissingManifestFieldException" => {
+                    CreateJobError::MissingManifestField(String::from(parsed_error.message))
+                }
+                "MissingParameterException" => {
+                    CreateJobError::MissingParameter(String::from(parsed_error.message))
+                }
+                "InvalidAccessKeyIdException" => {
+                    CreateJobError::InvalidAccessKeyId(String::from(parsed_error.message))
+                }
+                "InvalidJobIdException" => {
+                    CreateJobError::InvalidJobId(String::from(parsed_error.message))
+                }
+                "BucketPermissionException" => {
+                    CreateJobError::BucketPermission(String::from(parsed_error.message))
+                }
+                "InvalidAddressException" => {
+                    CreateJobError::InvalidAddress(String::from(parsed_error.message))
+                }
+                "InvalidVersionException" => {
+                    CreateJobError::InvalidVersion(String::from(parsed_error.message))
+                }
+                "NoSuchBucketException" => {
+                    CreateJobError::NoSuchBucket(String::from(parsed_error.message))
+                }
+                "MultipleRegionsException" => {
+                    CreateJobError::MultipleRegions(String::from(parsed_error.message))
+                }
+                "MalformedManifestException" => {
+                    CreateJobError::MalformedManifest(String::from(parsed_error.message))
+                }
+                _ => CreateJobError::Unknown(String::from(body)),
+            },
             Err(_) => CreateJobError::Unknown(body.to_string()),
         }
     }
@@ -1509,7 +1545,6 @@ pub enum GetShippingLabelError {
     Unknown(String),
 }
 
-
 impl GetShippingLabelError {
     pub fn from_body(body: &str) -> GetShippingLabelError {
         let reader = EventReader::new(body.as_bytes());
@@ -1517,30 +1552,30 @@ impl GetShippingLabelError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "ExpiredJobIdException" => {
-                        GetShippingLabelError::ExpiredJobId(String::from(parsed_error.message))
-                    }
-                    "InvalidParameterException" => {
-                        GetShippingLabelError::InvalidParameter(String::from(parsed_error.message))
-                    }
-                    "InvalidAccessKeyIdException" => GetShippingLabelError::InvalidAccessKeyId(String::from(parsed_error.message)),
-                    "InvalidJobIdException" => {
-                        GetShippingLabelError::InvalidJobId(String::from(parsed_error.message))
-                    }
-                    "InvalidAddressException" => {
-                        GetShippingLabelError::InvalidAddress(String::from(parsed_error.message))
-                    }
-                    "InvalidVersionException" => {
-                        GetShippingLabelError::InvalidVersion(String::from(parsed_error.message))
-                    }
-                    "CanceledJobIdException" => {
-                        GetShippingLabelError::CanceledJobId(String::from(parsed_error.message))
-                    }
-                    _ => GetShippingLabelError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "ExpiredJobIdException" => {
+                    GetShippingLabelError::ExpiredJobId(String::from(parsed_error.message))
                 }
-            }
+                "InvalidParameterException" => {
+                    GetShippingLabelError::InvalidParameter(String::from(parsed_error.message))
+                }
+                "InvalidAccessKeyIdException" => {
+                    GetShippingLabelError::InvalidAccessKeyId(String::from(parsed_error.message))
+                }
+                "InvalidJobIdException" => {
+                    GetShippingLabelError::InvalidJobId(String::from(parsed_error.message))
+                }
+                "InvalidAddressException" => {
+                    GetShippingLabelError::InvalidAddress(String::from(parsed_error.message))
+                }
+                "InvalidVersionException" => {
+                    GetShippingLabelError::InvalidVersion(String::from(parsed_error.message))
+                }
+                "CanceledJobIdException" => {
+                    GetShippingLabelError::CanceledJobId(String::from(parsed_error.message))
+                }
+                _ => GetShippingLabelError::Unknown(String::from(body)),
+            },
             Err(_) => GetShippingLabelError::Unknown(body.to_string()),
         }
     }
@@ -1612,7 +1647,6 @@ pub enum GetStatusError {
     Unknown(String),
 }
 
-
 impl GetStatusError {
     pub fn from_body(body: &str) -> GetStatusError {
         let reader = EventReader::new(body.as_bytes());
@@ -1620,26 +1654,24 @@ impl GetStatusError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "ExpiredJobIdException" => {
-                        GetStatusError::ExpiredJobId(String::from(parsed_error.message))
-                    }
-                    "InvalidAccessKeyIdException" => {
-                        GetStatusError::InvalidAccessKeyId(String::from(parsed_error.message))
-                    }
-                    "InvalidJobIdException" => {
-                        GetStatusError::InvalidJobId(String::from(parsed_error.message))
-                    }
-                    "InvalidVersionException" => {
-                        GetStatusError::InvalidVersion(String::from(parsed_error.message))
-                    }
-                    "CanceledJobIdException" => {
-                        GetStatusError::CanceledJobId(String::from(parsed_error.message))
-                    }
-                    _ => GetStatusError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "ExpiredJobIdException" => {
+                    GetStatusError::ExpiredJobId(String::from(parsed_error.message))
                 }
-            }
+                "InvalidAccessKeyIdException" => {
+                    GetStatusError::InvalidAccessKeyId(String::from(parsed_error.message))
+                }
+                "InvalidJobIdException" => {
+                    GetStatusError::InvalidJobId(String::from(parsed_error.message))
+                }
+                "InvalidVersionException" => {
+                    GetStatusError::InvalidVersion(String::from(parsed_error.message))
+                }
+                "CanceledJobIdException" => {
+                    GetStatusError::CanceledJobId(String::from(parsed_error.message))
+                }
+                _ => GetStatusError::Unknown(String::from(body)),
+            },
             Err(_) => GetStatusError::Unknown(body.to_string()),
         }
     }
@@ -1705,7 +1737,6 @@ pub enum ListJobsError {
     Unknown(String),
 }
 
-
 impl ListJobsError {
     pub fn from_body(body: &str) -> ListJobsError {
         let reader = EventReader::new(body.as_bytes());
@@ -1713,20 +1744,18 @@ impl ListJobsError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "InvalidParameterException" => {
-                        ListJobsError::InvalidParameter(String::from(parsed_error.message))
-                    }
-                    "InvalidAccessKeyIdException" => {
-                        ListJobsError::InvalidAccessKeyId(String::from(parsed_error.message))
-                    }
-                    "InvalidVersionException" => {
-                        ListJobsError::InvalidVersion(String::from(parsed_error.message))
-                    }
-                    _ => ListJobsError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "InvalidParameterException" => {
+                    ListJobsError::InvalidParameter(String::from(parsed_error.message))
                 }
-            }
+                "InvalidAccessKeyIdException" => {
+                    ListJobsError::InvalidAccessKeyId(String::from(parsed_error.message))
+                }
+                "InvalidVersionException" => {
+                    ListJobsError::InvalidVersion(String::from(parsed_error.message))
+                }
+                _ => ListJobsError::Unknown(String::from(body)),
+            },
             Err(_) => ListJobsError::Unknown(body.to_string()),
         }
     }
@@ -1820,7 +1849,6 @@ pub enum UpdateJobError {
     Unknown(String),
 }
 
-
 impl UpdateJobError {
     pub fn from_body(body: &str) -> UpdateJobError {
         let reader = EventReader::new(body.as_bytes());
@@ -1828,65 +1856,63 @@ impl UpdateJobError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "UnableToUpdateJobIdException" => {
-                        UpdateJobError::UnableToUpdateJobId(String::from(parsed_error.message))
-                    }
-                    "InvalidFileSystemException" => {
-                        UpdateJobError::InvalidFileSystem(String::from(parsed_error.message))
-                    }
-                    "ExpiredJobIdException" => {
-                        UpdateJobError::ExpiredJobId(String::from(parsed_error.message))
-                    }
-                    "InvalidCustomsException" => {
-                        UpdateJobError::InvalidCustoms(String::from(parsed_error.message))
-                    }
-                    "InvalidManifestFieldException" => {
-                        UpdateJobError::InvalidManifestField(String::from(parsed_error.message))
-                    }
-                    "InvalidParameterException" => {
-                        UpdateJobError::InvalidParameter(String::from(parsed_error.message))
-                    }
-                    "MissingCustomsException" => {
-                        UpdateJobError::MissingCustoms(String::from(parsed_error.message))
-                    }
-                    "MissingManifestFieldException" => {
-                        UpdateJobError::MissingManifestField(String::from(parsed_error.message))
-                    }
-                    "MissingParameterException" => {
-                        UpdateJobError::MissingParameter(String::from(parsed_error.message))
-                    }
-                    "InvalidAccessKeyIdException" => {
-                        UpdateJobError::InvalidAccessKeyId(String::from(parsed_error.message))
-                    }
-                    "InvalidJobIdException" => {
-                        UpdateJobError::InvalidJobId(String::from(parsed_error.message))
-                    }
-                    "BucketPermissionException" => {
-                        UpdateJobError::BucketPermission(String::from(parsed_error.message))
-                    }
-                    "InvalidAddressException" => {
-                        UpdateJobError::InvalidAddress(String::from(parsed_error.message))
-                    }
-                    "InvalidVersionException" => {
-                        UpdateJobError::InvalidVersion(String::from(parsed_error.message))
-                    }
-                    "NoSuchBucketException" => {
-                        UpdateJobError::NoSuchBucket(String::from(parsed_error.message))
-                    }
-                    "CanceledJobIdException" => {
-                        UpdateJobError::CanceledJobId(String::from(parsed_error.message))
-                    }
-                    "MultipleRegionsException" => {
-                        UpdateJobError::MultipleRegions(String::from(parsed_error.message))
-                    }
-                    "MalformedManifestException" => {
-                        UpdateJobError::MalformedManifest(String::from(parsed_error.message))
-                    }
-                    _ => UpdateJobError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "UnableToUpdateJobIdException" => {
+                    UpdateJobError::UnableToUpdateJobId(String::from(parsed_error.message))
                 }
-            }
+                "InvalidFileSystemException" => {
+                    UpdateJobError::InvalidFileSystem(String::from(parsed_error.message))
+                }
+                "ExpiredJobIdException" => {
+                    UpdateJobError::ExpiredJobId(String::from(parsed_error.message))
+                }
+                "InvalidCustomsException" => {
+                    UpdateJobError::InvalidCustoms(String::from(parsed_error.message))
+                }
+                "InvalidManifestFieldException" => {
+                    UpdateJobError::InvalidManifestField(String::from(parsed_error.message))
+                }
+                "InvalidParameterException" => {
+                    UpdateJobError::InvalidParameter(String::from(parsed_error.message))
+                }
+                "MissingCustomsException" => {
+                    UpdateJobError::MissingCustoms(String::from(parsed_error.message))
+                }
+                "MissingManifestFieldException" => {
+                    UpdateJobError::MissingManifestField(String::from(parsed_error.message))
+                }
+                "MissingParameterException" => {
+                    UpdateJobError::MissingParameter(String::from(parsed_error.message))
+                }
+                "InvalidAccessKeyIdException" => {
+                    UpdateJobError::InvalidAccessKeyId(String::from(parsed_error.message))
+                }
+                "InvalidJobIdException" => {
+                    UpdateJobError::InvalidJobId(String::from(parsed_error.message))
+                }
+                "BucketPermissionException" => {
+                    UpdateJobError::BucketPermission(String::from(parsed_error.message))
+                }
+                "InvalidAddressException" => {
+                    UpdateJobError::InvalidAddress(String::from(parsed_error.message))
+                }
+                "InvalidVersionException" => {
+                    UpdateJobError::InvalidVersion(String::from(parsed_error.message))
+                }
+                "NoSuchBucketException" => {
+                    UpdateJobError::NoSuchBucket(String::from(parsed_error.message))
+                }
+                "CanceledJobIdException" => {
+                    UpdateJobError::CanceledJobId(String::from(parsed_error.message))
+                }
+                "MultipleRegionsException" => {
+                    UpdateJobError::MultipleRegions(String::from(parsed_error.message))
+                }
+                "MalformedManifestException" => {
+                    UpdateJobError::MalformedManifest(String::from(parsed_error.message))
+                }
+                _ => UpdateJobError::Unknown(String::from(body)),
+            },
             Err(_) => UpdateJobError::Unknown(body.to_string()),
         }
     }
@@ -1951,32 +1977,29 @@ pub trait ImportExport {
     #[doc="This operation cancels a specified job. Only the job owner can cancel it. The operation fails if the job has already started or is complete."]
     fn cancel_job(&self, input: &CancelJobInput) -> Result<CancelJobOutput, CancelJobError>;
 
-
     #[doc="This operation initiates the process of scheduling an upload or download of your data. You include in the request a manifest that describes the data transfer specifics. The response to the request includes a job ID, which you can use in other operations, a signature that you use to identify your storage device, and the address where you should ship your storage device."]
     fn create_job(&self, input: &CreateJobInput) -> Result<CreateJobOutput, CreateJobError>;
 
-
     #[doc="This operation generates a pre-paid UPS shipping label that you will use to ship your device to AWS for processing."]
-    fn get_shipping_label(&self,
-                          input: &GetShippingLabelInput)
-                          -> Result<GetShippingLabelOutput, GetShippingLabelError>;
-
+    fn get_shipping_label(
+        &self,
+        input: &GetShippingLabelInput,
+    ) -> Result<GetShippingLabelOutput, GetShippingLabelError>;
 
     #[doc="This operation returns information about a job, including where the job is in the processing pipeline, the status of the results, and the signature value associated with the job. You can only return information about jobs you own."]
     fn get_status(&self, input: &GetStatusInput) -> Result<GetStatusOutput, GetStatusError>;
 
-
     #[doc="This operation returns the jobs associated with the requester. AWS Import/Export lists the jobs in reverse chronological order based on the date of creation. For example if Job Test1 was created 2009Dec30 and Test2 was created 2010Feb05, the ListJobs operation would return Test2 followed by Test1."]
     fn list_jobs(&self, input: &ListJobsInput) -> Result<ListJobsOutput, ListJobsError>;
-
 
     #[doc="You use this operation to change the parameters specified in the original manifest file by supplying a new manifest file. The manifest file attached to this request replaces the original manifest file. You can only use the operation after a CreateJob request but before the data transfer starts and you can only use it on jobs you own."]
     fn update_job(&self, input: &UpdateJobInput) -> Result<UpdateJobOutput, UpdateJobError>;
 }
 /// A client for the AWS Import/Export API.
 pub struct ImportExportClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -1984,8 +2007,9 @@ pub struct ImportExportClient<P, D>
 }
 
 impl<P, D> ImportExportClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         ImportExportClient {
@@ -1997,15 +2021,18 @@ impl<P, D> ImportExportClient<P, D>
 }
 
 impl<P, D> ImportExport for ImportExportClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     #[doc="This operation cancels a specified job. Only the job owner can cancel it. The operation fails if the job has already started or is complete."]
     fn cancel_job(&self, input: &CancelJobInput) -> Result<CancelJobOutput, CancelJobError> {
-        let mut request = SignedRequest::new("POST",
-                                             "importexport",
-                                             &self.region,
-                                             "/?Operation=CancelJob");
+        let mut request = SignedRequest::new(
+            "POST",
+            "importexport",
+            &self.region,
+            "/?Operation=CancelJob",
+        );
         let mut params = Params::new();
 
         params.put("Action", "CancelJob");
@@ -2017,7 +2044,6 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2025,15 +2051,18 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
                 if body.is_empty() {
                     result = CancelJobOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CancelJobOutputDeserializer::deserialize("CancelJobResult",
-                                                                           &mut stack));
+                    result = try!(CancelJobOutputDeserializer::deserialize(
+                        "CancelJobResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -2042,18 +2071,21 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CancelJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CancelJobError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="This operation initiates the process of scheduling an upload or download of your data. You include in the request a manifest that describes the data transfer specifics. The response to the request includes a job ID, which you can use in other operations, a signature that you use to identify your storage device, and the address where you should ship your storage device."]
     fn create_job(&self, input: &CreateJobInput) -> Result<CreateJobOutput, CreateJobError> {
-        let mut request = SignedRequest::new("POST",
-                                             "importexport",
-                                             &self.region,
-                                             "/?Operation=CreateJob");
+        let mut request = SignedRequest::new(
+            "POST",
+            "importexport",
+            &self.region,
+            "/?Operation=CreateJob",
+        );
         let mut params = Params::new();
 
         params.put("Action", "CreateJob");
@@ -2065,7 +2097,6 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2073,15 +2104,18 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
                 if body.is_empty() {
                     result = CreateJobOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateJobOutputDeserializer::deserialize("CreateJobResult",
-                                                                           &mut stack));
+                    result = try!(CreateJobOutputDeserializer::deserialize(
+                        "CreateJobResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -2090,20 +2124,24 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateJobError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="This operation generates a pre-paid UPS shipping label that you will use to ship your device to AWS for processing."]
-    fn get_shipping_label(&self,
-                          input: &GetShippingLabelInput)
-                          -> Result<GetShippingLabelOutput, GetShippingLabelError> {
-        let mut request = SignedRequest::new("POST",
-                                             "importexport",
-                                             &self.region,
-                                             "/?Operation=GetShippingLabel");
+    fn get_shipping_label(
+        &self,
+        input: &GetShippingLabelInput,
+    ) -> Result<GetShippingLabelOutput, GetShippingLabelError> {
+        let mut request = SignedRequest::new(
+            "POST",
+            "importexport",
+            &self.region,
+            "/?Operation=GetShippingLabel",
+        );
         let mut params = Params::new();
 
         params.put("Action", "GetShippingLabel");
@@ -2115,7 +2153,6 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2123,15 +2160,18 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
                 if body.is_empty() {
                     result = GetShippingLabelOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetShippingLabelOutputDeserializer::deserialize("GetShippingLabelResult",
-                                                                                  &mut stack));
+                    result = try!(GetShippingLabelOutputDeserializer::deserialize(
+                        "GetShippingLabelResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -2140,18 +2180,21 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetShippingLabelError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetShippingLabelError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="This operation returns information about a job, including where the job is in the processing pipeline, the status of the results, and the signature value associated with the job. You can only return information about jobs you own."]
     fn get_status(&self, input: &GetStatusInput) -> Result<GetStatusOutput, GetStatusError> {
-        let mut request = SignedRequest::new("POST",
-                                             "importexport",
-                                             &self.region,
-                                             "/?Operation=GetStatus");
+        let mut request = SignedRequest::new(
+            "POST",
+            "importexport",
+            &self.region,
+            "/?Operation=GetStatus",
+        );
         let mut params = Params::new();
 
         params.put("Action", "GetStatus");
@@ -2163,7 +2206,6 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2171,15 +2213,18 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
                 if body.is_empty() {
                     result = GetStatusOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetStatusOutputDeserializer::deserialize("GetStatusResult",
-                                                                           &mut stack));
+                    result = try!(GetStatusOutputDeserializer::deserialize(
+                        "GetStatusResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -2188,11 +2233,12 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetStatusError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="This operation returns the jobs associated with the requester. AWS Import/Export lists the jobs in reverse chronological order based on the date of creation. For example if Job Test1 was created 2009Dec30 and Test2 was created 2010Feb05, the ListJobs operation would return Test2 followed by Test1."]
     fn list_jobs(&self, input: &ListJobsInput) -> Result<ListJobsOutput, ListJobsError> {
@@ -2209,7 +2255,6 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2217,15 +2262,18 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
                 if body.is_empty() {
                     result = ListJobsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListJobsOutputDeserializer::deserialize("ListJobsResult",
-                                                                          &mut stack));
+                    result = try!(ListJobsOutputDeserializer::deserialize(
+                        "ListJobsResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -2234,18 +2282,21 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListJobsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListJobsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="You use this operation to change the parameters specified in the original manifest file by supplying a new manifest file. The manifest file attached to this request replaces the original manifest file. You can only use the operation after a CreateJob request but before the data transfer starts and you can only use it on jobs you own."]
     fn update_job(&self, input: &UpdateJobInput) -> Result<UpdateJobOutput, UpdateJobError> {
-        let mut request = SignedRequest::new("POST",
-                                             "importexport",
-                                             &self.region,
-                                             "/?Operation=UpdateJob");
+        let mut request = SignedRequest::new(
+            "POST",
+            "importexport",
+            &self.region,
+            "/?Operation=UpdateJob",
+        );
         let mut params = Params::new();
 
         params.put("Action", "UpdateJob");
@@ -2257,7 +2308,6 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2265,15 +2315,18 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
                 if body.is_empty() {
                     result = UpdateJobOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(UpdateJobOutputDeserializer::deserialize("UpdateJobResult",
-                                                                           &mut stack));
+                    result = try!(UpdateJobOutputDeserializer::deserialize(
+                        "UpdateJobResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -2282,7 +2335,9 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateJobError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
@@ -2297,11 +2352,12 @@ mod protocol_tests {
     use self::rusoto_mock::*;
     use rusoto_core::Region as rusoto_region;
 
-
     #[test]
     fn test_parse_error_importexport_get_status() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/error",
-                                                              "importexport-get-status.xml");
+        let mock_response = MockResponseReader::read_response(
+            "test_resources/generated/error",
+            "importexport-get-status.xml",
+        );
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
         let client = ImportExportClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetStatusInput::default();
@@ -2311,8 +2367,10 @@ mod protocol_tests {
 
     #[test]
     fn test_parse_valid_importexport_list_jobs() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "importexport-list-jobs.xml");
+        let mock_response = MockResponseReader::read_response(
+            "test_resources/generated/valid",
+            "importexport-list-jobs.xml",
+        );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = ImportExportClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListJobsInput::default();

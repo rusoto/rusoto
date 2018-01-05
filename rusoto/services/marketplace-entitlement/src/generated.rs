@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -28,82 +27,82 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[doc="<p>An entitlement represents capacity in a product owned by the customer. For example, a customer might own some number of users or seats in an SaaS application or some amount of data capacity in a multi-tenant database.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>An entitlement represents capacity in a product owned by the customer. For example, a customer might own some number of users or seats in an SaaS application or some amount of data capacity in a multi-tenant database.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Entitlement {
-    #[doc="<p>The customer identifier is a handle to each unique customer in an application. Customer identifiers are obtained through the ResolveCustomer operation in AWS Marketplace Metering Service.</p>"]
-    #[serde(rename="CustomerIdentifier")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The customer identifier is a handle to each unique customer in an application. Customer identifiers are obtained through the ResolveCustomer operation in AWS Marketplace Metering Service.</p>
+    #[serde(rename = "CustomerIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_identifier: Option<String>,
-    #[doc="<p>The dimension for which the given entitlement applies. Dimensions represent categories of capacity in a product and are specified when the product is listed in AWS Marketplace.</p>"]
-    #[serde(rename="Dimension")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The dimension for which the given entitlement applies. Dimensions represent categories of capacity in a product and are specified when the product is listed in AWS Marketplace.</p>
+    #[serde(rename = "Dimension")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub dimension: Option<String>,
-    #[doc="<p>The expiration date represents the minimum date through which this entitlement is expected to remain valid. For contractual products listed on AWS Marketplace, the expiration date is the date at which the customer will renew or cancel their contract. Customers who are opting to renew their contract will still have entitlements with an expiration date.</p>"]
-    #[serde(rename="ExpirationDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The expiration date represents the minimum date through which this entitlement is expected to remain valid. For contractual products listed on AWS Marketplace, the expiration date is the date at which the customer will renew or cancel their contract. Customers who are opting to renew their contract will still have entitlements with an expiration date.</p>
+    #[serde(rename = "ExpirationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub expiration_date: Option<f64>,
-    #[doc="<p>The product code for which the given entitlement applies. Product codes are provided by AWS Marketplace when the product listing is created.</p>"]
-    #[serde(rename="ProductCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The product code for which the given entitlement applies. Product codes are provided by AWS Marketplace when the product listing is created.</p>
+    #[serde(rename = "ProductCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub product_code: Option<String>,
-    #[doc="<p>The EntitlementValue represents the amount of capacity that the customer is entitled to for the product.</p>"]
-    #[serde(rename="Value")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The EntitlementValue represents the amount of capacity that the customer is entitled to for the product.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<EntitlementValue>,
 }
 
-#[doc="<p>The EntitlementValue represents the amount of capacity that the customer is entitled to for the product.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The EntitlementValue represents the amount of capacity that the customer is entitled to for the product.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct EntitlementValue {
-    #[doc="<p>The BooleanValue field will be populated with a boolean value when the entitlement is a boolean type. Otherwise, the field will not be set.</p>"]
-    #[serde(rename="BooleanValue")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The BooleanValue field will be populated with a boolean value when the entitlement is a boolean type. Otherwise, the field will not be set.</p>
+    #[serde(rename = "BooleanValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub boolean_value: Option<bool>,
-    #[doc="<p>The DoubleValue field will be populated with a double value when the entitlement is a double type. Otherwise, the field will not be set.</p>"]
-    #[serde(rename="DoubleValue")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The DoubleValue field will be populated with a double value when the entitlement is a double type. Otherwise, the field will not be set.</p>
+    #[serde(rename = "DoubleValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub double_value: Option<f64>,
-    #[doc="<p>The IntegerValue field will be populated with an integer value when the entitlement is an integer type. Otherwise, the field will not be set.</p>"]
-    #[serde(rename="IntegerValue")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The IntegerValue field will be populated with an integer value when the entitlement is an integer type. Otherwise, the field will not be set.</p>
+    #[serde(rename = "IntegerValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub integer_value: Option<i64>,
-    #[doc="<p>The StringValue field will be populated with a string value when the entitlement is a string type. Otherwise, the field will not be set.</p>"]
-    #[serde(rename="StringValue")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The StringValue field will be populated with a string value when the entitlement is a string type. Otherwise, the field will not be set.</p>
+    #[serde(rename = "StringValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub string_value: Option<String>,
 }
 
-#[doc="<p>The GetEntitlementsRequest contains parameters for the GetEntitlements operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The GetEntitlementsRequest contains parameters for the GetEntitlements operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetEntitlementsRequest {
-    #[doc="<p>Filter is used to return entitlements for a specific customer or for a specific dimension. Filters are described as keys mapped to a lists of values. Filtered requests are <i>unioned</i> for each value in the value list, and then <i>intersected</i> for each filter key.</p>"]
-    #[serde(rename="Filter")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Filter is used to return entitlements for a specific customer or for a specific dimension. Filters are described as keys mapped to a lists of values. Filtered requests are <i>unioned</i> for each value in the value list, and then <i>intersected</i> for each filter key.</p>
+    #[serde(rename = "Filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<::std::collections::HashMap<String, Vec<String>>>,
-    #[doc="<p>The maximum number of items to retrieve from the GetEntitlements operation. For pagination, use the NextToken field in subsequent calls to GetEntitlements.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to retrieve from the GetEntitlements operation. For pagination, use the NextToken field in subsequent calls to GetEntitlements.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>For paginated calls to GetEntitlements, pass the NextToken from the previous GetEntitlementsResult.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For paginated calls to GetEntitlements, pass the NextToken from the previous GetEntitlementsResult.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Product code is used to uniquely identify a product in AWS Marketplace. The product code will be provided by AWS Marketplace when the product listing is created.</p>"]
-    #[serde(rename="ProductCode")]
+    /// <p>Product code is used to uniquely identify a product in AWS Marketplace. The product code will be provided by AWS Marketplace when the product listing is created.</p>
+    #[serde(rename = "ProductCode")]
     pub product_code: String,
 }
 
-#[doc="<p>The GetEntitlementsRequest contains results from the GetEntitlements operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The GetEntitlementsRequest contains results from the GetEntitlements operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetEntitlementsResult {
-    #[doc="<p>The set of entitlements found through the GetEntitlements operation. If the result contains an empty set of entitlements, NextToken might still be present and should be used.</p>"]
-    #[serde(rename="Entitlements")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The set of entitlements found through the GetEntitlements operation. If the result contains an empty set of entitlements, NextToken might still be present and should be used.</p>
+    #[serde(rename = "Entitlements")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub entitlements: Option<Vec<Entitlement>>,
-    #[doc="<p>For paginated results, use NextToken in subsequent calls to GetEntitlements. If the result contains an empty set of entitlements, NextToken might still be present and should be used.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For paginated results, use NextToken in subsequent calls to GetEntitlements. If the result contains an empty set of entitlements, NextToken might still be present and should be used.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -125,7 +124,6 @@ pub enum GetEntitlementsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetEntitlementsError {
     pub fn from_body(body: &str) -> GetEntitlementsError {
@@ -201,14 +199,16 @@ impl Error for GetEntitlementsError {
 /// Trait representing the capabilities of the AWS Marketplace Entitlement Service API. AWS Marketplace Entitlement Service clients implement this trait.
 pub trait MarketplaceEntitlement {
     #[doc="<p>GetEntitlements retrieves entitlement values for a given product. The results can be filtered based on customer identifier or product dimensions.</p>"]
-    fn get_entitlements(&self,
-                        input: &GetEntitlementsRequest)
-                        -> Result<GetEntitlementsResult, GetEntitlementsError>;
+    fn get_entitlements(
+        &self,
+        input: &GetEntitlementsRequest,
+    ) -> Result<GetEntitlementsResult, GetEntitlementsError>;
 }
 /// A client for the AWS Marketplace Entitlement Service API.
 pub struct MarketplaceEntitlementClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -216,8 +216,9 @@ pub struct MarketplaceEntitlementClient<P, D>
 }
 
 impl<P, D> MarketplaceEntitlementClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         MarketplaceEntitlementClient {
@@ -229,13 +230,15 @@ impl<P, D> MarketplaceEntitlementClient<P, D>
 }
 
 impl<P, D> MarketplaceEntitlement for MarketplaceEntitlementClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     #[doc="<p>GetEntitlements retrieves entitlement values for a given product. The results can be filtered based on customer identifier or product dimensions.</p>"]
-    fn get_entitlements(&self,
-                        input: &GetEntitlementsRequest)
-                        -> Result<GetEntitlementsResult, GetEntitlementsError> {
+    fn get_entitlements(
+        &self,
+        input: &GetEntitlementsRequest,
+    ) -> Result<GetEntitlementsResult, GetEntitlementsError> {
         let mut request = SignedRequest::new("POST", "aws-marketplace", &self.region, "/");
         request.set_endpoint_prefix("entitlement.marketplace".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -251,14 +254,16 @@ impl<P, D> MarketplaceEntitlement for MarketplaceEntitlementClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetEntitlementsResult>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetEntitlementsResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetEntitlementsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetEntitlementsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

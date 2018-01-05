@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -29,1558 +28,1558 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AbortDocumentVersionUploadRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>The ID of the document.</p>"]
-    #[serde(rename="DocumentId")]
+    /// <p>The ID of the document.</p>
+    #[serde(rename = "DocumentId")]
     pub document_id: String,
-    #[doc="<p>The ID of the version.</p>"]
-    #[serde(rename="VersionId")]
+    /// <p>The ID of the version.</p>
+    #[serde(rename = "VersionId")]
     pub version_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ActivateUserRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>The ID of the user.</p>"]
-    #[serde(rename="UserId")]
+    /// <p>The ID of the user.</p>
+    #[serde(rename = "UserId")]
     pub user_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ActivateUserResponse {
-    #[doc="<p>The user information.</p>"]
-    #[serde(rename="User")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user information.</p>
+    #[serde(rename = "User")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user: Option<User>,
 }
 
-#[doc="<p>Describes the activity information.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes the activity information.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Activity {
-    #[doc="<p>Metadata of the commenting activity. This is an optional field and is filled for commenting activities.</p>"]
-    #[serde(rename="CommentMetadata")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Metadata of the commenting activity. This is an optional field and is filled for commenting activities.</p>
+    #[serde(rename = "CommentMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub comment_metadata: Option<CommentMetadata>,
-    #[doc="<p>The user who performed the action.</p>"]
-    #[serde(rename="Initiator")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user who performed the action.</p>
+    #[serde(rename = "Initiator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub initiator: Option<UserMetadata>,
-    #[doc="<p>The ID of the organization.</p>"]
-    #[serde(rename="OrganizationId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the organization.</p>
+    #[serde(rename = "OrganizationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub organization_id: Option<String>,
-    #[doc="<p>The original parent of the resource. This is an optional field and is filled for move activities.</p>"]
-    #[serde(rename="OriginalParent")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The original parent of the resource. This is an optional field and is filled for move activities.</p>
+    #[serde(rename = "OriginalParent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub original_parent: Option<ResourceMetadata>,
-    #[doc="<p>The list of users or groups impacted by this action. This is an optional field and is filled for the following sharing activities: DOCUMENT_SHARED, DOCUMENT_SHARED, DOCUMENT_UNSHARED, FOLDER_SHARED, FOLDER_UNSHARED.</p>"]
-    #[serde(rename="Participants")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of users or groups impacted by this action. This is an optional field and is filled for the following sharing activities: DOCUMENT_SHARED, DOCUMENT_SHARED, DOCUMENT_UNSHARED, FOLDER_SHARED, FOLDER_UNSHARED.</p>
+    #[serde(rename = "Participants")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub participants: Option<Participants>,
-    #[doc="<p>The metadata of the resource involved in the user action.</p>"]
-    #[serde(rename="ResourceMetadata")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The metadata of the resource involved in the user action.</p>
+    #[serde(rename = "ResourceMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_metadata: Option<ResourceMetadata>,
-    #[doc="<p>The timestamp when the action was performed.</p>"]
-    #[serde(rename="TimeStamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The timestamp when the action was performed.</p>
+    #[serde(rename = "TimeStamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub time_stamp: Option<f64>,
-    #[doc="<p>The activity type.</p>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The activity type.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AddResourcePermissionsRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>The users, groups, or organization being granted permission.</p>"]
-    #[serde(rename="Principals")]
+    /// <p>The users, groups, or organization being granted permission.</p>
+    #[serde(rename = "Principals")]
     pub principals: Vec<SharePrincipal>,
-    #[doc="<p>The ID of the resource.</p>"]
-    #[serde(rename="ResourceId")]
+    /// <p>The ID of the resource.</p>
+    #[serde(rename = "ResourceId")]
     pub resource_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AddResourcePermissionsResponse {
-    #[doc="<p>The share results.</p>"]
-    #[serde(rename="ShareResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The share results.</p>
+    #[serde(rename = "ShareResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub share_results: Option<Vec<ShareResult>>,
 }
 
-#[doc="<p>Describes a comment.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes a comment.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Comment {
-    #[doc="<p>The ID of the comment.</p>"]
-    #[serde(rename="CommentId")]
+    /// <p>The ID of the comment.</p>
+    #[serde(rename = "CommentId")]
     pub comment_id: String,
-    #[doc="<p>The details of the user who made the comment.</p>"]
-    #[serde(rename="Contributor")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The details of the user who made the comment.</p>
+    #[serde(rename = "Contributor")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub contributor: Option<User>,
-    #[doc="<p>The time that the comment was created.</p>"]
-    #[serde(rename="CreatedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time that the comment was created.</p>
+    #[serde(rename = "CreatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_timestamp: Option<f64>,
-    #[doc="<p>The ID of the parent comment.</p>"]
-    #[serde(rename="ParentId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the parent comment.</p>
+    #[serde(rename = "ParentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parent_id: Option<String>,
-    #[doc="<p>If the comment is a reply to another user's comment, this field contains the user ID of the user being replied to.</p>"]
-    #[serde(rename="RecipientId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the comment is a reply to another user's comment, this field contains the user ID of the user being replied to.</p>
+    #[serde(rename = "RecipientId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub recipient_id: Option<String>,
-    #[doc="<p>The status of the comment.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the comment.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The text of the comment.</p>"]
-    #[serde(rename="Text")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The text of the comment.</p>
+    #[serde(rename = "Text")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub text: Option<String>,
-    #[doc="<p>The ID of the root comment in the thread.</p>"]
-    #[serde(rename="ThreadId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the root comment in the thread.</p>
+    #[serde(rename = "ThreadId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thread_id: Option<String>,
-    #[doc="<p>The visibility of the comment. Options are either PRIVATE, where the comment is visible only to the comment author and document owner and co-owners, or PUBLIC, where the comment is visible to document owners, co-owners, and contributors.</p>"]
-    #[serde(rename="Visibility")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The visibility of the comment. Options are either PRIVATE, where the comment is visible only to the comment author and document owner and co-owners, or PUBLIC, where the comment is visible to document owners, co-owners, and contributors.</p>
+    #[serde(rename = "Visibility")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub visibility: Option<String>,
 }
 
-#[doc="<p>Describes the metadata of a comment.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes the metadata of a comment.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CommentMetadata {
-    #[doc="<p>The ID of the comment.</p>"]
-    #[serde(rename="CommentId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the comment.</p>
+    #[serde(rename = "CommentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub comment_id: Option<String>,
-    #[serde(rename="CommentStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "CommentStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub comment_status: Option<String>,
-    #[doc="<p>The user who made the comment.</p>"]
-    #[serde(rename="Contributor")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user who made the comment.</p>
+    #[serde(rename = "Contributor")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub contributor: Option<User>,
-    #[serde(rename="CreatedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "CreatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_timestamp: Option<f64>,
-    #[doc="<p>The ID of the user being replied to.</p>"]
-    #[serde(rename="RecipientId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the user being replied to.</p>
+    #[serde(rename = "RecipientId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub recipient_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateCommentRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>The ID of the document.</p>"]
-    #[serde(rename="DocumentId")]
+    /// <p>The ID of the document.</p>
+    #[serde(rename = "DocumentId")]
     pub document_id: String,
-    #[doc="<p>Set this parameter to TRUE to send an email out to the document collaborators after the comment is created.</p>"]
-    #[serde(rename="NotifyCollaborators")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Set this parameter to TRUE to send an email out to the document collaborators after the comment is created.</p>
+    #[serde(rename = "NotifyCollaborators")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub notify_collaborators: Option<bool>,
-    #[doc="<p>The ID of the parent comment.</p>"]
-    #[serde(rename="ParentId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the parent comment.</p>
+    #[serde(rename = "ParentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parent_id: Option<String>,
-    #[doc="<p>The text of the comment.</p>"]
-    #[serde(rename="Text")]
+    /// <p>The text of the comment.</p>
+    #[serde(rename = "Text")]
     pub text: String,
-    #[doc="<p>The ID of the root comment in the thread.</p>"]
-    #[serde(rename="ThreadId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the root comment in the thread.</p>
+    #[serde(rename = "ThreadId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thread_id: Option<String>,
-    #[doc="<p>The ID of the document version.</p>"]
-    #[serde(rename="VersionId")]
+    /// <p>The ID of the document version.</p>
+    #[serde(rename = "VersionId")]
     pub version_id: String,
-    #[doc="<p>The visibility of the comment. Options are either PRIVATE, where the comment is visible only to the comment author and document owner and co-owners, or PUBLIC, where the comment is visible to document owners, co-owners, and contributors.</p>"]
-    #[serde(rename="Visibility")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The visibility of the comment. Options are either PRIVATE, where the comment is visible only to the comment author and document owner and co-owners, or PUBLIC, where the comment is visible to document owners, co-owners, and contributors.</p>
+    #[serde(rename = "Visibility")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub visibility: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateCommentResponse {
-    #[doc="<p>The comment that has been created.</p>"]
-    #[serde(rename="Comment")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The comment that has been created.</p>
+    #[serde(rename = "Comment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub comment: Option<Comment>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateCustomMetadataRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>Custom metadata in the form of name-value pairs.</p>"]
-    #[serde(rename="CustomMetadata")]
+    /// <p>Custom metadata in the form of name-value pairs.</p>
+    #[serde(rename = "CustomMetadata")]
     pub custom_metadata: ::std::collections::HashMap<String, String>,
-    #[doc="<p>The ID of the resource.</p>"]
-    #[serde(rename="ResourceId")]
+    /// <p>The ID of the resource.</p>
+    #[serde(rename = "ResourceId")]
     pub resource_id: String,
-    #[doc="<p>The ID of the version, if the custom metadata is being added to a document version.</p>"]
-    #[serde(rename="VersionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the version, if the custom metadata is being added to a document version.</p>
+    #[serde(rename = "VersionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateCustomMetadataResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateFolderRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>The name of the new folder.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the new folder.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The ID of the parent folder.</p>"]
-    #[serde(rename="ParentFolderId")]
+    /// <p>The ID of the parent folder.</p>
+    #[serde(rename = "ParentFolderId")]
     pub parent_folder_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateFolderResponse {
-    #[doc="<p>The metadata of the folder.</p>"]
-    #[serde(rename="Metadata")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The metadata of the folder.</p>
+    #[serde(rename = "Metadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<FolderMetadata>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateLabelsRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>List of labels to add to the resource.</p>"]
-    #[serde(rename="Labels")]
+    /// <p>List of labels to add to the resource.</p>
+    #[serde(rename = "Labels")]
     pub labels: Vec<String>,
-    #[doc="<p>The ID of the resource.</p>"]
-    #[serde(rename="ResourceId")]
+    /// <p>The ID of the resource.</p>
+    #[serde(rename = "ResourceId")]
     pub resource_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateLabelsResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateNotificationSubscriptionRequest {
-    #[doc="<p>The endpoint to receive the notifications. If the protocol is HTTPS, the endpoint is a URL that begins with \"https://\".</p>"]
-    #[serde(rename="Endpoint")]
+    /// <p>The endpoint to receive the notifications. If the protocol is HTTPS, the endpoint is a URL that begins with "https://".</p>
+    #[serde(rename = "Endpoint")]
     pub endpoint: String,
-    #[doc="<p>The ID of the organization.</p>"]
-    #[serde(rename="OrganizationId")]
+    /// <p>The ID of the organization.</p>
+    #[serde(rename = "OrganizationId")]
     pub organization_id: String,
-    #[doc="<p>The protocol to use. The supported value is https, which delivers JSON-encoded messasges using HTTPS POST.</p>"]
-    #[serde(rename="Protocol")]
+    /// <p>The protocol to use. The supported value is https, which delivers JSON-encoded messasges using HTTPS POST.</p>
+    #[serde(rename = "Protocol")]
     pub protocol: String,
-    #[doc="<p>The notification type.</p>"]
-    #[serde(rename="SubscriptionType")]
+    /// <p>The notification type.</p>
+    #[serde(rename = "SubscriptionType")]
     pub subscription_type: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateNotificationSubscriptionResponse {
-    #[doc="<p>The subscription.</p>"]
-    #[serde(rename="Subscription")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The subscription.</p>
+    #[serde(rename = "Subscription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subscription: Option<Subscription>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateUserRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>The email address of the user.</p>"]
-    #[serde(rename="EmailAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The email address of the user.</p>
+    #[serde(rename = "EmailAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub email_address: Option<String>,
-    #[doc="<p>The given name of the user.</p>"]
-    #[serde(rename="GivenName")]
+    /// <p>The given name of the user.</p>
+    #[serde(rename = "GivenName")]
     pub given_name: String,
-    #[doc="<p>The ID of the organization.</p>"]
-    #[serde(rename="OrganizationId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the organization.</p>
+    #[serde(rename = "OrganizationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub organization_id: Option<String>,
-    #[doc="<p>The password of the user.</p>"]
-    #[serde(rename="Password")]
+    /// <p>The password of the user.</p>
+    #[serde(rename = "Password")]
     pub password: String,
-    #[doc="<p>The amount of storage for the user.</p>"]
-    #[serde(rename="StorageRule")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The amount of storage for the user.</p>
+    #[serde(rename = "StorageRule")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_rule: Option<StorageRuleType>,
-    #[doc="<p>The surname of the user.</p>"]
-    #[serde(rename="Surname")]
+    /// <p>The surname of the user.</p>
+    #[serde(rename = "Surname")]
     pub surname: String,
-    #[doc="<p>The time zone ID of the user.</p>"]
-    #[serde(rename="TimeZoneId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time zone ID of the user.</p>
+    #[serde(rename = "TimeZoneId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub time_zone_id: Option<String>,
-    #[doc="<p>The login name of the user.</p>"]
-    #[serde(rename="Username")]
+    /// <p>The login name of the user.</p>
+    #[serde(rename = "Username")]
     pub username: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateUserResponse {
-    #[doc="<p>The user information.</p>"]
-    #[serde(rename="User")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user information.</p>
+    #[serde(rename = "User")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user: Option<User>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeactivateUserRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>The ID of the user.</p>"]
-    #[serde(rename="UserId")]
+    /// <p>The ID of the user.</p>
+    #[serde(rename = "UserId")]
     pub user_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteCommentRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>The ID of the comment.</p>"]
-    #[serde(rename="CommentId")]
+    /// <p>The ID of the comment.</p>
+    #[serde(rename = "CommentId")]
     pub comment_id: String,
-    #[doc="<p>The ID of the document.</p>"]
-    #[serde(rename="DocumentId")]
+    /// <p>The ID of the document.</p>
+    #[serde(rename = "DocumentId")]
     pub document_id: String,
-    #[doc="<p>The ID of the document version.</p>"]
-    #[serde(rename="VersionId")]
+    /// <p>The ID of the document version.</p>
+    #[serde(rename = "VersionId")]
     pub version_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteCustomMetadataRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>Flag to indicate removal of all custom metadata properties from the specified resource.</p>"]
-    #[serde(rename="DeleteAll")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Flag to indicate removal of all custom metadata properties from the specified resource.</p>
+    #[serde(rename = "DeleteAll")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub delete_all: Option<bool>,
-    #[doc="<p>List of properties to remove.</p>"]
-    #[serde(rename="Keys")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>List of properties to remove.</p>
+    #[serde(rename = "Keys")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub keys: Option<Vec<String>>,
-    #[doc="<p>The ID of the resource, either a document or folder.</p>"]
-    #[serde(rename="ResourceId")]
+    /// <p>The ID of the resource, either a document or folder.</p>
+    #[serde(rename = "ResourceId")]
     pub resource_id: String,
-    #[doc="<p>The ID of the version, if the custom metadata is being deleted from a document version.</p>"]
-    #[serde(rename="VersionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the version, if the custom metadata is being deleted from a document version.</p>
+    #[serde(rename = "VersionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteCustomMetadataResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteDocumentRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>The ID of the document.</p>"]
-    #[serde(rename="DocumentId")]
+    /// <p>The ID of the document.</p>
+    #[serde(rename = "DocumentId")]
     pub document_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteFolderContentsRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>The ID of the folder.</p>"]
-    #[serde(rename="FolderId")]
+    /// <p>The ID of the folder.</p>
+    #[serde(rename = "FolderId")]
     pub folder_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteFolderRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>The ID of the folder.</p>"]
-    #[serde(rename="FolderId")]
+    /// <p>The ID of the folder.</p>
+    #[serde(rename = "FolderId")]
     pub folder_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteLabelsRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>Flag to request removal of all labels from the specified resource.</p>"]
-    #[serde(rename="DeleteAll")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Flag to request removal of all labels from the specified resource.</p>
+    #[serde(rename = "DeleteAll")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub delete_all: Option<bool>,
-    #[doc="<p>List of labels to delete from the resource.</p>"]
-    #[serde(rename="Labels")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>List of labels to delete from the resource.</p>
+    #[serde(rename = "Labels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub labels: Option<Vec<String>>,
-    #[doc="<p>The ID of the resource.</p>"]
-    #[serde(rename="ResourceId")]
+    /// <p>The ID of the resource.</p>
+    #[serde(rename = "ResourceId")]
     pub resource_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteLabelsResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteNotificationSubscriptionRequest {
-    #[doc="<p>The ID of the organization.</p>"]
-    #[serde(rename="OrganizationId")]
+    /// <p>The ID of the organization.</p>
+    #[serde(rename = "OrganizationId")]
     pub organization_id: String,
-    #[doc="<p>The ID of the subscription.</p>"]
-    #[serde(rename="SubscriptionId")]
+    /// <p>The ID of the subscription.</p>
+    #[serde(rename = "SubscriptionId")]
     pub subscription_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteUserRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>The ID of the user.</p>"]
-    #[serde(rename="UserId")]
+    /// <p>The ID of the user.</p>
+    #[serde(rename = "UserId")]
     pub user_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeActivitiesRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>The timestamp that determines the end time of the activities; the response includes the activities performed before the specified timestamp.</p>"]
-    #[serde(rename="EndTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The timestamp that determines the end time of the activities; the response includes the activities performed before the specified timestamp.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
-    #[doc="<p>The maximum number of items to return.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>The marker for the next set of results. (You received this marker from a previous call.)</p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The marker for the next set of results. (You received this marker from a previous call.)</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p>The ID of the organization. This is a mandatory parameter when using administrative API (SigV4) requests.</p>"]
-    #[serde(rename="OrganizationId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the organization. This is a mandatory parameter when using administrative API (SigV4) requests.</p>
+    #[serde(rename = "OrganizationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub organization_id: Option<String>,
-    #[doc="<p>The timestamp that determines the starting time of the activities; the response includes the activities performed after the specified timestamp.</p>"]
-    #[serde(rename="StartTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The timestamp that determines the starting time of the activities; the response includes the activities performed after the specified timestamp.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
-    #[doc="<p>The ID of the user who performed the action. The response includes activities pertaining to this user. This is an optional parameter and is only applicable for administrative API (SigV4) requests.</p>"]
-    #[serde(rename="UserId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the user who performed the action. The response includes activities pertaining to this user. This is an optional parameter and is only applicable for administrative API (SigV4) requests.</p>
+    #[serde(rename = "UserId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeActivitiesResponse {
-    #[doc="<p>The marker for the next set of results.</p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The marker for the next set of results.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p>The list of activities for the specified user and time period.</p>"]
-    #[serde(rename="UserActivities")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of activities for the specified user and time period.</p>
+    #[serde(rename = "UserActivities")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_activities: Option<Vec<Activity>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeCommentsRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>The ID of the document.</p>"]
-    #[serde(rename="DocumentId")]
+    /// <p>The ID of the document.</p>
+    #[serde(rename = "DocumentId")]
     pub document_id: String,
-    #[doc="<p>The maximum number of items to return.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>The marker for the next set of results. This marker was received from a previous call.</p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The marker for the next set of results. This marker was received from a previous call.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p>The ID of the document version.</p>"]
-    #[serde(rename="VersionId")]
+    /// <p>The ID of the document version.</p>
+    #[serde(rename = "VersionId")]
     pub version_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeCommentsResponse {
-    #[doc="<p>The list of comments for the specified document version.</p>"]
-    #[serde(rename="Comments")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of comments for the specified document version.</p>
+    #[serde(rename = "Comments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub comments: Option<Vec<Comment>>,
-    #[doc="<p>The marker for the next set of results. This marker was received from a previous call.</p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The marker for the next set of results. This marker was received from a previous call.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeDocumentVersionsRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>The ID of the document.</p>"]
-    #[serde(rename="DocumentId")]
+    /// <p>The ID of the document.</p>
+    #[serde(rename = "DocumentId")]
     pub document_id: String,
-    #[doc="<p>Specify \"SOURCE\" to include initialized versions and a URL for the source document.</p>"]
-    #[serde(rename="Fields")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specify "SOURCE" to include initialized versions and a URL for the source document.</p>
+    #[serde(rename = "Fields")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fields: Option<String>,
-    #[doc="<p>A comma-separated list of values. Specify \"INITIALIZED\" to include incomplete versions.</p>"]
-    #[serde(rename="Include")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A comma-separated list of values. Specify "INITIALIZED" to include incomplete versions.</p>
+    #[serde(rename = "Include")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub include: Option<String>,
-    #[doc="<p>The maximum number of versions to return with this call.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of versions to return with this call.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>The marker for the next set of results. (You received this marker from a previous call.)</p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The marker for the next set of results. (You received this marker from a previous call.)</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeDocumentVersionsResponse {
-    #[doc="<p>The document versions.</p>"]
-    #[serde(rename="DocumentVersions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The document versions.</p>
+    #[serde(rename = "DocumentVersions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_versions: Option<Vec<DocumentVersionMetadata>>,
-    #[doc="<p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeFolderContentsRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>The ID of the folder.</p>"]
-    #[serde(rename="FolderId")]
+    /// <p>The ID of the folder.</p>
+    #[serde(rename = "FolderId")]
     pub folder_id: String,
-    #[doc="<p>The contents to include. Specify \"INITIALIZED\" to include initialized documents.</p>"]
-    #[serde(rename="Include")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The contents to include. Specify "INITIALIZED" to include initialized documents.</p>
+    #[serde(rename = "Include")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub include: Option<String>,
-    #[doc="<p>The maximum number of items to return with this call.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return with this call.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>The marker for the next set of results. This marker was received from a previous call.</p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The marker for the next set of results. This marker was received from a previous call.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p>The order for the contents of the folder.</p>"]
-    #[serde(rename="Order")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The order for the contents of the folder.</p>
+    #[serde(rename = "Order")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub order: Option<String>,
-    #[doc="<p>The sorting criteria.</p>"]
-    #[serde(rename="Sort")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The sorting criteria.</p>
+    #[serde(rename = "Sort")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sort: Option<String>,
-    #[doc="<p>The type of items.</p>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of items.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeFolderContentsResponse {
-    #[doc="<p>The documents in the specified folder.</p>"]
-    #[serde(rename="Documents")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The documents in the specified folder.</p>
+    #[serde(rename = "Documents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub documents: Option<Vec<DocumentMetadata>>,
-    #[doc="<p>The subfolders in the specified folder.</p>"]
-    #[serde(rename="Folders")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The subfolders in the specified folder.</p>
+    #[serde(rename = "Folders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub folders: Option<Vec<FolderMetadata>>,
-    #[doc="<p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeNotificationSubscriptionsRequest {
-    #[doc="<p>The maximum number of items to return with this call.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return with this call.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>The marker for the next set of results. (You received this marker from a previous call.)</p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The marker for the next set of results. (You received this marker from a previous call.)</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p>The ID of the organization.</p>"]
-    #[serde(rename="OrganizationId")]
+    /// <p>The ID of the organization.</p>
+    #[serde(rename = "OrganizationId")]
     pub organization_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeNotificationSubscriptionsResponse {
-    #[doc="<p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p>The subscriptions.</p>"]
-    #[serde(rename="Subscriptions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The subscriptions.</p>
+    #[serde(rename = "Subscriptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subscriptions: Option<Vec<Subscription>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeResourcePermissionsRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>The maximum number of items to return with this call.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return with this call.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>The marker for the next set of results. (You received this marker from a previous call)</p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The marker for the next set of results. (You received this marker from a previous call)</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p>The ID of the resource.</p>"]
-    #[serde(rename="ResourceId")]
+    /// <p>The ID of the resource.</p>
+    #[serde(rename = "ResourceId")]
     pub resource_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeResourcePermissionsResponse {
-    #[doc="<p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p>The principals.</p>"]
-    #[serde(rename="Principals")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The principals.</p>
+    #[serde(rename = "Principals")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub principals: Option<Vec<Principal>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeRootFoldersRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
     pub authentication_token: String,
-    #[doc="<p>The maximum number of items to return.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>The marker for the next set of results. (You received this marker from a previous call.)</p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The marker for the next set of results. (You received this marker from a previous call.)</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeRootFoldersResponse {
-    #[doc="<p>The user's special folders.</p>"]
-    #[serde(rename="Folders")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user's special folders.</p>
+    #[serde(rename = "Folders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub folders: Option<Vec<FolderMetadata>>,
-    #[doc="<p>The marker for the next set of results.</p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The marker for the next set of results.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeUsersRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>A comma-separated list of values. Specify \"STORAGE_METADATA\" to include the user storage quota and utilization information.</p>"]
-    #[serde(rename="Fields")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A comma-separated list of values. Specify "STORAGE_METADATA" to include the user storage quota and utilization information.</p>
+    #[serde(rename = "Fields")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fields: Option<String>,
-    #[doc="<p>The state of the users. Specify \"ALL\" to include inactive users.</p>"]
-    #[serde(rename="Include")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The state of the users. Specify "ALL" to include inactive users.</p>
+    #[serde(rename = "Include")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub include: Option<String>,
-    #[doc="<p>The maximum number of items to return.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>The marker for the next set of results. (You received this marker from a previous call.)</p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The marker for the next set of results. (You received this marker from a previous call.)</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p>The order for the results.</p>"]
-    #[serde(rename="Order")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The order for the results.</p>
+    #[serde(rename = "Order")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub order: Option<String>,
-    #[doc="<p>The ID of the organization.</p>"]
-    #[serde(rename="OrganizationId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the organization.</p>
+    #[serde(rename = "OrganizationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub organization_id: Option<String>,
-    #[doc="<p>A query to filter users by user name.</p>"]
-    #[serde(rename="Query")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A query to filter users by user name.</p>
+    #[serde(rename = "Query")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub query: Option<String>,
-    #[doc="<p>The sorting criteria.</p>"]
-    #[serde(rename="Sort")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The sorting criteria.</p>
+    #[serde(rename = "Sort")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sort: Option<String>,
-    #[doc="<p>The IDs of the users.</p>"]
-    #[serde(rename="UserIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The IDs of the users.</p>
+    #[serde(rename = "UserIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_ids: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeUsersResponse {
-    #[doc="<p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p>The total number of users included in the results.</p>"]
-    #[serde(rename="TotalNumberOfUsers")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The total number of users included in the results.</p>
+    #[serde(rename = "TotalNumberOfUsers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub total_number_of_users: Option<i64>,
-    #[doc="<p>The users.</p>"]
-    #[serde(rename="Users")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The users.</p>
+    #[serde(rename = "Users")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub users: Option<Vec<User>>,
 }
 
-#[doc="<p>Describes the document.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes the document.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DocumentMetadata {
-    #[doc="<p>The time when the document was created.</p>"]
-    #[serde(rename="CreatedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time when the document was created.</p>
+    #[serde(rename = "CreatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_timestamp: Option<f64>,
-    #[doc="<p>The ID of the creator.</p>"]
-    #[serde(rename="CreatorId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the creator.</p>
+    #[serde(rename = "CreatorId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creator_id: Option<String>,
-    #[doc="<p>The ID of the document.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the document.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>List of labels on the document.</p>"]
-    #[serde(rename="Labels")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>List of labels on the document.</p>
+    #[serde(rename = "Labels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub labels: Option<Vec<String>>,
-    #[doc="<p>The latest version of the document.</p>"]
-    #[serde(rename="LatestVersionMetadata")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The latest version of the document.</p>
+    #[serde(rename = "LatestVersionMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_metadata: Option<DocumentVersionMetadata>,
-    #[doc="<p>The time when the document was updated.</p>"]
-    #[serde(rename="ModifiedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time when the document was updated.</p>
+    #[serde(rename = "ModifiedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub modified_timestamp: Option<f64>,
-    #[doc="<p>The ID of the parent folder.</p>"]
-    #[serde(rename="ParentFolderId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the parent folder.</p>
+    #[serde(rename = "ParentFolderId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parent_folder_id: Option<String>,
-    #[doc="<p>The resource state.</p>"]
-    #[serde(rename="ResourceState")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The resource state.</p>
+    #[serde(rename = "ResourceState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_state: Option<String>,
 }
 
-#[doc="<p>Describes a version of a document.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes a version of a document.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DocumentVersionMetadata {
-    #[doc="<p>The time stamp when the content of the document was originally created.</p>"]
-    #[serde(rename="ContentCreatedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time stamp when the content of the document was originally created.</p>
+    #[serde(rename = "ContentCreatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub content_created_timestamp: Option<f64>,
-    #[doc="<p>The time stamp when the content of the document was modified.</p>"]
-    #[serde(rename="ContentModifiedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time stamp when the content of the document was modified.</p>
+    #[serde(rename = "ContentModifiedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub content_modified_timestamp: Option<f64>,
-    #[doc="<p>The content type of the document.</p>"]
-    #[serde(rename="ContentType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The content type of the document.</p>
+    #[serde(rename = "ContentType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub content_type: Option<String>,
-    #[doc="<p>The time stamp when the document was first uploaded.</p>"]
-    #[serde(rename="CreatedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time stamp when the document was first uploaded.</p>
+    #[serde(rename = "CreatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_timestamp: Option<f64>,
-    #[doc="<p>The ID of the creator.</p>"]
-    #[serde(rename="CreatorId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the creator.</p>
+    #[serde(rename = "CreatorId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creator_id: Option<String>,
-    #[doc="<p>The ID of the version.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the version.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>The time stamp when the document was last uploaded.</p>"]
-    #[serde(rename="ModifiedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time stamp when the document was last uploaded.</p>
+    #[serde(rename = "ModifiedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub modified_timestamp: Option<f64>,
-    #[doc="<p>The name of the version.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the version.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The signature of the document.</p>"]
-    #[serde(rename="Signature")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The signature of the document.</p>
+    #[serde(rename = "Signature")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub signature: Option<String>,
-    #[doc="<p>The size of the document, in bytes.</p>"]
-    #[serde(rename="Size")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The size of the document, in bytes.</p>
+    #[serde(rename = "Size")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub size: Option<i64>,
-    #[doc="<p>The source of the document.</p>"]
-    #[serde(rename="Source")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The source of the document.</p>
+    #[serde(rename = "Source")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The status of the document.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the document.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The thumbnail of the document.</p>"]
-    #[serde(rename="Thumbnail")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The thumbnail of the document.</p>
+    #[serde(rename = "Thumbnail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thumbnail: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[doc="<p>Describes a folder.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes a folder.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct FolderMetadata {
-    #[doc="<p>The time when the folder was created.</p>"]
-    #[serde(rename="CreatedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time when the folder was created.</p>
+    #[serde(rename = "CreatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_timestamp: Option<f64>,
-    #[doc="<p>The ID of the creator.</p>"]
-    #[serde(rename="CreatorId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the creator.</p>
+    #[serde(rename = "CreatorId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creator_id: Option<String>,
-    #[doc="<p>The ID of the folder.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the folder.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>List of labels on the folder.</p>"]
-    #[serde(rename="Labels")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>List of labels on the folder.</p>
+    #[serde(rename = "Labels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub labels: Option<Vec<String>>,
-    #[doc="<p>The size of the latest version of the folder metadata.</p>"]
-    #[serde(rename="LatestVersionSize")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The size of the latest version of the folder metadata.</p>
+    #[serde(rename = "LatestVersionSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_size: Option<i64>,
-    #[doc="<p>The time when the folder was updated.</p>"]
-    #[serde(rename="ModifiedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time when the folder was updated.</p>
+    #[serde(rename = "ModifiedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub modified_timestamp: Option<f64>,
-    #[doc="<p>The name of the folder.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the folder.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The ID of the parent folder.</p>"]
-    #[serde(rename="ParentFolderId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the parent folder.</p>
+    #[serde(rename = "ParentFolderId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parent_folder_id: Option<String>,
-    #[doc="<p>The resource state of the folder.</p>"]
-    #[serde(rename="ResourceState")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The resource state of the folder.</p>
+    #[serde(rename = "ResourceState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_state: Option<String>,
-    #[doc="<p>The unique identifier created from the subfolders and documents of the folder.</p>"]
-    #[serde(rename="Signature")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique identifier created from the subfolders and documents of the folder.</p>
+    #[serde(rename = "Signature")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub signature: Option<String>,
-    #[doc="<p>The size of the folder metadata.</p>"]
-    #[serde(rename="Size")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The size of the folder metadata.</p>
+    #[serde(rename = "Size")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub size: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetCurrentUserRequest {
-    #[doc="<p>Amazon WorkDocs authentication token.</p>"]
-    #[serde(rename="AuthenticationToken")]
+    /// <p>Amazon WorkDocs authentication token.</p>
+    #[serde(rename = "AuthenticationToken")]
     pub authentication_token: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetCurrentUserResponse {
-    #[doc="<p>Metadata of the user.</p>"]
-    #[serde(rename="User")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Metadata of the user.</p>
+    #[serde(rename = "User")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user: Option<User>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDocumentPathRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>The ID of the document.</p>"]
-    #[serde(rename="DocumentId")]
+    /// <p>The ID of the document.</p>
+    #[serde(rename = "DocumentId")]
     pub document_id: String,
-    #[doc="<p>A comma-separated list of values. Specify <code>NAME</code> to include the names of the parent folders.</p>"]
-    #[serde(rename="Fields")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A comma-separated list of values. Specify <code>NAME</code> to include the names of the parent folders.</p>
+    #[serde(rename = "Fields")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fields: Option<String>,
-    #[doc="<p>The maximum number of levels in the hierarchy to return.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of levels in the hierarchy to return.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>This value is not supported.</p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>This value is not supported.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetDocumentPathResponse {
-    #[doc="<p>The path information.</p>"]
-    #[serde(rename="Path")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The path information.</p>
+    #[serde(rename = "Path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub path: Option<ResourcePath>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDocumentRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>The ID of the document.</p>"]
-    #[serde(rename="DocumentId")]
+    /// <p>The ID of the document.</p>
+    #[serde(rename = "DocumentId")]
     pub document_id: String,
-    #[doc="<p>Set this to <code>TRUE</code> to include custom metadata in the response.</p>"]
-    #[serde(rename="IncludeCustomMetadata")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Set this to <code>TRUE</code> to include custom metadata in the response.</p>
+    #[serde(rename = "IncludeCustomMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub include_custom_metadata: Option<bool>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetDocumentResponse {
-    #[doc="<p>The custom metadata on the document.</p>"]
-    #[serde(rename="CustomMetadata")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The custom metadata on the document.</p>
+    #[serde(rename = "CustomMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_metadata: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The metadata details of the document.</p>"]
-    #[serde(rename="Metadata")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The metadata details of the document.</p>
+    #[serde(rename = "Metadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<DocumentMetadata>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDocumentVersionRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>The ID of the document.</p>"]
-    #[serde(rename="DocumentId")]
+    /// <p>The ID of the document.</p>
+    #[serde(rename = "DocumentId")]
     pub document_id: String,
-    #[doc="<p>A comma-separated list of values. Specify \"SOURCE\" to include a URL for the source document.</p>"]
-    #[serde(rename="Fields")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A comma-separated list of values. Specify "SOURCE" to include a URL for the source document.</p>
+    #[serde(rename = "Fields")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fields: Option<String>,
-    #[doc="<p>Set this to TRUE to include custom metadata in the response.</p>"]
-    #[serde(rename="IncludeCustomMetadata")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Set this to TRUE to include custom metadata in the response.</p>
+    #[serde(rename = "IncludeCustomMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub include_custom_metadata: Option<bool>,
-    #[doc="<p>The version ID of the document.</p>"]
-    #[serde(rename="VersionId")]
+    /// <p>The version ID of the document.</p>
+    #[serde(rename = "VersionId")]
     pub version_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetDocumentVersionResponse {
-    #[doc="<p>The custom metadata on the document version.</p>"]
-    #[serde(rename="CustomMetadata")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The custom metadata on the document version.</p>
+    #[serde(rename = "CustomMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_metadata: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The version metadata.</p>"]
-    #[serde(rename="Metadata")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version metadata.</p>
+    #[serde(rename = "Metadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<DocumentVersionMetadata>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetFolderPathRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>A comma-separated list of values. Specify \"NAME\" to include the names of the parent folders.</p>"]
-    #[serde(rename="Fields")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A comma-separated list of values. Specify "NAME" to include the names of the parent folders.</p>
+    #[serde(rename = "Fields")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fields: Option<String>,
-    #[doc="<p>The ID of the folder.</p>"]
-    #[serde(rename="FolderId")]
+    /// <p>The ID of the folder.</p>
+    #[serde(rename = "FolderId")]
     pub folder_id: String,
-    #[doc="<p>The maximum number of levels in the hierarchy to return.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of levels in the hierarchy to return.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>This value is not supported.</p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>This value is not supported.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetFolderPathResponse {
-    #[doc="<p>The path information.</p>"]
-    #[serde(rename="Path")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The path information.</p>
+    #[serde(rename = "Path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub path: Option<ResourcePath>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetFolderRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>The ID of the folder.</p>"]
-    #[serde(rename="FolderId")]
+    /// <p>The ID of the folder.</p>
+    #[serde(rename = "FolderId")]
     pub folder_id: String,
-    #[doc="<p>Set to TRUE to include custom metadata in the response.</p>"]
-    #[serde(rename="IncludeCustomMetadata")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Set to TRUE to include custom metadata in the response.</p>
+    #[serde(rename = "IncludeCustomMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub include_custom_metadata: Option<bool>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetFolderResponse {
-    #[doc="<p>The custom metadata on the folder.</p>"]
-    #[serde(rename="CustomMetadata")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The custom metadata on the folder.</p>
+    #[serde(rename = "CustomMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_metadata: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The metadata of the folder.</p>"]
-    #[serde(rename="Metadata")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The metadata of the folder.</p>
+    #[serde(rename = "Metadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<FolderMetadata>,
 }
 
-#[doc="<p>Describes the metadata of a user group.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes the metadata of a user group.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GroupMetadata {
-    #[doc="<p>The ID of the user group.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the user group.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>The name of the group.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the group.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct InitiateDocumentVersionUploadRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>The time stamp when the content of the document was originally created.</p>"]
-    #[serde(rename="ContentCreatedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time stamp when the content of the document was originally created.</p>
+    #[serde(rename = "ContentCreatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub content_created_timestamp: Option<f64>,
-    #[doc="<p>The time stamp when the content of the document was modified.</p>"]
-    #[serde(rename="ContentModifiedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time stamp when the content of the document was modified.</p>
+    #[serde(rename = "ContentModifiedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub content_modified_timestamp: Option<f64>,
-    #[doc="<p>The content type of the document.</p>"]
-    #[serde(rename="ContentType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The content type of the document.</p>
+    #[serde(rename = "ContentType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub content_type: Option<String>,
-    #[doc="<p>The size of the document, in bytes.</p>"]
-    #[serde(rename="DocumentSizeInBytes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The size of the document, in bytes.</p>
+    #[serde(rename = "DocumentSizeInBytes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_size_in_bytes: Option<i64>,
-    #[doc="<p>The ID of the document.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the document.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>The name of the document.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the document.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The ID of the parent folder.</p>"]
-    #[serde(rename="ParentFolderId")]
+    /// <p>The ID of the parent folder.</p>
+    #[serde(rename = "ParentFolderId")]
     pub parent_folder_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct InitiateDocumentVersionUploadResponse {
-    #[doc="<p>The document metadata.</p>"]
-    #[serde(rename="Metadata")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The document metadata.</p>
+    #[serde(rename = "Metadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<DocumentMetadata>,
-    #[doc="<p>The upload metadata.</p>"]
-    #[serde(rename="UploadMetadata")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The upload metadata.</p>
+    #[serde(rename = "UploadMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub upload_metadata: Option<UploadMetadata>,
 }
 
-#[doc="<p>Describes the users and/or user groups.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes the users and/or user groups.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Participants {
-    #[doc="<p>The list of user groups.</p>"]
-    #[serde(rename="Groups")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of user groups.</p>
+    #[serde(rename = "Groups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub groups: Option<Vec<GroupMetadata>>,
-    #[doc="<p>The list of users.</p>"]
-    #[serde(rename="Users")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of users.</p>
+    #[serde(rename = "Users")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub users: Option<Vec<UserMetadata>>,
 }
 
-#[doc="<p>Describes the permissions.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes the permissions.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PermissionInfo {
-    #[doc="<p>The role of the user.</p>"]
-    #[serde(rename="Role")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The role of the user.</p>
+    #[serde(rename = "Role")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
-    #[doc="<p>The type of permissions.</p>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of permissions.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[doc="<p>Describes a resource.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes a resource.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Principal {
-    #[doc="<p>The ID of the resource.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the resource.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>The permission information for the resource.</p>"]
-    #[serde(rename="Roles")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The permission information for the resource.</p>
+    #[serde(rename = "Roles")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub roles: Option<Vec<PermissionInfo>>,
-    #[doc="<p>The type of resource.</p>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of resource.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct RemoveAllResourcePermissionsRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>The ID of the resource.</p>"]
-    #[serde(rename="ResourceId")]
+    /// <p>The ID of the resource.</p>
+    #[serde(rename = "ResourceId")]
     pub resource_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct RemoveResourcePermissionRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>The principal ID of the resource.</p>"]
-    #[serde(rename="PrincipalId")]
+    /// <p>The principal ID of the resource.</p>
+    #[serde(rename = "PrincipalId")]
     pub principal_id: String,
-    #[doc="<p>The principal type of the resource.</p>"]
-    #[serde(rename="PrincipalType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The principal type of the resource.</p>
+    #[serde(rename = "PrincipalType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub principal_type: Option<String>,
-    #[doc="<p>The ID of the resource.</p>"]
-    #[serde(rename="ResourceId")]
+    /// <p>The ID of the resource.</p>
+    #[serde(rename = "ResourceId")]
     pub resource_id: String,
 }
 
-#[doc="<p>Describes the metadata of a resource.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes the metadata of a resource.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ResourceMetadata {
-    #[doc="<p>The ID of the resource.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the resource.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>The name of the resource.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the resource.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The original name of the resource prior to a rename operation.</p>"]
-    #[serde(rename="OriginalName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The original name of the resource prior to a rename operation.</p>
+    #[serde(rename = "OriginalName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub original_name: Option<String>,
-    #[doc="<p>The owner of the resource.</p>"]
-    #[serde(rename="Owner")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The owner of the resource.</p>
+    #[serde(rename = "Owner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<UserMetadata>,
-    #[doc="<p>The parent ID of the resource before a rename operation.</p>"]
-    #[serde(rename="ParentId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The parent ID of the resource before a rename operation.</p>
+    #[serde(rename = "ParentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parent_id: Option<String>,
-    #[doc="<p>The type of resource.</p>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of resource.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
-    #[doc="<p>The version ID of the resource. This is an optional field and is filled for action on document version.</p>"]
-    #[serde(rename="VersionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version ID of the resource. This is an optional field and is filled for action on document version.</p>
+    #[serde(rename = "VersionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version_id: Option<String>,
 }
 
-#[doc="<p>Describes the path information of a resource.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes the path information of a resource.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ResourcePath {
-    #[doc="<p>The components of the resource path.</p>"]
-    #[serde(rename="Components")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The components of the resource path.</p>
+    #[serde(rename = "Components")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub components: Option<Vec<ResourcePathComponent>>,
 }
 
-#[doc="<p>Describes the resource path.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes the resource path.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ResourcePathComponent {
-    #[doc="<p>The ID of the resource path.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the resource path.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>The name of the resource path.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the resource path.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[doc="<p>Describes the recipient type and ID, if available.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Describes the recipient type and ID, if available.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct SharePrincipal {
-    #[doc="<p>The ID of the recipient.</p>"]
-    #[serde(rename="Id")]
+    /// <p>The ID of the recipient.</p>
+    #[serde(rename = "Id")]
     pub id: String,
-    #[doc="<p>The role of the recipient.</p>"]
-    #[serde(rename="Role")]
+    /// <p>The role of the recipient.</p>
+    #[serde(rename = "Role")]
     pub role: String,
-    #[doc="<p>The type of the recipient.</p>"]
-    #[serde(rename="Type")]
+    /// <p>The type of the recipient.</p>
+    #[serde(rename = "Type")]
     pub type_: String,
 }
 
-#[doc="<p>Describes the share results of a resource.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes the share results of a resource.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ShareResult {
-    #[doc="<p>The ID of the principal.</p>"]
-    #[serde(rename="PrincipalId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the principal.</p>
+    #[serde(rename = "PrincipalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub principal_id: Option<String>,
-    #[doc="<p>The role.</p>"]
-    #[serde(rename="Role")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The role.</p>
+    #[serde(rename = "Role")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
-    #[doc="<p>The ID of the resource that was shared.</p>"]
-    #[serde(rename="ShareId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the resource that was shared.</p>
+    #[serde(rename = "ShareId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub share_id: Option<String>,
-    #[doc="<p>The status.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The status message.</p>"]
-    #[serde(rename="StatusMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status message.</p>
+    #[serde(rename = "StatusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status_message: Option<String>,
 }
 
-#[doc="<p>Describes the storage for a user.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Describes the storage for a user.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct StorageRuleType {
-    #[doc="<p>The amount of storage allocated, in bytes.</p>"]
-    #[serde(rename="StorageAllocatedInBytes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The amount of storage allocated, in bytes.</p>
+    #[serde(rename = "StorageAllocatedInBytes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_allocated_in_bytes: Option<i64>,
-    #[doc="<p>The type of storage.</p>"]
-    #[serde(rename="StorageType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of storage.</p>
+    #[serde(rename = "StorageType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_type: Option<String>,
 }
 
-#[doc="<p>Describes a subscription.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes a subscription.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Subscription {
-    #[doc="<p>The endpoint of the subscription.</p>"]
-    #[serde(rename="EndPoint")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The endpoint of the subscription.</p>
+    #[serde(rename = "EndPoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub end_point: Option<String>,
-    #[doc="<p>The protocol of the subscription.</p>"]
-    #[serde(rename="Protocol")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The protocol of the subscription.</p>
+    #[serde(rename = "Protocol")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub protocol: Option<String>,
-    #[doc="<p>The ID of the subscription.</p>"]
-    #[serde(rename="SubscriptionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the subscription.</p>
+    #[serde(rename = "SubscriptionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subscription_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateDocumentRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>The ID of the document.</p>"]
-    #[serde(rename="DocumentId")]
+    /// <p>The ID of the document.</p>
+    #[serde(rename = "DocumentId")]
     pub document_id: String,
-    #[doc="<p>The name of the document.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the document.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The ID of the parent folder.</p>"]
-    #[serde(rename="ParentFolderId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the parent folder.</p>
+    #[serde(rename = "ParentFolderId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parent_folder_id: Option<String>,
-    #[doc="<p>The resource state of the document. Note that only ACTIVE and RECYCLED are supported.</p>"]
-    #[serde(rename="ResourceState")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The resource state of the document. Note that only ACTIVE and RECYCLED are supported.</p>
+    #[serde(rename = "ResourceState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_state: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateDocumentVersionRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>The ID of the document.</p>"]
-    #[serde(rename="DocumentId")]
+    /// <p>The ID of the document.</p>
+    #[serde(rename = "DocumentId")]
     pub document_id: String,
-    #[doc="<p>The version ID of the document.</p>"]
-    #[serde(rename="VersionId")]
+    /// <p>The version ID of the document.</p>
+    #[serde(rename = "VersionId")]
     pub version_id: String,
-    #[doc="<p>The status of the version.</p>"]
-    #[serde(rename="VersionStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the version.</p>
+    #[serde(rename = "VersionStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version_status: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateFolderRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>The ID of the folder.</p>"]
-    #[serde(rename="FolderId")]
+    /// <p>The ID of the folder.</p>
+    #[serde(rename = "FolderId")]
     pub folder_id: String,
-    #[doc="<p>The name of the folder.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the folder.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The ID of the parent folder.</p>"]
-    #[serde(rename="ParentFolderId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the parent folder.</p>
+    #[serde(rename = "ParentFolderId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parent_folder_id: Option<String>,
-    #[doc="<p>The resource state of the folder. Note that only ACTIVE and RECYCLED are accepted values from the API.</p>"]
-    #[serde(rename="ResourceState")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The resource state of the folder. Note that only ACTIVE and RECYCLED are accepted values from the API.</p>
+    #[serde(rename = "ResourceState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_state: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateUserRequest {
-    #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
-    #[serde(rename="AuthenticationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    #[doc="<p>The given name of the user.</p>"]
-    #[serde(rename="GivenName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The given name of the user.</p>
+    #[serde(rename = "GivenName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub given_name: Option<String>,
-    #[doc="<p>The locale of the user.</p>"]
-    #[serde(rename="Locale")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The locale of the user.</p>
+    #[serde(rename = "Locale")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub locale: Option<String>,
-    #[doc="<p>The amount of storage for the user.</p>"]
-    #[serde(rename="StorageRule")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The amount of storage for the user.</p>
+    #[serde(rename = "StorageRule")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_rule: Option<StorageRuleType>,
-    #[doc="<p>The surname of the user.</p>"]
-    #[serde(rename="Surname")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The surname of the user.</p>
+    #[serde(rename = "Surname")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub surname: Option<String>,
-    #[doc="<p>The time zone ID of the user.</p>"]
-    #[serde(rename="TimeZoneId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time zone ID of the user.</p>
+    #[serde(rename = "TimeZoneId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub time_zone_id: Option<String>,
-    #[doc="<p>The type of the user.</p>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of the user.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
-    #[doc="<p>The ID of the user.</p>"]
-    #[serde(rename="UserId")]
+    /// <p>The ID of the user.</p>
+    #[serde(rename = "UserId")]
     pub user_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateUserResponse {
-    #[doc="<p>The user information.</p>"]
-    #[serde(rename="User")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user information.</p>
+    #[serde(rename = "User")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user: Option<User>,
 }
 
-#[doc="<p>Describes the upload.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes the upload.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UploadMetadata {
-    #[doc="<p>The signed headers.</p>"]
-    #[serde(rename="SignedHeaders")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The signed headers.</p>
+    #[serde(rename = "SignedHeaders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub signed_headers: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The URL of the upload.</p>"]
-    #[serde(rename="UploadUrl")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The URL of the upload.</p>
+    #[serde(rename = "UploadUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub upload_url: Option<String>,
 }
 
-#[doc="<p>Describes a user.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes a user.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct User {
-    #[doc="<p>The time when the user was created.</p>"]
-    #[serde(rename="CreatedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time when the user was created.</p>
+    #[serde(rename = "CreatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_timestamp: Option<f64>,
-    #[doc="<p>The email address of the user.</p>"]
-    #[serde(rename="EmailAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The email address of the user.</p>
+    #[serde(rename = "EmailAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub email_address: Option<String>,
-    #[doc="<p>The given name of the user.</p>"]
-    #[serde(rename="GivenName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The given name of the user.</p>
+    #[serde(rename = "GivenName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub given_name: Option<String>,
-    #[doc="<p>The ID of the user.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the user.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>The locale of the user.</p>"]
-    #[serde(rename="Locale")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The locale of the user.</p>
+    #[serde(rename = "Locale")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub locale: Option<String>,
-    #[doc="<p>The time when the user was modified.</p>"]
-    #[serde(rename="ModifiedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time when the user was modified.</p>
+    #[serde(rename = "ModifiedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub modified_timestamp: Option<f64>,
-    #[doc="<p>The ID of the organization.</p>"]
-    #[serde(rename="OrganizationId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the organization.</p>
+    #[serde(rename = "OrganizationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub organization_id: Option<String>,
-    #[doc="<p>The ID of the recycle bin folder.</p>"]
-    #[serde(rename="RecycleBinFolderId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the recycle bin folder.</p>
+    #[serde(rename = "RecycleBinFolderId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub recycle_bin_folder_id: Option<String>,
-    #[doc="<p>The ID of the root folder.</p>"]
-    #[serde(rename="RootFolderId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the root folder.</p>
+    #[serde(rename = "RootFolderId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub root_folder_id: Option<String>,
-    #[doc="<p>The status of the user.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the user.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The storage for the user.</p>"]
-    #[serde(rename="Storage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The storage for the user.</p>
+    #[serde(rename = "Storage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub storage: Option<UserStorageMetadata>,
-    #[doc="<p>The surname of the user.</p>"]
-    #[serde(rename="Surname")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The surname of the user.</p>
+    #[serde(rename = "Surname")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub surname: Option<String>,
-    #[doc="<p>The time zone ID of the user.</p>"]
-    #[serde(rename="TimeZoneId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time zone ID of the user.</p>
+    #[serde(rename = "TimeZoneId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub time_zone_id: Option<String>,
-    #[doc="<p>The type of user.</p>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of user.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
-    #[doc="<p>The login name of the user.</p>"]
-    #[serde(rename="Username")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The login name of the user.</p>
+    #[serde(rename = "Username")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
 }
 
-#[doc="<p>Describes the metadata of the user.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes the metadata of the user.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UserMetadata {
-    #[doc="<p>The email address of the user.</p>"]
-    #[serde(rename="EmailAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The email address of the user.</p>
+    #[serde(rename = "EmailAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub email_address: Option<String>,
-    #[doc="<p>The given name of the user before a rename operation.</p>"]
-    #[serde(rename="GivenName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The given name of the user before a rename operation.</p>
+    #[serde(rename = "GivenName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub given_name: Option<String>,
-    #[doc="<p>The ID of the user.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the user.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>The surname of the user.</p>"]
-    #[serde(rename="Surname")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The surname of the user.</p>
+    #[serde(rename = "Surname")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub surname: Option<String>,
-    #[doc="<p>The username of the user.</p>"]
-    #[serde(rename="Username")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The username of the user.</p>
+    #[serde(rename = "Username")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
 }
 
-#[doc="<p>Describes the storage for a user.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes the storage for a user.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UserStorageMetadata {
-    #[doc="<p>The storage for a user.</p>"]
-    #[serde(rename="StorageRule")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The storage for a user.</p>
+    #[serde(rename = "StorageRule")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_rule: Option<StorageRuleType>,
-    #[doc="<p>The amount of storage utilized, in bytes.</p>"]
-    #[serde(rename="StorageUtilizedInBytes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The amount of storage utilized, in bytes.</p>
+    #[serde(rename = "StorageUtilizedInBytes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_utilized_in_bytes: Option<i64>,
 }
 
@@ -1609,7 +1608,6 @@ pub enum AbortDocumentVersionUploadError {
     Unknown(String),
 }
 
-
 impl AbortDocumentVersionUploadError {
     pub fn from_body(body: &str) -> AbortDocumentVersionUploadError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1623,12 +1621,36 @@ impl AbortDocumentVersionUploadError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "EntityNotExistsException" => AbortDocumentVersionUploadError::EntityNotExists(String::from(error_message)),
-                    "FailedDependencyException" => AbortDocumentVersionUploadError::FailedDependency(String::from(error_message)),
-                    "ProhibitedStateException" => AbortDocumentVersionUploadError::ProhibitedState(String::from(error_message)),
-                    "ServiceUnavailableException" => AbortDocumentVersionUploadError::ServiceUnavailable(String::from(error_message)),
-                    "UnauthorizedOperationException" => AbortDocumentVersionUploadError::UnauthorizedOperation(String::from(error_message)),
-                    "UnauthorizedResourceAccessException" => AbortDocumentVersionUploadError::UnauthorizedResourceAccess(String::from(error_message)),
+                    "EntityNotExistsException" => {
+                        AbortDocumentVersionUploadError::EntityNotExists(String::from(
+                            error_message,
+                        ))
+                    }
+                    "FailedDependencyException" => {
+                        AbortDocumentVersionUploadError::FailedDependency(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ProhibitedStateException" => {
+                        AbortDocumentVersionUploadError::ProhibitedState(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServiceUnavailableException" => {
+                        AbortDocumentVersionUploadError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnauthorizedOperationException" => {
+                        AbortDocumentVersionUploadError::UnauthorizedOperation(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnauthorizedResourceAccessException" => {
+                        AbortDocumentVersionUploadError::UnauthorizedResourceAccess(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         AbortDocumentVersionUploadError::Validation(error_message.to_string())
                     }
@@ -1705,7 +1727,6 @@ pub enum ActivateUserError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ActivateUserError {
     pub fn from_body(body: &str) -> ActivateUserError {
@@ -1807,7 +1828,6 @@ pub enum AddResourcePermissionsError {
     Unknown(String),
 }
 
-
 impl AddResourcePermissionsError {
     pub fn from_body(body: &str) -> AddResourcePermissionsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1827,8 +1847,16 @@ impl AddResourcePermissionsError {
                     "ServiceUnavailableException" => {
                         AddResourcePermissionsError::ServiceUnavailable(String::from(error_message))
                     }
-                    "UnauthorizedOperationException" => AddResourcePermissionsError::UnauthorizedOperation(String::from(error_message)),
-                    "UnauthorizedResourceAccessException" => AddResourcePermissionsError::UnauthorizedResourceAccess(String::from(error_message)),
+                    "UnauthorizedOperationException" => {
+                        AddResourcePermissionsError::UnauthorizedOperation(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnauthorizedResourceAccessException" => {
+                        AddResourcePermissionsError::UnauthorizedResourceAccess(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         AddResourcePermissionsError::Validation(error_message.to_string())
                     }
@@ -1907,7 +1935,6 @@ pub enum CreateCommentError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateCommentError {
     pub fn from_body(body: &str) -> CreateCommentError {
@@ -2023,7 +2050,6 @@ pub enum CreateCustomMetadataError {
     Unknown(String),
 }
 
-
 impl CreateCustomMetadataError {
     pub fn from_body(body: &str) -> CreateCustomMetadataError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2037,7 +2063,11 @@ impl CreateCustomMetadataError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "CustomMetadataLimitExceededException" => CreateCustomMetadataError::CustomMetadataLimitExceeded(String::from(error_message)),
+                    "CustomMetadataLimitExceededException" => {
+                        CreateCustomMetadataError::CustomMetadataLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
                     "EntityNotExistsException" => {
                         CreateCustomMetadataError::EntityNotExists(String::from(error_message))
                     }
@@ -2050,8 +2080,16 @@ impl CreateCustomMetadataError {
                     "ServiceUnavailableException" => {
                         CreateCustomMetadataError::ServiceUnavailable(String::from(error_message))
                     }
-                    "UnauthorizedOperationException" => CreateCustomMetadataError::UnauthorizedOperation(String::from(error_message)),
-                    "UnauthorizedResourceAccessException" => CreateCustomMetadataError::UnauthorizedResourceAccess(String::from(error_message)),
+                    "UnauthorizedOperationException" => {
+                        CreateCustomMetadataError::UnauthorizedOperation(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnauthorizedResourceAccessException" => {
+                        CreateCustomMetadataError::UnauthorizedResourceAccess(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         CreateCustomMetadataError::Validation(error_message.to_string())
                     }
@@ -2135,7 +2173,6 @@ pub enum CreateFolderError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateFolderError {
     pub fn from_body(body: &str) -> CreateFolderError {
@@ -2253,7 +2290,6 @@ pub enum CreateLabelsError {
     Unknown(String),
 }
 
-
 impl CreateLabelsError {
     pub fn from_body(body: &str) -> CreateLabelsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2356,7 +2392,6 @@ pub enum CreateNotificationSubscriptionError {
     Unknown(String),
 }
 
-
 impl CreateNotificationSubscriptionError {
     pub fn from_body(body: &str) -> CreateNotificationSubscriptionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2370,9 +2405,21 @@ impl CreateNotificationSubscriptionError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ServiceUnavailableException" => CreateNotificationSubscriptionError::ServiceUnavailable(String::from(error_message)),
-                    "TooManySubscriptionsException" => CreateNotificationSubscriptionError::TooManySubscriptions(String::from(error_message)),
-                    "UnauthorizedResourceAccessException" => CreateNotificationSubscriptionError::UnauthorizedResourceAccess(String::from(error_message)),
+                    "ServiceUnavailableException" => {
+                        CreateNotificationSubscriptionError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "TooManySubscriptionsException" => {
+                        CreateNotificationSubscriptionError::TooManySubscriptions(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnauthorizedResourceAccessException" => {
+                        CreateNotificationSubscriptionError::UnauthorizedResourceAccess(
+                            String::from(error_message),
+                        )
+                    }
                     "ValidationException" => {
                         CreateNotificationSubscriptionError::Validation(error_message.to_string())
                     }
@@ -2446,7 +2493,6 @@ pub enum CreateUserError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateUserError {
     pub fn from_body(body: &str) -> CreateUserError {
@@ -2547,7 +2593,6 @@ pub enum DeactivateUserError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeactivateUserError {
     pub fn from_body(body: &str) -> DeactivateUserError {
@@ -2654,7 +2699,6 @@ pub enum DeleteCommentError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteCommentError {
     pub fn from_body(body: &str) -> DeleteCommentError {
@@ -2768,7 +2812,6 @@ pub enum DeleteCustomMetadataError {
     Unknown(String),
 }
 
-
 impl DeleteCustomMetadataError {
     pub fn from_body(body: &str) -> DeleteCustomMetadataError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2794,8 +2837,16 @@ impl DeleteCustomMetadataError {
                     "ServiceUnavailableException" => {
                         DeleteCustomMetadataError::ServiceUnavailable(String::from(error_message))
                     }
-                    "UnauthorizedOperationException" => DeleteCustomMetadataError::UnauthorizedOperation(String::from(error_message)),
-                    "UnauthorizedResourceAccessException" => DeleteCustomMetadataError::UnauthorizedResourceAccess(String::from(error_message)),
+                    "UnauthorizedOperationException" => {
+                        DeleteCustomMetadataError::UnauthorizedOperation(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnauthorizedResourceAccessException" => {
+                        DeleteCustomMetadataError::UnauthorizedResourceAccess(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DeleteCustomMetadataError::Validation(error_message.to_string())
                     }
@@ -2876,7 +2927,6 @@ pub enum DeleteDocumentError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteDocumentError {
     pub fn from_body(body: &str) -> DeleteDocumentError {
@@ -2992,7 +3042,6 @@ pub enum DeleteFolderError {
     Unknown(String),
 }
 
-
 impl DeleteFolderError {
     pub fn from_body(body: &str) -> DeleteFolderError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3103,7 +3152,6 @@ pub enum DeleteFolderContentsError {
     Unknown(String),
 }
 
-
 impl DeleteFolderContentsError {
     pub fn from_body(body: &str) -> DeleteFolderContentsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3126,8 +3174,16 @@ impl DeleteFolderContentsError {
                     "ServiceUnavailableException" => {
                         DeleteFolderContentsError::ServiceUnavailable(String::from(error_message))
                     }
-                    "UnauthorizedOperationException" => DeleteFolderContentsError::UnauthorizedOperation(String::from(error_message)),
-                    "UnauthorizedResourceAccessException" => DeleteFolderContentsError::UnauthorizedResourceAccess(String::from(error_message)),
+                    "UnauthorizedOperationException" => {
+                        DeleteFolderContentsError::UnauthorizedOperation(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnauthorizedResourceAccessException" => {
+                        DeleteFolderContentsError::UnauthorizedResourceAccess(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DeleteFolderContentsError::Validation(error_message.to_string())
                     }
@@ -3203,7 +3259,6 @@ pub enum DeleteLabelsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteLabelsError {
     pub fn from_body(body: &str) -> DeleteLabelsError {
@@ -3305,7 +3360,6 @@ pub enum DeleteNotificationSubscriptionError {
     Unknown(String),
 }
 
-
 impl DeleteNotificationSubscriptionError {
     pub fn from_body(body: &str) -> DeleteNotificationSubscriptionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3319,10 +3373,26 @@ impl DeleteNotificationSubscriptionError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "EntityNotExistsException" => DeleteNotificationSubscriptionError::EntityNotExists(String::from(error_message)),
-                    "ProhibitedStateException" => DeleteNotificationSubscriptionError::ProhibitedState(String::from(error_message)),
-                    "ServiceUnavailableException" => DeleteNotificationSubscriptionError::ServiceUnavailable(String::from(error_message)),
-                    "UnauthorizedResourceAccessException" => DeleteNotificationSubscriptionError::UnauthorizedResourceAccess(String::from(error_message)),
+                    "EntityNotExistsException" => {
+                        DeleteNotificationSubscriptionError::EntityNotExists(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ProhibitedStateException" => {
+                        DeleteNotificationSubscriptionError::ProhibitedState(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServiceUnavailableException" => {
+                        DeleteNotificationSubscriptionError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnauthorizedResourceAccessException" => {
+                        DeleteNotificationSubscriptionError::UnauthorizedResourceAccess(
+                            String::from(error_message),
+                        )
+                    }
                     "ValidationException" => {
                         DeleteNotificationSubscriptionError::Validation(error_message.to_string())
                     }
@@ -3397,7 +3467,6 @@ pub enum DeleteUserError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteUserError {
     pub fn from_body(body: &str) -> DeleteUserError {
@@ -3499,7 +3568,6 @@ pub enum DescribeActivitiesError {
     Unknown(String),
 }
 
-
 impl DescribeActivitiesError {
     pub fn from_body(body: &str) -> DescribeActivitiesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3525,7 +3593,11 @@ impl DescribeActivitiesError {
                     "UnauthorizedOperationException" => {
                         DescribeActivitiesError::UnauthorizedOperation(String::from(error_message))
                     }
-                    "UnauthorizedResourceAccessException" => DescribeActivitiesError::UnauthorizedResourceAccess(String::from(error_message)),
+                    "UnauthorizedResourceAccessException" => {
+                        DescribeActivitiesError::UnauthorizedResourceAccess(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeActivitiesError::Validation(error_message.to_string())
                     }
@@ -3604,7 +3676,6 @@ pub enum DescribeCommentsError {
     Unknown(String),
 }
 
-
 impl DescribeCommentsError {
     pub fn from_body(body: &str) -> DescribeCommentsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3633,7 +3704,11 @@ impl DescribeCommentsError {
                     "UnauthorizedOperationException" => {
                         DescribeCommentsError::UnauthorizedOperation(String::from(error_message))
                     }
-                    "UnauthorizedResourceAccessException" => DescribeCommentsError::UnauthorizedResourceAccess(String::from(error_message)),
+                    "UnauthorizedResourceAccessException" => {
+                        DescribeCommentsError::UnauthorizedResourceAccess(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeCommentsError::Validation(error_message.to_string())
                     }
@@ -3713,7 +3788,6 @@ pub enum DescribeDocumentVersionsError {
     Unknown(String),
 }
 
-
 impl DescribeDocumentVersionsError {
     pub fn from_body(body: &str) -> DescribeDocumentVersionsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3739,9 +3813,21 @@ impl DescribeDocumentVersionsError {
                     "ProhibitedStateException" => {
                         DescribeDocumentVersionsError::ProhibitedState(String::from(error_message))
                     }
-                    "ServiceUnavailableException" => DescribeDocumentVersionsError::ServiceUnavailable(String::from(error_message)),
-                    "UnauthorizedOperationException" => DescribeDocumentVersionsError::UnauthorizedOperation(String::from(error_message)),
-                    "UnauthorizedResourceAccessException" => DescribeDocumentVersionsError::UnauthorizedResourceAccess(String::from(error_message)),
+                    "ServiceUnavailableException" => {
+                        DescribeDocumentVersionsError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnauthorizedOperationException" => {
+                        DescribeDocumentVersionsError::UnauthorizedOperation(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnauthorizedResourceAccessException" => {
+                        DescribeDocumentVersionsError::UnauthorizedResourceAccess(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeDocumentVersionsError::Validation(error_message.to_string())
                     }
@@ -3822,7 +3908,6 @@ pub enum DescribeFolderContentsError {
     Unknown(String),
 }
 
-
 impl DescribeFolderContentsError {
     pub fn from_body(body: &str) -> DescribeFolderContentsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3851,7 +3936,11 @@ impl DescribeFolderContentsError {
                     "ServiceUnavailableException" => {
                         DescribeFolderContentsError::ServiceUnavailable(String::from(error_message))
                     }
-                    "UnauthorizedResourceAccessException" => DescribeFolderContentsError::UnauthorizedResourceAccess(String::from(error_message)),
+                    "UnauthorizedResourceAccessException" => {
+                        DescribeFolderContentsError::UnauthorizedResourceAccess(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeFolderContentsError::Validation(error_message.to_string())
                     }
@@ -3925,7 +4014,6 @@ pub enum DescribeNotificationSubscriptionsError {
     Unknown(String),
 }
 
-
 impl DescribeNotificationSubscriptionsError {
     pub fn from_body(body: &str) -> DescribeNotificationSubscriptionsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3939,13 +4027,24 @@ impl DescribeNotificationSubscriptionsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "EntityNotExistsException" => DescribeNotificationSubscriptionsError::EntityNotExists(String::from(error_message)),
-                    "ServiceUnavailableException" => DescribeNotificationSubscriptionsError::ServiceUnavailable(String::from(error_message)),
-                    "UnauthorizedResourceAccessException" => DescribeNotificationSubscriptionsError::UnauthorizedResourceAccess(String::from(error_message)),
-                    "ValidationException" => {
-                        DescribeNotificationSubscriptionsError::Validation(error_message
-                                                                               .to_string())
+                    "EntityNotExistsException" => {
+                        DescribeNotificationSubscriptionsError::EntityNotExists(String::from(
+                            error_message,
+                        ))
                     }
+                    "ServiceUnavailableException" => {
+                        DescribeNotificationSubscriptionsError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnauthorizedResourceAccessException" => {
+                        DescribeNotificationSubscriptionsError::UnauthorizedResourceAccess(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => DescribeNotificationSubscriptionsError::Validation(
+                        error_message.to_string(),
+                    ),
                     _ => DescribeNotificationSubscriptionsError::Unknown(String::from(body)),
                 }
             }
@@ -4015,7 +4114,6 @@ pub enum DescribeResourcePermissionsError {
     Unknown(String),
 }
 
-
 impl DescribeResourcePermissionsError {
     pub fn from_body(body: &str) -> DescribeResourcePermissionsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4029,10 +4127,26 @@ impl DescribeResourcePermissionsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "FailedDependencyException" => DescribeResourcePermissionsError::FailedDependency(String::from(error_message)),
-                    "ServiceUnavailableException" => DescribeResourcePermissionsError::ServiceUnavailable(String::from(error_message)),
-                    "UnauthorizedOperationException" => DescribeResourcePermissionsError::UnauthorizedOperation(String::from(error_message)),
-                    "UnauthorizedResourceAccessException" => DescribeResourcePermissionsError::UnauthorizedResourceAccess(String::from(error_message)),
+                    "FailedDependencyException" => {
+                        DescribeResourcePermissionsError::FailedDependency(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServiceUnavailableException" => {
+                        DescribeResourcePermissionsError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnauthorizedOperationException" => {
+                        DescribeResourcePermissionsError::UnauthorizedOperation(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnauthorizedResourceAccessException" => {
+                        DescribeResourcePermissionsError::UnauthorizedResourceAccess(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeResourcePermissionsError::Validation(error_message.to_string())
                     }
@@ -4108,7 +4222,6 @@ pub enum DescribeRootFoldersError {
     Unknown(String),
 }
 
-
 impl DescribeRootFoldersError {
     pub fn from_body(body: &str) -> DescribeRootFoldersError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4134,7 +4247,11 @@ impl DescribeRootFoldersError {
                     "UnauthorizedOperationException" => {
                         DescribeRootFoldersError::UnauthorizedOperation(String::from(error_message))
                     }
-                    "UnauthorizedResourceAccessException" => DescribeRootFoldersError::UnauthorizedResourceAccess(String::from(error_message)),
+                    "UnauthorizedResourceAccessException" => {
+                        DescribeRootFoldersError::UnauthorizedResourceAccess(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeRootFoldersError::Validation(error_message.to_string())
                     }
@@ -4210,7 +4327,6 @@ pub enum DescribeUsersError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeUsersError {
     pub fn from_body(body: &str) -> DescribeUsersError {
@@ -4313,7 +4429,6 @@ pub enum GetCurrentUserError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetCurrentUserError {
     pub fn from_body(body: &str) -> GetCurrentUserError {
@@ -4418,7 +4533,6 @@ pub enum GetDocumentError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetDocumentError {
     pub fn from_body(body: &str) -> GetDocumentError {
@@ -4526,7 +4640,6 @@ pub enum GetDocumentPathError {
     Unknown(String),
 }
 
-
 impl GetDocumentPathError {
     pub fn from_body(body: &str) -> GetDocumentPathError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4552,7 +4665,11 @@ impl GetDocumentPathError {
                     "UnauthorizedOperationException" => {
                         GetDocumentPathError::UnauthorizedOperation(String::from(error_message))
                     }
-                    "UnauthorizedResourceAccessException" => GetDocumentPathError::UnauthorizedResourceAccess(String::from(error_message)),
+                    "UnauthorizedResourceAccessException" => {
+                        GetDocumentPathError::UnauthorizedResourceAccess(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         GetDocumentPathError::Validation(error_message.to_string())
                     }
@@ -4629,7 +4746,6 @@ pub enum GetDocumentVersionError {
     Unknown(String),
 }
 
-
 impl GetDocumentVersionError {
     pub fn from_body(body: &str) -> GetDocumentVersionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4658,7 +4774,11 @@ impl GetDocumentVersionError {
                     "UnauthorizedOperationException" => {
                         GetDocumentVersionError::UnauthorizedOperation(String::from(error_message))
                     }
-                    "UnauthorizedResourceAccessException" => GetDocumentVersionError::UnauthorizedResourceAccess(String::from(error_message)),
+                    "UnauthorizedResourceAccessException" => {
+                        GetDocumentVersionError::UnauthorizedResourceAccess(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         GetDocumentVersionError::Validation(error_message.to_string())
                     }
@@ -4739,7 +4859,6 @@ pub enum GetFolderError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetFolderError {
     pub fn from_body(body: &str) -> GetFolderError {
@@ -4848,7 +4967,6 @@ pub enum GetFolderPathError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetFolderPathError {
     pub fn from_body(body: &str) -> GetFolderPathError {
@@ -4964,7 +5082,6 @@ pub enum InitiateDocumentVersionUploadError {
     Unknown(String),
 }
 
-
 impl InitiateDocumentVersionUploadError {
     pub fn from_body(body: &str) -> InitiateDocumentVersionUploadError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4978,17 +5095,61 @@ impl InitiateDocumentVersionUploadError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DraftUploadOutOfSyncException" => InitiateDocumentVersionUploadError::DraftUploadOutOfSync(String::from(error_message)),
-                    "EntityAlreadyExistsException" => InitiateDocumentVersionUploadError::EntityAlreadyExists(String::from(error_message)),
-                    "EntityNotExistsException" => InitiateDocumentVersionUploadError::EntityNotExists(String::from(error_message)),
-                    "FailedDependencyException" => InitiateDocumentVersionUploadError::FailedDependency(String::from(error_message)),
-                    "ProhibitedStateException" => InitiateDocumentVersionUploadError::ProhibitedState(String::from(error_message)),
-                    "ResourceAlreadyCheckedOutException" => InitiateDocumentVersionUploadError::ResourceAlreadyCheckedOut(String::from(error_message)),
-                    "ServiceUnavailableException" => InitiateDocumentVersionUploadError::ServiceUnavailable(String::from(error_message)),
-                    "StorageLimitExceededException" => InitiateDocumentVersionUploadError::StorageLimitExceeded(String::from(error_message)),
-                    "StorageLimitWillExceedException" => InitiateDocumentVersionUploadError::StorageLimitWillExceed(String::from(error_message)),
-                    "UnauthorizedOperationException" => InitiateDocumentVersionUploadError::UnauthorizedOperation(String::from(error_message)),
-                    "UnauthorizedResourceAccessException" => InitiateDocumentVersionUploadError::UnauthorizedResourceAccess(String::from(error_message)),
+                    "DraftUploadOutOfSyncException" => {
+                        InitiateDocumentVersionUploadError::DraftUploadOutOfSync(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EntityAlreadyExistsException" => {
+                        InitiateDocumentVersionUploadError::EntityAlreadyExists(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EntityNotExistsException" => {
+                        InitiateDocumentVersionUploadError::EntityNotExists(String::from(
+                            error_message,
+                        ))
+                    }
+                    "FailedDependencyException" => {
+                        InitiateDocumentVersionUploadError::FailedDependency(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ProhibitedStateException" => {
+                        InitiateDocumentVersionUploadError::ProhibitedState(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceAlreadyCheckedOutException" => {
+                        InitiateDocumentVersionUploadError::ResourceAlreadyCheckedOut(
+                            String::from(error_message),
+                        )
+                    }
+                    "ServiceUnavailableException" => {
+                        InitiateDocumentVersionUploadError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "StorageLimitExceededException" => {
+                        InitiateDocumentVersionUploadError::StorageLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
+                    "StorageLimitWillExceedException" => {
+                        InitiateDocumentVersionUploadError::StorageLimitWillExceed(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnauthorizedOperationException" => {
+                        InitiateDocumentVersionUploadError::UnauthorizedOperation(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnauthorizedResourceAccessException" => {
+                        InitiateDocumentVersionUploadError::UnauthorizedResourceAccess(
+                            String::from(error_message),
+                        )
+                    }
                     "ValidationException" => {
                         InitiateDocumentVersionUploadError::Validation(error_message.to_string())
                     }
@@ -5069,7 +5230,6 @@ pub enum RemoveAllResourcePermissionsError {
     Unknown(String),
 }
 
-
 impl RemoveAllResourcePermissionsError {
     pub fn from_body(body: &str) -> RemoveAllResourcePermissionsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5083,10 +5243,26 @@ impl RemoveAllResourcePermissionsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "FailedDependencyException" => RemoveAllResourcePermissionsError::FailedDependency(String::from(error_message)),
-                    "ServiceUnavailableException" => RemoveAllResourcePermissionsError::ServiceUnavailable(String::from(error_message)),
-                    "UnauthorizedOperationException" => RemoveAllResourcePermissionsError::UnauthorizedOperation(String::from(error_message)),
-                    "UnauthorizedResourceAccessException" => RemoveAllResourcePermissionsError::UnauthorizedResourceAccess(String::from(error_message)),
+                    "FailedDependencyException" => {
+                        RemoveAllResourcePermissionsError::FailedDependency(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServiceUnavailableException" => {
+                        RemoveAllResourcePermissionsError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnauthorizedOperationException" => {
+                        RemoveAllResourcePermissionsError::UnauthorizedOperation(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnauthorizedResourceAccessException" => {
+                        RemoveAllResourcePermissionsError::UnauthorizedResourceAccess(
+                            String::from(error_message),
+                        )
+                    }
                     "ValidationException" => {
                         RemoveAllResourcePermissionsError::Validation(error_message.to_string())
                     }
@@ -5160,7 +5336,6 @@ pub enum RemoveResourcePermissionError {
     Unknown(String),
 }
 
-
 impl RemoveResourcePermissionError {
     pub fn from_body(body: &str) -> RemoveResourcePermissionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5177,9 +5352,21 @@ impl RemoveResourcePermissionError {
                     "FailedDependencyException" => {
                         RemoveResourcePermissionError::FailedDependency(String::from(error_message))
                     }
-                    "ServiceUnavailableException" => RemoveResourcePermissionError::ServiceUnavailable(String::from(error_message)),
-                    "UnauthorizedOperationException" => RemoveResourcePermissionError::UnauthorizedOperation(String::from(error_message)),
-                    "UnauthorizedResourceAccessException" => RemoveResourcePermissionError::UnauthorizedResourceAccess(String::from(error_message)),
+                    "ServiceUnavailableException" => {
+                        RemoveResourcePermissionError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnauthorizedOperationException" => {
+                        RemoveResourcePermissionError::UnauthorizedOperation(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnauthorizedResourceAccessException" => {
+                        RemoveResourcePermissionError::UnauthorizedResourceAccess(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         RemoveResourcePermissionError::Validation(error_message.to_string())
                     }
@@ -5262,7 +5449,6 @@ pub enum UpdateDocumentError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl UpdateDocumentError {
     pub fn from_body(body: &str) -> UpdateDocumentError {
@@ -5388,7 +5574,6 @@ pub enum UpdateDocumentVersionError {
     Unknown(String),
 }
 
-
 impl UpdateDocumentVersionError {
     pub fn from_body(body: &str) -> UpdateDocumentVersionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5402,7 +5587,11 @@ impl UpdateDocumentVersionError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ConcurrentModificationException" => UpdateDocumentVersionError::ConcurrentModification(String::from(error_message)),
+                    "ConcurrentModificationException" => {
+                        UpdateDocumentVersionError::ConcurrentModification(String::from(
+                            error_message,
+                        ))
+                    }
                     "EntityNotExistsException" => {
                         UpdateDocumentVersionError::EntityNotExists(String::from(error_message))
                     }
@@ -5418,8 +5607,16 @@ impl UpdateDocumentVersionError {
                     "ServiceUnavailableException" => {
                         UpdateDocumentVersionError::ServiceUnavailable(String::from(error_message))
                     }
-                    "UnauthorizedOperationException" => UpdateDocumentVersionError::UnauthorizedOperation(String::from(error_message)),
-                    "UnauthorizedResourceAccessException" => UpdateDocumentVersionError::UnauthorizedResourceAccess(String::from(error_message)),
+                    "UnauthorizedOperationException" => {
+                        UpdateDocumentVersionError::UnauthorizedOperation(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnauthorizedResourceAccessException" => {
+                        UpdateDocumentVersionError::UnauthorizedResourceAccess(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         UpdateDocumentVersionError::Validation(error_message.to_string())
                     }
@@ -5506,7 +5703,6 @@ pub enum UpdateFolderError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl UpdateFolderError {
     pub fn from_body(body: &str) -> UpdateFolderError {
@@ -5630,7 +5826,6 @@ pub enum UpdateUserError {
     Unknown(String),
 }
 
-
 impl UpdateUserError {
     pub fn from_body(body: &str) -> UpdateUserError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5719,236 +5914,216 @@ impl Error for UpdateUserError {
 /// Trait representing the capabilities of the Amazon WorkDocs API. Amazon WorkDocs clients implement this trait.
 pub trait Workdocs {
     #[doc="<p>Aborts the upload of the specified document version that was previously initiated by <a>InitiateDocumentVersionUpload</a>. The client should make this call only when it no longer intends to upload the document version, or fails to do so.</p>"]
-    fn abort_document_version_upload(&self,
-                                     input: &AbortDocumentVersionUploadRequest)
-                                     -> Result<(), AbortDocumentVersionUploadError>;
+    fn abort_document_version_upload(
+        &self,
+        input: &AbortDocumentVersionUploadRequest,
+    ) -> Result<(), AbortDocumentVersionUploadError>;
 
-
-    #[doc="<p>Activates the specified user. Only active users can access Amazon WorkDocs.</p>"]
-    fn activate_user(&self,
-                     input: &ActivateUserRequest)
-                     -> Result<ActivateUserResponse, ActivateUserError>;
-
+    #[doc = "<p>Activates the specified user. Only active users can access Amazon WorkDocs.</p>"]
+    fn activate_user(
+        &self,
+        input: &ActivateUserRequest,
+    ) -> Result<ActivateUserResponse, ActivateUserError>;
 
     #[doc="<p>Creates a set of permissions for the specified folder or document. The resource permissions are overwritten if the principals already have different permissions.</p>"]
-    fn add_resource_permissions
-        (&self,
-         input: &AddResourcePermissionsRequest)
-         -> Result<AddResourcePermissionsResponse, AddResourcePermissionsError>;
+    fn add_resource_permissions(
+        &self,
+        input: &AddResourcePermissionsRequest,
+    ) -> Result<AddResourcePermissionsResponse, AddResourcePermissionsError>;
 
-
-    #[doc="<p>Adds a new comment to the specified document version.</p>"]
-    fn create_comment(&self,
-                      input: &CreateCommentRequest)
-                      -> Result<CreateCommentResponse, CreateCommentError>;
-
+    #[doc = "<p>Adds a new comment to the specified document version.</p>"]
+    fn create_comment(
+        &self,
+        input: &CreateCommentRequest,
+    ) -> Result<CreateCommentResponse, CreateCommentError>;
 
     #[doc="<p>Adds one or more custom properties to the specified resource (a folder, document, or version).</p>"]
-    fn create_custom_metadata
-        (&self,
-         input: &CreateCustomMetadataRequest)
-         -> Result<CreateCustomMetadataResponse, CreateCustomMetadataError>;
+    fn create_custom_metadata(
+        &self,
+        input: &CreateCustomMetadataRequest,
+    ) -> Result<CreateCustomMetadataResponse, CreateCustomMetadataError>;
 
+    #[doc = "<p>Creates a folder with the specified name and parent folder.</p>"]
+    fn create_folder(
+        &self,
+        input: &CreateFolderRequest,
+    ) -> Result<CreateFolderResponse, CreateFolderError>;
 
-    #[doc="<p>Creates a folder with the specified name and parent folder.</p>"]
-    fn create_folder(&self,
-                     input: &CreateFolderRequest)
-                     -> Result<CreateFolderResponse, CreateFolderError>;
-
-
-    #[doc="<p>Adds the specified list of labels to the given resource (a document or folder)</p>"]
-    fn create_labels(&self,
-                     input: &CreateLabelsRequest)
-                     -> Result<CreateLabelsResponse, CreateLabelsError>;
-
+    #[doc = "<p>Adds the specified list of labels to the given resource (a document or folder)</p>"]
+    fn create_labels(
+        &self,
+        input: &CreateLabelsRequest,
+    ) -> Result<CreateLabelsResponse, CreateLabelsError>;
 
     #[doc="<p>Configure WorkDocs to use Amazon SNS notifications.</p> <p>The endpoint receives a confirmation message, and must confirm the subscription. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SendMessageToHttp.html#SendMessageToHttp.confirm\">Confirm the Subscription</a> in the <i>Amazon Simple Notification Service Developer Guide</i>.</p>"]
-    fn create_notification_subscription
-        (&self,
-         input: &CreateNotificationSubscriptionRequest)
-         -> Result<CreateNotificationSubscriptionResponse, CreateNotificationSubscriptionError>;
-
+    fn create_notification_subscription(
+        &self,
+        input: &CreateNotificationSubscriptionRequest,
+    ) -> Result<CreateNotificationSubscriptionResponse, CreateNotificationSubscriptionError>;
 
     #[doc="<p>Creates a user in a Simple AD or Microsoft AD directory. The status of a newly created user is \"ACTIVE\". New users can access Amazon WorkDocs.</p>"]
-    fn create_user(&self,
-                   input: &CreateUserRequest)
-                   -> Result<CreateUserResponse, CreateUserError>;
-
+    fn create_user(&self, input: &CreateUserRequest)
+        -> Result<CreateUserResponse, CreateUserError>;
 
     #[doc="<p>Deactivates the specified user, which revokes the user's access to Amazon WorkDocs.</p>"]
     fn deactivate_user(&self, input: &DeactivateUserRequest) -> Result<(), DeactivateUserError>;
 
-
-    #[doc="<p>Deletes the specified comment from the document version.</p>"]
+    #[doc = "<p>Deletes the specified comment from the document version.</p>"]
     fn delete_comment(&self, input: &DeleteCommentRequest) -> Result<(), DeleteCommentError>;
 
+    #[doc = "<p>Deletes custom metadata from the specified resource.</p>"]
+    fn delete_custom_metadata(
+        &self,
+        input: &DeleteCustomMetadataRequest,
+    ) -> Result<DeleteCustomMetadataResponse, DeleteCustomMetadataError>;
 
-    #[doc="<p>Deletes custom metadata from the specified resource.</p>"]
-    fn delete_custom_metadata
-        (&self,
-         input: &DeleteCustomMetadataRequest)
-         -> Result<DeleteCustomMetadataResponse, DeleteCustomMetadataError>;
-
-
-    #[doc="<p>Permanently deletes the specified document and its associated metadata.</p>"]
+    #[doc = "<p>Permanently deletes the specified document and its associated metadata.</p>"]
     fn delete_document(&self, input: &DeleteDocumentRequest) -> Result<(), DeleteDocumentError>;
 
-
-    #[doc="<p>Permanently deletes the specified folder and its contents.</p>"]
+    #[doc = "<p>Permanently deletes the specified folder and its contents.</p>"]
     fn delete_folder(&self, input: &DeleteFolderRequest) -> Result<(), DeleteFolderError>;
 
+    #[doc = "<p>Deletes the contents of the specified folder.</p>"]
+    fn delete_folder_contents(
+        &self,
+        input: &DeleteFolderContentsRequest,
+    ) -> Result<(), DeleteFolderContentsError>;
 
-    #[doc="<p>Deletes the contents of the specified folder.</p>"]
-    fn delete_folder_contents(&self,
-                              input: &DeleteFolderContentsRequest)
-                              -> Result<(), DeleteFolderContentsError>;
+    #[doc = "<p>Deletes the specified list of labels from a resource.</p>"]
+    fn delete_labels(
+        &self,
+        input: &DeleteLabelsRequest,
+    ) -> Result<DeleteLabelsResponse, DeleteLabelsError>;
 
+    #[doc = "<p>Deletes the specified subscription from the specified organization.</p>"]
+    fn delete_notification_subscription(
+        &self,
+        input: &DeleteNotificationSubscriptionRequest,
+    ) -> Result<(), DeleteNotificationSubscriptionError>;
 
-    #[doc="<p>Deletes the specified list of labels from a resource.</p>"]
-    fn delete_labels(&self,
-                     input: &DeleteLabelsRequest)
-                     -> Result<DeleteLabelsResponse, DeleteLabelsError>;
-
-
-    #[doc="<p>Deletes the specified subscription from the specified organization.</p>"]
-    fn delete_notification_subscription(&self,
-                                        input: &DeleteNotificationSubscriptionRequest)
-                                        -> Result<(), DeleteNotificationSubscriptionError>;
-
-
-    #[doc="<p>Deletes the specified user from a Simple AD or Microsoft AD directory.</p>"]
+    #[doc = "<p>Deletes the specified user from a Simple AD or Microsoft AD directory.</p>"]
     fn delete_user(&self, input: &DeleteUserRequest) -> Result<(), DeleteUserError>;
 
+    #[doc = "<p>Describes the user activities in a specified time period.</p>"]
+    fn describe_activities(
+        &self,
+        input: &DescribeActivitiesRequest,
+    ) -> Result<DescribeActivitiesResponse, DescribeActivitiesError>;
 
-    #[doc="<p>Describes the user activities in a specified time period.</p>"]
-    fn describe_activities(&self,
-                           input: &DescribeActivitiesRequest)
-                           -> Result<DescribeActivitiesResponse, DescribeActivitiesError>;
-
-
-    #[doc="<p>List all the comments for the specified document version.</p>"]
-    fn describe_comments(&self,
-                         input: &DescribeCommentsRequest)
-                         -> Result<DescribeCommentsResponse, DescribeCommentsError>;
-
+    #[doc = "<p>List all the comments for the specified document version.</p>"]
+    fn describe_comments(
+        &self,
+        input: &DescribeCommentsRequest,
+    ) -> Result<DescribeCommentsResponse, DescribeCommentsError>;
 
     #[doc="<p>Retrieves the document versions for the specified document.</p> <p>By default, only active versions are returned.</p>"]
-    fn describe_document_versions
-        (&self,
-         input: &DescribeDocumentVersionsRequest)
-         -> Result<DescribeDocumentVersionsResponse, DescribeDocumentVersionsError>;
-
+    fn describe_document_versions(
+        &self,
+        input: &DescribeDocumentVersionsRequest,
+    ) -> Result<DescribeDocumentVersionsResponse, DescribeDocumentVersionsError>;
 
     #[doc="<p>Describes the contents of the specified folder, including its documents and subfolders.</p> <p>By default, Amazon WorkDocs returns the first 100 active document and folder metadata items. If there are more results, the response includes a marker that you can use to request the next set of results. You can also request initialized documents.</p>"]
-    fn describe_folder_contents
-        (&self,
-         input: &DescribeFolderContentsRequest)
-         -> Result<DescribeFolderContentsResponse, DescribeFolderContentsError>;
+    fn describe_folder_contents(
+        &self,
+        input: &DescribeFolderContentsRequest,
+    ) -> Result<DescribeFolderContentsResponse, DescribeFolderContentsError>;
 
+    #[doc = "<p>Lists the specified notification subscriptions.</p>"]
+    fn describe_notification_subscriptions(
+        &self,
+        input: &DescribeNotificationSubscriptionsRequest,
+    ) -> Result<DescribeNotificationSubscriptionsResponse, DescribeNotificationSubscriptionsError>;
 
-    #[doc="<p>Lists the specified notification subscriptions.</p>"]
-    fn describe_notification_subscriptions
-        (&self,
-         input: &DescribeNotificationSubscriptionsRequest)
-         -> Result<DescribeNotificationSubscriptionsResponse,
-                   DescribeNotificationSubscriptionsError>;
-
-
-    #[doc="<p>Describes the permissions of a specified resource.</p>"]
-    fn describe_resource_permissions
-        (&self,
-         input: &DescribeResourcePermissionsRequest)
-         -> Result<DescribeResourcePermissionsResponse, DescribeResourcePermissionsError>;
-
+    #[doc = "<p>Describes the permissions of a specified resource.</p>"]
+    fn describe_resource_permissions(
+        &self,
+        input: &DescribeResourcePermissionsRequest,
+    ) -> Result<DescribeResourcePermissionsResponse, DescribeResourcePermissionsError>;
 
     #[doc="<p>Describes the current user's special folders; the <code>RootFolder</code> and the <code>RecyleBin</code>. <code>RootFolder</code> is the root of user's files and folders and <code>RecyleBin</code> is the root of recycled items. This is not a valid action for SigV4 (administrative API) clients.</p>"]
-    fn describe_root_folders(&self,
-                             input: &DescribeRootFoldersRequest)
-                             -> Result<DescribeRootFoldersResponse, DescribeRootFoldersError>;
-
+    fn describe_root_folders(
+        &self,
+        input: &DescribeRootFoldersRequest,
+    ) -> Result<DescribeRootFoldersResponse, DescribeRootFoldersError>;
 
     #[doc="<p>Describes the specified users. You can describe all users or filter the results (for example, by status or organization).</p> <p>By default, Amazon WorkDocs returns the first 24 active or pending users. If there are more results, the response includes a marker that you can use to request the next set of results.</p>"]
-    fn describe_users(&self,
-                      input: &DescribeUsersRequest)
-                      -> Result<DescribeUsersResponse, DescribeUsersError>;
-
+    fn describe_users(
+        &self,
+        input: &DescribeUsersRequest,
+    ) -> Result<DescribeUsersResponse, DescribeUsersError>;
 
     #[doc="<p>Retrieves details of the current user for whom the authentication token was generated. This is not a valid action for SigV4 (administrative API) clients.</p>"]
-    fn get_current_user(&self,
-                        input: &GetCurrentUserRequest)
-                        -> Result<GetCurrentUserResponse, GetCurrentUserError>;
+    fn get_current_user(
+        &self,
+        input: &GetCurrentUserRequest,
+    ) -> Result<GetCurrentUserResponse, GetCurrentUserError>;
 
-
-    #[doc="<p>Retrieves details of a document.</p>"]
-    fn get_document(&self,
-                    input: &GetDocumentRequest)
-                    -> Result<GetDocumentResponse, GetDocumentError>;
-
+    #[doc = "<p>Retrieves details of a document.</p>"]
+    fn get_document(
+        &self,
+        input: &GetDocumentRequest,
+    ) -> Result<GetDocumentResponse, GetDocumentError>;
 
     #[doc="<p>Retrieves the path information (the hierarchy from the root folder) for the requested document.</p> <p>By default, Amazon WorkDocs returns a maximum of 100 levels upwards from the requested document and only includes the IDs of the parent folders in the path. You can limit the maximum number of levels. You can also request the names of the parent folders.</p>"]
-    fn get_document_path(&self,
-                         input: &GetDocumentPathRequest)
-                         -> Result<GetDocumentPathResponse, GetDocumentPathError>;
+    fn get_document_path(
+        &self,
+        input: &GetDocumentPathRequest,
+    ) -> Result<GetDocumentPathResponse, GetDocumentPathError>;
 
+    #[doc = "<p>Retrieves version metadata for the specified document.</p>"]
+    fn get_document_version(
+        &self,
+        input: &GetDocumentVersionRequest,
+    ) -> Result<GetDocumentVersionResponse, GetDocumentVersionError>;
 
-    #[doc="<p>Retrieves version metadata for the specified document.</p>"]
-    fn get_document_version(&self,
-                            input: &GetDocumentVersionRequest)
-                            -> Result<GetDocumentVersionResponse, GetDocumentVersionError>;
-
-
-    #[doc="<p>Retrieves the metadata of the specified folder.</p>"]
+    #[doc = "<p>Retrieves the metadata of the specified folder.</p>"]
     fn get_folder(&self, input: &GetFolderRequest) -> Result<GetFolderResponse, GetFolderError>;
 
-
     #[doc="<p>Retrieves the path information (the hierarchy from the root folder) for the specified folder.</p> <p>By default, Amazon WorkDocs returns a maximum of 100 levels upwards from the requested folder and only includes the IDs of the parent folders in the path. You can limit the maximum number of levels. You can also request the parent folder names.</p>"]
-    fn get_folder_path(&self,
-                       input: &GetFolderPathRequest)
-                       -> Result<GetFolderPathResponse, GetFolderPathError>;
-
+    fn get_folder_path(
+        &self,
+        input: &GetFolderPathRequest,
+    ) -> Result<GetFolderPathResponse, GetFolderPathError>;
 
     #[doc="<p>Creates a new document object and version object.</p> <p>The client specifies the parent folder ID and name of the document to upload. The ID is optionally specified when creating a new version of an existing document. This is the first step to upload a document. Next, upload the document to the URL returned from the call, and then call <a>UpdateDocumentVersion</a>.</p> <p>To cancel the document upload, call <a>AbortDocumentVersionUpload</a>.</p>"]
-    fn initiate_document_version_upload
-        (&self,
-         input: &InitiateDocumentVersionUploadRequest)
-         -> Result<InitiateDocumentVersionUploadResponse, InitiateDocumentVersionUploadError>;
+    fn initiate_document_version_upload(
+        &self,
+        input: &InitiateDocumentVersionUploadRequest,
+    ) -> Result<InitiateDocumentVersionUploadResponse, InitiateDocumentVersionUploadError>;
 
+    #[doc = "<p>Removes all the permissions from the specified resource.</p>"]
+    fn remove_all_resource_permissions(
+        &self,
+        input: &RemoveAllResourcePermissionsRequest,
+    ) -> Result<(), RemoveAllResourcePermissionsError>;
 
-    #[doc="<p>Removes all the permissions from the specified resource.</p>"]
-    fn remove_all_resource_permissions(&self,
-                                       input: &RemoveAllResourcePermissionsRequest)
-                                       -> Result<(), RemoveAllResourcePermissionsError>;
-
-
-    #[doc="<p>Removes the permission for the specified principal from the specified resource.</p>"]
-    fn remove_resource_permission(&self,
-                                  input: &RemoveResourcePermissionRequest)
-                                  -> Result<(), RemoveResourcePermissionError>;
-
+    #[doc = "<p>Removes the permission for the specified principal from the specified resource.</p>"]
+    fn remove_resource_permission(
+        &self,
+        input: &RemoveResourcePermissionRequest,
+    ) -> Result<(), RemoveResourcePermissionError>;
 
     #[doc="<p>Updates the specified attributes of a document. The user must have access to both the document and its parent folder, if applicable.</p>"]
     fn update_document(&self, input: &UpdateDocumentRequest) -> Result<(), UpdateDocumentError>;
 
-
     #[doc="<p>Changes the status of the document version to ACTIVE. </p> <p>Amazon WorkDocs also sets its document container to ACTIVE. This is the last step in a document upload, after the client uploads the document to an S3-presigned URL returned by <a>InitiateDocumentVersionUpload</a>. </p>"]
-    fn update_document_version(&self,
-                               input: &UpdateDocumentVersionRequest)
-                               -> Result<(), UpdateDocumentVersionError>;
-
+    fn update_document_version(
+        &self,
+        input: &UpdateDocumentVersionRequest,
+    ) -> Result<(), UpdateDocumentVersionError>;
 
     #[doc="<p>Updates the specified attributes of the specified folder. The user must have access to both the folder and its parent folder, if applicable.</p>"]
     fn update_folder(&self, input: &UpdateFolderRequest) -> Result<(), UpdateFolderError>;
 
-
     #[doc="<p>Updates the specified attributes of the specified user, and grants or revokes administrative privileges to the Amazon WorkDocs site.</p>"]
-    fn update_user(&self,
-                   input: &UpdateUserRequest)
-                   -> Result<UpdateUserResponse, UpdateUserError>;
+    fn update_user(&self, input: &UpdateUserRequest)
+        -> Result<UpdateUserResponse, UpdateUserError>;
 }
 /// A client for the Amazon WorkDocs API.
 pub struct WorkdocsClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -5956,8 +6131,9 @@ pub struct WorkdocsClient<P, D>
 }
 
 impl<P, D> WorkdocsClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         WorkdocsClient {
@@ -5969,27 +6145,27 @@ impl<P, D> WorkdocsClient<P, D>
 }
 
 impl<P, D> Workdocs for WorkdocsClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     #[doc="<p>Aborts the upload of the specified document version that was previously initiated by <a>InitiateDocumentVersionUpload</a>. The client should make this call only when it no longer intends to upload the document version, or fails to do so.</p>"]
-    fn abort_document_version_upload(&self,
-                                     input: &AbortDocumentVersionUploadRequest)
-                                     -> Result<(), AbortDocumentVersionUploadError> {
-        let request_uri = format!("/api/v1/documents/{document_id}/versions/{version_id}",
-                                  document_id = input.document_id,
-                                  version_id = input.version_id);
+    fn abort_document_version_upload(
+        &self,
+        input: &AbortDocumentVersionUploadRequest,
+    ) -> Result<(), AbortDocumentVersionUploadError> {
+        let request_uri = format!(
+            "/api/v1/documents/{document_id}/versions/{version_id}",
+            document_id = input.document_id,
+            version_id = input.version_id
+        );
 
         let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
-
-
         if let Some(ref authentication_token) = input.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
@@ -5998,43 +6174,40 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
             StatusCode::NoContent => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AbortDocumentVersionUploadError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+                Err(AbortDocumentVersionUploadError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Activates the specified user. Only active users can access Amazon WorkDocs.</p>"]
-    fn activate_user(&self,
-                     input: &ActivateUserRequest)
-                     -> Result<ActivateUserResponse, ActivateUserError> {
-        let request_uri = format!("/api/v1/users/{user_id}/activation",
-                                  user_id = input.user_id);
+    #[doc = "<p>Activates the specified user. Only active users can access Amazon WorkDocs.</p>"]
+    fn activate_user(
+        &self,
+        input: &ActivateUserRequest,
+    ) -> Result<ActivateUserResponse, ActivateUserError> {
+        let request_uri = format!(
+            "/api/v1/users/{user_id}/activation",
+            user_id = input.user_id
+        );
 
         let mut request = SignedRequest::new("POST", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
-
-
         if let Some(ref authentication_token) = input.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -6046,30 +6219,30 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<ActivateUserResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ActivateUserError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ActivateUserError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a set of permissions for the specified folder or document. The resource permissions are overwritten if the principals already have different permissions.</p>"]
-    fn add_resource_permissions
-        (&self,
-         input: &AddResourcePermissionsRequest)
-         -> Result<AddResourcePermissionsResponse, AddResourcePermissionsError> {
-        let request_uri = format!("/api/v1/resources/{resource_id}/permissions",
-                                  resource_id = input.resource_id);
+    fn add_resource_permissions(
+        &self,
+        input: &AddResourcePermissionsRequest,
+    ) -> Result<AddResourcePermissionsResponse, AddResourcePermissionsError> {
+        let request_uri = format!(
+            "/api/v1/resources/{resource_id}/permissions",
+            resource_id = input.resource_id
+        );
 
         let mut request = SignedRequest::new("POST", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
 
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
@@ -6078,13 +6251,11 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -6094,33 +6265,34 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<AddResourcePermissionsResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<AddResourcePermissionsResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AddResourcePermissionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AddResourcePermissionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Adds a new comment to the specified document version.</p>"]
-    fn create_comment(&self,
-                      input: &CreateCommentRequest)
-                      -> Result<CreateCommentResponse, CreateCommentError> {
-        let request_uri = format!("/api/v1/documents/{document_id}/versions/{version_id}/comment",
-                                  document_id = input.document_id,
-                                  version_id = input.version_id);
+    #[doc = "<p>Adds a new comment to the specified document version.</p>"]
+    fn create_comment(
+        &self,
+        input: &CreateCommentRequest,
+    ) -> Result<CreateCommentResponse, CreateCommentError> {
+        let request_uri = format!(
+            "/api/v1/documents/{document_id}/versions/{version_id}/comment",
+            document_id = input.document_id,
+            version_id = input.version_id
+        );
 
         let mut request = SignedRequest::new("POST", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
 
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
@@ -6129,13 +6301,11 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -6147,30 +6317,30 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<CreateCommentResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateCommentError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateCommentError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Adds one or more custom properties to the specified resource (a folder, document, or version).</p>"]
-    fn create_custom_metadata
-        (&self,
-         input: &CreateCustomMetadataRequest)
-         -> Result<CreateCustomMetadataResponse, CreateCustomMetadataError> {
-        let request_uri = format!("/api/v1/resources/{resource_id}/customMetadata",
-                                  resource_id = input.resource_id);
+    fn create_custom_metadata(
+        &self,
+        input: &CreateCustomMetadataRequest,
+    ) -> Result<CreateCustomMetadataResponse, CreateCustomMetadataError> {
+        let request_uri = format!(
+            "/api/v1/resources/{resource_id}/customMetadata",
+            resource_id = input.resource_id
+        );
 
         let mut request = SignedRequest::new("PUT", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
 
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
@@ -6189,7 +6359,6 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -6201,28 +6370,27 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<CreateCustomMetadataResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateCustomMetadataError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateCustomMetadataError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates a folder with the specified name and parent folder.</p>"]
-    fn create_folder(&self,
-                     input: &CreateFolderRequest)
-                     -> Result<CreateFolderResponse, CreateFolderError> {
+    #[doc = "<p>Creates a folder with the specified name and parent folder.</p>"]
+    fn create_folder(
+        &self,
+        input: &CreateFolderRequest,
+    ) -> Result<CreateFolderResponse, CreateFolderError> {
         let request_uri = "/api/v1/folders";
 
         let mut request = SignedRequest::new("POST", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
 
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
@@ -6231,13 +6399,11 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -6249,29 +6415,30 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<CreateFolderResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateFolderError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateFolderError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Adds the specified list of labels to the given resource (a document or folder)</p>"]
-    fn create_labels(&self,
-                     input: &CreateLabelsRequest)
-                     -> Result<CreateLabelsResponse, CreateLabelsError> {
-        let request_uri = format!("/api/v1/resources/{resource_id}/labels",
-                                  resource_id = input.resource_id);
+    #[doc = "<p>Adds the specified list of labels to the given resource (a document or folder)</p>"]
+    fn create_labels(
+        &self,
+        input: &CreateLabelsRequest,
+    ) -> Result<CreateLabelsResponse, CreateLabelsError> {
+        let request_uri = format!(
+            "/api/v1/resources/{resource_id}/labels",
+            resource_id = input.resource_id
+        );
 
         let mut request = SignedRequest::new("PUT", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
 
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
@@ -6280,13 +6447,11 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -6298,42 +6463,39 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<CreateLabelsResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateLabelsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateLabelsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Configure WorkDocs to use Amazon SNS notifications.</p> <p>The endpoint receives a confirmation message, and must confirm the subscription. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SendMessageToHttp.html#SendMessageToHttp.confirm\">Confirm the Subscription</a> in the <i>Amazon Simple Notification Service Developer Guide</i>.</p>"]
-    fn create_notification_subscription
-        (&self,
-         input: &CreateNotificationSubscriptionRequest)
-         -> Result<CreateNotificationSubscriptionResponse, CreateNotificationSubscriptionError> {
-        let request_uri = format!("/api/v1/organizations/{organization_id}/subscriptions",
-                                  organization_id = input.organization_id);
+    fn create_notification_subscription(
+        &self,
+        input: &CreateNotificationSubscriptionRequest,
+    ) -> Result<CreateNotificationSubscriptionResponse, CreateNotificationSubscriptionError> {
+        let request_uri = format!(
+            "/api/v1/organizations/{organization_id}/subscriptions",
+            organization_id = input.organization_id
+        );
 
         let mut request = SignedRequest::new("POST", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -6343,33 +6505,31 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<CreateNotificationSubscriptionResponse>(&body)
-                        .unwrap();
-
-
+                let result = serde_json::from_slice::<CreateNotificationSubscriptionResponse>(
+                    &body,
+                ).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateNotificationSubscriptionError::from_body(String::from_utf8_lossy(&body)
-                                                                       .as_ref()))
+                Err(CreateNotificationSubscriptionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a user in a Simple AD or Microsoft AD directory. The status of a newly created user is \"ACTIVE\". New users can access Amazon WorkDocs.</p>"]
-    fn create_user(&self,
-                   input: &CreateUserRequest)
-                   -> Result<CreateUserResponse, CreateUserError> {
+    fn create_user(
+        &self,
+        input: &CreateUserRequest,
+    ) -> Result<CreateUserResponse, CreateUserError> {
         let request_uri = "/api/v1/users";
 
         let mut request = SignedRequest::new("POST", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
 
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
@@ -6378,13 +6538,11 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -6396,34 +6554,31 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<CreateUserResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateUserError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateUserError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Deactivates the specified user, which revokes the user's access to Amazon WorkDocs.</p>"]
     fn deactivate_user(&self, input: &DeactivateUserRequest) -> Result<(), DeactivateUserError> {
-        let request_uri = format!("/api/v1/users/{user_id}/activation",
-                                  user_id = input.user_id);
+        let request_uri = format!(
+            "/api/v1/users/{user_id}/activation",
+            user_id = input.user_id
+        );
 
         let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
-
-
         if let Some(ref authentication_token) = input.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
@@ -6432,35 +6587,33 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
             StatusCode::NoContent => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeactivateUserError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeactivateUserError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes the specified comment from the document version.</p>"]
+    #[doc = "<p>Deletes the specified comment from the document version.</p>"]
     fn delete_comment(&self, input: &DeleteCommentRequest) -> Result<(), DeleteCommentError> {
-        let request_uri = format!("/api/v1/documents/{document_id}/versions/{version_id}/comment/{comment_id}",
-                                  comment_id = input.comment_id,
-                                  document_id = input.document_id,
-                                  version_id = input.version_id);
+        let request_uri = format!(
+            "/api/v1/documents/{document_id}/versions/{version_id}/comment/{comment_id}",
+            comment_id = input.comment_id,
+            document_id = input.document_id,
+            version_id = input.version_id
+        );
 
         let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
-
-
         if let Some(ref authentication_token) = input.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
@@ -6469,31 +6622,30 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
             StatusCode::NoContent => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteCommentError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteCommentError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes custom metadata from the specified resource.</p>"]
-    fn delete_custom_metadata
-        (&self,
-         input: &DeleteCustomMetadataRequest)
-         -> Result<DeleteCustomMetadataResponse, DeleteCustomMetadataError> {
-        let request_uri = format!("/api/v1/resources/{resource_id}/customMetadata",
-                                  resource_id = input.resource_id);
+    #[doc = "<p>Deletes custom metadata from the specified resource.</p>"]
+    fn delete_custom_metadata(
+        &self,
+        input: &DeleteCustomMetadataRequest,
+    ) -> Result<DeleteCustomMetadataResponse, DeleteCustomMetadataError> {
+        let request_uri = format!(
+            "/api/v1/resources/{resource_id}/customMetadata",
+            resource_id = input.resource_id
+        );
 
         let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
 
         if let Some(ref authentication_token) = input.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
@@ -6517,7 +6669,6 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -6529,34 +6680,31 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<DeleteCustomMetadataResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteCustomMetadataError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteCustomMetadataError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Permanently deletes the specified document and its associated metadata.</p>"]
+    #[doc = "<p>Permanently deletes the specified document and its associated metadata.</p>"]
     fn delete_document(&self, input: &DeleteDocumentRequest) -> Result<(), DeleteDocumentError> {
-        let request_uri = format!("/api/v1/documents/{document_id}",
-                                  document_id = input.document_id);
+        let request_uri = format!(
+            "/api/v1/documents/{document_id}",
+            document_id = input.document_id
+        );
 
         let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
-
-
         if let Some(ref authentication_token) = input.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
@@ -6565,32 +6713,28 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
             StatusCode::NoContent => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteDocumentError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteDocumentError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Permanently deletes the specified folder and its contents.</p>"]
+    #[doc = "<p>Permanently deletes the specified folder and its contents.</p>"]
     fn delete_folder(&self, input: &DeleteFolderRequest) -> Result<(), DeleteFolderError> {
         let request_uri = format!("/api/v1/folders/{folder_id}", folder_id = input.folder_id);
 
         let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
-
-
         if let Some(ref authentication_token) = input.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
@@ -6599,35 +6743,34 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
             StatusCode::NoContent => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteFolderError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteFolderError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes the contents of the specified folder.</p>"]
-    fn delete_folder_contents(&self,
-                              input: &DeleteFolderContentsRequest)
-                              -> Result<(), DeleteFolderContentsError> {
-        let request_uri = format!("/api/v1/folders/{folder_id}/contents",
-                                  folder_id = input.folder_id);
+    #[doc = "<p>Deletes the contents of the specified folder.</p>"]
+    fn delete_folder_contents(
+        &self,
+        input: &DeleteFolderContentsRequest,
+    ) -> Result<(), DeleteFolderContentsError> {
+        let request_uri = format!(
+            "/api/v1/folders/{folder_id}/contents",
+            folder_id = input.folder_id
+        );
 
         let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
-
-
         if let Some(ref authentication_token) = input.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
@@ -6636,30 +6779,30 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
             StatusCode::NoContent => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteFolderContentsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteFolderContentsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes the specified list of labels from a resource.</p>"]
-    fn delete_labels(&self,
-                     input: &DeleteLabelsRequest)
-                     -> Result<DeleteLabelsResponse, DeleteLabelsError> {
-        let request_uri = format!("/api/v1/resources/{resource_id}/labels",
-                                  resource_id = input.resource_id);
+    #[doc = "<p>Deletes the specified list of labels from a resource.</p>"]
+    fn delete_labels(
+        &self,
+        input: &DeleteLabelsRequest,
+    ) -> Result<DeleteLabelsResponse, DeleteLabelsError> {
+        let request_uri = format!(
+            "/api/v1/resources/{resource_id}/labels",
+            resource_id = input.resource_id
+        );
 
         let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
 
         if let Some(ref authentication_token) = input.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
@@ -6680,7 +6823,6 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -6692,34 +6834,31 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<DeleteLabelsResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteLabelsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteLabelsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes the specified subscription from the specified organization.</p>"]
-    fn delete_notification_subscription(&self,
-                                        input: &DeleteNotificationSubscriptionRequest)
-                                        -> Result<(), DeleteNotificationSubscriptionError> {
-        let request_uri = format!("/api/v1/organizations/{organization_id}/subscriptions/{subscription_id}",
-                                  organization_id = input.organization_id,
-                                  subscription_id = input.subscription_id);
+    #[doc = "<p>Deletes the specified subscription from the specified organization.</p>"]
+    fn delete_notification_subscription(
+        &self,
+        input: &DeleteNotificationSubscriptionRequest,
+    ) -> Result<(), DeleteNotificationSubscriptionError> {
+        let request_uri = format!(
+            "/api/v1/organizations/{organization_id}/subscriptions/{subscription_id}",
+            organization_id = input.organization_id,
+            subscription_id = input.subscription_id
+        );
 
         let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
@@ -6728,33 +6867,28 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
             StatusCode::Ok => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteNotificationSubscriptionError::from_body(String::from_utf8_lossy(&body)
-                                                                       .as_ref()))
+                Err(DeleteNotificationSubscriptionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes the specified user from a Simple AD or Microsoft AD directory.</p>"]
+    #[doc = "<p>Deletes the specified user from a Simple AD or Microsoft AD directory.</p>"]
     fn delete_user(&self, input: &DeleteUserRequest) -> Result<(), DeleteUserError> {
         let request_uri = format!("/api/v1/users/{user_id}", user_id = input.user_id);
 
         let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
-
-
         if let Some(ref authentication_token) = input.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
@@ -6763,29 +6897,27 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
             StatusCode::NoContent => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteUserError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteUserError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Describes the user activities in a specified time period.</p>"]
-    fn describe_activities(&self,
-                           input: &DescribeActivitiesRequest)
-                           -> Result<DescribeActivitiesResponse, DescribeActivitiesError> {
+    #[doc = "<p>Describes the user activities in a specified time period.</p>"]
+    fn describe_activities(
+        &self,
+        input: &DescribeActivitiesRequest,
+    ) -> Result<DescribeActivitiesResponse, DescribeActivitiesError> {
         let request_uri = "/api/v1/activities";
 
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
 
         if let Some(ref authentication_token) = input.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
@@ -6816,7 +6948,6 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -6828,32 +6959,31 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<DescribeActivitiesResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeActivitiesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeActivitiesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>List all the comments for the specified document version.</p>"]
-    fn describe_comments(&self,
-                         input: &DescribeCommentsRequest)
-                         -> Result<DescribeCommentsResponse, DescribeCommentsError> {
-        let request_uri = format!("/api/v1/documents/{document_id}/versions/{version_id}/comments",
-                                  document_id = input.document_id,
-                                  version_id = input.version_id);
+    #[doc = "<p>List all the comments for the specified document version.</p>"]
+    fn describe_comments(
+        &self,
+        input: &DescribeCommentsRequest,
+    ) -> Result<DescribeCommentsResponse, DescribeCommentsError> {
+        let request_uri = format!(
+            "/api/v1/documents/{document_id}/versions/{version_id}/comments",
+            document_id = input.document_id,
+            version_id = input.version_id
+        );
 
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
 
         if let Some(ref authentication_token) = input.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
@@ -6872,7 +7002,6 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -6884,32 +7013,30 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<DescribeCommentsResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeCommentsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeCommentsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves the document versions for the specified document.</p> <p>By default, only active versions are returned.</p>"]
-    fn describe_document_versions
-        (&self,
-         input: &DescribeDocumentVersionsRequest)
-         -> Result<DescribeDocumentVersionsResponse, DescribeDocumentVersionsError> {
-        let request_uri = format!("/api/v1/documents/{document_id}/versions",
-                                  document_id = input.document_id);
+    fn describe_document_versions(
+        &self,
+        input: &DescribeDocumentVersionsRequest,
+    ) -> Result<DescribeDocumentVersionsResponse, DescribeDocumentVersionsError> {
+        let request_uri = format!(
+            "/api/v1/documents/{document_id}/versions",
+            document_id = input.document_id
+        );
 
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
 
         if let Some(ref authentication_token) = input.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
@@ -6934,7 +7061,6 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -6944,36 +7070,33 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DescribeDocumentVersionsResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<DescribeDocumentVersionsResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeDocumentVersionsError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(DescribeDocumentVersionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Describes the contents of the specified folder, including its documents and subfolders.</p> <p>By default, Amazon WorkDocs returns the first 100 active document and folder metadata items. If there are more results, the response includes a marker that you can use to request the next set of results. You can also request initialized documents.</p>"]
-    fn describe_folder_contents
-        (&self,
-         input: &DescribeFolderContentsRequest)
-         -> Result<DescribeFolderContentsResponse, DescribeFolderContentsError> {
-        let request_uri = format!("/api/v1/folders/{folder_id}/contents",
-                                  folder_id = input.folder_id);
+    fn describe_folder_contents(
+        &self,
+        input: &DescribeFolderContentsRequest,
+    ) -> Result<DescribeFolderContentsResponse, DescribeFolderContentsError> {
+        let request_uri = format!(
+            "/api/v1/folders/{folder_id}/contents",
+            folder_id = input.folder_id
+        );
 
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
 
         if let Some(ref authentication_token) = input.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
@@ -7004,7 +7127,6 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -7014,36 +7136,34 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DescribeFolderContentsResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<DescribeFolderContentsResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeFolderContentsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeFolderContentsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists the specified notification subscriptions.</p>"]
-    fn describe_notification_subscriptions
-        (&self,
-         input: &DescribeNotificationSubscriptionsRequest)
-         -> Result<DescribeNotificationSubscriptionsResponse,
-                   DescribeNotificationSubscriptionsError> {
-        let request_uri = format!("/api/v1/organizations/{organization_id}/subscriptions",
-                                  organization_id = input.organization_id);
+    #[doc = "<p>Lists the specified notification subscriptions.</p>"]
+    fn describe_notification_subscriptions(
+        &self,
+        input: &DescribeNotificationSubscriptionsRequest,
+    ) -> Result<DescribeNotificationSubscriptionsResponse, DescribeNotificationSubscriptionsError>
+    {
+        let request_uri = format!(
+            "/api/v1/organizations/{organization_id}/subscriptions",
+            organization_id = input.organization_id
+        );
 
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.limit {
@@ -7059,7 +7179,6 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -7069,36 +7188,34 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<DescribeNotificationSubscriptionsResponse>(&body)
-                        .unwrap();
-
-
+                let result = serde_json::from_slice::<DescribeNotificationSubscriptionsResponse>(
+                    &body,
+                ).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeNotificationSubscriptionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeNotificationSubscriptionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Describes the permissions of a specified resource.</p>"]
-    fn describe_resource_permissions
-        (&self,
-         input: &DescribeResourcePermissionsRequest)
-         -> Result<DescribeResourcePermissionsResponse, DescribeResourcePermissionsError> {
-        let request_uri = format!("/api/v1/resources/{resource_id}/permissions",
-                                  resource_id = input.resource_id);
+    #[doc = "<p>Describes the permissions of a specified resource.</p>"]
+    fn describe_resource_permissions(
+        &self,
+        input: &DescribeResourcePermissionsRequest,
+    ) -> Result<DescribeResourcePermissionsResponse, DescribeResourcePermissionsError> {
+        let request_uri = format!(
+            "/api/v1/resources/{resource_id}/permissions",
+            resource_id = input.resource_id
+        );
 
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
 
         if let Some(ref authentication_token) = input.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
@@ -7117,7 +7234,6 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -7127,33 +7243,30 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DescribeResourcePermissionsResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<DescribeResourcePermissionsResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeResourcePermissionsError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(DescribeResourcePermissionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Describes the current user's special folders; the <code>RootFolder</code> and the <code>RecyleBin</code>. <code>RootFolder</code> is the root of user's files and folders and <code>RecyleBin</code> is the root of recycled items. This is not a valid action for SigV4 (administrative API) clients.</p>"]
-    fn describe_root_folders(&self,
-                             input: &DescribeRootFoldersRequest)
-                             -> Result<DescribeRootFoldersResponse, DescribeRootFoldersError> {
+    fn describe_root_folders(
+        &self,
+        input: &DescribeRootFoldersRequest,
+    ) -> Result<DescribeRootFoldersResponse, DescribeRootFoldersError> {
         let request_uri = "/api/v1/me/root";
 
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
 
         request.add_header("Authentication", &input.authentication_token);
         let mut params = Params::new();
@@ -7170,7 +7283,6 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -7182,30 +7294,27 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<DescribeRootFoldersResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeRootFoldersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeRootFoldersError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Describes the specified users. You can describe all users or filter the results (for example, by status or organization).</p> <p>By default, Amazon WorkDocs returns the first 24 active or pending users. If there are more results, the response includes a marker that you can use to request the next set of results.</p>"]
-    fn describe_users(&self,
-                      input: &DescribeUsersRequest)
-                      -> Result<DescribeUsersResponse, DescribeUsersError> {
+    fn describe_users(
+        &self,
+        input: &DescribeUsersRequest,
+    ) -> Result<DescribeUsersResponse, DescribeUsersError> {
         let request_uri = "/api/v1/users";
 
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
 
         if let Some(ref authentication_token) = input.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
@@ -7245,7 +7354,6 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -7257,39 +7365,35 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<DescribeUsersResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeUsersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeUsersError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves details of the current user for whom the authentication token was generated. This is not a valid action for SigV4 (administrative API) clients.</p>"]
-    fn get_current_user(&self,
-                        input: &GetCurrentUserRequest)
-                        -> Result<GetCurrentUserResponse, GetCurrentUserError> {
+    fn get_current_user(
+        &self,
+        input: &GetCurrentUserRequest,
+    ) -> Result<GetCurrentUserResponse, GetCurrentUserError> {
         let request_uri = "/api/v1/me";
 
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
-
         request.add_header("Authentication", &input.authentication_token);
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -7301,31 +7405,30 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetCurrentUserResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetCurrentUserError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetCurrentUserError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves details of a document.</p>"]
-    fn get_document(&self,
-                    input: &GetDocumentRequest)
-                    -> Result<GetDocumentResponse, GetDocumentError> {
-        let request_uri = format!("/api/v1/documents/{document_id}",
-                                  document_id = input.document_id);
+    #[doc = "<p>Retrieves details of a document.</p>"]
+    fn get_document(
+        &self,
+        input: &GetDocumentRequest,
+    ) -> Result<GetDocumentResponse, GetDocumentError> {
+        let request_uri = format!(
+            "/api/v1/documents/{document_id}",
+            document_id = input.document_id
+        );
 
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
 
         if let Some(ref authentication_token) = input.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
@@ -7341,7 +7444,6 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -7353,31 +7455,30 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetDocumentResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetDocumentError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetDocumentError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves the path information (the hierarchy from the root folder) for the requested document.</p> <p>By default, Amazon WorkDocs returns a maximum of 100 levels upwards from the requested document and only includes the IDs of the parent folders in the path. You can limit the maximum number of levels. You can also request the names of the parent folders.</p>"]
-    fn get_document_path(&self,
-                         input: &GetDocumentPathRequest)
-                         -> Result<GetDocumentPathResponse, GetDocumentPathError> {
-        let request_uri = format!("/api/v1/documents/{document_id}/path",
-                                  document_id = input.document_id);
+    fn get_document_path(
+        &self,
+        input: &GetDocumentPathRequest,
+    ) -> Result<GetDocumentPathResponse, GetDocumentPathError> {
+        let request_uri = format!(
+            "/api/v1/documents/{document_id}/path",
+            document_id = input.document_id
+        );
 
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
 
         if let Some(ref authentication_token) = input.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
@@ -7399,7 +7500,6 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -7411,32 +7511,31 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetDocumentPathResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetDocumentPathError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetDocumentPathError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves version metadata for the specified document.</p>"]
-    fn get_document_version(&self,
-                            input: &GetDocumentVersionRequest)
-                            -> Result<GetDocumentVersionResponse, GetDocumentVersionError> {
-        let request_uri = format!("/api/v1/documents/{document_id}/versions/{version_id}",
-                                  document_id = input.document_id,
-                                  version_id = input.version_id);
+    #[doc = "<p>Retrieves version metadata for the specified document.</p>"]
+    fn get_document_version(
+        &self,
+        input: &GetDocumentVersionRequest,
+    ) -> Result<GetDocumentVersionResponse, GetDocumentVersionError> {
+        let request_uri = format!(
+            "/api/v1/documents/{document_id}/versions/{version_id}",
+            document_id = input.document_id,
+            version_id = input.version_id
+        );
 
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
 
         if let Some(ref authentication_token) = input.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
@@ -7455,7 +7554,6 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -7467,28 +7565,24 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetDocumentVersionResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetDocumentVersionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetDocumentVersionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves the metadata of the specified folder.</p>"]
+    #[doc = "<p>Retrieves the metadata of the specified folder.</p>"]
     fn get_folder(&self, input: &GetFolderRequest) -> Result<GetFolderResponse, GetFolderError> {
         let request_uri = format!("/api/v1/folders/{folder_id}", folder_id = input.folder_id);
 
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
 
         if let Some(ref authentication_token) = input.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
@@ -7504,7 +7598,6 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -7516,31 +7609,30 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetFolderResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetFolderError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetFolderError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves the path information (the hierarchy from the root folder) for the specified folder.</p> <p>By default, Amazon WorkDocs returns a maximum of 100 levels upwards from the requested folder and only includes the IDs of the parent folders in the path. You can limit the maximum number of levels. You can also request the parent folder names.</p>"]
-    fn get_folder_path(&self,
-                       input: &GetFolderPathRequest)
-                       -> Result<GetFolderPathResponse, GetFolderPathError> {
-        let request_uri = format!("/api/v1/folders/{folder_id}/path",
-                                  folder_id = input.folder_id);
+    fn get_folder_path(
+        &self,
+        input: &GetFolderPathRequest,
+    ) -> Result<GetFolderPathResponse, GetFolderPathError> {
+        let request_uri = format!(
+            "/api/v1/folders/{folder_id}/path",
+            folder_id = input.folder_id
+        );
 
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
 
         if let Some(ref authentication_token) = input.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
@@ -7562,7 +7654,6 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -7574,29 +7665,27 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetFolderPathResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetFolderPathError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetFolderPathError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a new document object and version object.</p> <p>The client specifies the parent folder ID and name of the document to upload. The ID is optionally specified when creating a new version of an existing document. This is the first step to upload a document. Next, upload the document to the URL returned from the call, and then call <a>UpdateDocumentVersion</a>.</p> <p>To cancel the document upload, call <a>AbortDocumentVersionUpload</a>.</p>"]
-    fn initiate_document_version_upload
-        (&self,
-         input: &InitiateDocumentVersionUploadRequest)
-         -> Result<InitiateDocumentVersionUploadResponse, InitiateDocumentVersionUploadError> {
+    fn initiate_document_version_upload(
+        &self,
+        input: &InitiateDocumentVersionUploadRequest,
+    ) -> Result<InitiateDocumentVersionUploadResponse, InitiateDocumentVersionUploadError> {
         let request_uri = "/api/v1/documents";
 
         let mut request = SignedRequest::new("POST", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
 
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
@@ -7605,13 +7694,11 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -7621,40 +7708,37 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<InitiateDocumentVersionUploadResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<InitiateDocumentVersionUploadResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(InitiateDocumentVersionUploadError::from_body(String::from_utf8_lossy(&body)
-                                                                      .as_ref()))
+                Err(InitiateDocumentVersionUploadError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Removes all the permissions from the specified resource.</p>"]
-    fn remove_all_resource_permissions(&self,
-                                       input: &RemoveAllResourcePermissionsRequest)
-                                       -> Result<(), RemoveAllResourcePermissionsError> {
-        let request_uri = format!("/api/v1/resources/{resource_id}/permissions",
-                                  resource_id = input.resource_id);
+    #[doc = "<p>Removes all the permissions from the specified resource.</p>"]
+    fn remove_all_resource_permissions(
+        &self,
+        input: &RemoveAllResourcePermissionsRequest,
+    ) -> Result<(), RemoveAllResourcePermissionsError> {
+        let request_uri = format!(
+            "/api/v1/resources/{resource_id}/permissions",
+            resource_id = input.resource_id
+        );
 
         let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
-
-
         if let Some(ref authentication_token) = input.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
@@ -7663,32 +7747,31 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
             StatusCode::NoContent => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(RemoveAllResourcePermissionsError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+                Err(RemoveAllResourcePermissionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Removes the permission for the specified principal from the specified resource.</p>"]
-    fn remove_resource_permission(&self,
-                                  input: &RemoveResourcePermissionRequest)
-                                  -> Result<(), RemoveResourcePermissionError> {
-        let request_uri = format!("/api/v1/resources/{resource_id}/permissions/{principal_id}",
-                                  principal_id = input.principal_id,
-                                  resource_id = input.resource_id);
+    #[doc = "<p>Removes the permission for the specified principal from the specified resource.</p>"]
+    fn remove_resource_permission(
+        &self,
+        input: &RemoveResourcePermissionRequest,
+    ) -> Result<(), RemoveResourcePermissionError> {
+        let request_uri = format!(
+            "/api/v1/resources/{resource_id}/permissions/{principal_id}",
+            principal_id = input.principal_id,
+            resource_id = input.resource_id
+        );
 
         let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
 
         if let Some(ref authentication_token) = input.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
@@ -7706,27 +7789,27 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
             StatusCode::NoContent => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(RemoveResourcePermissionError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(RemoveResourcePermissionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Updates the specified attributes of a document. The user must have access to both the document and its parent folder, if applicable.</p>"]
     fn update_document(&self, input: &UpdateDocumentRequest) -> Result<(), UpdateDocumentError> {
-        let request_uri = format!("/api/v1/documents/{document_id}",
-                                  document_id = input.document_id);
+        let request_uri = format!(
+            "/api/v1/documents/{document_id}",
+            document_id = input.document_id
+        );
 
         let mut request = SignedRequest::new("PATCH", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
 
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
@@ -7735,7 +7818,6 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
@@ -7743,29 +7825,31 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
             StatusCode::Ok => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateDocumentError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateDocumentError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Changes the status of the document version to ACTIVE. </p> <p>Amazon WorkDocs also sets its document container to ACTIVE. This is the last step in a document upload, after the client uploads the document to an S3-presigned URL returned by <a>InitiateDocumentVersionUpload</a>. </p>"]
-    fn update_document_version(&self,
-                               input: &UpdateDocumentVersionRequest)
-                               -> Result<(), UpdateDocumentVersionError> {
-        let request_uri = format!("/api/v1/documents/{document_id}/versions/{version_id}",
-                                  document_id = input.document_id,
-                                  version_id = input.version_id);
+    fn update_document_version(
+        &self,
+        input: &UpdateDocumentVersionRequest,
+    ) -> Result<(), UpdateDocumentVersionError> {
+        let request_uri = format!(
+            "/api/v1/documents/{document_id}/versions/{version_id}",
+            document_id = input.document_id,
+            version_id = input.version_id
+        );
 
         let mut request = SignedRequest::new("PATCH", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
 
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
@@ -7774,7 +7858,6 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
@@ -7782,17 +7865,17 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
             StatusCode::Ok => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateDocumentVersionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateDocumentVersionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Updates the specified attributes of the specified folder. The user must have access to both the folder and its parent folder, if applicable.</p>"]
     fn update_folder(&self, input: &UpdateFolderRequest) -> Result<(), UpdateFolderError> {
@@ -7801,14 +7884,12 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut request = SignedRequest::new("PATCH", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
         if let Some(ref authentication_token) = input.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
@@ -7817,27 +7898,27 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
             StatusCode::Ok => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateFolderError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateFolderError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Updates the specified attributes of the specified user, and grants or revokes administrative privileges to the Amazon WorkDocs site.</p>"]
-    fn update_user(&self,
-                   input: &UpdateUserRequest)
-                   -> Result<UpdateUserResponse, UpdateUserError> {
+    fn update_user(
+        &self,
+        input: &UpdateUserRequest,
+    ) -> Result<UpdateUserResponse, UpdateUserError> {
         let request_uri = format!("/api/v1/users/{user_id}", user_id = input.user_id);
 
         let mut request = SignedRequest::new("PATCH", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
 
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
@@ -7846,13 +7927,11 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -7864,14 +7943,14 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<UpdateUserResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateUserError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateUserError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

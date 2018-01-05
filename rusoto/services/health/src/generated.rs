@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -28,421 +27,421 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[doc="<p>Information about an entity that is affected by a Health event.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about an entity that is affected by a Health event.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AffectedEntity {
-    #[doc="<p>The 12-digit AWS account number that contains the affected entity.</p>"]
-    #[serde(rename="awsAccountId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The 12-digit AWS account number that contains the affected entity.</p>
+    #[serde(rename = "awsAccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_account_id: Option<String>,
-    #[doc="<p>The unique identifier for the entity. Format: <code>arn:aws:health:<i>entity-region</i>:<i>aws-account</i>:entity/<i>entity-id</i> </code>. Example: <code>arn:aws:health:us-east-1:111222333444:entity/AVh5GGT7ul1arKr1sE1K</code> </p>"]
-    #[serde(rename="entityArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique identifier for the entity. Format: <code>arn:aws:health:<i>entity-region</i>:<i>aws-account</i>:entity/<i>entity-id</i> </code>. Example: <code>arn:aws:health:us-east-1:111222333444:entity/AVh5GGT7ul1arKr1sE1K</code> </p>
+    #[serde(rename = "entityArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub entity_arn: Option<String>,
-    #[doc="<p>The ID of the affected entity.</p>"]
-    #[serde(rename="entityValue")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the affected entity.</p>
+    #[serde(rename = "entityValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub entity_value: Option<String>,
-    #[doc="<p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331</code> </p>"]
-    #[serde(rename="eventArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331</code> </p>
+    #[serde(rename = "eventArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_arn: Option<String>,
-    #[doc="<p>The most recent time that the entity was updated.</p>"]
-    #[serde(rename="lastUpdatedTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The most recent time that the entity was updated.</p>
+    #[serde(rename = "lastUpdatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_time: Option<f64>,
-    #[doc="<p>The most recent status of the entity affected by the event. The possible values are <code>IMPAIRED</code>, <code>UNIMPAIRED</code>, and <code>UNKNOWN</code>.</p>"]
-    #[serde(rename="statusCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The most recent status of the entity affected by the event. The possible values are <code>IMPAIRED</code>, <code>UNIMPAIRED</code>, and <code>UNKNOWN</code>.</p>
+    #[serde(rename = "statusCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status_code: Option<String>,
-    #[doc="<p>A map of entity tags attached to the affected entity.</p>"]
-    #[serde(rename="tags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A map of entity tags attached to the affected entity.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[doc="<p>A range of dates and times that is used by the <a>EventFilter</a> and <a>EntityFilter</a> objects. If <code>from</code> is set and <code>to</code> is set: match items where the timestamp (<code>startTime</code>, <code>endTime</code>, or <code>lastUpdatedTime</code>) is between <code>from</code> and <code>to</code> inclusive. If <code>from</code> is set and <code>to</code> is not set: match items where the timestamp value is equal to or after <code>from</code>. If <code>from</code> is not set and <code>to</code> is set: match items where the timestamp value is equal to or before <code>to</code>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>A range of dates and times that is used by the <a>EventFilter</a> and <a>EntityFilter</a> objects. If <code>from</code> is set and <code>to</code> is set: match items where the timestamp (<code>startTime</code>, <code>endTime</code>, or <code>lastUpdatedTime</code>) is between <code>from</code> and <code>to</code> inclusive. If <code>from</code> is set and <code>to</code> is not set: match items where the timestamp value is equal to or after <code>from</code>. If <code>from</code> is not set and <code>to</code> is set: match items where the timestamp value is equal to or before <code>to</code>.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DateTimeRange {
-    #[doc="<p>The starting date and time of a time range.</p>"]
-    #[serde(rename="from")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The starting date and time of a time range.</p>
+    #[serde(rename = "from")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub from: Option<f64>,
-    #[doc="<p>The ending date and time of a time range.</p>"]
-    #[serde(rename="to")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ending date and time of a time range.</p>
+    #[serde(rename = "to")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub to: Option<f64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeAffectedEntitiesRequest {
-    #[doc="<p>Values to narrow the results returned. At least one event ARN is required. </p>"]
-    #[serde(rename="filter")]
+    /// <p>Values to narrow the results returned. At least one event ARN is required. </p>
+    #[serde(rename = "filter")]
     pub filter: EntityFilter,
-    #[doc="<p>The locale (language) to return information in. English (en) is the default and the only supported value at this time.</p>"]
-    #[serde(rename="locale")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The locale (language) to return information in. English (en) is the default and the only supported value at this time.</p>
+    #[serde(rename = "locale")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub locale: Option<String>,
-    #[doc="<p>The maximum number of items to return in one batch, between 10 and 100, inclusive.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return in one batch, between 10 and 100, inclusive.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>If the results of a search are large, only a portion of the results are returned, and a <code>nextToken</code> pagination token is returned in the response. To retrieve the next batch of results, reissue the search request and include the returned token. When all results have been returned, the response does not contain a pagination token value.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the results of a search are large, only a portion of the results are returned, and a <code>nextToken</code> pagination token is returned in the response. To retrieve the next batch of results, reissue the search request and include the returned token. When all results have been returned, the response does not contain a pagination token value.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeAffectedEntitiesResponse {
-    #[doc="<p>The entities that match the filter criteria.</p>"]
-    #[serde(rename="entities")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The entities that match the filter criteria.</p>
+    #[serde(rename = "entities")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub entities: Option<Vec<AffectedEntity>>,
-    #[doc="<p>If the results of a search are large, only a portion of the results are returned, and a <code>nextToken</code> pagination token is returned in the response. To retrieve the next batch of results, reissue the search request and include the returned token. When all results have been returned, the response does not contain a pagination token value.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the results of a search are large, only a portion of the results are returned, and a <code>nextToken</code> pagination token is returned in the response. To retrieve the next batch of results, reissue the search request and include the returned token. When all results have been returned, the response does not contain a pagination token value.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeEntityAggregatesRequest {
-    #[doc="<p>A list of event ARNs (unique identifiers). For example: <code>\"arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331\", \"arn:aws:health:us-west-1::event/AWS_EBS_LOST_VOLUME_xyz\"</code> </p>"]
-    #[serde(rename="eventArns")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of event ARNs (unique identifiers). For example: <code>"arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331", "arn:aws:health:us-west-1::event/AWS_EBS_LOST_VOLUME_xyz"</code> </p>
+    #[serde(rename = "eventArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_arns: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeEntityAggregatesResponse {
-    #[doc="<p>The number of entities that are affected by each of the specified events.</p>"]
-    #[serde(rename="entityAggregates")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of entities that are affected by each of the specified events.</p>
+    #[serde(rename = "entityAggregates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub entity_aggregates: Option<Vec<EntityAggregate>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeEventAggregatesRequest {
-    #[doc="<p>The only currently supported value is <code>eventTypeCategory</code>.</p>"]
-    #[serde(rename="aggregateField")]
+    /// <p>The only currently supported value is <code>eventTypeCategory</code>.</p>
+    #[serde(rename = "aggregateField")]
     pub aggregate_field: String,
-    #[doc="<p>Values to narrow the results returned.</p>"]
-    #[serde(rename="filter")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Values to narrow the results returned.</p>
+    #[serde(rename = "filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<EventFilter>,
-    #[doc="<p>The maximum number of items to return in one batch, between 10 and 100, inclusive.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return in one batch, between 10 and 100, inclusive.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>If the results of a search are large, only a portion of the results are returned, and a <code>nextToken</code> pagination token is returned in the response. To retrieve the next batch of results, reissue the search request and include the returned token. When all results have been returned, the response does not contain a pagination token value.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the results of a search are large, only a portion of the results are returned, and a <code>nextToken</code> pagination token is returned in the response. To retrieve the next batch of results, reissue the search request and include the returned token. When all results have been returned, the response does not contain a pagination token value.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeEventAggregatesResponse {
-    #[doc="<p>The number of events in each category that meet the optional filter criteria.</p>"]
-    #[serde(rename="eventAggregates")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of events in each category that meet the optional filter criteria.</p>
+    #[serde(rename = "eventAggregates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_aggregates: Option<Vec<EventAggregate>>,
-    #[doc="<p>If the results of a search are large, only a portion of the results are returned, and a <code>nextToken</code> pagination token is returned in the response. To retrieve the next batch of results, reissue the search request and include the returned token. When all results have been returned, the response does not contain a pagination token value.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the results of a search are large, only a portion of the results are returned, and a <code>nextToken</code> pagination token is returned in the response. To retrieve the next batch of results, reissue the search request and include the returned token. When all results have been returned, the response does not contain a pagination token value.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeEventDetailsRequest {
-    #[doc="<p>A list of event ARNs (unique identifiers). For example: <code>\"arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331\", \"arn:aws:health:us-west-1::event/AWS_EBS_LOST_VOLUME_xyz\"</code> </p>"]
-    #[serde(rename="eventArns")]
+    /// <p>A list of event ARNs (unique identifiers). For example: <code>"arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331", "arn:aws:health:us-west-1::event/AWS_EBS_LOST_VOLUME_xyz"</code> </p>
+    #[serde(rename = "eventArns")]
     pub event_arns: Vec<String>,
-    #[doc="<p>The locale (language) to return information in. English (en) is the default and the only supported value at this time.</p>"]
-    #[serde(rename="locale")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The locale (language) to return information in. English (en) is the default and the only supported value at this time.</p>
+    #[serde(rename = "locale")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub locale: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeEventDetailsResponse {
-    #[doc="<p>Error messages for any events that could not be retrieved.</p>"]
-    #[serde(rename="failedSet")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Error messages for any events that could not be retrieved.</p>
+    #[serde(rename = "failedSet")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_set: Option<Vec<EventDetailsErrorItem>>,
-    #[doc="<p>Information about the events that could be retrieved.</p>"]
-    #[serde(rename="successfulSet")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the events that could be retrieved.</p>
+    #[serde(rename = "successfulSet")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub successful_set: Option<Vec<EventDetails>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeEventTypesRequest {
-    #[doc="<p>Values to narrow the results returned.</p>"]
-    #[serde(rename="filter")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Values to narrow the results returned.</p>
+    #[serde(rename = "filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<EventTypeFilter>,
-    #[doc="<p>The locale (language) to return information in. English (en) is the default and the only supported value at this time.</p>"]
-    #[serde(rename="locale")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The locale (language) to return information in. English (en) is the default and the only supported value at this time.</p>
+    #[serde(rename = "locale")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub locale: Option<String>,
-    #[doc="<p>The maximum number of items to return in one batch, between 10 and 100, inclusive.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return in one batch, between 10 and 100, inclusive.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>If the results of a search are large, only a portion of the results are returned, and a <code>nextToken</code> pagination token is returned in the response. To retrieve the next batch of results, reissue the search request and include the returned token. When all results have been returned, the response does not contain a pagination token value.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the results of a search are large, only a portion of the results are returned, and a <code>nextToken</code> pagination token is returned in the response. To retrieve the next batch of results, reissue the search request and include the returned token. When all results have been returned, the response does not contain a pagination token value.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeEventTypesResponse {
-    #[doc="<p>A list of event types that match the filter criteria. Event types have a category (<code>issue</code>, <code>accountNotification</code>, or <code>scheduledChange</code>), a service (for example, <code>EC2</code>, <code>RDS</code>, <code>DATAPIPELINE</code>, <code>BILLING</code>), and a code (in the format <code>AWS_<i>SERVICE</i>_<i>DESCRIPTION</i> </code>; for example, <code>AWS_EC2_SYSTEM_MAINTENANCE_EVENT</code>).</p>"]
-    #[serde(rename="eventTypes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of event types that match the filter criteria. Event types have a category (<code>issue</code>, <code>accountNotification</code>, or <code>scheduledChange</code>), a service (for example, <code>EC2</code>, <code>RDS</code>, <code>DATAPIPELINE</code>, <code>BILLING</code>), and a code (in the format <code>AWS_<i>SERVICE</i>_<i>DESCRIPTION</i> </code>; for example, <code>AWS_EC2_SYSTEM_MAINTENANCE_EVENT</code>).</p>
+    #[serde(rename = "eventTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_types: Option<Vec<String>>,
-    #[doc="<p>If the results of a search are large, only a portion of the results are returned, and a <code>nextToken</code> pagination token is returned in the response. To retrieve the next batch of results, reissue the search request and include the returned token. When all results have been returned, the response does not contain a pagination token value.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the results of a search are large, only a portion of the results are returned, and a <code>nextToken</code> pagination token is returned in the response. To retrieve the next batch of results, reissue the search request and include the returned token. When all results have been returned, the response does not contain a pagination token value.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeEventsRequest {
-    #[doc="<p>Values to narrow the results returned.</p>"]
-    #[serde(rename="filter")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Values to narrow the results returned.</p>
+    #[serde(rename = "filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<EventFilter>,
-    #[doc="<p>The locale (language) to return information in. English (en) is the default and the only supported value at this time.</p>"]
-    #[serde(rename="locale")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The locale (language) to return information in. English (en) is the default and the only supported value at this time.</p>
+    #[serde(rename = "locale")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub locale: Option<String>,
-    #[doc="<p>The maximum number of items to return in one batch, between 10 and 100, inclusive.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return in one batch, between 10 and 100, inclusive.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>If the results of a search are large, only a portion of the results are returned, and a <code>nextToken</code> pagination token is returned in the response. To retrieve the next batch of results, reissue the search request and include the returned token. When all results have been returned, the response does not contain a pagination token value.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the results of a search are large, only a portion of the results are returned, and a <code>nextToken</code> pagination token is returned in the response. To retrieve the next batch of results, reissue the search request and include the returned token. When all results have been returned, the response does not contain a pagination token value.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeEventsResponse {
-    #[doc="<p>The events that match the specified filter criteria.</p>"]
-    #[serde(rename="events")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The events that match the specified filter criteria.</p>
+    #[serde(rename = "events")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub events: Option<Vec<Event>>,
-    #[doc="<p>If the results of a search are large, only a portion of the results are returned, and a <code>nextToken</code> pagination token is returned in the response. To retrieve the next batch of results, reissue the search request and include the returned token. When all results have been returned, the response does not contain a pagination token value.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the results of a search are large, only a portion of the results are returned, and a <code>nextToken</code> pagination token is returned in the response. To retrieve the next batch of results, reissue the search request and include the returned token. When all results have been returned, the response does not contain a pagination token value.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>The number of entities that are affected by one or more events. Returned by the <a>DescribeEntityAggregates</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The number of entities that are affected by one or more events. Returned by the <a>DescribeEntityAggregates</a> operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct EntityAggregate {
-    #[doc="<p>The number entities that match the criteria for the specified events.</p>"]
-    #[serde(rename="count")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number entities that match the criteria for the specified events.</p>
+    #[serde(rename = "count")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub count: Option<i64>,
-    #[doc="<p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331</code> </p>"]
-    #[serde(rename="eventArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331</code> </p>
+    #[serde(rename = "eventArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_arn: Option<String>,
 }
 
-#[doc="<p>The values to use to filter results from the <a>DescribeAffectedEntities</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The values to use to filter results from the <a>DescribeAffectedEntities</a> operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct EntityFilter {
-    #[doc="<p>A list of entity ARNs (unique identifiers).</p>"]
-    #[serde(rename="entityArns")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of entity ARNs (unique identifiers).</p>
+    #[serde(rename = "entityArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub entity_arns: Option<Vec<String>>,
-    #[doc="<p>A list of IDs for affected entities.</p>"]
-    #[serde(rename="entityValues")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of IDs for affected entities.</p>
+    #[serde(rename = "entityValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub entity_values: Option<Vec<String>>,
-    #[doc="<p>A list of event ARNs (unique identifiers). For example: <code>\"arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331\", \"arn:aws:health:us-west-1::event/AWS_EBS_LOST_VOLUME_xyz\"</code> </p>"]
-    #[serde(rename="eventArns")]
+    /// <p>A list of event ARNs (unique identifiers). For example: <code>"arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331", "arn:aws:health:us-west-1::event/AWS_EBS_LOST_VOLUME_xyz"</code> </p>
+    #[serde(rename = "eventArns")]
     pub event_arns: Vec<String>,
-    #[doc="<p>A list of the most recent dates and times that the entity was updated.</p>"]
-    #[serde(rename="lastUpdatedTimes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of the most recent dates and times that the entity was updated.</p>
+    #[serde(rename = "lastUpdatedTimes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_times: Option<Vec<DateTimeRange>>,
-    #[doc="<p>A list of entity status codes (<code>IMPAIRED</code>, <code>UNIMPAIRED</code>, or <code>UNKNOWN</code>).</p>"]
-    #[serde(rename="statusCodes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of entity status codes (<code>IMPAIRED</code>, <code>UNIMPAIRED</code>, or <code>UNKNOWN</code>).</p>
+    #[serde(rename = "statusCodes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status_codes: Option<Vec<String>>,
-    #[doc="<p>A map of entity tags attached to the affected entity.</p>"]
-    #[serde(rename="tags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A map of entity tags attached to the affected entity.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<::std::collections::HashMap<String, String>>>,
 }
 
-#[doc="<p>Summary information about an event, returned by the <a>DescribeEvents</a> operation. The <a>DescribeEventDetails</a> operation also returns this information, as well as the <a>EventDescription</a> and additional event metadata.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Summary information about an event, returned by the <a>DescribeEvents</a> operation. The <a>DescribeEventDetails</a> operation also returns this information, as well as the <a>EventDescription</a> and additional event metadata.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Event {
-    #[doc="<p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331</code> </p>"]
-    #[serde(rename="arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331</code> </p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>The AWS Availability Zone of the event. For example, us-east-1a.</p>"]
-    #[serde(rename="availabilityZone")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS Availability Zone of the event. For example, us-east-1a.</p>
+    #[serde(rename = "availabilityZone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zone: Option<String>,
-    #[doc="<p>The date and time that the event ended.</p>"]
-    #[serde(rename="endTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time that the event ended.</p>
+    #[serde(rename = "endTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
-    #[doc="<p>The </p>"]
-    #[serde(rename="eventTypeCategory")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The </p>
+    #[serde(rename = "eventTypeCategory")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_type_category: Option<String>,
-    #[doc="<p>The unique identifier for the event type. The format is <code>AWS_<i>SERVICE</i>_<i>DESCRIPTION</i> </code>; for example, <code>AWS_EC2_SYSTEM_MAINTENANCE_EVENT</code>.</p>"]
-    #[serde(rename="eventTypeCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique identifier for the event type. The format is <code>AWS_<i>SERVICE</i>_<i>DESCRIPTION</i> </code>; for example, <code>AWS_EC2_SYSTEM_MAINTENANCE_EVENT</code>.</p>
+    #[serde(rename = "eventTypeCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_type_code: Option<String>,
-    #[doc="<p>The most recent date and time that the event was updated.</p>"]
-    #[serde(rename="lastUpdatedTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The most recent date and time that the event was updated.</p>
+    #[serde(rename = "lastUpdatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_time: Option<f64>,
-    #[doc="<p>The AWS region name of the event.</p>"]
-    #[serde(rename="region")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS region name of the event.</p>
+    #[serde(rename = "region")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub region: Option<String>,
-    #[doc="<p>The AWS service that is affected by the event. For example, <code>EC2</code>, <code>RDS</code>.</p>"]
-    #[serde(rename="service")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS service that is affected by the event. For example, <code>EC2</code>, <code>RDS</code>.</p>
+    #[serde(rename = "service")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub service: Option<String>,
-    #[doc="<p>The date and time that the event began.</p>"]
-    #[serde(rename="startTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time that the event began.</p>
+    #[serde(rename = "startTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
-    #[doc="<p>The most recent status of the event. Possible values are <code>open</code>, <code>closed</code>, and <code>upcoming</code>.</p>"]
-    #[serde(rename="statusCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The most recent status of the event. Possible values are <code>open</code>, <code>closed</code>, and <code>upcoming</code>.</p>
+    #[serde(rename = "statusCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status_code: Option<String>,
 }
 
-#[doc="<p>The number of events of each issue type. Returned by the <a>DescribeEventAggregates</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The number of events of each issue type. Returned by the <a>DescribeEventAggregates</a> operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct EventAggregate {
-    #[doc="<p>The issue type for the associated count.</p>"]
-    #[serde(rename="aggregateValue")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The issue type for the associated count.</p>
+    #[serde(rename = "aggregateValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub aggregate_value: Option<String>,
-    #[doc="<p>The number of events of the associated issue type.</p>"]
-    #[serde(rename="count")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of events of the associated issue type.</p>
+    #[serde(rename = "count")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub count: Option<i64>,
 }
 
-#[doc="<p>Detailed information about an event. A combination of an <a>Event</a> object, an <a>EventDescription</a> object, and additional metadata about the event. Returned by the <a>DescribeEventDetails</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Detailed information about an event. A combination of an <a>Event</a> object, an <a>EventDescription</a> object, and additional metadata about the event. Returned by the <a>DescribeEventDetails</a> operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct EventDetails {
-    #[doc="<p>Summary information about the event.</p>"]
-    #[serde(rename="event")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Summary information about the event.</p>
+    #[serde(rename = "event")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event: Option<Event>,
-    #[doc="<p>The most recent description of the event.</p>"]
-    #[serde(rename="eventDescription")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The most recent description of the event.</p>
+    #[serde(rename = "eventDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_description: Option<String>,
-    #[doc="<p>Additional metadata about the event.</p>"]
-    #[serde(rename="eventMetadata")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Additional metadata about the event.</p>
+    #[serde(rename = "eventMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_metadata: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[doc="<p>Error information returned when a <a>DescribeEventDetails</a> operation cannot find a specified event.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Error information returned when a <a>DescribeEventDetails</a> operation cannot find a specified event.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct EventDetailsErrorItem {
-    #[doc="<p>A message that describes the error.</p>"]
-    #[serde(rename="errorMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A message that describes the error.</p>
+    #[serde(rename = "errorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
-    #[doc="<p>The name of the error.</p>"]
-    #[serde(rename="errorName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the error.</p>
+    #[serde(rename = "errorName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_name: Option<String>,
-    #[doc="<p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331</code> </p>"]
-    #[serde(rename="eventArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331</code> </p>
+    #[serde(rename = "eventArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_arn: Option<String>,
 }
 
-#[doc="<p>The values to use to filter results from the <a>DescribeEvents</a> and <a>DescribeEventAggregates</a> operations.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The values to use to filter results from the <a>DescribeEvents</a> and <a>DescribeEventAggregates</a> operations.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct EventFilter {
-    #[doc="<p>A list of AWS availability zones.</p>"]
-    #[serde(rename="availabilityZones")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of AWS availability zones.</p>
+    #[serde(rename = "availabilityZones")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zones: Option<Vec<String>>,
-    #[doc="<p>A list of dates and times that the event ended.</p>"]
-    #[serde(rename="endTimes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of dates and times that the event ended.</p>
+    #[serde(rename = "endTimes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub end_times: Option<Vec<DateTimeRange>>,
-    #[doc="<p>A list of entity ARNs (unique identifiers).</p>"]
-    #[serde(rename="entityArns")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of entity ARNs (unique identifiers).</p>
+    #[serde(rename = "entityArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub entity_arns: Option<Vec<String>>,
-    #[doc="<p>A list of entity identifiers, such as EC2 instance IDs (<code>i-34ab692e</code>) or EBS volumes (<code>vol-426ab23e</code>).</p>"]
-    #[serde(rename="entityValues")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of entity identifiers, such as EC2 instance IDs (<code>i-34ab692e</code>) or EBS volumes (<code>vol-426ab23e</code>).</p>
+    #[serde(rename = "entityValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub entity_values: Option<Vec<String>>,
-    #[doc="<p>A list of event ARNs (unique identifiers). For example: <code>\"arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331\", \"arn:aws:health:us-west-1::event/AWS_EBS_LOST_VOLUME_xyz\"</code> </p>"]
-    #[serde(rename="eventArns")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of event ARNs (unique identifiers). For example: <code>"arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331", "arn:aws:health:us-west-1::event/AWS_EBS_LOST_VOLUME_xyz"</code> </p>
+    #[serde(rename = "eventArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_arns: Option<Vec<String>>,
-    #[doc="<p>A list of event status codes.</p>"]
-    #[serde(rename="eventStatusCodes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of event status codes.</p>
+    #[serde(rename = "eventStatusCodes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_status_codes: Option<Vec<String>>,
-    #[doc="<p>A list of event type category codes (<code>issue</code>, <code>scheduledChange</code>, or <code>accountNotification</code>).</p>"]
-    #[serde(rename="eventTypeCategories")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of event type category codes (<code>issue</code>, <code>scheduledChange</code>, or <code>accountNotification</code>).</p>
+    #[serde(rename = "eventTypeCategories")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_type_categories: Option<Vec<String>>,
-    #[doc="<p>A list of unique identifiers for event types. For example, <code>\"AWS_EC2_SYSTEM_MAINTENANCE_EVENT\",\"AWS_RDS_MAINTENANCE_SCHEDULED\"</code> </p>"]
-    #[serde(rename="eventTypeCodes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of unique identifiers for event types. For example, <code>"AWS_EC2_SYSTEM_MAINTENANCE_EVENT","AWS_RDS_MAINTENANCE_SCHEDULED"</code> </p>
+    #[serde(rename = "eventTypeCodes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_type_codes: Option<Vec<String>>,
-    #[doc="<p>A list of dates and times that the event was last updated.</p>"]
-    #[serde(rename="lastUpdatedTimes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of dates and times that the event was last updated.</p>
+    #[serde(rename = "lastUpdatedTimes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_times: Option<Vec<DateTimeRange>>,
-    #[doc="<p>A list of AWS regions.</p>"]
-    #[serde(rename="regions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of AWS regions.</p>
+    #[serde(rename = "regions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub regions: Option<Vec<String>>,
-    #[doc="<p>The AWS services associated with the event. For example, <code>EC2</code>, <code>RDS</code>.</p>"]
-    #[serde(rename="services")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS services associated with the event. For example, <code>EC2</code>, <code>RDS</code>.</p>
+    #[serde(rename = "services")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub services: Option<Vec<String>>,
-    #[doc="<p>A list of dates and times that the event began.</p>"]
-    #[serde(rename="startTimes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of dates and times that the event began.</p>
+    #[serde(rename = "startTimes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub start_times: Option<Vec<DateTimeRange>>,
-    #[doc="<p>A map of entity tags attached to the affected entity.</p>"]
-    #[serde(rename="tags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A map of entity tags attached to the affected entity.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<::std::collections::HashMap<String, String>>>,
 }
 
-#[doc="<p>The values to use to filter results from the <a>DescribeEventTypes</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The values to use to filter results from the <a>DescribeEventTypes</a> operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct EventTypeFilter {
-    #[doc="<p>A list of event type category codes (<code>issue</code>, <code>scheduledChange</code>, or <code>accountNotification</code>).</p>"]
-    #[serde(rename="eventTypeCategories")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of event type category codes (<code>issue</code>, <code>scheduledChange</code>, or <code>accountNotification</code>).</p>
+    #[serde(rename = "eventTypeCategories")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_type_categories: Option<Vec<String>>,
-    #[doc="<p>A list of event type codes.</p>"]
-    #[serde(rename="eventTypeCodes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of event type codes.</p>
+    #[serde(rename = "eventTypeCodes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_type_codes: Option<Vec<String>>,
-    #[doc="<p>The AWS services associated with the event. For example, <code>EC2</code>, <code>RDS</code>.</p>"]
-    #[serde(rename="services")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS services associated with the event. For example, <code>EC2</code>, <code>RDS</code>.</p>
+    #[serde(rename = "services")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub services: Option<Vec<String>>,
 }
 
@@ -463,7 +462,6 @@ pub enum DescribeAffectedEntitiesError {
     Unknown(String),
 }
 
-
 impl DescribeAffectedEntitiesError {
     pub fn from_body(body: &str) -> DescribeAffectedEntitiesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -477,8 +475,14 @@ impl DescribeAffectedEntitiesError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidPaginationToken" => DescribeAffectedEntitiesError::InvalidPaginationToken(String::from(error_message)),
-                    "UnsupportedLocale" => DescribeAffectedEntitiesError::UnsupportedLocale(String::from(error_message)),
+                    "InvalidPaginationToken" => {
+                        DescribeAffectedEntitiesError::InvalidPaginationToken(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnsupportedLocale" => DescribeAffectedEntitiesError::UnsupportedLocale(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         DescribeAffectedEntitiesError::Validation(error_message.to_string())
                     }
@@ -541,7 +545,6 @@ pub enum DescribeEntityAggregatesError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeEntityAggregatesError {
     pub fn from_body(body: &str) -> DescribeEntityAggregatesError {
@@ -619,7 +622,6 @@ pub enum DescribeEventAggregatesError {
     Unknown(String),
 }
 
-
 impl DescribeEventAggregatesError {
     pub fn from_body(body: &str) -> DescribeEventAggregatesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -633,7 +635,11 @@ impl DescribeEventAggregatesError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidPaginationToken" => DescribeEventAggregatesError::InvalidPaginationToken(String::from(error_message)),
+                    "InvalidPaginationToken" => {
+                        DescribeEventAggregatesError::InvalidPaginationToken(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeEventAggregatesError::Validation(error_message.to_string())
                     }
@@ -697,7 +703,6 @@ pub enum DescribeEventDetailsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeEventDetailsError {
     pub fn from_body(body: &str) -> DescribeEventDetailsError {
@@ -780,7 +785,6 @@ pub enum DescribeEventTypesError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeEventTypesError {
     pub fn from_body(body: &str) -> DescribeEventTypesError {
@@ -868,7 +872,6 @@ pub enum DescribeEventsError {
     Unknown(String),
 }
 
-
 impl DescribeEventsError {
     pub fn from_body(body: &str) -> DescribeEventsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -939,48 +942,46 @@ impl Error for DescribeEventsError {
 /// Trait representing the capabilities of the AWSHealth API. AWSHealth clients implement this trait.
 pub trait AWSHealth {
     #[doc="<p>Returns a list of entities that have been affected by the specified events, based on the specified filter criteria. Entities can refer to individual customer resources, groups of customer resources, or any other construct, depending on the AWS service. Events that have impact beyond that of the affected entities, or where the extent of impact is unknown, include at least one entity indicating this.</p> <p>At least one event ARN is required. Results are sorted by the <code>lastUpdatedTime</code> of the entity, starting with the most recent.</p>"]
-    fn describe_affected_entities
-        (&self,
-         input: &DescribeAffectedEntitiesRequest)
-         -> Result<DescribeAffectedEntitiesResponse, DescribeAffectedEntitiesError>;
-
+    fn describe_affected_entities(
+        &self,
+        input: &DescribeAffectedEntitiesRequest,
+    ) -> Result<DescribeAffectedEntitiesResponse, DescribeAffectedEntitiesError>;
 
     #[doc="<p>Returns the number of entities that are affected by each of the specified events. If no events are specified, the counts of all affected entities are returned.</p>"]
-    fn describe_entity_aggregates
-        (&self,
-         input: &DescribeEntityAggregatesRequest)
-         -> Result<DescribeEntityAggregatesResponse, DescribeEntityAggregatesError>;
-
+    fn describe_entity_aggregates(
+        &self,
+        input: &DescribeEntityAggregatesRequest,
+    ) -> Result<DescribeEntityAggregatesResponse, DescribeEntityAggregatesError>;
 
     #[doc="<p>Returns the number of events of each event type (issue, scheduled change, and account notification). If no filter is specified, the counts of all events in each category are returned.</p>"]
-    fn describe_event_aggregates
-        (&self,
-         input: &DescribeEventAggregatesRequest)
-         -> Result<DescribeEventAggregatesResponse, DescribeEventAggregatesError>;
-
+    fn describe_event_aggregates(
+        &self,
+        input: &DescribeEventAggregatesRequest,
+    ) -> Result<DescribeEventAggregatesResponse, DescribeEventAggregatesError>;
 
     #[doc="<p>Returns detailed information about one or more specified events. Information includes standard event data (region, service, etc., as returned by <a>DescribeEvents</a>), a detailed event description, and possible additional metadata that depends upon the nature of the event. Affected entities are not included; to retrieve those, use the <a>DescribeAffectedEntities</a> operation.</p> <p>If a specified event cannot be retrieved, an error message is returned for that event.</p>"]
-    fn describe_event_details
-        (&self,
-         input: &DescribeEventDetailsRequest)
-         -> Result<DescribeEventDetailsResponse, DescribeEventDetailsError>;
-
+    fn describe_event_details(
+        &self,
+        input: &DescribeEventDetailsRequest,
+    ) -> Result<DescribeEventDetailsResponse, DescribeEventDetailsError>;
 
     #[doc="<p>Returns the event types that meet the specified filter criteria. If no filter criteria are specified, all event types are returned, in no particular order.</p>"]
-    fn describe_event_types(&self,
-                            input: &DescribeEventTypesRequest)
-                            -> Result<DescribeEventTypesResponse, DescribeEventTypesError>;
-
+    fn describe_event_types(
+        &self,
+        input: &DescribeEventTypesRequest,
+    ) -> Result<DescribeEventTypesResponse, DescribeEventTypesError>;
 
     #[doc="<p>Returns information about events that meet the specified filter criteria. Events are returned in a summary form and do not include the detailed description, any additional metadata that depends on the event type, or any affected resources. To retrieve that information, use the <a>DescribeEventDetails</a> and <a>DescribeAffectedEntities</a> operations.</p> <p>If no filter criteria are specified, all events are returned. Results are sorted by <code>lastModifiedTime</code>, starting with the most recent.</p>"]
-    fn describe_events(&self,
-                       input: &DescribeEventsRequest)
-                       -> Result<DescribeEventsResponse, DescribeEventsError>;
+    fn describe_events(
+        &self,
+        input: &DescribeEventsRequest,
+    ) -> Result<DescribeEventsResponse, DescribeEventsError>;
 }
 /// A client for the AWSHealth API.
 pub struct AWSHealthClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -988,8 +989,9 @@ pub struct AWSHealthClient<P, D>
 }
 
 impl<P, D> AWSHealthClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         AWSHealthClient {
@@ -1001,19 +1003,22 @@ impl<P, D> AWSHealthClient<P, D>
 }
 
 impl<P, D> AWSHealth for AWSHealthClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     #[doc="<p>Returns a list of entities that have been affected by the specified events, based on the specified filter criteria. Entities can refer to individual customer resources, groups of customer resources, or any other construct, depending on the AWS service. Events that have impact beyond that of the affected entities, or where the extent of impact is unknown, include at least one entity indicating this.</p> <p>At least one event ARN is required. Results are sorted by the <code>lastUpdatedTime</code> of the entity, starting with the most recent.</p>"]
-    fn describe_affected_entities
-        (&self,
-         input: &DescribeAffectedEntitiesRequest)
-         -> Result<DescribeAffectedEntitiesResponse, DescribeAffectedEntitiesError> {
+    fn describe_affected_entities(
+        &self,
+        input: &DescribeAffectedEntitiesRequest,
+    ) -> Result<DescribeAffectedEntitiesResponse, DescribeAffectedEntitiesError> {
         let mut request = SignedRequest::new("POST", "health", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSHealth_20160804.DescribeAffectedEntities");
+        request.add_header(
+            "x-amz-target",
+            "AWSHealth_20160804.DescribeAffectedEntities",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -1025,28 +1030,32 @@ impl<P, D> AWSHealth for AWSHealthClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeAffectedEntitiesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeAffectedEntitiesResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeAffectedEntitiesError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(DescribeAffectedEntitiesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Returns the number of entities that are affected by each of the specified events. If no events are specified, the counts of all affected entities are returned.</p>"]
-    fn describe_entity_aggregates
-        (&self,
-         input: &DescribeEntityAggregatesRequest)
-         -> Result<DescribeEntityAggregatesResponse, DescribeEntityAggregatesError> {
+    fn describe_entity_aggregates(
+        &self,
+        input: &DescribeEntityAggregatesRequest,
+    ) -> Result<DescribeEntityAggregatesResponse, DescribeEntityAggregatesError> {
         let mut request = SignedRequest::new("POST", "health", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSHealth_20160804.DescribeEntityAggregates");
+        request.add_header(
+            "x-amz-target",
+            "AWSHealth_20160804.DescribeEntityAggregates",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -1058,23 +1067,25 @@ impl<P, D> AWSHealth for AWSHealthClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeEntityAggregatesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeEntityAggregatesResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeEntityAggregatesError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(DescribeEntityAggregatesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns the number of events of each event type (issue, scheduled change, and account notification). If no filter is specified, the counts of all events in each category are returned.</p>"]
-    fn describe_event_aggregates
-        (&self,
-         input: &DescribeEventAggregatesRequest)
-         -> Result<DescribeEventAggregatesResponse, DescribeEventAggregatesError> {
+    fn describe_event_aggregates(
+        &self,
+        input: &DescribeEventAggregatesRequest,
+    ) -> Result<DescribeEventAggregatesResponse, DescribeEventAggregatesError> {
         let mut request = SignedRequest::new("POST", "health", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1090,23 +1101,25 @@ impl<P, D> AWSHealth for AWSHealthClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeEventAggregatesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeEventAggregatesResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeEventAggregatesError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(DescribeEventAggregatesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns detailed information about one or more specified events. Information includes standard event data (region, service, etc., as returned by <a>DescribeEvents</a>), a detailed event description, and possible additional metadata that depends upon the nature of the event. Affected entities are not included; to retrieve those, use the <a>DescribeAffectedEntities</a> operation.</p> <p>If a specified event cannot be retrieved, an error message is returned for that event.</p>"]
-    fn describe_event_details
-        (&self,
-         input: &DescribeEventDetailsRequest)
-         -> Result<DescribeEventDetailsResponse, DescribeEventDetailsError> {
+    fn describe_event_details(
+        &self,
+        input: &DescribeEventDetailsRequest,
+    ) -> Result<DescribeEventDetailsResponse, DescribeEventDetailsError> {
         let mut request = SignedRequest::new("POST", "health", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1122,21 +1135,25 @@ impl<P, D> AWSHealth for AWSHealthClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeEventDetailsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeEventDetailsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeEventDetailsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeEventDetailsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns the event types that meet the specified filter criteria. If no filter criteria are specified, all event types are returned, in no particular order.</p>"]
-    fn describe_event_types(&self,
-                            input: &DescribeEventTypesRequest)
-                            -> Result<DescribeEventTypesResponse, DescribeEventTypesError> {
+    fn describe_event_types(
+        &self,
+        input: &DescribeEventTypesRequest,
+    ) -> Result<DescribeEventTypesResponse, DescribeEventTypesError> {
         let mut request = SignedRequest::new("POST", "health", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1152,21 +1169,25 @@ impl<P, D> AWSHealth for AWSHealthClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeEventTypesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeEventTypesResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeEventTypesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeEventTypesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns information about events that meet the specified filter criteria. Events are returned in a summary form and do not include the detailed description, any additional metadata that depends on the event type, or any affected resources. To retrieve that information, use the <a>DescribeEventDetails</a> and <a>DescribeAffectedEntities</a> operations.</p> <p>If no filter criteria are specified, all events are returned. Results are sorted by <code>lastModifiedTime</code>, starting with the most recent.</p>"]
-    fn describe_events(&self,
-                       input: &DescribeEventsRequest)
-                       -> Result<DescribeEventsResponse, DescribeEventsError> {
+    fn describe_events(
+        &self,
+        input: &DescribeEventsRequest,
+    ) -> Result<DescribeEventsResponse, DescribeEventsError> {
         let mut request = SignedRequest::new("POST", "health", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1182,14 +1203,16 @@ impl<P, D> AWSHealth for AWSHealthClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeEventsResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribeEventsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeEventsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeEventsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

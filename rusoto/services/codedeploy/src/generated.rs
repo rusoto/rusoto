@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -28,1684 +27,1684 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[doc="<p>Represents the input of, and adds tags to, an on-premises instance operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of, and adds tags to, an on-premises instance operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AddTagsToOnPremisesInstancesInput {
-    #[doc="<p>The names of the on-premises instances to which to add tags.</p>"]
-    #[serde(rename="instanceNames")]
+    /// <p>The names of the on-premises instances to which to add tags.</p>
+    #[serde(rename = "instanceNames")]
     pub instance_names: Vec<String>,
-    #[doc="<p>The tag key-value pairs to add to the on-premises instances.</p> <p>Keys and values are both required. Keys cannot be null or empty strings. Value-only tags are not allowed.</p>"]
-    #[serde(rename="tags")]
+    /// <p>The tag key-value pairs to add to the on-premises instances.</p> <p>Keys and values are both required. Keys cannot be null or empty strings. Value-only tags are not allowed.</p>
+    #[serde(rename = "tags")]
     pub tags: Vec<Tag>,
 }
 
-#[doc="<p>Information about an alarm.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Information about an alarm.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Alarm {
-    #[doc="<p>The name of the alarm. Maximum length is 255 characters. Each alarm name can be used only once in a list of alarms.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the alarm. Maximum length is 255 characters. Each alarm name can be used only once in a list of alarms.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[doc="<p>Information about alarms associated with the deployment group.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Information about alarms associated with the deployment group.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct AlarmConfiguration {
-    #[doc="<p>A list of alarms configured for the deployment group. A maximum of 10 alarms can be added to a deployment group.</p>"]
-    #[serde(rename="alarms")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of alarms configured for the deployment group. A maximum of 10 alarms can be added to a deployment group.</p>
+    #[serde(rename = "alarms")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub alarms: Option<Vec<Alarm>>,
-    #[doc="<p>Indicates whether the alarm configuration is enabled.</p>"]
-    #[serde(rename="enabled")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether the alarm configuration is enabled.</p>
+    #[serde(rename = "enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    #[doc="<p>Indicates whether a deployment should continue if information about the current state of alarms cannot be retrieved from Amazon CloudWatch. The default value is false.</p> <ul> <li> <p>true: The deployment will proceed even if alarm status information can't be retrieved from Amazon CloudWatch.</p> </li> <li> <p>false: The deployment will stop if alarm status information can't be retrieved from Amazon CloudWatch.</p> </li> </ul>"]
-    #[serde(rename="ignorePollAlarmFailure")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether a deployment should continue if information about the current state of alarms cannot be retrieved from Amazon CloudWatch. The default value is false.</p> <ul> <li> <p>true: The deployment will proceed even if alarm status information can't be retrieved from Amazon CloudWatch.</p> </li> <li> <p>false: The deployment will stop if alarm status information can't be retrieved from Amazon CloudWatch.</p> </li> </ul>
+    #[serde(rename = "ignorePollAlarmFailure")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ignore_poll_alarm_failure: Option<bool>,
 }
 
-#[doc="<p>Information about an application.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about an application.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ApplicationInfo {
-    #[doc="<p>The application ID.</p>"]
-    #[serde(rename="applicationId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The application ID.</p>
+    #[serde(rename = "applicationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub application_id: Option<String>,
-    #[doc="<p>The application name.</p>"]
-    #[serde(rename="applicationName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The application name.</p>
+    #[serde(rename = "applicationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub application_name: Option<String>,
-    #[doc="<p>The time at which the application was created.</p>"]
-    #[serde(rename="createTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time at which the application was created.</p>
+    #[serde(rename = "createTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<f64>,
-    #[doc="<p>The name for a connection to a GitHub account.</p>"]
-    #[serde(rename="gitHubAccountName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name for a connection to a GitHub account.</p>
+    #[serde(rename = "gitHubAccountName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub git_hub_account_name: Option<String>,
-    #[doc="<p>True if the user has authenticated with GitHub for the specified application; otherwise, false.</p>"]
-    #[serde(rename="linkedToGitHub")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>True if the user has authenticated with GitHub for the specified application; otherwise, false.</p>
+    #[serde(rename = "linkedToGitHub")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub linked_to_git_hub: Option<bool>,
 }
 
-#[doc="<p>Information about a configuration for automatically rolling back to a previous version of an application revision when a deployment doesn't complete successfully.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Information about a configuration for automatically rolling back to a previous version of an application revision when a deployment doesn't complete successfully.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct AutoRollbackConfiguration {
-    #[doc="<p>Indicates whether a defined automatic rollback configuration is currently enabled.</p>"]
-    #[serde(rename="enabled")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether a defined automatic rollback configuration is currently enabled.</p>
+    #[serde(rename = "enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    #[doc="<p>The event type or types that trigger a rollback.</p>"]
-    #[serde(rename="events")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The event type or types that trigger a rollback.</p>
+    #[serde(rename = "events")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub events: Option<Vec<String>>,
 }
 
-#[doc="<p>Information about an Auto Scaling group.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about an Auto Scaling group.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AutoScalingGroup {
-    #[doc="<p>An Auto Scaling lifecycle event hook name.</p>"]
-    #[serde(rename="hook")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An Auto Scaling lifecycle event hook name.</p>
+    #[serde(rename = "hook")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hook: Option<String>,
-    #[doc="<p>The Auto Scaling group name.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Auto Scaling group name.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[doc="<p>Represents the input of a BatchGetApplicationRevisions operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of a BatchGetApplicationRevisions operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct BatchGetApplicationRevisionsInput {
-    #[doc="<p>The name of an AWS CodeDeploy application about which to get revision information.</p>"]
-    #[serde(rename="applicationName")]
+    /// <p>The name of an AWS CodeDeploy application about which to get revision information.</p>
+    #[serde(rename = "applicationName")]
     pub application_name: String,
-    #[doc="<p>Information to get about the application revisions, including type and location.</p>"]
-    #[serde(rename="revisions")]
+    /// <p>Information to get about the application revisions, including type and location.</p>
+    #[serde(rename = "revisions")]
     pub revisions: Vec<RevisionLocation>,
 }
 
-#[doc="<p>Represents the output of a BatchGetApplicationRevisions operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the output of a BatchGetApplicationRevisions operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct BatchGetApplicationRevisionsOutput {
-    #[doc="<p>The name of the application that corresponds to the revisions.</p>"]
-    #[serde(rename="applicationName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the application that corresponds to the revisions.</p>
+    #[serde(rename = "applicationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub application_name: Option<String>,
-    #[doc="<p>Information about errors that may have occurred during the API call.</p>"]
-    #[serde(rename="errorMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about errors that may have occurred during the API call.</p>
+    #[serde(rename = "errorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
-    #[doc="<p>Additional information about the revisions, including the type and location.</p>"]
-    #[serde(rename="revisions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Additional information about the revisions, including the type and location.</p>
+    #[serde(rename = "revisions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub revisions: Option<Vec<RevisionInfo>>,
 }
 
-#[doc="<p>Represents the input of a BatchGetApplications operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of a BatchGetApplications operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct BatchGetApplicationsInput {
-    #[doc="<p>A list of application names separated by spaces.</p>"]
-    #[serde(rename="applicationNames")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of application names separated by spaces.</p>
+    #[serde(rename = "applicationNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub application_names: Option<Vec<String>>,
 }
 
-#[doc="<p>Represents the output of a BatchGetApplications operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the output of a BatchGetApplications operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct BatchGetApplicationsOutput {
-    #[doc="<p>Information about the applications.</p>"]
-    #[serde(rename="applicationsInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the applications.</p>
+    #[serde(rename = "applicationsInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub applications_info: Option<Vec<ApplicationInfo>>,
 }
 
-#[doc="<p>Represents the input of a BatchGetDeploymentGroups operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of a BatchGetDeploymentGroups operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct BatchGetDeploymentGroupsInput {
-    #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
-    #[serde(rename="applicationName")]
+    /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
+    #[serde(rename = "applicationName")]
     pub application_name: String,
-    #[doc="<p>The deployment groups' names.</p>"]
-    #[serde(rename="deploymentGroupNames")]
+    /// <p>The deployment groups' names.</p>
+    #[serde(rename = "deploymentGroupNames")]
     pub deployment_group_names: Vec<String>,
 }
 
-#[doc="<p>Represents the output of a BatchGetDeploymentGroups operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the output of a BatchGetDeploymentGroups operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct BatchGetDeploymentGroupsOutput {
-    #[doc="<p>Information about the deployment groups.</p>"]
-    #[serde(rename="deploymentGroupsInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the deployment groups.</p>
+    #[serde(rename = "deploymentGroupsInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_groups_info: Option<Vec<DeploymentGroupInfo>>,
-    #[doc="<p>Information about errors that may have occurred during the API call.</p>"]
-    #[serde(rename="errorMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about errors that may have occurred during the API call.</p>
+    #[serde(rename = "errorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
 }
 
-#[doc="<p>Represents the input of a BatchGetDeploymentInstances operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of a BatchGetDeploymentInstances operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct BatchGetDeploymentInstancesInput {
-    #[doc="<p>The unique ID of a deployment.</p>"]
-    #[serde(rename="deploymentId")]
+    /// <p>The unique ID of a deployment.</p>
+    #[serde(rename = "deploymentId")]
     pub deployment_id: String,
-    #[doc="<p>The unique IDs of instances in the deployment group.</p>"]
-    #[serde(rename="instanceIds")]
+    /// <p>The unique IDs of instances in the deployment group.</p>
+    #[serde(rename = "instanceIds")]
     pub instance_ids: Vec<String>,
 }
 
-#[doc="<p>Represents the output of a BatchGetDeploymentInstances operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the output of a BatchGetDeploymentInstances operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct BatchGetDeploymentInstancesOutput {
-    #[doc="<p>Information about errors that may have occurred during the API call.</p>"]
-    #[serde(rename="errorMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about errors that may have occurred during the API call.</p>
+    #[serde(rename = "errorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
-    #[doc="<p>Information about the instance.</p>"]
-    #[serde(rename="instancesSummary")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the instance.</p>
+    #[serde(rename = "instancesSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instances_summary: Option<Vec<InstanceSummary>>,
 }
 
-#[doc="<p>Represents the input of a BatchGetDeployments operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of a BatchGetDeployments operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct BatchGetDeploymentsInput {
-    #[doc="<p>A list of deployment IDs, separated by spaces.</p>"]
-    #[serde(rename="deploymentIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of deployment IDs, separated by spaces.</p>
+    #[serde(rename = "deploymentIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_ids: Option<Vec<String>>,
 }
 
-#[doc="<p>Represents the output of a BatchGetDeployments operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the output of a BatchGetDeployments operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct BatchGetDeploymentsOutput {
-    #[doc="<p>Information about the deployments.</p>"]
-    #[serde(rename="deploymentsInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the deployments.</p>
+    #[serde(rename = "deploymentsInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployments_info: Option<Vec<DeploymentInfo>>,
 }
 
-#[doc="<p>Represents the input of a BatchGetOnPremisesInstances operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of a BatchGetOnPremisesInstances operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct BatchGetOnPremisesInstancesInput {
-    #[doc="<p>The names of the on-premises instances about which to get information.</p>"]
-    #[serde(rename="instanceNames")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The names of the on-premises instances about which to get information.</p>
+    #[serde(rename = "instanceNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_names: Option<Vec<String>>,
 }
 
-#[doc="<p>Represents the output of a BatchGetOnPremisesInstances operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the output of a BatchGetOnPremisesInstances operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct BatchGetOnPremisesInstancesOutput {
-    #[doc="<p>Information about the on-premises instances.</p>"]
-    #[serde(rename="instanceInfos")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the on-premises instances.</p>
+    #[serde(rename = "instanceInfos")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_infos: Option<Vec<InstanceInfo>>,
 }
 
-#[doc="<p>Information about blue/green deployment options for a deployment group.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Information about blue/green deployment options for a deployment group.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct BlueGreenDeploymentConfiguration {
-    #[doc="<p>Information about the action to take when newly provisioned instances are ready to receive traffic in a blue/green deployment.</p>"]
-    #[serde(rename="deploymentReadyOption")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the action to take when newly provisioned instances are ready to receive traffic in a blue/green deployment.</p>
+    #[serde(rename = "deploymentReadyOption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_ready_option: Option<DeploymentReadyOption>,
-    #[doc="<p>Information about how instances are provisioned for a replacement environment in a blue/green deployment.</p>"]
-    #[serde(rename="greenFleetProvisioningOption")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about how instances are provisioned for a replacement environment in a blue/green deployment.</p>
+    #[serde(rename = "greenFleetProvisioningOption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub green_fleet_provisioning_option: Option<GreenFleetProvisioningOption>,
-    #[doc="<p>Information about whether to terminate instances in the original fleet during a blue/green deployment.</p>"]
-    #[serde(rename="terminateBlueInstancesOnDeploymentSuccess")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about whether to terminate instances in the original fleet during a blue/green deployment.</p>
+    #[serde(rename = "terminateBlueInstancesOnDeploymentSuccess")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub terminate_blue_instances_on_deployment_success: Option<BlueInstanceTerminationOption>,
 }
 
-#[doc="<p>Information about whether instances in the original environment are terminated when a blue/green deployment is successful.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Information about whether instances in the original environment are terminated when a blue/green deployment is successful.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct BlueInstanceTerminationOption {
-    #[doc="<p>The action to take on instances in the original environment after a successful blue/green deployment.</p> <ul> <li> <p>TERMINATE: Instances are terminated after a specified wait time.</p> </li> <li> <p>KEEP_ALIVE: Instances are left running after they are deregistered from the load balancer and removed from the deployment group.</p> </li> </ul>"]
-    #[serde(rename="action")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The action to take on instances in the original environment after a successful blue/green deployment.</p> <ul> <li> <p>TERMINATE: Instances are terminated after a specified wait time.</p> </li> <li> <p>KEEP_ALIVE: Instances are left running after they are deregistered from the load balancer and removed from the deployment group.</p> </li> </ul>
+    #[serde(rename = "action")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub action: Option<String>,
-    #[doc="<p>The number of minutes to wait after a successful blue/green deployment before terminating instances from the original environment.</p>"]
-    #[serde(rename="terminationWaitTimeInMinutes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of minutes to wait after a successful blue/green deployment before terminating instances from the original environment.</p>
+    #[serde(rename = "terminationWaitTimeInMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub termination_wait_time_in_minutes: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ContinueDeploymentInput {
-    #[doc="<p>The deployment ID of the blue/green deployment for which you want to start rerouting traffic to the replacement environment.</p>"]
-    #[serde(rename="deploymentId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The deployment ID of the blue/green deployment for which you want to start rerouting traffic to the replacement environment.</p>
+    #[serde(rename = "deploymentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
 }
 
-#[doc="<p>Represents the input of a CreateApplication operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of a CreateApplication operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateApplicationInput {
-    #[doc="<p>The name of the application. This name must be unique with the applicable IAM user or AWS account.</p>"]
-    #[serde(rename="applicationName")]
+    /// <p>The name of the application. This name must be unique with the applicable IAM user or AWS account.</p>
+    #[serde(rename = "applicationName")]
     pub application_name: String,
 }
 
-#[doc="<p>Represents the output of a CreateApplication operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the output of a CreateApplication operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateApplicationOutput {
-    #[doc="<p>A unique application ID.</p>"]
-    #[serde(rename="applicationId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A unique application ID.</p>
+    #[serde(rename = "applicationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub application_id: Option<String>,
 }
 
-#[doc="<p>Represents the input of a CreateDeploymentConfig operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of a CreateDeploymentConfig operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateDeploymentConfigInput {
-    #[doc="<p>The name of the deployment configuration to create.</p>"]
-    #[serde(rename="deploymentConfigName")]
+    /// <p>The name of the deployment configuration to create.</p>
+    #[serde(rename = "deploymentConfigName")]
     pub deployment_config_name: String,
-    #[doc="<p>The minimum number of healthy instances that should be available at any time during the deployment. There are two parameters expected in the input: type and value.</p> <p>The type parameter takes either of the following values:</p> <ul> <li> <p>HOST_COUNT: The value parameter represents the minimum number of healthy instances as an absolute value.</p> </li> <li> <p>FLEET_PERCENT: The value parameter represents the minimum number of healthy instances as a percentage of the total number of instances in the deployment. If you specify FLEET_PERCENT, at the start of the deployment, AWS CodeDeploy converts the percentage to the equivalent number of instance and rounds up fractional instances.</p> </li> </ul> <p>The value parameter takes an integer.</p> <p>For example, to set a minimum of 95% healthy instance, specify a type of FLEET_PERCENT and a value of 95.</p>"]
-    #[serde(rename="minimumHealthyHosts")]
+    /// <p>The minimum number of healthy instances that should be available at any time during the deployment. There are two parameters expected in the input: type and value.</p> <p>The type parameter takes either of the following values:</p> <ul> <li> <p>HOST_COUNT: The value parameter represents the minimum number of healthy instances as an absolute value.</p> </li> <li> <p>FLEET_PERCENT: The value parameter represents the minimum number of healthy instances as a percentage of the total number of instances in the deployment. If you specify FLEET_PERCENT, at the start of the deployment, AWS CodeDeploy converts the percentage to the equivalent number of instance and rounds up fractional instances.</p> </li> </ul> <p>The value parameter takes an integer.</p> <p>For example, to set a minimum of 95% healthy instance, specify a type of FLEET_PERCENT and a value of 95.</p>
+    #[serde(rename = "minimumHealthyHosts")]
     pub minimum_healthy_hosts: MinimumHealthyHosts,
 }
 
-#[doc="<p>Represents the output of a CreateDeploymentConfig operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the output of a CreateDeploymentConfig operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateDeploymentConfigOutput {
-    #[doc="<p>A unique deployment configuration ID.</p>"]
-    #[serde(rename="deploymentConfigId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A unique deployment configuration ID.</p>
+    #[serde(rename = "deploymentConfigId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_config_id: Option<String>,
 }
 
-#[doc="<p>Represents the input of a CreateDeploymentGroup operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of a CreateDeploymentGroup operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateDeploymentGroupInput {
-    #[doc="<p>Information to add about Amazon CloudWatch alarms when the deployment group is created.</p>"]
-    #[serde(rename="alarmConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information to add about Amazon CloudWatch alarms when the deployment group is created.</p>
+    #[serde(rename = "alarmConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub alarm_configuration: Option<AlarmConfiguration>,
-    #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
-    #[serde(rename="applicationName")]
+    /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
+    #[serde(rename = "applicationName")]
     pub application_name: String,
-    #[doc="<p>Configuration information for an automatic rollback that is added when a deployment group is created.</p>"]
-    #[serde(rename="autoRollbackConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Configuration information for an automatic rollback that is added when a deployment group is created.</p>
+    #[serde(rename = "autoRollbackConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_rollback_configuration: Option<AutoRollbackConfiguration>,
-    #[doc="<p>A list of associated Auto Scaling groups.</p>"]
-    #[serde(rename="autoScalingGroups")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of associated Auto Scaling groups.</p>
+    #[serde(rename = "autoScalingGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_scaling_groups: Option<Vec<String>>,
-    #[doc="<p>Information about blue/green deployment options for a deployment group.</p>"]
-    #[serde(rename="blueGreenDeploymentConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about blue/green deployment options for a deployment group.</p>
+    #[serde(rename = "blueGreenDeploymentConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub blue_green_deployment_configuration: Option<BlueGreenDeploymentConfiguration>,
-    #[doc="<p>If specified, the deployment configuration name can be either one of the predefined configurations provided with AWS CodeDeploy or a custom deployment configuration that you create by calling the create deployment configuration operation.</p> <p>CodeDeployDefault.OneAtATime is the default deployment configuration. It is used if a configuration isn't specified for the deployment or the deployment group.</p> <p>For more information about the predefined deployment configurations in AWS CodeDeploy, see <a href=\"http://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.html\">Working with Deployment Groups in AWS CodeDeploy</a> in the AWS CodeDeploy User Guide.</p>"]
-    #[serde(rename="deploymentConfigName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If specified, the deployment configuration name can be either one of the predefined configurations provided with AWS CodeDeploy or a custom deployment configuration that you create by calling the create deployment configuration operation.</p> <p>CodeDeployDefault.OneAtATime is the default deployment configuration. It is used if a configuration isn't specified for the deployment or the deployment group.</p> <p>For more information about the predefined deployment configurations in AWS CodeDeploy, see <a href="http://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.html">Working with Deployment Groups in AWS CodeDeploy</a> in the AWS CodeDeploy User Guide.</p>
+    #[serde(rename = "deploymentConfigName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_config_name: Option<String>,
-    #[doc="<p>The name of a new deployment group for the specified application.</p>"]
-    #[serde(rename="deploymentGroupName")]
+    /// <p>The name of a new deployment group for the specified application.</p>
+    #[serde(rename = "deploymentGroupName")]
     pub deployment_group_name: String,
-    #[doc="<p>Information about the type of deployment, in-place or blue/green, that you want to run and whether to route deployment traffic behind a load balancer.</p>"]
-    #[serde(rename="deploymentStyle")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the type of deployment, in-place or blue/green, that you want to run and whether to route deployment traffic behind a load balancer.</p>
+    #[serde(rename = "deploymentStyle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_style: Option<DeploymentStyle>,
-    #[doc="<p>The Amazon EC2 tags on which to filter. The deployment group will include EC2 instances with any of the specified tags. Cannot be used in the same call as ec2TagSet.</p>"]
-    #[serde(rename="ec2TagFilters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon EC2 tags on which to filter. The deployment group will include EC2 instances with any of the specified tags. Cannot be used in the same call as ec2TagSet.</p>
+    #[serde(rename = "ec2TagFilters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ec_2_tag_filters: Option<Vec<EC2TagFilter>>,
-    #[doc="<p>Information about groups of tags applied to EC2 instances. The deployment group will include only EC2 instances identified by all the tag groups. Cannot be used in the same call as ec2TagFilters.</p>"]
-    #[serde(rename="ec2TagSet")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about groups of tags applied to EC2 instances. The deployment group will include only EC2 instances identified by all the tag groups. Cannot be used in the same call as ec2TagFilters.</p>
+    #[serde(rename = "ec2TagSet")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ec_2_tag_set: Option<EC2TagSet>,
-    #[doc="<p>Information about the load balancer used in a deployment.</p>"]
-    #[serde(rename="loadBalancerInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the load balancer used in a deployment.</p>
+    #[serde(rename = "loadBalancerInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub load_balancer_info: Option<LoadBalancerInfo>,
-    #[doc="<p>The on-premises instance tags on which to filter. The deployment group will include on-premises instances with any of the specified tags. Cannot be used in the same call as OnPremisesTagSet.</p>"]
-    #[serde(rename="onPremisesInstanceTagFilters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The on-premises instance tags on which to filter. The deployment group will include on-premises instances with any of the specified tags. Cannot be used in the same call as OnPremisesTagSet.</p>
+    #[serde(rename = "onPremisesInstanceTagFilters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub on_premises_instance_tag_filters: Option<Vec<TagFilter>>,
-    #[doc="<p>Information about groups of tags applied to on-premises instances. The deployment group will include only on-premises instances identified by all the tag groups. Cannot be used in the same call as onPremisesInstanceTagFilters.</p>"]
-    #[serde(rename="onPremisesTagSet")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about groups of tags applied to on-premises instances. The deployment group will include only on-premises instances identified by all the tag groups. Cannot be used in the same call as onPremisesInstanceTagFilters.</p>
+    #[serde(rename = "onPremisesTagSet")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub on_premises_tag_set: Option<OnPremisesTagSet>,
-    #[doc="<p>A service role ARN that allows AWS CodeDeploy to act on the user's behalf when interacting with AWS services.</p>"]
-    #[serde(rename="serviceRoleArn")]
+    /// <p>A service role ARN that allows AWS CodeDeploy to act on the user's behalf when interacting with AWS services.</p>
+    #[serde(rename = "serviceRoleArn")]
     pub service_role_arn: String,
-    #[doc="<p>Information about triggers to create when the deployment group is created. For examples, see <a href=\"http://docs.aws.amazon.com/codedeploy/latest/userguide/how-to-notify-sns.html\">Create a Trigger for an AWS CodeDeploy Event</a> in the AWS CodeDeploy User Guide.</p>"]
-    #[serde(rename="triggerConfigurations")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about triggers to create when the deployment group is created. For examples, see <a href="http://docs.aws.amazon.com/codedeploy/latest/userguide/how-to-notify-sns.html">Create a Trigger for an AWS CodeDeploy Event</a> in the AWS CodeDeploy User Guide.</p>
+    #[serde(rename = "triggerConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub trigger_configurations: Option<Vec<TriggerConfig>>,
 }
 
-#[doc="<p>Represents the output of a CreateDeploymentGroup operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the output of a CreateDeploymentGroup operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateDeploymentGroupOutput {
-    #[doc="<p>A unique deployment group ID.</p>"]
-    #[serde(rename="deploymentGroupId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A unique deployment group ID.</p>
+    #[serde(rename = "deploymentGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_group_id: Option<String>,
 }
 
-#[doc="<p>Represents the input of a CreateDeployment operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of a CreateDeployment operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateDeploymentInput {
-    #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
-    #[serde(rename="applicationName")]
+    /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
+    #[serde(rename = "applicationName")]
     pub application_name: String,
-    #[doc="<p>Configuration information for an automatic rollback that is added when a deployment is created.</p>"]
-    #[serde(rename="autoRollbackConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Configuration information for an automatic rollback that is added when a deployment is created.</p>
+    #[serde(rename = "autoRollbackConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_rollback_configuration: Option<AutoRollbackConfiguration>,
-    #[doc="<p>The name of a deployment configuration associated with the applicable IAM user or AWS account.</p> <p>If not specified, the value configured in the deployment group will be used as the default. If the deployment group does not have a deployment configuration associated with it, then CodeDeployDefault.OneAtATime will be used by default.</p>"]
-    #[serde(rename="deploymentConfigName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of a deployment configuration associated with the applicable IAM user or AWS account.</p> <p>If not specified, the value configured in the deployment group will be used as the default. If the deployment group does not have a deployment configuration associated with it, then CodeDeployDefault.OneAtATime will be used by default.</p>
+    #[serde(rename = "deploymentConfigName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_config_name: Option<String>,
-    #[doc="<p>The name of the deployment group.</p>"]
-    #[serde(rename="deploymentGroupName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the deployment group.</p>
+    #[serde(rename = "deploymentGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_group_name: Option<String>,
-    #[doc="<p>A comment about the deployment.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A comment about the deployment.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>Information about how AWS CodeDeploy handles files that already exist in a deployment target location but weren't part of the previous successful deployment.</p> <p>The fileExistsBehavior parameter takes any of the following values:</p> <ul> <li> <p>DISALLOW: The deployment fails. This is also the default behavior if no option is specified.</p> </li> <li> <p>OVERWRITE: The version of the file from the application revision currently being deployed replaces the version already on the instance.</p> </li> <li> <p>RETAIN: The version of the file already on the instance is kept and used as part of the new deployment.</p> </li> </ul>"]
-    #[serde(rename="fileExistsBehavior")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about how AWS CodeDeploy handles files that already exist in a deployment target location but weren't part of the previous successful deployment.</p> <p>The fileExistsBehavior parameter takes any of the following values:</p> <ul> <li> <p>DISALLOW: The deployment fails. This is also the default behavior if no option is specified.</p> </li> <li> <p>OVERWRITE: The version of the file from the application revision currently being deployed replaces the version already on the instance.</p> </li> <li> <p>RETAIN: The version of the file already on the instance is kept and used as part of the new deployment.</p> </li> </ul>
+    #[serde(rename = "fileExistsBehavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub file_exists_behavior: Option<String>,
-    #[doc="<p>If set to true, then if the deployment causes the ApplicationStop deployment lifecycle event to an instance to fail, the deployment to that instance will not be considered to have failed at that point and will continue on to the BeforeInstall deployment lifecycle event.</p> <p>If set to false or not specified, then if the deployment causes the ApplicationStop deployment lifecycle event to fail to an instance, the deployment to that instance will stop, and the deployment to that instance will be considered to have failed.</p>"]
-    #[serde(rename="ignoreApplicationStopFailures")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If set to true, then if the deployment causes the ApplicationStop deployment lifecycle event to an instance to fail, the deployment to that instance will not be considered to have failed at that point and will continue on to the BeforeInstall deployment lifecycle event.</p> <p>If set to false or not specified, then if the deployment causes the ApplicationStop deployment lifecycle event to fail to an instance, the deployment to that instance will stop, and the deployment to that instance will be considered to have failed.</p>
+    #[serde(rename = "ignoreApplicationStopFailures")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ignore_application_stop_failures: Option<bool>,
-    #[doc="<p>The type and location of the revision to deploy.</p>"]
-    #[serde(rename="revision")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type and location of the revision to deploy.</p>
+    #[serde(rename = "revision")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub revision: Option<RevisionLocation>,
-    #[doc="<p>Information about the instances that will belong to the replacement environment in a blue/green deployment.</p>"]
-    #[serde(rename="targetInstances")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the instances that will belong to the replacement environment in a blue/green deployment.</p>
+    #[serde(rename = "targetInstances")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub target_instances: Option<TargetInstances>,
-    #[doc="<p>Indicates whether to deploy to all instances or only to instances that are not running the latest application revision.</p>"]
-    #[serde(rename="updateOutdatedInstancesOnly")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether to deploy to all instances or only to instances that are not running the latest application revision.</p>
+    #[serde(rename = "updateOutdatedInstancesOnly")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub update_outdated_instances_only: Option<bool>,
 }
 
-#[doc="<p>Represents the output of a CreateDeployment operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the output of a CreateDeployment operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateDeploymentOutput {
-    #[doc="<p>A unique deployment ID.</p>"]
-    #[serde(rename="deploymentId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A unique deployment ID.</p>
+    #[serde(rename = "deploymentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
 }
 
-#[doc="<p>Represents the input of a DeleteApplication operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of a DeleteApplication operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteApplicationInput {
-    #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
-    #[serde(rename="applicationName")]
+    /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
+    #[serde(rename = "applicationName")]
     pub application_name: String,
 }
 
-#[doc="<p>Represents the input of a DeleteDeploymentConfig operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of a DeleteDeploymentConfig operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteDeploymentConfigInput {
-    #[doc="<p>The name of a deployment configuration associated with the applicable IAM user or AWS account.</p>"]
-    #[serde(rename="deploymentConfigName")]
+    /// <p>The name of a deployment configuration associated with the applicable IAM user or AWS account.</p>
+    #[serde(rename = "deploymentConfigName")]
     pub deployment_config_name: String,
 }
 
-#[doc="<p>Represents the input of a DeleteDeploymentGroup operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of a DeleteDeploymentGroup operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteDeploymentGroupInput {
-    #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
-    #[serde(rename="applicationName")]
+    /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
+    #[serde(rename = "applicationName")]
     pub application_name: String,
-    #[doc="<p>The name of an existing deployment group for the specified application.</p>"]
-    #[serde(rename="deploymentGroupName")]
+    /// <p>The name of an existing deployment group for the specified application.</p>
+    #[serde(rename = "deploymentGroupName")]
     pub deployment_group_name: String,
 }
 
-#[doc="<p>Represents the output of a DeleteDeploymentGroup operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the output of a DeleteDeploymentGroup operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteDeploymentGroupOutput {
-    #[doc="<p>If the output contains no data, and the corresponding deployment group contained at least one Auto Scaling group, AWS CodeDeploy successfully removed all corresponding Auto Scaling lifecycle event hooks from the Amazon EC2 instances in the Auto Scaling group. If the output contains data, AWS CodeDeploy could not remove some Auto Scaling lifecycle event hooks from the Amazon EC2 instances in the Auto Scaling group.</p>"]
-    #[serde(rename="hooksNotCleanedUp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the output contains no data, and the corresponding deployment group contained at least one Auto Scaling group, AWS CodeDeploy successfully removed all corresponding Auto Scaling lifecycle event hooks from the Amazon EC2 instances in the Auto Scaling group. If the output contains data, AWS CodeDeploy could not remove some Auto Scaling lifecycle event hooks from the Amazon EC2 instances in the Auto Scaling group.</p>
+    #[serde(rename = "hooksNotCleanedUp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hooks_not_cleaned_up: Option<Vec<AutoScalingGroup>>,
 }
 
-#[doc="<p>Information about a deployment configuration.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about a deployment configuration.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeploymentConfigInfo {
-    #[doc="<p>The time at which the deployment configuration was created.</p>"]
-    #[serde(rename="createTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time at which the deployment configuration was created.</p>
+    #[serde(rename = "createTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<f64>,
-    #[doc="<p>The deployment configuration ID.</p>"]
-    #[serde(rename="deploymentConfigId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The deployment configuration ID.</p>
+    #[serde(rename = "deploymentConfigId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_config_id: Option<String>,
-    #[doc="<p>The deployment configuration name.</p>"]
-    #[serde(rename="deploymentConfigName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The deployment configuration name.</p>
+    #[serde(rename = "deploymentConfigName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_config_name: Option<String>,
-    #[doc="<p>Information about the number or percentage of minimum healthy instance.</p>"]
-    #[serde(rename="minimumHealthyHosts")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the number or percentage of minimum healthy instance.</p>
+    #[serde(rename = "minimumHealthyHosts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub minimum_healthy_hosts: Option<MinimumHealthyHosts>,
 }
 
-#[doc="<p>Information about a deployment group.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about a deployment group.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeploymentGroupInfo {
-    #[doc="<p>A list of alarms associated with the deployment group.</p>"]
-    #[serde(rename="alarmConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of alarms associated with the deployment group.</p>
+    #[serde(rename = "alarmConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub alarm_configuration: Option<AlarmConfiguration>,
-    #[doc="<p>The application name.</p>"]
-    #[serde(rename="applicationName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The application name.</p>
+    #[serde(rename = "applicationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub application_name: Option<String>,
-    #[doc="<p>Information about the automatic rollback configuration associated with the deployment group.</p>"]
-    #[serde(rename="autoRollbackConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the automatic rollback configuration associated with the deployment group.</p>
+    #[serde(rename = "autoRollbackConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_rollback_configuration: Option<AutoRollbackConfiguration>,
-    #[doc="<p>A list of associated Auto Scaling groups.</p>"]
-    #[serde(rename="autoScalingGroups")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of associated Auto Scaling groups.</p>
+    #[serde(rename = "autoScalingGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_scaling_groups: Option<Vec<AutoScalingGroup>>,
-    #[doc="<p>Information about blue/green deployment options for a deployment group.</p>"]
-    #[serde(rename="blueGreenDeploymentConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about blue/green deployment options for a deployment group.</p>
+    #[serde(rename = "blueGreenDeploymentConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub blue_green_deployment_configuration: Option<BlueGreenDeploymentConfiguration>,
-    #[doc="<p>The deployment configuration name.</p>"]
-    #[serde(rename="deploymentConfigName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The deployment configuration name.</p>
+    #[serde(rename = "deploymentConfigName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_config_name: Option<String>,
-    #[doc="<p>The deployment group ID.</p>"]
-    #[serde(rename="deploymentGroupId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The deployment group ID.</p>
+    #[serde(rename = "deploymentGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_group_id: Option<String>,
-    #[doc="<p>The deployment group name.</p>"]
-    #[serde(rename="deploymentGroupName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The deployment group name.</p>
+    #[serde(rename = "deploymentGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_group_name: Option<String>,
-    #[doc="<p>Information about the type of deployment, either in-place or blue/green, you want to run and whether to route deployment traffic behind a load balancer.</p>"]
-    #[serde(rename="deploymentStyle")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the type of deployment, either in-place or blue/green, you want to run and whether to route deployment traffic behind a load balancer.</p>
+    #[serde(rename = "deploymentStyle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_style: Option<DeploymentStyle>,
-    #[doc="<p>The Amazon EC2 tags on which to filter. The deployment group includes EC2 instances with any of the specified tags.</p>"]
-    #[serde(rename="ec2TagFilters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon EC2 tags on which to filter. The deployment group includes EC2 instances with any of the specified tags.</p>
+    #[serde(rename = "ec2TagFilters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ec_2_tag_filters: Option<Vec<EC2TagFilter>>,
-    #[doc="<p>Information about groups of tags applied to an EC2 instance. The deployment group includes only EC2 instances identified by all the tag groups. Cannot be used in the same call as ec2TagFilters.</p>"]
-    #[serde(rename="ec2TagSet")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about groups of tags applied to an EC2 instance. The deployment group includes only EC2 instances identified by all the tag groups. Cannot be used in the same call as ec2TagFilters.</p>
+    #[serde(rename = "ec2TagSet")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ec_2_tag_set: Option<EC2TagSet>,
-    #[doc="<p>Information about the most recent attempted deployment to the deployment group.</p>"]
-    #[serde(rename="lastAttemptedDeployment")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the most recent attempted deployment to the deployment group.</p>
+    #[serde(rename = "lastAttemptedDeployment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_attempted_deployment: Option<LastDeploymentInfo>,
-    #[doc="<p>Information about the most recent successful deployment to the deployment group.</p>"]
-    #[serde(rename="lastSuccessfulDeployment")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the most recent successful deployment to the deployment group.</p>
+    #[serde(rename = "lastSuccessfulDeployment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_successful_deployment: Option<LastDeploymentInfo>,
-    #[doc="<p>Information about the load balancer to use in a deployment.</p>"]
-    #[serde(rename="loadBalancerInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the load balancer to use in a deployment.</p>
+    #[serde(rename = "loadBalancerInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub load_balancer_info: Option<LoadBalancerInfo>,
-    #[doc="<p>The on-premises instance tags on which to filter. The deployment group includes on-premises instances with any of the specified tags.</p>"]
-    #[serde(rename="onPremisesInstanceTagFilters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The on-premises instance tags on which to filter. The deployment group includes on-premises instances with any of the specified tags.</p>
+    #[serde(rename = "onPremisesInstanceTagFilters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub on_premises_instance_tag_filters: Option<Vec<TagFilter>>,
-    #[doc="<p>Information about groups of tags applied to an on-premises instance. The deployment group includes only on-premises instances identified by all the tag groups. Cannot be used in the same call as onPremisesInstanceTagFilters.</p>"]
-    #[serde(rename="onPremisesTagSet")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about groups of tags applied to an on-premises instance. The deployment group includes only on-premises instances identified by all the tag groups. Cannot be used in the same call as onPremisesInstanceTagFilters.</p>
+    #[serde(rename = "onPremisesTagSet")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub on_premises_tag_set: Option<OnPremisesTagSet>,
-    #[doc="<p>A service role ARN.</p>"]
-    #[serde(rename="serviceRoleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A service role ARN.</p>
+    #[serde(rename = "serviceRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role_arn: Option<String>,
-    #[doc="<p>Information about the deployment group's target revision, including type and location.</p>"]
-    #[serde(rename="targetRevision")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the deployment group's target revision, including type and location.</p>
+    #[serde(rename = "targetRevision")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub target_revision: Option<RevisionLocation>,
-    #[doc="<p>Information about triggers associated with the deployment group.</p>"]
-    #[serde(rename="triggerConfigurations")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about triggers associated with the deployment group.</p>
+    #[serde(rename = "triggerConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub trigger_configurations: Option<Vec<TriggerConfig>>,
 }
 
-#[doc="<p>Information about a deployment.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about a deployment.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeploymentInfo {
-    #[doc="<p>Provides information about the results of a deployment, such as whether instances in the original environment in a blue/green deployment were not terminated.</p>"]
-    #[serde(rename="additionalDeploymentStatusInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Provides information about the results of a deployment, such as whether instances in the original environment in a blue/green deployment were not terminated.</p>
+    #[serde(rename = "additionalDeploymentStatusInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_deployment_status_info: Option<String>,
-    #[doc="<p>The application name.</p>"]
-    #[serde(rename="applicationName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The application name.</p>
+    #[serde(rename = "applicationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub application_name: Option<String>,
-    #[doc="<p>Information about the automatic rollback configuration associated with the deployment.</p>"]
-    #[serde(rename="autoRollbackConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the automatic rollback configuration associated with the deployment.</p>
+    #[serde(rename = "autoRollbackConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_rollback_configuration: Option<AutoRollbackConfiguration>,
-    #[doc="<p>Information about blue/green deployment options for this deployment.</p>"]
-    #[serde(rename="blueGreenDeploymentConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about blue/green deployment options for this deployment.</p>
+    #[serde(rename = "blueGreenDeploymentConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub blue_green_deployment_configuration: Option<BlueGreenDeploymentConfiguration>,
-    #[doc="<p>A timestamp indicating when the deployment was complete.</p>"]
-    #[serde(rename="completeTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A timestamp indicating when the deployment was complete.</p>
+    #[serde(rename = "completeTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub complete_time: Option<f64>,
-    #[doc="<p>A timestamp indicating when the deployment was created.</p>"]
-    #[serde(rename="createTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A timestamp indicating when the deployment was created.</p>
+    #[serde(rename = "createTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<f64>,
-    #[doc="<p>The means by which the deployment was created:</p> <ul> <li> <p>user: A user created the deployment.</p> </li> <li> <p>autoscaling: Auto Scaling created the deployment.</p> </li> <li> <p>codeDeployRollback: A rollback process created the deployment.</p> </li> </ul>"]
-    #[serde(rename="creator")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The means by which the deployment was created:</p> <ul> <li> <p>user: A user created the deployment.</p> </li> <li> <p>autoscaling: Auto Scaling created the deployment.</p> </li> <li> <p>codeDeployRollback: A rollback process created the deployment.</p> </li> </ul>
+    #[serde(rename = "creator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creator: Option<String>,
-    #[doc="<p>The deployment configuration name.</p>"]
-    #[serde(rename="deploymentConfigName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The deployment configuration name.</p>
+    #[serde(rename = "deploymentConfigName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_config_name: Option<String>,
-    #[doc="<p>The deployment group name.</p>"]
-    #[serde(rename="deploymentGroupName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The deployment group name.</p>
+    #[serde(rename = "deploymentGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_group_name: Option<String>,
-    #[doc="<p>The deployment ID.</p>"]
-    #[serde(rename="deploymentId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The deployment ID.</p>
+    #[serde(rename = "deploymentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
-    #[doc="<p>A summary of the deployment status of the instances in the deployment.</p>"]
-    #[serde(rename="deploymentOverview")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A summary of the deployment status of the instances in the deployment.</p>
+    #[serde(rename = "deploymentOverview")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_overview: Option<DeploymentOverview>,
-    #[doc="<p>Information about the type of deployment, either in-place or blue/green, you want to run and whether to route deployment traffic behind a load balancer.</p>"]
-    #[serde(rename="deploymentStyle")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the type of deployment, either in-place or blue/green, you want to run and whether to route deployment traffic behind a load balancer.</p>
+    #[serde(rename = "deploymentStyle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_style: Option<DeploymentStyle>,
-    #[doc="<p>A comment about the deployment.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A comment about the deployment.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>Information about any error associated with this deployment.</p>"]
-    #[serde(rename="errorInformation")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about any error associated with this deployment.</p>
+    #[serde(rename = "errorInformation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_information: Option<ErrorInformation>,
-    #[doc="<p>Information about how AWS CodeDeploy handles files that already exist in a deployment target location but weren't part of the previous successful deployment.</p> <ul> <li> <p>DISALLOW: The deployment fails. This is also the default behavior if no option is specified.</p> </li> <li> <p>OVERWRITE: The version of the file from the application revision currently being deployed replaces the version already on the instance.</p> </li> <li> <p>RETAIN: The version of the file already on the instance is kept and used as part of the new deployment.</p> </li> </ul>"]
-    #[serde(rename="fileExistsBehavior")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about how AWS CodeDeploy handles files that already exist in a deployment target location but weren't part of the previous successful deployment.</p> <ul> <li> <p>DISALLOW: The deployment fails. This is also the default behavior if no option is specified.</p> </li> <li> <p>OVERWRITE: The version of the file from the application revision currently being deployed replaces the version already on the instance.</p> </li> <li> <p>RETAIN: The version of the file already on the instance is kept and used as part of the new deployment.</p> </li> </ul>
+    #[serde(rename = "fileExistsBehavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub file_exists_behavior: Option<String>,
-    #[doc="<p>If true, then if the deployment causes the ApplicationStop deployment lifecycle event to an instance to fail, the deployment to that instance will not be considered to have failed at that point and will continue on to the BeforeInstall deployment lifecycle event.</p> <p>If false or not specified, then if the deployment causes the ApplicationStop deployment lifecycle event to an instance to fail, the deployment to that instance will stop, and the deployment to that instance will be considered to have failed.</p>"]
-    #[serde(rename="ignoreApplicationStopFailures")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If true, then if the deployment causes the ApplicationStop deployment lifecycle event to an instance to fail, the deployment to that instance will not be considered to have failed at that point and will continue on to the BeforeInstall deployment lifecycle event.</p> <p>If false or not specified, then if the deployment causes the ApplicationStop deployment lifecycle event to an instance to fail, the deployment to that instance will stop, and the deployment to that instance will be considered to have failed.</p>
+    #[serde(rename = "ignoreApplicationStopFailures")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ignore_application_stop_failures: Option<bool>,
-    #[doc="<p>Indicates whether the wait period set for the termination of instances in the original environment has started. Status is 'false' if the KEEP_ALIVE option is specified; otherwise, 'true' as soon as the termination wait period starts.</p>"]
-    #[serde(rename="instanceTerminationWaitTimeStarted")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether the wait period set for the termination of instances in the original environment has started. Status is 'false' if the KEEP_ALIVE option is specified; otherwise, 'true' as soon as the termination wait period starts.</p>
+    #[serde(rename = "instanceTerminationWaitTimeStarted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_termination_wait_time_started: Option<bool>,
-    #[doc="<p>Information about the load balancer used in the deployment.</p>"]
-    #[serde(rename="loadBalancerInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the load balancer used in the deployment.</p>
+    #[serde(rename = "loadBalancerInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub load_balancer_info: Option<LoadBalancerInfo>,
-    #[doc="<p>Information about the application revision that was deployed to the deployment group before the most recent successful deployment.</p>"]
-    #[serde(rename="previousRevision")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the application revision that was deployed to the deployment group before the most recent successful deployment.</p>
+    #[serde(rename = "previousRevision")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub previous_revision: Option<RevisionLocation>,
-    #[doc="<p>Information about the location of stored application artifacts and the service from which to retrieve them.</p>"]
-    #[serde(rename="revision")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the location of stored application artifacts and the service from which to retrieve them.</p>
+    #[serde(rename = "revision")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub revision: Option<RevisionLocation>,
-    #[doc="<p>Information about a deployment rollback.</p>"]
-    #[serde(rename="rollbackInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about a deployment rollback.</p>
+    #[serde(rename = "rollbackInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rollback_info: Option<RollbackInfo>,
-    #[doc="<p>A timestamp indicating when the deployment was deployed to the deployment group.</p> <p>In some cases, the reported value of the start time may be later than the complete time. This is due to differences in the clock settings of back-end servers that participate in the deployment process.</p>"]
-    #[serde(rename="startTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A timestamp indicating when the deployment was deployed to the deployment group.</p> <p>In some cases, the reported value of the start time may be later than the complete time. This is due to differences in the clock settings of back-end servers that participate in the deployment process.</p>
+    #[serde(rename = "startTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
-    #[doc="<p>The current state of the deployment as a whole.</p>"]
-    #[serde(rename="status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The current state of the deployment as a whole.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>Information about the instances that belong to the replacement environment in a blue/green deployment.</p>"]
-    #[serde(rename="targetInstances")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the instances that belong to the replacement environment in a blue/green deployment.</p>
+    #[serde(rename = "targetInstances")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub target_instances: Option<TargetInstances>,
-    #[doc="<p>Indicates whether only instances that are not running the latest application revision are to be deployed to.</p>"]
-    #[serde(rename="updateOutdatedInstancesOnly")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether only instances that are not running the latest application revision are to be deployed to.</p>
+    #[serde(rename = "updateOutdatedInstancesOnly")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub update_outdated_instances_only: Option<bool>,
 }
 
-#[doc="<p>Information about the deployment status of the instances in the deployment.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about the deployment status of the instances in the deployment.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeploymentOverview {
-    #[doc="<p>The number of instances in the deployment in a failed state.</p>"]
-    #[serde(rename="Failed")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of instances in the deployment in a failed state.</p>
+    #[serde(rename = "Failed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failed: Option<i64>,
-    #[doc="<p>The number of instances in which the deployment is in progress.</p>"]
-    #[serde(rename="InProgress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of instances in which the deployment is in progress.</p>
+    #[serde(rename = "InProgress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub in_progress: Option<i64>,
-    #[doc="<p>The number of instances in the deployment in a pending state.</p>"]
-    #[serde(rename="Pending")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of instances in the deployment in a pending state.</p>
+    #[serde(rename = "Pending")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub pending: Option<i64>,
-    #[doc="<p>The number of instances in a replacement environment ready to receive traffic in a blue/green deployment.</p>"]
-    #[serde(rename="Ready")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of instances in a replacement environment ready to receive traffic in a blue/green deployment.</p>
+    #[serde(rename = "Ready")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ready: Option<i64>,
-    #[doc="<p>The number of instances in the deployment in a skipped state.</p>"]
-    #[serde(rename="Skipped")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of instances in the deployment in a skipped state.</p>
+    #[serde(rename = "Skipped")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub skipped: Option<i64>,
-    #[doc="<p>The number of instances in the deployment to which revisions have been successfully deployed.</p>"]
-    #[serde(rename="Succeeded")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of instances in the deployment to which revisions have been successfully deployed.</p>
+    #[serde(rename = "Succeeded")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub succeeded: Option<i64>,
 }
 
-#[doc="<p>Information about how traffic is rerouted to instances in a replacement environment in a blue/green deployment.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Information about how traffic is rerouted to instances in a replacement environment in a blue/green deployment.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct DeploymentReadyOption {
-    #[doc="<p>Information about when to reroute traffic from an original environment to a replacement environment in a blue/green deployment.</p> <ul> <li> <p>CONTINUE_DEPLOYMENT: Register new instances with the load balancer immediately after the new application revision is installed on the instances in the replacement environment.</p> </li> <li> <p>STOP_DEPLOYMENT: Do not register new instances with load balancer unless traffic is rerouted manually. If traffic is not rerouted manually before the end of the specified wait period, the deployment status is changed to Stopped.</p> </li> </ul>"]
-    #[serde(rename="actionOnTimeout")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about when to reroute traffic from an original environment to a replacement environment in a blue/green deployment.</p> <ul> <li> <p>CONTINUE_DEPLOYMENT: Register new instances with the load balancer immediately after the new application revision is installed on the instances in the replacement environment.</p> </li> <li> <p>STOP_DEPLOYMENT: Do not register new instances with load balancer unless traffic is rerouted manually. If traffic is not rerouted manually before the end of the specified wait period, the deployment status is changed to Stopped.</p> </li> </ul>
+    #[serde(rename = "actionOnTimeout")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub action_on_timeout: Option<String>,
-    #[doc="<p>The number of minutes to wait before the status of a blue/green deployment changed to Stopped if rerouting is not started manually. Applies only to the STOP_DEPLOYMENT option for actionOnTimeout</p>"]
-    #[serde(rename="waitTimeInMinutes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of minutes to wait before the status of a blue/green deployment changed to Stopped if rerouting is not started manually. Applies only to the STOP_DEPLOYMENT option for actionOnTimeout</p>
+    #[serde(rename = "waitTimeInMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub wait_time_in_minutes: Option<i64>,
 }
 
-#[doc="<p>Information about the type of deployment, either in-place or blue/green, you want to run and whether to route deployment traffic behind a load balancer.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Information about the type of deployment, either in-place or blue/green, you want to run and whether to route deployment traffic behind a load balancer.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct DeploymentStyle {
-    #[doc="<p>Indicates whether to route deployment traffic behind a load balancer.</p>"]
-    #[serde(rename="deploymentOption")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether to route deployment traffic behind a load balancer.</p>
+    #[serde(rename = "deploymentOption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_option: Option<String>,
-    #[doc="<p>Indicates whether to run an in-place deployment or a blue/green deployment.</p>"]
-    #[serde(rename="deploymentType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether to run an in-place deployment or a blue/green deployment.</p>
+    #[serde(rename = "deploymentType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_type: Option<String>,
 }
 
-#[doc="<p>Represents the input of a DeregisterOnPremisesInstance operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of a DeregisterOnPremisesInstance operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeregisterOnPremisesInstanceInput {
-    #[doc="<p>The name of the on-premises instance to deregister.</p>"]
-    #[serde(rename="instanceName")]
+    /// <p>The name of the on-premises instance to deregister.</p>
+    #[serde(rename = "instanceName")]
     pub instance_name: String,
 }
 
-#[doc="<p>Diagnostic information about executable scripts that are part of a deployment.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Diagnostic information about executable scripts that are part of a deployment.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Diagnostics {
-    #[doc="<p>The associated error code:</p> <ul> <li> <p>Success: The specified script ran.</p> </li> <li> <p>ScriptMissing: The specified script was not found in the specified location.</p> </li> <li> <p>ScriptNotExecutable: The specified script is not a recognized executable file type.</p> </li> <li> <p>ScriptTimedOut: The specified script did not finish running in the specified time period.</p> </li> <li> <p>ScriptFailed: The specified script failed to run as expected.</p> </li> <li> <p>UnknownError: The specified script did not run for an unknown reason.</p> </li> </ul>"]
-    #[serde(rename="errorCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The associated error code:</p> <ul> <li> <p>Success: The specified script ran.</p> </li> <li> <p>ScriptMissing: The specified script was not found in the specified location.</p> </li> <li> <p>ScriptNotExecutable: The specified script is not a recognized executable file type.</p> </li> <li> <p>ScriptTimedOut: The specified script did not finish running in the specified time period.</p> </li> <li> <p>ScriptFailed: The specified script failed to run as expected.</p> </li> <li> <p>UnknownError: The specified script did not run for an unknown reason.</p> </li> </ul>
+    #[serde(rename = "errorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_code: Option<String>,
-    #[doc="<p>The last portion of the diagnostic log.</p> <p>If available, AWS CodeDeploy returns up to the last 4 KB of the diagnostic log.</p>"]
-    #[serde(rename="logTail")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The last portion of the diagnostic log.</p> <p>If available, AWS CodeDeploy returns up to the last 4 KB of the diagnostic log.</p>
+    #[serde(rename = "logTail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub log_tail: Option<String>,
-    #[doc="<p>The message associated with the error.</p>"]
-    #[serde(rename="message")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The message associated with the error.</p>
+    #[serde(rename = "message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
-    #[doc="<p>The name of the script.</p>"]
-    #[serde(rename="scriptName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the script.</p>
+    #[serde(rename = "scriptName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub script_name: Option<String>,
 }
 
-#[doc="<p>Information about an EC2 tag filter.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Information about an EC2 tag filter.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct EC2TagFilter {
-    #[doc="<p>The tag filter key.</p>"]
-    #[serde(rename="Key")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The tag filter key.</p>
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    #[doc="<p>The tag filter type:</p> <ul> <li> <p>KEY_ONLY: Key only.</p> </li> <li> <p>VALUE_ONLY: Value only.</p> </li> <li> <p>KEY_AND_VALUE: Key and value.</p> </li> </ul>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The tag filter type:</p> <ul> <li> <p>KEY_ONLY: Key only.</p> </li> <li> <p>VALUE_ONLY: Value only.</p> </li> <li> <p>KEY_AND_VALUE: Key and value.</p> </li> </ul>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
-    #[doc="<p>The tag filter value.</p>"]
-    #[serde(rename="Value")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The tag filter value.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
-#[doc="<p>Information about groups of EC2 instance tags.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Information about groups of EC2 instance tags.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct EC2TagSet {
-    #[doc="<p>A list containing other lists of EC2 instance tag groups. In order for an instance to be included in the deployment group, it must be identified by all the tag groups in the list.</p>"]
-    #[serde(rename="ec2TagSetList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list containing other lists of EC2 instance tag groups. In order for an instance to be included in the deployment group, it must be identified by all the tag groups in the list.</p>
+    #[serde(rename = "ec2TagSetList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ec_2_tag_set_list: Option<Vec<Vec<EC2TagFilter>>>,
 }
 
-#[doc="<p>Information about a load balancer in Elastic Load Balancing to use in a deployment. Instances are registered directly with a load balancer, and traffic is routed to the load balancer.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Information about a load balancer in Elastic Load Balancing to use in a deployment. Instances are registered directly with a load balancer, and traffic is routed to the load balancer.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ELBInfo {
-    #[doc="<p>For blue/green deployments, the name of the load balancer that will be used to route traffic from original instances to replacement instances in a blue/green deployment. For in-place deployments, the name of the load balancer that instances are deregistered from, so they are not serving traffic during a deployment, and then re-registered with after the deployment completes.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For blue/green deployments, the name of the load balancer that will be used to route traffic from original instances to replacement instances in a blue/green deployment. For in-place deployments, the name of the load balancer that instances are deregistered from, so they are not serving traffic during a deployment, and then re-registered with after the deployment completes.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[doc="<p>Information about a deployment error.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about a deployment error.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ErrorInformation {
-    #[doc="<p>For information about additional error codes, see <a href=\"http://docs.aws.amazon.com/codedeploy/latest/userguide/error-codes.html\">Error Codes for AWS CodeDeploy</a> in the <a href=\"http://docs.aws.amazon.com/codedeploy/latest/userguide\">AWS CodeDeploy User Guide</a>.</p> <p>The error code:</p> <ul> <li> <p>APPLICATION_MISSING: The application was missing. This error code will most likely be raised if the application is deleted after the deployment is created but before it is started.</p> </li> <li> <p>DEPLOYMENT_GROUP_MISSING: The deployment group was missing. This error code will most likely be raised if the deployment group is deleted after the deployment is created but before it is started.</p> </li> <li> <p>HEALTH_CONSTRAINTS: The deployment failed on too many instances to be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>HEALTH_CONSTRAINTS_INVALID: The revision cannot be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>IAM_ROLE_MISSING: The service role cannot be accessed.</p> </li> <li> <p>IAM_ROLE_PERMISSIONS: The service role does not have the correct permissions.</p> </li> <li> <p>INTERNAL_ERROR: There was an internal error.</p> </li> <li> <p>NO_EC2_SUBSCRIPTION: The calling account is not subscribed to the Amazon EC2 service.</p> </li> <li> <p>NO_INSTANCES: No instance were specified, or no instance can be found.</p> </li> <li> <p>OVER_MAX_INSTANCES: The maximum number of instance was exceeded.</p> </li> <li> <p>THROTTLED: The operation was throttled because the calling account exceeded the throttling limits of one or more AWS services.</p> </li> <li> <p>TIMEOUT: The deployment has timed out.</p> </li> <li> <p>REVISION_MISSING: The revision ID was missing. This error code will most likely be raised if the revision is deleted after the deployment is created but before it is started.</p> </li> </ul>"]
-    #[serde(rename="code")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For information about additional error codes, see <a href="http://docs.aws.amazon.com/codedeploy/latest/userguide/error-codes.html">Error Codes for AWS CodeDeploy</a> in the <a href="http://docs.aws.amazon.com/codedeploy/latest/userguide">AWS CodeDeploy User Guide</a>.</p> <p>The error code:</p> <ul> <li> <p>APPLICATION_MISSING: The application was missing. This error code will most likely be raised if the application is deleted after the deployment is created but before it is started.</p> </li> <li> <p>DEPLOYMENT_GROUP_MISSING: The deployment group was missing. This error code will most likely be raised if the deployment group is deleted after the deployment is created but before it is started.</p> </li> <li> <p>HEALTH_CONSTRAINTS: The deployment failed on too many instances to be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>HEALTH_CONSTRAINTS_INVALID: The revision cannot be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>IAM_ROLE_MISSING: The service role cannot be accessed.</p> </li> <li> <p>IAM_ROLE_PERMISSIONS: The service role does not have the correct permissions.</p> </li> <li> <p>INTERNAL_ERROR: There was an internal error.</p> </li> <li> <p>NO_EC2_SUBSCRIPTION: The calling account is not subscribed to the Amazon EC2 service.</p> </li> <li> <p>NO_INSTANCES: No instance were specified, or no instance can be found.</p> </li> <li> <p>OVER_MAX_INSTANCES: The maximum number of instance was exceeded.</p> </li> <li> <p>THROTTLED: The operation was throttled because the calling account exceeded the throttling limits of one or more AWS services.</p> </li> <li> <p>TIMEOUT: The deployment has timed out.</p> </li> <li> <p>REVISION_MISSING: The revision ID was missing. This error code will most likely be raised if the revision is deleted after the deployment is created but before it is started.</p> </li> </ul>
+    #[serde(rename = "code")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub code: Option<String>,
-    #[doc="<p>An accompanying error message.</p>"]
-    #[serde(rename="message")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An accompanying error message.</p>
+    #[serde(rename = "message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
 }
 
-#[doc="<p>Information about an application revision.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about an application revision.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GenericRevisionInfo {
-    #[doc="<p>The deployment groups for which this is the current target revision.</p>"]
-    #[serde(rename="deploymentGroups")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The deployment groups for which this is the current target revision.</p>
+    #[serde(rename = "deploymentGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_groups: Option<Vec<String>>,
-    #[doc="<p>A comment about the revision.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A comment about the revision.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>When the revision was first used by AWS CodeDeploy.</p>"]
-    #[serde(rename="firstUsedTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>When the revision was first used by AWS CodeDeploy.</p>
+    #[serde(rename = "firstUsedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub first_used_time: Option<f64>,
-    #[doc="<p>When the revision was last used by AWS CodeDeploy.</p>"]
-    #[serde(rename="lastUsedTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>When the revision was last used by AWS CodeDeploy.</p>
+    #[serde(rename = "lastUsedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_used_time: Option<f64>,
-    #[doc="<p>When the revision was registered with AWS CodeDeploy.</p>"]
-    #[serde(rename="registerTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>When the revision was registered with AWS CodeDeploy.</p>
+    #[serde(rename = "registerTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub register_time: Option<f64>,
 }
 
-#[doc="<p>Represents the input of a GetApplication operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of a GetApplication operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetApplicationInput {
-    #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
-    #[serde(rename="applicationName")]
+    /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
+    #[serde(rename = "applicationName")]
     pub application_name: String,
 }
 
-#[doc="<p>Represents the output of a GetApplication operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the output of a GetApplication operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetApplicationOutput {
-    #[doc="<p>Information about the application.</p>"]
-    #[serde(rename="application")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the application.</p>
+    #[serde(rename = "application")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub application: Option<ApplicationInfo>,
 }
 
-#[doc="<p>Represents the input of a GetApplicationRevision operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of a GetApplicationRevision operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetApplicationRevisionInput {
-    #[doc="<p>The name of the application that corresponds to the revision.</p>"]
-    #[serde(rename="applicationName")]
+    /// <p>The name of the application that corresponds to the revision.</p>
+    #[serde(rename = "applicationName")]
     pub application_name: String,
-    #[doc="<p>Information about the application revision to get, including type and location.</p>"]
-    #[serde(rename="revision")]
+    /// <p>Information about the application revision to get, including type and location.</p>
+    #[serde(rename = "revision")]
     pub revision: RevisionLocation,
 }
 
-#[doc="<p>Represents the output of a GetApplicationRevision operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the output of a GetApplicationRevision operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetApplicationRevisionOutput {
-    #[doc="<p>The name of the application that corresponds to the revision.</p>"]
-    #[serde(rename="applicationName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the application that corresponds to the revision.</p>
+    #[serde(rename = "applicationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub application_name: Option<String>,
-    #[doc="<p>Additional information about the revision, including type and location.</p>"]
-    #[serde(rename="revision")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Additional information about the revision, including type and location.</p>
+    #[serde(rename = "revision")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub revision: Option<RevisionLocation>,
-    #[doc="<p>General information about the revision.</p>"]
-    #[serde(rename="revisionInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>General information about the revision.</p>
+    #[serde(rename = "revisionInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub revision_info: Option<GenericRevisionInfo>,
 }
 
-#[doc="<p>Represents the input of a GetDeploymentConfig operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of a GetDeploymentConfig operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDeploymentConfigInput {
-    #[doc="<p>The name of a deployment configuration associated with the applicable IAM user or AWS account.</p>"]
-    #[serde(rename="deploymentConfigName")]
+    /// <p>The name of a deployment configuration associated with the applicable IAM user or AWS account.</p>
+    #[serde(rename = "deploymentConfigName")]
     pub deployment_config_name: String,
 }
 
-#[doc="<p>Represents the output of a GetDeploymentConfig operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the output of a GetDeploymentConfig operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetDeploymentConfigOutput {
-    #[doc="<p>Information about the deployment configuration.</p>"]
-    #[serde(rename="deploymentConfigInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the deployment configuration.</p>
+    #[serde(rename = "deploymentConfigInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_config_info: Option<DeploymentConfigInfo>,
 }
 
-#[doc="<p>Represents the input of a GetDeploymentGroup operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of a GetDeploymentGroup operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDeploymentGroupInput {
-    #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
-    #[serde(rename="applicationName")]
+    /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
+    #[serde(rename = "applicationName")]
     pub application_name: String,
-    #[doc="<p>The name of an existing deployment group for the specified application.</p>"]
-    #[serde(rename="deploymentGroupName")]
+    /// <p>The name of an existing deployment group for the specified application.</p>
+    #[serde(rename = "deploymentGroupName")]
     pub deployment_group_name: String,
 }
 
-#[doc="<p>Represents the output of a GetDeploymentGroup operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the output of a GetDeploymentGroup operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetDeploymentGroupOutput {
-    #[doc="<p>Information about the deployment group.</p>"]
-    #[serde(rename="deploymentGroupInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the deployment group.</p>
+    #[serde(rename = "deploymentGroupInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_group_info: Option<DeploymentGroupInfo>,
 }
 
-#[doc="<p>Represents the input of a GetDeployment operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of a GetDeployment operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDeploymentInput {
-    #[doc="<p>A deployment ID associated with the applicable IAM user or AWS account.</p>"]
-    #[serde(rename="deploymentId")]
+    /// <p>A deployment ID associated with the applicable IAM user or AWS account.</p>
+    #[serde(rename = "deploymentId")]
     pub deployment_id: String,
 }
 
-#[doc="<p>Represents the input of a GetDeploymentInstance operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of a GetDeploymentInstance operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDeploymentInstanceInput {
-    #[doc="<p>The unique ID of a deployment.</p>"]
-    #[serde(rename="deploymentId")]
+    /// <p>The unique ID of a deployment.</p>
+    #[serde(rename = "deploymentId")]
     pub deployment_id: String,
-    #[doc="<p>The unique ID of an instance in the deployment group.</p>"]
-    #[serde(rename="instanceId")]
+    /// <p>The unique ID of an instance in the deployment group.</p>
+    #[serde(rename = "instanceId")]
     pub instance_id: String,
 }
 
-#[doc="<p>Represents the output of a GetDeploymentInstance operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the output of a GetDeploymentInstance operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetDeploymentInstanceOutput {
-    #[doc="<p>Information about the instance.</p>"]
-    #[serde(rename="instanceSummary")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the instance.</p>
+    #[serde(rename = "instanceSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_summary: Option<InstanceSummary>,
 }
 
-#[doc="<p>Represents the output of a GetDeployment operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the output of a GetDeployment operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetDeploymentOutput {
-    #[doc="<p>Information about the deployment.</p>"]
-    #[serde(rename="deploymentInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the deployment.</p>
+    #[serde(rename = "deploymentInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_info: Option<DeploymentInfo>,
 }
 
-#[doc="<p>Represents the input of a GetOnPremisesInstance operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of a GetOnPremisesInstance operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetOnPremisesInstanceInput {
-    #[doc="<p>The name of the on-premises instance about which to get information.</p>"]
-    #[serde(rename="instanceName")]
+    /// <p>The name of the on-premises instance about which to get information.</p>
+    #[serde(rename = "instanceName")]
     pub instance_name: String,
 }
 
-#[doc="<p>Represents the output of a GetOnPremisesInstance operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the output of a GetOnPremisesInstance operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetOnPremisesInstanceOutput {
-    #[doc="<p>Information about the on-premises instance.</p>"]
-    #[serde(rename="instanceInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the on-premises instance.</p>
+    #[serde(rename = "instanceInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_info: Option<InstanceInfo>,
 }
 
-#[doc="<p>Information about the location of application artifacts stored in GitHub.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Information about the location of application artifacts stored in GitHub.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct GitHubLocation {
-    #[doc="<p>The SHA1 commit ID of the GitHub commit that represents the bundled artifacts for the application revision.</p>"]
-    #[serde(rename="commitId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The SHA1 commit ID of the GitHub commit that represents the bundled artifacts for the application revision.</p>
+    #[serde(rename = "commitId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub commit_id: Option<String>,
-    #[doc="<p>The GitHub account and repository pair that stores a reference to the commit that represents the bundled artifacts for the application revision. </p> <p>Specified as account/repository.</p>"]
-    #[serde(rename="repository")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The GitHub account and repository pair that stores a reference to the commit that represents the bundled artifacts for the application revision. </p> <p>Specified as account/repository.</p>
+    #[serde(rename = "repository")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub repository: Option<String>,
 }
 
-#[doc="<p>Information about the instances that belong to the replacement environment in a blue/green deployment.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Information about the instances that belong to the replacement environment in a blue/green deployment.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct GreenFleetProvisioningOption {
-    #[doc="<p>The method used to add instances to a replacement environment.</p> <ul> <li> <p>DISCOVER_EXISTING: Use instances that already exist or will be created manually.</p> </li> <li> <p>COPY_AUTO_SCALING_GROUP: Use settings from a specified Auto Scaling group to define and create instances in a new Auto Scaling group.</p> </li> </ul>"]
-    #[serde(rename="action")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The method used to add instances to a replacement environment.</p> <ul> <li> <p>DISCOVER_EXISTING: Use instances that already exist or will be created manually.</p> </li> <li> <p>COPY_AUTO_SCALING_GROUP: Use settings from a specified Auto Scaling group to define and create instances in a new Auto Scaling group.</p> </li> </ul>
+    #[serde(rename = "action")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub action: Option<String>,
 }
 
-#[doc="<p>Information about an on-premises instance.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about an on-premises instance.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct InstanceInfo {
-    #[doc="<p>If the on-premises instance was deregistered, the time at which the on-premises instance was deregistered.</p>"]
-    #[serde(rename="deregisterTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the on-premises instance was deregistered, the time at which the on-premises instance was deregistered.</p>
+    #[serde(rename = "deregisterTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deregister_time: Option<f64>,
-    #[doc="<p>The ARN of the IAM session associated with the on-premises instance.</p>"]
-    #[serde(rename="iamSessionArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the IAM session associated with the on-premises instance.</p>
+    #[serde(rename = "iamSessionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_session_arn: Option<String>,
-    #[doc="<p>The IAM user ARN associated with the on-premises instance.</p>"]
-    #[serde(rename="iamUserArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The IAM user ARN associated with the on-premises instance.</p>
+    #[serde(rename = "iamUserArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_user_arn: Option<String>,
-    #[doc="<p>The ARN of the on-premises instance.</p>"]
-    #[serde(rename="instanceArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the on-premises instance.</p>
+    #[serde(rename = "instanceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_arn: Option<String>,
-    #[doc="<p>The name of the on-premises instance.</p>"]
-    #[serde(rename="instanceName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the on-premises instance.</p>
+    #[serde(rename = "instanceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_name: Option<String>,
-    #[doc="<p>The time at which the on-premises instance was registered.</p>"]
-    #[serde(rename="registerTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time at which the on-premises instance was registered.</p>
+    #[serde(rename = "registerTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub register_time: Option<f64>,
-    #[doc="<p>The tags currently associated with the on-premises instance.</p>"]
-    #[serde(rename="tags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The tags currently associated with the on-premises instance.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
-#[doc="<p>Information about an instance in a deployment.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about an instance in a deployment.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct InstanceSummary {
-    #[doc="<p>The deployment ID.</p>"]
-    #[serde(rename="deploymentId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The deployment ID.</p>
+    #[serde(rename = "deploymentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
-    #[doc="<p>The instance ID.</p>"]
-    #[serde(rename="instanceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The instance ID.</p>
+    #[serde(rename = "instanceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_id: Option<String>,
-    #[doc="<p>Information about which environment an instance belongs to in a blue/green deployment.</p> <ul> <li> <p>BLUE: The instance is part of the original environment.</p> </li> <li> <p>GREEN: The instance is part of the replacement environment.</p> </li> </ul>"]
-    #[serde(rename="instanceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about which environment an instance belongs to in a blue/green deployment.</p> <ul> <li> <p>BLUE: The instance is part of the original environment.</p> </li> <li> <p>GREEN: The instance is part of the replacement environment.</p> </li> </ul>
+    #[serde(rename = "instanceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_type: Option<String>,
-    #[doc="<p>A timestamp indicating when the instance information was last updated.</p>"]
-    #[serde(rename="lastUpdatedAt")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A timestamp indicating when the instance information was last updated.</p>
+    #[serde(rename = "lastUpdatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_at: Option<f64>,
-    #[doc="<p>A list of lifecycle events for this instance.</p>"]
-    #[serde(rename="lifecycleEvents")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of lifecycle events for this instance.</p>
+    #[serde(rename = "lifecycleEvents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub lifecycle_events: Option<Vec<LifecycleEvent>>,
-    #[doc="<p>The deployment status for this instance:</p> <ul> <li> <p>Pending: The deployment is pending for this instance.</p> </li> <li> <p>In Progress: The deployment is in progress for this instance.</p> </li> <li> <p>Succeeded: The deployment has succeeded for this instance.</p> </li> <li> <p>Failed: The deployment has failed for this instance.</p> </li> <li> <p>Skipped: The deployment has been skipped for this instance.</p> </li> <li> <p>Unknown: The deployment status is unknown for this instance.</p> </li> </ul>"]
-    #[serde(rename="status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The deployment status for this instance:</p> <ul> <li> <p>Pending: The deployment is pending for this instance.</p> </li> <li> <p>In Progress: The deployment is in progress for this instance.</p> </li> <li> <p>Succeeded: The deployment has succeeded for this instance.</p> </li> <li> <p>Failed: The deployment has failed for this instance.</p> </li> <li> <p>Skipped: The deployment has been skipped for this instance.</p> </li> <li> <p>Unknown: The deployment status is unknown for this instance.</p> </li> </ul>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
 
-#[doc="<p>Information about the most recent attempted or successful deployment to a deployment group.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about the most recent attempted or successful deployment to a deployment group.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct LastDeploymentInfo {
-    #[doc="<p>A timestamp indicating when the most recent deployment to the deployment group started.</p>"]
-    #[serde(rename="createTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A timestamp indicating when the most recent deployment to the deployment group started.</p>
+    #[serde(rename = "createTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<f64>,
-    #[doc="<p>The deployment ID.</p>"]
-    #[serde(rename="deploymentId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The deployment ID.</p>
+    #[serde(rename = "deploymentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
-    #[doc="<p>A timestamp indicating when the most recent deployment to the deployment group completed.</p>"]
-    #[serde(rename="endTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A timestamp indicating when the most recent deployment to the deployment group completed.</p>
+    #[serde(rename = "endTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
-    #[doc="<p>The status of the most recent deployment.</p>"]
-    #[serde(rename="status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the most recent deployment.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
 
-#[doc="<p>Information about a deployment lifecycle event.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about a deployment lifecycle event.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct LifecycleEvent {
-    #[doc="<p>Diagnostic information about the deployment lifecycle event.</p>"]
-    #[serde(rename="diagnostics")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Diagnostic information about the deployment lifecycle event.</p>
+    #[serde(rename = "diagnostics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub diagnostics: Option<Diagnostics>,
-    #[doc="<p>A timestamp indicating when the deployment lifecycle event ended.</p>"]
-    #[serde(rename="endTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A timestamp indicating when the deployment lifecycle event ended.</p>
+    #[serde(rename = "endTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
-    #[doc="<p>The deployment lifecycle event name, such as ApplicationStop, BeforeInstall, AfterInstall, ApplicationStart, or ValidateService.</p>"]
-    #[serde(rename="lifecycleEventName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The deployment lifecycle event name, such as ApplicationStop, BeforeInstall, AfterInstall, ApplicationStart, or ValidateService.</p>
+    #[serde(rename = "lifecycleEventName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub lifecycle_event_name: Option<String>,
-    #[doc="<p>A timestamp indicating when the deployment lifecycle event started.</p>"]
-    #[serde(rename="startTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A timestamp indicating when the deployment lifecycle event started.</p>
+    #[serde(rename = "startTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
-    #[doc="<p>The deployment lifecycle event status:</p> <ul> <li> <p>Pending: The deployment lifecycle event is pending.</p> </li> <li> <p>InProgress: The deployment lifecycle event is in progress.</p> </li> <li> <p>Succeeded: The deployment lifecycle event ran successfully.</p> </li> <li> <p>Failed: The deployment lifecycle event has failed.</p> </li> <li> <p>Skipped: The deployment lifecycle event has been skipped.</p> </li> <li> <p>Unknown: The deployment lifecycle event is unknown.</p> </li> </ul>"]
-    #[serde(rename="status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The deployment lifecycle event status:</p> <ul> <li> <p>Pending: The deployment lifecycle event is pending.</p> </li> <li> <p>InProgress: The deployment lifecycle event is in progress.</p> </li> <li> <p>Succeeded: The deployment lifecycle event ran successfully.</p> </li> <li> <p>Failed: The deployment lifecycle event has failed.</p> </li> <li> <p>Skipped: The deployment lifecycle event has been skipped.</p> </li> <li> <p>Unknown: The deployment lifecycle event is unknown.</p> </li> </ul>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
 
-#[doc="<p>Represents the input of a ListApplicationRevisions operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of a ListApplicationRevisions operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListApplicationRevisionsInput {
-    #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
-    #[serde(rename="applicationName")]
+    /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
+    #[serde(rename = "applicationName")]
     pub application_name: String,
-    #[doc="<p>Whether to list revisions based on whether the revision is the target revision of an deployment group:</p> <ul> <li> <p>include: List revisions that are target revisions of a deployment group.</p> </li> <li> <p>exclude: Do not list revisions that are target revisions of a deployment group.</p> </li> <li> <p>ignore: List all revisions.</p> </li> </ul>"]
-    #[serde(rename="deployed")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Whether to list revisions based on whether the revision is the target revision of an deployment group:</p> <ul> <li> <p>include: List revisions that are target revisions of a deployment group.</p> </li> <li> <p>exclude: Do not list revisions that are target revisions of a deployment group.</p> </li> <li> <p>ignore: List all revisions.</p> </li> </ul>
+    #[serde(rename = "deployed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployed: Option<String>,
-    #[doc="<p>An identifier returned from the previous list application revisions call. It can be used to return the next set of applications in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier returned from the previous list application revisions call. It can be used to return the next set of applications in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>An Amazon S3 bucket name to limit the search for revisions.</p> <p>If set to null, all of the user's buckets will be searched.</p>"]
-    #[serde(rename="s3Bucket")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An Amazon S3 bucket name to limit the search for revisions.</p> <p>If set to null, all of the user's buckets will be searched.</p>
+    #[serde(rename = "s3Bucket")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub s_3_bucket: Option<String>,
-    #[doc="<p>A key prefix for the set of Amazon S3 objects to limit the search for revisions.</p>"]
-    #[serde(rename="s3KeyPrefix")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A key prefix for the set of Amazon S3 objects to limit the search for revisions.</p>
+    #[serde(rename = "s3KeyPrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub s_3_key_prefix: Option<String>,
-    #[doc="<p>The column name to use to sort the list results:</p> <ul> <li> <p>registerTime: Sort by the time the revisions were registered with AWS CodeDeploy.</p> </li> <li> <p>firstUsedTime: Sort by the time the revisions were first used in a deployment.</p> </li> <li> <p>lastUsedTime: Sort by the time the revisions were last used in a deployment.</p> </li> </ul> <p>If not specified or set to null, the results will be returned in an arbitrary order.</p>"]
-    #[serde(rename="sortBy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The column name to use to sort the list results:</p> <ul> <li> <p>registerTime: Sort by the time the revisions were registered with AWS CodeDeploy.</p> </li> <li> <p>firstUsedTime: Sort by the time the revisions were first used in a deployment.</p> </li> <li> <p>lastUsedTime: Sort by the time the revisions were last used in a deployment.</p> </li> </ul> <p>If not specified or set to null, the results will be returned in an arbitrary order.</p>
+    #[serde(rename = "sortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sort_by: Option<String>,
-    #[doc="<p>The order in which to sort the list results:</p> <ul> <li> <p>ascending: ascending order.</p> </li> <li> <p>descending: descending order.</p> </li> </ul> <p>If not specified, the results will be sorted in ascending order.</p> <p>If set to null, the results will be sorted in an arbitrary order.</p>"]
-    #[serde(rename="sortOrder")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The order in which to sort the list results:</p> <ul> <li> <p>ascending: ascending order.</p> </li> <li> <p>descending: descending order.</p> </li> </ul> <p>If not specified, the results will be sorted in ascending order.</p> <p>If set to null, the results will be sorted in an arbitrary order.</p>
+    #[serde(rename = "sortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sort_order: Option<String>,
 }
 
-#[doc="<p>Represents the output of a ListApplicationRevisions operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the output of a ListApplicationRevisions operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListApplicationRevisionsOutput {
-    #[doc="<p>If a large amount of information is returned, an identifier will also be returned. It can be used in a subsequent list application revisions call to return the next set of application revisions in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If a large amount of information is returned, an identifier will also be returned. It can be used in a subsequent list application revisions call to return the next set of application revisions in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>A list of locations that contain the matching revisions.</p>"]
-    #[serde(rename="revisions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of locations that contain the matching revisions.</p>
+    #[serde(rename = "revisions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub revisions: Option<Vec<RevisionLocation>>,
 }
 
-#[doc="<p>Represents the input of a ListApplications operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of a ListApplications operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListApplicationsInput {
-    #[doc="<p>An identifier returned from the previous list applications call. It can be used to return the next set of applications in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier returned from the previous list applications call. It can be used to return the next set of applications in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the output of a ListApplications operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the output of a ListApplications operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListApplicationsOutput {
-    #[doc="<p>A list of application names.</p>"]
-    #[serde(rename="applications")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of application names.</p>
+    #[serde(rename = "applications")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub applications: Option<Vec<String>>,
-    #[doc="<p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list applications call to return the next set of applications, will also be returned. in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list applications call to return the next set of applications, will also be returned. in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the input of a ListDeploymentConfigs operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of a ListDeploymentConfigs operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListDeploymentConfigsInput {
-    #[doc="<p>An identifier returned from the previous list deployment configurations call. It can be used to return the next set of deployment configurations in the list. </p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier returned from the previous list deployment configurations call. It can be used to return the next set of deployment configurations in the list. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the output of a ListDeploymentConfigs operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the output of a ListDeploymentConfigs operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListDeploymentConfigsOutput {
-    #[doc="<p>A list of deployment configurations, including built-in configurations such as CodeDeployDefault.OneAtATime.</p>"]
-    #[serde(rename="deploymentConfigsList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of deployment configurations, including built-in configurations such as CodeDeployDefault.OneAtATime.</p>
+    #[serde(rename = "deploymentConfigsList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_configs_list: Option<Vec<String>>,
-    #[doc="<p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list deployment configurations call to return the next set of deployment configurations in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list deployment configurations call to return the next set of deployment configurations in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the input of a ListDeploymentGroups operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of a ListDeploymentGroups operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListDeploymentGroupsInput {
-    #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
-    #[serde(rename="applicationName")]
+    /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
+    #[serde(rename = "applicationName")]
     pub application_name: String,
-    #[doc="<p>An identifier returned from the previous list deployment groups call. It can be used to return the next set of deployment groups in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier returned from the previous list deployment groups call. It can be used to return the next set of deployment groups in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the output of a ListDeploymentGroups operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the output of a ListDeploymentGroups operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListDeploymentGroupsOutput {
-    #[doc="<p>The application name.</p>"]
-    #[serde(rename="applicationName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The application name.</p>
+    #[serde(rename = "applicationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub application_name: Option<String>,
-    #[doc="<p>A list of corresponding deployment group names.</p>"]
-    #[serde(rename="deploymentGroups")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of corresponding deployment group names.</p>
+    #[serde(rename = "deploymentGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_groups: Option<Vec<String>>,
-    #[doc="<p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list deployment groups call to return the next set of deployment groups in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list deployment groups call to return the next set of deployment groups in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the input of a ListDeploymentInstances operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of a ListDeploymentInstances operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListDeploymentInstancesInput {
-    #[doc="<p>The unique ID of a deployment.</p>"]
-    #[serde(rename="deploymentId")]
+    /// <p>The unique ID of a deployment.</p>
+    #[serde(rename = "deploymentId")]
     pub deployment_id: String,
-    #[doc="<p>A subset of instances to list by status:</p> <ul> <li> <p>Pending: Include those instance with pending deployments.</p> </li> <li> <p>InProgress: Include those instance where deployments are still in progress.</p> </li> <li> <p>Succeeded: Include those instances with successful deployments.</p> </li> <li> <p>Failed: Include those instance with failed deployments.</p> </li> <li> <p>Skipped: Include those instance with skipped deployments.</p> </li> <li> <p>Unknown: Include those instance with deployments in an unknown state.</p> </li> </ul>"]
-    #[serde(rename="instanceStatusFilter")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A subset of instances to list by status:</p> <ul> <li> <p>Pending: Include those instance with pending deployments.</p> </li> <li> <p>InProgress: Include those instance where deployments are still in progress.</p> </li> <li> <p>Succeeded: Include those instances with successful deployments.</p> </li> <li> <p>Failed: Include those instance with failed deployments.</p> </li> <li> <p>Skipped: Include those instance with skipped deployments.</p> </li> <li> <p>Unknown: Include those instance with deployments in an unknown state.</p> </li> </ul>
+    #[serde(rename = "instanceStatusFilter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_status_filter: Option<Vec<String>>,
-    #[doc="<p>The set of instances in a blue/green deployment, either those in the original environment (\"BLUE\") or those in the replacement environment (\"GREEN\"), for which you want to view instance information.</p>"]
-    #[serde(rename="instanceTypeFilter")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The set of instances in a blue/green deployment, either those in the original environment ("BLUE") or those in the replacement environment ("GREEN"), for which you want to view instance information.</p>
+    #[serde(rename = "instanceTypeFilter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_type_filter: Option<Vec<String>>,
-    #[doc="<p>An identifier returned from the previous list deployment instances call. It can be used to return the next set of deployment instances in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier returned from the previous list deployment instances call. It can be used to return the next set of deployment instances in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the output of a ListDeploymentInstances operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the output of a ListDeploymentInstances operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListDeploymentInstancesOutput {
-    #[doc="<p>A list of instance IDs.</p>"]
-    #[serde(rename="instancesList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of instance IDs.</p>
+    #[serde(rename = "instancesList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instances_list: Option<Vec<String>>,
-    #[doc="<p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list deployment instances call to return the next set of deployment instances in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list deployment instances call to return the next set of deployment instances in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the input of a ListDeployments operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of a ListDeployments operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListDeploymentsInput {
-    #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
-    #[serde(rename="applicationName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
+    #[serde(rename = "applicationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub application_name: Option<String>,
-    #[doc="<p>A time range (start and end) for returning a subset of the list of deployments.</p>"]
-    #[serde(rename="createTimeRange")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A time range (start and end) for returning a subset of the list of deployments.</p>
+    #[serde(rename = "createTimeRange")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub create_time_range: Option<TimeRange>,
-    #[doc="<p>The name of an existing deployment group for the specified application.</p>"]
-    #[serde(rename="deploymentGroupName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of an existing deployment group for the specified application.</p>
+    #[serde(rename = "deploymentGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_group_name: Option<String>,
-    #[doc="<p>A subset of deployments to list by status:</p> <ul> <li> <p>Created: Include created deployments in the resulting list.</p> </li> <li> <p>Queued: Include queued deployments in the resulting list.</p> </li> <li> <p>In Progress: Include in-progress deployments in the resulting list.</p> </li> <li> <p>Succeeded: Include successful deployments in the resulting list.</p> </li> <li> <p>Failed: Include failed deployments in the resulting list.</p> </li> <li> <p>Stopped: Include stopped deployments in the resulting list.</p> </li> </ul>"]
-    #[serde(rename="includeOnlyStatuses")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A subset of deployments to list by status:</p> <ul> <li> <p>Created: Include created deployments in the resulting list.</p> </li> <li> <p>Queued: Include queued deployments in the resulting list.</p> </li> <li> <p>In Progress: Include in-progress deployments in the resulting list.</p> </li> <li> <p>Succeeded: Include successful deployments in the resulting list.</p> </li> <li> <p>Failed: Include failed deployments in the resulting list.</p> </li> <li> <p>Stopped: Include stopped deployments in the resulting list.</p> </li> </ul>
+    #[serde(rename = "includeOnlyStatuses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub include_only_statuses: Option<Vec<String>>,
-    #[doc="<p>An identifier returned from the previous list deployments call. It can be used to return the next set of deployments in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier returned from the previous list deployments call. It can be used to return the next set of deployments in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the output of a ListDeployments operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the output of a ListDeployments operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListDeploymentsOutput {
-    #[doc="<p>A list of deployment IDs.</p>"]
-    #[serde(rename="deployments")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of deployment IDs.</p>
+    #[serde(rename = "deployments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployments: Option<Vec<String>>,
-    #[doc="<p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list deployments call to return the next set of deployments in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list deployments call to return the next set of deployments in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the input of a ListGitHubAccountTokenNames operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of a ListGitHubAccountTokenNames operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListGitHubAccountTokenNamesInput {
-    #[doc="<p>An identifier returned from the previous ListGitHubAccountTokenNames call. It can be used to return the next set of names in the list. </p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier returned from the previous ListGitHubAccountTokenNames call. It can be used to return the next set of names in the list. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the output of a ListGitHubAccountTokenNames operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the output of a ListGitHubAccountTokenNames operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListGitHubAccountTokenNamesOutput {
-    #[doc="<p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent ListGitHubAccountTokenNames call to return the next set of names in the list. </p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent ListGitHubAccountTokenNames call to return the next set of names in the list. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>A list of names of connections to GitHub accounts.</p>"]
-    #[serde(rename="tokenNameList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of names of connections to GitHub accounts.</p>
+    #[serde(rename = "tokenNameList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub token_name_list: Option<Vec<String>>,
 }
 
-#[doc="<p>Represents the input of a ListOnPremisesInstances operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of a ListOnPremisesInstances operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListOnPremisesInstancesInput {
-    #[doc="<p>An identifier returned from the previous list on-premises instances call. It can be used to return the next set of on-premises instances in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier returned from the previous list on-premises instances call. It can be used to return the next set of on-premises instances in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The registration status of the on-premises instances:</p> <ul> <li> <p>Deregistered: Include deregistered on-premises instances in the resulting list.</p> </li> <li> <p>Registered: Include registered on-premises instances in the resulting list.</p> </li> </ul>"]
-    #[serde(rename="registrationStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The registration status of the on-premises instances:</p> <ul> <li> <p>Deregistered: Include deregistered on-premises instances in the resulting list.</p> </li> <li> <p>Registered: Include registered on-premises instances in the resulting list.</p> </li> </ul>
+    #[serde(rename = "registrationStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registration_status: Option<String>,
-    #[doc="<p>The on-premises instance tags that will be used to restrict the corresponding on-premises instance names returned.</p>"]
-    #[serde(rename="tagFilters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The on-premises instance tags that will be used to restrict the corresponding on-premises instance names returned.</p>
+    #[serde(rename = "tagFilters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_filters: Option<Vec<TagFilter>>,
 }
 
-#[doc="<p>Represents the output of list on-premises instances operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the output of list on-premises instances operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListOnPremisesInstancesOutput {
-    #[doc="<p>The list of matching on-premises instance names.</p>"]
-    #[serde(rename="instanceNames")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of matching on-premises instance names.</p>
+    #[serde(rename = "instanceNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_names: Option<Vec<String>>,
-    #[doc="<p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list on-premises instances call to return the next set of on-premises instances in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list on-premises instances call to return the next set of on-premises instances in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Information about the Elastic Load Balancing load balancer or target group used in a deployment.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Information about the Elastic Load Balancing load balancer or target group used in a deployment.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct LoadBalancerInfo {
-    #[doc="<p>An array containing information about the load balancer to use for load balancing in a deployment. In Elastic Load Balancing, load balancers are used with Classic Load Balancers.</p>"]
-    #[serde(rename="elbInfoList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array containing information about the load balancer to use for load balancing in a deployment. In Elastic Load Balancing, load balancers are used with Classic Load Balancers.</p>
+    #[serde(rename = "elbInfoList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub elb_info_list: Option<Vec<ELBInfo>>,
-    #[doc="<p>An array containing information about the target group to use for load balancing in a deployment. In Elastic Load Balancing, target groups are used with Application Load Balancers.</p>"]
-    #[serde(rename="targetGroupInfoList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array containing information about the target group to use for load balancing in a deployment. In Elastic Load Balancing, target groups are used with Application Load Balancers.</p>
+    #[serde(rename = "targetGroupInfoList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub target_group_info_list: Option<Vec<TargetGroupInfo>>,
 }
 
-#[doc="<p>Information about minimum healthy instance.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Information about minimum healthy instance.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct MinimumHealthyHosts {
-    #[doc="<p>The minimum healthy instance type:</p> <ul> <li> <p>HOST_COUNT: The minimum number of healthy instance as an absolute value.</p> </li> <li> <p>FLEET_PERCENT: The minimum number of healthy instance as a percentage of the total number of instance in the deployment.</p> </li> </ul> <p>In an example of nine instance, if a HOST_COUNT of six is specified, deploy to up to three instances at a time. The deployment will be successful if six or more instances are deployed to successfully; otherwise, the deployment fails. If a FLEET_PERCENT of 40 is specified, deploy to up to five instance at a time. The deployment will be successful if four or more instance are deployed to successfully; otherwise, the deployment fails.</p> <note> <p>In a call to the get deployment configuration operation, CodeDeployDefault.OneAtATime will return a minimum healthy instance type of MOST_CONCURRENCY and a value of 1. This means a deployment to only one instance at a time. (You cannot set the type to MOST_CONCURRENCY, only to HOST_COUNT or FLEET_PERCENT.) In addition, with CodeDeployDefault.OneAtATime, AWS CodeDeploy will try to ensure that all instances but one are kept in a healthy state during the deployment. Although this allows one instance at a time to be taken offline for a new deployment, it also means that if the deployment to the last instance fails, the overall deployment still succeeds.</p> </note> <p>For more information, see <a href=\"http://docs.aws.amazon.com/codedeploy/latest/userguide/instances-health.html\">AWS CodeDeploy Instance Health</a> in the <i>AWS CodeDeploy User Guide</i>.</p>"]
-    #[serde(rename="type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The minimum healthy instance type:</p> <ul> <li> <p>HOST_COUNT: The minimum number of healthy instance as an absolute value.</p> </li> <li> <p>FLEET_PERCENT: The minimum number of healthy instance as a percentage of the total number of instance in the deployment.</p> </li> </ul> <p>In an example of nine instance, if a HOST_COUNT of six is specified, deploy to up to three instances at a time. The deployment will be successful if six or more instances are deployed to successfully; otherwise, the deployment fails. If a FLEET_PERCENT of 40 is specified, deploy to up to five instance at a time. The deployment will be successful if four or more instance are deployed to successfully; otherwise, the deployment fails.</p> <note> <p>In a call to the get deployment configuration operation, CodeDeployDefault.OneAtATime will return a minimum healthy instance type of MOST_CONCURRENCY and a value of 1. This means a deployment to only one instance at a time. (You cannot set the type to MOST_CONCURRENCY, only to HOST_COUNT or FLEET_PERCENT.) In addition, with CodeDeployDefault.OneAtATime, AWS CodeDeploy will try to ensure that all instances but one are kept in a healthy state during the deployment. Although this allows one instance at a time to be taken offline for a new deployment, it also means that if the deployment to the last instance fails, the overall deployment still succeeds.</p> </note> <p>For more information, see <a href="http://docs.aws.amazon.com/codedeploy/latest/userguide/instances-health.html">AWS CodeDeploy Instance Health</a> in the <i>AWS CodeDeploy User Guide</i>.</p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
-    #[doc="<p>The minimum healthy instance value.</p>"]
-    #[serde(rename="value")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The minimum healthy instance value.</p>
+    #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<i64>,
 }
 
-#[doc="<p>Information about groups of on-premises instance tags.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Information about groups of on-premises instance tags.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct OnPremisesTagSet {
-    #[doc="<p>A list containing other lists of on-premises instance tag groups. In order for an instance to be included in the deployment group, it must be identified by all the tag groups in the list.</p>"]
-    #[serde(rename="onPremisesTagSetList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list containing other lists of on-premises instance tag groups. In order for an instance to be included in the deployment group, it must be identified by all the tag groups in the list.</p>
+    #[serde(rename = "onPremisesTagSetList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub on_premises_tag_set_list: Option<Vec<Vec<TagFilter>>>,
 }
 
-#[doc="<p>Represents the input of a RegisterApplicationRevision operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of a RegisterApplicationRevision operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct RegisterApplicationRevisionInput {
-    #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
-    #[serde(rename="applicationName")]
+    /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
+    #[serde(rename = "applicationName")]
     pub application_name: String,
-    #[doc="<p>A comment about the revision.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A comment about the revision.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>Information about the application revision to register, including type and location.</p>"]
-    #[serde(rename="revision")]
+    /// <p>Information about the application revision to register, including type and location.</p>
+    #[serde(rename = "revision")]
     pub revision: RevisionLocation,
 }
 
-#[doc="<p>Represents the input of the register on-premises instance operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of the register on-premises instance operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct RegisterOnPremisesInstanceInput {
-    #[doc="<p>The ARN of the IAM session to associate with the on-premises instance.</p>"]
-    #[serde(rename="iamSessionArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the IAM session to associate with the on-premises instance.</p>
+    #[serde(rename = "iamSessionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_session_arn: Option<String>,
-    #[doc="<p>The ARN of the IAM user to associate with the on-premises instance.</p>"]
-    #[serde(rename="iamUserArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the IAM user to associate with the on-premises instance.</p>
+    #[serde(rename = "iamUserArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_user_arn: Option<String>,
-    #[doc="<p>The name of the on-premises instance to register.</p>"]
-    #[serde(rename="instanceName")]
+    /// <p>The name of the on-premises instance to register.</p>
+    #[serde(rename = "instanceName")]
     pub instance_name: String,
 }
 
-#[doc="<p>Represents the input of a RemoveTagsFromOnPremisesInstances operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of a RemoveTagsFromOnPremisesInstances operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct RemoveTagsFromOnPremisesInstancesInput {
-    #[doc="<p>The names of the on-premises instances from which to remove tags.</p>"]
-    #[serde(rename="instanceNames")]
+    /// <p>The names of the on-premises instances from which to remove tags.</p>
+    #[serde(rename = "instanceNames")]
     pub instance_names: Vec<String>,
-    #[doc="<p>The tag key-value pairs to remove from the on-premises instances.</p>"]
-    #[serde(rename="tags")]
+    /// <p>The tag key-value pairs to remove from the on-premises instances.</p>
+    #[serde(rename = "tags")]
     pub tags: Vec<Tag>,
 }
 
-#[doc="<p>Information about an application revision.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about an application revision.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RevisionInfo {
-    #[doc="<p>Information about an application revision, including usage details and associated deployment groups.</p>"]
-    #[serde(rename="genericRevisionInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about an application revision, including usage details and associated deployment groups.</p>
+    #[serde(rename = "genericRevisionInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub generic_revision_info: Option<GenericRevisionInfo>,
-    #[doc="<p>Information about the location and type of an application revision.</p>"]
-    #[serde(rename="revisionLocation")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the location and type of an application revision.</p>
+    #[serde(rename = "revisionLocation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub revision_location: Option<RevisionLocation>,
 }
 
-#[doc="<p>Information about the location of an application revision.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Information about the location of an application revision.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct RevisionLocation {
-    #[doc="<p>Information about the location of application artifacts stored in GitHub.</p>"]
-    #[serde(rename="gitHubLocation")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the location of application artifacts stored in GitHub.</p>
+    #[serde(rename = "gitHubLocation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub git_hub_location: Option<GitHubLocation>,
-    #[doc="<p>The type of application revision:</p> <ul> <li> <p>S3: An application revision stored in Amazon S3.</p> </li> <li> <p>GitHub: An application revision stored in GitHub.</p> </li> </ul>"]
-    #[serde(rename="revisionType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of application revision:</p> <ul> <li> <p>S3: An application revision stored in Amazon S3.</p> </li> <li> <p>GitHub: An application revision stored in GitHub.</p> </li> </ul>
+    #[serde(rename = "revisionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub revision_type: Option<String>,
-    #[doc="<p>Information about the location of application artifacts stored in Amazon S3. </p>"]
-    #[serde(rename="s3Location")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the location of application artifacts stored in Amazon S3. </p>
+    #[serde(rename = "s3Location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub s_3_location: Option<S3Location>,
 }
 
-#[doc="<p>Information about a deployment rollback.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about a deployment rollback.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RollbackInfo {
-    #[doc="<p>The ID of the deployment rollback.</p>"]
-    #[serde(rename="rollbackDeploymentId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the deployment rollback.</p>
+    #[serde(rename = "rollbackDeploymentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rollback_deployment_id: Option<String>,
-    #[doc="<p>Information describing the status of a deployment rollback; for example, whether the deployment can't be rolled back, is in progress, failed, or succeeded. </p>"]
-    #[serde(rename="rollbackMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information describing the status of a deployment rollback; for example, whether the deployment can't be rolled back, is in progress, failed, or succeeded. </p>
+    #[serde(rename = "rollbackMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rollback_message: Option<String>,
-    #[doc="<p>The deployment ID of the deployment that was underway and triggered a rollback deployment because it failed or was stopped.</p>"]
-    #[serde(rename="rollbackTriggeringDeploymentId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The deployment ID of the deployment that was underway and triggered a rollback deployment because it failed or was stopped.</p>
+    #[serde(rename = "rollbackTriggeringDeploymentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rollback_triggering_deployment_id: Option<String>,
 }
 
-#[doc="<p>Information about the location of application artifacts stored in Amazon S3.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Information about the location of application artifacts stored in Amazon S3.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct S3Location {
-    #[doc="<p>The name of the Amazon S3 bucket where the application revision is stored.</p>"]
-    #[serde(rename="bucket")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the Amazon S3 bucket where the application revision is stored.</p>
+    #[serde(rename = "bucket")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bucket: Option<String>,
-    #[doc="<p>The file type of the application revision. Must be one of the following:</p> <ul> <li> <p>tar: A tar archive file.</p> </li> <li> <p>tgz: A compressed tar archive file.</p> </li> <li> <p>zip: A zip archive file.</p> </li> </ul>"]
-    #[serde(rename="bundleType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The file type of the application revision. Must be one of the following:</p> <ul> <li> <p>tar: A tar archive file.</p> </li> <li> <p>tgz: A compressed tar archive file.</p> </li> <li> <p>zip: A zip archive file.</p> </li> </ul>
+    #[serde(rename = "bundleType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bundle_type: Option<String>,
-    #[doc="<p>The ETag of the Amazon S3 object that represents the bundled artifacts for the application revision.</p> <p>If the ETag is not specified as an input parameter, ETag validation of the object will be skipped.</p>"]
-    #[serde(rename="eTag")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ETag of the Amazon S3 object that represents the bundled artifacts for the application revision.</p> <p>If the ETag is not specified as an input parameter, ETag validation of the object will be skipped.</p>
+    #[serde(rename = "eTag")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub e_tag: Option<String>,
-    #[doc="<p>The name of the Amazon S3 object that represents the bundled artifacts for the application revision.</p>"]
-    #[serde(rename="key")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the Amazon S3 object that represents the bundled artifacts for the application revision.</p>
+    #[serde(rename = "key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    #[doc="<p>A specific version of the Amazon S3 object that represents the bundled artifacts for the application revision.</p> <p>If the version is not specified, the system will use the most recent version by default.</p>"]
-    #[serde(rename="version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A specific version of the Amazon S3 object that represents the bundled artifacts for the application revision.</p> <p>If the version is not specified, the system will use the most recent version by default.</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct SkipWaitTimeForInstanceTerminationInput {
-    #[doc="<p>The ID of the blue/green deployment for which you want to skip the instance termination wait time.</p>"]
-    #[serde(rename="deploymentId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the blue/green deployment for which you want to skip the instance termination wait time.</p>
+    #[serde(rename = "deploymentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
 }
 
-#[doc="<p>Represents the input of a StopDeployment operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of a StopDeployment operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StopDeploymentInput {
-    #[doc="<p>Indicates, when a deployment is stopped, whether instances that have been updated should be rolled back to the previous version of the application revision.</p>"]
-    #[serde(rename="autoRollbackEnabled")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates, when a deployment is stopped, whether instances that have been updated should be rolled back to the previous version of the application revision.</p>
+    #[serde(rename = "autoRollbackEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_rollback_enabled: Option<bool>,
-    #[doc="<p>The unique ID of a deployment.</p>"]
-    #[serde(rename="deploymentId")]
+    /// <p>The unique ID of a deployment.</p>
+    #[serde(rename = "deploymentId")]
     pub deployment_id: String,
 }
 
-#[doc="<p>Represents the output of a StopDeployment operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the output of a StopDeployment operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StopDeploymentOutput {
-    #[doc="<p>The status of the stop deployment operation:</p> <ul> <li> <p>Pending: The stop operation is pending.</p> </li> <li> <p>Succeeded: The stop operation was successful.</p> </li> </ul>"]
-    #[serde(rename="status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the stop deployment operation:</p> <ul> <li> <p>Pending: The stop operation is pending.</p> </li> <li> <p>Succeeded: The stop operation was successful.</p> </li> </ul>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>An accompanying status message.</p>"]
-    #[serde(rename="statusMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An accompanying status message.</p>
+    #[serde(rename = "statusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status_message: Option<String>,
 }
 
-#[doc="<p>Information about a tag.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Information about a tag.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Tag {
-    #[doc="<p>The tag's key.</p>"]
-    #[serde(rename="Key")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The tag's key.</p>
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    #[doc="<p>The tag's value.</p>"]
-    #[serde(rename="Value")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The tag's value.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
-#[doc="<p>Information about an on-premises instance tag filter.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Information about an on-premises instance tag filter.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct TagFilter {
-    #[doc="<p>The on-premises instance tag filter key.</p>"]
-    #[serde(rename="Key")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The on-premises instance tag filter key.</p>
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    #[doc="<p>The on-premises instance tag filter type:</p> <ul> <li> <p>KEY_ONLY: Key only.</p> </li> <li> <p>VALUE_ONLY: Value only.</p> </li> <li> <p>KEY_AND_VALUE: Key and value.</p> </li> </ul>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The on-premises instance tag filter type:</p> <ul> <li> <p>KEY_ONLY: Key only.</p> </li> <li> <p>VALUE_ONLY: Value only.</p> </li> <li> <p>KEY_AND_VALUE: Key and value.</p> </li> </ul>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
-    #[doc="<p>The on-premises instance tag filter value.</p>"]
-    #[serde(rename="Value")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The on-premises instance tag filter value.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
-#[doc="<p>Information about a target group in Elastic Load Balancing to use in a deployment. Instances are registered as targets in a target group, and traffic is routed to the target group.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Information about a target group in Elastic Load Balancing to use in a deployment. Instances are registered as targets in a target group, and traffic is routed to the target group.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct TargetGroupInfo {
-    #[doc="<p>For blue/green deployments, the name of the target group that instances in the original environment are deregistered from, and instances in the replacement environment registered with. For in-place deployments, the name of the target group that instances are deregistered from, so they are not serving traffic during a deployment, and then re-registered with after the deployment completes. </p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For blue/green deployments, the name of the target group that instances in the original environment are deregistered from, and instances in the replacement environment registered with. For in-place deployments, the name of the target group that instances are deregistered from, so they are not serving traffic during a deployment, and then re-registered with after the deployment completes. </p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[doc="<p>Information about the instances to be used in the replacement environment in a blue/green deployment.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Information about the instances to be used in the replacement environment in a blue/green deployment.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct TargetInstances {
-    #[doc="<p>The names of one or more Auto Scaling groups to identify a replacement environment for a blue/green deployment.</p>"]
-    #[serde(rename="autoScalingGroups")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The names of one or more Auto Scaling groups to identify a replacement environment for a blue/green deployment.</p>
+    #[serde(rename = "autoScalingGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_scaling_groups: Option<Vec<String>>,
-    #[doc="<p>Information about the groups of EC2 instance tags that an instance must be identified by in order for it to be included in the replacement environment for a blue/green deployment. Cannot be used in the same call as tagFilters.</p>"]
-    #[serde(rename="ec2TagSet")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the groups of EC2 instance tags that an instance must be identified by in order for it to be included in the replacement environment for a blue/green deployment. Cannot be used in the same call as tagFilters.</p>
+    #[serde(rename = "ec2TagSet")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ec_2_tag_set: Option<EC2TagSet>,
-    #[doc="<p>The tag filter key, type, and value used to identify Amazon EC2 instances in a replacement environment for a blue/green deployment. Cannot be used in the same call as ec2TagSet.</p>"]
-    #[serde(rename="tagFilters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The tag filter key, type, and value used to identify Amazon EC2 instances in a replacement environment for a blue/green deployment. Cannot be used in the same call as ec2TagSet.</p>
+    #[serde(rename = "tagFilters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_filters: Option<Vec<EC2TagFilter>>,
 }
 
-#[doc="<p>Information about a time range.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Information about a time range.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct TimeRange {
-    #[doc="<p>The end time of the time range.</p> <note> <p>Specify null to leave the end time open-ended.</p> </note>"]
-    #[serde(rename="end")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The end time of the time range.</p> <note> <p>Specify null to leave the end time open-ended.</p> </note>
+    #[serde(rename = "end")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub end: Option<f64>,
-    #[doc="<p>The start time of the time range.</p> <note> <p>Specify null to leave the start time open-ended.</p> </note>"]
-    #[serde(rename="start")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The start time of the time range.</p> <note> <p>Specify null to leave the start time open-ended.</p> </note>
+    #[serde(rename = "start")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub start: Option<f64>,
 }
 
-#[doc="<p>Information about notification triggers for the deployment group.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Information about notification triggers for the deployment group.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct TriggerConfig {
-    #[doc="<p>The event type or types for which notifications are triggered.</p>"]
-    #[serde(rename="triggerEvents")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The event type or types for which notifications are triggered.</p>
+    #[serde(rename = "triggerEvents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub trigger_events: Option<Vec<String>>,
-    #[doc="<p>The name of the notification trigger.</p>"]
-    #[serde(rename="triggerName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the notification trigger.</p>
+    #[serde(rename = "triggerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub trigger_name: Option<String>,
-    #[doc="<p>The ARN of the Amazon Simple Notification Service topic through which notifications about deployment or instance events are sent.</p>"]
-    #[serde(rename="triggerTargetArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the Amazon Simple Notification Service topic through which notifications about deployment or instance events are sent.</p>
+    #[serde(rename = "triggerTargetArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub trigger_target_arn: Option<String>,
 }
 
-#[doc="<p>Represents the input of an UpdateApplication operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of an UpdateApplication operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateApplicationInput {
-    #[doc="<p>The current name of the application you want to change.</p>"]
-    #[serde(rename="applicationName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The current name of the application you want to change.</p>
+    #[serde(rename = "applicationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub application_name: Option<String>,
-    #[doc="<p>The new name to give the application.</p>"]
-    #[serde(rename="newApplicationName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The new name to give the application.</p>
+    #[serde(rename = "newApplicationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub new_application_name: Option<String>,
 }
 
-#[doc="<p>Represents the input of an UpdateDeploymentGroup operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input of an UpdateDeploymentGroup operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateDeploymentGroupInput {
-    #[doc="<p>Information to add or change about Amazon CloudWatch alarms when the deployment group is updated.</p>"]
-    #[serde(rename="alarmConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information to add or change about Amazon CloudWatch alarms when the deployment group is updated.</p>
+    #[serde(rename = "alarmConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub alarm_configuration: Option<AlarmConfiguration>,
-    #[doc="<p>The application name corresponding to the deployment group to update.</p>"]
-    #[serde(rename="applicationName")]
+    /// <p>The application name corresponding to the deployment group to update.</p>
+    #[serde(rename = "applicationName")]
     pub application_name: String,
-    #[doc="<p>Information for an automatic rollback configuration that is added or changed when a deployment group is updated.</p>"]
-    #[serde(rename="autoRollbackConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information for an automatic rollback configuration that is added or changed when a deployment group is updated.</p>
+    #[serde(rename = "autoRollbackConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_rollback_configuration: Option<AutoRollbackConfiguration>,
-    #[doc="<p>The replacement list of Auto Scaling groups to be included in the deployment group, if you want to change them. To keep the Auto Scaling groups, enter their names. To remove Auto Scaling groups, do not enter any Auto Scaling group names.</p>"]
-    #[serde(rename="autoScalingGroups")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The replacement list of Auto Scaling groups to be included in the deployment group, if you want to change them. To keep the Auto Scaling groups, enter their names. To remove Auto Scaling groups, do not enter any Auto Scaling group names.</p>
+    #[serde(rename = "autoScalingGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_scaling_groups: Option<Vec<String>>,
-    #[doc="<p>Information about blue/green deployment options for a deployment group.</p>"]
-    #[serde(rename="blueGreenDeploymentConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about blue/green deployment options for a deployment group.</p>
+    #[serde(rename = "blueGreenDeploymentConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub blue_green_deployment_configuration: Option<BlueGreenDeploymentConfiguration>,
-    #[doc="<p>The current name of the deployment group.</p>"]
-    #[serde(rename="currentDeploymentGroupName")]
+    /// <p>The current name of the deployment group.</p>
+    #[serde(rename = "currentDeploymentGroupName")]
     pub current_deployment_group_name: String,
-    #[doc="<p>The replacement deployment configuration name to use, if you want to change it.</p>"]
-    #[serde(rename="deploymentConfigName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The replacement deployment configuration name to use, if you want to change it.</p>
+    #[serde(rename = "deploymentConfigName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_config_name: Option<String>,
-    #[doc="<p>Information about the type of deployment, either in-place or blue/green, you want to run and whether to route deployment traffic behind a load balancer.</p>"]
-    #[serde(rename="deploymentStyle")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the type of deployment, either in-place or blue/green, you want to run and whether to route deployment traffic behind a load balancer.</p>
+    #[serde(rename = "deploymentStyle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_style: Option<DeploymentStyle>,
-    #[doc="<p>The replacement set of Amazon EC2 tags on which to filter, if you want to change them. To keep the existing tags, enter their names. To remove tags, do not enter any tag names.</p>"]
-    #[serde(rename="ec2TagFilters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The replacement set of Amazon EC2 tags on which to filter, if you want to change them. To keep the existing tags, enter their names. To remove tags, do not enter any tag names.</p>
+    #[serde(rename = "ec2TagFilters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ec_2_tag_filters: Option<Vec<EC2TagFilter>>,
-    #[doc="<p>Information about groups of tags applied to on-premises instances. The deployment group will include only EC2 instances identified by all the tag groups.</p>"]
-    #[serde(rename="ec2TagSet")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about groups of tags applied to on-premises instances. The deployment group will include only EC2 instances identified by all the tag groups.</p>
+    #[serde(rename = "ec2TagSet")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ec_2_tag_set: Option<EC2TagSet>,
-    #[doc="<p>Information about the load balancer used in a deployment.</p>"]
-    #[serde(rename="loadBalancerInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the load balancer used in a deployment.</p>
+    #[serde(rename = "loadBalancerInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub load_balancer_info: Option<LoadBalancerInfo>,
-    #[doc="<p>The new name of the deployment group, if you want to change it.</p>"]
-    #[serde(rename="newDeploymentGroupName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The new name of the deployment group, if you want to change it.</p>
+    #[serde(rename = "newDeploymentGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub new_deployment_group_name: Option<String>,
-    #[doc="<p>The replacement set of on-premises instance tags on which to filter, if you want to change them. To keep the existing tags, enter their names. To remove tags, do not enter any tag names.</p>"]
-    #[serde(rename="onPremisesInstanceTagFilters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The replacement set of on-premises instance tags on which to filter, if you want to change them. To keep the existing tags, enter their names. To remove tags, do not enter any tag names.</p>
+    #[serde(rename = "onPremisesInstanceTagFilters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub on_premises_instance_tag_filters: Option<Vec<TagFilter>>,
-    #[doc="<p>Information about an on-premises instance tag set. The deployment group will include only on-premises instances identified by all the tag groups.</p>"]
-    #[serde(rename="onPremisesTagSet")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about an on-premises instance tag set. The deployment group will include only on-premises instances identified by all the tag groups.</p>
+    #[serde(rename = "onPremisesTagSet")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub on_premises_tag_set: Option<OnPremisesTagSet>,
-    #[doc="<p>A replacement ARN for the service role, if you want to change it.</p>"]
-    #[serde(rename="serviceRoleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A replacement ARN for the service role, if you want to change it.</p>
+    #[serde(rename = "serviceRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role_arn: Option<String>,
-    #[doc="<p>Information about triggers to change when the deployment group is updated. For examples, see <a href=\"http://docs.aws.amazon.com/codedeploy/latest/userguide/how-to-notify-edit.html\">Modify Triggers in an AWS CodeDeploy Deployment Group</a> in the AWS CodeDeploy User Guide.</p>"]
-    #[serde(rename="triggerConfigurations")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about triggers to change when the deployment group is updated. For examples, see <a href="http://docs.aws.amazon.com/codedeploy/latest/userguide/how-to-notify-edit.html">Modify Triggers in an AWS CodeDeploy Deployment Group</a> in the AWS CodeDeploy User Guide.</p>
+    #[serde(rename = "triggerConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub trigger_configurations: Option<Vec<TriggerConfig>>,
 }
 
-#[doc="<p>Represents the output of an UpdateDeploymentGroup operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the output of an UpdateDeploymentGroup operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateDeploymentGroupOutput {
-    #[doc="<p>If the output contains no data, and the corresponding deployment group contained at least one Auto Scaling group, AWS CodeDeploy successfully removed all corresponding Auto Scaling lifecycle event hooks from the AWS account. If the output contains data, AWS CodeDeploy could not remove some Auto Scaling lifecycle event hooks from the AWS account.</p>"]
-    #[serde(rename="hooksNotCleanedUp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the output contains no data, and the corresponding deployment group contained at least one Auto Scaling group, AWS CodeDeploy successfully removed all corresponding Auto Scaling lifecycle event hooks from the AWS account. If the output contains data, AWS CodeDeploy could not remove some Auto Scaling lifecycle event hooks from the AWS account.</p>
+    #[serde(rename = "hooksNotCleanedUp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hooks_not_cleaned_up: Option<Vec<AutoScalingGroup>>,
 }
 
@@ -1734,7 +1733,6 @@ pub enum AddTagsToOnPremisesInstancesError {
     Unknown(String),
 }
 
-
 impl AddTagsToOnPremisesInstancesError {
     pub fn from_body(body: &str) -> AddTagsToOnPremisesInstancesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1748,13 +1746,29 @@ impl AddTagsToOnPremisesInstancesError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InstanceLimitExceededException" => AddTagsToOnPremisesInstancesError::InstanceLimitExceeded(String::from(error_message)),
-                    "InstanceNameRequiredException" => AddTagsToOnPremisesInstancesError::InstanceNameRequired(String::from(error_message)),
-                    "InstanceNotRegisteredException" => AddTagsToOnPremisesInstancesError::InstanceNotRegistered(String::from(error_message)),
+                    "InstanceLimitExceededException" => {
+                        AddTagsToOnPremisesInstancesError::InstanceLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InstanceNameRequiredException" => {
+                        AddTagsToOnPremisesInstancesError::InstanceNameRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InstanceNotRegisteredException" => {
+                        AddTagsToOnPremisesInstancesError::InstanceNotRegistered(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidTagException" => {
                         AddTagsToOnPremisesInstancesError::InvalidTag(String::from(error_message))
                     }
-                    "TagLimitExceededException" => AddTagsToOnPremisesInstancesError::TagLimitExceeded(String::from(error_message)),
+                    "TagLimitExceededException" => {
+                        AddTagsToOnPremisesInstancesError::TagLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
                     "TagRequiredException" => {
                         AddTagsToOnPremisesInstancesError::TagRequired(String::from(error_message))
                     }
@@ -1837,7 +1851,6 @@ pub enum BatchGetApplicationRevisionsError {
     Unknown(String),
 }
 
-
 impl BatchGetApplicationRevisionsError {
     pub fn from_body(body: &str) -> BatchGetApplicationRevisionsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1851,12 +1864,36 @@ impl BatchGetApplicationRevisionsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ApplicationDoesNotExistException" => BatchGetApplicationRevisionsError::ApplicationDoesNotExist(String::from(error_message)),
-                    "ApplicationNameRequiredException" => BatchGetApplicationRevisionsError::ApplicationNameRequired(String::from(error_message)),
-                    "BatchLimitExceededException" => BatchGetApplicationRevisionsError::BatchLimitExceeded(String::from(error_message)),
-                    "InvalidApplicationNameException" => BatchGetApplicationRevisionsError::InvalidApplicationName(String::from(error_message)),
-                    "InvalidRevisionException" => BatchGetApplicationRevisionsError::InvalidRevision(String::from(error_message)),
-                    "RevisionRequiredException" => BatchGetApplicationRevisionsError::RevisionRequired(String::from(error_message)),
+                    "ApplicationDoesNotExistException" => {
+                        BatchGetApplicationRevisionsError::ApplicationDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ApplicationNameRequiredException" => {
+                        BatchGetApplicationRevisionsError::ApplicationNameRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "BatchLimitExceededException" => {
+                        BatchGetApplicationRevisionsError::BatchLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidApplicationNameException" => {
+                        BatchGetApplicationRevisionsError::InvalidApplicationName(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidRevisionException" => {
+                        BatchGetApplicationRevisionsError::InvalidRevision(String::from(
+                            error_message,
+                        ))
+                    }
+                    "RevisionRequiredException" => {
+                        BatchGetApplicationRevisionsError::RevisionRequired(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         BatchGetApplicationRevisionsError::Validation(error_message.to_string())
                     }
@@ -1932,7 +1969,6 @@ pub enum BatchGetApplicationsError {
     Unknown(String),
 }
 
-
 impl BatchGetApplicationsError {
     pub fn from_body(body: &str) -> BatchGetApplicationsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1946,12 +1982,24 @@ impl BatchGetApplicationsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ApplicationDoesNotExistException" => BatchGetApplicationsError::ApplicationDoesNotExist(String::from(error_message)),
-                    "ApplicationNameRequiredException" => BatchGetApplicationsError::ApplicationNameRequired(String::from(error_message)),
+                    "ApplicationDoesNotExistException" => {
+                        BatchGetApplicationsError::ApplicationDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ApplicationNameRequiredException" => {
+                        BatchGetApplicationsError::ApplicationNameRequired(String::from(
+                            error_message,
+                        ))
+                    }
                     "BatchLimitExceededException" => {
                         BatchGetApplicationsError::BatchLimitExceeded(String::from(error_message))
                     }
-                    "InvalidApplicationNameException" => BatchGetApplicationsError::InvalidApplicationName(String::from(error_message)),
+                    "InvalidApplicationNameException" => {
+                        BatchGetApplicationsError::InvalidApplicationName(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         BatchGetApplicationsError::Validation(error_message.to_string())
                     }
@@ -2029,7 +2077,6 @@ pub enum BatchGetDeploymentGroupsError {
     Unknown(String),
 }
 
-
 impl BatchGetDeploymentGroupsError {
     pub fn from_body(body: &str) -> BatchGetDeploymentGroupsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2043,12 +2090,36 @@ impl BatchGetDeploymentGroupsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ApplicationDoesNotExistException" => BatchGetDeploymentGroupsError::ApplicationDoesNotExist(String::from(error_message)),
-                    "ApplicationNameRequiredException" => BatchGetDeploymentGroupsError::ApplicationNameRequired(String::from(error_message)),
-                    "BatchLimitExceededException" => BatchGetDeploymentGroupsError::BatchLimitExceeded(String::from(error_message)),
-                    "DeploymentGroupNameRequiredException" => BatchGetDeploymentGroupsError::DeploymentGroupNameRequired(String::from(error_message)),
-                    "InvalidApplicationNameException" => BatchGetDeploymentGroupsError::InvalidApplicationName(String::from(error_message)),
-                    "InvalidDeploymentGroupNameException" => BatchGetDeploymentGroupsError::InvalidDeploymentGroupName(String::from(error_message)),
+                    "ApplicationDoesNotExistException" => {
+                        BatchGetDeploymentGroupsError::ApplicationDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ApplicationNameRequiredException" => {
+                        BatchGetDeploymentGroupsError::ApplicationNameRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "BatchLimitExceededException" => {
+                        BatchGetDeploymentGroupsError::BatchLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DeploymentGroupNameRequiredException" => {
+                        BatchGetDeploymentGroupsError::DeploymentGroupNameRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidApplicationNameException" => {
+                        BatchGetDeploymentGroupsError::InvalidApplicationName(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidDeploymentGroupNameException" => {
+                        BatchGetDeploymentGroupsError::InvalidDeploymentGroupName(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         BatchGetDeploymentGroupsError::Validation(error_message.to_string())
                     }
@@ -2128,7 +2199,6 @@ pub enum BatchGetDeploymentInstancesError {
     Unknown(String),
 }
 
-
 impl BatchGetDeploymentInstancesError {
     pub fn from_body(body: &str) -> BatchGetDeploymentInstancesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2142,12 +2212,36 @@ impl BatchGetDeploymentInstancesError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "BatchLimitExceededException" => BatchGetDeploymentInstancesError::BatchLimitExceeded(String::from(error_message)),
-                    "DeploymentDoesNotExistException" => BatchGetDeploymentInstancesError::DeploymentDoesNotExist(String::from(error_message)),
-                    "DeploymentIdRequiredException" => BatchGetDeploymentInstancesError::DeploymentIdRequired(String::from(error_message)),
-                    "InstanceIdRequiredException" => BatchGetDeploymentInstancesError::InstanceIdRequired(String::from(error_message)),
-                    "InvalidDeploymentIdException" => BatchGetDeploymentInstancesError::InvalidDeploymentId(String::from(error_message)),
-                    "InvalidInstanceNameException" => BatchGetDeploymentInstancesError::InvalidInstanceName(String::from(error_message)),
+                    "BatchLimitExceededException" => {
+                        BatchGetDeploymentInstancesError::BatchLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DeploymentDoesNotExistException" => {
+                        BatchGetDeploymentInstancesError::DeploymentDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DeploymentIdRequiredException" => {
+                        BatchGetDeploymentInstancesError::DeploymentIdRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InstanceIdRequiredException" => {
+                        BatchGetDeploymentInstancesError::InstanceIdRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidDeploymentIdException" => {
+                        BatchGetDeploymentInstancesError::InvalidDeploymentId(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidInstanceNameException" => {
+                        BatchGetDeploymentInstancesError::InvalidInstanceName(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         BatchGetDeploymentInstancesError::Validation(error_message.to_string())
                     }
@@ -2220,7 +2314,6 @@ pub enum BatchGetDeploymentsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl BatchGetDeploymentsError {
     pub fn from_body(body: &str) -> BatchGetDeploymentsError {
@@ -2314,7 +2407,6 @@ pub enum BatchGetOnPremisesInstancesError {
     Unknown(String),
 }
 
-
 impl BatchGetOnPremisesInstancesError {
     pub fn from_body(body: &str) -> BatchGetOnPremisesInstancesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2328,9 +2420,21 @@ impl BatchGetOnPremisesInstancesError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "BatchLimitExceededException" => BatchGetOnPremisesInstancesError::BatchLimitExceeded(String::from(error_message)),
-                    "InstanceNameRequiredException" => BatchGetOnPremisesInstancesError::InstanceNameRequired(String::from(error_message)),
-                    "InvalidInstanceNameException" => BatchGetOnPremisesInstancesError::InvalidInstanceName(String::from(error_message)),
+                    "BatchLimitExceededException" => {
+                        BatchGetOnPremisesInstancesError::BatchLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InstanceNameRequiredException" => {
+                        BatchGetOnPremisesInstancesError::InstanceNameRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidInstanceNameException" => {
+                        BatchGetOnPremisesInstancesError::InvalidInstanceName(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         BatchGetOnPremisesInstancesError::Validation(error_message.to_string())
                     }
@@ -2407,7 +2511,6 @@ pub enum ContinueDeploymentError {
     Unknown(String),
 }
 
-
 impl ContinueDeploymentError {
     pub fn from_body(body: &str) -> ContinueDeploymentError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2421,18 +2524,30 @@ impl ContinueDeploymentError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DeploymentAlreadyCompletedException" => ContinueDeploymentError::DeploymentAlreadyCompleted(String::from(error_message)),
+                    "DeploymentAlreadyCompletedException" => {
+                        ContinueDeploymentError::DeploymentAlreadyCompleted(String::from(
+                            error_message,
+                        ))
+                    }
                     "DeploymentDoesNotExistException" => {
                         ContinueDeploymentError::DeploymentDoesNotExist(String::from(error_message))
                     }
                     "DeploymentIdRequiredException" => {
                         ContinueDeploymentError::DeploymentIdRequired(String::from(error_message))
                     }
-                    "DeploymentIsNotInReadyStateException" => ContinueDeploymentError::DeploymentIsNotInReadyState(String::from(error_message)),
+                    "DeploymentIsNotInReadyStateException" => {
+                        ContinueDeploymentError::DeploymentIsNotInReadyState(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidDeploymentIdException" => {
                         ContinueDeploymentError::InvalidDeploymentId(String::from(error_message))
                     }
-                    "UnsupportedActionForDeploymentTypeException" => ContinueDeploymentError::UnsupportedActionForDeploymentType(String::from(error_message)),
+                    "UnsupportedActionForDeploymentTypeException" => {
+                        ContinueDeploymentError::UnsupportedActionForDeploymentType(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         ContinueDeploymentError::Validation(error_message.to_string())
                     }
@@ -2508,7 +2623,6 @@ pub enum CreateApplicationError {
     Unknown(String),
 }
 
-
 impl CreateApplicationError {
     pub fn from_body(body: &str) -> CreateApplicationError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2522,8 +2636,16 @@ impl CreateApplicationError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ApplicationAlreadyExistsException" => CreateApplicationError::ApplicationAlreadyExists(String::from(error_message)),
-                    "ApplicationLimitExceededException" => CreateApplicationError::ApplicationLimitExceeded(String::from(error_message)),
+                    "ApplicationAlreadyExistsException" => {
+                        CreateApplicationError::ApplicationAlreadyExists(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ApplicationLimitExceededException" => {
+                        CreateApplicationError::ApplicationLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
                     "ApplicationNameRequiredException" => {
                         CreateApplicationError::ApplicationNameRequired(String::from(error_message))
                     }
@@ -2629,7 +2751,6 @@ pub enum CreateDeploymentError {
     Unknown(String),
 }
 
-
 impl CreateDeploymentError {
     pub fn from_body(body: &str) -> CreateDeploymentError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2649,9 +2770,21 @@ impl CreateDeploymentError {
                     "ApplicationNameRequiredException" => {
                         CreateDeploymentError::ApplicationNameRequired(String::from(error_message))
                     }
-                    "DeploymentConfigDoesNotExistException" => CreateDeploymentError::DeploymentConfigDoesNotExist(String::from(error_message)),
-                    "DeploymentGroupDoesNotExistException" => CreateDeploymentError::DeploymentGroupDoesNotExist(String::from(error_message)),
-                    "DeploymentGroupNameRequiredException" => CreateDeploymentError::DeploymentGroupNameRequired(String::from(error_message)),
+                    "DeploymentConfigDoesNotExistException" => {
+                        CreateDeploymentError::DeploymentConfigDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DeploymentGroupDoesNotExistException" => {
+                        CreateDeploymentError::DeploymentGroupDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DeploymentGroupNameRequiredException" => {
+                        CreateDeploymentError::DeploymentGroupNameRequired(String::from(
+                            error_message,
+                        ))
+                    }
                     "DeploymentLimitExceededException" => {
                         CreateDeploymentError::DeploymentLimitExceeded(String::from(error_message))
                     }
@@ -2661,10 +2794,26 @@ impl CreateDeploymentError {
                     "InvalidApplicationNameException" => {
                         CreateDeploymentError::InvalidApplicationName(String::from(error_message))
                     }
-                    "InvalidAutoRollbackConfigException" => CreateDeploymentError::InvalidAutoRollbackConfig(String::from(error_message)),
-                    "InvalidDeploymentConfigNameException" => CreateDeploymentError::InvalidDeploymentConfigName(String::from(error_message)),
-                    "InvalidDeploymentGroupNameException" => CreateDeploymentError::InvalidDeploymentGroupName(String::from(error_message)),
-                    "InvalidFileExistsBehaviorException" => CreateDeploymentError::InvalidFileExistsBehavior(String::from(error_message)),
+                    "InvalidAutoRollbackConfigException" => {
+                        CreateDeploymentError::InvalidAutoRollbackConfig(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidDeploymentConfigNameException" => {
+                        CreateDeploymentError::InvalidDeploymentConfigName(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidDeploymentGroupNameException" => {
+                        CreateDeploymentError::InvalidDeploymentGroupName(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidFileExistsBehaviorException" => {
+                        CreateDeploymentError::InvalidFileExistsBehavior(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidLoadBalancerInfoException" => {
                         CreateDeploymentError::InvalidLoadBalancerInfo(String::from(error_message))
                     }
@@ -2766,7 +2915,6 @@ pub enum CreateDeploymentConfigError {
     Unknown(String),
 }
 
-
 impl CreateDeploymentConfigError {
     pub fn from_body(body: &str) -> CreateDeploymentConfigError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2780,11 +2928,31 @@ impl CreateDeploymentConfigError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DeploymentConfigAlreadyExistsException" => CreateDeploymentConfigError::DeploymentConfigAlreadyExists(String::from(error_message)),
-                    "DeploymentConfigLimitExceededException" => CreateDeploymentConfigError::DeploymentConfigLimitExceeded(String::from(error_message)),
-                    "DeploymentConfigNameRequiredException" => CreateDeploymentConfigError::DeploymentConfigNameRequired(String::from(error_message)),
-                    "InvalidDeploymentConfigNameException" => CreateDeploymentConfigError::InvalidDeploymentConfigName(String::from(error_message)),
-                    "InvalidMinimumHealthyHostValueException" => CreateDeploymentConfigError::InvalidMinimumHealthyHostValue(String::from(error_message)),
+                    "DeploymentConfigAlreadyExistsException" => {
+                        CreateDeploymentConfigError::DeploymentConfigAlreadyExists(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DeploymentConfigLimitExceededException" => {
+                        CreateDeploymentConfigError::DeploymentConfigLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DeploymentConfigNameRequiredException" => {
+                        CreateDeploymentConfigError::DeploymentConfigNameRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidDeploymentConfigNameException" => {
+                        CreateDeploymentConfigError::InvalidDeploymentConfigName(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidMinimumHealthyHostValueException" => {
+                        CreateDeploymentConfigError::InvalidMinimumHealthyHostValue(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         CreateDeploymentConfigError::Validation(error_message.to_string())
                     }
@@ -2903,7 +3071,6 @@ pub enum CreateDeploymentGroupError {
     Unknown(String),
 }
 
-
 impl CreateDeploymentGroupError {
     pub fn from_body(body: &str) -> CreateDeploymentGroupError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2920,41 +3087,121 @@ impl CreateDeploymentGroupError {
                     "AlarmsLimitExceededException" => {
                         CreateDeploymentGroupError::AlarmsLimitExceeded(String::from(error_message))
                     }
-                    "ApplicationDoesNotExistException" => CreateDeploymentGroupError::ApplicationDoesNotExist(String::from(error_message)),
-                    "ApplicationNameRequiredException" => CreateDeploymentGroupError::ApplicationNameRequired(String::from(error_message)),
-                    "DeploymentConfigDoesNotExistException" => CreateDeploymentGroupError::DeploymentConfigDoesNotExist(String::from(error_message)),
-                    "DeploymentGroupAlreadyExistsException" => CreateDeploymentGroupError::DeploymentGroupAlreadyExists(String::from(error_message)),
-                    "DeploymentGroupLimitExceededException" => CreateDeploymentGroupError::DeploymentGroupLimitExceeded(String::from(error_message)),
-                    "DeploymentGroupNameRequiredException" => CreateDeploymentGroupError::DeploymentGroupNameRequired(String::from(error_message)),
+                    "ApplicationDoesNotExistException" => {
+                        CreateDeploymentGroupError::ApplicationDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ApplicationNameRequiredException" => {
+                        CreateDeploymentGroupError::ApplicationNameRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DeploymentConfigDoesNotExistException" => {
+                        CreateDeploymentGroupError::DeploymentConfigDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DeploymentGroupAlreadyExistsException" => {
+                        CreateDeploymentGroupError::DeploymentGroupAlreadyExists(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DeploymentGroupLimitExceededException" => {
+                        CreateDeploymentGroupError::DeploymentGroupLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DeploymentGroupNameRequiredException" => {
+                        CreateDeploymentGroupError::DeploymentGroupNameRequired(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidAlarmConfigException" => {
                         CreateDeploymentGroupError::InvalidAlarmConfig(String::from(error_message))
                     }
-                    "InvalidApplicationNameException" => CreateDeploymentGroupError::InvalidApplicationName(String::from(error_message)),
-                    "InvalidAutoRollbackConfigException" => CreateDeploymentGroupError::InvalidAutoRollbackConfig(String::from(error_message)),
-                    "InvalidAutoScalingGroupException" => CreateDeploymentGroupError::InvalidAutoScalingGroup(String::from(error_message)),
-                    "InvalidBlueGreenDeploymentConfigurationException" => CreateDeploymentGroupError::InvalidBlueGreenDeploymentConfiguration(String::from(error_message)),
-                    "InvalidDeploymentConfigNameException" => CreateDeploymentGroupError::InvalidDeploymentConfigName(String::from(error_message)),
-                    "InvalidDeploymentGroupNameException" => CreateDeploymentGroupError::InvalidDeploymentGroupName(String::from(error_message)),
-                    "InvalidDeploymentStyleException" => CreateDeploymentGroupError::InvalidDeploymentStyle(String::from(error_message)),
-                    "InvalidEC2TagCombinationException" => CreateDeploymentGroupError::InvalidEC2TagCombination(String::from(error_message)),
+                    "InvalidApplicationNameException" => {
+                        CreateDeploymentGroupError::InvalidApplicationName(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidAutoRollbackConfigException" => {
+                        CreateDeploymentGroupError::InvalidAutoRollbackConfig(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidAutoScalingGroupException" => {
+                        CreateDeploymentGroupError::InvalidAutoScalingGroup(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidBlueGreenDeploymentConfigurationException" => {
+                        CreateDeploymentGroupError::InvalidBlueGreenDeploymentConfiguration(
+                            String::from(error_message),
+                        )
+                    }
+                    "InvalidDeploymentConfigNameException" => {
+                        CreateDeploymentGroupError::InvalidDeploymentConfigName(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidDeploymentGroupNameException" => {
+                        CreateDeploymentGroupError::InvalidDeploymentGroupName(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidDeploymentStyleException" => {
+                        CreateDeploymentGroupError::InvalidDeploymentStyle(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidEC2TagCombinationException" => {
+                        CreateDeploymentGroupError::InvalidEC2TagCombination(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidEC2TagException" => {
                         CreateDeploymentGroupError::InvalidEC2Tag(String::from(error_message))
                     }
-                    "InvalidLoadBalancerInfoException" => CreateDeploymentGroupError::InvalidLoadBalancerInfo(String::from(error_message)),
-                    "InvalidOnPremisesTagCombinationException" => CreateDeploymentGroupError::InvalidOnPremisesTagCombination(String::from(error_message)),
+                    "InvalidLoadBalancerInfoException" => {
+                        CreateDeploymentGroupError::InvalidLoadBalancerInfo(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidOnPremisesTagCombinationException" => {
+                        CreateDeploymentGroupError::InvalidOnPremisesTagCombination(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidRoleException" => {
                         CreateDeploymentGroupError::InvalidRole(String::from(error_message))
                     }
                     "InvalidTagException" => {
                         CreateDeploymentGroupError::InvalidTag(String::from(error_message))
                     }
-                    "InvalidTriggerConfigException" => CreateDeploymentGroupError::InvalidTriggerConfig(String::from(error_message)),
-                    "LifecycleHookLimitExceededException" => CreateDeploymentGroupError::LifecycleHookLimitExceeded(String::from(error_message)),
+                    "InvalidTriggerConfigException" => {
+                        CreateDeploymentGroupError::InvalidTriggerConfig(String::from(
+                            error_message,
+                        ))
+                    }
+                    "LifecycleHookLimitExceededException" => {
+                        CreateDeploymentGroupError::LifecycleHookLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
                     "RoleRequiredException" => {
                         CreateDeploymentGroupError::RoleRequired(String::from(error_message))
                     }
-                    "TagSetListLimitExceededException" => CreateDeploymentGroupError::TagSetListLimitExceeded(String::from(error_message)),
-                    "TriggerTargetsLimitExceededException" => CreateDeploymentGroupError::TriggerTargetsLimitExceeded(String::from(error_message)),
+                    "TagSetListLimitExceededException" => {
+                        CreateDeploymentGroupError::TagSetListLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
+                    "TriggerTargetsLimitExceededException" => {
+                        CreateDeploymentGroupError::TriggerTargetsLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         CreateDeploymentGroupError::Validation(error_message.to_string())
                     }
@@ -3046,7 +3293,6 @@ pub enum DeleteApplicationError {
     Unknown(String),
 }
 
-
 impl DeleteApplicationError {
     pub fn from_body(body: &str) -> DeleteApplicationError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3137,7 +3383,6 @@ pub enum DeleteDeploymentConfigError {
     Unknown(String),
 }
 
-
 impl DeleteDeploymentConfigError {
     pub fn from_body(body: &str) -> DeleteDeploymentConfigError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3151,9 +3396,21 @@ impl DeleteDeploymentConfigError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DeploymentConfigInUseException" => DeleteDeploymentConfigError::DeploymentConfigInUse(String::from(error_message)),
-                    "DeploymentConfigNameRequiredException" => DeleteDeploymentConfigError::DeploymentConfigNameRequired(String::from(error_message)),
-                    "InvalidDeploymentConfigNameException" => DeleteDeploymentConfigError::InvalidDeploymentConfigName(String::from(error_message)),
+                    "DeploymentConfigInUseException" => {
+                        DeleteDeploymentConfigError::DeploymentConfigInUse(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DeploymentConfigNameRequiredException" => {
+                        DeleteDeploymentConfigError::DeploymentConfigNameRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidDeploymentConfigNameException" => {
+                        DeleteDeploymentConfigError::InvalidDeploymentConfigName(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidOperationException" => {
                         DeleteDeploymentConfigError::InvalidOperation(String::from(error_message))
                     }
@@ -3232,7 +3489,6 @@ pub enum DeleteDeploymentGroupError {
     Unknown(String),
 }
 
-
 impl DeleteDeploymentGroupError {
     pub fn from_body(body: &str) -> DeleteDeploymentGroupError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3246,10 +3502,26 @@ impl DeleteDeploymentGroupError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ApplicationNameRequiredException" => DeleteDeploymentGroupError::ApplicationNameRequired(String::from(error_message)),
-                    "DeploymentGroupNameRequiredException" => DeleteDeploymentGroupError::DeploymentGroupNameRequired(String::from(error_message)),
-                    "InvalidApplicationNameException" => DeleteDeploymentGroupError::InvalidApplicationName(String::from(error_message)),
-                    "InvalidDeploymentGroupNameException" => DeleteDeploymentGroupError::InvalidDeploymentGroupName(String::from(error_message)),
+                    "ApplicationNameRequiredException" => {
+                        DeleteDeploymentGroupError::ApplicationNameRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DeploymentGroupNameRequiredException" => {
+                        DeleteDeploymentGroupError::DeploymentGroupNameRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidApplicationNameException" => {
+                        DeleteDeploymentGroupError::InvalidApplicationName(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidDeploymentGroupNameException" => {
+                        DeleteDeploymentGroupError::InvalidDeploymentGroupName(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidRoleException" => {
                         DeleteDeploymentGroupError::InvalidRole(String::from(error_message))
                     }
@@ -3323,7 +3595,6 @@ pub enum DeregisterOnPremisesInstanceError {
     Unknown(String),
 }
 
-
 impl DeregisterOnPremisesInstanceError {
     pub fn from_body(body: &str) -> DeregisterOnPremisesInstanceError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3337,8 +3608,16 @@ impl DeregisterOnPremisesInstanceError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InstanceNameRequiredException" => DeregisterOnPremisesInstanceError::InstanceNameRequired(String::from(error_message)),
-                    "InvalidInstanceNameException" => DeregisterOnPremisesInstanceError::InvalidInstanceName(String::from(error_message)),
+                    "InstanceNameRequiredException" => {
+                        DeregisterOnPremisesInstanceError::InstanceNameRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidInstanceNameException" => {
+                        DeregisterOnPremisesInstanceError::InvalidInstanceName(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DeregisterOnPremisesInstanceError::Validation(error_message.to_string())
                     }
@@ -3407,7 +3686,6 @@ pub enum GetApplicationError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetApplicationError {
     pub fn from_body(body: &str) -> GetApplicationError {
@@ -3505,7 +3783,6 @@ pub enum GetApplicationRevisionError {
     Unknown(String),
 }
 
-
 impl GetApplicationRevisionError {
     pub fn from_body(body: &str) -> GetApplicationRevisionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3519,13 +3796,29 @@ impl GetApplicationRevisionError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ApplicationDoesNotExistException" => GetApplicationRevisionError::ApplicationDoesNotExist(String::from(error_message)),
-                    "ApplicationNameRequiredException" => GetApplicationRevisionError::ApplicationNameRequired(String::from(error_message)),
-                    "InvalidApplicationNameException" => GetApplicationRevisionError::InvalidApplicationName(String::from(error_message)),
+                    "ApplicationDoesNotExistException" => {
+                        GetApplicationRevisionError::ApplicationDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ApplicationNameRequiredException" => {
+                        GetApplicationRevisionError::ApplicationNameRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidApplicationNameException" => {
+                        GetApplicationRevisionError::InvalidApplicationName(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidRevisionException" => {
                         GetApplicationRevisionError::InvalidRevision(String::from(error_message))
                     }
-                    "RevisionDoesNotExistException" => GetApplicationRevisionError::RevisionDoesNotExist(String::from(error_message)),
+                    "RevisionDoesNotExistException" => {
+                        GetApplicationRevisionError::RevisionDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
                     "RevisionRequiredException" => {
                         GetApplicationRevisionError::RevisionRequired(String::from(error_message))
                     }
@@ -3601,7 +3894,6 @@ pub enum GetDeploymentError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetDeploymentError {
     pub fn from_body(body: &str) -> GetDeploymentError {
@@ -3693,7 +3985,6 @@ pub enum GetDeploymentConfigError {
     Unknown(String),
 }
 
-
 impl GetDeploymentConfigError {
     pub fn from_body(body: &str) -> GetDeploymentConfigError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3707,9 +3998,21 @@ impl GetDeploymentConfigError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DeploymentConfigDoesNotExistException" => GetDeploymentConfigError::DeploymentConfigDoesNotExist(String::from(error_message)),
-                    "DeploymentConfigNameRequiredException" => GetDeploymentConfigError::DeploymentConfigNameRequired(String::from(error_message)),
-                    "InvalidDeploymentConfigNameException" => GetDeploymentConfigError::InvalidDeploymentConfigName(String::from(error_message)),
+                    "DeploymentConfigDoesNotExistException" => {
+                        GetDeploymentConfigError::DeploymentConfigDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DeploymentConfigNameRequiredException" => {
+                        GetDeploymentConfigError::DeploymentConfigNameRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidDeploymentConfigNameException" => {
+                        GetDeploymentConfigError::InvalidDeploymentConfigName(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         GetDeploymentConfigError::Validation(error_message.to_string())
                     }
@@ -3786,7 +4089,6 @@ pub enum GetDeploymentGroupError {
     Unknown(String),
 }
 
-
 impl GetDeploymentGroupError {
     pub fn from_body(body: &str) -> GetDeploymentGroupError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3800,14 +4102,34 @@ impl GetDeploymentGroupError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ApplicationDoesNotExistException" => GetDeploymentGroupError::ApplicationDoesNotExist(String::from(error_message)),
-                    "ApplicationNameRequiredException" => GetDeploymentGroupError::ApplicationNameRequired(String::from(error_message)),
-                    "DeploymentGroupDoesNotExistException" => GetDeploymentGroupError::DeploymentGroupDoesNotExist(String::from(error_message)),
-                    "DeploymentGroupNameRequiredException" => GetDeploymentGroupError::DeploymentGroupNameRequired(String::from(error_message)),
+                    "ApplicationDoesNotExistException" => {
+                        GetDeploymentGroupError::ApplicationDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ApplicationNameRequiredException" => {
+                        GetDeploymentGroupError::ApplicationNameRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DeploymentGroupDoesNotExistException" => {
+                        GetDeploymentGroupError::DeploymentGroupDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DeploymentGroupNameRequiredException" => {
+                        GetDeploymentGroupError::DeploymentGroupNameRequired(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidApplicationNameException" => {
                         GetDeploymentGroupError::InvalidApplicationName(String::from(error_message))
                     }
-                    "InvalidDeploymentGroupNameException" => GetDeploymentGroupError::InvalidDeploymentGroupName(String::from(error_message)),
+                    "InvalidDeploymentGroupNameException" => {
+                        GetDeploymentGroupError::InvalidDeploymentGroupName(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         GetDeploymentGroupError::Validation(error_message.to_string())
                     }
@@ -3887,7 +4209,6 @@ pub enum GetDeploymentInstanceError {
     Unknown(String),
 }
 
-
 impl GetDeploymentInstanceError {
     pub fn from_body(body: &str) -> GetDeploymentInstanceError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3901,9 +4222,21 @@ impl GetDeploymentInstanceError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DeploymentDoesNotExistException" => GetDeploymentInstanceError::DeploymentDoesNotExist(String::from(error_message)),
-                    "DeploymentIdRequiredException" => GetDeploymentInstanceError::DeploymentIdRequired(String::from(error_message)),
-                    "InstanceDoesNotExistException" => GetDeploymentInstanceError::InstanceDoesNotExist(String::from(error_message)),
+                    "DeploymentDoesNotExistException" => {
+                        GetDeploymentInstanceError::DeploymentDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DeploymentIdRequiredException" => {
+                        GetDeploymentInstanceError::DeploymentIdRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InstanceDoesNotExistException" => {
+                        GetDeploymentInstanceError::InstanceDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
                     "InstanceIdRequiredException" => {
                         GetDeploymentInstanceError::InstanceIdRequired(String::from(error_message))
                     }
@@ -3986,7 +4319,6 @@ pub enum GetOnPremisesInstanceError {
     Unknown(String),
 }
 
-
 impl GetOnPremisesInstanceError {
     pub fn from_body(body: &str) -> GetOnPremisesInstanceError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4000,8 +4332,16 @@ impl GetOnPremisesInstanceError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InstanceNameRequiredException" => GetOnPremisesInstanceError::InstanceNameRequired(String::from(error_message)),
-                    "InstanceNotRegisteredException" => GetOnPremisesInstanceError::InstanceNotRegistered(String::from(error_message)),
+                    "InstanceNameRequiredException" => {
+                        GetOnPremisesInstanceError::InstanceNameRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InstanceNotRegisteredException" => {
+                        GetOnPremisesInstanceError::InstanceNotRegistered(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidInstanceNameException" => {
                         GetOnPremisesInstanceError::InvalidInstanceName(String::from(error_message))
                     }
@@ -4089,7 +4429,6 @@ pub enum ListApplicationRevisionsError {
     Unknown(String),
 }
 
-
 impl ListApplicationRevisionsError {
     pub fn from_body(body: &str) -> ListApplicationRevisionsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4103,13 +4442,41 @@ impl ListApplicationRevisionsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ApplicationDoesNotExistException" => ListApplicationRevisionsError::ApplicationDoesNotExist(String::from(error_message)),
-                    "ApplicationNameRequiredException" => ListApplicationRevisionsError::ApplicationNameRequired(String::from(error_message)),
-                    "BucketNameFilterRequiredException" => ListApplicationRevisionsError::BucketNameFilterRequired(String::from(error_message)),
-                    "InvalidApplicationNameException" => ListApplicationRevisionsError::InvalidApplicationName(String::from(error_message)),
-                    "InvalidBucketNameFilterException" => ListApplicationRevisionsError::InvalidBucketNameFilter(String::from(error_message)),
-                    "InvalidDeployedStateFilterException" => ListApplicationRevisionsError::InvalidDeployedStateFilter(String::from(error_message)),
-                    "InvalidKeyPrefixFilterException" => ListApplicationRevisionsError::InvalidKeyPrefixFilter(String::from(error_message)),
+                    "ApplicationDoesNotExistException" => {
+                        ListApplicationRevisionsError::ApplicationDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ApplicationNameRequiredException" => {
+                        ListApplicationRevisionsError::ApplicationNameRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "BucketNameFilterRequiredException" => {
+                        ListApplicationRevisionsError::BucketNameFilterRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidApplicationNameException" => {
+                        ListApplicationRevisionsError::InvalidApplicationName(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidBucketNameFilterException" => {
+                        ListApplicationRevisionsError::InvalidBucketNameFilter(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidDeployedStateFilterException" => {
+                        ListApplicationRevisionsError::InvalidDeployedStateFilter(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidKeyPrefixFilterException" => {
+                        ListApplicationRevisionsError::InvalidKeyPrefixFilter(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidNextTokenException" => {
                         ListApplicationRevisionsError::InvalidNextToken(String::from(error_message))
                     }
@@ -4192,7 +4559,6 @@ pub enum ListApplicationsError {
     Unknown(String),
 }
 
-
 impl ListApplicationsError {
     pub fn from_body(body: &str) -> ListApplicationsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4270,7 +4636,6 @@ pub enum ListDeploymentConfigsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListDeploymentConfigsError {
     pub fn from_body(body: &str) -> ListDeploymentConfigsError {
@@ -4358,7 +4723,6 @@ pub enum ListDeploymentGroupsError {
     Unknown(String),
 }
 
-
 impl ListDeploymentGroupsError {
     pub fn from_body(body: &str) -> ListDeploymentGroupsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4372,9 +4736,21 @@ impl ListDeploymentGroupsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ApplicationDoesNotExistException" => ListDeploymentGroupsError::ApplicationDoesNotExist(String::from(error_message)),
-                    "ApplicationNameRequiredException" => ListDeploymentGroupsError::ApplicationNameRequired(String::from(error_message)),
-                    "InvalidApplicationNameException" => ListDeploymentGroupsError::InvalidApplicationName(String::from(error_message)),
+                    "ApplicationDoesNotExistException" => {
+                        ListDeploymentGroupsError::ApplicationDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ApplicationNameRequiredException" => {
+                        ListDeploymentGroupsError::ApplicationNameRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidApplicationNameException" => {
+                        ListDeploymentGroupsError::InvalidApplicationName(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidNextTokenException" => {
                         ListDeploymentGroupsError::InvalidNextToken(String::from(error_message))
                     }
@@ -4459,7 +4835,6 @@ pub enum ListDeploymentInstancesError {
     Unknown(String),
 }
 
-
 impl ListDeploymentInstancesError {
     pub fn from_body(body: &str) -> ListDeploymentInstancesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4473,13 +4848,41 @@ impl ListDeploymentInstancesError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DeploymentDoesNotExistException" => ListDeploymentInstancesError::DeploymentDoesNotExist(String::from(error_message)),
-                    "DeploymentIdRequiredException" => ListDeploymentInstancesError::DeploymentIdRequired(String::from(error_message)),
-                    "DeploymentNotStartedException" => ListDeploymentInstancesError::DeploymentNotStarted(String::from(error_message)),
-                    "InvalidDeploymentIdException" => ListDeploymentInstancesError::InvalidDeploymentId(String::from(error_message)),
-                    "InvalidDeploymentInstanceTypeException" => ListDeploymentInstancesError::InvalidDeploymentInstanceType(String::from(error_message)),
-                    "InvalidInstanceStatusException" => ListDeploymentInstancesError::InvalidInstanceStatus(String::from(error_message)),
-                    "InvalidInstanceTypeException" => ListDeploymentInstancesError::InvalidInstanceType(String::from(error_message)),
+                    "DeploymentDoesNotExistException" => {
+                        ListDeploymentInstancesError::DeploymentDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DeploymentIdRequiredException" => {
+                        ListDeploymentInstancesError::DeploymentIdRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DeploymentNotStartedException" => {
+                        ListDeploymentInstancesError::DeploymentNotStarted(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidDeploymentIdException" => {
+                        ListDeploymentInstancesError::InvalidDeploymentId(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidDeploymentInstanceTypeException" => {
+                        ListDeploymentInstancesError::InvalidDeploymentInstanceType(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidInstanceStatusException" => {
+                        ListDeploymentInstancesError::InvalidInstanceStatus(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidInstanceTypeException" => {
+                        ListDeploymentInstancesError::InvalidInstanceType(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidNextTokenException" => {
                         ListDeploymentInstancesError::InvalidNextToken(String::from(error_message))
                     }
@@ -4570,7 +4973,6 @@ pub enum ListDeploymentsError {
     Unknown(String),
 }
 
-
 impl ListDeploymentsError {
     pub fn from_body(body: &str) -> ListDeploymentsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4590,12 +4992,24 @@ impl ListDeploymentsError {
                     "ApplicationNameRequiredException" => {
                         ListDeploymentsError::ApplicationNameRequired(String::from(error_message))
                     }
-                    "DeploymentGroupDoesNotExistException" => ListDeploymentsError::DeploymentGroupDoesNotExist(String::from(error_message)),
-                    "DeploymentGroupNameRequiredException" => ListDeploymentsError::DeploymentGroupNameRequired(String::from(error_message)),
+                    "DeploymentGroupDoesNotExistException" => {
+                        ListDeploymentsError::DeploymentGroupDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DeploymentGroupNameRequiredException" => {
+                        ListDeploymentsError::DeploymentGroupNameRequired(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidApplicationNameException" => {
                         ListDeploymentsError::InvalidApplicationName(String::from(error_message))
                     }
-                    "InvalidDeploymentGroupNameException" => ListDeploymentsError::InvalidDeploymentGroupName(String::from(error_message)),
+                    "InvalidDeploymentGroupNameException" => {
+                        ListDeploymentsError::InvalidDeploymentGroupName(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidDeploymentStatusException" => {
                         ListDeploymentsError::InvalidDeploymentStatus(String::from(error_message))
                     }
@@ -4677,7 +5091,6 @@ pub enum ListGitHubAccountTokenNamesError {
     Unknown(String),
 }
 
-
 impl ListGitHubAccountTokenNamesError {
     pub fn from_body(body: &str) -> ListGitHubAccountTokenNamesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4691,8 +5104,16 @@ impl ListGitHubAccountTokenNamesError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidNextTokenException" => ListGitHubAccountTokenNamesError::InvalidNextToken(String::from(error_message)),
-                    "ResourceValidationException" => ListGitHubAccountTokenNamesError::ResourceValidation(String::from(error_message)),
+                    "InvalidNextTokenException" => {
+                        ListGitHubAccountTokenNamesError::InvalidNextToken(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceValidationException" => {
+                        ListGitHubAccountTokenNamesError::ResourceValidation(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         ListGitHubAccountTokenNamesError::Validation(error_message.to_string())
                     }
@@ -4762,7 +5183,6 @@ pub enum ListOnPremisesInstancesError {
     Unknown(String),
 }
 
-
 impl ListOnPremisesInstancesError {
     pub fn from_body(body: &str) -> ListOnPremisesInstancesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4779,7 +5199,11 @@ impl ListOnPremisesInstancesError {
                     "InvalidNextTokenException" => {
                         ListOnPremisesInstancesError::InvalidNextToken(String::from(error_message))
                     }
-                    "InvalidRegistrationStatusException" => ListOnPremisesInstancesError::InvalidRegistrationStatus(String::from(error_message)),
+                    "InvalidRegistrationStatusException" => {
+                        ListOnPremisesInstancesError::InvalidRegistrationStatus(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidTagFilterException" => {
                         ListOnPremisesInstancesError::InvalidTagFilter(String::from(error_message))
                     }
@@ -4859,7 +5283,6 @@ pub enum RegisterApplicationRevisionError {
     Unknown(String),
 }
 
-
 impl RegisterApplicationRevisionError {
     pub fn from_body(body: &str) -> RegisterApplicationRevisionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4873,12 +5296,36 @@ impl RegisterApplicationRevisionError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ApplicationDoesNotExistException" => RegisterApplicationRevisionError::ApplicationDoesNotExist(String::from(error_message)),
-                    "ApplicationNameRequiredException" => RegisterApplicationRevisionError::ApplicationNameRequired(String::from(error_message)),
-                    "DescriptionTooLongException" => RegisterApplicationRevisionError::DescriptionTooLong(String::from(error_message)),
-                    "InvalidApplicationNameException" => RegisterApplicationRevisionError::InvalidApplicationName(String::from(error_message)),
-                    "InvalidRevisionException" => RegisterApplicationRevisionError::InvalidRevision(String::from(error_message)),
-                    "RevisionRequiredException" => RegisterApplicationRevisionError::RevisionRequired(String::from(error_message)),
+                    "ApplicationDoesNotExistException" => {
+                        RegisterApplicationRevisionError::ApplicationDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ApplicationNameRequiredException" => {
+                        RegisterApplicationRevisionError::ApplicationNameRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DescriptionTooLongException" => {
+                        RegisterApplicationRevisionError::DescriptionTooLong(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidApplicationNameException" => {
+                        RegisterApplicationRevisionError::InvalidApplicationName(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidRevisionException" => {
+                        RegisterApplicationRevisionError::InvalidRevision(String::from(
+                            error_message,
+                        ))
+                    }
+                    "RevisionRequiredException" => {
+                        RegisterApplicationRevisionError::RevisionRequired(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         RegisterApplicationRevisionError::Validation(error_message.to_string())
                     }
@@ -4966,7 +5413,6 @@ pub enum RegisterOnPremisesInstanceError {
     Unknown(String),
 }
 
-
 impl RegisterOnPremisesInstanceError {
     pub fn from_body(body: &str) -> RegisterOnPremisesInstanceError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4983,15 +5429,51 @@ impl RegisterOnPremisesInstanceError {
                     "IamArnRequiredException" => {
                         RegisterOnPremisesInstanceError::IamArnRequired(String::from(error_message))
                     }
-                    "IamSessionArnAlreadyRegisteredException" => RegisterOnPremisesInstanceError::IamSessionArnAlreadyRegistered(String::from(error_message)),
-                    "IamUserArnAlreadyRegisteredException" => RegisterOnPremisesInstanceError::IamUserArnAlreadyRegistered(String::from(error_message)),
-                    "IamUserArnRequiredException" => RegisterOnPremisesInstanceError::IamUserArnRequired(String::from(error_message)),
-                    "InstanceNameAlreadyRegisteredException" => RegisterOnPremisesInstanceError::InstanceNameAlreadyRegistered(String::from(error_message)),
-                    "InstanceNameRequiredException" => RegisterOnPremisesInstanceError::InstanceNameRequired(String::from(error_message)),
-                    "InvalidIamSessionArnException" => RegisterOnPremisesInstanceError::InvalidIamSessionArn(String::from(error_message)),
-                    "InvalidIamUserArnException" => RegisterOnPremisesInstanceError::InvalidIamUserArn(String::from(error_message)),
-                    "InvalidInstanceNameException" => RegisterOnPremisesInstanceError::InvalidInstanceName(String::from(error_message)),
-                    "MultipleIamArnsProvidedException" => RegisterOnPremisesInstanceError::MultipleIamArnsProvided(String::from(error_message)),
+                    "IamSessionArnAlreadyRegisteredException" => {
+                        RegisterOnPremisesInstanceError::IamSessionArnAlreadyRegistered(
+                            String::from(error_message),
+                        )
+                    }
+                    "IamUserArnAlreadyRegisteredException" => {
+                        RegisterOnPremisesInstanceError::IamUserArnAlreadyRegistered(String::from(
+                            error_message,
+                        ))
+                    }
+                    "IamUserArnRequiredException" => {
+                        RegisterOnPremisesInstanceError::IamUserArnRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InstanceNameAlreadyRegisteredException" => {
+                        RegisterOnPremisesInstanceError::InstanceNameAlreadyRegistered(
+                            String::from(error_message),
+                        )
+                    }
+                    "InstanceNameRequiredException" => {
+                        RegisterOnPremisesInstanceError::InstanceNameRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidIamSessionArnException" => {
+                        RegisterOnPremisesInstanceError::InvalidIamSessionArn(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidIamUserArnException" => {
+                        RegisterOnPremisesInstanceError::InvalidIamUserArn(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidInstanceNameException" => {
+                        RegisterOnPremisesInstanceError::InvalidInstanceName(String::from(
+                            error_message,
+                        ))
+                    }
+                    "MultipleIamArnsProvidedException" => {
+                        RegisterOnPremisesInstanceError::MultipleIamArnsProvided(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         RegisterOnPremisesInstanceError::Validation(error_message.to_string())
                     }
@@ -5075,7 +5557,6 @@ pub enum RemoveTagsFromOnPremisesInstancesError {
     Unknown(String),
 }
 
-
 impl RemoveTagsFromOnPremisesInstancesError {
     pub fn from_body(body: &str) -> RemoveTagsFromOnPremisesInstancesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5089,16 +5570,35 @@ impl RemoveTagsFromOnPremisesInstancesError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InstanceLimitExceededException" => RemoveTagsFromOnPremisesInstancesError::InstanceLimitExceeded(String::from(error_message)),
-                    "InstanceNameRequiredException" => RemoveTagsFromOnPremisesInstancesError::InstanceNameRequired(String::from(error_message)),
-                    "InstanceNotRegisteredException" => RemoveTagsFromOnPremisesInstancesError::InstanceNotRegistered(String::from(error_message)),
-                    "InvalidTagException" => RemoveTagsFromOnPremisesInstancesError::InvalidTag(String::from(error_message)),
-                    "TagLimitExceededException" => RemoveTagsFromOnPremisesInstancesError::TagLimitExceeded(String::from(error_message)),
-                    "TagRequiredException" => RemoveTagsFromOnPremisesInstancesError::TagRequired(String::from(error_message)),
-                    "ValidationException" => {
-                        RemoveTagsFromOnPremisesInstancesError::Validation(error_message
-                                                                               .to_string())
+                    "InstanceLimitExceededException" => {
+                        RemoveTagsFromOnPremisesInstancesError::InstanceLimitExceeded(
+                            String::from(error_message),
+                        )
                     }
+                    "InstanceNameRequiredException" => {
+                        RemoveTagsFromOnPremisesInstancesError::InstanceNameRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InstanceNotRegisteredException" => {
+                        RemoveTagsFromOnPremisesInstancesError::InstanceNotRegistered(
+                            String::from(error_message),
+                        )
+                    }
+                    "InvalidTagException" => RemoveTagsFromOnPremisesInstancesError::InvalidTag(
+                        String::from(error_message),
+                    ),
+                    "TagLimitExceededException" => {
+                        RemoveTagsFromOnPremisesInstancesError::TagLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
+                    "TagRequiredException" => RemoveTagsFromOnPremisesInstancesError::TagRequired(
+                        String::from(error_message),
+                    ),
+                    "ValidationException" => RemoveTagsFromOnPremisesInstancesError::Validation(
+                        error_message.to_string(),
+                    ),
                     _ => RemoveTagsFromOnPremisesInstancesError::Unknown(String::from(body)),
                 }
             }
@@ -5175,7 +5675,6 @@ pub enum SkipWaitTimeForInstanceTerminationError {
     Unknown(String),
 }
 
-
 impl SkipWaitTimeForInstanceTerminationError {
     pub fn from_body(body: &str) -> SkipWaitTimeForInstanceTerminationError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5189,18 +5688,15 @@ impl SkipWaitTimeForInstanceTerminationError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DeploymentAlreadyCompletedException" => SkipWaitTimeForInstanceTerminationError::DeploymentAlreadyCompleted(String::from(error_message)),
-                    "DeploymentDoesNotExistException" => SkipWaitTimeForInstanceTerminationError::DeploymentDoesNotExist(String::from(error_message)),
-                    "DeploymentIdRequiredException" => SkipWaitTimeForInstanceTerminationError::DeploymentIdRequired(String::from(error_message)),
-                    "DeploymentNotStartedException" => SkipWaitTimeForInstanceTerminationError::DeploymentNotStarted(String::from(error_message)),
-                    "InvalidDeploymentIdException" => SkipWaitTimeForInstanceTerminationError::InvalidDeploymentId(String::from(error_message)),
-                    "UnsupportedActionForDeploymentTypeException" => SkipWaitTimeForInstanceTerminationError::UnsupportedActionForDeploymentType(String::from(error_message)),
-                    "ValidationException" => {
-                        SkipWaitTimeForInstanceTerminationError::Validation(error_message
-                                                                                .to_string())
-                    }
-                    _ => SkipWaitTimeForInstanceTerminationError::Unknown(String::from(body)),
-                }
+                                    "DeploymentAlreadyCompletedException" => SkipWaitTimeForInstanceTerminationError::DeploymentAlreadyCompleted(String::from(error_message)),
+"DeploymentDoesNotExistException" => SkipWaitTimeForInstanceTerminationError::DeploymentDoesNotExist(String::from(error_message)),
+"DeploymentIdRequiredException" => SkipWaitTimeForInstanceTerminationError::DeploymentIdRequired(String::from(error_message)),
+"DeploymentNotStartedException" => SkipWaitTimeForInstanceTerminationError::DeploymentNotStarted(String::from(error_message)),
+"InvalidDeploymentIdException" => SkipWaitTimeForInstanceTerminationError::InvalidDeploymentId(String::from(error_message)),
+"UnsupportedActionForDeploymentTypeException" => SkipWaitTimeForInstanceTerminationError::UnsupportedActionForDeploymentType(String::from(error_message)),
+"ValidationException" => SkipWaitTimeForInstanceTerminationError::Validation(error_message.to_string()),
+_ => SkipWaitTimeForInstanceTerminationError::Unknown(String::from(body))
+                                }
             }
             Err(_) => SkipWaitTimeForInstanceTerminationError::Unknown(String::from(body)),
         }
@@ -5240,7 +5736,9 @@ impl Error for SkipWaitTimeForInstanceTerminationError {
             SkipWaitTimeForInstanceTerminationError::DeploymentIdRequired(ref cause) => cause,
             SkipWaitTimeForInstanceTerminationError::DeploymentNotStarted(ref cause) => cause,
             SkipWaitTimeForInstanceTerminationError::InvalidDeploymentId(ref cause) => cause,
-            SkipWaitTimeForInstanceTerminationError::UnsupportedActionForDeploymentType(ref cause) => cause,
+            SkipWaitTimeForInstanceTerminationError::UnsupportedActionForDeploymentType(
+                ref cause,
+            ) => cause,
             SkipWaitTimeForInstanceTerminationError::Validation(ref cause) => cause,
             SkipWaitTimeForInstanceTerminationError::Credentials(ref err) => err.description(),
             SkipWaitTimeForInstanceTerminationError::HttpDispatch(ref dispatch_error) => {
@@ -5270,7 +5768,6 @@ pub enum StopDeploymentError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl StopDeploymentError {
     pub fn from_body(body: &str) -> StopDeploymentError {
@@ -5368,7 +5865,6 @@ pub enum UpdateApplicationError {
     Unknown(String),
 }
 
-
 impl UpdateApplicationError {
     pub fn from_body(body: &str) -> UpdateApplicationError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5382,7 +5878,11 @@ impl UpdateApplicationError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ApplicationAlreadyExistsException" => UpdateApplicationError::ApplicationAlreadyExists(String::from(error_message)),
+                    "ApplicationAlreadyExistsException" => {
+                        UpdateApplicationError::ApplicationAlreadyExists(String::from(
+                            error_message,
+                        ))
+                    }
                     "ApplicationDoesNotExistException" => {
                         UpdateApplicationError::ApplicationDoesNotExist(String::from(error_message))
                     }
@@ -5507,7 +6007,6 @@ pub enum UpdateDeploymentGroupError {
     Unknown(String),
 }
 
-
 impl UpdateDeploymentGroupError {
     pub fn from_body(body: &str) -> UpdateDeploymentGroupError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5524,38 +6023,118 @@ impl UpdateDeploymentGroupError {
                     "AlarmsLimitExceededException" => {
                         UpdateDeploymentGroupError::AlarmsLimitExceeded(String::from(error_message))
                     }
-                    "ApplicationDoesNotExistException" => UpdateDeploymentGroupError::ApplicationDoesNotExist(String::from(error_message)),
-                    "ApplicationNameRequiredException" => UpdateDeploymentGroupError::ApplicationNameRequired(String::from(error_message)),
-                    "DeploymentConfigDoesNotExistException" => UpdateDeploymentGroupError::DeploymentConfigDoesNotExist(String::from(error_message)),
-                    "DeploymentGroupAlreadyExistsException" => UpdateDeploymentGroupError::DeploymentGroupAlreadyExists(String::from(error_message)),
-                    "DeploymentGroupDoesNotExistException" => UpdateDeploymentGroupError::DeploymentGroupDoesNotExist(String::from(error_message)),
-                    "DeploymentGroupNameRequiredException" => UpdateDeploymentGroupError::DeploymentGroupNameRequired(String::from(error_message)),
+                    "ApplicationDoesNotExistException" => {
+                        UpdateDeploymentGroupError::ApplicationDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ApplicationNameRequiredException" => {
+                        UpdateDeploymentGroupError::ApplicationNameRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DeploymentConfigDoesNotExistException" => {
+                        UpdateDeploymentGroupError::DeploymentConfigDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DeploymentGroupAlreadyExistsException" => {
+                        UpdateDeploymentGroupError::DeploymentGroupAlreadyExists(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DeploymentGroupDoesNotExistException" => {
+                        UpdateDeploymentGroupError::DeploymentGroupDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DeploymentGroupNameRequiredException" => {
+                        UpdateDeploymentGroupError::DeploymentGroupNameRequired(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidAlarmConfigException" => {
                         UpdateDeploymentGroupError::InvalidAlarmConfig(String::from(error_message))
                     }
-                    "InvalidApplicationNameException" => UpdateDeploymentGroupError::InvalidApplicationName(String::from(error_message)),
-                    "InvalidAutoRollbackConfigException" => UpdateDeploymentGroupError::InvalidAutoRollbackConfig(String::from(error_message)),
-                    "InvalidAutoScalingGroupException" => UpdateDeploymentGroupError::InvalidAutoScalingGroup(String::from(error_message)),
-                    "InvalidBlueGreenDeploymentConfigurationException" => UpdateDeploymentGroupError::InvalidBlueGreenDeploymentConfiguration(String::from(error_message)),
-                    "InvalidDeploymentConfigNameException" => UpdateDeploymentGroupError::InvalidDeploymentConfigName(String::from(error_message)),
-                    "InvalidDeploymentGroupNameException" => UpdateDeploymentGroupError::InvalidDeploymentGroupName(String::from(error_message)),
-                    "InvalidDeploymentStyleException" => UpdateDeploymentGroupError::InvalidDeploymentStyle(String::from(error_message)),
-                    "InvalidEC2TagCombinationException" => UpdateDeploymentGroupError::InvalidEC2TagCombination(String::from(error_message)),
+                    "InvalidApplicationNameException" => {
+                        UpdateDeploymentGroupError::InvalidApplicationName(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidAutoRollbackConfigException" => {
+                        UpdateDeploymentGroupError::InvalidAutoRollbackConfig(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidAutoScalingGroupException" => {
+                        UpdateDeploymentGroupError::InvalidAutoScalingGroup(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidBlueGreenDeploymentConfigurationException" => {
+                        UpdateDeploymentGroupError::InvalidBlueGreenDeploymentConfiguration(
+                            String::from(error_message),
+                        )
+                    }
+                    "InvalidDeploymentConfigNameException" => {
+                        UpdateDeploymentGroupError::InvalidDeploymentConfigName(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidDeploymentGroupNameException" => {
+                        UpdateDeploymentGroupError::InvalidDeploymentGroupName(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidDeploymentStyleException" => {
+                        UpdateDeploymentGroupError::InvalidDeploymentStyle(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidEC2TagCombinationException" => {
+                        UpdateDeploymentGroupError::InvalidEC2TagCombination(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidEC2TagException" => {
                         UpdateDeploymentGroupError::InvalidEC2Tag(String::from(error_message))
                     }
-                    "InvalidLoadBalancerInfoException" => UpdateDeploymentGroupError::InvalidLoadBalancerInfo(String::from(error_message)),
-                    "InvalidOnPremisesTagCombinationException" => UpdateDeploymentGroupError::InvalidOnPremisesTagCombination(String::from(error_message)),
+                    "InvalidLoadBalancerInfoException" => {
+                        UpdateDeploymentGroupError::InvalidLoadBalancerInfo(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidOnPremisesTagCombinationException" => {
+                        UpdateDeploymentGroupError::InvalidOnPremisesTagCombination(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidRoleException" => {
                         UpdateDeploymentGroupError::InvalidRole(String::from(error_message))
                     }
                     "InvalidTagException" => {
                         UpdateDeploymentGroupError::InvalidTag(String::from(error_message))
                     }
-                    "InvalidTriggerConfigException" => UpdateDeploymentGroupError::InvalidTriggerConfig(String::from(error_message)),
-                    "LifecycleHookLimitExceededException" => UpdateDeploymentGroupError::LifecycleHookLimitExceeded(String::from(error_message)),
-                    "TagSetListLimitExceededException" => UpdateDeploymentGroupError::TagSetListLimitExceeded(String::from(error_message)),
-                    "TriggerTargetsLimitExceededException" => UpdateDeploymentGroupError::TriggerTargetsLimitExceeded(String::from(error_message)),
+                    "InvalidTriggerConfigException" => {
+                        UpdateDeploymentGroupError::InvalidTriggerConfig(String::from(
+                            error_message,
+                        ))
+                    }
+                    "LifecycleHookLimitExceededException" => {
+                        UpdateDeploymentGroupError::LifecycleHookLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
+                    "TagSetListLimitExceededException" => {
+                        UpdateDeploymentGroupError::TagSetListLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
+                    "TriggerTargetsLimitExceededException" => {
+                        UpdateDeploymentGroupError::TriggerTargetsLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         UpdateDeploymentGroupError::Validation(error_message.to_string())
                     }
@@ -5631,255 +6210,239 @@ impl Error for UpdateDeploymentGroupError {
 }
 /// Trait representing the capabilities of the CodeDeploy API. CodeDeploy clients implement this trait.
 pub trait CodeDeploy {
-    #[doc="<p>Adds tags to on-premises instances.</p>"]
-    fn add_tags_to_on_premises_instances(&self,
-                                         input: &AddTagsToOnPremisesInstancesInput)
-                                         -> Result<(), AddTagsToOnPremisesInstancesError>;
+    #[doc = "<p>Adds tags to on-premises instances.</p>"]
+    fn add_tags_to_on_premises_instances(
+        &self,
+        input: &AddTagsToOnPremisesInstancesInput,
+    ) -> Result<(), AddTagsToOnPremisesInstancesError>;
 
+    #[doc = "<p>Gets information about one or more application revisions.</p>"]
+    fn batch_get_application_revisions(
+        &self,
+        input: &BatchGetApplicationRevisionsInput,
+    ) -> Result<BatchGetApplicationRevisionsOutput, BatchGetApplicationRevisionsError>;
 
-    #[doc="<p>Gets information about one or more application revisions.</p>"]
-    fn batch_get_application_revisions
-        (&self,
-         input: &BatchGetApplicationRevisionsInput)
-         -> Result<BatchGetApplicationRevisionsOutput, BatchGetApplicationRevisionsError>;
+    #[doc = "<p>Gets information about one or more applications.</p>"]
+    fn batch_get_applications(
+        &self,
+        input: &BatchGetApplicationsInput,
+    ) -> Result<BatchGetApplicationsOutput, BatchGetApplicationsError>;
 
-
-    #[doc="<p>Gets information about one or more applications.</p>"]
-    fn batch_get_applications(&self,
-                              input: &BatchGetApplicationsInput)
-                              -> Result<BatchGetApplicationsOutput, BatchGetApplicationsError>;
-
-
-    #[doc="<p>Gets information about one or more deployment groups.</p>"]
-    fn batch_get_deployment_groups
-        (&self,
-         input: &BatchGetDeploymentGroupsInput)
-         -> Result<BatchGetDeploymentGroupsOutput, BatchGetDeploymentGroupsError>;
-
+    #[doc = "<p>Gets information about one or more deployment groups.</p>"]
+    fn batch_get_deployment_groups(
+        &self,
+        input: &BatchGetDeploymentGroupsInput,
+    ) -> Result<BatchGetDeploymentGroupsOutput, BatchGetDeploymentGroupsError>;
 
     #[doc="<p>Gets information about one or more instance that are part of a deployment group.</p>"]
-    fn batch_get_deployment_instances
-        (&self,
-         input: &BatchGetDeploymentInstancesInput)
-         -> Result<BatchGetDeploymentInstancesOutput, BatchGetDeploymentInstancesError>;
+    fn batch_get_deployment_instances(
+        &self,
+        input: &BatchGetDeploymentInstancesInput,
+    ) -> Result<BatchGetDeploymentInstancesOutput, BatchGetDeploymentInstancesError>;
 
+    #[doc = "<p>Gets information about one or more deployments.</p>"]
+    fn batch_get_deployments(
+        &self,
+        input: &BatchGetDeploymentsInput,
+    ) -> Result<BatchGetDeploymentsOutput, BatchGetDeploymentsError>;
 
-    #[doc="<p>Gets information about one or more deployments.</p>"]
-    fn batch_get_deployments(&self,
-                             input: &BatchGetDeploymentsInput)
-                             -> Result<BatchGetDeploymentsOutput, BatchGetDeploymentsError>;
-
-
-    #[doc="<p>Gets information about one or more on-premises instances.</p>"]
-    fn batch_get_on_premises_instances
-        (&self,
-         input: &BatchGetOnPremisesInstancesInput)
-         -> Result<BatchGetOnPremisesInstancesOutput, BatchGetOnPremisesInstancesError>;
-
+    #[doc = "<p>Gets information about one or more on-premises instances.</p>"]
+    fn batch_get_on_premises_instances(
+        &self,
+        input: &BatchGetOnPremisesInstancesInput,
+    ) -> Result<BatchGetOnPremisesInstancesOutput, BatchGetOnPremisesInstancesError>;
 
     #[doc="<p>For a blue/green deployment, starts the process of rerouting traffic from instances in the original environment to instances in the replacement environment without waiting for a specified wait time to elapse. (Traffic rerouting, which is achieved by registering instances in the replacement environment with the load balancer, can start as soon as all instances have a status of Ready.) </p>"]
-    fn continue_deployment(&self,
-                           input: &ContinueDeploymentInput)
-                           -> Result<(), ContinueDeploymentError>;
+    fn continue_deployment(
+        &self,
+        input: &ContinueDeploymentInput,
+    ) -> Result<(), ContinueDeploymentError>;
 
+    #[doc = "<p>Creates an application.</p>"]
+    fn create_application(
+        &self,
+        input: &CreateApplicationInput,
+    ) -> Result<CreateApplicationOutput, CreateApplicationError>;
 
-    #[doc="<p>Creates an application.</p>"]
-    fn create_application(&self,
-                          input: &CreateApplicationInput)
-                          -> Result<CreateApplicationOutput, CreateApplicationError>;
+    #[doc = "<p>Deploys an application revision through the specified deployment group.</p>"]
+    fn create_deployment(
+        &self,
+        input: &CreateDeploymentInput,
+    ) -> Result<CreateDeploymentOutput, CreateDeploymentError>;
 
+    #[doc = "<p>Creates a deployment configuration.</p>"]
+    fn create_deployment_config(
+        &self,
+        input: &CreateDeploymentConfigInput,
+    ) -> Result<CreateDeploymentConfigOutput, CreateDeploymentConfigError>;
 
-    #[doc="<p>Deploys an application revision through the specified deployment group.</p>"]
-    fn create_deployment(&self,
-                         input: &CreateDeploymentInput)
-                         -> Result<CreateDeploymentOutput, CreateDeploymentError>;
+    #[doc = "<p>Creates a deployment group to which application revisions will be deployed.</p>"]
+    fn create_deployment_group(
+        &self,
+        input: &CreateDeploymentGroupInput,
+    ) -> Result<CreateDeploymentGroupOutput, CreateDeploymentGroupError>;
 
-
-    #[doc="<p>Creates a deployment configuration.</p>"]
-    fn create_deployment_config
-        (&self,
-         input: &CreateDeploymentConfigInput)
-         -> Result<CreateDeploymentConfigOutput, CreateDeploymentConfigError>;
-
-
-    #[doc="<p>Creates a deployment group to which application revisions will be deployed.</p>"]
-    fn create_deployment_group
-        (&self,
-         input: &CreateDeploymentGroupInput)
-         -> Result<CreateDeploymentGroupOutput, CreateDeploymentGroupError>;
-
-
-    #[doc="<p>Deletes an application.</p>"]
-    fn delete_application(&self,
-                          input: &DeleteApplicationInput)
-                          -> Result<(), DeleteApplicationError>;
-
+    #[doc = "<p>Deletes an application.</p>"]
+    fn delete_application(
+        &self,
+        input: &DeleteApplicationInput,
+    ) -> Result<(), DeleteApplicationError>;
 
     #[doc="<p>Deletes a deployment configuration.</p> <note> <p>A deployment configuration cannot be deleted if it is currently in use. Predefined configurations cannot be deleted.</p> </note>"]
-    fn delete_deployment_config(&self,
-                                input: &DeleteDeploymentConfigInput)
-                                -> Result<(), DeleteDeploymentConfigError>;
+    fn delete_deployment_config(
+        &self,
+        input: &DeleteDeploymentConfigInput,
+    ) -> Result<(), DeleteDeploymentConfigError>;
 
+    #[doc = "<p>Deletes a deployment group.</p>"]
+    fn delete_deployment_group(
+        &self,
+        input: &DeleteDeploymentGroupInput,
+    ) -> Result<DeleteDeploymentGroupOutput, DeleteDeploymentGroupError>;
 
-    #[doc="<p>Deletes a deployment group.</p>"]
-    fn delete_deployment_group
-        (&self,
-         input: &DeleteDeploymentGroupInput)
-         -> Result<DeleteDeploymentGroupOutput, DeleteDeploymentGroupError>;
+    #[doc = "<p>Deregisters an on-premises instance.</p>"]
+    fn deregister_on_premises_instance(
+        &self,
+        input: &DeregisterOnPremisesInstanceInput,
+    ) -> Result<(), DeregisterOnPremisesInstanceError>;
 
+    #[doc = "<p>Gets information about an application.</p>"]
+    fn get_application(
+        &self,
+        input: &GetApplicationInput,
+    ) -> Result<GetApplicationOutput, GetApplicationError>;
 
-    #[doc="<p>Deregisters an on-premises instance.</p>"]
-    fn deregister_on_premises_instance(&self,
-                                       input: &DeregisterOnPremisesInstanceInput)
-                                       -> Result<(), DeregisterOnPremisesInstanceError>;
+    #[doc = "<p>Gets information about an application revision.</p>"]
+    fn get_application_revision(
+        &self,
+        input: &GetApplicationRevisionInput,
+    ) -> Result<GetApplicationRevisionOutput, GetApplicationRevisionError>;
 
+    #[doc = "<p>Gets information about a deployment.</p>"]
+    fn get_deployment(
+        &self,
+        input: &GetDeploymentInput,
+    ) -> Result<GetDeploymentOutput, GetDeploymentError>;
 
-    #[doc="<p>Gets information about an application.</p>"]
-    fn get_application(&self,
-                       input: &GetApplicationInput)
-                       -> Result<GetApplicationOutput, GetApplicationError>;
+    #[doc = "<p>Gets information about a deployment configuration.</p>"]
+    fn get_deployment_config(
+        &self,
+        input: &GetDeploymentConfigInput,
+    ) -> Result<GetDeploymentConfigOutput, GetDeploymentConfigError>;
 
+    #[doc = "<p>Gets information about a deployment group.</p>"]
+    fn get_deployment_group(
+        &self,
+        input: &GetDeploymentGroupInput,
+    ) -> Result<GetDeploymentGroupOutput, GetDeploymentGroupError>;
 
-    #[doc="<p>Gets information about an application revision.</p>"]
-    fn get_application_revision
-        (&self,
-         input: &GetApplicationRevisionInput)
-         -> Result<GetApplicationRevisionOutput, GetApplicationRevisionError>;
+    #[doc = "<p>Gets information about an instance as part of a deployment.</p>"]
+    fn get_deployment_instance(
+        &self,
+        input: &GetDeploymentInstanceInput,
+    ) -> Result<GetDeploymentInstanceOutput, GetDeploymentInstanceError>;
 
+    #[doc = "<p>Gets information about an on-premises instance.</p>"]
+    fn get_on_premises_instance(
+        &self,
+        input: &GetOnPremisesInstanceInput,
+    ) -> Result<GetOnPremisesInstanceOutput, GetOnPremisesInstanceError>;
 
-    #[doc="<p>Gets information about a deployment.</p>"]
-    fn get_deployment(&self,
-                      input: &GetDeploymentInput)
-                      -> Result<GetDeploymentOutput, GetDeploymentError>;
+    #[doc = "<p>Lists information about revisions for an application.</p>"]
+    fn list_application_revisions(
+        &self,
+        input: &ListApplicationRevisionsInput,
+    ) -> Result<ListApplicationRevisionsOutput, ListApplicationRevisionsError>;
 
-
-    #[doc="<p>Gets information about a deployment configuration.</p>"]
-    fn get_deployment_config(&self,
-                             input: &GetDeploymentConfigInput)
-                             -> Result<GetDeploymentConfigOutput, GetDeploymentConfigError>;
-
-
-    #[doc="<p>Gets information about a deployment group.</p>"]
-    fn get_deployment_group(&self,
-                            input: &GetDeploymentGroupInput)
-                            -> Result<GetDeploymentGroupOutput, GetDeploymentGroupError>;
-
-
-    #[doc="<p>Gets information about an instance as part of a deployment.</p>"]
-    fn get_deployment_instance
-        (&self,
-         input: &GetDeploymentInstanceInput)
-         -> Result<GetDeploymentInstanceOutput, GetDeploymentInstanceError>;
-
-
-    #[doc="<p>Gets information about an on-premises instance.</p>"]
-    fn get_on_premises_instance
-        (&self,
-         input: &GetOnPremisesInstanceInput)
-         -> Result<GetOnPremisesInstanceOutput, GetOnPremisesInstanceError>;
-
-
-    #[doc="<p>Lists information about revisions for an application.</p>"]
-    fn list_application_revisions
-        (&self,
-         input: &ListApplicationRevisionsInput)
-         -> Result<ListApplicationRevisionsOutput, ListApplicationRevisionsError>;
-
-
-    #[doc="<p>Lists the applications registered with the applicable IAM user or AWS account.</p>"]
-    fn list_applications(&self,
-                         input: &ListApplicationsInput)
-                         -> Result<ListApplicationsOutput, ListApplicationsError>;
-
+    #[doc = "<p>Lists the applications registered with the applicable IAM user or AWS account.</p>"]
+    fn list_applications(
+        &self,
+        input: &ListApplicationsInput,
+    ) -> Result<ListApplicationsOutput, ListApplicationsError>;
 
     #[doc="<p>Lists the deployment configurations with the applicable IAM user or AWS account.</p>"]
-    fn list_deployment_configs
-        (&self,
-         input: &ListDeploymentConfigsInput)
-         -> Result<ListDeploymentConfigsOutput, ListDeploymentConfigsError>;
-
+    fn list_deployment_configs(
+        &self,
+        input: &ListDeploymentConfigsInput,
+    ) -> Result<ListDeploymentConfigsOutput, ListDeploymentConfigsError>;
 
     #[doc="<p>Lists the deployment groups for an application registered with the applicable IAM user or AWS account.</p>"]
-    fn list_deployment_groups(&self,
-                              input: &ListDeploymentGroupsInput)
-                              -> Result<ListDeploymentGroupsOutput, ListDeploymentGroupsError>;
-
+    fn list_deployment_groups(
+        &self,
+        input: &ListDeploymentGroupsInput,
+    ) -> Result<ListDeploymentGroupsOutput, ListDeploymentGroupsError>;
 
     #[doc="<p>Lists the instance for a deployment associated with the applicable IAM user or AWS account.</p>"]
-    fn list_deployment_instances
-        (&self,
-         input: &ListDeploymentInstancesInput)
-         -> Result<ListDeploymentInstancesOutput, ListDeploymentInstancesError>;
-
+    fn list_deployment_instances(
+        &self,
+        input: &ListDeploymentInstancesInput,
+    ) -> Result<ListDeploymentInstancesOutput, ListDeploymentInstancesError>;
 
     #[doc="<p>Lists the deployments in a deployment group for an application registered with the applicable IAM user or AWS account.</p>"]
-    fn list_deployments(&self,
-                        input: &ListDeploymentsInput)
-                        -> Result<ListDeploymentsOutput, ListDeploymentsError>;
+    fn list_deployments(
+        &self,
+        input: &ListDeploymentsInput,
+    ) -> Result<ListDeploymentsOutput, ListDeploymentsError>;
 
-
-    #[doc="<p>Lists the names of stored connections to GitHub accounts.</p>"]
-    fn list_git_hub_account_token_names
-        (&self,
-         input: &ListGitHubAccountTokenNamesInput)
-         -> Result<ListGitHubAccountTokenNamesOutput, ListGitHubAccountTokenNamesError>;
-
+    #[doc = "<p>Lists the names of stored connections to GitHub accounts.</p>"]
+    fn list_git_hub_account_token_names(
+        &self,
+        input: &ListGitHubAccountTokenNamesInput,
+    ) -> Result<ListGitHubAccountTokenNamesOutput, ListGitHubAccountTokenNamesError>;
 
     #[doc="<p>Gets a list of names for one or more on-premises instances.</p> <p>Unless otherwise specified, both registered and deregistered on-premises instance names will be listed. To list only registered or deregistered on-premises instance names, use the registration status parameter.</p>"]
-    fn list_on_premises_instances
-        (&self,
-         input: &ListOnPremisesInstancesInput)
-         -> Result<ListOnPremisesInstancesOutput, ListOnPremisesInstancesError>;
+    fn list_on_premises_instances(
+        &self,
+        input: &ListOnPremisesInstancesInput,
+    ) -> Result<ListOnPremisesInstancesOutput, ListOnPremisesInstancesError>;
 
-
-    #[doc="<p>Registers with AWS CodeDeploy a revision for the specified application.</p>"]
-    fn register_application_revision(&self,
-                                     input: &RegisterApplicationRevisionInput)
-                                     -> Result<(), RegisterApplicationRevisionError>;
-
+    #[doc = "<p>Registers with AWS CodeDeploy a revision for the specified application.</p>"]
+    fn register_application_revision(
+        &self,
+        input: &RegisterApplicationRevisionInput,
+    ) -> Result<(), RegisterApplicationRevisionError>;
 
     #[doc="<p>Registers an on-premises instance.</p> <note> <p>Only one IAM ARN (an IAM session ARN or IAM user ARN) is supported in the request. You cannot use both.</p> </note>"]
-    fn register_on_premises_instance(&self,
-                                     input: &RegisterOnPremisesInstanceInput)
-                                     -> Result<(), RegisterOnPremisesInstanceError>;
+    fn register_on_premises_instance(
+        &self,
+        input: &RegisterOnPremisesInstanceInput,
+    ) -> Result<(), RegisterOnPremisesInstanceError>;
 
-
-    #[doc="<p>Removes one or more tags from one or more on-premises instances.</p>"]
-    fn remove_tags_from_on_premises_instances
-        (&self,
-         input: &RemoveTagsFromOnPremisesInstancesInput)
-         -> Result<(), RemoveTagsFromOnPremisesInstancesError>;
-
+    #[doc = "<p>Removes one or more tags from one or more on-premises instances.</p>"]
+    fn remove_tags_from_on_premises_instances(
+        &self,
+        input: &RemoveTagsFromOnPremisesInstancesInput,
+    ) -> Result<(), RemoveTagsFromOnPremisesInstancesError>;
 
     #[doc="<p>In a blue/green deployment, overrides any specified wait time and starts terminating instances immediately after the traffic routing is completed.</p>"]
-    fn skip_wait_time_for_instance_termination
-        (&self,
-         input: &SkipWaitTimeForInstanceTerminationInput)
-         -> Result<(), SkipWaitTimeForInstanceTerminationError>;
+    fn skip_wait_time_for_instance_termination(
+        &self,
+        input: &SkipWaitTimeForInstanceTerminationInput,
+    ) -> Result<(), SkipWaitTimeForInstanceTerminationError>;
 
+    #[doc = "<p>Attempts to stop an ongoing deployment.</p>"]
+    fn stop_deployment(
+        &self,
+        input: &StopDeploymentInput,
+    ) -> Result<StopDeploymentOutput, StopDeploymentError>;
 
-    #[doc="<p>Attempts to stop an ongoing deployment.</p>"]
-    fn stop_deployment(&self,
-                       input: &StopDeploymentInput)
-                       -> Result<StopDeploymentOutput, StopDeploymentError>;
+    #[doc = "<p>Changes the name of an application.</p>"]
+    fn update_application(
+        &self,
+        input: &UpdateApplicationInput,
+    ) -> Result<(), UpdateApplicationError>;
 
-
-    #[doc="<p>Changes the name of an application.</p>"]
-    fn update_application(&self,
-                          input: &UpdateApplicationInput)
-                          -> Result<(), UpdateApplicationError>;
-
-
-    #[doc="<p>Changes information about a deployment group.</p>"]
-    fn update_deployment_group
-        (&self,
-         input: &UpdateDeploymentGroupInput)
-         -> Result<UpdateDeploymentGroupOutput, UpdateDeploymentGroupError>;
+    #[doc = "<p>Changes information about a deployment group.</p>"]
+    fn update_deployment_group(
+        &self,
+        input: &UpdateDeploymentGroupInput,
+    ) -> Result<UpdateDeploymentGroupOutput, UpdateDeploymentGroupError>;
 }
 /// A client for the CodeDeploy API.
 pub struct CodeDeployClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -5887,8 +6450,9 @@ pub struct CodeDeployClient<P, D>
 }
 
 impl<P, D> CodeDeployClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         CodeDeployClient {
@@ -5900,18 +6464,22 @@ impl<P, D> CodeDeployClient<P, D>
 }
 
 impl<P, D> CodeDeploy for CodeDeployClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
-    #[doc="<p>Adds tags to on-premises instances.</p>"]
-    fn add_tags_to_on_premises_instances(&self,
-                                         input: &AddTagsToOnPremisesInstancesInput)
-                                         -> Result<(), AddTagsToOnPremisesInstancesError> {
+    #[doc = "<p>Adds tags to on-premises instances.</p>"]
+    fn add_tags_to_on_premises_instances(
+        &self,
+        input: &AddTagsToOnPremisesInstancesInput,
+    ) -> Result<(), AddTagsToOnPremisesInstancesError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "CodeDeploy_20141006.AddTagsToOnPremisesInstances");
+        request.add_header(
+            "x-amz-target",
+            "CodeDeploy_20141006.AddTagsToOnPremisesInstances",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -5924,23 +6492,25 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AddTagsToOnPremisesInstancesError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+                Err(AddTagsToOnPremisesInstancesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about one or more application revisions.</p>"]
-    fn batch_get_application_revisions
-        (&self,
-         input: &BatchGetApplicationRevisionsInput)
-         -> Result<BatchGetApplicationRevisionsOutput, BatchGetApplicationRevisionsError> {
+    #[doc = "<p>Gets information about one or more application revisions.</p>"]
+    fn batch_get_application_revisions(
+        &self,
+        input: &BatchGetApplicationRevisionsInput,
+    ) -> Result<BatchGetApplicationRevisionsOutput, BatchGetApplicationRevisionsError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "CodeDeploy_20141006.BatchGetApplicationRevisions");
+        request.add_header(
+            "x-amz-target",
+            "CodeDeploy_20141006.BatchGetApplicationRevisions",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -5952,22 +6522,25 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<BatchGetApplicationRevisionsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<BatchGetApplicationRevisionsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(BatchGetApplicationRevisionsError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+                Err(BatchGetApplicationRevisionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about one or more applications.</p>"]
-    fn batch_get_applications(&self,
-                              input: &BatchGetApplicationsInput)
-                              -> Result<BatchGetApplicationsOutput, BatchGetApplicationsError> {
+    #[doc = "<p>Gets information about one or more applications.</p>"]
+    fn batch_get_applications(
+        &self,
+        input: &BatchGetApplicationsInput,
+    ) -> Result<BatchGetApplicationsOutput, BatchGetApplicationsError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5983,27 +6556,32 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<BatchGetApplicationsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<BatchGetApplicationsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(BatchGetApplicationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(BatchGetApplicationsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about one or more deployment groups.</p>"]
-    fn batch_get_deployment_groups
-        (&self,
-         input: &BatchGetDeploymentGroupsInput)
-         -> Result<BatchGetDeploymentGroupsOutput, BatchGetDeploymentGroupsError> {
+    #[doc = "<p>Gets information about one or more deployment groups.</p>"]
+    fn batch_get_deployment_groups(
+        &self,
+        input: &BatchGetDeploymentGroupsInput,
+    ) -> Result<BatchGetDeploymentGroupsOutput, BatchGetDeploymentGroupsError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "CodeDeploy_20141006.BatchGetDeploymentGroups");
+        request.add_header(
+            "x-amz-target",
+            "CodeDeploy_20141006.BatchGetDeploymentGroups",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6015,28 +6593,32 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<BatchGetDeploymentGroupsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<BatchGetDeploymentGroupsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(BatchGetDeploymentGroupsError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(BatchGetDeploymentGroupsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Gets information about one or more instance that are part of a deployment group.</p>"]
-    fn batch_get_deployment_instances
-        (&self,
-         input: &BatchGetDeploymentInstancesInput)
-         -> Result<BatchGetDeploymentInstancesOutput, BatchGetDeploymentInstancesError> {
+    fn batch_get_deployment_instances(
+        &self,
+        input: &BatchGetDeploymentInstancesInput,
+    ) -> Result<BatchGetDeploymentInstancesOutput, BatchGetDeploymentInstancesError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "CodeDeploy_20141006.BatchGetDeploymentInstances");
+        request.add_header(
+            "x-amz-target",
+            "CodeDeploy_20141006.BatchGetDeploymentInstances",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6048,22 +6630,25 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<BatchGetDeploymentInstancesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<BatchGetDeploymentInstancesOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(BatchGetDeploymentInstancesError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(BatchGetDeploymentInstancesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about one or more deployments.</p>"]
-    fn batch_get_deployments(&self,
-                             input: &BatchGetDeploymentsInput)
-                             -> Result<BatchGetDeploymentsOutput, BatchGetDeploymentsError> {
+    #[doc = "<p>Gets information about one or more deployments.</p>"]
+    fn batch_get_deployments(
+        &self,
+        input: &BatchGetDeploymentsInput,
+    ) -> Result<BatchGetDeploymentsOutput, BatchGetDeploymentsError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6079,27 +6664,32 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<BatchGetDeploymentsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<BatchGetDeploymentsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(BatchGetDeploymentsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(BatchGetDeploymentsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about one or more on-premises instances.</p>"]
-    fn batch_get_on_premises_instances
-        (&self,
-         input: &BatchGetOnPremisesInstancesInput)
-         -> Result<BatchGetOnPremisesInstancesOutput, BatchGetOnPremisesInstancesError> {
+    #[doc = "<p>Gets information about one or more on-premises instances.</p>"]
+    fn batch_get_on_premises_instances(
+        &self,
+        input: &BatchGetOnPremisesInstancesInput,
+    ) -> Result<BatchGetOnPremisesInstancesOutput, BatchGetOnPremisesInstancesError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "CodeDeploy_20141006.BatchGetOnPremisesInstances");
+        request.add_header(
+            "x-amz-target",
+            "CodeDeploy_20141006.BatchGetOnPremisesInstances",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6111,22 +6701,25 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<BatchGetOnPremisesInstancesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<BatchGetOnPremisesInstancesOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(BatchGetOnPremisesInstancesError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(BatchGetOnPremisesInstancesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>For a blue/green deployment, starts the process of rerouting traffic from instances in the original environment to instances in the replacement environment without waiting for a specified wait time to elapse. (Traffic rerouting, which is achieved by registering instances in the replacement environment with the load balancer, can start as soon as all instances have a status of Ready.) </p>"]
-    fn continue_deployment(&self,
-                           input: &ContinueDeploymentInput)
-                           -> Result<(), ContinueDeploymentError> {
+    fn continue_deployment(
+        &self,
+        input: &ContinueDeploymentInput,
+    ) -> Result<(), ContinueDeploymentError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6143,16 +6736,18 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ContinueDeploymentError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ContinueDeploymentError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates an application.</p>"]
-    fn create_application(&self,
-                          input: &CreateApplicationInput)
-                          -> Result<CreateApplicationOutput, CreateApplicationError> {
+    #[doc = "<p>Creates an application.</p>"]
+    fn create_application(
+        &self,
+        input: &CreateApplicationInput,
+    ) -> Result<CreateApplicationOutput, CreateApplicationError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6168,23 +6763,25 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateApplicationOutput>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateApplicationOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateApplicationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateApplicationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deploys an application revision through the specified deployment group.</p>"]
-    fn create_deployment(&self,
-                         input: &CreateDeploymentInput)
-                         -> Result<CreateDeploymentOutput, CreateDeploymentError> {
+    #[doc = "<p>Deploys an application revision through the specified deployment group.</p>"]
+    fn create_deployment(
+        &self,
+        input: &CreateDeploymentInput,
+    ) -> Result<CreateDeploymentOutput, CreateDeploymentError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6200,24 +6797,25 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateDeploymentOutput>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateDeploymentOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateDeploymentError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateDeploymentError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates a deployment configuration.</p>"]
-    fn create_deployment_config
-        (&self,
-         input: &CreateDeploymentConfigInput)
-         -> Result<CreateDeploymentConfigOutput, CreateDeploymentConfigError> {
+    #[doc = "<p>Creates a deployment configuration.</p>"]
+    fn create_deployment_config(
+        &self,
+        input: &CreateDeploymentConfigInput,
+    ) -> Result<CreateDeploymentConfigOutput, CreateDeploymentConfigError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6233,22 +6831,25 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateDeploymentConfigOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreateDeploymentConfigOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateDeploymentConfigError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateDeploymentConfigError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates a deployment group to which application revisions will be deployed.</p>"]
-    fn create_deployment_group
-        (&self,
-         input: &CreateDeploymentGroupInput)
-         -> Result<CreateDeploymentGroupOutput, CreateDeploymentGroupError> {
+    #[doc = "<p>Creates a deployment group to which application revisions will be deployed.</p>"]
+    fn create_deployment_group(
+        &self,
+        input: &CreateDeploymentGroupInput,
+    ) -> Result<CreateDeploymentGroupOutput, CreateDeploymentGroupError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6264,21 +6865,25 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateDeploymentGroupOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreateDeploymentGroupOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateDeploymentGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateDeploymentGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes an application.</p>"]
-    fn delete_application(&self,
-                          input: &DeleteApplicationInput)
-                          -> Result<(), DeleteApplicationError> {
+    #[doc = "<p>Deletes an application.</p>"]
+    fn delete_application(
+        &self,
+        input: &DeleteApplicationInput,
+    ) -> Result<(), DeleteApplicationError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6295,16 +6900,18 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteApplicationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteApplicationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes a deployment configuration.</p> <note> <p>A deployment configuration cannot be deleted if it is currently in use. Predefined configurations cannot be deleted.</p> </note>"]
-    fn delete_deployment_config(&self,
-                                input: &DeleteDeploymentConfigInput)
-                                -> Result<(), DeleteDeploymentConfigError> {
+    fn delete_deployment_config(
+        &self,
+        input: &DeleteDeploymentConfigInput,
+    ) -> Result<(), DeleteDeploymentConfigError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6321,17 +6928,18 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteDeploymentConfigError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteDeploymentConfigError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes a deployment group.</p>"]
-    fn delete_deployment_group
-        (&self,
-         input: &DeleteDeploymentGroupInput)
-         -> Result<DeleteDeploymentGroupOutput, DeleteDeploymentGroupError> {
+    #[doc = "<p>Deletes a deployment group.</p>"]
+    fn delete_deployment_group(
+        &self,
+        input: &DeleteDeploymentGroupInput,
+    ) -> Result<DeleteDeploymentGroupOutput, DeleteDeploymentGroupError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6347,26 +6955,32 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteDeploymentGroupOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DeleteDeploymentGroupOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteDeploymentGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteDeploymentGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deregisters an on-premises instance.</p>"]
-    fn deregister_on_premises_instance(&self,
-                                       input: &DeregisterOnPremisesInstanceInput)
-                                       -> Result<(), DeregisterOnPremisesInstanceError> {
+    #[doc = "<p>Deregisters an on-premises instance.</p>"]
+    fn deregister_on_premises_instance(
+        &self,
+        input: &DeregisterOnPremisesInstanceInput,
+    ) -> Result<(), DeregisterOnPremisesInstanceError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "CodeDeploy_20141006.DeregisterOnPremisesInstance");
+        request.add_header(
+            "x-amz-target",
+            "CodeDeploy_20141006.DeregisterOnPremisesInstance",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6379,17 +6993,18 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeregisterOnPremisesInstanceError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+                Err(DeregisterOnPremisesInstanceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about an application.</p>"]
-    fn get_application(&self,
-                       input: &GetApplicationInput)
-                       -> Result<GetApplicationOutput, GetApplicationError> {
+    #[doc = "<p>Gets information about an application.</p>"]
+    fn get_application(
+        &self,
+        input: &GetApplicationInput,
+    ) -> Result<GetApplicationOutput, GetApplicationError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6405,24 +7020,25 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetApplicationOutput>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetApplicationOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetApplicationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetApplicationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about an application revision.</p>"]
-    fn get_application_revision
-        (&self,
-         input: &GetApplicationRevisionInput)
-         -> Result<GetApplicationRevisionOutput, GetApplicationRevisionError> {
+    #[doc = "<p>Gets information about an application revision.</p>"]
+    fn get_application_revision(
+        &self,
+        input: &GetApplicationRevisionInput,
+    ) -> Result<GetApplicationRevisionOutput, GetApplicationRevisionError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6438,21 +7054,25 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetApplicationRevisionOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetApplicationRevisionOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetApplicationRevisionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetApplicationRevisionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about a deployment.</p>"]
-    fn get_deployment(&self,
-                      input: &GetDeploymentInput)
-                      -> Result<GetDeploymentOutput, GetDeploymentError> {
+    #[doc = "<p>Gets information about a deployment.</p>"]
+    fn get_deployment(
+        &self,
+        input: &GetDeploymentInput,
+    ) -> Result<GetDeploymentOutput, GetDeploymentError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6468,23 +7088,25 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetDeploymentOutput>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetDeploymentOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetDeploymentError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetDeploymentError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about a deployment configuration.</p>"]
-    fn get_deployment_config(&self,
-                             input: &GetDeploymentConfigInput)
-                             -> Result<GetDeploymentConfigOutput, GetDeploymentConfigError> {
+    #[doc = "<p>Gets information about a deployment configuration.</p>"]
+    fn get_deployment_config(
+        &self,
+        input: &GetDeploymentConfigInput,
+    ) -> Result<GetDeploymentConfigOutput, GetDeploymentConfigError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6500,21 +7122,25 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetDeploymentConfigOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetDeploymentConfigOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetDeploymentConfigError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetDeploymentConfigError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about a deployment group.</p>"]
-    fn get_deployment_group(&self,
-                            input: &GetDeploymentGroupInput)
-                            -> Result<GetDeploymentGroupOutput, GetDeploymentGroupError> {
+    #[doc = "<p>Gets information about a deployment group.</p>"]
+    fn get_deployment_group(
+        &self,
+        input: &GetDeploymentGroupInput,
+    ) -> Result<GetDeploymentGroupOutput, GetDeploymentGroupError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6530,24 +7156,25 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetDeploymentGroupOutput>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetDeploymentGroupOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetDeploymentGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetDeploymentGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about an instance as part of a deployment.</p>"]
-    fn get_deployment_instance
-        (&self,
-         input: &GetDeploymentInstanceInput)
-         -> Result<GetDeploymentInstanceOutput, GetDeploymentInstanceError> {
+    #[doc = "<p>Gets information about an instance as part of a deployment.</p>"]
+    fn get_deployment_instance(
+        &self,
+        input: &GetDeploymentInstanceInput,
+    ) -> Result<GetDeploymentInstanceOutput, GetDeploymentInstanceError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6563,22 +7190,25 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetDeploymentInstanceOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetDeploymentInstanceOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetDeploymentInstanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetDeploymentInstanceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about an on-premises instance.</p>"]
-    fn get_on_premises_instance
-        (&self,
-         input: &GetOnPremisesInstanceInput)
-         -> Result<GetOnPremisesInstanceOutput, GetOnPremisesInstanceError> {
+    #[doc = "<p>Gets information about an on-premises instance.</p>"]
+    fn get_on_premises_instance(
+        &self,
+        input: &GetOnPremisesInstanceInput,
+    ) -> Result<GetOnPremisesInstanceOutput, GetOnPremisesInstanceError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6594,27 +7224,32 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetOnPremisesInstanceOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetOnPremisesInstanceOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetOnPremisesInstanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetOnPremisesInstanceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists information about revisions for an application.</p>"]
-    fn list_application_revisions
-        (&self,
-         input: &ListApplicationRevisionsInput)
-         -> Result<ListApplicationRevisionsOutput, ListApplicationRevisionsError> {
+    #[doc = "<p>Lists information about revisions for an application.</p>"]
+    fn list_application_revisions(
+        &self,
+        input: &ListApplicationRevisionsInput,
+    ) -> Result<ListApplicationRevisionsOutput, ListApplicationRevisionsError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "CodeDeploy_20141006.ListApplicationRevisions");
+        request.add_header(
+            "x-amz-target",
+            "CodeDeploy_20141006.ListApplicationRevisions",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6626,22 +7261,25 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListApplicationRevisionsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListApplicationRevisionsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListApplicationRevisionsError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(ListApplicationRevisionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists the applications registered with the applicable IAM user or AWS account.</p>"]
-    fn list_applications(&self,
-                         input: &ListApplicationsInput)
-                         -> Result<ListApplicationsOutput, ListApplicationsError> {
+    #[doc = "<p>Lists the applications registered with the applicable IAM user or AWS account.</p>"]
+    fn list_applications(
+        &self,
+        input: &ListApplicationsInput,
+    ) -> Result<ListApplicationsOutput, ListApplicationsError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6657,24 +7295,25 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListApplicationsOutput>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListApplicationsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListApplicationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListApplicationsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists the deployment configurations with the applicable IAM user or AWS account.</p>"]
-    fn list_deployment_configs
-        (&self,
-         input: &ListDeploymentConfigsInput)
-         -> Result<ListDeploymentConfigsOutput, ListDeploymentConfigsError> {
+    fn list_deployment_configs(
+        &self,
+        input: &ListDeploymentConfigsInput,
+    ) -> Result<ListDeploymentConfigsOutput, ListDeploymentConfigsError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6690,21 +7329,25 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListDeploymentConfigsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListDeploymentConfigsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListDeploymentConfigsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListDeploymentConfigsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists the deployment groups for an application registered with the applicable IAM user or AWS account.</p>"]
-    fn list_deployment_groups(&self,
-                              input: &ListDeploymentGroupsInput)
-                              -> Result<ListDeploymentGroupsOutput, ListDeploymentGroupsError> {
+    fn list_deployment_groups(
+        &self,
+        input: &ListDeploymentGroupsInput,
+    ) -> Result<ListDeploymentGroupsOutput, ListDeploymentGroupsError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6720,27 +7363,32 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListDeploymentGroupsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListDeploymentGroupsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListDeploymentGroupsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListDeploymentGroupsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists the instance for a deployment associated with the applicable IAM user or AWS account.</p>"]
-    fn list_deployment_instances
-        (&self,
-         input: &ListDeploymentInstancesInput)
-         -> Result<ListDeploymentInstancesOutput, ListDeploymentInstancesError> {
+    fn list_deployment_instances(
+        &self,
+        input: &ListDeploymentInstancesInput,
+    ) -> Result<ListDeploymentInstancesOutput, ListDeploymentInstancesError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "CodeDeploy_20141006.ListDeploymentInstances");
+        request.add_header(
+            "x-amz-target",
+            "CodeDeploy_20141006.ListDeploymentInstances",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6752,22 +7400,25 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListDeploymentInstancesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListDeploymentInstancesOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListDeploymentInstancesError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(ListDeploymentInstancesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists the deployments in a deployment group for an application registered with the applicable IAM user or AWS account.</p>"]
-    fn list_deployments(&self,
-                        input: &ListDeploymentsInput)
-                        -> Result<ListDeploymentsOutput, ListDeploymentsError> {
+    fn list_deployments(
+        &self,
+        input: &ListDeploymentsInput,
+    ) -> Result<ListDeploymentsOutput, ListDeploymentsError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6783,29 +7434,32 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListDeploymentsOutput>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListDeploymentsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListDeploymentsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListDeploymentsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists the names of stored connections to GitHub accounts.</p>"]
-    fn list_git_hub_account_token_names
-        (&self,
-         input: &ListGitHubAccountTokenNamesInput)
-         -> Result<ListGitHubAccountTokenNamesOutput, ListGitHubAccountTokenNamesError> {
+    #[doc = "<p>Lists the names of stored connections to GitHub accounts.</p>"]
+    fn list_git_hub_account_token_names(
+        &self,
+        input: &ListGitHubAccountTokenNamesInput,
+    ) -> Result<ListGitHubAccountTokenNamesOutput, ListGitHubAccountTokenNamesError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "CodeDeploy_20141006.ListGitHubAccountTokenNames");
+        request.add_header(
+            "x-amz-target",
+            "CodeDeploy_20141006.ListGitHubAccountTokenNames",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6817,28 +7471,32 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListGitHubAccountTokenNamesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListGitHubAccountTokenNamesOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListGitHubAccountTokenNamesError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(ListGitHubAccountTokenNamesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Gets a list of names for one or more on-premises instances.</p> <p>Unless otherwise specified, both registered and deregistered on-premises instance names will be listed. To list only registered or deregistered on-premises instance names, use the registration status parameter.</p>"]
-    fn list_on_premises_instances
-        (&self,
-         input: &ListOnPremisesInstancesInput)
-         -> Result<ListOnPremisesInstancesOutput, ListOnPremisesInstancesError> {
+    fn list_on_premises_instances(
+        &self,
+        input: &ListOnPremisesInstancesInput,
+    ) -> Result<ListOnPremisesInstancesOutput, ListOnPremisesInstancesError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "CodeDeploy_20141006.ListOnPremisesInstances");
+        request.add_header(
+            "x-amz-target",
+            "CodeDeploy_20141006.ListOnPremisesInstances",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6850,27 +7508,32 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListOnPremisesInstancesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListOnPremisesInstancesOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListOnPremisesInstancesError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(ListOnPremisesInstancesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Registers with AWS CodeDeploy a revision for the specified application.</p>"]
-    fn register_application_revision(&self,
-                                     input: &RegisterApplicationRevisionInput)
-                                     -> Result<(), RegisterApplicationRevisionError> {
+    #[doc = "<p>Registers with AWS CodeDeploy a revision for the specified application.</p>"]
+    fn register_application_revision(
+        &self,
+        input: &RegisterApplicationRevisionInput,
+    ) -> Result<(), RegisterApplicationRevisionError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "CodeDeploy_20141006.RegisterApplicationRevision");
+        request.add_header(
+            "x-amz-target",
+            "CodeDeploy_20141006.RegisterApplicationRevision",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6883,22 +7546,25 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(RegisterApplicationRevisionError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(RegisterApplicationRevisionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Registers an on-premises instance.</p> <note> <p>Only one IAM ARN (an IAM session ARN or IAM user ARN) is supported in the request. You cannot use both.</p> </note>"]
-    fn register_on_premises_instance(&self,
-                                     input: &RegisterOnPremisesInstanceInput)
-                                     -> Result<(), RegisterOnPremisesInstanceError> {
+    fn register_on_premises_instance(
+        &self,
+        input: &RegisterOnPremisesInstanceInput,
+    ) -> Result<(), RegisterOnPremisesInstanceError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "CodeDeploy_20141006.RegisterOnPremisesInstance");
+        request.add_header(
+            "x-amz-target",
+            "CodeDeploy_20141006.RegisterOnPremisesInstance",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6911,23 +7577,25 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(RegisterOnPremisesInstanceError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+                Err(RegisterOnPremisesInstanceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Removes one or more tags from one or more on-premises instances.</p>"]
-    fn remove_tags_from_on_premises_instances
-        (&self,
-         input: &RemoveTagsFromOnPremisesInstancesInput)
-         -> Result<(), RemoveTagsFromOnPremisesInstancesError> {
+    #[doc = "<p>Removes one or more tags from one or more on-premises instances.</p>"]
+    fn remove_tags_from_on_premises_instances(
+        &self,
+        input: &RemoveTagsFromOnPremisesInstancesInput,
+    ) -> Result<(), RemoveTagsFromOnPremisesInstancesError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "CodeDeploy_20141006.RemoveTagsFromOnPremisesInstances");
+        request.add_header(
+            "x-amz-target",
+            "CodeDeploy_20141006.RemoveTagsFromOnPremisesInstances",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6940,22 +7608,25 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(RemoveTagsFromOnPremisesInstancesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(RemoveTagsFromOnPremisesInstancesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>In a blue/green deployment, overrides any specified wait time and starts terminating instances immediately after the traffic routing is completed.</p>"]
-    fn skip_wait_time_for_instance_termination
-        (&self,
-         input: &SkipWaitTimeForInstanceTerminationInput)
-         -> Result<(), SkipWaitTimeForInstanceTerminationError> {
+    fn skip_wait_time_for_instance_termination(
+        &self,
+        input: &SkipWaitTimeForInstanceTerminationInput,
+    ) -> Result<(), SkipWaitTimeForInstanceTerminationError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "CodeDeploy_20141006.SkipWaitTimeForInstanceTermination");
+        request.add_header(
+            "x-amz-target",
+            "CodeDeploy_20141006.SkipWaitTimeForInstanceTermination",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6968,16 +7639,18 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(SkipWaitTimeForInstanceTerminationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(SkipWaitTimeForInstanceTerminationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Attempts to stop an ongoing deployment.</p>"]
-    fn stop_deployment(&self,
-                       input: &StopDeploymentInput)
-                       -> Result<StopDeploymentOutput, StopDeploymentError> {
+    #[doc = "<p>Attempts to stop an ongoing deployment.</p>"]
+    fn stop_deployment(
+        &self,
+        input: &StopDeploymentInput,
+    ) -> Result<StopDeploymentOutput, StopDeploymentError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6993,23 +7666,25 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StopDeploymentOutput>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<StopDeploymentOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StopDeploymentError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(StopDeploymentError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Changes the name of an application.</p>"]
-    fn update_application(&self,
-                          input: &UpdateApplicationInput)
-                          -> Result<(), UpdateApplicationError> {
+    #[doc = "<p>Changes the name of an application.</p>"]
+    fn update_application(
+        &self,
+        input: &UpdateApplicationInput,
+    ) -> Result<(), UpdateApplicationError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7026,17 +7701,18 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateApplicationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateApplicationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Changes information about a deployment group.</p>"]
-    fn update_deployment_group
-        (&self,
-         input: &UpdateDeploymentGroupInput)
-         -> Result<UpdateDeploymentGroupOutput, UpdateDeploymentGroupError> {
+    #[doc = "<p>Changes information about a deployment group.</p>"]
+    fn update_deployment_group(
+        &self,
+        input: &UpdateDeploymentGroupInput,
+    ) -> Result<UpdateDeploymentGroupOutput, UpdateDeploymentGroupError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7052,12 +7728,16 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateDeploymentGroupOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<UpdateDeploymentGroupOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateDeploymentGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateDeploymentGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

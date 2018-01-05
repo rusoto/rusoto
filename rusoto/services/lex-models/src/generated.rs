@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -29,1584 +28,1584 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
-#[doc="<p>Provides information about a bot alias.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Provides information about a bot alias.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct BotAliasMetadata {
-    #[doc="<p>The name of the bot to which the alias points.</p>"]
-    #[serde(rename="botName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the bot to which the alias points.</p>
+    #[serde(rename = "botName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bot_name: Option<String>,
-    #[doc="<p>The version of the Amazon Lex bot to which the alias points.</p>"]
-    #[serde(rename="botVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version of the Amazon Lex bot to which the alias points.</p>
+    #[serde(rename = "botVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bot_version: Option<String>,
-    #[doc="<p>Checksum of the bot alias.</p>"]
-    #[serde(rename="checksum")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Checksum of the bot alias.</p>
+    #[serde(rename = "checksum")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub checksum: Option<String>,
-    #[doc="<p>The date that the bot alias was created.</p>"]
-    #[serde(rename="createdDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the bot alias was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<f64>,
-    #[doc="<p>A description of the bot alias.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the bot alias.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The date that the bot alias was updated. When you create a resource, the creation date and last updated date are the same.</p>"]
-    #[serde(rename="lastUpdatedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the bot alias was updated. When you create a resource, the creation date and last updated date are the same.</p>
+    #[serde(rename = "lastUpdatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_date: Option<f64>,
-    #[doc="<p>The name of the bot alias.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the bot alias.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[doc="<p>Represents an association between an Amazon Lex bot and an external messaging platform.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents an association between an Amazon Lex bot and an external messaging platform.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct BotChannelAssociation {
-    #[doc="<p>An alias pointing to the specific version of the Amazon Lex bot to which this association is being made. </p>"]
-    #[serde(rename="botAlias")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An alias pointing to the specific version of the Amazon Lex bot to which this association is being made. </p>
+    #[serde(rename = "botAlias")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bot_alias: Option<String>,
-    #[doc="<p>Provides information necessary to communicate with the messaging platform. </p>"]
-    #[serde(rename="botConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Provides information necessary to communicate with the messaging platform. </p>
+    #[serde(rename = "botConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bot_configuration: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The name of the Amazon Lex bot to which this association is being made. </p> <note> <p>Currently, Amazon Lex supports associations with Facebook and Slack, and Twilio.</p> </note>"]
-    #[serde(rename="botName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the Amazon Lex bot to which this association is being made. </p> <note> <p>Currently, Amazon Lex supports associations with Facebook and Slack, and Twilio.</p> </note>
+    #[serde(rename = "botName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bot_name: Option<String>,
-    #[doc="<p>The date that the association between the Amazon Lex bot and the channel was created. </p>"]
-    #[serde(rename="createdDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the association between the Amazon Lex bot and the channel was created. </p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<f64>,
-    #[doc="<p>A text description of the association you are creating. </p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A text description of the association you are creating. </p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The name of the association between the bot and the channel. </p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the association between the bot and the channel. </p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>Specifies the type of association by indicating the type of channel being established between the Amazon Lex bot and the external messaging platform.</p>"]
-    #[serde(rename="type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies the type of association by indicating the type of channel being established between the Amazon Lex bot and the external messaging platform.</p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[doc="<p>Provides information about a bot. .</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Provides information about a bot. .</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct BotMetadata {
-    #[doc="<p>The date that the bot was created.</p>"]
-    #[serde(rename="createdDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the bot was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<f64>,
-    #[doc="<p>A description of the bot.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the bot.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The date that the bot was updated. When you create a bot, the creation date and last updated date are the same. </p>"]
-    #[serde(rename="lastUpdatedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the bot was updated. When you create a bot, the creation date and last updated date are the same. </p>
+    #[serde(rename = "lastUpdatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_date: Option<f64>,
-    #[doc="<p>The name of the bot. </p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the bot. </p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The status of the bot.</p>"]
-    #[serde(rename="status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the bot.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The version of the bot. For a new bot, the version is always <code>$LATEST</code>.</p>"]
-    #[serde(rename="version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version of the bot. For a new bot, the version is always <code>$LATEST</code>.</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
 
-#[doc="<p>Provides metadata for a built-in intent.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Provides metadata for a built-in intent.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct BuiltinIntentMetadata {
-    #[doc="<p>A unique identifier for the built-in intent. To find the signature for an intent, see <a href=\"https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/standard-intents\">Standard Built-in Intents</a> in the <i>Alexa Skills Kit</i>.</p>"]
-    #[serde(rename="signature")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A unique identifier for the built-in intent. To find the signature for an intent, see <a href="https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/standard-intents">Standard Built-in Intents</a> in the <i>Alexa Skills Kit</i>.</p>
+    #[serde(rename = "signature")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub signature: Option<String>,
-    #[doc="<p>A list of identifiers for the locales that the intent supports.</p>"]
-    #[serde(rename="supportedLocales")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of identifiers for the locales that the intent supports.</p>
+    #[serde(rename = "supportedLocales")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub supported_locales: Option<Vec<String>>,
 }
 
-#[doc="<p>Provides information about a slot used in a built-in intent.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Provides information about a slot used in a built-in intent.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct BuiltinIntentSlot {
-    #[doc="<p>A list of the slots defined for the intent.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of the slots defined for the intent.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[doc="<p>Provides information about a built in slot type.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Provides information about a built in slot type.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct BuiltinSlotTypeMetadata {
-    #[doc="<p>A unique identifier for the built-in slot type. To find the signature for a slot type, see <a href=\"https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/slot-type-reference\">Slot Type Reference</a> in the <i>Alexa Skills Kit</i>.</p>"]
-    #[serde(rename="signature")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A unique identifier for the built-in slot type. To find the signature for a slot type, see <a href="https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/slot-type-reference">Slot Type Reference</a> in the <i>Alexa Skills Kit</i>.</p>
+    #[serde(rename = "signature")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub signature: Option<String>,
-    #[doc="<p>A list of target locales for the slot. </p>"]
-    #[serde(rename="supportedLocales")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of target locales for the slot. </p>
+    #[serde(rename = "supportedLocales")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub supported_locales: Option<Vec<String>>,
 }
 
-#[doc="<p>Specifies a Lambda function that verifies requests to a bot or fulfills the user's request to a bot..</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Specifies a Lambda function that verifies requests to a bot or fulfills the user's request to a bot..</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct CodeHook {
-    #[doc="<p>The version of the request-response that you want Amazon Lex to use to invoke your Lambda function. For more information, see <a>using-lambda</a>.</p>"]
-    #[serde(rename="messageVersion")]
+    /// <p>The version of the request-response that you want Amazon Lex to use to invoke your Lambda function. For more information, see <a>using-lambda</a>.</p>
+    #[serde(rename = "messageVersion")]
     pub message_version: String,
-    #[doc="<p>The Amazon Resource Name (ARN) of the Lambda function.</p>"]
-    #[serde(rename="uri")]
+    /// <p>The Amazon Resource Name (ARN) of the Lambda function.</p>
+    #[serde(rename = "uri")]
     pub uri: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateBotVersionRequest {
-    #[doc="<p>Identifies a specific revision of the <code>$LATEST</code> version of the bot. If you specify a checksum and the <code>$LATEST</code> version of the bot has a different checksum, a <code>PreconditionFailedException</code> exception is returned and Amazon Lex doesn't publish a new version. If you don't specify a checksum, Amazon Lex publishes the <code>$LATEST</code> version.</p>"]
-    #[serde(rename="checksum")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Identifies a specific revision of the <code>$LATEST</code> version of the bot. If you specify a checksum and the <code>$LATEST</code> version of the bot has a different checksum, a <code>PreconditionFailedException</code> exception is returned and Amazon Lex doesn't publish a new version. If you don't specify a checksum, Amazon Lex publishes the <code>$LATEST</code> version.</p>
+    #[serde(rename = "checksum")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub checksum: Option<String>,
-    #[doc="<p>The name of the bot that you want to create a new version of. The name is case sensitive. </p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the bot that you want to create a new version of. The name is case sensitive. </p>
+    #[serde(rename = "name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateBotVersionResponse {
-    #[doc="<p>The message that Amazon Lex uses to abort a conversation. For more information, see <a>PutBot</a>.</p>"]
-    #[serde(rename="abortStatement")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The message that Amazon Lex uses to abort a conversation. For more information, see <a>PutBot</a>.</p>
+    #[serde(rename = "abortStatement")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub abort_statement: Option<Statement>,
-    #[doc="<p>Checksum identifying the version of the bot that was created.</p>"]
-    #[serde(rename="checksum")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Checksum identifying the version of the bot that was created.</p>
+    #[serde(rename = "checksum")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub checksum: Option<String>,
-    #[doc="<p>For each Amazon Lex bot created with the Amazon Lex Model Building Service, you must specify whether your use of Amazon Lex is related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to the Children's Online Privacy Protection Act (COPPA) by specifying <code>true</code> or <code>false</code> in the <code>childDirected</code> field. By specifying <code>true</code> in the <code>childDirected</code> field, you confirm that your use of Amazon Lex <b>is</b> related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to COPPA. By specifying <code>false</code> in the <code>childDirected</code> field, you confirm that your use of Amazon Lex <b>is not</b> related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to COPPA. You may not specify a default value for the <code>childDirected</code> field that does not accurately reflect whether your use of Amazon Lex is related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to COPPA.</p> <p>If your use of Amazon Lex relates to a website, program, or other application that is directed in whole or in part, to children under age 13, you must obtain any required verifiable parental consent under COPPA. For information regarding the use of Amazon Lex in connection with websites, programs, or other applications that are directed or targeted, in whole or in part, to children under age 13, see the <a href=\"https://aws.amazon.com/lex/faqs#data-security\">Amazon Lex FAQ.</a> </p>"]
-    #[serde(rename="childDirected")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For each Amazon Lex bot created with the Amazon Lex Model Building Service, you must specify whether your use of Amazon Lex is related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to the Children's Online Privacy Protection Act (COPPA) by specifying <code>true</code> or <code>false</code> in the <code>childDirected</code> field. By specifying <code>true</code> in the <code>childDirected</code> field, you confirm that your use of Amazon Lex <b>is</b> related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to COPPA. By specifying <code>false</code> in the <code>childDirected</code> field, you confirm that your use of Amazon Lex <b>is not</b> related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to COPPA. You may not specify a default value for the <code>childDirected</code> field that does not accurately reflect whether your use of Amazon Lex is related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to COPPA.</p> <p>If your use of Amazon Lex relates to a website, program, or other application that is directed in whole or in part, to children under age 13, you must obtain any required verifiable parental consent under COPPA. For information regarding the use of Amazon Lex in connection with websites, programs, or other applications that are directed or targeted, in whole or in part, to children under age 13, see the <a href="https://aws.amazon.com/lex/faqs#data-security">Amazon Lex FAQ.</a> </p>
+    #[serde(rename = "childDirected")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub child_directed: Option<bool>,
-    #[doc="<p>The message that Amazon Lex uses when it doesn't understand the user's request. For more information, see <a>PutBot</a>. </p>"]
-    #[serde(rename="clarificationPrompt")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The message that Amazon Lex uses when it doesn't understand the user's request. For more information, see <a>PutBot</a>. </p>
+    #[serde(rename = "clarificationPrompt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub clarification_prompt: Option<Prompt>,
-    #[doc="<p>The date when the bot version was created.</p>"]
-    #[serde(rename="createdDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date when the bot version was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<f64>,
-    #[doc="<p>A description of the bot.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the bot.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>If <code>status</code> is <code>FAILED</code>, Amazon Lex provides the reason that it failed to build the bot.</p>"]
-    #[serde(rename="failureReason")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If <code>status</code> is <code>FAILED</code>, Amazon Lex provides the reason that it failed to build the bot.</p>
+    #[serde(rename = "failureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_reason: Option<String>,
-    #[doc="<p>The maximum time in seconds that Amazon Lex retains the data gathered in a conversation. For more information, see <a>PutBot</a>.</p>"]
-    #[serde(rename="idleSessionTTLInSeconds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum time in seconds that Amazon Lex retains the data gathered in a conversation. For more information, see <a>PutBot</a>.</p>
+    #[serde(rename = "idleSessionTTLInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub idle_session_ttl_in_seconds: Option<i64>,
-    #[doc="<p>An array of <code>Intent</code> objects. For more information, see <a>PutBot</a>.</p>"]
-    #[serde(rename="intents")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of <code>Intent</code> objects. For more information, see <a>PutBot</a>.</p>
+    #[serde(rename = "intents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub intents: Option<Vec<Intent>>,
-    #[doc="<p>The date when the <code>$LATEST</code> version of this bot was updated. </p>"]
-    #[serde(rename="lastUpdatedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date when the <code>$LATEST</code> version of this bot was updated. </p>
+    #[serde(rename = "lastUpdatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_date: Option<f64>,
-    #[doc="<p> Specifies the target locale for the bot. </p>"]
-    #[serde(rename="locale")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> Specifies the target locale for the bot. </p>
+    #[serde(rename = "locale")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub locale: Option<String>,
-    #[doc="<p>The name of the bot.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the bot.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p> When you send a request to create or update a bot, Amazon Lex sets the <code>status</code> response element to <code>BUILDING</code>. After Amazon Lex builds the bot, it sets <code>status</code> to <code>READY</code>. If Amazon Lex can't build the bot, it sets <code>status</code> to <code>FAILED</code>. Amazon Lex returns the reason for the failure in the <code>failureReason</code> response element. </p>"]
-    #[serde(rename="status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> When you send a request to create or update a bot, Amazon Lex sets the <code>status</code> response element to <code>BUILDING</code>. After Amazon Lex builds the bot, it sets <code>status</code> to <code>READY</code>. If Amazon Lex can't build the bot, it sets <code>status</code> to <code>FAILED</code>. Amazon Lex returns the reason for the failure in the <code>failureReason</code> response element. </p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The version of the bot. </p>"]
-    #[serde(rename="version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version of the bot. </p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
-    #[doc="<p>The Amazon Polly voice ID that Amazon Lex uses for voice interactions with the user.</p>"]
-    #[serde(rename="voiceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Polly voice ID that Amazon Lex uses for voice interactions with the user.</p>
+    #[serde(rename = "voiceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub voice_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateIntentVersionRequest {
-    #[doc="<p>Checksum of the <code>$LATEST</code> version of the intent that should be used to create the new version. If you specify a checksum and the <code>$LATEST</code> version of the intent has a different checksum, Amazon Lex returns a <code>PreconditionFailedException</code> exception and doesn't publish a new version. If you don't specify a checksum, Amazon Lex publishes the <code>$LATEST</code> version.</p>"]
-    #[serde(rename="checksum")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Checksum of the <code>$LATEST</code> version of the intent that should be used to create the new version. If you specify a checksum and the <code>$LATEST</code> version of the intent has a different checksum, Amazon Lex returns a <code>PreconditionFailedException</code> exception and doesn't publish a new version. If you don't specify a checksum, Amazon Lex publishes the <code>$LATEST</code> version.</p>
+    #[serde(rename = "checksum")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub checksum: Option<String>,
-    #[doc="<p>The name of the intent that you want to create a new version of. The name is case sensitive. </p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the intent that you want to create a new version of. The name is case sensitive. </p>
+    #[serde(rename = "name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateIntentVersionResponse {
-    #[doc="<p>Checksum of the intent version created.</p>"]
-    #[serde(rename="checksum")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Checksum of the intent version created.</p>
+    #[serde(rename = "checksum")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub checksum: Option<String>,
-    #[doc="<p>After the Lambda function specified in the <code>fulfillmentActivity</code> field fulfills the intent, Amazon Lex conveys this statement to the user. </p>"]
-    #[serde(rename="conclusionStatement")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>After the Lambda function specified in the <code>fulfillmentActivity</code> field fulfills the intent, Amazon Lex conveys this statement to the user. </p>
+    #[serde(rename = "conclusionStatement")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub conclusion_statement: Option<Statement>,
-    #[doc="<p>If defined, the prompt that Amazon Lex uses to confirm the user's intent before fulfilling it. </p>"]
-    #[serde(rename="confirmationPrompt")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If defined, the prompt that Amazon Lex uses to confirm the user's intent before fulfilling it. </p>
+    #[serde(rename = "confirmationPrompt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub confirmation_prompt: Option<Prompt>,
-    #[doc="<p>The date that the intent was created.</p>"]
-    #[serde(rename="createdDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the intent was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<f64>,
-    #[doc="<p>A description of the intent.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the intent.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>If defined, Amazon Lex invokes this Lambda function for each user input.</p>"]
-    #[serde(rename="dialogCodeHook")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If defined, Amazon Lex invokes this Lambda function for each user input.</p>
+    #[serde(rename = "dialogCodeHook")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub dialog_code_hook: Option<CodeHook>,
-    #[doc="<p>If defined, Amazon Lex uses this prompt to solicit additional user activity after the intent is fulfilled. </p>"]
-    #[serde(rename="followUpPrompt")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If defined, Amazon Lex uses this prompt to solicit additional user activity after the intent is fulfilled. </p>
+    #[serde(rename = "followUpPrompt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub follow_up_prompt: Option<FollowUpPrompt>,
-    #[doc="<p> Describes how the intent is fulfilled. </p>"]
-    #[serde(rename="fulfillmentActivity")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> Describes how the intent is fulfilled. </p>
+    #[serde(rename = "fulfillmentActivity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fulfillment_activity: Option<FulfillmentActivity>,
-    #[doc="<p>The date that the intent was updated. </p>"]
-    #[serde(rename="lastUpdatedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the intent was updated. </p>
+    #[serde(rename = "lastUpdatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_date: Option<f64>,
-    #[doc="<p>The name of the intent.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the intent.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>A unique identifier for a built-in intent.</p>"]
-    #[serde(rename="parentIntentSignature")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A unique identifier for a built-in intent.</p>
+    #[serde(rename = "parentIntentSignature")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parent_intent_signature: Option<String>,
-    #[doc="<p>If the user answers \"no\" to the question defined in <code>confirmationPrompt</code>, Amazon Lex responds with this statement to acknowledge that the intent was canceled. </p>"]
-    #[serde(rename="rejectionStatement")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the user answers "no" to the question defined in <code>confirmationPrompt</code>, Amazon Lex responds with this statement to acknowledge that the intent was canceled. </p>
+    #[serde(rename = "rejectionStatement")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rejection_statement: Option<Statement>,
-    #[doc="<p>An array of sample utterances configured for the intent. </p>"]
-    #[serde(rename="sampleUtterances")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of sample utterances configured for the intent. </p>
+    #[serde(rename = "sampleUtterances")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sample_utterances: Option<Vec<String>>,
-    #[doc="<p>An array of slot types that defines the information required to fulfill the intent.</p>"]
-    #[serde(rename="slots")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of slot types that defines the information required to fulfill the intent.</p>
+    #[serde(rename = "slots")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub slots: Option<Vec<Slot>>,
-    #[doc="<p>The version number assigned to the new version of the intent.</p>"]
-    #[serde(rename="version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version number assigned to the new version of the intent.</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateSlotTypeVersionRequest {
-    #[doc="<p>Checksum for the <code>$LATEST</code> version of the slot type that you want to publish. If you specify a checksum and the <code>$LATEST</code> version of the slot type has a different checksum, Amazon Lex returns a <code>PreconditionFailedException</code> exception and doesn't publish the new version. If you don't specify a checksum, Amazon Lex publishes the <code>$LATEST</code> version.</p>"]
-    #[serde(rename="checksum")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Checksum for the <code>$LATEST</code> version of the slot type that you want to publish. If you specify a checksum and the <code>$LATEST</code> version of the slot type has a different checksum, Amazon Lex returns a <code>PreconditionFailedException</code> exception and doesn't publish the new version. If you don't specify a checksum, Amazon Lex publishes the <code>$LATEST</code> version.</p>
+    #[serde(rename = "checksum")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub checksum: Option<String>,
-    #[doc="<p>The name of the slot type that you want to create a new version for. The name is case sensitive. </p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the slot type that you want to create a new version for. The name is case sensitive. </p>
+    #[serde(rename = "name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateSlotTypeVersionResponse {
-    #[doc="<p>Checksum of the <code>$LATEST</code> version of the slot type.</p>"]
-    #[serde(rename="checksum")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Checksum of the <code>$LATEST</code> version of the slot type.</p>
+    #[serde(rename = "checksum")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub checksum: Option<String>,
-    #[doc="<p>The date that the slot type was created.</p>"]
-    #[serde(rename="createdDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the slot type was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<f64>,
-    #[doc="<p>A description of the slot type.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the slot type.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>A list of <code>EnumerationValue</code> objects that defines the values that the slot type can take.</p>"]
-    #[serde(rename="enumerationValues")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of <code>EnumerationValue</code> objects that defines the values that the slot type can take.</p>
+    #[serde(rename = "enumerationValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub enumeration_values: Option<Vec<EnumerationValue>>,
-    #[doc="<p>The date that the slot type was updated. When you create a resource, the creation date and last update date are the same.</p>"]
-    #[serde(rename="lastUpdatedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the slot type was updated. When you create a resource, the creation date and last update date are the same.</p>
+    #[serde(rename = "lastUpdatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_date: Option<f64>,
-    #[doc="<p>The name of the slot type.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the slot type.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The version assigned to the new slot type version. </p>"]
-    #[serde(rename="version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version assigned to the new slot type version. </p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteBotAliasRequest {
-    #[doc="<p>The name of the bot that the alias points to.</p>"]
-    #[serde(rename="botName")]
+    /// <p>The name of the bot that the alias points to.</p>
+    #[serde(rename = "botName")]
     pub bot_name: String,
-    #[doc="<p>The name of the alias to delete. The name is case sensitive. </p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the alias to delete. The name is case sensitive. </p>
+    #[serde(rename = "name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteBotChannelAssociationRequest {
-    #[doc="<p>An alias that points to the specific version of the Amazon Lex bot to which this association is being made.</p>"]
-    #[serde(rename="botAlias")]
+    /// <p>An alias that points to the specific version of the Amazon Lex bot to which this association is being made.</p>
+    #[serde(rename = "botAlias")]
     pub bot_alias: String,
-    #[doc="<p>The name of the Amazon Lex bot.</p>"]
-    #[serde(rename="botName")]
+    /// <p>The name of the Amazon Lex bot.</p>
+    #[serde(rename = "botName")]
     pub bot_name: String,
-    #[doc="<p>The name of the association. The name is case sensitive. </p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the association. The name is case sensitive. </p>
+    #[serde(rename = "name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteBotRequest {
-    #[doc="<p>The name of the bot. The name is case sensitive. </p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the bot. The name is case sensitive. </p>
+    #[serde(rename = "name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteBotVersionRequest {
-    #[doc="<p>The name of the bot.</p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the bot.</p>
+    #[serde(rename = "name")]
     pub name: String,
-    #[doc="<p>The version of the bot to delete. You cannot delete the <code>$LATEST</code> version of the bot. To delete the <code>$LATEST</code> version, use the <a>DeleteBot</a> operation.</p>"]
-    #[serde(rename="version")]
+    /// <p>The version of the bot to delete. You cannot delete the <code>$LATEST</code> version of the bot. To delete the <code>$LATEST</code> version, use the <a>DeleteBot</a> operation.</p>
+    #[serde(rename = "version")]
     pub version: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteIntentRequest {
-    #[doc="<p>The name of the intent. The name is case sensitive. </p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the intent. The name is case sensitive. </p>
+    #[serde(rename = "name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteIntentVersionRequest {
-    #[doc="<p>The name of the intent.</p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the intent.</p>
+    #[serde(rename = "name")]
     pub name: String,
-    #[doc="<p>The version of the intent to delete. You cannot delete the <code>$LATEST</code> version of the intent. To delete the <code>$LATEST</code> version, use the <a>DeleteIntent</a> operation.</p>"]
-    #[serde(rename="version")]
+    /// <p>The version of the intent to delete. You cannot delete the <code>$LATEST</code> version of the intent. To delete the <code>$LATEST</code> version, use the <a>DeleteIntent</a> operation.</p>
+    #[serde(rename = "version")]
     pub version: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteSlotTypeRequest {
-    #[doc="<p>The name of the slot type. The name is case sensitive. </p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the slot type. The name is case sensitive. </p>
+    #[serde(rename = "name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteSlotTypeVersionRequest {
-    #[doc="<p>The name of the slot type.</p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the slot type.</p>
+    #[serde(rename = "name")]
     pub name: String,
-    #[doc="<p>The version of the slot type to delete. You cannot delete the <code>$LATEST</code> version of the slot type. To delete the <code>$LATEST</code> version, use the <a>DeleteSlotType</a> operation.</p>"]
-    #[serde(rename="version")]
+    /// <p>The version of the slot type to delete. You cannot delete the <code>$LATEST</code> version of the slot type. To delete the <code>$LATEST</code> version, use the <a>DeleteSlotType</a> operation.</p>
+    #[serde(rename = "version")]
     pub version: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteUtterancesRequest {
-    #[doc="<p>The name of the bot that stored the utterances.</p>"]
-    #[serde(rename="botName")]
+    /// <p>The name of the bot that stored the utterances.</p>
+    #[serde(rename = "botName")]
     pub bot_name: String,
-    #[doc="<p> The unique identifier for the user that made the utterances. This is the user ID that was sent in the <a href=\"http://docs.aws.amazon.com/lex/latest/dg/API_runtime_PostContent.html\">PostContent</a> or <a href=\"http://docs.aws.amazon.com/lex/latest/dg/API_runtime_PostText.html\">PostText</a> operation request that contained the utterance.</p>"]
-    #[serde(rename="userId")]
+    /// <p> The unique identifier for the user that made the utterances. This is the user ID that was sent in the <a href="http://docs.aws.amazon.com/lex/latest/dg/API_runtime_PostContent.html">PostContent</a> or <a href="http://docs.aws.amazon.com/lex/latest/dg/API_runtime_PostText.html">PostText</a> operation request that contained the utterance.</p>
+    #[serde(rename = "userId")]
     pub user_id: String,
 }
 
-#[doc="<p>Each slot type can have a set of values. Each enumeration value represents a value the slot type can take. </p> <p>For example, a pizza ordering bot could have a slot type that specifies the type of crust that the pizza should have. The slot type could include the values </p> <ul> <li> <p>thick</p> </li> <li> <p>thin</p> </li> <li> <p>stuffed</p> </li> </ul>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Each slot type can have a set of values. Each enumeration value represents a value the slot type can take. </p> <p>For example, a pizza ordering bot could have a slot type that specifies the type of crust that the pizza should have. The slot type could include the values </p> <ul> <li> <p>thick</p> </li> <li> <p>thin</p> </li> <li> <p>stuffed</p> </li> </ul>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct EnumerationValue {
-    #[doc="<p>The value of the slot type.</p>"]
-    #[serde(rename="value")]
+    /// <p>The value of the slot type.</p>
+    #[serde(rename = "value")]
     pub value: String,
 }
 
-#[doc="<p>A prompt for additional activity after an intent is fulfilled. For example, after the <code>OrderPizza</code> intent is fulfilled, you might prompt the user to find out whether the user wants to order drinks.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>A prompt for additional activity after an intent is fulfilled. For example, after the <code>OrderPizza</code> intent is fulfilled, you might prompt the user to find out whether the user wants to order drinks.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct FollowUpPrompt {
-    #[doc="<p>Prompts for information from the user. </p>"]
-    #[serde(rename="prompt")]
+    /// <p>Prompts for information from the user. </p>
+    #[serde(rename = "prompt")]
     pub prompt: Prompt,
-    #[doc="<p>If the user answers \"no\" to the question defined in the <code>prompt</code> field, Amazon Lex responds with this statement to acknowledge that the intent was canceled. </p>"]
-    #[serde(rename="rejectionStatement")]
+    /// <p>If the user answers "no" to the question defined in the <code>prompt</code> field, Amazon Lex responds with this statement to acknowledge that the intent was canceled. </p>
+    #[serde(rename = "rejectionStatement")]
     pub rejection_statement: Statement,
 }
 
-#[doc="<p> Describes how the intent is fulfilled after the user provides all of the information required for the intent. You can provide a Lambda function to process the intent, or you can return the intent information to the client application. We recommend that you use a Lambda function so that the relevant logic lives in the Cloud and limit the client-side code primarily to presentation. If you need to update the logic, you only update the Lambda function; you don't need to upgrade your client application. </p> <p>Consider the following examples:</p> <ul> <li> <p>In a pizza ordering application, after the user provides all of the information for placing an order, you use a Lambda function to place an order with a pizzeria. </p> </li> <li> <p>In a gaming application, when a user says \"pick up a rock,\" this information must go back to the client application so that it can perform the operation and update the graphics. In this case, you want Amazon Lex to return the intent data to the client. </p> </li> </ul>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p> Describes how the intent is fulfilled after the user provides all of the information required for the intent. You can provide a Lambda function to process the intent, or you can return the intent information to the client application. We recommend that you use a Lambda function so that the relevant logic lives in the Cloud and limit the client-side code primarily to presentation. If you need to update the logic, you only update the Lambda function; you don't need to upgrade your client application. </p> <p>Consider the following examples:</p> <ul> <li> <p>In a pizza ordering application, after the user provides all of the information for placing an order, you use a Lambda function to place an order with a pizzeria. </p> </li> <li> <p>In a gaming application, when a user says "pick up a rock," this information must go back to the client application so that it can perform the operation and update the graphics. In this case, you want Amazon Lex to return the intent data to the client. </p> </li> </ul>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct FulfillmentActivity {
-    #[doc="<p> A description of the Lambda function that is run to fulfill the intent. </p>"]
-    #[serde(rename="codeHook")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> A description of the Lambda function that is run to fulfill the intent. </p>
+    #[serde(rename = "codeHook")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub code_hook: Option<CodeHook>,
-    #[doc="<p> How the intent should be fulfilled, either by running a Lambda function or by returning the slot data to the client application. </p>"]
-    #[serde(rename="type")]
+    /// <p> How the intent should be fulfilled, either by running a Lambda function or by returning the slot data to the client application. </p>
+    #[serde(rename = "type")]
     pub type_: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetBotAliasRequest {
-    #[doc="<p>The name of the bot.</p>"]
-    #[serde(rename="botName")]
+    /// <p>The name of the bot.</p>
+    #[serde(rename = "botName")]
     pub bot_name: String,
-    #[doc="<p>The name of the bot alias. The name is case sensitive.</p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the bot alias. The name is case sensitive.</p>
+    #[serde(rename = "name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetBotAliasResponse {
-    #[doc="<p>The name of the bot that the alias points to.</p>"]
-    #[serde(rename="botName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the bot that the alias points to.</p>
+    #[serde(rename = "botName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bot_name: Option<String>,
-    #[doc="<p>The version of the bot that the alias points to.</p>"]
-    #[serde(rename="botVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version of the bot that the alias points to.</p>
+    #[serde(rename = "botVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bot_version: Option<String>,
-    #[doc="<p>Checksum of the bot alias.</p>"]
-    #[serde(rename="checksum")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Checksum of the bot alias.</p>
+    #[serde(rename = "checksum")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub checksum: Option<String>,
-    #[doc="<p>The date that the bot alias was created.</p>"]
-    #[serde(rename="createdDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the bot alias was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<f64>,
-    #[doc="<p>A description of the bot alias.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the bot alias.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The date that the bot alias was updated. When you create a resource, the creation date and the last updated date are the same.</p>"]
-    #[serde(rename="lastUpdatedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the bot alias was updated. When you create a resource, the creation date and the last updated date are the same.</p>
+    #[serde(rename = "lastUpdatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_date: Option<f64>,
-    #[doc="<p>The name of the bot alias.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the bot alias.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetBotAliasesRequest {
-    #[doc="<p>The name of the bot.</p>"]
-    #[serde(rename="botName")]
+    /// <p>The name of the bot.</p>
+    #[serde(rename = "botName")]
     pub bot_name: String,
-    #[doc="<p>The maximum number of aliases to return in the response. The default is 50. . </p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of aliases to return in the response. The default is 50. . </p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>Substring to match in bot alias names. An alias will be returned if any part of its name matches the substring. For example, \"xyz\" matches both \"xyzabc\" and \"abcxyz.\"</p>"]
-    #[serde(rename="nameContains")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Substring to match in bot alias names. An alias will be returned if any part of its name matches the substring. For example, "xyz" matches both "xyzabc" and "abcxyz."</p>
+    #[serde(rename = "nameContains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name_contains: Option<String>,
-    #[doc="<p>A pagination token for fetching the next page of aliases. If the response to this call is truncated, Amazon Lex returns a pagination token in the response. To fetch the next page of aliases, specify the pagination token in the next request. </p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A pagination token for fetching the next page of aliases. If the response to this call is truncated, Amazon Lex returns a pagination token in the response. To fetch the next page of aliases, specify the pagination token in the next request. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetBotAliasesResponse {
-    #[doc="<p>An array of <code>BotAliasMetadata</code> objects, each describing a bot alias.</p>"]
-    #[serde(rename="BotAliases")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of <code>BotAliasMetadata</code> objects, each describing a bot alias.</p>
+    #[serde(rename = "BotAliases")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bot_aliases: Option<Vec<BotAliasMetadata>>,
-    #[doc="<p>A pagination token for fetching next page of aliases. If the response to this call is truncated, Amazon Lex returns a pagination token in the response. To fetch the next page of aliases, specify the pagination token in the next request. </p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A pagination token for fetching next page of aliases. If the response to this call is truncated, Amazon Lex returns a pagination token in the response. To fetch the next page of aliases, specify the pagination token in the next request. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetBotChannelAssociationRequest {
-    #[doc="<p>An alias pointing to the specific version of the Amazon Lex bot to which this association is being made.</p>"]
-    #[serde(rename="botAlias")]
+    /// <p>An alias pointing to the specific version of the Amazon Lex bot to which this association is being made.</p>
+    #[serde(rename = "botAlias")]
     pub bot_alias: String,
-    #[doc="<p>The name of the Amazon Lex bot.</p>"]
-    #[serde(rename="botName")]
+    /// <p>The name of the Amazon Lex bot.</p>
+    #[serde(rename = "botName")]
     pub bot_name: String,
-    #[doc="<p>The name of the association between the bot and the channel. The name is case sensitive. </p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the association between the bot and the channel. The name is case sensitive. </p>
+    #[serde(rename = "name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetBotChannelAssociationResponse {
-    #[doc="<p>An alias pointing to the specific version of the Amazon Lex bot to which this association is being made.</p>"]
-    #[serde(rename="botAlias")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An alias pointing to the specific version of the Amazon Lex bot to which this association is being made.</p>
+    #[serde(rename = "botAlias")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bot_alias: Option<String>,
-    #[doc="<p>Provides information that the messaging platform needs to communicate with the Amazon Lex bot.</p>"]
-    #[serde(rename="botConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Provides information that the messaging platform needs to communicate with the Amazon Lex bot.</p>
+    #[serde(rename = "botConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bot_configuration: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The name of the Amazon Lex bot.</p>"]
-    #[serde(rename="botName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the Amazon Lex bot.</p>
+    #[serde(rename = "botName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bot_name: Option<String>,
-    #[doc="<p>The date that the association between the bot and the channel was created.</p>"]
-    #[serde(rename="createdDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the association between the bot and the channel was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<f64>,
-    #[doc="<p>A description of the association between the bot and the channel.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the association between the bot and the channel.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The name of the association between the bot and the channel.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the association between the bot and the channel.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The type of the messaging platform.</p>"]
-    #[serde(rename="type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of the messaging platform.</p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetBotChannelAssociationsRequest {
-    #[doc="<p>An alias pointing to the specific version of the Amazon Lex bot to which this association is being made.</p>"]
-    #[serde(rename="botAlias")]
+    /// <p>An alias pointing to the specific version of the Amazon Lex bot to which this association is being made.</p>
+    #[serde(rename = "botAlias")]
     pub bot_alias: String,
-    #[doc="<p>The name of the Amazon Lex bot in the association.</p>"]
-    #[serde(rename="botName")]
+    /// <p>The name of the Amazon Lex bot in the association.</p>
+    #[serde(rename = "botName")]
     pub bot_name: String,
-    #[doc="<p>The maximum number of associations to return in the response. The default is 50. </p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of associations to return in the response. The default is 50. </p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>Substring to match in channel association names. An association will be returned if any part of its name matches the substring. For example, \"xyz\" matches both \"xyzabc\" and \"abcxyz.\" To return all bot channel associations, use a hyphen (\"-\") as the <code>nameContains</code> parameter.</p>"]
-    #[serde(rename="nameContains")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Substring to match in channel association names. An association will be returned if any part of its name matches the substring. For example, "xyz" matches both "xyzabc" and "abcxyz." To return all bot channel associations, use a hyphen ("-") as the <code>nameContains</code> parameter.</p>
+    #[serde(rename = "nameContains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name_contains: Option<String>,
-    #[doc="<p>A pagination token for fetching the next page of associations. If the response to this call is truncated, Amazon Lex returns a pagination token in the response. To fetch the next page of associations, specify the pagination token in the next request. </p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A pagination token for fetching the next page of associations. If the response to this call is truncated, Amazon Lex returns a pagination token in the response. To fetch the next page of associations, specify the pagination token in the next request. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetBotChannelAssociationsResponse {
-    #[doc="<p>An array of objects, one for each association, that provides information about the Amazon Lex bot and its association with the channel. </p>"]
-    #[serde(rename="botChannelAssociations")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of objects, one for each association, that provides information about the Amazon Lex bot and its association with the channel. </p>
+    #[serde(rename = "botChannelAssociations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bot_channel_associations: Option<Vec<BotChannelAssociation>>,
-    #[doc="<p>A pagination token that fetches the next page of associations. If the response to this call is truncated, Amazon Lex returns a pagination token in the response. To fetch the next page of associations, specify the pagination token in the next request. </p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A pagination token that fetches the next page of associations. If the response to this call is truncated, Amazon Lex returns a pagination token in the response. To fetch the next page of associations, specify the pagination token in the next request. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetBotRequest {
-    #[doc="<p>The name of the bot. The name is case sensitive. </p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the bot. The name is case sensitive. </p>
+    #[serde(rename = "name")]
     pub name: String,
-    #[doc="<p>The version or alias of the bot.</p>"]
-    #[serde(rename="versionOrAlias")]
+    /// <p>The version or alias of the bot.</p>
+    #[serde(rename = "versionOrAlias")]
     pub version_or_alias: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetBotResponse {
-    #[doc="<p>The message that Amazon Lex returns when the user elects to end the conversation without completing it. For more information, see <a>PutBot</a>.</p>"]
-    #[serde(rename="abortStatement")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The message that Amazon Lex returns when the user elects to end the conversation without completing it. For more information, see <a>PutBot</a>.</p>
+    #[serde(rename = "abortStatement")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub abort_statement: Option<Statement>,
-    #[doc="<p>Checksum of the bot used to identify a specific revision of the bot's <code>$LATEST</code> version.</p>"]
-    #[serde(rename="checksum")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Checksum of the bot used to identify a specific revision of the bot's <code>$LATEST</code> version.</p>
+    #[serde(rename = "checksum")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub checksum: Option<String>,
-    #[doc="<p>For each Amazon Lex bot created with the Amazon Lex Model Building Service, you must specify whether your use of Amazon Lex is related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to the Children's Online Privacy Protection Act (COPPA) by specifying <code>true</code> or <code>false</code> in the <code>childDirected</code> field. By specifying <code>true</code> in the <code>childDirected</code> field, you confirm that your use of Amazon Lex <b>is</b> related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to COPPA. By specifying <code>false</code> in the <code>childDirected</code> field, you confirm that your use of Amazon Lex <b>is not</b> related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to COPPA. You may not specify a default value for the <code>childDirected</code> field that does not accurately reflect whether your use of Amazon Lex is related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to COPPA.</p> <p>If your use of Amazon Lex relates to a website, program, or other application that is directed in whole or in part, to children under age 13, you must obtain any required verifiable parental consent under COPPA. For information regarding the use of Amazon Lex in connection with websites, programs, or other applications that are directed or targeted, in whole or in part, to children under age 13, see the <a href=\"https://aws.amazon.com/lex/faqs#data-security\">Amazon Lex FAQ.</a> </p>"]
-    #[serde(rename="childDirected")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For each Amazon Lex bot created with the Amazon Lex Model Building Service, you must specify whether your use of Amazon Lex is related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to the Children's Online Privacy Protection Act (COPPA) by specifying <code>true</code> or <code>false</code> in the <code>childDirected</code> field. By specifying <code>true</code> in the <code>childDirected</code> field, you confirm that your use of Amazon Lex <b>is</b> related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to COPPA. By specifying <code>false</code> in the <code>childDirected</code> field, you confirm that your use of Amazon Lex <b>is not</b> related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to COPPA. You may not specify a default value for the <code>childDirected</code> field that does not accurately reflect whether your use of Amazon Lex is related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to COPPA.</p> <p>If your use of Amazon Lex relates to a website, program, or other application that is directed in whole or in part, to children under age 13, you must obtain any required verifiable parental consent under COPPA. For information regarding the use of Amazon Lex in connection with websites, programs, or other applications that are directed or targeted, in whole or in part, to children under age 13, see the <a href="https://aws.amazon.com/lex/faqs#data-security">Amazon Lex FAQ.</a> </p>
+    #[serde(rename = "childDirected")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub child_directed: Option<bool>,
-    #[doc="<p>The message Amazon Lex uses when it doesn't understand the user's request. For more information, see <a>PutBot</a>. </p>"]
-    #[serde(rename="clarificationPrompt")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The message Amazon Lex uses when it doesn't understand the user's request. For more information, see <a>PutBot</a>. </p>
+    #[serde(rename = "clarificationPrompt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub clarification_prompt: Option<Prompt>,
-    #[doc="<p>The date that the bot was created.</p>"]
-    #[serde(rename="createdDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the bot was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<f64>,
-    #[doc="<p>A description of the bot.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the bot.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>If <code>status</code> is <code>FAILED</code>, Amazon Lex explains why it failed to build the bot.</p>"]
-    #[serde(rename="failureReason")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If <code>status</code> is <code>FAILED</code>, Amazon Lex explains why it failed to build the bot.</p>
+    #[serde(rename = "failureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_reason: Option<String>,
-    #[doc="<p>The maximum time in seconds that Amazon Lex retains the data gathered in a conversation. For more information, see <a>PutBot</a>.</p>"]
-    #[serde(rename="idleSessionTTLInSeconds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum time in seconds that Amazon Lex retains the data gathered in a conversation. For more information, see <a>PutBot</a>.</p>
+    #[serde(rename = "idleSessionTTLInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub idle_session_ttl_in_seconds: Option<i64>,
-    #[doc="<p>An array of <code>intent</code> objects. For more information, see <a>PutBot</a>.</p>"]
-    #[serde(rename="intents")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of <code>intent</code> objects. For more information, see <a>PutBot</a>.</p>
+    #[serde(rename = "intents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub intents: Option<Vec<Intent>>,
-    #[doc="<p>The date that the bot was updated. When you create a resource, the creation date and last updated date are the same. </p>"]
-    #[serde(rename="lastUpdatedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the bot was updated. When you create a resource, the creation date and last updated date are the same. </p>
+    #[serde(rename = "lastUpdatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_date: Option<f64>,
-    #[doc="<p> The target locale for the bot. </p>"]
-    #[serde(rename="locale")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The target locale for the bot. </p>
+    #[serde(rename = "locale")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub locale: Option<String>,
-    #[doc="<p>The name of the bot.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the bot.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The status of the bot. If the bot is ready to run, the status is <code>READY</code>. If there was a problem with building the bot, the status is <code>FAILED</code> and the <code>failureReason</code> explains why the bot did not build. If the bot was saved but not built, the status is <code>NOT BUILT</code>.</p>"]
-    #[serde(rename="status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the bot. If the bot is ready to run, the status is <code>READY</code>. If there was a problem with building the bot, the status is <code>FAILED</code> and the <code>failureReason</code> explains why the bot did not build. If the bot was saved but not built, the status is <code>NOT BUILT</code>.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The version of the bot. For a new bot, the version is always <code>$LATEST</code>.</p>"]
-    #[serde(rename="version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version of the bot. For a new bot, the version is always <code>$LATEST</code>.</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
-    #[doc="<p>The Amazon Polly voice ID that Amazon Lex uses for voice interaction with the user. For more information, see <a>PutBot</a>.</p>"]
-    #[serde(rename="voiceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Polly voice ID that Amazon Lex uses for voice interaction with the user. For more information, see <a>PutBot</a>.</p>
+    #[serde(rename = "voiceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub voice_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetBotVersionsRequest {
-    #[doc="<p>The maximum number of bot versions to return in the response. The default is 10.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of bot versions to return in the response. The default is 10.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The name of the bot for which versions should be returned.</p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the bot for which versions should be returned.</p>
+    #[serde(rename = "name")]
     pub name: String,
-    #[doc="<p>A pagination token for fetching the next page of bot versions. If the response to this call is truncated, Amazon Lex returns a pagination token in the response. To fetch the next page of versions, specify the pagination token in the next request. </p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A pagination token for fetching the next page of bot versions. If the response to this call is truncated, Amazon Lex returns a pagination token in the response. To fetch the next page of versions, specify the pagination token in the next request. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetBotVersionsResponse {
-    #[doc="<p>An array of <code>BotMetadata</code> objects, one for each numbered version of the bot plus one for the <code>$LATEST</code> version.</p>"]
-    #[serde(rename="bots")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of <code>BotMetadata</code> objects, one for each numbered version of the bot plus one for the <code>$LATEST</code> version.</p>
+    #[serde(rename = "bots")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bots: Option<Vec<BotMetadata>>,
-    #[doc="<p>A pagination token for fetching the next page of bot versions. If the response to this call is truncated, Amazon Lex returns a pagination token in the response. To fetch the next page of versions, specify the pagination token in the next request. </p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A pagination token for fetching the next page of bot versions. If the response to this call is truncated, Amazon Lex returns a pagination token in the response. To fetch the next page of versions, specify the pagination token in the next request. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetBotsRequest {
-    #[doc="<p>The maximum number of bots to return in the response that the request will return. The default is 10.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of bots to return in the response that the request will return. The default is 10.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>Substring to match in bot names. A bot will be returned if any part of its name matches the substring. For example, \"xyz\" matches both \"xyzabc\" and \"abcxyz.\"</p>"]
-    #[serde(rename="nameContains")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Substring to match in bot names. A bot will be returned if any part of its name matches the substring. For example, "xyz" matches both "xyzabc" and "abcxyz."</p>
+    #[serde(rename = "nameContains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name_contains: Option<String>,
-    #[doc="<p>A pagination token that fetches the next page of bots. If the response to this call is truncated, Amazon Lex returns a pagination token in the response. To fetch the next page of bots, specify the pagination token in the next request. </p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A pagination token that fetches the next page of bots. If the response to this call is truncated, Amazon Lex returns a pagination token in the response. To fetch the next page of bots, specify the pagination token in the next request. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetBotsResponse {
-    #[doc="<p>An array of <code>botMetadata</code> objects, with one entry for each bot. </p>"]
-    #[serde(rename="bots")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of <code>botMetadata</code> objects, with one entry for each bot. </p>
+    #[serde(rename = "bots")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bots: Option<Vec<BotMetadata>>,
-    #[doc="<p>If the response is truncated, it includes a pagination token that you can specify in your next request to fetch the next page of bots. </p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the response is truncated, it includes a pagination token that you can specify in your next request to fetch the next page of bots. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetBuiltinIntentRequest {
-    #[doc="<p>The unique identifier for a built-in intent. To find the signature for an intent, see <a href=\"https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/standard-intents\">Standard Built-in Intents</a> in the <i>Alexa Skills Kit</i>.</p>"]
-    #[serde(rename="signature")]
+    /// <p>The unique identifier for a built-in intent. To find the signature for an intent, see <a href="https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/standard-intents">Standard Built-in Intents</a> in the <i>Alexa Skills Kit</i>.</p>
+    #[serde(rename = "signature")]
     pub signature: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetBuiltinIntentResponse {
-    #[doc="<p>The unique identifier for a built-in intent.</p>"]
-    #[serde(rename="signature")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique identifier for a built-in intent.</p>
+    #[serde(rename = "signature")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub signature: Option<String>,
-    #[doc="<p>An array of <code>BuiltinIntentSlot</code> objects, one entry for each slot type in the intent.</p>"]
-    #[serde(rename="slots")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of <code>BuiltinIntentSlot</code> objects, one entry for each slot type in the intent.</p>
+    #[serde(rename = "slots")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub slots: Option<Vec<BuiltinIntentSlot>>,
-    #[doc="<p>A list of locales that the intent supports.</p>"]
-    #[serde(rename="supportedLocales")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of locales that the intent supports.</p>
+    #[serde(rename = "supportedLocales")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub supported_locales: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetBuiltinIntentsRequest {
-    #[doc="<p>A list of locales that the intent supports.</p>"]
-    #[serde(rename="locale")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of locales that the intent supports.</p>
+    #[serde(rename = "locale")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub locale: Option<String>,
-    #[doc="<p>The maximum number of intents to return in the response. The default is 10.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of intents to return in the response. The default is 10.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>A pagination token that fetches the next page of intents. If this API call is truncated, Amazon Lex returns a pagination token in the response. To fetch the next page of intents, use the pagination token in the next request.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A pagination token that fetches the next page of intents. If this API call is truncated, Amazon Lex returns a pagination token in the response. To fetch the next page of intents, use the pagination token in the next request.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Substring to match in built-in intent signatures. An intent will be returned if any part of its signature matches the substring. For example, \"xyz\" matches both \"xyzabc\" and \"abcxyz.\" To find the signature for an intent, see <a href=\"https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/standard-intents\">Standard Built-in Intents</a> in the <i>Alexa Skills Kit</i>.</p>"]
-    #[serde(rename="signatureContains")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Substring to match in built-in intent signatures. An intent will be returned if any part of its signature matches the substring. For example, "xyz" matches both "xyzabc" and "abcxyz." To find the signature for an intent, see <a href="https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/standard-intents">Standard Built-in Intents</a> in the <i>Alexa Skills Kit</i>.</p>
+    #[serde(rename = "signatureContains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub signature_contains: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetBuiltinIntentsResponse {
-    #[doc="<p>An array of <code>builtinIntentMetadata</code> objects, one for each intent in the response.</p>"]
-    #[serde(rename="intents")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of <code>builtinIntentMetadata</code> objects, one for each intent in the response.</p>
+    #[serde(rename = "intents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub intents: Option<Vec<BuiltinIntentMetadata>>,
-    #[doc="<p>A pagination token that fetches the next page of intents. If the response to this API call is truncated, Amazon Lex returns a pagination token in the response. To fetch the next page of intents, specify the pagination token in the next request.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A pagination token that fetches the next page of intents. If the response to this API call is truncated, Amazon Lex returns a pagination token in the response. To fetch the next page of intents, specify the pagination token in the next request.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetBuiltinSlotTypesRequest {
-    #[doc="<p>A list of locales that the slot type supports.</p>"]
-    #[serde(rename="locale")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of locales that the slot type supports.</p>
+    #[serde(rename = "locale")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub locale: Option<String>,
-    #[doc="<p>The maximum number of slot types to return in the response. The default is 10.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of slot types to return in the response. The default is 10.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>A pagination token that fetches the next page of slot types. If the response to this API call is truncated, Amazon Lex returns a pagination token in the response. To fetch the next page of slot types, specify the pagination token in the next request.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A pagination token that fetches the next page of slot types. If the response to this API call is truncated, Amazon Lex returns a pagination token in the response. To fetch the next page of slot types, specify the pagination token in the next request.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Substring to match in built-in slot type signatures. A slot type will be returned if any part of its signature matches the substring. For example, \"xyz\" matches both \"xyzabc\" and \"abcxyz.\"</p>"]
-    #[serde(rename="signatureContains")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Substring to match in built-in slot type signatures. A slot type will be returned if any part of its signature matches the substring. For example, "xyz" matches both "xyzabc" and "abcxyz."</p>
+    #[serde(rename = "signatureContains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub signature_contains: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetBuiltinSlotTypesResponse {
-    #[doc="<p>If the response is truncated, the response includes a pagination token that you can use in your next request to fetch the next page of slot types.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the response is truncated, the response includes a pagination token that you can use in your next request to fetch the next page of slot types.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>An array of <code>BuiltInSlotTypeMetadata</code> objects, one entry for each slot type returned.</p>"]
-    #[serde(rename="slotTypes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of <code>BuiltInSlotTypeMetadata</code> objects, one entry for each slot type returned.</p>
+    #[serde(rename = "slotTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub slot_types: Option<Vec<BuiltinSlotTypeMetadata>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetIntentRequest {
-    #[doc="<p>The name of the intent. The name is case sensitive. </p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the intent. The name is case sensitive. </p>
+    #[serde(rename = "name")]
     pub name: String,
-    #[doc="<p>The version of the intent.</p>"]
-    #[serde(rename="version")]
+    /// <p>The version of the intent.</p>
+    #[serde(rename = "version")]
     pub version: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetIntentResponse {
-    #[doc="<p>Checksum of the intent.</p>"]
-    #[serde(rename="checksum")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Checksum of the intent.</p>
+    #[serde(rename = "checksum")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub checksum: Option<String>,
-    #[doc="<p>After the Lambda function specified in the <code>fulfillmentActivity</code> element fulfills the intent, Amazon Lex conveys this statement to the user.</p>"]
-    #[serde(rename="conclusionStatement")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>After the Lambda function specified in the <code>fulfillmentActivity</code> element fulfills the intent, Amazon Lex conveys this statement to the user.</p>
+    #[serde(rename = "conclusionStatement")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub conclusion_statement: Option<Statement>,
-    #[doc="<p>If defined in the bot, Amazon Lex uses prompt to confirm the intent before fulfilling the user's request. For more information, see <a>PutIntent</a>. </p>"]
-    #[serde(rename="confirmationPrompt")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If defined in the bot, Amazon Lex uses prompt to confirm the intent before fulfilling the user's request. For more information, see <a>PutIntent</a>. </p>
+    #[serde(rename = "confirmationPrompt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub confirmation_prompt: Option<Prompt>,
-    #[doc="<p>The date that the intent was created.</p>"]
-    #[serde(rename="createdDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the intent was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<f64>,
-    #[doc="<p>A description of the intent.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the intent.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>If defined in the bot, Amazon Amazon Lex invokes this Lambda function for each user input. For more information, see <a>PutIntent</a>. </p>"]
-    #[serde(rename="dialogCodeHook")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If defined in the bot, Amazon Amazon Lex invokes this Lambda function for each user input. For more information, see <a>PutIntent</a>. </p>
+    #[serde(rename = "dialogCodeHook")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub dialog_code_hook: Option<CodeHook>,
-    #[doc="<p>If defined in the bot, Amazon Lex uses this prompt to solicit additional user activity after the intent is fulfilled. For more information, see <a>PutIntent</a>.</p>"]
-    #[serde(rename="followUpPrompt")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If defined in the bot, Amazon Lex uses this prompt to solicit additional user activity after the intent is fulfilled. For more information, see <a>PutIntent</a>.</p>
+    #[serde(rename = "followUpPrompt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub follow_up_prompt: Option<FollowUpPrompt>,
-    #[doc="<p>Describes how the intent is fulfilled. For more information, see <a>PutIntent</a>. </p>"]
-    #[serde(rename="fulfillmentActivity")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Describes how the intent is fulfilled. For more information, see <a>PutIntent</a>. </p>
+    #[serde(rename = "fulfillmentActivity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fulfillment_activity: Option<FulfillmentActivity>,
-    #[doc="<p>The date that the intent was updated. When you create a resource, the creation date and the last updated date are the same. </p>"]
-    #[serde(rename="lastUpdatedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the intent was updated. When you create a resource, the creation date and the last updated date are the same. </p>
+    #[serde(rename = "lastUpdatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_date: Option<f64>,
-    #[doc="<p>The name of the intent.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the intent.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>A unique identifier for a built-in intent.</p>"]
-    #[serde(rename="parentIntentSignature")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A unique identifier for a built-in intent.</p>
+    #[serde(rename = "parentIntentSignature")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parent_intent_signature: Option<String>,
-    #[doc="<p>If the user answers \"no\" to the question defined in <code>confirmationPrompt</code>, Amazon Lex responds with this statement to acknowledge that the intent was canceled. </p>"]
-    #[serde(rename="rejectionStatement")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the user answers "no" to the question defined in <code>confirmationPrompt</code>, Amazon Lex responds with this statement to acknowledge that the intent was canceled. </p>
+    #[serde(rename = "rejectionStatement")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rejection_statement: Option<Statement>,
-    #[doc="<p>An array of sample utterances configured for the intent.</p>"]
-    #[serde(rename="sampleUtterances")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of sample utterances configured for the intent.</p>
+    #[serde(rename = "sampleUtterances")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sample_utterances: Option<Vec<String>>,
-    #[doc="<p>An array of intent slots configured for the intent.</p>"]
-    #[serde(rename="slots")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of intent slots configured for the intent.</p>
+    #[serde(rename = "slots")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub slots: Option<Vec<Slot>>,
-    #[doc="<p>The version of the intent.</p>"]
-    #[serde(rename="version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version of the intent.</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetIntentVersionsRequest {
-    #[doc="<p>The maximum number of intent versions to return in the response. The default is 10.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of intent versions to return in the response. The default is 10.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The name of the intent for which versions should be returned.</p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the intent for which versions should be returned.</p>
+    #[serde(rename = "name")]
     pub name: String,
-    #[doc="<p>A pagination token for fetching the next page of intent versions. If the response to this call is truncated, Amazon Lex returns a pagination token in the response. To fetch the next page of versions, specify the pagination token in the next request. </p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A pagination token for fetching the next page of intent versions. If the response to this call is truncated, Amazon Lex returns a pagination token in the response. To fetch the next page of versions, specify the pagination token in the next request. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetIntentVersionsResponse {
-    #[doc="<p>An array of <code>IntentMetadata</code> objects, one for each numbered version of the intent plus one for the <code>$LATEST</code> version.</p>"]
-    #[serde(rename="intents")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of <code>IntentMetadata</code> objects, one for each numbered version of the intent plus one for the <code>$LATEST</code> version.</p>
+    #[serde(rename = "intents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub intents: Option<Vec<IntentMetadata>>,
-    #[doc="<p>A pagination token for fetching the next page of intent versions. If the response to this call is truncated, Amazon Lex returns a pagination token in the response. To fetch the next page of versions, specify the pagination token in the next request. </p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A pagination token for fetching the next page of intent versions. If the response to this call is truncated, Amazon Lex returns a pagination token in the response. To fetch the next page of versions, specify the pagination token in the next request. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetIntentsRequest {
-    #[doc="<p>The maximum number of intents to return in the response. The default is 10.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of intents to return in the response. The default is 10.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>Substring to match in intent names. An intent will be returned if any part of its name matches the substring. For example, \"xyz\" matches both \"xyzabc\" and \"abcxyz.\"</p>"]
-    #[serde(rename="nameContains")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Substring to match in intent names. An intent will be returned if any part of its name matches the substring. For example, "xyz" matches both "xyzabc" and "abcxyz."</p>
+    #[serde(rename = "nameContains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name_contains: Option<String>,
-    #[doc="<p>A pagination token that fetches the next page of intents. If the response to this API call is truncated, Amazon Lex returns a pagination token in the response. To fetch the next page of intents, specify the pagination token in the next request. </p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A pagination token that fetches the next page of intents. If the response to this API call is truncated, Amazon Lex returns a pagination token in the response. To fetch the next page of intents, specify the pagination token in the next request. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetIntentsResponse {
-    #[doc="<p>An array of <code>Intent</code> objects. For more information, see <a>PutBot</a>.</p>"]
-    #[serde(rename="intents")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of <code>Intent</code> objects. For more information, see <a>PutBot</a>.</p>
+    #[serde(rename = "intents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub intents: Option<Vec<IntentMetadata>>,
-    #[doc="<p>If the response is truncated, the response includes a pagination token that you can specify in your next request to fetch the next page of intents. </p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the response is truncated, the response includes a pagination token that you can specify in your next request to fetch the next page of intents. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetSlotTypeRequest {
-    #[doc="<p>The name of the slot type. The name is case sensitive. </p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the slot type. The name is case sensitive. </p>
+    #[serde(rename = "name")]
     pub name: String,
-    #[doc="<p>The version of the slot type. </p>"]
-    #[serde(rename="version")]
+    /// <p>The version of the slot type. </p>
+    #[serde(rename = "version")]
     pub version: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetSlotTypeResponse {
-    #[doc="<p>Checksum of the <code>$LATEST</code> version of the slot type.</p>"]
-    #[serde(rename="checksum")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Checksum of the <code>$LATEST</code> version of the slot type.</p>
+    #[serde(rename = "checksum")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub checksum: Option<String>,
-    #[doc="<p>The date that the slot type was created.</p>"]
-    #[serde(rename="createdDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the slot type was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<f64>,
-    #[doc="<p>A description of the slot type.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the slot type.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>A list of <code>EnumerationValue</code> objects that defines the values that the slot type can take.</p>"]
-    #[serde(rename="enumerationValues")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of <code>EnumerationValue</code> objects that defines the values that the slot type can take.</p>
+    #[serde(rename = "enumerationValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub enumeration_values: Option<Vec<EnumerationValue>>,
-    #[doc="<p>The date that the slot type was updated. When you create a resource, the creation date and last update date are the same.</p>"]
-    #[serde(rename="lastUpdatedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the slot type was updated. When you create a resource, the creation date and last update date are the same.</p>
+    #[serde(rename = "lastUpdatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_date: Option<f64>,
-    #[doc="<p>The name of the slot type.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the slot type.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The version of the slot type.</p>"]
-    #[serde(rename="version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version of the slot type.</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetSlotTypeVersionsRequest {
-    #[doc="<p>The maximum number of slot type versions to return in the response. The default is 10.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of slot type versions to return in the response. The default is 10.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The name of the slot type for which versions should be returned.</p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the slot type for which versions should be returned.</p>
+    #[serde(rename = "name")]
     pub name: String,
-    #[doc="<p>A pagination token for fetching the next page of slot type versions. If the response to this call is truncated, Amazon Lex returns a pagination token in the response. To fetch the next page of versions, specify the pagination token in the next request. </p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A pagination token for fetching the next page of slot type versions. If the response to this call is truncated, Amazon Lex returns a pagination token in the response. To fetch the next page of versions, specify the pagination token in the next request. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetSlotTypeVersionsResponse {
-    #[doc="<p>A pagination token for fetching the next page of slot type versions. If the response to this call is truncated, Amazon Lex returns a pagination token in the response. To fetch the next page of versions, specify the pagination token in the next request. </p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A pagination token for fetching the next page of slot type versions. If the response to this call is truncated, Amazon Lex returns a pagination token in the response. To fetch the next page of versions, specify the pagination token in the next request. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>An array of <code>SlotTypeMetadata</code> objects, one for each numbered version of the slot type plus one for the <code>$LATEST</code> version.</p>"]
-    #[serde(rename="slotTypes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of <code>SlotTypeMetadata</code> objects, one for each numbered version of the slot type plus one for the <code>$LATEST</code> version.</p>
+    #[serde(rename = "slotTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub slot_types: Option<Vec<SlotTypeMetadata>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetSlotTypesRequest {
-    #[doc="<p>The maximum number of slot types to return in the response. The default is 10.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of slot types to return in the response. The default is 10.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>Substring to match in slot type names. A slot type will be returned if any part of its name matches the substring. For example, \"xyz\" matches both \"xyzabc\" and \"abcxyz.\"</p>"]
-    #[serde(rename="nameContains")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Substring to match in slot type names. A slot type will be returned if any part of its name matches the substring. For example, "xyz" matches both "xyzabc" and "abcxyz."</p>
+    #[serde(rename = "nameContains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name_contains: Option<String>,
-    #[doc="<p>A pagination token that fetches the next page of slot types. If the response to this API call is truncated, Amazon Lex returns a pagination token in the response. To fetch next page of slot types, specify the pagination token in the next request.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A pagination token that fetches the next page of slot types. If the response to this API call is truncated, Amazon Lex returns a pagination token in the response. To fetch next page of slot types, specify the pagination token in the next request.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetSlotTypesResponse {
-    #[doc="<p>If the response is truncated, it includes a pagination token that you can specify in your next request to fetch the next page of slot types.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the response is truncated, it includes a pagination token that you can specify in your next request to fetch the next page of slot types.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>An array of objects, one for each slot type, that provides information such as the name of the slot type, the version, and a description.</p>"]
-    #[serde(rename="slotTypes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of objects, one for each slot type, that provides information such as the name of the slot type, the version, and a description.</p>
+    #[serde(rename = "slotTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub slot_types: Option<Vec<SlotTypeMetadata>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetUtterancesViewRequest {
-    #[doc="<p>The name of the bot for which utterance information should be returned.</p>"]
-    #[serde(rename="botName")]
+    /// <p>The name of the bot for which utterance information should be returned.</p>
+    #[serde(rename = "botName")]
     pub bot_name: String,
-    #[doc="<p>An array of bot versions for which utterance information should be returned. The limit is 5 versions per request.</p>"]
-    #[serde(rename="botVersions")]
+    /// <p>An array of bot versions for which utterance information should be returned. The limit is 5 versions per request.</p>
+    #[serde(rename = "botVersions")]
     pub bot_versions: Vec<String>,
-    #[doc="<p>To return utterances that were recognized and handled, use<code>Detected</code>. To return utterances that were not recognized, use <code>Missed</code>.</p>"]
-    #[serde(rename="statusType")]
+    /// <p>To return utterances that were recognized and handled, use<code>Detected</code>. To return utterances that were not recognized, use <code>Missed</code>.</p>
+    #[serde(rename = "statusType")]
     pub status_type: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetUtterancesViewResponse {
-    #[doc="<p>The name of the bot for which utterance information was returned.</p>"]
-    #[serde(rename="botName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the bot for which utterance information was returned.</p>
+    #[serde(rename = "botName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bot_name: Option<String>,
-    #[doc="<p>An array of <a>UtteranceList</a> objects, each containing a list of <a>UtteranceData</a> objects describing the utterances that were processed by your bot. The response contains a maximum of 100 <code>UtteranceData</code> objects for each version.</p>"]
-    #[serde(rename="utterances")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of <a>UtteranceList</a> objects, each containing a list of <a>UtteranceData</a> objects describing the utterances that were processed by your bot. The response contains a maximum of 100 <code>UtteranceData</code> objects for each version.</p>
+    #[serde(rename = "utterances")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub utterances: Option<Vec<UtteranceList>>,
 }
 
-#[doc="<p>Identifies the specific version of an intent.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Identifies the specific version of an intent.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Intent {
-    #[doc="<p>The name of the intent.</p>"]
-    #[serde(rename="intentName")]
+    /// <p>The name of the intent.</p>
+    #[serde(rename = "intentName")]
     pub intent_name: String,
-    #[doc="<p>The version of the intent.</p>"]
-    #[serde(rename="intentVersion")]
+    /// <p>The version of the intent.</p>
+    #[serde(rename = "intentVersion")]
     pub intent_version: String,
 }
 
-#[doc="<p>Provides information about an intent.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Provides information about an intent.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct IntentMetadata {
-    #[doc="<p>The date that the intent was created.</p>"]
-    #[serde(rename="createdDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the intent was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<f64>,
-    #[doc="<p>A description of the intent.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the intent.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The date that the intent was updated. When you create an intent, the creation date and last updated date are the same.</p>"]
-    #[serde(rename="lastUpdatedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the intent was updated. When you create an intent, the creation date and last updated date are the same.</p>
+    #[serde(rename = "lastUpdatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_date: Option<f64>,
-    #[doc="<p>The name of the intent.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the intent.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The version of the intent.</p>"]
-    #[serde(rename="version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version of the intent.</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
 
-#[doc="<p>The message object that provides the message text and its type.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>The message object that provides the message text and its type.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Message {
-    #[doc="<p>The text of the message.</p>"]
-    #[serde(rename="content")]
+    /// <p>The text of the message.</p>
+    #[serde(rename = "content")]
     pub content: String,
-    #[doc="<p>The content type of the message string.</p>"]
-    #[serde(rename="contentType")]
+    /// <p>The content type of the message string.</p>
+    #[serde(rename = "contentType")]
     pub content_type: String,
 }
 
-#[doc="<p>Obtains information from the user. To define a prompt, provide one or more messages and specify the number of attempts to get information from the user. If you provide more than one message, Amazon Lex chooses one of the messages to use to prompt the user. For more information, see <a>how-it-works</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Obtains information from the user. To define a prompt, provide one or more messages and specify the number of attempts to get information from the user. If you provide more than one message, Amazon Lex chooses one of the messages to use to prompt the user. For more information, see <a>how-it-works</a>.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Prompt {
-    #[doc="<p>The number of times to prompt the user for information.</p>"]
-    #[serde(rename="maxAttempts")]
+    /// <p>The number of times to prompt the user for information.</p>
+    #[serde(rename = "maxAttempts")]
     pub max_attempts: i64,
-    #[doc="<p>An array of objects, each of which provides a message string and its type. You can specify the message string in plain text or in Speech Synthesis Markup Language (SSML).</p>"]
-    #[serde(rename="messages")]
+    /// <p>An array of objects, each of which provides a message string and its type. You can specify the message string in plain text or in Speech Synthesis Markup Language (SSML).</p>
+    #[serde(rename = "messages")]
     pub messages: Vec<Message>,
-    #[doc="<p>A response card. Amazon Lex uses this prompt at runtime, in the <code>PostText</code> API response. It substitutes session attributes and slot values for placeholders in the response card. For more information, see <a>ex-resp-card</a>. </p>"]
-    #[serde(rename="responseCard")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A response card. Amazon Lex uses this prompt at runtime, in the <code>PostText</code> API response. It substitutes session attributes and slot values for placeholders in the response card. For more information, see <a>ex-resp-card</a>. </p>
+    #[serde(rename = "responseCard")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub response_card: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct PutBotAliasRequest {
-    #[doc="<p>The name of the bot.</p>"]
-    #[serde(rename="botName")]
+    /// <p>The name of the bot.</p>
+    #[serde(rename = "botName")]
     pub bot_name: String,
-    #[doc="<p>The version of the bot.</p>"]
-    #[serde(rename="botVersion")]
+    /// <p>The version of the bot.</p>
+    #[serde(rename = "botVersion")]
     pub bot_version: String,
-    #[doc="<p>Identifies a specific revision of the <code>$LATEST</code> version.</p> <p>When you create a new bot alias, leave the <code>checksum</code> field blank. If you specify a checksum you get a <code>BadRequestException</code> exception.</p> <p>When you want to update a bot alias, set the <code>checksum</code> field to the checksum of the most recent revision of the <code>$LATEST</code> version. If you don't specify the <code> checksum</code> field, or if the checksum does not match the <code>$LATEST</code> version, you get a <code>PreconditionFailedException</code> exception.</p>"]
-    #[serde(rename="checksum")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Identifies a specific revision of the <code>$LATEST</code> version.</p> <p>When you create a new bot alias, leave the <code>checksum</code> field blank. If you specify a checksum you get a <code>BadRequestException</code> exception.</p> <p>When you want to update a bot alias, set the <code>checksum</code> field to the checksum of the most recent revision of the <code>$LATEST</code> version. If you don't specify the <code> checksum</code> field, or if the checksum does not match the <code>$LATEST</code> version, you get a <code>PreconditionFailedException</code> exception.</p>
+    #[serde(rename = "checksum")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub checksum: Option<String>,
-    #[doc="<p>A description of the alias.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the alias.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The name of the alias. The name is <i>not</i> case sensitive.</p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the alias. The name is <i>not</i> case sensitive.</p>
+    #[serde(rename = "name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PutBotAliasResponse {
-    #[doc="<p>The name of the bot that the alias points to.</p>"]
-    #[serde(rename="botName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the bot that the alias points to.</p>
+    #[serde(rename = "botName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bot_name: Option<String>,
-    #[doc="<p>The version of the bot that the alias points to.</p>"]
-    #[serde(rename="botVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version of the bot that the alias points to.</p>
+    #[serde(rename = "botVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bot_version: Option<String>,
-    #[doc="<p>The checksum for the current version of the alias.</p>"]
-    #[serde(rename="checksum")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The checksum for the current version of the alias.</p>
+    #[serde(rename = "checksum")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub checksum: Option<String>,
-    #[doc="<p>The date that the bot alias was created.</p>"]
-    #[serde(rename="createdDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the bot alias was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<f64>,
-    #[doc="<p>A description of the alias.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the alias.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The date that the bot alias was updated. When you create a resource, the creation date and the last updated date are the same.</p>"]
-    #[serde(rename="lastUpdatedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the bot alias was updated. When you create a resource, the creation date and the last updated date are the same.</p>
+    #[serde(rename = "lastUpdatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_date: Option<f64>,
-    #[doc="<p>The name of the alias.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the alias.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct PutBotRequest {
-    #[doc="<p>When Amazon Lex can't understand the user's input in context, it tries to elicit the information a few times. After that, Amazon Lex sends the message defined in <code>abortStatement</code> to the user, and then aborts the conversation. To set the number of retries, use the <code>valueElicitationPrompt</code> field for the slot type. </p> <p>For example, in a pizza ordering bot, Amazon Lex might ask a user \"What type of crust would you like?\" If the user's response is not one of the expected responses (for example, \"thin crust, \"deep dish,\" etc.), Amazon Lex tries to elicit a correct response a few more times. </p> <p>For example, in a pizza ordering application, <code>OrderPizza</code> might be one of the intents. This intent might require the <code>CrustType</code> slot. You specify the <code>valueElicitationPrompt</code> field when you create the <code>CrustType</code> slot.</p>"]
-    #[serde(rename="abortStatement")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>When Amazon Lex can't understand the user's input in context, it tries to elicit the information a few times. After that, Amazon Lex sends the message defined in <code>abortStatement</code> to the user, and then aborts the conversation. To set the number of retries, use the <code>valueElicitationPrompt</code> field for the slot type. </p> <p>For example, in a pizza ordering bot, Amazon Lex might ask a user "What type of crust would you like?" If the user's response is not one of the expected responses (for example, "thin crust, "deep dish," etc.), Amazon Lex tries to elicit a correct response a few more times. </p> <p>For example, in a pizza ordering application, <code>OrderPizza</code> might be one of the intents. This intent might require the <code>CrustType</code> slot. You specify the <code>valueElicitationPrompt</code> field when you create the <code>CrustType</code> slot.</p>
+    #[serde(rename = "abortStatement")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub abort_statement: Option<Statement>,
-    #[doc="<p>Identifies a specific revision of the <code>$LATEST</code> version.</p> <p>When you create a new bot, leave the <code>checksum</code> field blank. If you specify a checksum you get a <code>BadRequestException</code> exception.</p> <p>When you want to update a bot, set the <code>checksum</code> field to the checksum of the most recent revision of the <code>$LATEST</code> version. If you don't specify the <code> checksum</code> field, or if the checksum does not match the <code>$LATEST</code> version, you get a <code>PreconditionFailedException</code> exception.</p>"]
-    #[serde(rename="checksum")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Identifies a specific revision of the <code>$LATEST</code> version.</p> <p>When you create a new bot, leave the <code>checksum</code> field blank. If you specify a checksum you get a <code>BadRequestException</code> exception.</p> <p>When you want to update a bot, set the <code>checksum</code> field to the checksum of the most recent revision of the <code>$LATEST</code> version. If you don't specify the <code> checksum</code> field, or if the checksum does not match the <code>$LATEST</code> version, you get a <code>PreconditionFailedException</code> exception.</p>
+    #[serde(rename = "checksum")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub checksum: Option<String>,
-    #[doc="<p>For each Amazon Lex bot created with the Amazon Lex Model Building Service, you must specify whether your use of Amazon Lex is related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to the Children's Online Privacy Protection Act (COPPA) by specifying <code>true</code> or <code>false</code> in the <code>childDirected</code> field. By specifying <code>true</code> in the <code>childDirected</code> field, you confirm that your use of Amazon Lex <b>is</b> related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to COPPA. By specifying <code>false</code> in the <code>childDirected</code> field, you confirm that your use of Amazon Lex <b>is not</b> related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to COPPA. You may not specify a default value for the <code>childDirected</code> field that does not accurately reflect whether your use of Amazon Lex is related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to COPPA.</p> <p>If your use of Amazon Lex relates to a website, program, or other application that is directed in whole or in part, to children under age 13, you must obtain any required verifiable parental consent under COPPA. For information regarding the use of Amazon Lex in connection with websites, programs, or other applications that are directed or targeted, in whole or in part, to children under age 13, see the <a href=\"https://aws.amazon.com/lex/faqs#data-security\">Amazon Lex FAQ.</a> </p>"]
-    #[serde(rename="childDirected")]
+    /// <p>For each Amazon Lex bot created with the Amazon Lex Model Building Service, you must specify whether your use of Amazon Lex is related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to the Children's Online Privacy Protection Act (COPPA) by specifying <code>true</code> or <code>false</code> in the <code>childDirected</code> field. By specifying <code>true</code> in the <code>childDirected</code> field, you confirm that your use of Amazon Lex <b>is</b> related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to COPPA. By specifying <code>false</code> in the <code>childDirected</code> field, you confirm that your use of Amazon Lex <b>is not</b> related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to COPPA. You may not specify a default value for the <code>childDirected</code> field that does not accurately reflect whether your use of Amazon Lex is related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to COPPA.</p> <p>If your use of Amazon Lex relates to a website, program, or other application that is directed in whole or in part, to children under age 13, you must obtain any required verifiable parental consent under COPPA. For information regarding the use of Amazon Lex in connection with websites, programs, or other applications that are directed or targeted, in whole or in part, to children under age 13, see the <a href="https://aws.amazon.com/lex/faqs#data-security">Amazon Lex FAQ.</a> </p>
+    #[serde(rename = "childDirected")]
     pub child_directed: bool,
-    #[doc="<p>When Amazon Lex doesn't understand the user's intent, it uses this message to get clarification. To specify how many times Amazon Lex should repeate the clarification prompt, use the <code>maxAttempts</code> field. If Amazon Lex still doesn't understand, it sends the message in the <code>abortStatement</code> field. </p> <p>When you create a clarification prompt, make sure that it suggests the correct response from the user. for example, for a bot that orders pizza and drinks, you might create this clarification prompt: \"What would you like to do? You can say 'Order a pizza' or 'Order a drink.'\"</p>"]
-    #[serde(rename="clarificationPrompt")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>When Amazon Lex doesn't understand the user's intent, it uses this message to get clarification. To specify how many times Amazon Lex should repeate the clarification prompt, use the <code>maxAttempts</code> field. If Amazon Lex still doesn't understand, it sends the message in the <code>abortStatement</code> field. </p> <p>When you create a clarification prompt, make sure that it suggests the correct response from the user. for example, for a bot that orders pizza and drinks, you might create this clarification prompt: "What would you like to do? You can say 'Order a pizza' or 'Order a drink.'"</p>
+    #[serde(rename = "clarificationPrompt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub clarification_prompt: Option<Prompt>,
-    #[doc="<p>A description of the bot.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the bot.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The maximum time in seconds that Amazon Lex retains the data gathered in a conversation.</p> <p>A user interaction session remains active for the amount of time specified. If no conversation occurs during this time, the session expires and Amazon Lex deletes any data provided before the timeout.</p> <p>For example, suppose that a user chooses the OrderPizza intent, but gets sidetracked halfway through placing an order. If the user doesn't complete the order within the specified time, Amazon Lex discards the slot information that it gathered, and the user must start over.</p> <p>If you don't include the <code>idleSessionTTLInSeconds</code> element in a <code>PutBot</code> operation request, Amazon Lex uses the default value. This is also true if the request replaces an existing bot.</p> <p>The default is 300 seconds (5 minutes).</p>"]
-    #[serde(rename="idleSessionTTLInSeconds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum time in seconds that Amazon Lex retains the data gathered in a conversation.</p> <p>A user interaction session remains active for the amount of time specified. If no conversation occurs during this time, the session expires and Amazon Lex deletes any data provided before the timeout.</p> <p>For example, suppose that a user chooses the OrderPizza intent, but gets sidetracked halfway through placing an order. If the user doesn't complete the order within the specified time, Amazon Lex discards the slot information that it gathered, and the user must start over.</p> <p>If you don't include the <code>idleSessionTTLInSeconds</code> element in a <code>PutBot</code> operation request, Amazon Lex uses the default value. This is also true if the request replaces an existing bot.</p> <p>The default is 300 seconds (5 minutes).</p>
+    #[serde(rename = "idleSessionTTLInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub idle_session_ttl_in_seconds: Option<i64>,
-    #[doc="<p>An array of <code>Intent</code> objects. Each intent represents a command that a user can express. For example, a pizza ordering bot might support an OrderPizza intent. For more information, see <a>how-it-works</a>.</p>"]
-    #[serde(rename="intents")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of <code>Intent</code> objects. Each intent represents a command that a user can express. For example, a pizza ordering bot might support an OrderPizza intent. For more information, see <a>how-it-works</a>.</p>
+    #[serde(rename = "intents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub intents: Option<Vec<Intent>>,
-    #[doc="<p> Specifies the target locale for the bot. Any intent used in the bot must be compatible with the locale of the bot. </p> <p>The default is <code>en-US</code>.</p>"]
-    #[serde(rename="locale")]
+    /// <p> Specifies the target locale for the bot. Any intent used in the bot must be compatible with the locale of the bot. </p> <p>The default is <code>en-US</code>.</p>
+    #[serde(rename = "locale")]
     pub locale: String,
-    #[doc="<p>The name of the bot. The name is <i>not</i> case sensitive. </p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the bot. The name is <i>not</i> case sensitive. </p>
+    #[serde(rename = "name")]
     pub name: String,
-    #[doc="<p>If you set the <code>processBehavior</code> element to <code>Build</code>, Amazon Lex builds the bot so that it can be run. If you set the element to <code>Save</code>Amazon Lex saves the bot, but doesn't build it. </p> <p>If you don't specify this value, the default value is <code>Save</code>.</p>"]
-    #[serde(rename="processBehavior")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If you set the <code>processBehavior</code> element to <code>Build</code>, Amazon Lex builds the bot so that it can be run. If you set the element to <code>Save</code>Amazon Lex saves the bot, but doesn't build it. </p> <p>If you don't specify this value, the default value is <code>Save</code>.</p>
+    #[serde(rename = "processBehavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub process_behavior: Option<String>,
-    #[doc="<p>The Amazon Polly voice ID that you want Amazon Lex to use for voice interactions with the user. The locale configured for the voice must match the locale of the bot. For more information, see <a href=\"http://docs.aws.amazon.com/polly/latest/dg/voicelist.html\">Available Voices</a> in the <i>Amazon Polly Developer Guide</i>.</p>"]
-    #[serde(rename="voiceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Polly voice ID that you want Amazon Lex to use for voice interactions with the user. The locale configured for the voice must match the locale of the bot. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/voicelist.html">Available Voices</a> in the <i>Amazon Polly Developer Guide</i>.</p>
+    #[serde(rename = "voiceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub voice_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PutBotResponse {
-    #[doc="<p>The message that Amazon Lex uses to abort a conversation. For more information, see <a>PutBot</a>.</p>"]
-    #[serde(rename="abortStatement")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The message that Amazon Lex uses to abort a conversation. For more information, see <a>PutBot</a>.</p>
+    #[serde(rename = "abortStatement")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub abort_statement: Option<Statement>,
-    #[doc="<p>Checksum of the bot that you created.</p>"]
-    #[serde(rename="checksum")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Checksum of the bot that you created.</p>
+    #[serde(rename = "checksum")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub checksum: Option<String>,
-    #[doc="<p>For each Amazon Lex bot created with the Amazon Lex Model Building Service, you must specify whether your use of Amazon Lex is related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to the Children's Online Privacy Protection Act (COPPA) by specifying <code>true</code> or <code>false</code> in the <code>childDirected</code> field. By specifying <code>true</code> in the <code>childDirected</code> field, you confirm that your use of Amazon Lex <b>is</b> related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to COPPA. By specifying <code>false</code> in the <code>childDirected</code> field, you confirm that your use of Amazon Lex <b>is not</b> related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to COPPA. You may not specify a default value for the <code>childDirected</code> field that does not accurately reflect whether your use of Amazon Lex is related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to COPPA.</p> <p>If your use of Amazon Lex relates to a website, program, or other application that is directed in whole or in part, to children under age 13, you must obtain any required verifiable parental consent under COPPA. For information regarding the use of Amazon Lex in connection with websites, programs, or other applications that are directed or targeted, in whole or in part, to children under age 13, see the <a href=\"https://aws.amazon.com/lex/faqs#data-security\">Amazon Lex FAQ.</a> </p>"]
-    #[serde(rename="childDirected")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For each Amazon Lex bot created with the Amazon Lex Model Building Service, you must specify whether your use of Amazon Lex is related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to the Children's Online Privacy Protection Act (COPPA) by specifying <code>true</code> or <code>false</code> in the <code>childDirected</code> field. By specifying <code>true</code> in the <code>childDirected</code> field, you confirm that your use of Amazon Lex <b>is</b> related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to COPPA. By specifying <code>false</code> in the <code>childDirected</code> field, you confirm that your use of Amazon Lex <b>is not</b> related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to COPPA. You may not specify a default value for the <code>childDirected</code> field that does not accurately reflect whether your use of Amazon Lex is related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to COPPA.</p> <p>If your use of Amazon Lex relates to a website, program, or other application that is directed in whole or in part, to children under age 13, you must obtain any required verifiable parental consent under COPPA. For information regarding the use of Amazon Lex in connection with websites, programs, or other applications that are directed or targeted, in whole or in part, to children under age 13, see the <a href="https://aws.amazon.com/lex/faqs#data-security">Amazon Lex FAQ.</a> </p>
+    #[serde(rename = "childDirected")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub child_directed: Option<bool>,
-    #[doc="<p> The prompts that Amazon Lex uses when it doesn't understand the user's intent. For more information, see <a>PutBot</a>. </p>"]
-    #[serde(rename="clarificationPrompt")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The prompts that Amazon Lex uses when it doesn't understand the user's intent. For more information, see <a>PutBot</a>. </p>
+    #[serde(rename = "clarificationPrompt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub clarification_prompt: Option<Prompt>,
-    #[doc="<p>The date that the bot was created.</p>"]
-    #[serde(rename="createdDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the bot was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<f64>,
-    #[doc="<p>A description of the bot.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the bot.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>If <code>status</code> is <code>FAILED</code>, Amazon Lex provides the reason that it failed to build the bot.</p>"]
-    #[serde(rename="failureReason")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If <code>status</code> is <code>FAILED</code>, Amazon Lex provides the reason that it failed to build the bot.</p>
+    #[serde(rename = "failureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_reason: Option<String>,
-    #[doc="<p>The maximum length of time that Amazon Lex retains the data gathered in a conversation. For more information, see <a>PutBot</a>.</p>"]
-    #[serde(rename="idleSessionTTLInSeconds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum length of time that Amazon Lex retains the data gathered in a conversation. For more information, see <a>PutBot</a>.</p>
+    #[serde(rename = "idleSessionTTLInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub idle_session_ttl_in_seconds: Option<i64>,
-    #[doc="<p>An array of <code>Intent</code> objects. For more information, see <a>PutBot</a>.</p>"]
-    #[serde(rename="intents")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of <code>Intent</code> objects. For more information, see <a>PutBot</a>.</p>
+    #[serde(rename = "intents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub intents: Option<Vec<Intent>>,
-    #[doc="<p>The date that the bot was updated. When you create a resource, the creation date and last updated date are the same.</p>"]
-    #[serde(rename="lastUpdatedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the bot was updated. When you create a resource, the creation date and last updated date are the same.</p>
+    #[serde(rename = "lastUpdatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_date: Option<f64>,
-    #[doc="<p> The target locale for the bot. </p>"]
-    #[serde(rename="locale")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The target locale for the bot. </p>
+    #[serde(rename = "locale")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub locale: Option<String>,
-    #[doc="<p>The name of the bot.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the bot.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p> When you send a request to create a bot with <code>processBehavior</code> set to <code>BUILD</code>, Amazon Lex sets the <code>status</code> response element to <code>BUILDING</code>. After Amazon Lex builds the bot, it sets <code>status</code> to <code>READY</code>. If Amazon Lex can't build the bot, Amazon Lex sets <code>status</code> to <code>FAILED</code>. Amazon Lex returns the reason for the failure in the <code>failureReason</code> response element. </p> <p>When you set <code>processBehavior</code>to <code>SAVE</code>, Amazon Lex sets the status code to <code>NOT BUILT</code>.</p>"]
-    #[serde(rename="status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> When you send a request to create a bot with <code>processBehavior</code> set to <code>BUILD</code>, Amazon Lex sets the <code>status</code> response element to <code>BUILDING</code>. After Amazon Lex builds the bot, it sets <code>status</code> to <code>READY</code>. If Amazon Lex can't build the bot, Amazon Lex sets <code>status</code> to <code>FAILED</code>. Amazon Lex returns the reason for the failure in the <code>failureReason</code> response element. </p> <p>When you set <code>processBehavior</code>to <code>SAVE</code>, Amazon Lex sets the status code to <code>NOT BUILT</code>.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The version of the bot. For a new bot, the version is always <code>$LATEST</code>.</p>"]
-    #[serde(rename="version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version of the bot. For a new bot, the version is always <code>$LATEST</code>.</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
-    #[doc="<p>The Amazon Polly voice ID that Amazon Lex uses for voice interaction with the user. For more information, see <a>PutBot</a>.</p>"]
-    #[serde(rename="voiceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Polly voice ID that Amazon Lex uses for voice interaction with the user. For more information, see <a>PutBot</a>.</p>
+    #[serde(rename = "voiceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub voice_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct PutIntentRequest {
-    #[doc="<p>Identifies a specific revision of the <code>$LATEST</code> version.</p> <p>When you create a new intent, leave the <code>checksum</code> field blank. If you specify a checksum you get a <code>BadRequestException</code> exception.</p> <p>When you want to update a intent, set the <code>checksum</code> field to the checksum of the most recent revision of the <code>$LATEST</code> version. If you don't specify the <code> checksum</code> field, or if the checksum does not match the <code>$LATEST</code> version, you get a <code>PreconditionFailedException</code> exception.</p>"]
-    #[serde(rename="checksum")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Identifies a specific revision of the <code>$LATEST</code> version.</p> <p>When you create a new intent, leave the <code>checksum</code> field blank. If you specify a checksum you get a <code>BadRequestException</code> exception.</p> <p>When you want to update a intent, set the <code>checksum</code> field to the checksum of the most recent revision of the <code>$LATEST</code> version. If you don't specify the <code> checksum</code> field, or if the checksum does not match the <code>$LATEST</code> version, you get a <code>PreconditionFailedException</code> exception.</p>
+    #[serde(rename = "checksum")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub checksum: Option<String>,
-    #[doc="<p> The statement that you want Amazon Lex to convey to the user after the intent is successfully fulfilled by the Lambda function. </p> <p>This element is relevant only if you provide a Lambda function in the <code>fulfillmentActivity</code>. If you return the intent to the client application, you can't specify this element.</p> <note> <p>The <code>followUpPrompt</code> and <code>conclusionStatement</code> are mutually exclusive. You can specify only one.</p> </note>"]
-    #[serde(rename="conclusionStatement")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The statement that you want Amazon Lex to convey to the user after the intent is successfully fulfilled by the Lambda function. </p> <p>This element is relevant only if you provide a Lambda function in the <code>fulfillmentActivity</code>. If you return the intent to the client application, you can't specify this element.</p> <note> <p>The <code>followUpPrompt</code> and <code>conclusionStatement</code> are mutually exclusive. You can specify only one.</p> </note>
+    #[serde(rename = "conclusionStatement")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub conclusion_statement: Option<Statement>,
-    #[doc="<p>Prompts the user to confirm the intent. This question should have a yes or no answer.</p> <p>Amazon Lex uses this prompt to ensure that the user acknowledges that the intent is ready for fulfillment. For example, with the <code>OrderPizza</code> intent, you might want to confirm that the order is correct before placing it. For other intents, such as intents that simply respond to user questions, you might not need to ask the user for confirmation before providing the information. </p> <note> <p>You you must provide both the <code>rejectionStatement</code> and the <code>confirmationPrompt</code>, or neither.</p> </note>"]
-    #[serde(rename="confirmationPrompt")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Prompts the user to confirm the intent. This question should have a yes or no answer.</p> <p>Amazon Lex uses this prompt to ensure that the user acknowledges that the intent is ready for fulfillment. For example, with the <code>OrderPizza</code> intent, you might want to confirm that the order is correct before placing it. For other intents, such as intents that simply respond to user questions, you might not need to ask the user for confirmation before providing the information. </p> <note> <p>You you must provide both the <code>rejectionStatement</code> and the <code>confirmationPrompt</code>, or neither.</p> </note>
+    #[serde(rename = "confirmationPrompt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub confirmation_prompt: Option<Prompt>,
-    #[doc="<p>A description of the intent.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the intent.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p> Specifies a Lambda function to invoke for each user input. You can invoke this Lambda function to personalize user interaction. </p> <p>For example, suppose your bot determines that the user is John. Your Lambda function might retrieve John's information from a backend database and prepopulate some of the values. For example, if you find that John is gluten intolerant, you might set the corresponding intent slot, <code>GlutenIntolerant</code>, to true. You might find John's phone number and set the corresponding session attribute. </p>"]
-    #[serde(rename="dialogCodeHook")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> Specifies a Lambda function to invoke for each user input. You can invoke this Lambda function to personalize user interaction. </p> <p>For example, suppose your bot determines that the user is John. Your Lambda function might retrieve John's information from a backend database and prepopulate some of the values. For example, if you find that John is gluten intolerant, you might set the corresponding intent slot, <code>GlutenIntolerant</code>, to true. You might find John's phone number and set the corresponding session attribute. </p>
+    #[serde(rename = "dialogCodeHook")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub dialog_code_hook: Option<CodeHook>,
-    #[doc="<p>Amazon Lex uses this prompt to solicit additional activity after fulfilling an intent. For example, after the <code>OrderPizza</code> intent is fulfilled, you might prompt the user to order a drink.</p> <p>The action that Amazon Lex takes depends on the user's response, as follows:</p> <ul> <li> <p>If the user says \"Yes\" it responds with the clarification prompt that is configured for the bot.</p> </li> <li> <p>if the user says \"Yes\" and continues with an utterance that triggers an intent it starts a conversation for the intent.</p> </li> <li> <p>If the user says \"No\" it responds with the rejection statement configured for the the follow-up prompt.</p> </li> <li> <p>If it doesn't recognize the utterance it repeats the follow-up prompt again.</p> </li> </ul> <p>The <code>followUpPrompt</code> field and the <code>conclusionStatement</code> field are mutually exclusive. You can specify only one. </p>"]
-    #[serde(rename="followUpPrompt")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon Lex uses this prompt to solicit additional activity after fulfilling an intent. For example, after the <code>OrderPizza</code> intent is fulfilled, you might prompt the user to order a drink.</p> <p>The action that Amazon Lex takes depends on the user's response, as follows:</p> <ul> <li> <p>If the user says "Yes" it responds with the clarification prompt that is configured for the bot.</p> </li> <li> <p>if the user says "Yes" and continues with an utterance that triggers an intent it starts a conversation for the intent.</p> </li> <li> <p>If the user says "No" it responds with the rejection statement configured for the the follow-up prompt.</p> </li> <li> <p>If it doesn't recognize the utterance it repeats the follow-up prompt again.</p> </li> </ul> <p>The <code>followUpPrompt</code> field and the <code>conclusionStatement</code> field are mutually exclusive. You can specify only one. </p>
+    #[serde(rename = "followUpPrompt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub follow_up_prompt: Option<FollowUpPrompt>,
-    #[doc="<p> Describes how the intent is fulfilled. For example, after a user provides all of the information for a pizza order, <code>fulfillmentActivity</code> defines how the bot places an order with a local pizza store. </p> <p> You might configure Amazon Lex to return all of the intent information to the client application, or direct it to invoke a Lambda function that can process the intent (for example, place an order with a pizzeria). </p>"]
-    #[serde(rename="fulfillmentActivity")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> Describes how the intent is fulfilled. For example, after a user provides all of the information for a pizza order, <code>fulfillmentActivity</code> defines how the bot places an order with a local pizza store. </p> <p> You might configure Amazon Lex to return all of the intent information to the client application, or direct it to invoke a Lambda function that can process the intent (for example, place an order with a pizzeria). </p>
+    #[serde(rename = "fulfillmentActivity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fulfillment_activity: Option<FulfillmentActivity>,
-    #[doc="<p>The name of the intent. The name is <i>not</i> case sensitive. </p> <p>The name can't match a built-in intent name, or a built-in intent name with \"AMAZON.\" removed. For example, because there is a built-in intent called <code>AMAZON.HelpIntent</code>, you can't create a custom intent called <code>HelpIntent</code>.</p> <p>For a list of built-in intents, see <a href=\"https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/standard-intents\">Standard Built-in Intents</a> in the <i>Alexa Skills Kit</i>.</p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the intent. The name is <i>not</i> case sensitive. </p> <p>The name can't match a built-in intent name, or a built-in intent name with "AMAZON." removed. For example, because there is a built-in intent called <code>AMAZON.HelpIntent</code>, you can't create a custom intent called <code>HelpIntent</code>.</p> <p>For a list of built-in intents, see <a href="https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/standard-intents">Standard Built-in Intents</a> in the <i>Alexa Skills Kit</i>.</p>
+    #[serde(rename = "name")]
     pub name: String,
-    #[doc="<p>A unique identifier for the built-in intent to base this intent on. To find the signature for an intent, see <a href=\"https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/standard-intents\">Standard Built-in Intents</a> in the <i>Alexa Skills Kit</i>.</p>"]
-    #[serde(rename="parentIntentSignature")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A unique identifier for the built-in intent to base this intent on. To find the signature for an intent, see <a href="https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/standard-intents">Standard Built-in Intents</a> in the <i>Alexa Skills Kit</i>.</p>
+    #[serde(rename = "parentIntentSignature")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parent_intent_signature: Option<String>,
-    #[doc="<p>When the user answers \"no\" to the question defined in <code>confirmationPrompt</code>, Amazon Lex responds with this statement to acknowledge that the intent was canceled. </p> <note> <p>You must provide both the <code>rejectionStatement</code> and the <code>confirmationPrompt</code>, or neither.</p> </note>"]
-    #[serde(rename="rejectionStatement")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>When the user answers "no" to the question defined in <code>confirmationPrompt</code>, Amazon Lex responds with this statement to acknowledge that the intent was canceled. </p> <note> <p>You must provide both the <code>rejectionStatement</code> and the <code>confirmationPrompt</code>, or neither.</p> </note>
+    #[serde(rename = "rejectionStatement")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rejection_statement: Option<Statement>,
-    #[doc="<p>An array of utterances (strings) that a user might say to signal the intent. For example, \"I want {PizzaSize} pizza\", \"Order {Quantity} {PizzaSize} pizzas\". </p> <p>In each utterance, a slot name is enclosed in curly braces. </p>"]
-    #[serde(rename="sampleUtterances")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of utterances (strings) that a user might say to signal the intent. For example, "I want {PizzaSize} pizza", "Order {Quantity} {PizzaSize} pizzas". </p> <p>In each utterance, a slot name is enclosed in curly braces. </p>
+    #[serde(rename = "sampleUtterances")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sample_utterances: Option<Vec<String>>,
-    #[doc="<p>An array of intent slots. At runtime, Amazon Lex elicits required slot values from the user using prompts defined in the slots. For more information, see &lt;xref linkend=\"how-it-works\"/&gt;. </p>"]
-    #[serde(rename="slots")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of intent slots. At runtime, Amazon Lex elicits required slot values from the user using prompts defined in the slots. For more information, see &lt;xref linkend="how-it-works"/&gt;. </p>
+    #[serde(rename = "slots")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub slots: Option<Vec<Slot>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PutIntentResponse {
-    #[doc="<p>Checksum of the <code>$LATEST</code>version of the intent created or updated.</p>"]
-    #[serde(rename="checksum")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Checksum of the <code>$LATEST</code>version of the intent created or updated.</p>
+    #[serde(rename = "checksum")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub checksum: Option<String>,
-    #[doc="<p>After the Lambda function specified in the<code>fulfillmentActivity</code>intent fulfills the intent, Amazon Lex conveys this statement to the user.</p>"]
-    #[serde(rename="conclusionStatement")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>After the Lambda function specified in the<code>fulfillmentActivity</code>intent fulfills the intent, Amazon Lex conveys this statement to the user.</p>
+    #[serde(rename = "conclusionStatement")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub conclusion_statement: Option<Statement>,
-    #[doc="<p>If defined in the intent, Amazon Lex prompts the user to confirm the intent before fulfilling it.</p>"]
-    #[serde(rename="confirmationPrompt")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If defined in the intent, Amazon Lex prompts the user to confirm the intent before fulfilling it.</p>
+    #[serde(rename = "confirmationPrompt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub confirmation_prompt: Option<Prompt>,
-    #[doc="<p>The date that the intent was created.</p>"]
-    #[serde(rename="createdDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the intent was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<f64>,
-    #[doc="<p>A description of the intent.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the intent.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>If defined in the intent, Amazon Lex invokes this Lambda function for each user input.</p>"]
-    #[serde(rename="dialogCodeHook")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If defined in the intent, Amazon Lex invokes this Lambda function for each user input.</p>
+    #[serde(rename = "dialogCodeHook")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub dialog_code_hook: Option<CodeHook>,
-    #[doc="<p>If defined in the intent, Amazon Lex uses this prompt to solicit additional user activity after the intent is fulfilled.</p>"]
-    #[serde(rename="followUpPrompt")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If defined in the intent, Amazon Lex uses this prompt to solicit additional user activity after the intent is fulfilled.</p>
+    #[serde(rename = "followUpPrompt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub follow_up_prompt: Option<FollowUpPrompt>,
-    #[doc="<p>If defined in the intent, Amazon Lex invokes this Lambda function to fulfill the intent after the user provides all of the information required by the intent.</p>"]
-    #[serde(rename="fulfillmentActivity")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If defined in the intent, Amazon Lex invokes this Lambda function to fulfill the intent after the user provides all of the information required by the intent.</p>
+    #[serde(rename = "fulfillmentActivity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fulfillment_activity: Option<FulfillmentActivity>,
-    #[doc="<p>The date that the intent was updated. When you create a resource, the creation date and last update dates are the same.</p>"]
-    #[serde(rename="lastUpdatedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the intent was updated. When you create a resource, the creation date and last update dates are the same.</p>
+    #[serde(rename = "lastUpdatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_date: Option<f64>,
-    #[doc="<p>The name of the intent.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the intent.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>A unique identifier for the built-in intent that this intent is based on.</p>"]
-    #[serde(rename="parentIntentSignature")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A unique identifier for the built-in intent that this intent is based on.</p>
+    #[serde(rename = "parentIntentSignature")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parent_intent_signature: Option<String>,
-    #[doc="<p>If the user answers \"no\" to the question defined in <code>confirmationPrompt</code> Amazon Lex responds with this statement to acknowledge that the intent was canceled. </p>"]
-    #[serde(rename="rejectionStatement")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the user answers "no" to the question defined in <code>confirmationPrompt</code> Amazon Lex responds with this statement to acknowledge that the intent was canceled. </p>
+    #[serde(rename = "rejectionStatement")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rejection_statement: Option<Statement>,
-    #[doc="<p> An array of sample utterances that are configured for the intent. </p>"]
-    #[serde(rename="sampleUtterances")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> An array of sample utterances that are configured for the intent. </p>
+    #[serde(rename = "sampleUtterances")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sample_utterances: Option<Vec<String>>,
-    #[doc="<p>An array of intent slots that are configured for the intent.</p>"]
-    #[serde(rename="slots")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of intent slots that are configured for the intent.</p>
+    #[serde(rename = "slots")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub slots: Option<Vec<Slot>>,
-    #[doc="<p>The version of the intent. For a new intent, the version is always <code>$LATEST</code>.</p>"]
-    #[serde(rename="version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version of the intent. For a new intent, the version is always <code>$LATEST</code>.</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct PutSlotTypeRequest {
-    #[doc="<p>Identifies a specific revision of the <code>$LATEST</code> version.</p> <p>When you create a new slot type, leave the <code>checksum</code> field blank. If you specify a checksum you get a <code>BadRequestException</code> exception.</p> <p>When you want to update a slot type, set the <code>checksum</code> field to the checksum of the most recent revision of the <code>$LATEST</code> version. If you don't specify the <code> checksum</code> field, or if the checksum does not match the <code>$LATEST</code> version, you get a <code>PreconditionFailedException</code> exception.</p>"]
-    #[serde(rename="checksum")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Identifies a specific revision of the <code>$LATEST</code> version.</p> <p>When you create a new slot type, leave the <code>checksum</code> field blank. If you specify a checksum you get a <code>BadRequestException</code> exception.</p> <p>When you want to update a slot type, set the <code>checksum</code> field to the checksum of the most recent revision of the <code>$LATEST</code> version. If you don't specify the <code> checksum</code> field, or if the checksum does not match the <code>$LATEST</code> version, you get a <code>PreconditionFailedException</code> exception.</p>
+    #[serde(rename = "checksum")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub checksum: Option<String>,
-    #[doc="<p>A description of the slot type.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the slot type.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>A list of <code>EnumerationValue</code> objects that defines the values that the slot type can take.</p>"]
-    #[serde(rename="enumerationValues")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of <code>EnumerationValue</code> objects that defines the values that the slot type can take.</p>
+    #[serde(rename = "enumerationValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub enumeration_values: Option<Vec<EnumerationValue>>,
-    #[doc="<p>The name of the slot type. The name is <i>not</i> case sensitive. </p> <p>The name can't match a built-in slot type name, or a built-in slot type name with \"AMAZON.\" removed. For example, because there is a built-in slot type called <code>AMAZON.DATE</code>, you can't create a custom slot type called <code>DATE</code>.</p> <p>For a list of built-in slot types, see <a href=\"https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/slot-type-reference\">Slot Type Reference</a> in the <i>Alexa Skills Kit</i>.</p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the slot type. The name is <i>not</i> case sensitive. </p> <p>The name can't match a built-in slot type name, or a built-in slot type name with "AMAZON." removed. For example, because there is a built-in slot type called <code>AMAZON.DATE</code>, you can't create a custom slot type called <code>DATE</code>.</p> <p>For a list of built-in slot types, see <a href="https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/slot-type-reference">Slot Type Reference</a> in the <i>Alexa Skills Kit</i>.</p>
+    #[serde(rename = "name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PutSlotTypeResponse {
-    #[doc="<p>Checksum of the <code>$LATEST</code> version of the slot type.</p>"]
-    #[serde(rename="checksum")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Checksum of the <code>$LATEST</code> version of the slot type.</p>
+    #[serde(rename = "checksum")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub checksum: Option<String>,
-    #[doc="<p>The date that the slot type was created.</p>"]
-    #[serde(rename="createdDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the slot type was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<f64>,
-    #[doc="<p>A description of the slot type.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the slot type.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>A list of <code>EnumerationValue</code> objects that defines the values that the slot type can take.</p>"]
-    #[serde(rename="enumerationValues")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of <code>EnumerationValue</code> objects that defines the values that the slot type can take.</p>
+    #[serde(rename = "enumerationValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub enumeration_values: Option<Vec<EnumerationValue>>,
-    #[doc="<p>The date that the slot type was updated. When you create a slot type, the creation date and last update date are the same.</p>"]
-    #[serde(rename="lastUpdatedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the slot type was updated. When you create a slot type, the creation date and last update date are the same.</p>
+    #[serde(rename = "lastUpdatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_date: Option<f64>,
-    #[doc="<p>The name of the slot type.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the slot type.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The version of the slot type. For a new slot type, the version is always <code>$LATEST</code>. </p>"]
-    #[serde(rename="version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version of the slot type. For a new slot type, the version is always <code>$LATEST</code>. </p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
 
-#[doc="<p>Describes the resource that refers to the resource that you are attempting to delete. This object is returned as part of the <code>ResourceInUseException</code> exception. </p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Describes the resource that refers to the resource that you are attempting to delete. This object is returned as part of the <code>ResourceInUseException</code> exception. </p>
+#[derive(Default, Debug, Clone)]
 pub struct ResourceReference {
-    #[doc="<p>The name of the resource that is using the resource that you are trying to delete.</p>"]
+    /// <p>The name of the resource that is using the resource that you are trying to delete.</p>
     pub name: Option<String>,
-    #[doc="<p>The version of the resource that is using the resource that you are trying to delete.</p>"]
+    /// <p>The version of the resource that is using the resource that you are trying to delete.</p>
     pub version: Option<String>,
 }
 
-#[doc="<p>Identifies the version of a specific slot.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Identifies the version of a specific slot.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Slot {
-    #[doc="<p>A description of the slot.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the slot.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The name of the slot.</p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the slot.</p>
+    #[serde(rename = "name")]
     pub name: String,
-    #[doc="<p> Directs Lex the order in which to elicit this slot value from the user. For example, if the intent has two slots with priorities 1 and 2, AWS Lex first elicits a value for the slot with priority 1.</p> <p>If multiple slots share the same priority, the order in which Lex elicits values is arbitrary.</p>"]
-    #[serde(rename="priority")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> Directs Lex the order in which to elicit this slot value from the user. For example, if the intent has two slots with priorities 1 and 2, AWS Lex first elicits a value for the slot with priority 1.</p> <p>If multiple slots share the same priority, the order in which Lex elicits values is arbitrary.</p>
+    #[serde(rename = "priority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub priority: Option<i64>,
-    #[doc="<p> A set of possible responses for the slot type used by text-based clients. A user chooses an option from the response card, instead of using text to reply. </p>"]
-    #[serde(rename="responseCard")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> A set of possible responses for the slot type used by text-based clients. A user chooses an option from the response card, instead of using text to reply. </p>
+    #[serde(rename = "responseCard")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub response_card: Option<String>,
-    #[doc="<p> If you know a specific pattern with which users might respond to an Amazon Lex request for a slot value, you can provide those utterances to improve accuracy. This is optional. In most cases, Amazon Lex is capable of understanding user utterances. </p>"]
-    #[serde(rename="sampleUtterances")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> If you know a specific pattern with which users might respond to an Amazon Lex request for a slot value, you can provide those utterances to improve accuracy. This is optional. In most cases, Amazon Lex is capable of understanding user utterances. </p>
+    #[serde(rename = "sampleUtterances")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sample_utterances: Option<Vec<String>>,
-    #[doc="<p>Specifies whether the slot is required or optional. </p>"]
-    #[serde(rename="slotConstraint")]
+    /// <p>Specifies whether the slot is required or optional. </p>
+    #[serde(rename = "slotConstraint")]
     pub slot_constraint: String,
-    #[doc="<p>The type of the slot, either a custom slot type that you defined or one of the built-in slot types.</p>"]
-    #[serde(rename="slotType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of the slot, either a custom slot type that you defined or one of the built-in slot types.</p>
+    #[serde(rename = "slotType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub slot_type: Option<String>,
-    #[doc="<p>The version of the slot type.</p>"]
-    #[serde(rename="slotTypeVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version of the slot type.</p>
+    #[serde(rename = "slotTypeVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub slot_type_version: Option<String>,
-    #[doc="<p>The prompt that Amazon Lex uses to elicit the slot value from the user.</p>"]
-    #[serde(rename="valueElicitationPrompt")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The prompt that Amazon Lex uses to elicit the slot value from the user.</p>
+    #[serde(rename = "valueElicitationPrompt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value_elicitation_prompt: Option<Prompt>,
 }
 
-#[doc="<p>Provides information about a slot type..</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Provides information about a slot type..</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct SlotTypeMetadata {
-    #[doc="<p>The date that the slot type was created.</p>"]
-    #[serde(rename="createdDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the slot type was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<f64>,
-    #[doc="<p>A description of the slot type.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the slot type.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The date that the slot type was updated. When you create a resource, the creation date and last updated date are the same. </p>"]
-    #[serde(rename="lastUpdatedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the slot type was updated. When you create a resource, the creation date and last updated date are the same. </p>
+    #[serde(rename = "lastUpdatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_date: Option<f64>,
-    #[doc="<p>The name of the slot type.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the slot type.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The version of the slot type.</p>"]
-    #[serde(rename="version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version of the slot type.</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
 
-#[doc="<p>A collection of messages that convey information to the user. At runtime, Amazon Lex selects the message to convey. </p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>A collection of messages that convey information to the user. At runtime, Amazon Lex selects the message to convey. </p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Statement {
-    #[doc="<p>A collection of message objects.</p>"]
-    #[serde(rename="messages")]
+    /// <p>A collection of message objects.</p>
+    #[serde(rename = "messages")]
     pub messages: Vec<Message>,
-    #[doc="<p> At runtime, if the client is using the <a href=\"http://docs.aws.amazon.com/lex/latest/dg/API_runtime_PostText.html\">PostText</a> API, Amazon Lex includes the response card in the response. It substitutes all of the session attributes and slot values for placeholders in the response card. </p>"]
-    #[serde(rename="responseCard")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> At runtime, if the client is using the <a href="http://docs.aws.amazon.com/lex/latest/dg/API_runtime_PostText.html">PostText</a> API, Amazon Lex includes the response card in the response. It substitutes all of the session attributes and slot values for placeholders in the response card. </p>
+    #[serde(rename = "responseCard")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub response_card: Option<String>,
 }
 
-#[doc="<p>Provides information about a single utterance that was made to your bot. </p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Provides information about a single utterance that was made to your bot. </p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UtteranceData {
-    #[doc="<p>The number of times that the utterance was processed.</p>"]
-    #[serde(rename="count")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of times that the utterance was processed.</p>
+    #[serde(rename = "count")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub count: Option<i64>,
-    #[doc="<p>The total number of individuals that used the utterance.</p>"]
-    #[serde(rename="distinctUsers")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The total number of individuals that used the utterance.</p>
+    #[serde(rename = "distinctUsers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub distinct_users: Option<i64>,
-    #[doc="<p>The date that the utterance was first recorded.</p>"]
-    #[serde(rename="firstUtteredDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the utterance was first recorded.</p>
+    #[serde(rename = "firstUtteredDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub first_uttered_date: Option<f64>,
-    #[doc="<p>The date that the utterance was last recorded.</p>"]
-    #[serde(rename="lastUtteredDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the utterance was last recorded.</p>
+    #[serde(rename = "lastUtteredDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_uttered_date: Option<f64>,
-    #[doc="<p>The text that was entered by the user or the text representation of an audio clip.</p>"]
-    #[serde(rename="utteranceString")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The text that was entered by the user or the text representation of an audio clip.</p>
+    #[serde(rename = "utteranceString")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub utterance_string: Option<String>,
 }
 
-#[doc="<p>Provides a list of utterances that have been made to a specific version of your bot. The list contains a maximum of 100 utterances.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Provides a list of utterances that have been made to a specific version of your bot. The list contains a maximum of 100 utterances.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UtteranceList {
-    #[doc="<p>The version of the bot that processed the list.</p>"]
-    #[serde(rename="botVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version of the bot that processed the list.</p>
+    #[serde(rename = "botVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bot_version: Option<String>,
-    #[doc="<p>One or more <a>UtteranceData</a> objects that contain information about the utterances that have been made to a bot. The maximum number of object is 100.</p>"]
-    #[serde(rename="utterances")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>One or more <a>UtteranceData</a> objects that contain information about the utterances that have been made to a bot. The maximum number of object is 100.</p>
+    #[serde(rename = "utterances")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub utterances: Option<Vec<UtteranceData>>,
 }
 
@@ -1634,7 +1633,6 @@ pub enum CreateBotVersionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateBotVersionError {
     pub fn from_body(body: &str) -> CreateBotVersionError {
@@ -1743,7 +1741,6 @@ pub enum CreateIntentVersionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateIntentVersionError {
     pub fn from_body(body: &str) -> CreateIntentVersionError {
@@ -1855,7 +1852,6 @@ pub enum CreateSlotTypeVersionError {
     Unknown(String),
 }
 
-
 impl CreateSlotTypeVersionError {
     pub fn from_body(body: &str) -> CreateSlotTypeVersionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1966,7 +1962,6 @@ pub enum DeleteBotError {
     Unknown(String),
 }
 
-
 impl DeleteBotError {
     pub fn from_body(body: &str) -> DeleteBotError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2068,7 +2063,6 @@ pub enum DeleteBotAliasError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteBotAliasError {
     pub fn from_body(body: &str) -> DeleteBotAliasError {
@@ -2176,7 +2170,6 @@ pub enum DeleteBotChannelAssociationError {
     Unknown(String),
 }
 
-
 impl DeleteBotChannelAssociationError {
     pub fn from_body(body: &str) -> DeleteBotChannelAssociationError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2196,7 +2189,11 @@ impl DeleteBotChannelAssociationError {
                     "ConflictException" => {
                         DeleteBotChannelAssociationError::Conflict(String::from(error_message))
                     }
-                    "InternalFailureException" => DeleteBotChannelAssociationError::InternalFailure(String::from(error_message)),
+                    "InternalFailureException" => {
+                        DeleteBotChannelAssociationError::InternalFailure(String::from(
+                            error_message,
+                        ))
+                    }
                     "LimitExceededException" => {
                         DeleteBotChannelAssociationError::LimitExceeded(String::from(error_message))
                     }
@@ -2280,7 +2277,6 @@ pub enum DeleteBotVersionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteBotVersionError {
     pub fn from_body(body: &str) -> DeleteBotVersionError {
@@ -2390,7 +2386,6 @@ pub enum DeleteIntentError {
     Unknown(String),
 }
 
-
 impl DeleteIntentError {
     pub fn from_body(body: &str) -> DeleteIntentError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2494,7 +2489,6 @@ pub enum DeleteIntentVersionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteIntentVersionError {
     pub fn from_body(body: &str) -> DeleteIntentVersionError {
@@ -2606,7 +2600,6 @@ pub enum DeleteSlotTypeError {
     Unknown(String),
 }
 
-
 impl DeleteSlotTypeError {
     pub fn from_body(body: &str) -> DeleteSlotTypeError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2715,7 +2708,6 @@ pub enum DeleteSlotTypeVersionError {
     Unknown(String),
 }
 
-
 impl DeleteSlotTypeVersionError {
     pub fn from_body(body: &str) -> DeleteSlotTypeVersionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2822,7 +2814,6 @@ pub enum DeleteUtterancesError {
     Unknown(String),
 }
 
-
 impl DeleteUtterancesError {
     pub fn from_body(body: &str) -> DeleteUtterancesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2919,7 +2910,6 @@ pub enum GetBotError {
     Unknown(String),
 }
 
-
 impl GetBotError {
     pub fn from_body(body: &str) -> GetBotError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3009,7 +2999,6 @@ pub enum GetBotAliasError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetBotAliasError {
     pub fn from_body(body: &str) -> GetBotAliasError {
@@ -3103,7 +3092,6 @@ pub enum GetBotAliasesError {
     Unknown(String),
 }
 
-
 impl GetBotAliasesError {
     pub fn from_body(body: &str) -> GetBotAliasesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3195,7 +3183,6 @@ pub enum GetBotChannelAssociationError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetBotChannelAssociationError {
     pub fn from_body(body: &str) -> GetBotChannelAssociationError {
@@ -3293,7 +3280,6 @@ pub enum GetBotChannelAssociationsError {
     Unknown(String),
 }
 
-
 impl GetBotChannelAssociationsError {
     pub fn from_body(body: &str) -> GetBotChannelAssociationsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3387,7 +3373,6 @@ pub enum GetBotVersionsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetBotVersionsError {
     pub fn from_body(body: &str) -> GetBotVersionsError {
@@ -3485,7 +3470,6 @@ pub enum GetBotsError {
     Unknown(String),
 }
 
-
 impl GetBotsError {
     pub fn from_body(body: &str) -> GetBotsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3575,7 +3559,6 @@ pub enum GetBuiltinIntentError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetBuiltinIntentError {
     pub fn from_body(body: &str) -> GetBuiltinIntentError {
@@ -3671,7 +3654,6 @@ pub enum GetBuiltinIntentsError {
     Unknown(String),
 }
 
-
 impl GetBuiltinIntentsError {
     pub fn from_body(body: &str) -> GetBuiltinIntentsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3763,7 +3745,6 @@ pub enum GetBuiltinSlotTypesError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetBuiltinSlotTypesError {
     pub fn from_body(body: &str) -> GetBuiltinSlotTypesError {
@@ -3859,7 +3840,6 @@ pub enum GetIntentError {
     Unknown(String),
 }
 
-
 impl GetIntentError {
     pub fn from_body(body: &str) -> GetIntentError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3951,7 +3931,6 @@ pub enum GetIntentVersionsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetIntentVersionsError {
     pub fn from_body(body: &str) -> GetIntentVersionsError {
@@ -4051,7 +4030,6 @@ pub enum GetIntentsError {
     Unknown(String),
 }
 
-
 impl GetIntentsError {
     pub fn from_body(body: &str) -> GetIntentsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4143,7 +4121,6 @@ pub enum GetSlotTypeError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetSlotTypeError {
     pub fn from_body(body: &str) -> GetSlotTypeError {
@@ -4238,7 +4215,6 @@ pub enum GetSlotTypeVersionsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetSlotTypeVersionsError {
     pub fn from_body(body: &str) -> GetSlotTypeVersionsError {
@@ -4338,7 +4314,6 @@ pub enum GetSlotTypesError {
     Unknown(String),
 }
 
-
 impl GetSlotTypesError {
     pub fn from_body(body: &str) -> GetSlotTypesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4430,7 +4405,6 @@ pub enum GetUtterancesViewError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetUtterancesViewError {
     pub fn from_body(body: &str) -> GetUtterancesViewError {
@@ -4528,7 +4502,6 @@ pub enum PutBotError {
     Unknown(String),
 }
 
-
 impl PutBotError {
     pub fn from_body(body: &str) -> PutBotError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4624,7 +4597,6 @@ pub enum PutBotAliasError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl PutBotAliasError {
     pub fn from_body(body: &str) -> PutBotAliasError {
@@ -4726,7 +4698,6 @@ pub enum PutIntentError {
     Unknown(String),
 }
 
-
 impl PutIntentError {
     pub fn from_body(body: &str) -> PutIntentError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4825,7 +4796,6 @@ pub enum PutSlotTypeError {
     Unknown(String),
 }
 
-
 impl PutSlotTypeError {
     pub fn from_body(body: &str) -> PutSlotTypeError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4906,191 +4876,179 @@ impl Error for PutSlotTypeError {
 /// Trait representing the capabilities of the Amazon Lex Model Building Service API. Amazon Lex Model Building Service clients implement this trait.
 pub trait LexModels {
     #[doc="<p>Creates a new version of the bot based on the <code>$LATEST</code> version. If the <code>$LATEST</code> version of this resource hasn't changed since you created the last version, Amazon Lex doesn't create a new version. It returns the last created version.</p> <note> <p>You can update only the <code>$LATEST</code> version of the bot. You can't update the numbered versions that you create with the <code>CreateBotVersion</code> operation.</p> </note> <p> When you create the first version of a bot, Amazon Lex sets the version to 1. Subsequent versions increment by 1. For more information, see <a>versioning-intro</a>. </p> <p> This operation requires permission for the <code>lex:CreateBotVersion</code> action. </p>"]
-    fn create_bot_version(&self,
-                          input: &CreateBotVersionRequest)
-                          -> Result<CreateBotVersionResponse, CreateBotVersionError>;
-
+    fn create_bot_version(
+        &self,
+        input: &CreateBotVersionRequest,
+    ) -> Result<CreateBotVersionResponse, CreateBotVersionError>;
 
     #[doc="<p>Creates a new version of an intent based on the <code>$LATEST</code> version of the intent. If the <code>$LATEST</code> version of this intent hasn't changed since you last updated it, Amazon Lex doesn't create a new version. It returns the last version you created.</p> <note> <p>You can update only the <code>$LATEST</code> version of the intent. You can't update the numbered versions that you create with the <code>CreateIntentVersion</code> operation.</p> </note> <p> When you create a version of an intent, Amazon Lex sets the version to 1. Subsequent versions increment by 1. For more information, see <a>versioning-intro</a>. </p> <p>This operation requires permissions to perform the <code>lex:CreateIntentVersion</code> action. </p>"]
-    fn create_intent_version(&self,
-                             input: &CreateIntentVersionRequest)
-                             -> Result<CreateIntentVersionResponse, CreateIntentVersionError>;
-
+    fn create_intent_version(
+        &self,
+        input: &CreateIntentVersionRequest,
+    ) -> Result<CreateIntentVersionResponse, CreateIntentVersionError>;
 
     #[doc="<p>Creates a new version of a slot type based on the <code>$LATEST</code> version of the specified slot type. If the <code>$LATEST</code> version of this resource has not changed since the last version that you created, Amazon Lex doesn't create a new version. It returns the last version that you created. </p> <note> <p>You can update only the <code>$LATEST</code> version of a slot type. You can't update the numbered versions that you create with the <code>CreateSlotTypeVersion</code> operation.</p> </note> <p>When you create a version of a slot type, Amazon Lex sets the version to 1. Subsequent versions increment by 1. For more information, see <a>versioning-intro</a>. </p> <p>This operation requires permissions for the <code>lex:CreateSlotTypeVersion</code> action.</p>"]
-    fn create_slot_type_version
-        (&self,
-         input: &CreateSlotTypeVersionRequest)
-         -> Result<CreateSlotTypeVersionResponse, CreateSlotTypeVersionError>;
-
+    fn create_slot_type_version(
+        &self,
+        input: &CreateSlotTypeVersionRequest,
+    ) -> Result<CreateSlotTypeVersionResponse, CreateSlotTypeVersionError>;
 
     #[doc="<p>Deletes all versions of the bot, including the <code>$LATEST</code> version. To delete a specific version of the bot, use the <a>DeleteBotVersion</a> operation.</p> <p>If a bot has an alias, you can't delete it. Instead, the <code>DeleteBot</code> operation returns a <code>ResourceInUseException</code> exception that includes a reference to the alias that refers to the bot. To remove the reference to the bot, delete the alias. If you get the same exception again, delete the referring alias until the <code>DeleteBot</code> operation is successful.</p> <p>This operation requires permissions for the <code>lex:DeleteBot</code> action.</p>"]
     fn delete_bot(&self, input: &DeleteBotRequest) -> Result<(), DeleteBotError>;
 
-
     #[doc="<p>Deletes an alias for the specified bot. </p> <p>You can't delete an alias that is used in the association between a bot and a messaging channel. If an alias is used in a channel association, the <code>DeleteBot</code> operation returns a <code>ResourceInUseException</code> exception that includes a reference to the channel association that refers to the bot. You can remove the reference to the alias by deleting the channel association. If you get the same exception again, delete the referring association until the <code>DeleteBotAlias</code> operation is successful.</p>"]
     fn delete_bot_alias(&self, input: &DeleteBotAliasRequest) -> Result<(), DeleteBotAliasError>;
 
-
     #[doc="<p>Deletes the association between an Amazon Lex bot and a messaging platform.</p> <p>This operation requires permission for the <code>lex:DeleteBotChannelAssociation</code> action.</p>"]
-    fn delete_bot_channel_association(&self,
-                                      input: &DeleteBotChannelAssociationRequest)
-                                      -> Result<(), DeleteBotChannelAssociationError>;
-
+    fn delete_bot_channel_association(
+        &self,
+        input: &DeleteBotChannelAssociationRequest,
+    ) -> Result<(), DeleteBotChannelAssociationError>;
 
     #[doc="<p>Deletes a specific version of a bot. To delete all versions of a bot, use the <a>DeleteBot</a> operation. </p> <p>This operation requires permissions for the <code>lex:DeleteBotVersion</code> action.</p>"]
-    fn delete_bot_version(&self,
-                          input: &DeleteBotVersionRequest)
-                          -> Result<(), DeleteBotVersionError>;
-
+    fn delete_bot_version(
+        &self,
+        input: &DeleteBotVersionRequest,
+    ) -> Result<(), DeleteBotVersionError>;
 
     #[doc="<p>Deletes all versions of the intent, including the <code>$LATEST</code> version. To delete a specific version of the intent, use the <a>DeleteIntentVersion</a> operation.</p> <p> You can delete a version of an intent only if it is not referenced. To delete an intent that is referred to in one or more bots (see <a>how-it-works</a>), you must remove those references first. </p> <note> <p> If you get the <code>ResourceInUseException</code> exception, it provides an example reference that shows where the intent is referenced. To remove the reference to the intent, either update the bot or delete it. If you get the same exception when you attempt to delete the intent again, repeat until the intent has no references and the call to <code>DeleteIntent</code> is successful. </p> </note> <p> This operation requires permission for the <code>lex:DeleteIntent</code> action. </p>"]
     fn delete_intent(&self, input: &DeleteIntentRequest) -> Result<(), DeleteIntentError>;
 
-
     #[doc="<p>Deletes a specific version of an intent. To delete all versions of a intent, use the <a>DeleteIntent</a> operation. </p> <p>This operation requires permissions for the <code>lex:DeleteIntentVersion</code> action.</p>"]
-    fn delete_intent_version(&self,
-                             input: &DeleteIntentVersionRequest)
-                             -> Result<(), DeleteIntentVersionError>;
-
+    fn delete_intent_version(
+        &self,
+        input: &DeleteIntentVersionRequest,
+    ) -> Result<(), DeleteIntentVersionError>;
 
     #[doc="<p>Deletes all versions of the slot type, including the <code>$LATEST</code> version. To delete a specific version of the slot type, use the <a>DeleteSlotTypeVersion</a> operation.</p> <p> You can delete a version of a slot type only if it is not referenced. To delete a slot type that is referred to in one or more intents, you must remove those references first. </p> <note> <p> If you get the <code>ResourceInUseException</code> exception, the exception provides an example reference that shows the intent where the slot type is referenced. To remove the reference to the slot type, either update the intent or delete it. If you get the same exception when you attempt to delete the slot type again, repeat until the slot type has no references and the <code>DeleteSlotType</code> call is successful. </p> </note> <p>This operation requires permission for the <code>lex:DeleteSlotType</code> action.</p>"]
     fn delete_slot_type(&self, input: &DeleteSlotTypeRequest) -> Result<(), DeleteSlotTypeError>;
 
-
     #[doc="<p>Deletes a specific version of a slot type. To delete all versions of a slot type, use the <a>DeleteSlotType</a> operation. </p> <p>This operation requires permissions for the <code>lex:DeleteSlotTypeVersion</code> action.</p>"]
-    fn delete_slot_type_version(&self,
-                                input: &DeleteSlotTypeVersionRequest)
-                                -> Result<(), DeleteSlotTypeVersionError>;
-
+    fn delete_slot_type_version(
+        &self,
+        input: &DeleteSlotTypeVersionRequest,
+    ) -> Result<(), DeleteSlotTypeVersionError>;
 
     #[doc="<p>Deletes stored utterances.</p> <p>Amazon Lex stores the utterances that users send to your bot unless the <code>childDirected</code> field in the bot is set to <code>true</code>. Utterances are stored for 15 days for use with the <a>GetUtterancesView</a> operation, and then stored indefinately for use in improving the ability of your bot to respond to user input.</p> <p>Use the <code>DeleteStoredUtterances</code> operation to manually delete stored utterances for a specific user.</p> <p>This operation requires permissions for the <code>lex:DeleteUtterances</code> action.</p>"]
-    fn delete_utterances(&self,
-                         input: &DeleteUtterancesRequest)
-                         -> Result<(), DeleteUtterancesError>;
-
+    fn delete_utterances(
+        &self,
+        input: &DeleteUtterancesRequest,
+    ) -> Result<(), DeleteUtterancesError>;
 
     #[doc="<p>Returns metadata information for a specific bot. You must provide the bot name and the bot version or alias. </p> <p> The GetBot operation requires permissions for the <code>lex:GetBot</code> action. </p>"]
     fn get_bot(&self, input: &GetBotRequest) -> Result<GetBotResponse, GetBotError>;
 
-
     #[doc="<p>Returns information about an Amazon Lex bot alias. For more information about aliases, see <a>versioning-aliases</a>.</p> <p>This operation requires permissions for the <code>lex:GetBotAlias</code> action.</p>"]
-    fn get_bot_alias(&self,
-                     input: &GetBotAliasRequest)
-                     -> Result<GetBotAliasResponse, GetBotAliasError>;
-
+    fn get_bot_alias(
+        &self,
+        input: &GetBotAliasRequest,
+    ) -> Result<GetBotAliasResponse, GetBotAliasError>;
 
     #[doc="<p>Returns a list of aliases for a specified Amazon Lex bot.</p> <p>This operation requires permissions for the <code>lex:GetBotAliases</code> action.</p>"]
-    fn get_bot_aliases(&self,
-                       input: &GetBotAliasesRequest)
-                       -> Result<GetBotAliasesResponse, GetBotAliasesError>;
-
+    fn get_bot_aliases(
+        &self,
+        input: &GetBotAliasesRequest,
+    ) -> Result<GetBotAliasesResponse, GetBotAliasesError>;
 
     #[doc="<p>Returns information about the association between an Amazon Lex bot and a messaging platform.</p> <p>This operation requires permissions for the <code>lex:GetBotChannelAssociation</code> action.</p>"]
-    fn get_bot_channel_association
-        (&self,
-         input: &GetBotChannelAssociationRequest)
-         -> Result<GetBotChannelAssociationResponse, GetBotChannelAssociationError>;
-
+    fn get_bot_channel_association(
+        &self,
+        input: &GetBotChannelAssociationRequest,
+    ) -> Result<GetBotChannelAssociationResponse, GetBotChannelAssociationError>;
 
     #[doc="<p> Returns a list of all of the channels associated with the specified bot. </p> <p>The <code>GetBotChannelAssociations</code> operation requires permissions for the <code>lex:GetBotChannelAssociations</code> action.</p>"]
-    fn get_bot_channel_associations
-        (&self,
-         input: &GetBotChannelAssociationsRequest)
-         -> Result<GetBotChannelAssociationsResponse, GetBotChannelAssociationsError>;
-
+    fn get_bot_channel_associations(
+        &self,
+        input: &GetBotChannelAssociationsRequest,
+    ) -> Result<GetBotChannelAssociationsResponse, GetBotChannelAssociationsError>;
 
     #[doc="<p>Gets information about all of the versions of a bot.</p> <p>The <code>GetBotVersions</code> operation returns a <code>BotMetadata</code> object for each version of a bot. For example, if a bot has three numbered versions, the <code>GetBotVersions</code> operation returns four <code>BotMetadata</code> objects in the response, one for each numbered version and one for the <code>$LATEST</code> version. </p> <p>The <code>GetBotVersions</code> operation always returns at least one version, the <code>$LATEST</code> version.</p> <p>This operation requires permissions for the <code>lex:GetBotVersions</code> action.</p>"]
-    fn get_bot_versions(&self,
-                        input: &GetBotVersionsRequest)
-                        -> Result<GetBotVersionsResponse, GetBotVersionsError>;
-
+    fn get_bot_versions(
+        &self,
+        input: &GetBotVersionsRequest,
+    ) -> Result<GetBotVersionsResponse, GetBotVersionsError>;
 
     #[doc="<p>Returns bot information as follows: </p> <ul> <li> <p>If you provide the <code>nameContains</code> field, the response includes information for the <code>$LATEST</code> version of all bots whose name contains the specified string.</p> </li> <li> <p>If you don't specify the <code>nameContains</code> field, the operation returns information about the <code>$LATEST</code> version of all of your bots.</p> </li> </ul> <p>This operation requires permission for the <code>lex:GetBots</code> action.</p>"]
     fn get_bots(&self, input: &GetBotsRequest) -> Result<GetBotsResponse, GetBotsError>;
 
-
     #[doc="<p>Returns information about a built-in intent.</p> <p>This operation requires permission for the <code>lex:GetBuiltinIntent</code> action.</p>"]
-    fn get_builtin_intent(&self,
-                          input: &GetBuiltinIntentRequest)
-                          -> Result<GetBuiltinIntentResponse, GetBuiltinIntentError>;
-
+    fn get_builtin_intent(
+        &self,
+        input: &GetBuiltinIntentRequest,
+    ) -> Result<GetBuiltinIntentResponse, GetBuiltinIntentError>;
 
     #[doc="<p>Gets a list of built-in intents that meet the specified criteria.</p> <p>This operation requires permission for the <code>lex:GetBuiltinIntents</code> action.</p>"]
-    fn get_builtin_intents(&self,
-                           input: &GetBuiltinIntentsRequest)
-                           -> Result<GetBuiltinIntentsResponse, GetBuiltinIntentsError>;
-
+    fn get_builtin_intents(
+        &self,
+        input: &GetBuiltinIntentsRequest,
+    ) -> Result<GetBuiltinIntentsResponse, GetBuiltinIntentsError>;
 
     #[doc="<p>Gets a list of built-in slot types that meet the specified criteria.</p> <p>For a list of built-in slot types, see <a href=\"https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/slot-type-reference\">Slot Type Reference</a> in the <i>Alexa Skills Kit</i>.</p> <p>This operation requires permission for the <code>lex:GetBuiltInSlotTypes</code> action.</p>"]
-    fn get_builtin_slot_types(&self,
-                              input: &GetBuiltinSlotTypesRequest)
-                              -> Result<GetBuiltinSlotTypesResponse, GetBuiltinSlotTypesError>;
-
+    fn get_builtin_slot_types(
+        &self,
+        input: &GetBuiltinSlotTypesRequest,
+    ) -> Result<GetBuiltinSlotTypesResponse, GetBuiltinSlotTypesError>;
 
     #[doc="<p> Returns information about an intent. In addition to the intent name, you must specify the intent version. </p> <p> This operation requires permissions to perform the <code>lex:GetIntent</code> action. </p>"]
     fn get_intent(&self, input: &GetIntentRequest) -> Result<GetIntentResponse, GetIntentError>;
 
-
     #[doc="<p>Gets information about all of the versions of an intent.</p> <p>The <code>GetIntentVersions</code> operation returns an <code>IntentMetadata</code> object for each version of an intent. For example, if an intent has three numbered versions, the <code>GetIntentVersions</code> operation returns four <code>IntentMetadata</code> objects in the response, one for each numbered version and one for the <code>$LATEST</code> version. </p> <p>The <code>GetIntentVersions</code> operation always returns at least one version, the <code>$LATEST</code> version.</p> <p>This operation requires permissions for the <code>lex:GetIntentVersions</code> action.</p>"]
-    fn get_intent_versions(&self,
-                           input: &GetIntentVersionsRequest)
-                           -> Result<GetIntentVersionsResponse, GetIntentVersionsError>;
-
+    fn get_intent_versions(
+        &self,
+        input: &GetIntentVersionsRequest,
+    ) -> Result<GetIntentVersionsResponse, GetIntentVersionsError>;
 
     #[doc="<p>Returns intent information as follows: </p> <ul> <li> <p>If you specify the <code>nameContains</code> field, returns the <code>$LATEST</code> version of all intents that contain the specified string.</p> </li> <li> <p> If you don't specify the <code>nameContains</code> field, returns information about the <code>$LATEST</code> version of all intents. </p> </li> </ul> <p> The operation requires permission for the <code>lex:GetIntents</code> action. </p>"]
-    fn get_intents(&self,
-                   input: &GetIntentsRequest)
-                   -> Result<GetIntentsResponse, GetIntentsError>;
-
+    fn get_intents(&self, input: &GetIntentsRequest)
+        -> Result<GetIntentsResponse, GetIntentsError>;
 
     #[doc="<p>Returns information about a specific version of a slot type. In addition to specifying the slot type name, you must specify the slot type version.</p> <p>This operation requires permissions for the <code>lex:GetSlotType</code> action.</p>"]
-    fn get_slot_type(&self,
-                     input: &GetSlotTypeRequest)
-                     -> Result<GetSlotTypeResponse, GetSlotTypeError>;
-
+    fn get_slot_type(
+        &self,
+        input: &GetSlotTypeRequest,
+    ) -> Result<GetSlotTypeResponse, GetSlotTypeError>;
 
     #[doc="<p>Gets information about all versions of a slot type.</p> <p>The <code>GetSlotTypeVersions</code> operation returns a <code>SlotTypeMetadata</code> object for each version of a slot type. For example, if a slot type has three numbered versions, the <code>GetSlotTypeVersions</code> operation returns four <code>SlotTypeMetadata</code> objects in the response, one for each numbered version and one for the <code>$LATEST</code> version. </p> <p>The <code>GetSlotTypeVersions</code> operation always returns at least one version, the <code>$LATEST</code> version.</p> <p>This operation requires permissions for the <code>lex:GetSlotTypeVersions</code> action.</p>"]
-    fn get_slot_type_versions(&self,
-                              input: &GetSlotTypeVersionsRequest)
-                              -> Result<GetSlotTypeVersionsResponse, GetSlotTypeVersionsError>;
-
+    fn get_slot_type_versions(
+        &self,
+        input: &GetSlotTypeVersionsRequest,
+    ) -> Result<GetSlotTypeVersionsResponse, GetSlotTypeVersionsError>;
 
     #[doc="<p>Returns slot type information as follows: </p> <ul> <li> <p>If you specify the <code>nameContains</code> field, returns the <code>$LATEST</code> version of all slot types that contain the specified string.</p> </li> <li> <p> If you don't specify the <code>nameContains</code> field, returns information about the <code>$LATEST</code> version of all slot types. </p> </li> </ul> <p> The operation requires permission for the <code>lex:GetSlotTypes</code> action. </p>"]
-    fn get_slot_types(&self,
-                      input: &GetSlotTypesRequest)
-                      -> Result<GetSlotTypesResponse, GetSlotTypesError>;
-
+    fn get_slot_types(
+        &self,
+        input: &GetSlotTypesRequest,
+    ) -> Result<GetSlotTypesResponse, GetSlotTypesError>;
 
     #[doc="<p>Use the <code>GetUtterancesView</code> operation to get information about the utterances that your users have made to your bot. You can use this list to tune the utterances that your bot responds to.</p> <p>For example, say that you have created a bot to order flowers. After your users have used your bot for a while, use the <code>GetUtterancesView</code> operation to see the requests that they have made and whether they have been successful. You might find that the utterance \"I want flowers\" is not being recognized. You could add this utterance to the <code>OrderFlowers</code> intent so that your bot recognizes that utterance.</p> <p>After you publish a new version of a bot, you can get information about the old version and the new so that you can compare the performance across the two versions. </p> <p>Data is available for the last 15 days. You can request information for up to 5 versions in each request. The response contains information about a maximum of 100 utterances for each version.</p> <p>If the bot's <code>childDirected</code> field is set to <code>true</code>, utterances for the bot are not stored and cannot be retrieved with the <code>GetUtterancesView</code> operation. For more information, see <a>PutBot</a>.</p> <p>This operation requires permissions for the <code>lex:GetUtterancesView</code> action.</p>"]
-    fn get_utterances_view(&self,
-                           input: &GetUtterancesViewRequest)
-                           -> Result<GetUtterancesViewResponse, GetUtterancesViewError>;
-
+    fn get_utterances_view(
+        &self,
+        input: &GetUtterancesViewRequest,
+    ) -> Result<GetUtterancesViewResponse, GetUtterancesViewError>;
 
     #[doc="<p>Creates an Amazon Lex conversational bot or replaces an existing bot. When you create or update a bot you are only required to specify a name. You can use this to add intents later, or to remove intents from an existing bot. When you create a bot with a name only, the bot is created or updated but Amazon Lex returns the <code/> response <code>FAILED</code>. You can build the bot after you add one or more intents. For more information about Amazon Lex bots, see <a>how-it-works</a>. </p> <p>If you specify the name of an existing bot, the fields in the request replace the existing values in the <code>$LATEST</code> version of the bot. Amazon Lex removes any fields that you don't provide values for in the request, except for the <code>idleTTLInSeconds</code> and <code>privacySettings</code> fields, which are set to their default values. If you don't specify values for required fields, Amazon Lex throws an exception.</p> <p>This operation requires permissions for the <code>lex:PutBot</code> action. For more information, see <a>auth-and-access-control</a>.</p>"]
     fn put_bot(&self, input: &PutBotRequest) -> Result<PutBotResponse, PutBotError>;
 
-
     #[doc="<p>Creates an alias for the specified version of the bot or replaces an alias for the specified bot. To change the version of the bot that the alias points to, replace the alias. For more information about aliases, see <a>versioning-aliases</a>.</p> <p>This operation requires permissions for the <code>lex:PutBotAlias</code> action. </p>"]
-    fn put_bot_alias(&self,
-                     input: &PutBotAliasRequest)
-                     -> Result<PutBotAliasResponse, PutBotAliasError>;
-
+    fn put_bot_alias(
+        &self,
+        input: &PutBotAliasRequest,
+    ) -> Result<PutBotAliasResponse, PutBotAliasError>;
 
     #[doc="<p>Creates an intent or replaces an existing intent.</p> <p>To define the interaction between the user and your bot, you use one or more intents. For a pizza ordering bot, for example, you would create an <code>OrderPizza</code> intent. </p> <p>To create an intent or replace an existing intent, you must provide the following:</p> <ul> <li> <p>Intent name. For example, <code>OrderPizza</code>.</p> </li> <li> <p>Sample utterances. For example, \"Can I order a pizza, please.\" and \"I want to order a pizza.\"</p> </li> <li> <p>Information to be gathered. You specify slot types for the information that your bot will request from the user. You can specify standard slot types, such as a date or a time, or custom slot types such as the size and crust of a pizza.</p> </li> <li> <p>How the intent will be fulfilled. You can provide a Lambda function or configure the intent to return the intent information to the client application. If you use a Lambda function, when all of the intent information is available, Amazon Lex invokes your Lambda function. If you configure your intent to return the intent information to the client application. </p> </li> </ul> <p>You can specify other optional information in the request, such as:</p> <ul> <li> <p>A confirmation prompt to ask the user to confirm an intent. For example, \"Shall I order your pizza?\"</p> </li> <li> <p>A conclusion statement to send to the user after the intent has been fulfilled. For example, \"I placed your pizza order.\"</p> </li> <li> <p>A follow-up prompt that asks the user for additional activity. For example, asking \"Do you want to order a drink with your pizza?\"</p> </li> </ul> <p>If you specify an existing intent name to update the intent, Amazon Lex replaces the values in the <code>$LATEST</code> version of the slot type with the values in the request. Amazon Lex removes fields that you don't provide in the request. If you don't specify the required fields, Amazon Lex throws an exception.</p> <p>For more information, see <a>how-it-works</a>.</p> <p>This operation requires permissions for the <code>lex:PutIntent</code> action.</p>"]
     fn put_intent(&self, input: &PutIntentRequest) -> Result<PutIntentResponse, PutIntentError>;
 
-
     #[doc="<p>Creates a custom slot type or replaces an existing custom slot type.</p> <p>To create a custom slot type, specify a name for the slot type and a set of enumeration values, which are the values that a slot of this type can assume. For more information, see <a>how-it-works</a>.</p> <p>If you specify the name of an existing slot type, the fields in the request replace the existing values in the <code>$LATEST</code> version of the slot type. Amazon Lex removes the fields that you don't provide in the request. If you don't specify required fields, Amazon Lex throws an exception.</p> <p>This operation requires permissions for the <code>lex:PutSlotType</code> action.</p>"]
-    fn put_slot_type(&self,
-                     input: &PutSlotTypeRequest)
-                     -> Result<PutSlotTypeResponse, PutSlotTypeError>;
+    fn put_slot_type(
+        &self,
+        input: &PutSlotTypeRequest,
+    ) -> Result<PutSlotTypeResponse, PutSlotTypeError>;
 }
 /// A client for the Amazon Lex Model Building Service API.
 pub struct LexModelsClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -5098,8 +5056,9 @@ pub struct LexModelsClient<P, D>
 }
 
 impl<P, D> LexModelsClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         LexModelsClient {
@@ -5111,13 +5070,15 @@ impl<P, D> LexModelsClient<P, D>
 }
 
 impl<P, D> LexModels for LexModelsClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     #[doc="<p>Creates a new version of the bot based on the <code>$LATEST</code> version. If the <code>$LATEST</code> version of this resource hasn't changed since you created the last version, Amazon Lex doesn't create a new version. It returns the last created version.</p> <note> <p>You can update only the <code>$LATEST</code> version of the bot. You can't update the numbered versions that you create with the <code>CreateBotVersion</code> operation.</p> </note> <p> When you create the first version of a bot, Amazon Lex sets the version to 1. Subsequent versions increment by 1. For more information, see <a>versioning-intro</a>. </p> <p> This operation requires permission for the <code>lex:CreateBotVersion</code> action. </p>"]
-    fn create_bot_version(&self,
-                          input: &CreateBotVersionRequest)
-                          -> Result<CreateBotVersionResponse, CreateBotVersionError> {
+    fn create_bot_version(
+        &self,
+        input: &CreateBotVersionRequest,
+    ) -> Result<CreateBotVersionResponse, CreateBotVersionError> {
         let request_uri = format!("/bots/{name}/versions", name = input.name);
 
         let mut request = SignedRequest::new("POST", "lex", &self.region, &request_uri);
@@ -5127,14 +5088,11 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -5146,23 +5104,23 @@ impl<P, D> LexModels for LexModelsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<CreateBotVersionResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateBotVersionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateBotVersionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a new version of an intent based on the <code>$LATEST</code> version of the intent. If the <code>$LATEST</code> version of this intent hasn't changed since you last updated it, Amazon Lex doesn't create a new version. It returns the last version you created.</p> <note> <p>You can update only the <code>$LATEST</code> version of the intent. You can't update the numbered versions that you create with the <code>CreateIntentVersion</code> operation.</p> </note> <p> When you create a version of an intent, Amazon Lex sets the version to 1. Subsequent versions increment by 1. For more information, see <a>versioning-intro</a>. </p> <p>This operation requires permissions to perform the <code>lex:CreateIntentVersion</code> action. </p>"]
-    fn create_intent_version(&self,
-                             input: &CreateIntentVersionRequest)
-                             -> Result<CreateIntentVersionResponse, CreateIntentVersionError> {
+    fn create_intent_version(
+        &self,
+        input: &CreateIntentVersionRequest,
+    ) -> Result<CreateIntentVersionResponse, CreateIntentVersionError> {
         let request_uri = format!("/intents/{name}/versions", name = input.name);
 
         let mut request = SignedRequest::new("POST", "lex", &self.region, &request_uri);
@@ -5172,14 +5130,11 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -5191,24 +5146,23 @@ impl<P, D> LexModels for LexModelsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<CreateIntentVersionResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateIntentVersionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateIntentVersionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a new version of a slot type based on the <code>$LATEST</code> version of the specified slot type. If the <code>$LATEST</code> version of this resource has not changed since the last version that you created, Amazon Lex doesn't create a new version. It returns the last version that you created. </p> <note> <p>You can update only the <code>$LATEST</code> version of a slot type. You can't update the numbered versions that you create with the <code>CreateSlotTypeVersion</code> operation.</p> </note> <p>When you create a version of a slot type, Amazon Lex sets the version to 1. Subsequent versions increment by 1. For more information, see <a>versioning-intro</a>. </p> <p>This operation requires permissions for the <code>lex:CreateSlotTypeVersion</code> action.</p>"]
-    fn create_slot_type_version
-        (&self,
-         input: &CreateSlotTypeVersionRequest)
-         -> Result<CreateSlotTypeVersionResponse, CreateSlotTypeVersionError> {
+    fn create_slot_type_version(
+        &self,
+        input: &CreateSlotTypeVersionRequest,
+    ) -> Result<CreateSlotTypeVersionResponse, CreateSlotTypeVersionError> {
         let request_uri = format!("/slottypes/{name}/versions", name = input.name);
 
         let mut request = SignedRequest::new("POST", "lex", &self.region, &request_uri);
@@ -5218,14 +5172,11 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -5235,21 +5186,20 @@ impl<P, D> LexModels for LexModelsClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CreateSlotTypeVersionResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<CreateSlotTypeVersionResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateSlotTypeVersionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateSlotTypeVersionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Deletes all versions of the bot, including the <code>$LATEST</code> version. To delete a specific version of the bot, use the <a>DeleteBotVersion</a> operation.</p> <p>If a bot has an alias, you can't delete it. Instead, the <code>DeleteBot</code> operation returns a <code>ResourceInUseException</code> exception that includes a reference to the alias that refers to the bot. To remove the reference to the bot, delete the alias. If you get the same exception again, delete the referring alias until the <code>DeleteBot</code> operation is successful.</p> <p>This operation requires permissions for the <code>lex:DeleteBot</code> action.</p>"]
     fn delete_bot(&self, input: &DeleteBotRequest) -> Result<(), DeleteBotError> {
@@ -5260,9 +5210,6 @@ impl<P, D> LexModels for LexModelsClient<P, D>
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
@@ -5270,31 +5217,30 @@ impl<P, D> LexModels for LexModelsClient<P, D>
             StatusCode::NoContent => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteBotError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteBotError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Deletes an alias for the specified bot. </p> <p>You can't delete an alias that is used in the association between a bot and a messaging channel. If an alias is used in a channel association, the <code>DeleteBot</code> operation returns a <code>ResourceInUseException</code> exception that includes a reference to the channel association that refers to the bot. You can remove the reference to the alias by deleting the channel association. If you get the same exception again, delete the referring association until the <code>DeleteBotAlias</code> operation is successful.</p>"]
     fn delete_bot_alias(&self, input: &DeleteBotAliasRequest) -> Result<(), DeleteBotAliasError> {
-        let request_uri = format!("/bots/{bot_name}/aliases/{name}",
-                                  bot_name = input.bot_name,
-                                  name = input.name);
+        let request_uri = format!(
+            "/bots/{bot_name}/aliases/{name}",
+            bot_name = input.bot_name,
+            name = input.name
+        );
 
         let mut request = SignedRequest::new("DELETE", "lex", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
-
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
@@ -5303,34 +5249,34 @@ impl<P, D> LexModels for LexModelsClient<P, D>
             StatusCode::NoContent => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteBotAliasError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteBotAliasError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Deletes the association between an Amazon Lex bot and a messaging platform.</p> <p>This operation requires permission for the <code>lex:DeleteBotChannelAssociation</code> action.</p>"]
-    fn delete_bot_channel_association(&self,
-                                      input: &DeleteBotChannelAssociationRequest)
-                                      -> Result<(), DeleteBotChannelAssociationError> {
-        let request_uri = format!("/bots/{bot_name}/aliases/{alias_name}/channels/{name}",
-                                  alias_name = input.bot_alias,
-                                  bot_name = input.bot_name,
-                                  name = input.name);
+    fn delete_bot_channel_association(
+        &self,
+        input: &DeleteBotChannelAssociationRequest,
+    ) -> Result<(), DeleteBotChannelAssociationError> {
+        let request_uri = format!(
+            "/bots/{bot_name}/aliases/{alias_name}/channels/{name}",
+            alias_name = input.bot_alias,
+            bot_name = input.bot_name,
+            name = input.name
+        );
 
         let mut request = SignedRequest::new("DELETE", "lex", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
-
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
@@ -5339,34 +5285,33 @@ impl<P, D> LexModels for LexModelsClient<P, D>
             StatusCode::NoContent => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteBotChannelAssociationError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(DeleteBotChannelAssociationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Deletes a specific version of a bot. To delete all versions of a bot, use the <a>DeleteBot</a> operation. </p> <p>This operation requires permissions for the <code>lex:DeleteBotVersion</code> action.</p>"]
-    fn delete_bot_version(&self,
-                          input: &DeleteBotVersionRequest)
-                          -> Result<(), DeleteBotVersionError> {
-        let request_uri = format!("/bots/{name}/versions/{version}",
-                                  name = input.name,
-                                  version = input.version);
+    fn delete_bot_version(
+        &self,
+        input: &DeleteBotVersionRequest,
+    ) -> Result<(), DeleteBotVersionError> {
+        let request_uri = format!(
+            "/bots/{name}/versions/{version}",
+            name = input.name,
+            version = input.version
+        );
 
         let mut request = SignedRequest::new("DELETE", "lex", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
-
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
@@ -5375,17 +5320,17 @@ impl<P, D> LexModels for LexModelsClient<P, D>
             StatusCode::NoContent => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteBotVersionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteBotVersionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Deletes all versions of the intent, including the <code>$LATEST</code> version. To delete a specific version of the intent, use the <a>DeleteIntentVersion</a> operation.</p> <p> You can delete a version of an intent only if it is not referenced. To delete an intent that is referred to in one or more bots (see <a>how-it-works</a>), you must remove those references first. </p> <note> <p> If you get the <code>ResourceInUseException</code> exception, it provides an example reference that shows where the intent is referenced. To remove the reference to the intent, either update the bot or delete it. If you get the same exception when you attempt to delete the intent again, repeat until the intent has no references and the call to <code>DeleteIntent</code> is successful. </p> </note> <p> This operation requires permission for the <code>lex:DeleteIntent</code> action. </p>"]
     fn delete_intent(&self, input: &DeleteIntentRequest) -> Result<(), DeleteIntentError> {
@@ -5396,9 +5341,6 @@ impl<P, D> LexModels for LexModelsClient<P, D>
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
@@ -5406,34 +5348,34 @@ impl<P, D> LexModels for LexModelsClient<P, D>
             StatusCode::NoContent => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteIntentError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteIntentError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes a specific version of an intent. To delete all versions of a intent, use the <a>DeleteIntent</a> operation. </p> <p>This operation requires permissions for the <code>lex:DeleteIntentVersion</code> action.</p>"]
-    fn delete_intent_version(&self,
-                             input: &DeleteIntentVersionRequest)
-                             -> Result<(), DeleteIntentVersionError> {
-        let request_uri = format!("/intents/{name}/versions/{version}",
-                                  name = input.name,
-                                  version = input.version);
+    fn delete_intent_version(
+        &self,
+        input: &DeleteIntentVersionRequest,
+    ) -> Result<(), DeleteIntentVersionError> {
+        let request_uri = format!(
+            "/intents/{name}/versions/{version}",
+            name = input.name,
+            version = input.version
+        );
 
         let mut request = SignedRequest::new("DELETE", "lex", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
@@ -5441,17 +5383,17 @@ impl<P, D> LexModels for LexModelsClient<P, D>
             StatusCode::NoContent => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteIntentVersionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteIntentVersionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Deletes all versions of the slot type, including the <code>$LATEST</code> version. To delete a specific version of the slot type, use the <a>DeleteSlotTypeVersion</a> operation.</p> <p> You can delete a version of a slot type only if it is not referenced. To delete a slot type that is referred to in one or more intents, you must remove those references first. </p> <note> <p> If you get the <code>ResourceInUseException</code> exception, the exception provides an example reference that shows the intent where the slot type is referenced. To remove the reference to the slot type, either update the intent or delete it. If you get the same exception when you attempt to delete the slot type again, repeat until the slot type has no references and the <code>DeleteSlotType</code> call is successful. </p> </note> <p>This operation requires permission for the <code>lex:DeleteSlotType</code> action.</p>"]
     fn delete_slot_type(&self, input: &DeleteSlotTypeRequest) -> Result<(), DeleteSlotTypeError> {
@@ -5462,9 +5404,6 @@ impl<P, D> LexModels for LexModelsClient<P, D>
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
@@ -5472,33 +5411,33 @@ impl<P, D> LexModels for LexModelsClient<P, D>
             StatusCode::NoContent => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteSlotTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteSlotTypeError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Deletes a specific version of a slot type. To delete all versions of a slot type, use the <a>DeleteSlotType</a> operation. </p> <p>This operation requires permissions for the <code>lex:DeleteSlotTypeVersion</code> action.</p>"]
-    fn delete_slot_type_version(&self,
-                                input: &DeleteSlotTypeVersionRequest)
-                                -> Result<(), DeleteSlotTypeVersionError> {
-        let request_uri = format!("/slottypes/{name}/version/{version}",
-                                  name = input.name,
-                                  version = input.version);
+    fn delete_slot_type_version(
+        &self,
+        input: &DeleteSlotTypeVersionRequest,
+    ) -> Result<(), DeleteSlotTypeVersionError> {
+        let request_uri = format!(
+            "/slottypes/{name}/version/{version}",
+            name = input.name,
+            version = input.version
+        );
 
         let mut request = SignedRequest::new("DELETE", "lex", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
-
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
@@ -5507,33 +5446,33 @@ impl<P, D> LexModels for LexModelsClient<P, D>
             StatusCode::NoContent => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteSlotTypeVersionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteSlotTypeVersionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Deletes stored utterances.</p> <p>Amazon Lex stores the utterances that users send to your bot unless the <code>childDirected</code> field in the bot is set to <code>true</code>. Utterances are stored for 15 days for use with the <a>GetUtterancesView</a> operation, and then stored indefinately for use in improving the ability of your bot to respond to user input.</p> <p>Use the <code>DeleteStoredUtterances</code> operation to manually delete stored utterances for a specific user.</p> <p>This operation requires permissions for the <code>lex:DeleteUtterances</code> action.</p>"]
-    fn delete_utterances(&self,
-                         input: &DeleteUtterancesRequest)
-                         -> Result<(), DeleteUtterancesError> {
-        let request_uri = format!("/bots/{bot_name}/utterances/{user_id}",
-                                  bot_name = input.bot_name,
-                                  user_id = input.user_id);
+    fn delete_utterances(
+        &self,
+        input: &DeleteUtterancesRequest,
+    ) -> Result<(), DeleteUtterancesError> {
+        let request_uri = format!(
+            "/bots/{bot_name}/utterances/{user_id}",
+            bot_name = input.bot_name,
+            user_id = input.user_id
+        );
 
         let mut request = SignedRequest::new("DELETE", "lex", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
-
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
@@ -5542,38 +5481,36 @@ impl<P, D> LexModels for LexModelsClient<P, D>
             StatusCode::NoContent => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteUtterancesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteUtterancesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Returns metadata information for a specific bot. You must provide the bot name and the bot version or alias. </p> <p> The GetBot operation requires permissions for the <code>lex:GetBot</code> action. </p>"]
     fn get_bot(&self, input: &GetBotRequest) -> Result<GetBotResponse, GetBotError> {
-        let request_uri = format!("/bots/{name}/versions/{versionoralias}",
-                                  name = input.name,
-                                  versionoralias = input.version_or_alias);
+        let request_uri = format!(
+            "/bots/{name}/versions/{versionoralias}",
+            name = input.name,
+            versionoralias = input.version_or_alias
+        );
 
         let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -5585,41 +5522,39 @@ impl<P, D> LexModels for LexModelsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetBotResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetBotError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetBotError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns information about an Amazon Lex bot alias. For more information about aliases, see <a>versioning-aliases</a>.</p> <p>This operation requires permissions for the <code>lex:GetBotAlias</code> action.</p>"]
-    fn get_bot_alias(&self,
-                     input: &GetBotAliasRequest)
-                     -> Result<GetBotAliasResponse, GetBotAliasError> {
-        let request_uri = format!("/bots/{bot_name}/aliases/{name}",
-                                  bot_name = input.bot_name,
-                                  name = input.name);
+    fn get_bot_alias(
+        &self,
+        input: &GetBotAliasRequest,
+    ) -> Result<GetBotAliasResponse, GetBotAliasError> {
+        let request_uri = format!(
+            "/bots/{bot_name}/aliases/{name}",
+            bot_name = input.bot_name,
+            name = input.name
+        );
 
         let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -5631,30 +5566,29 @@ impl<P, D> LexModels for LexModelsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetBotAliasResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetBotAliasError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetBotAliasError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns a list of aliases for a specified Amazon Lex bot.</p> <p>This operation requires permissions for the <code>lex:GetBotAliases</code> action.</p>"]
-    fn get_bot_aliases(&self,
-                       input: &GetBotAliasesRequest)
-                       -> Result<GetBotAliasesResponse, GetBotAliasesError> {
+    fn get_bot_aliases(
+        &self,
+        input: &GetBotAliasesRequest,
+    ) -> Result<GetBotAliasesResponse, GetBotAliasesError> {
         let request_uri = format!("/bots/{bot_name}/aliases/", bot_name = input.bot_name);
 
         let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.max_results {
@@ -5673,7 +5607,6 @@ impl<P, D> LexModels for LexModelsClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -5685,43 +5618,40 @@ impl<P, D> LexModels for LexModelsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetBotAliasesResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetBotAliasesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetBotAliasesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns information about the association between an Amazon Lex bot and a messaging platform.</p> <p>This operation requires permissions for the <code>lex:GetBotChannelAssociation</code> action.</p>"]
-    fn get_bot_channel_association
-        (&self,
-         input: &GetBotChannelAssociationRequest)
-         -> Result<GetBotChannelAssociationResponse, GetBotChannelAssociationError> {
-        let request_uri = format!("/bots/{bot_name}/aliases/{alias_name}/channels/{name}",
-                                  alias_name = input.bot_alias,
-                                  bot_name = input.bot_name,
-                                  name = input.name);
+    fn get_bot_channel_association(
+        &self,
+        input: &GetBotChannelAssociationRequest,
+    ) -> Result<GetBotChannelAssociationResponse, GetBotChannelAssociationError> {
+        let request_uri = format!(
+            "/bots/{bot_name}/aliases/{alias_name}/channels/{name}",
+            alias_name = input.bot_alias,
+            bot_name = input.bot_name,
+            name = input.name
+        );
 
         let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -5731,37 +5661,36 @@ impl<P, D> LexModels for LexModelsClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetBotChannelAssociationResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<GetBotChannelAssociationResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetBotChannelAssociationError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(GetBotChannelAssociationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p> Returns a list of all of the channels associated with the specified bot. </p> <p>The <code>GetBotChannelAssociations</code> operation requires permissions for the <code>lex:GetBotChannelAssociations</code> action.</p>"]
-    fn get_bot_channel_associations
-        (&self,
-         input: &GetBotChannelAssociationsRequest)
-         -> Result<GetBotChannelAssociationsResponse, GetBotChannelAssociationsError> {
-        let request_uri = format!("/bots/{bot_name}/aliases/{alias_name}/channels/",
-                                  alias_name = input.bot_alias,
-                                  bot_name = input.bot_name);
+    fn get_bot_channel_associations(
+        &self,
+        input: &GetBotChannelAssociationsRequest,
+    ) -> Result<GetBotChannelAssociationsResponse, GetBotChannelAssociationsError> {
+        let request_uri = format!(
+            "/bots/{bot_name}/aliases/{alias_name}/channels/",
+            alias_name = input.bot_alias,
+            bot_name = input.bot_name
+        );
 
         let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.max_results {
@@ -5780,7 +5709,6 @@ impl<P, D> LexModels for LexModelsClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -5790,34 +5718,32 @@ impl<P, D> LexModels for LexModelsClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetBotChannelAssociationsResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<GetBotChannelAssociationsResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetBotChannelAssociationsError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(GetBotChannelAssociationsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Gets information about all of the versions of a bot.</p> <p>The <code>GetBotVersions</code> operation returns a <code>BotMetadata</code> object for each version of a bot. For example, if a bot has three numbered versions, the <code>GetBotVersions</code> operation returns four <code>BotMetadata</code> objects in the response, one for each numbered version and one for the <code>$LATEST</code> version. </p> <p>The <code>GetBotVersions</code> operation always returns at least one version, the <code>$LATEST</code> version.</p> <p>This operation requires permissions for the <code>lex:GetBotVersions</code> action.</p>"]
-    fn get_bot_versions(&self,
-                        input: &GetBotVersionsRequest)
-                        -> Result<GetBotVersionsResponse, GetBotVersionsError> {
+    fn get_bot_versions(
+        &self,
+        input: &GetBotVersionsRequest,
+    ) -> Result<GetBotVersionsResponse, GetBotVersionsError> {
         let request_uri = format!("/bots/{name}/versions/", name = input.name);
 
         let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.max_results {
@@ -5833,7 +5759,6 @@ impl<P, D> LexModels for LexModelsClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -5845,18 +5770,17 @@ impl<P, D> LexModels for LexModelsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetBotVersionsResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetBotVersionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetBotVersionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Returns bot information as follows: </p> <ul> <li> <p>If you provide the <code>nameContains</code> field, the response includes information for the <code>$LATEST</code> version of all bots whose name contains the specified string.</p> </li> <li> <p>If you don't specify the <code>nameContains</code> field, the operation returns information about the <code>$LATEST</code> version of all of your bots.</p> </li> </ul> <p>This operation requires permission for the <code>lex:GetBots</code> action.</p>"]
     fn get_bots(&self, input: &GetBotsRequest) -> Result<GetBotsResponse, GetBotsError> {
@@ -5866,7 +5790,6 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.max_results {
@@ -5885,7 +5808,6 @@ impl<P, D> LexModels for LexModelsClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -5897,23 +5819,23 @@ impl<P, D> LexModels for LexModelsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetBotsResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetBotsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetBotsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns information about a built-in intent.</p> <p>This operation requires permission for the <code>lex:GetBuiltinIntent</code> action.</p>"]
-    fn get_builtin_intent(&self,
-                          input: &GetBuiltinIntentRequest)
-                          -> Result<GetBuiltinIntentResponse, GetBuiltinIntentError> {
+    fn get_builtin_intent(
+        &self,
+        input: &GetBuiltinIntentRequest,
+    ) -> Result<GetBuiltinIntentResponse, GetBuiltinIntentError> {
         let request_uri = format!("/builtins/intents/{signature}", signature = input.signature);
 
         let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
@@ -5921,15 +5843,11 @@ impl<P, D> LexModels for LexModelsClient<P, D>
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -5941,30 +5859,29 @@ impl<P, D> LexModels for LexModelsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetBuiltinIntentResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetBuiltinIntentError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetBuiltinIntentError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Gets a list of built-in intents that meet the specified criteria.</p> <p>This operation requires permission for the <code>lex:GetBuiltinIntents</code> action.</p>"]
-    fn get_builtin_intents(&self,
-                           input: &GetBuiltinIntentsRequest)
-                           -> Result<GetBuiltinIntentsResponse, GetBuiltinIntentsError> {
+    fn get_builtin_intents(
+        &self,
+        input: &GetBuiltinIntentsRequest,
+    ) -> Result<GetBuiltinIntentsResponse, GetBuiltinIntentsError> {
         let request_uri = "/builtins/intents/";
 
         let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.locale {
@@ -5986,7 +5903,6 @@ impl<P, D> LexModels for LexModelsClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -5998,30 +5914,29 @@ impl<P, D> LexModels for LexModelsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetBuiltinIntentsResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetBuiltinIntentsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetBuiltinIntentsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Gets a list of built-in slot types that meet the specified criteria.</p> <p>For a list of built-in slot types, see <a href=\"https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/slot-type-reference\">Slot Type Reference</a> in the <i>Alexa Skills Kit</i>.</p> <p>This operation requires permission for the <code>lex:GetBuiltInSlotTypes</code> action.</p>"]
-    fn get_builtin_slot_types(&self,
-                              input: &GetBuiltinSlotTypesRequest)
-                              -> Result<GetBuiltinSlotTypesResponse, GetBuiltinSlotTypesError> {
+    fn get_builtin_slot_types(
+        &self,
+        input: &GetBuiltinSlotTypesRequest,
+    ) -> Result<GetBuiltinSlotTypesResponse, GetBuiltinSlotTypesError> {
         let request_uri = "/builtins/slottypes/";
 
         let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.locale {
@@ -6043,7 +5958,6 @@ impl<P, D> LexModels for LexModelsClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -6055,39 +5969,36 @@ impl<P, D> LexModels for LexModelsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetBuiltinSlotTypesResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetBuiltinSlotTypesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetBuiltinSlotTypesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p> Returns information about an intent. In addition to the intent name, you must specify the intent version. </p> <p> This operation requires permissions to perform the <code>lex:GetIntent</code> action. </p>"]
     fn get_intent(&self, input: &GetIntentRequest) -> Result<GetIntentResponse, GetIntentError> {
-        let request_uri = format!("/intents/{name}/versions/{version}",
-                                  name = input.name,
-                                  version = input.version);
+        let request_uri = format!(
+            "/intents/{name}/versions/{version}",
+            name = input.name,
+            version = input.version
+        );
 
         let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -6099,30 +6010,29 @@ impl<P, D> LexModels for LexModelsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetIntentResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetIntentError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetIntentError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Gets information about all of the versions of an intent.</p> <p>The <code>GetIntentVersions</code> operation returns an <code>IntentMetadata</code> object for each version of an intent. For example, if an intent has three numbered versions, the <code>GetIntentVersions</code> operation returns four <code>IntentMetadata</code> objects in the response, one for each numbered version and one for the <code>$LATEST</code> version. </p> <p>The <code>GetIntentVersions</code> operation always returns at least one version, the <code>$LATEST</code> version.</p> <p>This operation requires permissions for the <code>lex:GetIntentVersions</code> action.</p>"]
-    fn get_intent_versions(&self,
-                           input: &GetIntentVersionsRequest)
-                           -> Result<GetIntentVersionsResponse, GetIntentVersionsError> {
+    fn get_intent_versions(
+        &self,
+        input: &GetIntentVersionsRequest,
+    ) -> Result<GetIntentVersionsResponse, GetIntentVersionsError> {
         let request_uri = format!("/intents/{name}/versions/", name = input.name);
 
         let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.max_results {
@@ -6138,7 +6048,6 @@ impl<P, D> LexModels for LexModelsClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -6150,30 +6059,29 @@ impl<P, D> LexModels for LexModelsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetIntentVersionsResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetIntentVersionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetIntentVersionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns intent information as follows: </p> <ul> <li> <p>If you specify the <code>nameContains</code> field, returns the <code>$LATEST</code> version of all intents that contain the specified string.</p> </li> <li> <p> If you don't specify the <code>nameContains</code> field, returns information about the <code>$LATEST</code> version of all intents. </p> </li> </ul> <p> The operation requires permission for the <code>lex:GetIntents</code> action. </p>"]
-    fn get_intents(&self,
-                   input: &GetIntentsRequest)
-                   -> Result<GetIntentsResponse, GetIntentsError> {
+    fn get_intents(
+        &self,
+        input: &GetIntentsRequest,
+    ) -> Result<GetIntentsResponse, GetIntentsError> {
         let request_uri = "/intents/";
 
         let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.max_results {
@@ -6192,7 +6100,6 @@ impl<P, D> LexModels for LexModelsClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -6204,41 +6111,39 @@ impl<P, D> LexModels for LexModelsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetIntentsResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetIntentsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetIntentsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns information about a specific version of a slot type. In addition to specifying the slot type name, you must specify the slot type version.</p> <p>This operation requires permissions for the <code>lex:GetSlotType</code> action.</p>"]
-    fn get_slot_type(&self,
-                     input: &GetSlotTypeRequest)
-                     -> Result<GetSlotTypeResponse, GetSlotTypeError> {
-        let request_uri = format!("/slottypes/{name}/versions/{version}",
-                                  name = input.name,
-                                  version = input.version);
+    fn get_slot_type(
+        &self,
+        input: &GetSlotTypeRequest,
+    ) -> Result<GetSlotTypeResponse, GetSlotTypeError> {
+        let request_uri = format!(
+            "/slottypes/{name}/versions/{version}",
+            name = input.name,
+            version = input.version
+        );
 
         let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -6250,30 +6155,29 @@ impl<P, D> LexModels for LexModelsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetSlotTypeResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetSlotTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetSlotTypeError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Gets information about all versions of a slot type.</p> <p>The <code>GetSlotTypeVersions</code> operation returns a <code>SlotTypeMetadata</code> object for each version of a slot type. For example, if a slot type has three numbered versions, the <code>GetSlotTypeVersions</code> operation returns four <code>SlotTypeMetadata</code> objects in the response, one for each numbered version and one for the <code>$LATEST</code> version. </p> <p>The <code>GetSlotTypeVersions</code> operation always returns at least one version, the <code>$LATEST</code> version.</p> <p>This operation requires permissions for the <code>lex:GetSlotTypeVersions</code> action.</p>"]
-    fn get_slot_type_versions(&self,
-                              input: &GetSlotTypeVersionsRequest)
-                              -> Result<GetSlotTypeVersionsResponse, GetSlotTypeVersionsError> {
+    fn get_slot_type_versions(
+        &self,
+        input: &GetSlotTypeVersionsRequest,
+    ) -> Result<GetSlotTypeVersionsResponse, GetSlotTypeVersionsError> {
         let request_uri = format!("/slottypes/{name}/versions/", name = input.name);
 
         let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.max_results {
@@ -6289,7 +6193,6 @@ impl<P, D> LexModels for LexModelsClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -6301,30 +6204,29 @@ impl<P, D> LexModels for LexModelsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetSlotTypeVersionsResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetSlotTypeVersionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetSlotTypeVersionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns slot type information as follows: </p> <ul> <li> <p>If you specify the <code>nameContains</code> field, returns the <code>$LATEST</code> version of all slot types that contain the specified string.</p> </li> <li> <p> If you don't specify the <code>nameContains</code> field, returns information about the <code>$LATEST</code> version of all slot types. </p> </li> </ul> <p> The operation requires permission for the <code>lex:GetSlotTypes</code> action. </p>"]
-    fn get_slot_types(&self,
-                      input: &GetSlotTypesRequest)
-                      -> Result<GetSlotTypesResponse, GetSlotTypesError> {
+    fn get_slot_types(
+        &self,
+        input: &GetSlotTypesRequest,
+    ) -> Result<GetSlotTypesResponse, GetSlotTypesError> {
         let request_uri = "/slottypes/";
 
         let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.max_results {
@@ -6343,7 +6245,6 @@ impl<P, D> LexModels for LexModelsClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -6355,30 +6256,29 @@ impl<P, D> LexModels for LexModelsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetSlotTypesResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetSlotTypesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetSlotTypesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Use the <code>GetUtterancesView</code> operation to get information about the utterances that your users have made to your bot. You can use this list to tune the utterances that your bot responds to.</p> <p>For example, say that you have created a bot to order flowers. After your users have used your bot for a while, use the <code>GetUtterancesView</code> operation to see the requests that they have made and whether they have been successful. You might find that the utterance \"I want flowers\" is not being recognized. You could add this utterance to the <code>OrderFlowers</code> intent so that your bot recognizes that utterance.</p> <p>After you publish a new version of a bot, you can get information about the old version and the new so that you can compare the performance across the two versions. </p> <p>Data is available for the last 15 days. You can request information for up to 5 versions in each request. The response contains information about a maximum of 100 utterances for each version.</p> <p>If the bot's <code>childDirected</code> field is set to <code>true</code>, utterances for the bot are not stored and cannot be retrieved with the <code>GetUtterancesView</code> operation. For more information, see <a>PutBot</a>.</p> <p>This operation requires permissions for the <code>lex:GetUtterancesView</code> action.</p>"]
-    fn get_utterances_view(&self,
-                           input: &GetUtterancesViewRequest)
-                           -> Result<GetUtterancesViewResponse, GetUtterancesViewError> {
+    fn get_utterances_view(
+        &self,
+        input: &GetUtterancesViewRequest,
+    ) -> Result<GetUtterancesViewResponse, GetUtterancesViewError> {
         let request_uri = format!("/bots/{botname}/utterances", botname = input.bot_name);
 
         let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
-
 
         let mut params = Params::new();
         for item in input.bot_versions.iter() {
@@ -6393,7 +6293,6 @@ impl<P, D> LexModels for LexModelsClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -6405,18 +6304,17 @@ impl<P, D> LexModels for LexModelsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetUtterancesViewResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetUtterancesViewError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetUtterancesViewError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Creates an Amazon Lex conversational bot or replaces an existing bot. When you create or update a bot you are only required to specify a name. You can use this to add intents later, or to remove intents from an existing bot. When you create a bot with a name only, the bot is created or updated but Amazon Lex returns the <code/> response <code>FAILED</code>. You can build the bot after you add one or more intents. For more information about Amazon Lex bots, see <a>how-it-works</a>. </p> <p>If you specify the name of an existing bot, the fields in the request replace the existing values in the <code>$LATEST</code> version of the bot. Amazon Lex removes any fields that you don't provide values for in the request, except for the <code>idleTTLInSeconds</code> and <code>privacySettings</code> fields, which are set to their default values. If you don't specify values for required fields, Amazon Lex throws an exception.</p> <p>This operation requires permissions for the <code>lex:PutBot</code> action. For more information, see <a>auth-and-access-control</a>.</p>"]
     fn put_bot(&self, input: &PutBotRequest) -> Result<PutBotResponse, PutBotError> {
@@ -6429,14 +6327,11 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -6448,26 +6343,28 @@ impl<P, D> LexModels for LexModelsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<PutBotResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(PutBotError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(PutBotError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates an alias for the specified version of the bot or replaces an alias for the specified bot. To change the version of the bot that the alias points to, replace the alias. For more information about aliases, see <a>versioning-aliases</a>.</p> <p>This operation requires permissions for the <code>lex:PutBotAlias</code> action. </p>"]
-    fn put_bot_alias(&self,
-                     input: &PutBotAliasRequest)
-                     -> Result<PutBotAliasResponse, PutBotAliasError> {
-        let request_uri = format!("/bots/{bot_name}/aliases/{name}",
-                                  bot_name = input.bot_name,
-                                  name = input.name);
+    fn put_bot_alias(
+        &self,
+        input: &PutBotAliasRequest,
+    ) -> Result<PutBotAliasResponse, PutBotAliasError> {
+        let request_uri = format!(
+            "/bots/{bot_name}/aliases/{name}",
+            bot_name = input.bot_name,
+            name = input.name
+        );
 
         let mut request = SignedRequest::new("PUT", "lex", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6476,14 +6373,11 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -6495,18 +6389,17 @@ impl<P, D> LexModels for LexModelsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<PutBotAliasResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(PutBotAliasError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(PutBotAliasError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Creates an intent or replaces an existing intent.</p> <p>To define the interaction between the user and your bot, you use one or more intents. For a pizza ordering bot, for example, you would create an <code>OrderPizza</code> intent. </p> <p>To create an intent or replace an existing intent, you must provide the following:</p> <ul> <li> <p>Intent name. For example, <code>OrderPizza</code>.</p> </li> <li> <p>Sample utterances. For example, \"Can I order a pizza, please.\" and \"I want to order a pizza.\"</p> </li> <li> <p>Information to be gathered. You specify slot types for the information that your bot will request from the user. You can specify standard slot types, such as a date or a time, or custom slot types such as the size and crust of a pizza.</p> </li> <li> <p>How the intent will be fulfilled. You can provide a Lambda function or configure the intent to return the intent information to the client application. If you use a Lambda function, when all of the intent information is available, Amazon Lex invokes your Lambda function. If you configure your intent to return the intent information to the client application. </p> </li> </ul> <p>You can specify other optional information in the request, such as:</p> <ul> <li> <p>A confirmation prompt to ask the user to confirm an intent. For example, \"Shall I order your pizza?\"</p> </li> <li> <p>A conclusion statement to send to the user after the intent has been fulfilled. For example, \"I placed your pizza order.\"</p> </li> <li> <p>A follow-up prompt that asks the user for additional activity. For example, asking \"Do you want to order a drink with your pizza?\"</p> </li> </ul> <p>If you specify an existing intent name to update the intent, Amazon Lex replaces the values in the <code>$LATEST</code> version of the slot type with the values in the request. Amazon Lex removes fields that you don't provide in the request. If you don't specify the required fields, Amazon Lex throws an exception.</p> <p>For more information, see <a>how-it-works</a>.</p> <p>This operation requires permissions for the <code>lex:PutIntent</code> action.</p>"]
     fn put_intent(&self, input: &PutIntentRequest) -> Result<PutIntentResponse, PutIntentError> {
@@ -6519,14 +6412,11 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -6538,23 +6428,23 @@ impl<P, D> LexModels for LexModelsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<PutIntentResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(PutIntentError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(PutIntentError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a custom slot type or replaces an existing custom slot type.</p> <p>To create a custom slot type, specify a name for the slot type and a set of enumeration values, which are the values that a slot of this type can assume. For more information, see <a>how-it-works</a>.</p> <p>If you specify the name of an existing slot type, the fields in the request replace the existing values in the <code>$LATEST</code> version of the slot type. Amazon Lex removes the fields that you don't provide in the request. If you don't specify required fields, Amazon Lex throws an exception.</p> <p>This operation requires permissions for the <code>lex:PutSlotType</code> action.</p>"]
-    fn put_slot_type(&self,
-                     input: &PutSlotTypeRequest)
-                     -> Result<PutSlotTypeResponse, PutSlotTypeError> {
+    fn put_slot_type(
+        &self,
+        input: &PutSlotTypeRequest,
+    ) -> Result<PutSlotTypeResponse, PutSlotTypeError> {
         let request_uri = format!("/slottypes/{name}/versions/$LATEST", name = input.name);
 
         let mut request = SignedRequest::new("PUT", "lex", &self.region, &request_uri);
@@ -6564,14 +6454,11 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -6583,14 +6470,14 @@ impl<P, D> LexModels for LexModelsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<PutSlotTypeResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(PutSlotTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(PutSlotTypeError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

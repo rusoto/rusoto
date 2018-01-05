@@ -8,10 +8,19 @@ In order to run the service generator, first make sure that the botocore submodu
 $ git submodule update --init
 ```
 
-Then, from the `service_crategen` directory, call:
+Then, make sure you have Rust nightly installed. The service generator needs this because it relies on [`rustfmt-nightly`](https://crates.io/crates/rustfmt-nightly)
+to format the generated code nicely.
+
+You can install Rust nightly easily via [`rustup`](https://www.rustup.rs/):
 
 ```bash
-$ cargo run -- generate -c ./services.json -o ../rusoto/services
+$ rustup install nightly
+```
+
+Finally, from the `service_crategen` directory, call:
+
+```bash
+$ cargo +nightly run -- generate -c ./services.json -o ../rusoto/services
 ```
 
 This will regenerate all services in the `rusoto/services` directory, updating them with the configuration defined in the `services.json` file and applying any code generation changes.
@@ -44,5 +53,5 @@ If there are any missing or outdated services, they will be output in a formatte
 To output timing information on crate generation, run with logging set to debug level:
 
 ```bash
-$ RUST_LOG=rusoto_service_crategen=debug cargo run -- generate -c ./services.json -o ../rusoto/services
+$ RUST_LOG=rusoto_service_crategen=debug cargo +nightly run -- generate -c ./services.json -o ../rusoto/services
 ```

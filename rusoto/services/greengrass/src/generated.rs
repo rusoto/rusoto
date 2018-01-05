@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -29,2148 +28,2148 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AssociateRoleToGroupRequest {
-    #[doc="The unique Id of the AWS Greengrass Group"]
-    #[serde(rename="GroupId")]
+    /// The unique Id of the AWS Greengrass Group
+    #[serde(rename = "GroupId")]
     pub group_id: String,
-    #[doc="Role arn you wish to associate with this group."]
-    #[serde(rename="RoleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Role arn you wish to associate with this group.
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AssociateRoleToGroupResponse {
-    #[doc="Time the role arn was associated to your group."]
-    #[serde(rename="AssociatedAt")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Time the role arn was associated to your group.
+    #[serde(rename = "AssociatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub associated_at: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AssociateServiceRoleToAccountRequest {
-    #[doc="Role arn you wish to associate with this account."]
-    #[serde(rename="RoleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Role arn you wish to associate with this account.
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AssociateServiceRoleToAccountResponse {
-    #[doc="Time when the service role was associated to the account."]
-    #[serde(rename="AssociatedAt")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Time when the service role was associated to the account.
+    #[serde(rename = "AssociatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub associated_at: Option<String>,
 }
 
-#[doc="Connectivity Info"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// Connectivity Info
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ConnectivityInfo {
-    #[doc="Endpoint for the GGC. Can be an IP address or DNS."]
-    #[serde(rename="HostAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Endpoint for the GGC. Can be an IP address or DNS.
+    #[serde(rename = "HostAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub host_address: Option<String>,
-    #[doc="Element Id for this entry in the list."]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Element Id for this entry in the list.
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="Metadata for this endpoint."]
-    #[serde(rename="Metadata")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Metadata for this endpoint.
+    #[serde(rename = "Metadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<String>,
-    #[doc="Port of the GGC. Usually 8883."]
-    #[serde(rename="PortNumber")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Port of the GGC. Usually 8883.
+    #[serde(rename = "PortNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub port_number: Option<i64>,
 }
 
-#[doc="Information on the core"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// Information on the core
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Core {
-    #[doc="Certificate arn of the core."]
-    #[serde(rename="CertificateArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Certificate arn of the core.
+    #[serde(rename = "CertificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_arn: Option<String>,
-    #[doc="Element Id for this entry in the list."]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Element Id for this entry in the list.
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="If true, the local shadow value automatically syncs with the cloud's shadow state."]
-    #[serde(rename="SyncShadow")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// If true, the local shadow value automatically syncs with the cloud's shadow state.
+    #[serde(rename = "SyncShadow")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sync_shadow: Option<bool>,
-    #[doc="Thing arn of the core."]
-    #[serde(rename="ThingArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Thing arn of the core.
+    #[serde(rename = "ThingArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_arn: Option<String>,
 }
 
-#[doc="Information on core definition version"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// Information on core definition version
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct CoreDefinitionVersion {
-    #[doc="Cores in the definition version."]
-    #[serde(rename="Cores")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Cores in the definition version.
+    #[serde(rename = "Cores")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cores: Option<Vec<Core>>,
 }
 
-#[doc="Information on the core definition request"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// Information on the core definition request
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateCoreDefinitionRequest {
-    #[doc="The client token used to request idempotent operations."]
-    #[serde(rename="AmznClientToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// The client token used to request idempotent operations.
+    #[serde(rename = "AmznClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub amzn_client_token: Option<String>,
-    #[doc="Information on the initial version"]
-    #[serde(rename="InitialVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Information on the initial version
+    #[serde(rename = "InitialVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub initial_version: Option<CoreDefinitionVersion>,
-    #[doc="name of the core definition"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// name of the core definition
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateCoreDefinitionResponse {
-    #[doc="Arn of the definition."]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the definition.
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="Timestamp of when the definition was created."]
-    #[serde(rename="CreationTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Timestamp of when the definition was created.
+    #[serde(rename = "CreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    #[doc="Id of the definition."]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the definition.
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="Last updated timestamp of the definition."]
-    #[serde(rename="LastUpdatedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Last updated timestamp of the definition.
+    #[serde(rename = "LastUpdatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<String>,
-    #[doc="Last version of the definition."]
-    #[serde(rename="LatestVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Last version of the definition.
+    #[serde(rename = "LatestVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    #[doc="Latest version arn of the definition."]
-    #[serde(rename="LatestVersionArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Latest version arn of the definition.
+    #[serde(rename = "LatestVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_arn: Option<String>,
-    #[doc="Name of the definition."]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Name of the definition.
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateCoreDefinitionVersionRequest {
-    #[doc="The client token used to request idempotent operations."]
-    #[serde(rename="AmznClientToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// The client token used to request idempotent operations.
+    #[serde(rename = "AmznClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub amzn_client_token: Option<String>,
-    #[doc="core definition Id"]
-    #[serde(rename="CoreDefinitionId")]
+    /// core definition Id
+    #[serde(rename = "CoreDefinitionId")]
     pub core_definition_id: String,
-    #[doc="Cores in the definition version."]
-    #[serde(rename="Cores")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Cores in the definition version.
+    #[serde(rename = "Cores")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cores: Option<Vec<Core>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateCoreDefinitionVersionResponse {
-    #[doc="Arn of the version."]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the version.
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="Timestamp of when the version was created."]
-    #[serde(rename="CreationTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Timestamp of when the version was created.
+    #[serde(rename = "CreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    #[doc="Id of the resource container."]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the resource container.
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="Unique Id of a version."]
-    #[serde(rename="Version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Unique Id of a version.
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateDeploymentRequest {
-    #[doc="The client token used to request idempotent operations."]
-    #[serde(rename="AmznClientToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// The client token used to request idempotent operations.
+    #[serde(rename = "AmznClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub amzn_client_token: Option<String>,
-    #[doc="Id of the deployment if you wish to redeploy a previous deployment."]
-    #[serde(rename="DeploymentId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the deployment if you wish to redeploy a previous deployment.
+    #[serde(rename = "DeploymentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
-    #[doc="Type of deployment"]
-    #[serde(rename="DeploymentType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Type of deployment
+    #[serde(rename = "DeploymentType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_type: Option<String>,
-    #[doc="The unique Id of the AWS Greengrass Group"]
-    #[serde(rename="GroupId")]
+    /// The unique Id of the AWS Greengrass Group
+    #[serde(rename = "GroupId")]
     pub group_id: String,
-    #[doc="Group Version you wish to deploy."]
-    #[serde(rename="GroupVersionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Group Version you wish to deploy.
+    #[serde(rename = "GroupVersionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub group_version_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateDeploymentResponse {
-    #[doc="Arn of the deployment."]
-    #[serde(rename="DeploymentArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the deployment.
+    #[serde(rename = "DeploymentArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_arn: Option<String>,
-    #[doc="Id of the deployment."]
-    #[serde(rename="DeploymentId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the deployment.
+    #[serde(rename = "DeploymentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateDeviceDefinitionRequest {
-    #[doc="The client token used to request idempotent operations."]
-    #[serde(rename="AmznClientToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// The client token used to request idempotent operations.
+    #[serde(rename = "AmznClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub amzn_client_token: Option<String>,
-    #[doc="Information on the initial version"]
-    #[serde(rename="InitialVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Information on the initial version
+    #[serde(rename = "InitialVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub initial_version: Option<DeviceDefinitionVersion>,
-    #[doc="name of the device definition"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// name of the device definition
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateDeviceDefinitionResponse {
-    #[doc="Arn of the definition."]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the definition.
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="Timestamp of when the definition was created."]
-    #[serde(rename="CreationTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Timestamp of when the definition was created.
+    #[serde(rename = "CreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    #[doc="Id of the definition."]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the definition.
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="Last updated timestamp of the definition."]
-    #[serde(rename="LastUpdatedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Last updated timestamp of the definition.
+    #[serde(rename = "LastUpdatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<String>,
-    #[doc="Last version of the definition."]
-    #[serde(rename="LatestVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Last version of the definition.
+    #[serde(rename = "LatestVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    #[doc="Latest version arn of the definition."]
-    #[serde(rename="LatestVersionArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Latest version arn of the definition.
+    #[serde(rename = "LatestVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_arn: Option<String>,
-    #[doc="Name of the definition."]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Name of the definition.
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateDeviceDefinitionVersionRequest {
-    #[doc="The client token used to request idempotent operations."]
-    #[serde(rename="AmznClientToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// The client token used to request idempotent operations.
+    #[serde(rename = "AmznClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub amzn_client_token: Option<String>,
-    #[doc="device definition Id"]
-    #[serde(rename="DeviceDefinitionId")]
+    /// device definition Id
+    #[serde(rename = "DeviceDefinitionId")]
     pub device_definition_id: String,
-    #[doc="Devices in the definition version."]
-    #[serde(rename="Devices")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Devices in the definition version.
+    #[serde(rename = "Devices")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub devices: Option<Vec<Device>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateDeviceDefinitionVersionResponse {
-    #[doc="Arn of the version."]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the version.
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="Timestamp of when the version was created."]
-    #[serde(rename="CreationTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Timestamp of when the version was created.
+    #[serde(rename = "CreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    #[doc="Id of the resource container."]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the resource container.
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="Unique Id of a version."]
-    #[serde(rename="Version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Unique Id of a version.
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateFunctionDefinitionRequest {
-    #[doc="The client token used to request idempotent operations."]
-    #[serde(rename="AmznClientToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// The client token used to request idempotent operations.
+    #[serde(rename = "AmznClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub amzn_client_token: Option<String>,
-    #[doc="Information on the initial version"]
-    #[serde(rename="InitialVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Information on the initial version
+    #[serde(rename = "InitialVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub initial_version: Option<FunctionDefinitionVersion>,
-    #[doc="name of the function definition"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// name of the function definition
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateFunctionDefinitionResponse {
-    #[doc="Arn of the definition."]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the definition.
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="Timestamp of when the definition was created."]
-    #[serde(rename="CreationTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Timestamp of when the definition was created.
+    #[serde(rename = "CreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    #[doc="Id of the definition."]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the definition.
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="Last updated timestamp of the definition."]
-    #[serde(rename="LastUpdatedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Last updated timestamp of the definition.
+    #[serde(rename = "LastUpdatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<String>,
-    #[doc="Last version of the definition."]
-    #[serde(rename="LatestVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Last version of the definition.
+    #[serde(rename = "LatestVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    #[doc="Latest version arn of the definition."]
-    #[serde(rename="LatestVersionArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Latest version arn of the definition.
+    #[serde(rename = "LatestVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_arn: Option<String>,
-    #[doc="Name of the definition."]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Name of the definition.
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[doc="Function definition version"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// Function definition version
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateFunctionDefinitionVersionRequest {
-    #[doc="The client token used to request idempotent operations."]
-    #[serde(rename="AmznClientToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// The client token used to request idempotent operations.
+    #[serde(rename = "AmznClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub amzn_client_token: Option<String>,
-    #[doc="the unique Id of the lambda definition"]
-    #[serde(rename="FunctionDefinitionId")]
+    /// the unique Id of the lambda definition
+    #[serde(rename = "FunctionDefinitionId")]
     pub function_definition_id: String,
-    #[doc="Lambda functions in this function definition version."]
-    #[serde(rename="Functions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Lambda functions in this function definition version.
+    #[serde(rename = "Functions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub functions: Option<Vec<Function>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateFunctionDefinitionVersionResponse {
-    #[doc="Arn of the version."]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the version.
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="Timestamp of when the version was created."]
-    #[serde(rename="CreationTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Timestamp of when the version was created.
+    #[serde(rename = "CreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    #[doc="Id of the resource container."]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the resource container.
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="Unique Id of a version."]
-    #[serde(rename="Version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Unique Id of a version.
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateGroupCertificateAuthorityRequest {
-    #[doc="The client token used to request idempotent operations."]
-    #[serde(rename="AmznClientToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// The client token used to request idempotent operations.
+    #[serde(rename = "AmznClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub amzn_client_token: Option<String>,
-    #[doc="The unique Id of the AWS Greengrass Group"]
-    #[serde(rename="GroupId")]
+    /// The unique Id of the AWS Greengrass Group
+    #[serde(rename = "GroupId")]
     pub group_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateGroupCertificateAuthorityResponse {
-    #[doc="Arn of the group certificate authority."]
-    #[serde(rename="GroupCertificateAuthorityArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the group certificate authority.
+    #[serde(rename = "GroupCertificateAuthorityArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub group_certificate_authority_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateGroupRequest {
-    #[doc="The client token used to request idempotent operations."]
-    #[serde(rename="AmznClientToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// The client token used to request idempotent operations.
+    #[serde(rename = "AmznClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub amzn_client_token: Option<String>,
-    #[doc="Information on the initial version"]
-    #[serde(rename="InitialVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Information on the initial version
+    #[serde(rename = "InitialVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub initial_version: Option<GroupVersion>,
-    #[doc="name of the group"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// name of the group
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateGroupResponse {
-    #[doc="Arn of the definition."]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the definition.
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="Timestamp of when the definition was created."]
-    #[serde(rename="CreationTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Timestamp of when the definition was created.
+    #[serde(rename = "CreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    #[doc="Id of the definition."]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the definition.
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="Last updated timestamp of the definition."]
-    #[serde(rename="LastUpdatedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Last updated timestamp of the definition.
+    #[serde(rename = "LastUpdatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<String>,
-    #[doc="Last version of the definition."]
-    #[serde(rename="LatestVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Last version of the definition.
+    #[serde(rename = "LatestVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    #[doc="Latest version arn of the definition."]
-    #[serde(rename="LatestVersionArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Latest version arn of the definition.
+    #[serde(rename = "LatestVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_arn: Option<String>,
-    #[doc="Name of the definition."]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Name of the definition.
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateGroupVersionRequest {
-    #[doc="The client token used to request idempotent operations."]
-    #[serde(rename="AmznClientToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// The client token used to request idempotent operations.
+    #[serde(rename = "AmznClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub amzn_client_token: Option<String>,
-    #[doc="Core definition version arn for this group."]
-    #[serde(rename="CoreDefinitionVersionArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Core definition version arn for this group.
+    #[serde(rename = "CoreDefinitionVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub core_definition_version_arn: Option<String>,
-    #[doc="Device definition version arn for this group."]
-    #[serde(rename="DeviceDefinitionVersionArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Device definition version arn for this group.
+    #[serde(rename = "DeviceDefinitionVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub device_definition_version_arn: Option<String>,
-    #[doc="Function definition version arn for this group."]
-    #[serde(rename="FunctionDefinitionVersionArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Function definition version arn for this group.
+    #[serde(rename = "FunctionDefinitionVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub function_definition_version_arn: Option<String>,
-    #[doc="The unique Id of the AWS Greengrass Group"]
-    #[serde(rename="GroupId")]
+    /// The unique Id of the AWS Greengrass Group
+    #[serde(rename = "GroupId")]
     pub group_id: String,
-    #[doc="Logger definitionv ersion arn for this group."]
-    #[serde(rename="LoggerDefinitionVersionArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Logger definitionv ersion arn for this group.
+    #[serde(rename = "LoggerDefinitionVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub logger_definition_version_arn: Option<String>,
-    #[doc="Subscription definition version arn for this group."]
-    #[serde(rename="SubscriptionDefinitionVersionArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Subscription definition version arn for this group.
+    #[serde(rename = "SubscriptionDefinitionVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subscription_definition_version_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateGroupVersionResponse {
-    #[doc="Arn of the version."]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the version.
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="Timestamp of when the version was created."]
-    #[serde(rename="CreationTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Timestamp of when the version was created.
+    #[serde(rename = "CreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    #[doc="Id of the resource container."]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the resource container.
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="Unique Id of a version."]
-    #[serde(rename="Version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Unique Id of a version.
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateLoggerDefinitionRequest {
-    #[doc="The client token used to request idempotent operations."]
-    #[serde(rename="AmznClientToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// The client token used to request idempotent operations.
+    #[serde(rename = "AmznClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub amzn_client_token: Option<String>,
-    #[doc="Information on the initial version"]
-    #[serde(rename="InitialVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Information on the initial version
+    #[serde(rename = "InitialVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub initial_version: Option<LoggerDefinitionVersion>,
-    #[doc="name of the logger definition"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// name of the logger definition
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateLoggerDefinitionResponse {
-    #[doc="Arn of the definition."]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the definition.
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="Timestamp of when the definition was created."]
-    #[serde(rename="CreationTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Timestamp of when the definition was created.
+    #[serde(rename = "CreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    #[doc="Id of the definition."]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the definition.
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="Last updated timestamp of the definition."]
-    #[serde(rename="LastUpdatedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Last updated timestamp of the definition.
+    #[serde(rename = "LastUpdatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<String>,
-    #[doc="Last version of the definition."]
-    #[serde(rename="LatestVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Last version of the definition.
+    #[serde(rename = "LatestVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    #[doc="Latest version arn of the definition."]
-    #[serde(rename="LatestVersionArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Latest version arn of the definition.
+    #[serde(rename = "LatestVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_arn: Option<String>,
-    #[doc="Name of the definition."]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Name of the definition.
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateLoggerDefinitionVersionRequest {
-    #[doc="The client token used to request idempotent operations."]
-    #[serde(rename="AmznClientToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// The client token used to request idempotent operations.
+    #[serde(rename = "AmznClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub amzn_client_token: Option<String>,
-    #[doc="logger definition Id"]
-    #[serde(rename="LoggerDefinitionId")]
+    /// logger definition Id
+    #[serde(rename = "LoggerDefinitionId")]
     pub logger_definition_id: String,
-    #[doc="List of loggers."]
-    #[serde(rename="Loggers")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// List of loggers.
+    #[serde(rename = "Loggers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub loggers: Option<Vec<Logger>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateLoggerDefinitionVersionResponse {
-    #[doc="Arn of the version."]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the version.
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="Timestamp of when the version was created."]
-    #[serde(rename="CreationTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Timestamp of when the version was created.
+    #[serde(rename = "CreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    #[doc="Id of the resource container."]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the resource container.
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="Unique Id of a version."]
-    #[serde(rename="Version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Unique Id of a version.
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateSubscriptionDefinitionRequest {
-    #[doc="The client token used to request idempotent operations."]
-    #[serde(rename="AmznClientToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// The client token used to request idempotent operations.
+    #[serde(rename = "AmznClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub amzn_client_token: Option<String>,
-    #[doc="Information on the initial version"]
-    #[serde(rename="InitialVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Information on the initial version
+    #[serde(rename = "InitialVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub initial_version: Option<SubscriptionDefinitionVersion>,
-    #[doc="name of the subscription definition"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// name of the subscription definition
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateSubscriptionDefinitionResponse {
-    #[doc="Arn of the definition."]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the definition.
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="Timestamp of when the definition was created."]
-    #[serde(rename="CreationTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Timestamp of when the definition was created.
+    #[serde(rename = "CreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    #[doc="Id of the definition."]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the definition.
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="Last updated timestamp of the definition."]
-    #[serde(rename="LastUpdatedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Last updated timestamp of the definition.
+    #[serde(rename = "LastUpdatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<String>,
-    #[doc="Last version of the definition."]
-    #[serde(rename="LatestVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Last version of the definition.
+    #[serde(rename = "LatestVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    #[doc="Latest version arn of the definition."]
-    #[serde(rename="LatestVersionArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Latest version arn of the definition.
+    #[serde(rename = "LatestVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_arn: Option<String>,
-    #[doc="Name of the definition."]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Name of the definition.
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateSubscriptionDefinitionVersionRequest {
-    #[doc="The client token used to request idempotent operations."]
-    #[serde(rename="AmznClientToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// The client token used to request idempotent operations.
+    #[serde(rename = "AmznClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub amzn_client_token: Option<String>,
-    #[doc="subscription definition Id"]
-    #[serde(rename="SubscriptionDefinitionId")]
+    /// subscription definition Id
+    #[serde(rename = "SubscriptionDefinitionId")]
     pub subscription_definition_id: String,
-    #[doc="Subscriptions in the version."]
-    #[serde(rename="Subscriptions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Subscriptions in the version.
+    #[serde(rename = "Subscriptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subscriptions: Option<Vec<Subscription>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateSubscriptionDefinitionVersionResponse {
-    #[doc="Arn of the version."]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the version.
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="Timestamp of when the version was created."]
-    #[serde(rename="CreationTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Timestamp of when the version was created.
+    #[serde(rename = "CreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    #[doc="Id of the resource container."]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the resource container.
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="Unique Id of a version."]
-    #[serde(rename="Version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Unique Id of a version.
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
 
-#[doc="Information on the Definition"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// Information on the Definition
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DefinitionInformation {
-    #[doc="Arn of the definition."]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the definition.
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="Timestamp of when the definition was created."]
-    #[serde(rename="CreationTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Timestamp of when the definition was created.
+    #[serde(rename = "CreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    #[doc="Id of the definition."]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the definition.
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="Last updated timestamp of the definition."]
-    #[serde(rename="LastUpdatedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Last updated timestamp of the definition.
+    #[serde(rename = "LastUpdatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<String>,
-    #[doc="Last version of the definition."]
-    #[serde(rename="LatestVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Last version of the definition.
+    #[serde(rename = "LatestVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    #[doc="Latest version arn of the definition."]
-    #[serde(rename="LatestVersionArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Latest version arn of the definition.
+    #[serde(rename = "LatestVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_arn: Option<String>,
-    #[doc="Name of the definition."]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Name of the definition.
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteCoreDefinitionRequest {
-    #[doc="core definition Id"]
-    #[serde(rename="CoreDefinitionId")]
+    /// core definition Id
+    #[serde(rename = "CoreDefinitionId")]
     pub core_definition_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteCoreDefinitionResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteDeviceDefinitionRequest {
-    #[doc="device definition Id"]
-    #[serde(rename="DeviceDefinitionId")]
+    /// device definition Id
+    #[serde(rename = "DeviceDefinitionId")]
     pub device_definition_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteDeviceDefinitionResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteFunctionDefinitionRequest {
-    #[doc="the unique Id of the lambda definition"]
-    #[serde(rename="FunctionDefinitionId")]
+    /// the unique Id of the lambda definition
+    #[serde(rename = "FunctionDefinitionId")]
     pub function_definition_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteFunctionDefinitionResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteGroupRequest {
-    #[doc="The unique Id of the AWS Greengrass Group"]
-    #[serde(rename="GroupId")]
+    /// The unique Id of the AWS Greengrass Group
+    #[serde(rename = "GroupId")]
     pub group_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteGroupResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteLoggerDefinitionRequest {
-    #[doc="logger definition Id"]
-    #[serde(rename="LoggerDefinitionId")]
+    /// logger definition Id
+    #[serde(rename = "LoggerDefinitionId")]
     pub logger_definition_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteLoggerDefinitionResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteSubscriptionDefinitionRequest {
-    #[doc="subscription definition Id"]
-    #[serde(rename="SubscriptionDefinitionId")]
+    /// subscription definition Id
+    #[serde(rename = "SubscriptionDefinitionId")]
     pub subscription_definition_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteSubscriptionDefinitionResponse;
 
-#[doc="Information on the deployment"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// Information on the deployment
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Deployment {
-    #[doc="Timestamp when the deployment was created."]
-    #[serde(rename="CreatedAt")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Timestamp when the deployment was created.
+    #[serde(rename = "CreatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<String>,
-    #[doc="Arn of the deployment."]
-    #[serde(rename="DeploymentArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the deployment.
+    #[serde(rename = "DeploymentArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_arn: Option<String>,
-    #[doc="Id of the deployment."]
-    #[serde(rename="DeploymentId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the deployment.
+    #[serde(rename = "DeploymentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
-    #[doc="Arn of the group for this deployment."]
-    #[serde(rename="GroupArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the group for this deployment.
+    #[serde(rename = "GroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub group_arn: Option<String>,
 }
 
-#[doc="Information on a Device"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// Information on a Device
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Device {
-    #[doc="Certificate arn of the device."]
-    #[serde(rename="CertificateArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Certificate arn of the device.
+    #[serde(rename = "CertificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_arn: Option<String>,
-    #[doc="Element Id for this entry in the list."]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Element Id for this entry in the list.
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="If true, the local shadow value automatically syncs with the cloud's shadow state."]
-    #[serde(rename="SyncShadow")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// If true, the local shadow value automatically syncs with the cloud's shadow state.
+    #[serde(rename = "SyncShadow")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sync_shadow: Option<bool>,
-    #[doc="Thing arn of the device."]
-    #[serde(rename="ThingArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Thing arn of the device.
+    #[serde(rename = "ThingArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_arn: Option<String>,
 }
 
-#[doc="Information on device definition version"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// Information on device definition version
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct DeviceDefinitionVersion {
-    #[doc="Devices in the definition version."]
-    #[serde(rename="Devices")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Devices in the definition version.
+    #[serde(rename = "Devices")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub devices: Option<Vec<Device>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DisassociateRoleFromGroupRequest {
-    #[doc="The unique Id of the AWS Greengrass Group"]
-    #[serde(rename="GroupId")]
+    /// The unique Id of the AWS Greengrass Group
+    #[serde(rename = "GroupId")]
     pub group_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DisassociateRoleFromGroupResponse {
-    #[doc="Time when the role was disassociated from the group."]
-    #[serde(rename="DisassociatedAt")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Time when the role was disassociated from the group.
+    #[serde(rename = "DisassociatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub disassociated_at: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DisassociateServiceRoleFromAccountRequest;
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DisassociateServiceRoleFromAccountResponse {
-    #[doc="Time when the service role was disassociated from the account."]
-    #[serde(rename="DisassociatedAt")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Time when the service role was disassociated from the account.
+    #[serde(rename = "DisassociatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub disassociated_at: Option<String>,
 }
 
-#[doc="Empty"]
-#[derive(Default,Debug,Clone)]
+/// Empty
+#[derive(Default, Debug, Clone)]
 pub struct Empty;
 
-#[doc="ErrorDetail"]
-#[derive(Default,Debug,Clone)]
+/// ErrorDetail
+#[derive(Default, Debug, Clone)]
 pub struct ErrorDetail {
-    #[doc="Detailed Error Code"]
+    /// Detailed Error Code
     pub detailed_error_code: Option<String>,
-    #[doc="Detailed Error Message"]
+    /// Detailed Error Message
     pub detailed_error_message: Option<String>,
 }
 
-#[doc="Information on function"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// Information on function
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Function {
-    #[doc="Arn of the Lambda function."]
-    #[serde(rename="FunctionArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the Lambda function.
+    #[serde(rename = "FunctionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub function_arn: Option<String>,
-    #[doc="Configuration of the function"]
-    #[serde(rename="FunctionConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Configuration of the function
+    #[serde(rename = "FunctionConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub function_configuration: Option<FunctionConfiguration>,
-    #[doc="Id of the function in this version."]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the function in this version.
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
 }
 
-#[doc="Configuration of the function"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// Configuration of the function
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct FunctionConfiguration {
-    #[doc="Environment of the function configuration"]
-    #[serde(rename="Environment")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Environment of the function configuration
+    #[serde(rename = "Environment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub environment: Option<FunctionConfigurationEnvironment>,
-    #[doc="Execution Arguments"]
-    #[serde(rename="ExecArgs")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Execution Arguments
+    #[serde(rename = "ExecArgs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub exec_args: Option<String>,
-    #[doc="Executable"]
-    #[serde(rename="Executable")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Executable
+    #[serde(rename = "Executable")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub executable: Option<String>,
-    #[doc="The memory size, in KB, you configured for the function."]
-    #[serde(rename="MemorySize")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// The memory size, in KB, you configured for the function.
+    #[serde(rename = "MemorySize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub memory_size: Option<i64>,
-    #[doc="Whether the function is pinned or not. Pinned means the function is long-lived and starts when the core starts."]
-    #[serde(rename="Pinned")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Whether the function is pinned or not. Pinned means the function is long-lived and starts when the core starts.
+    #[serde(rename = "Pinned")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub pinned: Option<bool>,
-    #[doc="The function execution time at which Lambda should terminate the function. This timeout still applies to pinned lambdas for each request."]
-    #[serde(rename="Timeout")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// The function execution time at which Lambda should terminate the function. This timeout still applies to pinned lambdas for each request.
+    #[serde(rename = "Timeout")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout: Option<i64>,
 }
 
-#[doc="Environment of the function configuration"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// Environment of the function configuration
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct FunctionConfigurationEnvironment {
-    #[doc="Environment variables for the lambda function."]
-    #[serde(rename="Variables")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Environment variables for the lambda function.
+    #[serde(rename = "Variables")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub variables: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[doc="Information on the function definition version"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// Information on the function definition version
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct FunctionDefinitionVersion {
-    #[doc="Lambda functions in this function definition version."]
-    #[serde(rename="Functions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Lambda functions in this function definition version.
+    #[serde(rename = "Functions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub functions: Option<Vec<Function>>,
 }
 
-#[doc="General Error"]
-#[derive(Default,Debug,Clone)]
+/// General Error
+#[derive(Default, Debug, Clone)]
 pub struct GeneralError {
-    #[doc="Error Details"]
+    /// Error Details
     pub error_details: Option<Vec<ErrorDetail>>,
-    #[doc="Message"]
+    /// Message
     pub message: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetAssociatedRoleRequest {
-    #[doc="The unique Id of the AWS Greengrass Group"]
-    #[serde(rename="GroupId")]
+    /// The unique Id of the AWS Greengrass Group
+    #[serde(rename = "GroupId")]
     pub group_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetAssociatedRoleResponse {
-    #[doc="Time when the role was associated for the group."]
-    #[serde(rename="AssociatedAt")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Time when the role was associated for the group.
+    #[serde(rename = "AssociatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub associated_at: Option<String>,
-    #[doc="Arn of the role that is associated with the group."]
-    #[serde(rename="RoleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the role that is associated with the group.
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetConnectivityInfoRequest {
-    #[doc="Thing Name"]
-    #[serde(rename="ThingName")]
+    /// Thing Name
+    #[serde(rename = "ThingName")]
     pub thing_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetConnectivityInfoResponse {
-    #[doc="Connectivity info array"]
-    #[serde(rename="ConnectivityInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Connectivity info array
+    #[serde(rename = "ConnectivityInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub connectivity_info: Option<Vec<ConnectivityInfo>>,
-    #[doc="Response Text"]
-    #[serde(rename="Message")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Response Text
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetCoreDefinitionRequest {
-    #[doc="core definition Id"]
-    #[serde(rename="CoreDefinitionId")]
+    /// core definition Id
+    #[serde(rename = "CoreDefinitionId")]
     pub core_definition_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetCoreDefinitionResponse {
-    #[doc="Arn of the definition."]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the definition.
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="Timestamp of when the definition was created."]
-    #[serde(rename="CreationTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Timestamp of when the definition was created.
+    #[serde(rename = "CreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    #[doc="Id of the definition."]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the definition.
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="Last updated timestamp of the definition."]
-    #[serde(rename="LastUpdatedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Last updated timestamp of the definition.
+    #[serde(rename = "LastUpdatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<String>,
-    #[doc="Last version of the definition."]
-    #[serde(rename="LatestVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Last version of the definition.
+    #[serde(rename = "LatestVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    #[doc="Latest version arn of the definition."]
-    #[serde(rename="LatestVersionArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Latest version arn of the definition.
+    #[serde(rename = "LatestVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_arn: Option<String>,
-    #[doc="Name of the definition."]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Name of the definition.
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetCoreDefinitionVersionRequest {
-    #[doc="core definition Id"]
-    #[serde(rename="CoreDefinitionId")]
+    /// core definition Id
+    #[serde(rename = "CoreDefinitionId")]
     pub core_definition_id: String,
-    #[doc="core definition version Id"]
-    #[serde(rename="CoreDefinitionVersionId")]
+    /// core definition version Id
+    #[serde(rename = "CoreDefinitionVersionId")]
     pub core_definition_version_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetCoreDefinitionVersionResponse {
-    #[doc="Arn of the core definition version."]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the core definition version.
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="Timestamp of when the core definition version was created."]
-    #[serde(rename="CreationTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Timestamp of when the core definition version was created.
+    #[serde(rename = "CreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    #[doc="Information on definition"]
-    #[serde(rename="Definition")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Information on definition
+    #[serde(rename = "Definition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub definition: Option<CoreDefinitionVersion>,
-    #[doc="Id of the core definition the version belongs to."]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the core definition the version belongs to.
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="Version of the core definition version."]
-    #[serde(rename="Version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Version of the core definition version.
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDeploymentStatusRequest {
-    #[doc="the deployment Id"]
-    #[serde(rename="DeploymentId")]
+    /// the deployment Id
+    #[serde(rename = "DeploymentId")]
     pub deployment_id: String,
-    #[doc="The unique Id of the AWS Greengrass Group"]
-    #[serde(rename="GroupId")]
+    /// The unique Id of the AWS Greengrass Group
+    #[serde(rename = "GroupId")]
     pub group_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetDeploymentStatusResponse {
-    #[doc="Status of the deployment."]
-    #[serde(rename="DeploymentStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Status of the deployment.
+    #[serde(rename = "DeploymentStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_status: Option<String>,
-    #[doc="Error Message"]
-    #[serde(rename="ErrorMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Error Message
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
-    #[doc="Last time the deployment status was updated."]
-    #[serde(rename="UpdatedAt")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Last time the deployment status was updated.
+    #[serde(rename = "UpdatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDeviceDefinitionRequest {
-    #[doc="device definition Id"]
-    #[serde(rename="DeviceDefinitionId")]
+    /// device definition Id
+    #[serde(rename = "DeviceDefinitionId")]
     pub device_definition_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetDeviceDefinitionResponse {
-    #[doc="Arn of the definition."]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the definition.
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="Timestamp of when the definition was created."]
-    #[serde(rename="CreationTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Timestamp of when the definition was created.
+    #[serde(rename = "CreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    #[doc="Id of the definition."]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the definition.
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="Last updated timestamp of the definition."]
-    #[serde(rename="LastUpdatedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Last updated timestamp of the definition.
+    #[serde(rename = "LastUpdatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<String>,
-    #[doc="Last version of the definition."]
-    #[serde(rename="LatestVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Last version of the definition.
+    #[serde(rename = "LatestVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    #[doc="Latest version arn of the definition."]
-    #[serde(rename="LatestVersionArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Latest version arn of the definition.
+    #[serde(rename = "LatestVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_arn: Option<String>,
-    #[doc="Name of the definition."]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Name of the definition.
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDeviceDefinitionVersionRequest {
-    #[doc="device definition Id"]
-    #[serde(rename="DeviceDefinitionId")]
+    /// device definition Id
+    #[serde(rename = "DeviceDefinitionId")]
     pub device_definition_id: String,
-    #[doc="device definition version Id"]
-    #[serde(rename="DeviceDefinitionVersionId")]
+    /// device definition version Id
+    #[serde(rename = "DeviceDefinitionVersionId")]
     pub device_definition_version_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetDeviceDefinitionVersionResponse {
-    #[doc="Arn of the device definition version."]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the device definition version.
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="Timestamp of when the device definition version was created."]
-    #[serde(rename="CreationTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Timestamp of when the device definition version was created.
+    #[serde(rename = "CreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    #[doc="Device definition version"]
-    #[serde(rename="Definition")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Device definition version
+    #[serde(rename = "Definition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub definition: Option<DeviceDefinitionVersion>,
-    #[doc="Id of the device definition the version belongs to."]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the device definition the version belongs to.
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="Version of the device definition version."]
-    #[serde(rename="Version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Version of the device definition version.
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetFunctionDefinitionRequest {
-    #[doc="the unique Id of the lambda definition"]
-    #[serde(rename="FunctionDefinitionId")]
+    /// the unique Id of the lambda definition
+    #[serde(rename = "FunctionDefinitionId")]
     pub function_definition_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetFunctionDefinitionResponse {
-    #[doc="Arn of the definition."]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the definition.
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="Timestamp of when the definition was created."]
-    #[serde(rename="CreationTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Timestamp of when the definition was created.
+    #[serde(rename = "CreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    #[doc="Id of the definition."]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the definition.
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="Last updated timestamp of the definition."]
-    #[serde(rename="LastUpdatedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Last updated timestamp of the definition.
+    #[serde(rename = "LastUpdatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<String>,
-    #[doc="Last version of the definition."]
-    #[serde(rename="LatestVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Last version of the definition.
+    #[serde(rename = "LatestVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    #[doc="Latest version arn of the definition."]
-    #[serde(rename="LatestVersionArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Latest version arn of the definition.
+    #[serde(rename = "LatestVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_arn: Option<String>,
-    #[doc="Name of the definition."]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Name of the definition.
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetFunctionDefinitionVersionRequest {
-    #[doc="the unique Id of the lambda definition"]
-    #[serde(rename="FunctionDefinitionId")]
+    /// the unique Id of the lambda definition
+    #[serde(rename = "FunctionDefinitionId")]
     pub function_definition_id: String,
-    #[doc="Function definition version Id"]
-    #[serde(rename="FunctionDefinitionVersionId")]
+    /// Function definition version Id
+    #[serde(rename = "FunctionDefinitionVersionId")]
     pub function_definition_version_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetFunctionDefinitionVersionResponse {
-    #[doc="Arn of the function definition version."]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the function definition version.
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="Timestamp when the funtion definition version was created."]
-    #[serde(rename="CreationTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Timestamp when the funtion definition version was created.
+    #[serde(rename = "CreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    #[serde(rename="Definition")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "Definition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub definition: Option<FunctionDefinitionVersion>,
-    #[doc="Id of the function definition the version belongs to."]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the function definition the version belongs to.
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="Version of the function definition version."]
-    #[serde(rename="Version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Version of the function definition version.
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetGroupCertificateAuthorityRequest {
-    #[doc="certificate authority Id"]
-    #[serde(rename="CertificateAuthorityId")]
+    /// certificate authority Id
+    #[serde(rename = "CertificateAuthorityId")]
     pub certificate_authority_id: String,
-    #[doc="The unique Id of the AWS Greengrass Group"]
-    #[serde(rename="GroupId")]
+    /// The unique Id of the AWS Greengrass Group
+    #[serde(rename = "GroupId")]
     pub group_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetGroupCertificateAuthorityResponse {
-    #[doc="Arn of the certificate authority for the group."]
-    #[serde(rename="GroupCertificateAuthorityArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the certificate authority for the group.
+    #[serde(rename = "GroupCertificateAuthorityArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub group_certificate_authority_arn: Option<String>,
-    #[doc="Id of the certificate authority for the group."]
-    #[serde(rename="GroupCertificateAuthorityId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the certificate authority for the group.
+    #[serde(rename = "GroupCertificateAuthorityId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub group_certificate_authority_id: Option<String>,
-    #[doc="PEM encoded certificate for the group."]
-    #[serde(rename="PemEncodedCertificate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// PEM encoded certificate for the group.
+    #[serde(rename = "PemEncodedCertificate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub pem_encoded_certificate: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetGroupCertificateConfigurationRequest {
-    #[doc="The unique Id of the AWS Greengrass Group"]
-    #[serde(rename="GroupId")]
+    /// The unique Id of the AWS Greengrass Group
+    #[serde(rename = "GroupId")]
     pub group_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetGroupCertificateConfigurationResponse {
-    #[doc="Amount of time when the certificate authority expires in milliseconds."]
-    #[serde(rename="CertificateAuthorityExpiryInMilliseconds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Amount of time when the certificate authority expires in milliseconds.
+    #[serde(rename = "CertificateAuthorityExpiryInMilliseconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_authority_expiry_in_milliseconds: Option<String>,
-    #[doc="Amount of time when the certificate expires in milliseconds."]
-    #[serde(rename="CertificateExpiryInMilliseconds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Amount of time when the certificate expires in milliseconds.
+    #[serde(rename = "CertificateExpiryInMilliseconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_expiry_in_milliseconds: Option<String>,
-    #[doc="Id of the group the certificate configuration belongs to."]
-    #[serde(rename="GroupId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the group the certificate configuration belongs to.
+    #[serde(rename = "GroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub group_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetGroupRequest {
-    #[doc="The unique Id of the AWS Greengrass Group"]
-    #[serde(rename="GroupId")]
+    /// The unique Id of the AWS Greengrass Group
+    #[serde(rename = "GroupId")]
     pub group_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetGroupResponse {
-    #[doc="Arn of the definition."]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the definition.
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="Timestamp of when the definition was created."]
-    #[serde(rename="CreationTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Timestamp of when the definition was created.
+    #[serde(rename = "CreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    #[doc="Id of the definition."]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the definition.
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="Last updated timestamp of the definition."]
-    #[serde(rename="LastUpdatedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Last updated timestamp of the definition.
+    #[serde(rename = "LastUpdatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<String>,
-    #[doc="Last version of the definition."]
-    #[serde(rename="LatestVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Last version of the definition.
+    #[serde(rename = "LatestVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    #[doc="Latest version arn of the definition."]
-    #[serde(rename="LatestVersionArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Latest version arn of the definition.
+    #[serde(rename = "LatestVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_arn: Option<String>,
-    #[doc="Name of the definition."]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Name of the definition.
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetGroupVersionRequest {
-    #[doc="The unique Id of the AWS Greengrass Group"]
-    #[serde(rename="GroupId")]
+    /// The unique Id of the AWS Greengrass Group
+    #[serde(rename = "GroupId")]
     pub group_id: String,
-    #[doc="Group version Id"]
-    #[serde(rename="GroupVersionId")]
+    /// Group version Id
+    #[serde(rename = "GroupVersionId")]
     pub group_version_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetGroupVersionResponse {
-    #[doc="Arn of the group version."]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the group version.
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="Timestamp when the group version was created."]
-    #[serde(rename="CreationTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Timestamp when the group version was created.
+    #[serde(rename = "CreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    #[doc="Information on the definition"]
-    #[serde(rename="Definition")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Information on the definition
+    #[serde(rename = "Definition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub definition: Option<GroupVersion>,
-    #[doc="Id of the group version."]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the group version.
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="Unique Id for a version of the Group."]
-    #[serde(rename="Version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Unique Id for a version of the Group.
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetLoggerDefinitionRequest {
-    #[doc="logger definition Id"]
-    #[serde(rename="LoggerDefinitionId")]
+    /// logger definition Id
+    #[serde(rename = "LoggerDefinitionId")]
     pub logger_definition_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetLoggerDefinitionResponse {
-    #[doc="Arn of the definition."]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the definition.
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="Timestamp of when the definition was created."]
-    #[serde(rename="CreationTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Timestamp of when the definition was created.
+    #[serde(rename = "CreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    #[doc="Id of the definition."]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the definition.
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="Last updated timestamp of the definition."]
-    #[serde(rename="LastUpdatedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Last updated timestamp of the definition.
+    #[serde(rename = "LastUpdatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<String>,
-    #[doc="Last version of the definition."]
-    #[serde(rename="LatestVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Last version of the definition.
+    #[serde(rename = "LatestVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    #[doc="Latest version arn of the definition."]
-    #[serde(rename="LatestVersionArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Latest version arn of the definition.
+    #[serde(rename = "LatestVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_arn: Option<String>,
-    #[doc="Name of the definition."]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Name of the definition.
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetLoggerDefinitionVersionRequest {
-    #[doc="logger definition Id"]
-    #[serde(rename="LoggerDefinitionId")]
+    /// logger definition Id
+    #[serde(rename = "LoggerDefinitionId")]
     pub logger_definition_id: String,
-    #[doc="logger definition version Id"]
-    #[serde(rename="LoggerDefinitionVersionId")]
+    /// logger definition version Id
+    #[serde(rename = "LoggerDefinitionVersionId")]
     pub logger_definition_version_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetLoggerDefinitionVersionResponse {
-    #[doc="Arn of the logger definition version."]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the logger definition version.
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="Timestamp of when the logger definition version was created."]
-    #[serde(rename="CreationTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Timestamp of when the logger definition version was created.
+    #[serde(rename = "CreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    #[doc="Information on definition"]
-    #[serde(rename="Definition")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Information on definition
+    #[serde(rename = "Definition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub definition: Option<LoggerDefinitionVersion>,
-    #[doc="Id of the logger definition the version belongs to."]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the logger definition the version belongs to.
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="Version of the logger definition version."]
-    #[serde(rename="Version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Version of the logger definition version.
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetServiceRoleForAccountRequest;
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetServiceRoleForAccountResponse {
-    #[doc="Time when the service role was associated to the account."]
-    #[serde(rename="AssociatedAt")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Time when the service role was associated to the account.
+    #[serde(rename = "AssociatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub associated_at: Option<String>,
-    #[doc="Role arn which is associated to the account."]
-    #[serde(rename="RoleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Role arn which is associated to the account.
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetSubscriptionDefinitionRequest {
-    #[doc="subscription definition Id"]
-    #[serde(rename="SubscriptionDefinitionId")]
+    /// subscription definition Id
+    #[serde(rename = "SubscriptionDefinitionId")]
     pub subscription_definition_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetSubscriptionDefinitionResponse {
-    #[doc="Arn of the definition."]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the definition.
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="Timestamp of when the definition was created."]
-    #[serde(rename="CreationTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Timestamp of when the definition was created.
+    #[serde(rename = "CreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    #[doc="Id of the definition."]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the definition.
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="Last updated timestamp of the definition."]
-    #[serde(rename="LastUpdatedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Last updated timestamp of the definition.
+    #[serde(rename = "LastUpdatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<String>,
-    #[doc="Last version of the definition."]
-    #[serde(rename="LatestVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Last version of the definition.
+    #[serde(rename = "LatestVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    #[doc="Latest version arn of the definition."]
-    #[serde(rename="LatestVersionArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Latest version arn of the definition.
+    #[serde(rename = "LatestVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_arn: Option<String>,
-    #[doc="Name of the definition."]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Name of the definition.
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetSubscriptionDefinitionVersionRequest {
-    #[doc="subscription definition Id"]
-    #[serde(rename="SubscriptionDefinitionId")]
+    /// subscription definition Id
+    #[serde(rename = "SubscriptionDefinitionId")]
     pub subscription_definition_id: String,
-    #[doc="subscription definition version Id"]
-    #[serde(rename="SubscriptionDefinitionVersionId")]
+    /// subscription definition version Id
+    #[serde(rename = "SubscriptionDefinitionVersionId")]
     pub subscription_definition_version_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetSubscriptionDefinitionVersionResponse {
-    #[doc="Arn of the subscription definition version."]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the subscription definition version.
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="Timestamp of when the subscription definition version was created."]
-    #[serde(rename="CreationTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Timestamp of when the subscription definition version was created.
+    #[serde(rename = "CreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    #[doc="Information on the definition"]
-    #[serde(rename="Definition")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Information on the definition
+    #[serde(rename = "Definition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub definition: Option<SubscriptionDefinitionVersion>,
-    #[doc="Id of the subscription definition the version belongs to."]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the subscription definition the version belongs to.
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="Version of the subscription definition version."]
-    #[serde(rename="Version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Version of the subscription definition version.
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
 
-#[doc="Information on group certificate authority properties"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// Information on group certificate authority properties
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GroupCertificateAuthorityProperties {
-    #[doc="Arn of the certificate authority for the group."]
-    #[serde(rename="GroupCertificateAuthorityArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the certificate authority for the group.
+    #[serde(rename = "GroupCertificateAuthorityArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub group_certificate_authority_arn: Option<String>,
-    #[doc="Id of the certificate authority for the group."]
-    #[serde(rename="GroupCertificateAuthorityId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the certificate authority for the group.
+    #[serde(rename = "GroupCertificateAuthorityId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub group_certificate_authority_id: Option<String>,
 }
 
-#[doc="Information on the group certificate configuration"]
-#[derive(Default,Debug,Clone)]
+/// Information on the group certificate configuration
+#[derive(Default, Debug, Clone)]
 pub struct GroupCertificateConfiguration {
-    #[doc="Amount of time when the certificate authority expires in milliseconds."]
+    /// Amount of time when the certificate authority expires in milliseconds.
     pub certificate_authority_expiry_in_milliseconds: Option<String>,
-    #[doc="Amount of time when the certificate expires in milliseconds."]
+    /// Amount of time when the certificate expires in milliseconds.
     pub certificate_expiry_in_milliseconds: Option<String>,
-    #[doc="Id of the group the certificate configuration belongs to."]
+    /// Id of the group the certificate configuration belongs to.
     pub group_id: Option<String>,
 }
 
-#[doc="Information of a group"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// Information of a group
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GroupInformation {
-    #[doc="Arn of a group."]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of a group.
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="Timestamp of when the group was created."]
-    #[serde(rename="CreationTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Timestamp of when the group was created.
+    #[serde(rename = "CreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    #[doc="Id of a group."]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of a group.
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="Last updated timestamp of the group."]
-    #[serde(rename="LastUpdatedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Last updated timestamp of the group.
+    #[serde(rename = "LastUpdatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<String>,
-    #[doc="Last version of the group."]
-    #[serde(rename="LatestVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Last version of the group.
+    #[serde(rename = "LatestVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    #[doc="Latest version arn of the group."]
-    #[serde(rename="LatestVersionArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Latest version arn of the group.
+    #[serde(rename = "LatestVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_arn: Option<String>,
-    #[doc="Name of a group."]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Name of a group.
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[doc="Information on group version"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// Information on group version
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct GroupVersion {
-    #[doc="Core definition version arn for this group."]
-    #[serde(rename="CoreDefinitionVersionArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Core definition version arn for this group.
+    #[serde(rename = "CoreDefinitionVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub core_definition_version_arn: Option<String>,
-    #[doc="Device definition version arn for this group."]
-    #[serde(rename="DeviceDefinitionVersionArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Device definition version arn for this group.
+    #[serde(rename = "DeviceDefinitionVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub device_definition_version_arn: Option<String>,
-    #[doc="Function definition version arn for this group."]
-    #[serde(rename="FunctionDefinitionVersionArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Function definition version arn for this group.
+    #[serde(rename = "FunctionDefinitionVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub function_definition_version_arn: Option<String>,
-    #[doc="Logger definitionv ersion arn for this group."]
-    #[serde(rename="LoggerDefinitionVersionArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Logger definitionv ersion arn for this group.
+    #[serde(rename = "LoggerDefinitionVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub logger_definition_version_arn: Option<String>,
-    #[doc="Subscription definition version arn for this group."]
-    #[serde(rename="SubscriptionDefinitionVersionArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Subscription definition version arn for this group.
+    #[serde(rename = "SubscriptionDefinitionVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subscription_definition_version_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListCoreDefinitionVersionsRequest {
-    #[doc="core definition Id"]
-    #[serde(rename="CoreDefinitionId")]
+    /// core definition Id
+    #[serde(rename = "CoreDefinitionId")]
     pub core_definition_id: String,
-    #[doc="Specifies the maximum number of list results to be returned in this page"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Specifies the maximum number of list results to be returned in this page
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    #[doc="Specifies the pagination token used when iterating through a paginated request"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Specifies the pagination token used when iterating through a paginated request
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListCoreDefinitionVersionsResponse {
-    #[doc="The token for the next set of results, or ''null'' if there are no additional results."]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// The token for the next set of results, or ''null'' if there are no additional results.
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="Versions"]
-    #[serde(rename="Versions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Versions
+    #[serde(rename = "Versions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub versions: Option<Vec<VersionInformation>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListCoreDefinitionsRequest {
-    #[doc="Specifies the maximum number of list results to be returned in this page"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Specifies the maximum number of list results to be returned in this page
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    #[doc="Specifies the pagination token used when iterating through a paginated request"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Specifies the pagination token used when iterating through a paginated request
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListCoreDefinitionsResponse {
-    #[doc="Definitions"]
-    #[serde(rename="Definitions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Definitions
+    #[serde(rename = "Definitions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub definitions: Option<Vec<DefinitionInformation>>,
-    #[doc="The token for the next set of results, or ''null'' if there are no additional results."]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// The token for the next set of results, or ''null'' if there are no additional results.
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="List of definition response"]
-#[derive(Default,Debug,Clone)]
+/// List of definition response
+#[derive(Default, Debug, Clone)]
 pub struct ListDefinitionsResponse {
-    #[doc="Definitions"]
+    /// Definitions
     pub definitions: Option<Vec<DefinitionInformation>>,
-    #[doc="The token for the next set of results, or ''null'' if there are no additional results."]
+    /// The token for the next set of results, or ''null'' if there are no additional results.
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListDeploymentsRequest {
-    #[doc="The unique Id of the AWS Greengrass Group"]
-    #[serde(rename="GroupId")]
+    /// The unique Id of the AWS Greengrass Group
+    #[serde(rename = "GroupId")]
     pub group_id: String,
-    #[doc="Specifies the maximum number of list results to be returned in this page"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Specifies the maximum number of list results to be returned in this page
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    #[doc="Specifies the pagination token used when iterating through a paginated request"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Specifies the pagination token used when iterating through a paginated request
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListDeploymentsResponse {
-    #[doc="Information on deployments"]
-    #[serde(rename="Deployments")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Information on deployments
+    #[serde(rename = "Deployments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployments: Option<Vec<Deployment>>,
-    #[doc="The token for the next set of results, or ''null'' if there are no additional results."]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// The token for the next set of results, or ''null'' if there are no additional results.
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListDeviceDefinitionVersionsRequest {
-    #[doc="device definition Id"]
-    #[serde(rename="DeviceDefinitionId")]
+    /// device definition Id
+    #[serde(rename = "DeviceDefinitionId")]
     pub device_definition_id: String,
-    #[doc="Specifies the maximum number of list results to be returned in this page"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Specifies the maximum number of list results to be returned in this page
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    #[doc="Specifies the pagination token used when iterating through a paginated request"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Specifies the pagination token used when iterating through a paginated request
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListDeviceDefinitionVersionsResponse {
-    #[doc="The token for the next set of results, or ''null'' if there are no additional results."]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// The token for the next set of results, or ''null'' if there are no additional results.
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="Versions"]
-    #[serde(rename="Versions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Versions
+    #[serde(rename = "Versions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub versions: Option<Vec<VersionInformation>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListDeviceDefinitionsRequest {
-    #[doc="Specifies the maximum number of list results to be returned in this page"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Specifies the maximum number of list results to be returned in this page
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    #[doc="Specifies the pagination token used when iterating through a paginated request"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Specifies the pagination token used when iterating through a paginated request
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListDeviceDefinitionsResponse {
-    #[doc="Definitions"]
-    #[serde(rename="Definitions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Definitions
+    #[serde(rename = "Definitions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub definitions: Option<Vec<DefinitionInformation>>,
-    #[doc="The token for the next set of results, or ''null'' if there are no additional results."]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// The token for the next set of results, or ''null'' if there are no additional results.
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListFunctionDefinitionVersionsRequest {
-    #[doc="the unique Id of the lambda definition"]
-    #[serde(rename="FunctionDefinitionId")]
+    /// the unique Id of the lambda definition
+    #[serde(rename = "FunctionDefinitionId")]
     pub function_definition_id: String,
-    #[doc="Specifies the maximum number of list results to be returned in this page"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Specifies the maximum number of list results to be returned in this page
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    #[doc="Specifies the pagination token used when iterating through a paginated request"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Specifies the pagination token used when iterating through a paginated request
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListFunctionDefinitionVersionsResponse {
-    #[doc="The token for the next set of results, or ''null'' if there are no additional results."]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// The token for the next set of results, or ''null'' if there are no additional results.
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="Versions"]
-    #[serde(rename="Versions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Versions
+    #[serde(rename = "Versions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub versions: Option<Vec<VersionInformation>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListFunctionDefinitionsRequest {
-    #[doc="Specifies the maximum number of list results to be returned in this page"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Specifies the maximum number of list results to be returned in this page
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    #[doc="Specifies the pagination token used when iterating through a paginated request"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Specifies the pagination token used when iterating through a paginated request
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListFunctionDefinitionsResponse {
-    #[doc="Definitions"]
-    #[serde(rename="Definitions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Definitions
+    #[serde(rename = "Definitions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub definitions: Option<Vec<DefinitionInformation>>,
-    #[doc="The token for the next set of results, or ''null'' if there are no additional results."]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// The token for the next set of results, or ''null'' if there are no additional results.
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListGroupCertificateAuthoritiesRequest {
-    #[doc="The unique Id of the AWS Greengrass Group"]
-    #[serde(rename="GroupId")]
+    /// The unique Id of the AWS Greengrass Group
+    #[serde(rename = "GroupId")]
     pub group_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListGroupCertificateAuthoritiesResponse {
-    #[doc="List of certificate authorities associated with the group."]
-    #[serde(rename="GroupCertificateAuthorities")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// List of certificate authorities associated with the group.
+    #[serde(rename = "GroupCertificateAuthorities")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub group_certificate_authorities: Option<Vec<GroupCertificateAuthorityProperties>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListGroupVersionsRequest {
-    #[doc="The unique Id of the AWS Greengrass Group"]
-    #[serde(rename="GroupId")]
+    /// The unique Id of the AWS Greengrass Group
+    #[serde(rename = "GroupId")]
     pub group_id: String,
-    #[doc="Specifies the maximum number of list results to be returned in this page"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Specifies the maximum number of list results to be returned in this page
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    #[doc="Specifies the pagination token used when iterating through a paginated request"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Specifies the pagination token used when iterating through a paginated request
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListGroupVersionsResponse {
-    #[doc="The token for the next set of results, or ''null'' if there are no additional results."]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// The token for the next set of results, or ''null'' if there are no additional results.
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="Versions"]
-    #[serde(rename="Versions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Versions
+    #[serde(rename = "Versions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub versions: Option<Vec<VersionInformation>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListGroupsRequest {
-    #[doc="Specifies the maximum number of list results to be returned in this page"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Specifies the maximum number of list results to be returned in this page
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    #[doc="Specifies the pagination token used when iterating through a paginated request"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Specifies the pagination token used when iterating through a paginated request
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListGroupsResponse {
-    #[doc="Groups"]
-    #[serde(rename="Groups")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Groups
+    #[serde(rename = "Groups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub groups: Option<Vec<GroupInformation>>,
-    #[doc="The token for the next set of results, or ''null'' if there are no additional results."]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// The token for the next set of results, or ''null'' if there are no additional results.
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListLoggerDefinitionVersionsRequest {
-    #[doc="logger definition Id"]
-    #[serde(rename="LoggerDefinitionId")]
+    /// logger definition Id
+    #[serde(rename = "LoggerDefinitionId")]
     pub logger_definition_id: String,
-    #[doc="Specifies the maximum number of list results to be returned in this page"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Specifies the maximum number of list results to be returned in this page
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    #[doc="Specifies the pagination token used when iterating through a paginated request"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Specifies the pagination token used when iterating through a paginated request
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListLoggerDefinitionVersionsResponse {
-    #[doc="The token for the next set of results, or ''null'' if there are no additional results."]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// The token for the next set of results, or ''null'' if there are no additional results.
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="Versions"]
-    #[serde(rename="Versions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Versions
+    #[serde(rename = "Versions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub versions: Option<Vec<VersionInformation>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListLoggerDefinitionsRequest {
-    #[doc="Specifies the maximum number of list results to be returned in this page"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Specifies the maximum number of list results to be returned in this page
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    #[doc="Specifies the pagination token used when iterating through a paginated request"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Specifies the pagination token used when iterating through a paginated request
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListLoggerDefinitionsResponse {
-    #[doc="Definitions"]
-    #[serde(rename="Definitions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Definitions
+    #[serde(rename = "Definitions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub definitions: Option<Vec<DefinitionInformation>>,
-    #[doc="The token for the next set of results, or ''null'' if there are no additional results."]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// The token for the next set of results, or ''null'' if there are no additional results.
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListSubscriptionDefinitionVersionsRequest {
-    #[doc="Specifies the maximum number of list results to be returned in this page"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Specifies the maximum number of list results to be returned in this page
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    #[doc="Specifies the pagination token used when iterating through a paginated request"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Specifies the pagination token used when iterating through a paginated request
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="subscription definition Id"]
-    #[serde(rename="SubscriptionDefinitionId")]
+    /// subscription definition Id
+    #[serde(rename = "SubscriptionDefinitionId")]
     pub subscription_definition_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListSubscriptionDefinitionVersionsResponse {
-    #[doc="The token for the next set of results, or ''null'' if there are no additional results."]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// The token for the next set of results, or ''null'' if there are no additional results.
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="Versions"]
-    #[serde(rename="Versions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Versions
+    #[serde(rename = "Versions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub versions: Option<Vec<VersionInformation>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListSubscriptionDefinitionsRequest {
-    #[doc="Specifies the maximum number of list results to be returned in this page"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Specifies the maximum number of list results to be returned in this page
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    #[doc="Specifies the pagination token used when iterating through a paginated request"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Specifies the pagination token used when iterating through a paginated request
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListSubscriptionDefinitionsResponse {
-    #[doc="Definitions"]
-    #[serde(rename="Definitions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Definitions
+    #[serde(rename = "Definitions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub definitions: Option<Vec<DefinitionInformation>>,
-    #[doc="The token for the next set of results, or ''null'' if there are no additional results."]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// The token for the next set of results, or ''null'' if there are no additional results.
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="List of versions response"]
-#[derive(Default,Debug,Clone)]
+/// List of versions response
+#[derive(Default, Debug, Clone)]
 pub struct ListVersionsResponse {
-    #[doc="The token for the next set of results, or ''null'' if there are no additional results."]
+    /// The token for the next set of results, or ''null'' if there are no additional results.
     pub next_token: Option<String>,
-    #[doc="Versions"]
+    /// Versions
     pub versions: Option<Vec<VersionInformation>>,
 }
 
-#[doc="Information on the Logger"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// Information on the Logger
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Logger {
-    #[doc="The component that will be subject to logs"]
-    #[serde(rename="Component")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// The component that will be subject to logs
+    #[serde(rename = "Component")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub component: Option<String>,
-    #[doc="Element Id for this entry in the list."]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Element Id for this entry in the list.
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="The level of the logs"]
-    #[serde(rename="Level")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// The level of the logs
+    #[serde(rename = "Level")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub level: Option<String>,
-    #[doc="Amount of hardware space, in KB, to use if file system is used for logging purposes."]
-    #[serde(rename="Space")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Amount of hardware space, in KB, to use if file system is used for logging purposes.
+    #[serde(rename = "Space")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub space: Option<i64>,
-    #[doc="The type which will be use for log output"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// The type which will be use for log output
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[doc="Information on logger definition version"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// Information on logger definition version
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct LoggerDefinitionVersion {
-    #[doc="List of loggers."]
-    #[serde(rename="Loggers")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// List of loggers.
+    #[serde(rename = "Loggers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub loggers: Option<Vec<Logger>>,
 }
 
-#[doc="Information on subscription"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// Information on subscription
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Subscription {
-    #[doc="Element Id for this entry in the list."]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Element Id for this entry in the list.
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="Source of the subscription. Can be a thing arn, lambda arn or word 'cloud'"]
-    #[serde(rename="Source")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Source of the subscription. Can be a thing arn, lambda arn or word 'cloud'
+    #[serde(rename = "Source")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<String>,
-    #[doc="Subject of the message."]
-    #[serde(rename="Subject")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Subject of the message.
+    #[serde(rename = "Subject")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subject: Option<String>,
-    #[doc="Where the message is sent to. Can be a thing arn, lambda arn or word 'cloud'."]
-    #[serde(rename="Target")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Where the message is sent to. Can be a thing arn, lambda arn or word 'cloud'.
+    #[serde(rename = "Target")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub target: Option<String>,
 }
 
-#[doc="Information on subscription definition version"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// Information on subscription definition version
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct SubscriptionDefinitionVersion {
-    #[doc="Subscriptions in the version."]
-    #[serde(rename="Subscriptions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Subscriptions in the version.
+    #[serde(rename = "Subscriptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subscriptions: Option<Vec<Subscription>>,
 }
 
-#[doc="connectivity info request"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// connectivity info request
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateConnectivityInfoRequest {
-    #[doc="Connectivity info array"]
-    #[serde(rename="ConnectivityInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Connectivity info array
+    #[serde(rename = "ConnectivityInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub connectivity_info: Option<Vec<ConnectivityInfo>>,
-    #[doc="Thing Name"]
-    #[serde(rename="ThingName")]
+    /// Thing Name
+    #[serde(rename = "ThingName")]
     pub thing_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateConnectivityInfoResponse {
-    #[doc="Response Text"]
-    #[serde(rename="Message")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Response Text
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
-    #[doc="New Version"]
-    #[serde(rename="Version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// New Version
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateCoreDefinitionRequest {
-    #[doc="core definition Id"]
-    #[serde(rename="CoreDefinitionId")]
+    /// core definition Id
+    #[serde(rename = "CoreDefinitionId")]
     pub core_definition_id: String,
-    #[doc="name of the definition"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// name of the definition
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateCoreDefinitionResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateDeviceDefinitionRequest {
-    #[doc="device definition Id"]
-    #[serde(rename="DeviceDefinitionId")]
+    /// device definition Id
+    #[serde(rename = "DeviceDefinitionId")]
     pub device_definition_id: String,
-    #[doc="name of the definition"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// name of the definition
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateDeviceDefinitionResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateFunctionDefinitionRequest {
-    #[doc="the unique Id of the lambda definition"]
-    #[serde(rename="FunctionDefinitionId")]
+    /// the unique Id of the lambda definition
+    #[serde(rename = "FunctionDefinitionId")]
     pub function_definition_id: String,
-    #[doc="name of the definition"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// name of the definition
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateFunctionDefinitionResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateGroupCertificateConfigurationRequest {
-    #[doc="Amount of time when the certificate expires in milliseconds."]
-    #[serde(rename="CertificateExpiryInMilliseconds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Amount of time when the certificate expires in milliseconds.
+    #[serde(rename = "CertificateExpiryInMilliseconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_expiry_in_milliseconds: Option<String>,
-    #[doc="The unique Id of the AWS Greengrass Group"]
-    #[serde(rename="GroupId")]
+    /// The unique Id of the AWS Greengrass Group
+    #[serde(rename = "GroupId")]
     pub group_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateGroupCertificateConfigurationResponse {
-    #[doc="Amount of time when the certificate authority expires in milliseconds."]
-    #[serde(rename="CertificateAuthorityExpiryInMilliseconds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Amount of time when the certificate authority expires in milliseconds.
+    #[serde(rename = "CertificateAuthorityExpiryInMilliseconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_authority_expiry_in_milliseconds: Option<String>,
-    #[doc="Amount of time when the certificate expires in milliseconds."]
-    #[serde(rename="CertificateExpiryInMilliseconds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Amount of time when the certificate expires in milliseconds.
+    #[serde(rename = "CertificateExpiryInMilliseconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_expiry_in_milliseconds: Option<String>,
-    #[doc="Id of the group the certificate configuration belongs to."]
-    #[serde(rename="GroupId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the group the certificate configuration belongs to.
+    #[serde(rename = "GroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub group_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateGroupRequest {
-    #[doc="The unique Id of the AWS Greengrass Group"]
-    #[serde(rename="GroupId")]
+    /// The unique Id of the AWS Greengrass Group
+    #[serde(rename = "GroupId")]
     pub group_id: String,
-    #[doc="name of the definition"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// name of the definition
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateGroupResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateLoggerDefinitionRequest {
-    #[doc="logger definition Id"]
-    #[serde(rename="LoggerDefinitionId")]
+    /// logger definition Id
+    #[serde(rename = "LoggerDefinitionId")]
     pub logger_definition_id: String,
-    #[doc="name of the definition"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// name of the definition
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateLoggerDefinitionResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateSubscriptionDefinitionRequest {
-    #[doc="name of the definition"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// name of the definition
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="subscription definition Id"]
-    #[serde(rename="SubscriptionDefinitionId")]
+    /// subscription definition Id
+    #[serde(rename = "SubscriptionDefinitionId")]
     pub subscription_definition_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateSubscriptionDefinitionResponse;
 
-#[doc="Information on the version"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// Information on the version
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct VersionInformation {
-    #[doc="Arn of the version."]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Arn of the version.
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="Timestamp of when the version was created."]
-    #[serde(rename="CreationTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Timestamp of when the version was created.
+    #[serde(rename = "CreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    #[doc="Id of the resource container."]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Id of the resource container.
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="Unique Id of a version."]
-    #[serde(rename="Version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// Unique Id of a version.
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
 
@@ -2190,7 +2189,6 @@ pub enum AssociateRoleToGroupError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl AssociateRoleToGroupError {
     pub fn from_body(body: &str) -> AssociateRoleToGroupError {
@@ -2278,7 +2276,6 @@ pub enum AssociateServiceRoleToAccountError {
     Unknown(String),
 }
 
-
 impl AssociateServiceRoleToAccountError {
     pub fn from_body(body: &str) -> AssociateServiceRoleToAccountError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2292,7 +2289,11 @@ impl AssociateServiceRoleToAccountError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerErrorException" => AssociateServiceRoleToAccountError::InternalServerError(String::from(error_message)),
+                    "InternalServerErrorException" => {
+                        AssociateServiceRoleToAccountError::InternalServerError(String::from(
+                            error_message,
+                        ))
+                    }
                     "BadRequestException" => {
                         AssociateServiceRoleToAccountError::BadRequest(String::from(error_message))
                     }
@@ -2360,7 +2361,6 @@ pub enum CreateCoreDefinitionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateCoreDefinitionError {
     pub fn from_body(body: &str) -> CreateCoreDefinitionError {
@@ -2442,7 +2442,6 @@ pub enum CreateCoreDefinitionVersionError {
     Unknown(String),
 }
 
-
 impl CreateCoreDefinitionVersionError {
     pub fn from_body(body: &str) -> CreateCoreDefinitionVersionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2523,7 +2522,6 @@ pub enum CreateDeploymentError {
     Unknown(String),
 }
 
-
 impl CreateDeploymentError {
     pub fn from_body(body: &str) -> CreateDeploymentError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2601,7 +2599,6 @@ pub enum CreateDeviceDefinitionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateDeviceDefinitionError {
     pub fn from_body(body: &str) -> CreateDeviceDefinitionError {
@@ -2683,7 +2680,6 @@ pub enum CreateDeviceDefinitionVersionError {
     Unknown(String),
 }
 
-
 impl CreateDeviceDefinitionVersionError {
     pub fn from_body(body: &str) -> CreateDeviceDefinitionVersionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2763,7 +2759,6 @@ pub enum CreateFunctionDefinitionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateFunctionDefinitionError {
     pub fn from_body(body: &str) -> CreateFunctionDefinitionError {
@@ -2845,7 +2840,6 @@ pub enum CreateFunctionDefinitionVersionError {
     Unknown(String),
 }
 
-
 impl CreateFunctionDefinitionVersionError {
     pub fn from_body(body: &str) -> CreateFunctionDefinitionVersionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2859,7 +2853,9 @@ impl CreateFunctionDefinitionVersionError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "BadRequestException" => CreateFunctionDefinitionVersionError::BadRequest(String::from(error_message)),
+                    "BadRequestException" => CreateFunctionDefinitionVersionError::BadRequest(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         CreateFunctionDefinitionVersionError::Validation(error_message.to_string())
                     }
@@ -2923,7 +2919,6 @@ pub enum CreateGroupError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateGroupError {
     pub fn from_body(body: &str) -> CreateGroupError {
@@ -3005,7 +3000,6 @@ pub enum CreateGroupCertificateAuthorityError {
     Unknown(String),
 }
 
-
 impl CreateGroupCertificateAuthorityError {
     pub fn from_body(body: &str) -> CreateGroupCertificateAuthorityError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3019,8 +3013,14 @@ impl CreateGroupCertificateAuthorityError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerErrorException" => CreateGroupCertificateAuthorityError::InternalServerError(String::from(error_message)),
-                    "BadRequestException" => CreateGroupCertificateAuthorityError::BadRequest(String::from(error_message)),
+                    "InternalServerErrorException" => {
+                        CreateGroupCertificateAuthorityError::InternalServerError(String::from(
+                            error_message,
+                        ))
+                    }
+                    "BadRequestException" => CreateGroupCertificateAuthorityError::BadRequest(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         CreateGroupCertificateAuthorityError::Validation(error_message.to_string())
                     }
@@ -3085,7 +3085,6 @@ pub enum CreateGroupVersionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateGroupVersionError {
     pub fn from_body(body: &str) -> CreateGroupVersionError {
@@ -3167,7 +3166,6 @@ pub enum CreateLoggerDefinitionError {
     Unknown(String),
 }
 
-
 impl CreateLoggerDefinitionError {
     pub fn from_body(body: &str) -> CreateLoggerDefinitionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3247,7 +3245,6 @@ pub enum CreateLoggerDefinitionVersionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateLoggerDefinitionVersionError {
     pub fn from_body(body: &str) -> CreateLoggerDefinitionVersionError {
@@ -3329,7 +3326,6 @@ pub enum CreateSubscriptionDefinitionError {
     Unknown(String),
 }
 
-
 impl CreateSubscriptionDefinitionError {
     pub fn from_body(body: &str) -> CreateSubscriptionDefinitionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3410,7 +3406,6 @@ pub enum CreateSubscriptionDefinitionVersionError {
     Unknown(String),
 }
 
-
 impl CreateSubscriptionDefinitionVersionError {
     pub fn from_body(body: &str) -> CreateSubscriptionDefinitionVersionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3424,11 +3419,12 @@ impl CreateSubscriptionDefinitionVersionError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "BadRequestException" => CreateSubscriptionDefinitionVersionError::BadRequest(String::from(error_message)),
-                    "ValidationException" => {
-                        CreateSubscriptionDefinitionVersionError::Validation(error_message
-                                                                                 .to_string())
-                    }
+                    "BadRequestException" => CreateSubscriptionDefinitionVersionError::BadRequest(
+                        String::from(error_message),
+                    ),
+                    "ValidationException" => CreateSubscriptionDefinitionVersionError::Validation(
+                        error_message.to_string(),
+                    ),
                     _ => CreateSubscriptionDefinitionVersionError::Unknown(String::from(body)),
                 }
             }
@@ -3489,7 +3485,6 @@ pub enum DeleteCoreDefinitionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteCoreDefinitionError {
     pub fn from_body(body: &str) -> DeleteCoreDefinitionError {
@@ -3571,7 +3566,6 @@ pub enum DeleteDeviceDefinitionError {
     Unknown(String),
 }
 
-
 impl DeleteDeviceDefinitionError {
     pub fn from_body(body: &str) -> DeleteDeviceDefinitionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3651,7 +3645,6 @@ pub enum DeleteFunctionDefinitionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteFunctionDefinitionError {
     pub fn from_body(body: &str) -> DeleteFunctionDefinitionError {
@@ -3733,7 +3726,6 @@ pub enum DeleteGroupError {
     Unknown(String),
 }
 
-
 impl DeleteGroupError {
     pub fn from_body(body: &str) -> DeleteGroupError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3811,7 +3803,6 @@ pub enum DeleteLoggerDefinitionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteLoggerDefinitionError {
     pub fn from_body(body: &str) -> DeleteLoggerDefinitionError {
@@ -3892,7 +3883,6 @@ pub enum DeleteSubscriptionDefinitionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteSubscriptionDefinitionError {
     pub fn from_body(body: &str) -> DeleteSubscriptionDefinitionError {
@@ -3976,7 +3966,6 @@ pub enum DisassociateRoleFromGroupError {
     Unknown(String),
 }
 
-
 impl DisassociateRoleFromGroupError {
     pub fn from_body(body: &str) -> DisassociateRoleFromGroupError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3990,7 +3979,11 @@ impl DisassociateRoleFromGroupError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerErrorException" => DisassociateRoleFromGroupError::InternalServerError(String::from(error_message)),
+                    "InternalServerErrorException" => {
+                        DisassociateRoleFromGroupError::InternalServerError(String::from(
+                            error_message,
+                        ))
+                    }
                     "BadRequestException" => {
                         DisassociateRoleFromGroupError::BadRequest(String::from(error_message))
                     }
@@ -4059,7 +4052,6 @@ pub enum DisassociateServiceRoleFromAccountError {
     Unknown(String),
 }
 
-
 impl DisassociateServiceRoleFromAccountError {
     pub fn from_body(body: &str) -> DisassociateServiceRoleFromAccountError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4073,11 +4065,14 @@ impl DisassociateServiceRoleFromAccountError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerErrorException" => DisassociateServiceRoleFromAccountError::InternalServerError(String::from(error_message)),
-                    "ValidationException" => {
-                        DisassociateServiceRoleFromAccountError::Validation(error_message
-                                                                                .to_string())
+                    "InternalServerErrorException" => {
+                        DisassociateServiceRoleFromAccountError::InternalServerError(String::from(
+                            error_message,
+                        ))
                     }
+                    "ValidationException" => DisassociateServiceRoleFromAccountError::Validation(
+                        error_message.to_string(),
+                    ),
                     _ => DisassociateServiceRoleFromAccountError::Unknown(String::from(body)),
                 }
             }
@@ -4140,7 +4135,6 @@ pub enum GetAssociatedRoleError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetAssociatedRoleError {
     pub fn from_body(body: &str) -> GetAssociatedRoleError {
@@ -4228,7 +4222,6 @@ pub enum GetConnectivityInfoError {
     Unknown(String),
 }
 
-
 impl GetConnectivityInfoError {
     pub fn from_body(body: &str) -> GetConnectivityInfoError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4313,7 +4306,6 @@ pub enum GetCoreDefinitionError {
     Unknown(String),
 }
 
-
 impl GetCoreDefinitionError {
     pub fn from_body(body: &str) -> GetCoreDefinitionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4393,7 +4385,6 @@ pub enum GetCoreDefinitionVersionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetCoreDefinitionVersionError {
     pub fn from_body(body: &str) -> GetCoreDefinitionVersionError {
@@ -4475,7 +4466,6 @@ pub enum GetDeploymentStatusError {
     Unknown(String),
 }
 
-
 impl GetDeploymentStatusError {
     pub fn from_body(body: &str) -> GetDeploymentStatusError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4555,7 +4545,6 @@ pub enum GetDeviceDefinitionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetDeviceDefinitionError {
     pub fn from_body(body: &str) -> GetDeviceDefinitionError {
@@ -4637,7 +4626,6 @@ pub enum GetDeviceDefinitionVersionError {
     Unknown(String),
 }
 
-
 impl GetDeviceDefinitionVersionError {
     pub fn from_body(body: &str) -> GetDeviceDefinitionVersionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4717,7 +4705,6 @@ pub enum GetFunctionDefinitionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetFunctionDefinitionError {
     pub fn from_body(body: &str) -> GetFunctionDefinitionError {
@@ -4799,7 +4786,6 @@ pub enum GetFunctionDefinitionVersionError {
     Unknown(String),
 }
 
-
 impl GetFunctionDefinitionVersionError {
     pub fn from_body(body: &str) -> GetFunctionDefinitionVersionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4880,7 +4866,6 @@ pub enum GetGroupError {
     Unknown(String),
 }
 
-
 impl GetGroupError {
     pub fn from_body(body: &str) -> GetGroupError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4957,7 +4942,6 @@ pub enum GetGroupCertificateAuthorityError {
     Unknown(String),
 }
 
-
 impl GetGroupCertificateAuthorityError {
     pub fn from_body(body: &str) -> GetGroupCertificateAuthorityError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4974,7 +4958,11 @@ impl GetGroupCertificateAuthorityError {
                     "BadRequestException" => {
                         GetGroupCertificateAuthorityError::BadRequest(String::from(error_message))
                     }
-                    "InternalServerErrorException" => GetGroupCertificateAuthorityError::InternalServerError(String::from(error_message)),
+                    "InternalServerErrorException" => {
+                        GetGroupCertificateAuthorityError::InternalServerError(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         GetGroupCertificateAuthorityError::Validation(error_message.to_string())
                     }
@@ -5042,7 +5030,6 @@ pub enum GetGroupCertificateConfigurationError {
     Unknown(String),
 }
 
-
 impl GetGroupCertificateConfigurationError {
     pub fn from_body(body: &str) -> GetGroupCertificateConfigurationError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5056,8 +5043,14 @@ impl GetGroupCertificateConfigurationError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "BadRequestException" => GetGroupCertificateConfigurationError::BadRequest(String::from(error_message)),
-                    "InternalServerErrorException" => GetGroupCertificateConfigurationError::InternalServerError(String::from(error_message)),
+                    "BadRequestException" => GetGroupCertificateConfigurationError::BadRequest(
+                        String::from(error_message),
+                    ),
+                    "InternalServerErrorException" => {
+                        GetGroupCertificateConfigurationError::InternalServerError(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         GetGroupCertificateConfigurationError::Validation(error_message.to_string())
                     }
@@ -5122,7 +5115,6 @@ pub enum GetGroupVersionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetGroupVersionError {
     pub fn from_body(body: &str) -> GetGroupVersionError {
@@ -5201,7 +5193,6 @@ pub enum GetLoggerDefinitionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetLoggerDefinitionError {
     pub fn from_body(body: &str) -> GetLoggerDefinitionError {
@@ -5283,7 +5274,6 @@ pub enum GetLoggerDefinitionVersionError {
     Unknown(String),
 }
 
-
 impl GetLoggerDefinitionVersionError {
     pub fn from_body(body: &str) -> GetLoggerDefinitionVersionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5364,7 +5354,6 @@ pub enum GetServiceRoleForAccountError {
     Unknown(String),
 }
 
-
 impl GetServiceRoleForAccountError {
     pub fn from_body(body: &str) -> GetServiceRoleForAccountError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5378,7 +5367,11 @@ impl GetServiceRoleForAccountError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerErrorException" => GetServiceRoleForAccountError::InternalServerError(String::from(error_message)),
+                    "InternalServerErrorException" => {
+                        GetServiceRoleForAccountError::InternalServerError(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         GetServiceRoleForAccountError::Validation(error_message.to_string())
                     }
@@ -5442,7 +5435,6 @@ pub enum GetSubscriptionDefinitionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetSubscriptionDefinitionError {
     pub fn from_body(body: &str) -> GetSubscriptionDefinitionError {
@@ -5524,7 +5516,6 @@ pub enum GetSubscriptionDefinitionVersionError {
     Unknown(String),
 }
 
-
 impl GetSubscriptionDefinitionVersionError {
     pub fn from_body(body: &str) -> GetSubscriptionDefinitionVersionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5538,7 +5529,9 @@ impl GetSubscriptionDefinitionVersionError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "BadRequestException" => GetSubscriptionDefinitionVersionError::BadRequest(String::from(error_message)),
+                    "BadRequestException" => GetSubscriptionDefinitionVersionError::BadRequest(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         GetSubscriptionDefinitionVersionError::Validation(error_message.to_string())
                     }
@@ -5602,7 +5595,6 @@ pub enum ListCoreDefinitionVersionsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListCoreDefinitionVersionsError {
     pub fn from_body(body: &str) -> ListCoreDefinitionVersionsError {
@@ -5682,7 +5674,6 @@ pub enum ListCoreDefinitionsError {
     Unknown(String),
 }
 
-
 impl ListCoreDefinitionsError {
     pub fn from_body(body: &str) -> ListCoreDefinitionsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5758,7 +5749,6 @@ pub enum ListDeploymentsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListDeploymentsError {
     pub fn from_body(body: &str) -> ListDeploymentsError {
@@ -5838,7 +5828,6 @@ pub enum ListDeviceDefinitionVersionsError {
     Unknown(String),
 }
 
-
 impl ListDeviceDefinitionVersionsError {
     pub fn from_body(body: &str) -> ListDeviceDefinitionVersionsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5917,7 +5906,6 @@ pub enum ListDeviceDefinitionsError {
     Unknown(String),
 }
 
-
 impl ListDeviceDefinitionsError {
     pub fn from_body(body: &str) -> ListDeviceDefinitionsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5993,7 +5981,6 @@ pub enum ListFunctionDefinitionVersionsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListFunctionDefinitionVersionsError {
     pub fn from_body(body: &str) -> ListFunctionDefinitionVersionsError {
@@ -6073,7 +6060,6 @@ pub enum ListFunctionDefinitionsError {
     Unknown(String),
 }
 
-
 impl ListFunctionDefinitionsError {
     pub fn from_body(body: &str) -> ListFunctionDefinitionsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6152,7 +6138,6 @@ pub enum ListGroupCertificateAuthoritiesError {
     Unknown(String),
 }
 
-
 impl ListGroupCertificateAuthoritiesError {
     pub fn from_body(body: &str) -> ListGroupCertificateAuthoritiesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6166,8 +6151,14 @@ impl ListGroupCertificateAuthoritiesError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "BadRequestException" => ListGroupCertificateAuthoritiesError::BadRequest(String::from(error_message)),
-                    "InternalServerErrorException" => ListGroupCertificateAuthoritiesError::InternalServerError(String::from(error_message)),
+                    "BadRequestException" => ListGroupCertificateAuthoritiesError::BadRequest(
+                        String::from(error_message),
+                    ),
+                    "InternalServerErrorException" => {
+                        ListGroupCertificateAuthoritiesError::InternalServerError(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         ListGroupCertificateAuthoritiesError::Validation(error_message.to_string())
                     }
@@ -6232,7 +6223,6 @@ pub enum ListGroupVersionsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListGroupVersionsError {
     pub fn from_body(body: &str) -> ListGroupVersionsError {
@@ -6312,7 +6302,6 @@ pub enum ListGroupsError {
     Unknown(String),
 }
 
-
 impl ListGroupsError {
     pub fn from_body(body: &str) -> ListGroupsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6384,7 +6373,6 @@ pub enum ListLoggerDefinitionVersionsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListLoggerDefinitionVersionsError {
     pub fn from_body(body: &str) -> ListLoggerDefinitionVersionsError {
@@ -6464,7 +6452,6 @@ pub enum ListLoggerDefinitionsError {
     Unknown(String),
 }
 
-
 impl ListLoggerDefinitionsError {
     pub fn from_body(body: &str) -> ListLoggerDefinitionsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6541,7 +6528,6 @@ pub enum ListSubscriptionDefinitionVersionsError {
     Unknown(String),
 }
 
-
 impl ListSubscriptionDefinitionVersionsError {
     pub fn from_body(body: &str) -> ListSubscriptionDefinitionVersionsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6555,11 +6541,12 @@ impl ListSubscriptionDefinitionVersionsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "BadRequestException" => ListSubscriptionDefinitionVersionsError::BadRequest(String::from(error_message)),
-                    "ValidationException" => {
-                        ListSubscriptionDefinitionVersionsError::Validation(error_message
-                                                                                .to_string())
-                    }
+                    "BadRequestException" => ListSubscriptionDefinitionVersionsError::BadRequest(
+                        String::from(error_message),
+                    ),
+                    "ValidationException" => ListSubscriptionDefinitionVersionsError::Validation(
+                        error_message.to_string(),
+                    ),
                     _ => ListSubscriptionDefinitionVersionsError::Unknown(String::from(body)),
                 }
             }
@@ -6618,7 +6605,6 @@ pub enum ListSubscriptionDefinitionsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListSubscriptionDefinitionsError {
     pub fn from_body(body: &str) -> ListSubscriptionDefinitionsError {
@@ -6698,7 +6684,6 @@ pub enum UpdateConnectivityInfoError {
     Unknown(String),
 }
 
-
 impl UpdateConnectivityInfoError {
     pub fn from_body(body: &str) -> UpdateConnectivityInfoError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6715,7 +6700,11 @@ impl UpdateConnectivityInfoError {
                     "BadRequestException" => {
                         UpdateConnectivityInfoError::BadRequest(String::from(error_message))
                     }
-                    "InternalServerErrorException" => UpdateConnectivityInfoError::InternalServerError(String::from(error_message)),
+                    "InternalServerErrorException" => {
+                        UpdateConnectivityInfoError::InternalServerError(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         UpdateConnectivityInfoError::Validation(error_message.to_string())
                     }
@@ -6780,7 +6769,6 @@ pub enum UpdateCoreDefinitionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl UpdateCoreDefinitionError {
     pub fn from_body(body: &str) -> UpdateCoreDefinitionError {
@@ -6862,7 +6850,6 @@ pub enum UpdateDeviceDefinitionError {
     Unknown(String),
 }
 
-
 impl UpdateDeviceDefinitionError {
     pub fn from_body(body: &str) -> UpdateDeviceDefinitionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6942,7 +6929,6 @@ pub enum UpdateFunctionDefinitionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl UpdateFunctionDefinitionError {
     pub fn from_body(body: &str) -> UpdateFunctionDefinitionError {
@@ -7024,7 +7010,6 @@ pub enum UpdateGroupError {
     Unknown(String),
 }
 
-
 impl UpdateGroupError {
     pub fn from_body(body: &str) -> UpdateGroupError {
         match from_str::<SerdeJsonValue>(body) {
@@ -7105,7 +7090,6 @@ pub enum UpdateGroupCertificateConfigurationError {
     Unknown(String),
 }
 
-
 impl UpdateGroupCertificateConfigurationError {
     pub fn from_body(body: &str) -> UpdateGroupCertificateConfigurationError {
         match from_str::<SerdeJsonValue>(body) {
@@ -7119,12 +7103,17 @@ impl UpdateGroupCertificateConfigurationError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "BadRequestException" => UpdateGroupCertificateConfigurationError::BadRequest(String::from(error_message)),
-                    "InternalServerErrorException" => UpdateGroupCertificateConfigurationError::InternalServerError(String::from(error_message)),
-                    "ValidationException" => {
-                        UpdateGroupCertificateConfigurationError::Validation(error_message
-                                                                                 .to_string())
+                    "BadRequestException" => UpdateGroupCertificateConfigurationError::BadRequest(
+                        String::from(error_message),
+                    ),
+                    "InternalServerErrorException" => {
+                        UpdateGroupCertificateConfigurationError::InternalServerError(
+                            String::from(error_message),
+                        )
                     }
+                    "ValidationException" => UpdateGroupCertificateConfigurationError::Validation(
+                        error_message.to_string(),
+                    ),
                     _ => UpdateGroupCertificateConfigurationError::Unknown(String::from(body)),
                 }
             }
@@ -7186,7 +7175,6 @@ pub enum UpdateLoggerDefinitionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl UpdateLoggerDefinitionError {
     pub fn from_body(body: &str) -> UpdateLoggerDefinitionError {
@@ -7268,7 +7256,6 @@ pub enum UpdateSubscriptionDefinitionError {
     Unknown(String),
 }
 
-
 impl UpdateSubscriptionDefinitionError {
     pub fn from_body(body: &str) -> UpdateSubscriptionDefinitionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -7337,439 +7324,387 @@ impl Error for UpdateSubscriptionDefinitionError {
 /// Trait representing the capabilities of the AWS Greengrass API. AWS Greengrass clients implement this trait.
 pub trait GreenGrass {
     #[doc="Associates a role with a group. The role will be used by the AWS Greengrass core in order to access AWS cloud services. The role's permissions will allow Greengrass core Lambda functions to perform actions against the cloud."]
-    fn associate_role_to_group
-        (&self,
-         input: &AssociateRoleToGroupRequest)
-         -> Result<AssociateRoleToGroupResponse, AssociateRoleToGroupError>;
-
+    fn associate_role_to_group(
+        &self,
+        input: &AssociateRoleToGroupRequest,
+    ) -> Result<AssociateRoleToGroupResponse, AssociateRoleToGroupError>;
 
     #[doc="Associates a role which is used by AWS Greengrass. AWS Greengrass uses the role to access your Lambda functions and AWS IoT resources. This is necessary for deployments to succeed. It needs to have minimum permissions in policy ``AWSGreengrassResourceAccessRolePolicy``"]
-    fn associate_service_role_to_account
-        (&self,
-         input: &AssociateServiceRoleToAccountRequest)
-         -> Result<AssociateServiceRoleToAccountResponse, AssociateServiceRoleToAccountError>;
-
+    fn associate_service_role_to_account(
+        &self,
+        input: &AssociateServiceRoleToAccountRequest,
+    ) -> Result<AssociateServiceRoleToAccountResponse, AssociateServiceRoleToAccountError>;
 
     #[doc="Creates a core definition. You may optionally provide the initial version of the core definition or use ''CreateCoreDefinitionVersion'' at a later time. AWS Greengrass Groups must each contain exactly 1 AWS Greengrass Core."]
-    fn create_core_definition
-        (&self,
-         input: &CreateCoreDefinitionRequest)
-         -> Result<CreateCoreDefinitionResponse, CreateCoreDefinitionError>;
-
+    fn create_core_definition(
+        &self,
+        input: &CreateCoreDefinitionRequest,
+    ) -> Result<CreateCoreDefinitionResponse, CreateCoreDefinitionError>;
 
     #[doc="Creates a version of a core definition that has already been defined. AWS Greengrass Groups must each contain exactly 1 AWS Greengrass Core."]
-    fn create_core_definition_version
-        (&self,
-         input: &CreateCoreDefinitionVersionRequest)
-         -> Result<CreateCoreDefinitionVersionResponse, CreateCoreDefinitionVersionError>;
+    fn create_core_definition_version(
+        &self,
+        input: &CreateCoreDefinitionVersionRequest,
+    ) -> Result<CreateCoreDefinitionVersionResponse, CreateCoreDefinitionVersionError>;
 
-
-    #[doc="Creates a deployment."]
-    fn create_deployment(&self,
-                         input: &CreateDeploymentRequest)
-                         -> Result<CreateDeploymentResponse, CreateDeploymentError>;
-
+    #[doc = "Creates a deployment."]
+    fn create_deployment(
+        &self,
+        input: &CreateDeploymentRequest,
+    ) -> Result<CreateDeploymentResponse, CreateDeploymentError>;
 
     #[doc="Creates a device definition. You may optinally provide the initial version of the device definition or use ``CreateDeviceDefinitionVersion`` at a later time."]
-    fn create_device_definition
-        (&self,
-         input: &CreateDeviceDefinitionRequest)
-         -> Result<CreateDeviceDefinitionResponse, CreateDeviceDefinitionError>;
+    fn create_device_definition(
+        &self,
+        input: &CreateDeviceDefinitionRequest,
+    ) -> Result<CreateDeviceDefinitionResponse, CreateDeviceDefinitionError>;
 
-
-    #[doc="Creates a version of a device definition that has already been defined."]
-    fn create_device_definition_version
-        (&self,
-         input: &CreateDeviceDefinitionVersionRequest)
-         -> Result<CreateDeviceDefinitionVersionResponse, CreateDeviceDefinitionVersionError>;
-
+    #[doc = "Creates a version of a device definition that has already been defined."]
+    fn create_device_definition_version(
+        &self,
+        input: &CreateDeviceDefinitionVersionRequest,
+    ) -> Result<CreateDeviceDefinitionVersionResponse, CreateDeviceDefinitionVersionError>;
 
     #[doc="Creates a Lambda function definition which contains a list of Lambda functions and their configurations to be used in a group. You can create an initial version of the definition by providing a list of Lambda functions and their configurations now, or use ``CreateFunctionDefinitionVersion`` later."]
-    fn create_function_definition
-        (&self,
-         input: &CreateFunctionDefinitionRequest)
-         -> Result<CreateFunctionDefinitionResponse, CreateFunctionDefinitionError>;
+    fn create_function_definition(
+        &self,
+        input: &CreateFunctionDefinitionRequest,
+    ) -> Result<CreateFunctionDefinitionResponse, CreateFunctionDefinitionError>;
 
-
-    #[doc="Create a version of a Lambda function definition that has already been defined."]
-    fn create_function_definition_version
-        (&self,
-         input: &CreateFunctionDefinitionVersionRequest)
-         -> Result<CreateFunctionDefinitionVersionResponse, CreateFunctionDefinitionVersionError>;
-
+    #[doc = "Create a version of a Lambda function definition that has already been defined."]
+    fn create_function_definition_version(
+        &self,
+        input: &CreateFunctionDefinitionVersionRequest,
+    ) -> Result<CreateFunctionDefinitionVersionResponse, CreateFunctionDefinitionVersionError>;
 
     #[doc="Creates a group. You may optionally provide the initial version of the group or use ''CreateGroupVersion'' at a later time."]
-    fn create_group(&self,
-                    input: &CreateGroupRequest)
-                    -> Result<CreateGroupResponse, CreateGroupError>;
+    fn create_group(
+        &self,
+        input: &CreateGroupRequest,
+    ) -> Result<CreateGroupResponse, CreateGroupError>;
 
+    #[doc = "Creates a CA for the group. If a CA already exists, it will rotate the existing CA."]
+    fn create_group_certificate_authority(
+        &self,
+        input: &CreateGroupCertificateAuthorityRequest,
+    ) -> Result<CreateGroupCertificateAuthorityResponse, CreateGroupCertificateAuthorityError>;
 
-    #[doc="Creates a CA for the group. If a CA already exists, it will rotate the existing CA."]
-    fn create_group_certificate_authority
-        (&self,
-         input: &CreateGroupCertificateAuthorityRequest)
-         -> Result<CreateGroupCertificateAuthorityResponse, CreateGroupCertificateAuthorityError>;
-
-
-    #[doc="Creates a version of a group which has already been defined."]
-    fn create_group_version(&self,
-                            input: &CreateGroupVersionRequest)
-                            -> Result<CreateGroupVersionResponse, CreateGroupVersionError>;
-
+    #[doc = "Creates a version of a group which has already been defined."]
+    fn create_group_version(
+        &self,
+        input: &CreateGroupVersionRequest,
+    ) -> Result<CreateGroupVersionResponse, CreateGroupVersionError>;
 
     #[doc="Creates a logger definition. You may optionally provide the initial version of the logger definition or use ``CreateLoggerDefinitionVersion`` at a later time."]
-    fn create_logger_definition
-        (&self,
-         input: &CreateLoggerDefinitionRequest)
-         -> Result<CreateLoggerDefinitionResponse, CreateLoggerDefinitionError>;
+    fn create_logger_definition(
+        &self,
+        input: &CreateLoggerDefinitionRequest,
+    ) -> Result<CreateLoggerDefinitionResponse, CreateLoggerDefinitionError>;
 
-
-    #[doc="Creates a version of a logger definition that has already been defined."]
-    fn create_logger_definition_version
-        (&self,
-         input: &CreateLoggerDefinitionVersionRequest)
-         -> Result<CreateLoggerDefinitionVersionResponse, CreateLoggerDefinitionVersionError>;
-
+    #[doc = "Creates a version of a logger definition that has already been defined."]
+    fn create_logger_definition_version(
+        &self,
+        input: &CreateLoggerDefinitionVersionRequest,
+    ) -> Result<CreateLoggerDefinitionVersionResponse, CreateLoggerDefinitionVersionError>;
 
     #[doc="Creates a subscription definition. You may optionally provide the initial version of the subscription definition or use ``CreateSubscriptionDefinitionVersion`` at a later time."]
-    fn create_subscription_definition
-        (&self,
-         input: &CreateSubscriptionDefinitionRequest)
-         -> Result<CreateSubscriptionDefinitionResponse, CreateSubscriptionDefinitionError>;
+    fn create_subscription_definition(
+        &self,
+        input: &CreateSubscriptionDefinitionRequest,
+    ) -> Result<CreateSubscriptionDefinitionResponse, CreateSubscriptionDefinitionError>;
 
-
-    #[doc="Creates a version of a subscription definition which has already been defined."]
-    fn create_subscription_definition_version
-        (&self,
-         input: &CreateSubscriptionDefinitionVersionRequest)
-         -> Result<CreateSubscriptionDefinitionVersionResponse,
-                   CreateSubscriptionDefinitionVersionError>;
-
+    #[doc = "Creates a version of a subscription definition which has already been defined."]
+    fn create_subscription_definition_version(
+        &self,
+        input: &CreateSubscriptionDefinitionVersionRequest,
+    ) -> Result<CreateSubscriptionDefinitionVersionResponse, CreateSubscriptionDefinitionVersionError>;
 
     #[doc="Deletes a core definition. The core definition must not have been used in a deployment."]
-    fn delete_core_definition
-        (&self,
-         input: &DeleteCoreDefinitionRequest)
-         -> Result<DeleteCoreDefinitionResponse, DeleteCoreDefinitionError>;
-
+    fn delete_core_definition(
+        &self,
+        input: &DeleteCoreDefinitionRequest,
+    ) -> Result<DeleteCoreDefinitionResponse, DeleteCoreDefinitionError>;
 
     #[doc="Deletes a device definition. The device definition must not have been used in a deployment."]
-    fn delete_device_definition
-        (&self,
-         input: &DeleteDeviceDefinitionRequest)
-         -> Result<DeleteDeviceDefinitionResponse, DeleteDeviceDefinitionError>;
-
+    fn delete_device_definition(
+        &self,
+        input: &DeleteDeviceDefinitionRequest,
+    ) -> Result<DeleteDeviceDefinitionResponse, DeleteDeviceDefinitionError>;
 
     #[doc="Deletes a Lambda function definition. The Lambda function definition must not have been used in a deployment."]
-    fn delete_function_definition
-        (&self,
-         input: &DeleteFunctionDefinitionRequest)
-         -> Result<DeleteFunctionDefinitionResponse, DeleteFunctionDefinitionError>;
+    fn delete_function_definition(
+        &self,
+        input: &DeleteFunctionDefinitionRequest,
+    ) -> Result<DeleteFunctionDefinitionResponse, DeleteFunctionDefinitionError>;
 
-
-    #[doc="Deletes a group. The group must not have been used in deployment."]
-    fn delete_group(&self,
-                    input: &DeleteGroupRequest)
-                    -> Result<DeleteGroupResponse, DeleteGroupError>;
-
+    #[doc = "Deletes a group. The group must not have been used in deployment."]
+    fn delete_group(
+        &self,
+        input: &DeleteGroupRequest,
+    ) -> Result<DeleteGroupResponse, DeleteGroupError>;
 
     #[doc="Deletes a logger definition. The logger definition must not have been used in a deployment."]
-    fn delete_logger_definition
-        (&self,
-         input: &DeleteLoggerDefinitionRequest)
-         -> Result<DeleteLoggerDefinitionResponse, DeleteLoggerDefinitionError>;
-
+    fn delete_logger_definition(
+        &self,
+        input: &DeleteLoggerDefinitionRequest,
+    ) -> Result<DeleteLoggerDefinitionResponse, DeleteLoggerDefinitionError>;
 
     #[doc="Deletes a subscription definition. The subscription definition must not have been used in a deployment."]
-    fn delete_subscription_definition
-        (&self,
-         input: &DeleteSubscriptionDefinitionRequest)
-         -> Result<DeleteSubscriptionDefinitionResponse, DeleteSubscriptionDefinitionError>;
+    fn delete_subscription_definition(
+        &self,
+        input: &DeleteSubscriptionDefinitionRequest,
+    ) -> Result<DeleteSubscriptionDefinitionResponse, DeleteSubscriptionDefinitionError>;
 
-
-    #[doc="Disassociates the role from a group."]
-    fn disassociate_role_from_group
-        (&self,
-         input: &DisassociateRoleFromGroupRequest)
-         -> Result<DisassociateRoleFromGroupResponse, DisassociateRoleFromGroupError>;
-
+    #[doc = "Disassociates the role from a group."]
+    fn disassociate_role_from_group(
+        &self,
+        input: &DisassociateRoleFromGroupRequest,
+    ) -> Result<DisassociateRoleFromGroupResponse, DisassociateRoleFromGroupError>;
 
     #[doc="Disassociates the service role from the account. Without a service role, deployments will not work."]
-    fn disassociate_service_role_from_account
-        (&self)
-         -> Result<DisassociateServiceRoleFromAccountResponse,
-                   DisassociateServiceRoleFromAccountError>;
+    fn disassociate_service_role_from_account(
+        &self,
+    ) -> Result<DisassociateServiceRoleFromAccountResponse, DisassociateServiceRoleFromAccountError>;
 
+    #[doc = "Retrieves the role associated with a particular group."]
+    fn get_associated_role(
+        &self,
+        input: &GetAssociatedRoleRequest,
+    ) -> Result<GetAssociatedRoleResponse, GetAssociatedRoleError>;
 
-    #[doc="Retrieves the role associated with a particular group."]
-    fn get_associated_role(&self,
-                           input: &GetAssociatedRoleRequest)
-                           -> Result<GetAssociatedRoleResponse, GetAssociatedRoleError>;
+    #[doc = "Retrieves the connectivity information for a core."]
+    fn get_connectivity_info(
+        &self,
+        input: &GetConnectivityInfoRequest,
+    ) -> Result<GetConnectivityInfoResponse, GetConnectivityInfoError>;
 
+    #[doc = "Retrieves information about a core definition version."]
+    fn get_core_definition(
+        &self,
+        input: &GetCoreDefinitionRequest,
+    ) -> Result<GetCoreDefinitionResponse, GetCoreDefinitionError>;
 
-    #[doc="Retrieves the connectivity information for a core."]
-    fn get_connectivity_info(&self,
-                             input: &GetConnectivityInfoRequest)
-                             -> Result<GetConnectivityInfoResponse, GetConnectivityInfoError>;
+    #[doc = "Retrieves information about a core definition version."]
+    fn get_core_definition_version(
+        &self,
+        input: &GetCoreDefinitionVersionRequest,
+    ) -> Result<GetCoreDefinitionVersionResponse, GetCoreDefinitionVersionError>;
 
+    #[doc = "Returns the status of a deployment."]
+    fn get_deployment_status(
+        &self,
+        input: &GetDeploymentStatusRequest,
+    ) -> Result<GetDeploymentStatusResponse, GetDeploymentStatusError>;
 
-    #[doc="Retrieves information about a core definition version."]
-    fn get_core_definition(&self,
-                           input: &GetCoreDefinitionRequest)
-                           -> Result<GetCoreDefinitionResponse, GetCoreDefinitionError>;
+    #[doc = "Retrieves information about a device definition."]
+    fn get_device_definition(
+        &self,
+        input: &GetDeviceDefinitionRequest,
+    ) -> Result<GetDeviceDefinitionResponse, GetDeviceDefinitionError>;
 
-
-    #[doc="Retrieves information about a core definition version."]
-    fn get_core_definition_version
-        (&self,
-         input: &GetCoreDefinitionVersionRequest)
-         -> Result<GetCoreDefinitionVersionResponse, GetCoreDefinitionVersionError>;
-
-
-    #[doc="Returns the status of a deployment."]
-    fn get_deployment_status(&self,
-                             input: &GetDeploymentStatusRequest)
-                             -> Result<GetDeploymentStatusResponse, GetDeploymentStatusError>;
-
-
-    #[doc="Retrieves information about a device definition."]
-    fn get_device_definition(&self,
-                             input: &GetDeviceDefinitionRequest)
-                             -> Result<GetDeviceDefinitionResponse, GetDeviceDefinitionError>;
-
-
-    #[doc="Retrieves information about a device definition version."]
-    fn get_device_definition_version
-        (&self,
-         input: &GetDeviceDefinitionVersionRequest)
-         -> Result<GetDeviceDefinitionVersionResponse, GetDeviceDefinitionVersionError>;
-
+    #[doc = "Retrieves information about a device definition version."]
+    fn get_device_definition_version(
+        &self,
+        input: &GetDeviceDefinitionVersionRequest,
+    ) -> Result<GetDeviceDefinitionVersionResponse, GetDeviceDefinitionVersionError>;
 
     #[doc="Retrieves information about a Lambda function definition, such as its creation time and latest version."]
-    fn get_function_definition
-        (&self,
-         input: &GetFunctionDefinitionRequest)
-         -> Result<GetFunctionDefinitionResponse, GetFunctionDefinitionError>;
-
+    fn get_function_definition(
+        &self,
+        input: &GetFunctionDefinitionRequest,
+    ) -> Result<GetFunctionDefinitionResponse, GetFunctionDefinitionError>;
 
     #[doc="Retrieves information about a Lambda function definition version, such as which Lambda functions are included in the version and their configurations."]
-    fn get_function_definition_version
-        (&self,
-         input: &GetFunctionDefinitionVersionRequest)
-         -> Result<GetFunctionDefinitionVersionResponse, GetFunctionDefinitionVersionError>;
+    fn get_function_definition_version(
+        &self,
+        input: &GetFunctionDefinitionVersionRequest,
+    ) -> Result<GetFunctionDefinitionVersionResponse, GetFunctionDefinitionVersionError>;
 
-
-    #[doc="Retrieves information about a group."]
+    #[doc = "Retrieves information about a group."]
     fn get_group(&self, input: &GetGroupRequest) -> Result<GetGroupResponse, GetGroupError>;
 
+    #[doc = "Retreives the CA associated with a group. Returns the public key of the CA."]
+    fn get_group_certificate_authority(
+        &self,
+        input: &GetGroupCertificateAuthorityRequest,
+    ) -> Result<GetGroupCertificateAuthorityResponse, GetGroupCertificateAuthorityError>;
 
-    #[doc="Retreives the CA associated with a group. Returns the public key of the CA."]
-    fn get_group_certificate_authority
-        (&self,
-         input: &GetGroupCertificateAuthorityRequest)
-         -> Result<GetGroupCertificateAuthorityResponse, GetGroupCertificateAuthorityError>;
+    #[doc = "Retrieves the current configuration for the CA used by the group."]
+    fn get_group_certificate_configuration(
+        &self,
+        input: &GetGroupCertificateConfigurationRequest,
+    ) -> Result<GetGroupCertificateConfigurationResponse, GetGroupCertificateConfigurationError>;
 
+    #[doc = "Retrieves information about a group version."]
+    fn get_group_version(
+        &self,
+        input: &GetGroupVersionRequest,
+    ) -> Result<GetGroupVersionResponse, GetGroupVersionError>;
 
-    #[doc="Retrieves the current configuration for the CA used by the group."]
-    fn get_group_certificate_configuration
-        (&self,
-         input: &GetGroupCertificateConfigurationRequest)
-         -> Result<GetGroupCertificateConfigurationResponse, GetGroupCertificateConfigurationError>;
+    #[doc = "Retrieves information about a logger definition."]
+    fn get_logger_definition(
+        &self,
+        input: &GetLoggerDefinitionRequest,
+    ) -> Result<GetLoggerDefinitionResponse, GetLoggerDefinitionError>;
 
+    #[doc = "Retrieves information about a logger definition version."]
+    fn get_logger_definition_version(
+        &self,
+        input: &GetLoggerDefinitionVersionRequest,
+    ) -> Result<GetLoggerDefinitionVersionResponse, GetLoggerDefinitionVersionError>;
 
-    #[doc="Retrieves information about a group version."]
-    fn get_group_version(&self,
-                         input: &GetGroupVersionRequest)
-                         -> Result<GetGroupVersionResponse, GetGroupVersionError>;
+    #[doc = "Retrieves the service role that is attached to the account."]
+    fn get_service_role_for_account(
+        &self,
+    ) -> Result<GetServiceRoleForAccountResponse, GetServiceRoleForAccountError>;
 
+    #[doc = "Retrieves information about a subscription definition."]
+    fn get_subscription_definition(
+        &self,
+        input: &GetSubscriptionDefinitionRequest,
+    ) -> Result<GetSubscriptionDefinitionResponse, GetSubscriptionDefinitionError>;
 
-    #[doc="Retrieves information about a logger definition."]
-    fn get_logger_definition(&self,
-                             input: &GetLoggerDefinitionRequest)
-                             -> Result<GetLoggerDefinitionResponse, GetLoggerDefinitionError>;
+    #[doc = "Retrieves information about a subscription definition version."]
+    fn get_subscription_definition_version(
+        &self,
+        input: &GetSubscriptionDefinitionVersionRequest,
+    ) -> Result<GetSubscriptionDefinitionVersionResponse, GetSubscriptionDefinitionVersionError>;
 
+    #[doc = "Lists versions of a core definition."]
+    fn list_core_definition_versions(
+        &self,
+        input: &ListCoreDefinitionVersionsRequest,
+    ) -> Result<ListCoreDefinitionVersionsResponse, ListCoreDefinitionVersionsError>;
 
-    #[doc="Retrieves information about a logger definition version."]
-    fn get_logger_definition_version
-        (&self,
-         input: &GetLoggerDefinitionVersionRequest)
-         -> Result<GetLoggerDefinitionVersionResponse, GetLoggerDefinitionVersionError>;
+    #[doc = "Retrieves a list of core definitions."]
+    fn list_core_definitions(
+        &self,
+        input: &ListCoreDefinitionsRequest,
+    ) -> Result<ListCoreDefinitionsResponse, ListCoreDefinitionsError>;
 
+    #[doc = "Returns a history of deployments for the group."]
+    fn list_deployments(
+        &self,
+        input: &ListDeploymentsRequest,
+    ) -> Result<ListDeploymentsResponse, ListDeploymentsError>;
 
-    #[doc="Retrieves the service role that is attached to the account."]
-    fn get_service_role_for_account
-        (&self)
-         -> Result<GetServiceRoleForAccountResponse, GetServiceRoleForAccountError>;
+    #[doc = "Lists the versions of a device definition."]
+    fn list_device_definition_versions(
+        &self,
+        input: &ListDeviceDefinitionVersionsRequest,
+    ) -> Result<ListDeviceDefinitionVersionsResponse, ListDeviceDefinitionVersionsError>;
 
+    #[doc = "Retrieves a list of device definitions."]
+    fn list_device_definitions(
+        &self,
+        input: &ListDeviceDefinitionsRequest,
+    ) -> Result<ListDeviceDefinitionsResponse, ListDeviceDefinitionsError>;
 
-    #[doc="Retrieves information about a subscription definition."]
-    fn get_subscription_definition
-        (&self,
-         input: &GetSubscriptionDefinitionRequest)
-         -> Result<GetSubscriptionDefinitionResponse, GetSubscriptionDefinitionError>;
+    #[doc = "Lists the versions of a Lambda function definition."]
+    fn list_function_definition_versions(
+        &self,
+        input: &ListFunctionDefinitionVersionsRequest,
+    ) -> Result<ListFunctionDefinitionVersionsResponse, ListFunctionDefinitionVersionsError>;
 
+    #[doc = "Retrieves a list of Lambda function definitions."]
+    fn list_function_definitions(
+        &self,
+        input: &ListFunctionDefinitionsRequest,
+    ) -> Result<ListFunctionDefinitionsResponse, ListFunctionDefinitionsError>;
 
-    #[doc="Retrieves information about a subscription definition version."]
-    fn get_subscription_definition_version
-        (&self,
-         input: &GetSubscriptionDefinitionVersionRequest)
-         -> Result<GetSubscriptionDefinitionVersionResponse, GetSubscriptionDefinitionVersionError>;
+    #[doc = "Retrieves the current CAs for a group."]
+    fn list_group_certificate_authorities(
+        &self,
+        input: &ListGroupCertificateAuthoritiesRequest,
+    ) -> Result<ListGroupCertificateAuthoritiesResponse, ListGroupCertificateAuthoritiesError>;
 
+    #[doc = "List the versions of a group."]
+    fn list_group_versions(
+        &self,
+        input: &ListGroupVersionsRequest,
+    ) -> Result<ListGroupVersionsResponse, ListGroupVersionsError>;
 
-    #[doc="Lists versions of a core definition."]
-    fn list_core_definition_versions
-        (&self,
-         input: &ListCoreDefinitionVersionsRequest)
-         -> Result<ListCoreDefinitionVersionsResponse, ListCoreDefinitionVersionsError>;
+    #[doc = "Retrieves a list of groups."]
+    fn list_groups(&self, input: &ListGroupsRequest)
+        -> Result<ListGroupsResponse, ListGroupsError>;
 
+    #[doc = "Lists the versions of a logger definition."]
+    fn list_logger_definition_versions(
+        &self,
+        input: &ListLoggerDefinitionVersionsRequest,
+    ) -> Result<ListLoggerDefinitionVersionsResponse, ListLoggerDefinitionVersionsError>;
 
-    #[doc="Retrieves a list of core definitions."]
-    fn list_core_definitions(&self,
-                             input: &ListCoreDefinitionsRequest)
-                             -> Result<ListCoreDefinitionsResponse, ListCoreDefinitionsError>;
+    #[doc = "Retrieves a list of logger definitions."]
+    fn list_logger_definitions(
+        &self,
+        input: &ListLoggerDefinitionsRequest,
+    ) -> Result<ListLoggerDefinitionsResponse, ListLoggerDefinitionsError>;
 
+    #[doc = "Lists the versions of a subscription definition."]
+    fn list_subscription_definition_versions(
+        &self,
+        input: &ListSubscriptionDefinitionVersionsRequest,
+    ) -> Result<ListSubscriptionDefinitionVersionsResponse, ListSubscriptionDefinitionVersionsError>;
 
-    #[doc="Returns a history of deployments for the group."]
-    fn list_deployments(&self,
-                        input: &ListDeploymentsRequest)
-                        -> Result<ListDeploymentsResponse, ListDeploymentsError>;
-
-
-    #[doc="Lists the versions of a device definition."]
-    fn list_device_definition_versions
-        (&self,
-         input: &ListDeviceDefinitionVersionsRequest)
-         -> Result<ListDeviceDefinitionVersionsResponse, ListDeviceDefinitionVersionsError>;
-
-
-    #[doc="Retrieves a list of device definitions."]
-    fn list_device_definitions
-        (&self,
-         input: &ListDeviceDefinitionsRequest)
-         -> Result<ListDeviceDefinitionsResponse, ListDeviceDefinitionsError>;
-
-
-    #[doc="Lists the versions of a Lambda function definition."]
-    fn list_function_definition_versions
-        (&self,
-         input: &ListFunctionDefinitionVersionsRequest)
-         -> Result<ListFunctionDefinitionVersionsResponse, ListFunctionDefinitionVersionsError>;
-
-
-    #[doc="Retrieves a list of Lambda function definitions."]
-    fn list_function_definitions
-        (&self,
-         input: &ListFunctionDefinitionsRequest)
-         -> Result<ListFunctionDefinitionsResponse, ListFunctionDefinitionsError>;
-
-
-    #[doc="Retrieves the current CAs for a group."]
-    fn list_group_certificate_authorities
-        (&self,
-         input: &ListGroupCertificateAuthoritiesRequest)
-         -> Result<ListGroupCertificateAuthoritiesResponse, ListGroupCertificateAuthoritiesError>;
-
-
-    #[doc="List the versions of a group."]
-    fn list_group_versions(&self,
-                           input: &ListGroupVersionsRequest)
-                           -> Result<ListGroupVersionsResponse, ListGroupVersionsError>;
-
-
-    #[doc="Retrieves a list of groups."]
-    fn list_groups(&self,
-                   input: &ListGroupsRequest)
-                   -> Result<ListGroupsResponse, ListGroupsError>;
-
-
-    #[doc="Lists the versions of a logger definition."]
-    fn list_logger_definition_versions
-        (&self,
-         input: &ListLoggerDefinitionVersionsRequest)
-         -> Result<ListLoggerDefinitionVersionsResponse, ListLoggerDefinitionVersionsError>;
-
-
-    #[doc="Retrieves a list of logger definitions."]
-    fn list_logger_definitions
-        (&self,
-         input: &ListLoggerDefinitionsRequest)
-         -> Result<ListLoggerDefinitionsResponse, ListLoggerDefinitionsError>;
-
-
-    #[doc="Lists the versions of a subscription definition."]
-    fn list_subscription_definition_versions
-        (&self,
-         input: &ListSubscriptionDefinitionVersionsRequest)
-         -> Result<ListSubscriptionDefinitionVersionsResponse,
-                   ListSubscriptionDefinitionVersionsError>;
-
-
-    #[doc="Retrieves a list of subscription definitions."]
-    fn list_subscription_definitions
-        (&self,
-         input: &ListSubscriptionDefinitionsRequest)
-         -> Result<ListSubscriptionDefinitionsResponse, ListSubscriptionDefinitionsError>;
-
+    #[doc = "Retrieves a list of subscription definitions."]
+    fn list_subscription_definitions(
+        &self,
+        input: &ListSubscriptionDefinitionsRequest,
+    ) -> Result<ListSubscriptionDefinitionsResponse, ListSubscriptionDefinitionsError>;
 
     #[doc="Updates the connectivity information for the core. Any devices that belong to the group which has this core will receive this information in order to find the location of the core and connect to it."]
-    fn update_connectivity_info
-        (&self,
-         input: &UpdateConnectivityInfoRequest)
-         -> Result<UpdateConnectivityInfoResponse, UpdateConnectivityInfoError>;
+    fn update_connectivity_info(
+        &self,
+        input: &UpdateConnectivityInfoRequest,
+    ) -> Result<UpdateConnectivityInfoResponse, UpdateConnectivityInfoError>;
 
+    #[doc = "Updates a core definition."]
+    fn update_core_definition(
+        &self,
+        input: &UpdateCoreDefinitionRequest,
+    ) -> Result<UpdateCoreDefinitionResponse, UpdateCoreDefinitionError>;
 
-    #[doc="Updates a core definition."]
-    fn update_core_definition
-        (&self,
-         input: &UpdateCoreDefinitionRequest)
-         -> Result<UpdateCoreDefinitionResponse, UpdateCoreDefinitionError>;
+    #[doc = "Updates a device definition."]
+    fn update_device_definition(
+        &self,
+        input: &UpdateDeviceDefinitionRequest,
+    ) -> Result<UpdateDeviceDefinitionResponse, UpdateDeviceDefinitionError>;
 
+    #[doc = "Updates a Lambda function definition."]
+    fn update_function_definition(
+        &self,
+        input: &UpdateFunctionDefinitionRequest,
+    ) -> Result<UpdateFunctionDefinitionResponse, UpdateFunctionDefinitionError>;
 
-    #[doc="Updates a device definition."]
-    fn update_device_definition
-        (&self,
-         input: &UpdateDeviceDefinitionRequest)
-         -> Result<UpdateDeviceDefinitionResponse, UpdateDeviceDefinitionError>;
+    #[doc = "Updates a group."]
+    fn update_group(
+        &self,
+        input: &UpdateGroupRequest,
+    ) -> Result<UpdateGroupResponse, UpdateGroupError>;
 
+    #[doc = "Updates the Cert expiry time for a group."]
+    fn update_group_certificate_configuration(
+        &self,
+        input: &UpdateGroupCertificateConfigurationRequest,
+    ) -> Result<UpdateGroupCertificateConfigurationResponse, UpdateGroupCertificateConfigurationError>;
 
-    #[doc="Updates a Lambda function definition."]
-    fn update_function_definition
-        (&self,
-         input: &UpdateFunctionDefinitionRequest)
-         -> Result<UpdateFunctionDefinitionResponse, UpdateFunctionDefinitionError>;
+    #[doc = "Updates a logger definition."]
+    fn update_logger_definition(
+        &self,
+        input: &UpdateLoggerDefinitionRequest,
+    ) -> Result<UpdateLoggerDefinitionResponse, UpdateLoggerDefinitionError>;
 
-
-    #[doc="Updates a group."]
-    fn update_group(&self,
-                    input: &UpdateGroupRequest)
-                    -> Result<UpdateGroupResponse, UpdateGroupError>;
-
-
-    #[doc="Updates the Cert expiry time for a group."]
-    fn update_group_certificate_configuration
-        (&self,
-         input: &UpdateGroupCertificateConfigurationRequest)
-         -> Result<UpdateGroupCertificateConfigurationResponse,
-                   UpdateGroupCertificateConfigurationError>;
-
-
-    #[doc="Updates a logger definition."]
-    fn update_logger_definition
-        (&self,
-         input: &UpdateLoggerDefinitionRequest)
-         -> Result<UpdateLoggerDefinitionResponse, UpdateLoggerDefinitionError>;
-
-
-    #[doc="Updates a subscription definition."]
-    fn update_subscription_definition
-        (&self,
-         input: &UpdateSubscriptionDefinitionRequest)
-         -> Result<UpdateSubscriptionDefinitionResponse, UpdateSubscriptionDefinitionError>;
+    #[doc = "Updates a subscription definition."]
+    fn update_subscription_definition(
+        &self,
+        input: &UpdateSubscriptionDefinitionRequest,
+    ) -> Result<UpdateSubscriptionDefinitionResponse, UpdateSubscriptionDefinitionError>;
 }
 /// A client for the AWS Greengrass API.
 pub struct GreenGrassClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -7777,8 +7712,9 @@ pub struct GreenGrassClient<P, D>
 }
 
 impl<P, D> GreenGrassClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         GreenGrassClient {
@@ -7790,32 +7726,31 @@ impl<P, D> GreenGrassClient<P, D>
 }
 
 impl<P, D> GreenGrass for GreenGrassClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     #[doc="Associates a role with a group. The role will be used by the AWS Greengrass core in order to access AWS cloud services. The role's permissions will allow Greengrass core Lambda functions to perform actions against the cloud."]
-    fn associate_role_to_group
-        (&self,
-         input: &AssociateRoleToGroupRequest)
-         -> Result<AssociateRoleToGroupResponse, AssociateRoleToGroupError> {
-        let request_uri = format!("/greengrass/groups/{group_id}/role",
-                                  group_id = input.group_id);
+    fn associate_role_to_group(
+        &self,
+        input: &AssociateRoleToGroupRequest,
+    ) -> Result<AssociateRoleToGroupResponse, AssociateRoleToGroupError> {
+        let request_uri = format!(
+            "/greengrass/groups/{group_id}/role",
+            group_id = input.group_id
+        );
 
         let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -7827,41 +7762,36 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<AssociateRoleToGroupResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AssociateRoleToGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AssociateRoleToGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="Associates a role which is used by AWS Greengrass. AWS Greengrass uses the role to access your Lambda functions and AWS IoT resources. This is necessary for deployments to succeed. It needs to have minimum permissions in policy ``AWSGreengrassResourceAccessRolePolicy``"]
-    fn associate_service_role_to_account
-        (&self,
-         input: &AssociateServiceRoleToAccountRequest)
-         -> Result<AssociateServiceRoleToAccountResponse, AssociateServiceRoleToAccountError> {
+    fn associate_service_role_to_account(
+        &self,
+        input: &AssociateServiceRoleToAccountRequest,
+    ) -> Result<AssociateServiceRoleToAccountResponse, AssociateServiceRoleToAccountError> {
         let request_uri = "/greengrass/servicerole";
 
         let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -7871,33 +7801,30 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<AssociateServiceRoleToAccountResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<AssociateServiceRoleToAccountResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AssociateServiceRoleToAccountError::from_body(String::from_utf8_lossy(&body)
-                                                                      .as_ref()))
+                Err(AssociateServiceRoleToAccountError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="Creates a core definition. You may optionally provide the initial version of the core definition or use ''CreateCoreDefinitionVersion'' at a later time. AWS Greengrass Groups must each contain exactly 1 AWS Greengrass Core."]
-    fn create_core_definition
-        (&self,
-         input: &CreateCoreDefinitionRequest)
-         -> Result<CreateCoreDefinitionResponse, CreateCoreDefinitionError> {
+    fn create_core_definition(
+        &self,
+        input: &CreateCoreDefinitionRequest,
+    ) -> Result<CreateCoreDefinitionResponse, CreateCoreDefinitionError> {
         let request_uri = "/greengrass/definition/cores";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
 
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
@@ -7906,13 +7833,11 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -7924,30 +7849,30 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<CreateCoreDefinitionResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateCoreDefinitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateCoreDefinitionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="Creates a version of a core definition that has already been defined. AWS Greengrass Groups must each contain exactly 1 AWS Greengrass Core."]
-    fn create_core_definition_version
-        (&self,
-         input: &CreateCoreDefinitionVersionRequest)
-         -> Result<CreateCoreDefinitionVersionResponse, CreateCoreDefinitionVersionError> {
-        let request_uri = format!("/greengrass/definition/cores/{core_definition_id}/versions",
-                                  core_definition_id = input.core_definition_id);
+    fn create_core_definition_version(
+        &self,
+        input: &CreateCoreDefinitionVersionRequest,
+    ) -> Result<CreateCoreDefinitionVersionResponse, CreateCoreDefinitionVersionError> {
+        let request_uri = format!(
+            "/greengrass/definition/cores/{core_definition_id}/versions",
+            core_definition_id = input.core_definition_id
+        );
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
 
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
@@ -7956,13 +7881,11 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -7972,33 +7895,33 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CreateCoreDefinitionVersionResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<CreateCoreDefinitionVersionResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateCoreDefinitionVersionError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(CreateCoreDefinitionVersionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Creates a deployment."]
-    fn create_deployment(&self,
-                         input: &CreateDeploymentRequest)
-                         -> Result<CreateDeploymentResponse, CreateDeploymentError> {
-        let request_uri = format!("/greengrass/groups/{group_id}/deployments",
-                                  group_id = input.group_id);
+    #[doc = "Creates a deployment."]
+    fn create_deployment(
+        &self,
+        input: &CreateDeploymentRequest,
+    ) -> Result<CreateDeploymentResponse, CreateDeploymentError> {
+        let request_uri = format!(
+            "/greengrass/groups/{group_id}/deployments",
+            group_id = input.group_id
+        );
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
 
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
@@ -8007,13 +7930,11 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -8025,30 +7946,28 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<CreateDeploymentResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateDeploymentError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateDeploymentError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="Creates a device definition. You may optinally provide the initial version of the device definition or use ``CreateDeviceDefinitionVersion`` at a later time."]
-    fn create_device_definition
-        (&self,
-         input: &CreateDeviceDefinitionRequest)
-         -> Result<CreateDeviceDefinitionResponse, CreateDeviceDefinitionError> {
+    fn create_device_definition(
+        &self,
+        input: &CreateDeviceDefinitionRequest,
+    ) -> Result<CreateDeviceDefinitionResponse, CreateDeviceDefinitionError> {
         let request_uri = "/greengrass/definition/devices";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
@@ -8056,167 +7975,11 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
-
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CreateDeviceDefinitionResponse>(&body)
-                    .unwrap();
-
-
-
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateDeviceDefinitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
-    }
-
-
-    #[doc="Creates a version of a device definition that has already been defined."]
-    fn create_device_definition_version
-        (&self,
-         input: &CreateDeviceDefinitionVersionRequest)
-         -> Result<CreateDeviceDefinitionVersionResponse, CreateDeviceDefinitionVersionError> {
-        let request_uri = format!("/greengrass/definition/devices/{device_definition_id}/versions",
-                                  device_definition_id = input.device_definition_id);
-
-        let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-        let encoded = Some(serde_json::to_vec(input).unwrap());
-        request.set_payload(encoded);
-
-        if let Some(ref amzn_client_token) = input.amzn_client_token {
-            request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
-        }
-
-
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
-
-        match response.status {
-            StatusCode::Ok => {
-
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
-
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CreateDeviceDefinitionVersionResponse>(&body)
-                    .unwrap();
-
-
-
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateDeviceDefinitionVersionError::from_body(String::from_utf8_lossy(&body)
-                                                                      .as_ref()))
-            }
-        }
-    }
-
-
-    #[doc="Creates a Lambda function definition which contains a list of Lambda functions and their configurations to be used in a group. You can create an initial version of the definition by providing a list of Lambda functions and their configurations now, or use ``CreateFunctionDefinitionVersion`` later."]
-    fn create_function_definition
-        (&self,
-         input: &CreateFunctionDefinitionRequest)
-         -> Result<CreateFunctionDefinitionResponse, CreateFunctionDefinitionError> {
-        let request_uri = "/greengrass/definition/functions";
-
-        let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-        let encoded = Some(serde_json::to_vec(input).unwrap());
-        request.set_payload(encoded);
-
-        if let Some(ref amzn_client_token) = input.amzn_client_token {
-            request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
-        }
-
-
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
-
-        match response.status {
-            StatusCode::Ok => {
-
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
-
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CreateFunctionDefinitionResponse>(&body)
-                    .unwrap();
-
-
-
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateFunctionDefinitionError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
-            }
-        }
-    }
-
-
-    #[doc="Create a version of a Lambda function definition that has already been defined."]
-    fn create_function_definition_version
-        (&self,
-         input: &CreateFunctionDefinitionVersionRequest)
-         -> Result<CreateFunctionDefinitionVersionResponse, CreateFunctionDefinitionVersionError> {
-        let request_uri = format!("/greengrass/definition/functions/{function_definition_id}/versions",
-                                  function_definition_id = input.function_definition_id);
-
-        let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-        let encoded = Some(serde_json::to_vec(input).unwrap());
-        request.set_payload(encoded);
-
-        if let Some(ref amzn_client_token) = input.amzn_client_token {
-            request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
-        }
-
-
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
-
-        match response.status {
-            StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -8227,32 +7990,32 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
                 let result =
-                    serde_json::from_slice::<CreateFunctionDefinitionVersionResponse>(&body)
-                        .unwrap();
-
-
+                    serde_json::from_slice::<CreateDeviceDefinitionResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateFunctionDefinitionVersionError::from_body(String::from_utf8_lossy(&body)
-                                                                        .as_ref()))
+                Err(CreateDeviceDefinitionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Creates a group. You may optionally provide the initial version of the group or use ''CreateGroupVersion'' at a later time."]
-    fn create_group(&self,
-                    input: &CreateGroupRequest)
-                    -> Result<CreateGroupResponse, CreateGroupError> {
-        let request_uri = "/greengrass/groups";
+    #[doc = "Creates a version of a device definition that has already been defined."]
+    fn create_device_definition_version(
+        &self,
+        input: &CreateDeviceDefinitionVersionRequest,
+    ) -> Result<CreateDeviceDefinitionVersionResponse, CreateDeviceDefinitionVersionError> {
+        let request_uri = format!(
+            "/greengrass/definition/devices/{device_definition_id}/versions",
+            device_definition_id = input.device_definition_id
+        );
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
 
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
@@ -8261,13 +8024,153 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_slice::<CreateDeviceDefinitionVersionResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDeviceDefinitionVersionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    #[doc="Creates a Lambda function definition which contains a list of Lambda functions and their configurations to be used in a group. You can create an initial version of the definition by providing a list of Lambda functions and their configurations now, or use ``CreateFunctionDefinitionVersion`` later."]
+    fn create_function_definition(
+        &self,
+        input: &CreateFunctionDefinitionRequest,
+    ) -> Result<CreateFunctionDefinitionResponse, CreateFunctionDefinitionError> {
+        let request_uri = "/greengrass/definition/functions";
+
+        let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        if let Some(ref amzn_client_token) = input.amzn_client_token {
+            request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
+        }
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_slice::<CreateFunctionDefinitionResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateFunctionDefinitionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    #[doc = "Create a version of a Lambda function definition that has already been defined."]
+    fn create_function_definition_version(
+        &self,
+        input: &CreateFunctionDefinitionVersionRequest,
+    ) -> Result<CreateFunctionDefinitionVersionResponse, CreateFunctionDefinitionVersionError> {
+        let request_uri = format!(
+            "/greengrass/definition/functions/{function_definition_id}/versions",
+            function_definition_id = input.function_definition_id
+        );
+
+        let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        if let Some(ref amzn_client_token) = input.amzn_client_token {
+            request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
+        }
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<CreateFunctionDefinitionVersionResponse>(
+                    &body,
+                ).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateFunctionDefinitionVersionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    #[doc="Creates a group. You may optionally provide the initial version of the group or use ''CreateGroupVersion'' at a later time."]
+    fn create_group(
+        &self,
+        input: &CreateGroupRequest,
+    ) -> Result<CreateGroupResponse, CreateGroupError> {
+        let request_uri = "/greengrass/groups";
+
+        let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        if let Some(ref amzn_client_token) = input.amzn_client_token {
+            request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
+        }
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -8279,44 +8182,40 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<CreateGroupResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Creates a CA for the group. If a CA already exists, it will rotate the existing CA."]
-    fn create_group_certificate_authority
-        (&self,
-         input: &CreateGroupCertificateAuthorityRequest)
-         -> Result<CreateGroupCertificateAuthorityResponse, CreateGroupCertificateAuthorityError> {
-        let request_uri = format!("/greengrass/groups/{group_id}/certificateauthorities",
-                                  group_id = input.group_id);
+    #[doc = "Creates a CA for the group. If a CA already exists, it will rotate the existing CA."]
+    fn create_group_certificate_authority(
+        &self,
+        input: &CreateGroupCertificateAuthorityRequest,
+    ) -> Result<CreateGroupCertificateAuthorityResponse, CreateGroupCertificateAuthorityError> {
+        let request_uri = format!(
+            "/greengrass/groups/{group_id}/certificateauthorities",
+            group_id = input.group_id
+        );
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
-
-
         if let Some(ref amzn_client_token) = input.amzn_client_token {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -8326,34 +8225,34 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<CreateGroupCertificateAuthorityResponse>(&body)
-                        .unwrap();
-
-
+                let result = serde_json::from_slice::<CreateGroupCertificateAuthorityResponse>(
+                    &body,
+                ).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateGroupCertificateAuthorityError::from_body(String::from_utf8_lossy(&body)
-                                                                        .as_ref()))
+                Err(CreateGroupCertificateAuthorityError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Creates a version of a group which has already been defined."]
-    fn create_group_version(&self,
-                            input: &CreateGroupVersionRequest)
-                            -> Result<CreateGroupVersionResponse, CreateGroupVersionError> {
-        let request_uri = format!("/greengrass/groups/{group_id}/versions",
-                                  group_id = input.group_id);
+    #[doc = "Creates a version of a group which has already been defined."]
+    fn create_group_version(
+        &self,
+        input: &CreateGroupVersionRequest,
+    ) -> Result<CreateGroupVersionResponse, CreateGroupVersionError> {
+        let request_uri = format!(
+            "/greengrass/groups/{group_id}/versions",
+            group_id = input.group_id
+        );
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
 
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
@@ -8362,13 +8261,11 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -8380,30 +8277,28 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<CreateGroupVersionResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateGroupVersionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateGroupVersionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="Creates a logger definition. You may optionally provide the initial version of the logger definition or use ``CreateLoggerDefinitionVersion`` at a later time."]
-    fn create_logger_definition
-        (&self,
-         input: &CreateLoggerDefinitionRequest)
-         -> Result<CreateLoggerDefinitionResponse, CreateLoggerDefinitionError> {
+    fn create_logger_definition(
+        &self,
+        input: &CreateLoggerDefinitionRequest,
+    ) -> Result<CreateLoggerDefinitionResponse, CreateLoggerDefinitionError> {
         let request_uri = "/greengrass/definition/loggers";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
@@ -8411,13 +8306,11 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -8427,34 +8320,34 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CreateLoggerDefinitionResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<CreateLoggerDefinitionResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateLoggerDefinitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateLoggerDefinitionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Creates a version of a logger definition that has already been defined."]
-    fn create_logger_definition_version
-        (&self,
-         input: &CreateLoggerDefinitionVersionRequest)
-         -> Result<CreateLoggerDefinitionVersionResponse, CreateLoggerDefinitionVersionError> {
-        let request_uri = format!("/greengrass/definition/loggers/{logger_definition_id}/versions",
-                                  logger_definition_id = input.logger_definition_id);
+    #[doc = "Creates a version of a logger definition that has already been defined."]
+    fn create_logger_definition_version(
+        &self,
+        input: &CreateLoggerDefinitionVersionRequest,
+    ) -> Result<CreateLoggerDefinitionVersionResponse, CreateLoggerDefinitionVersionError> {
+        let request_uri = format!(
+            "/greengrass/definition/loggers/{logger_definition_id}/versions",
+            logger_definition_id = input.logger_definition_id
+        );
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
@@ -8462,13 +8355,11 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -8478,34 +8369,31 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CreateLoggerDefinitionVersionResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<CreateLoggerDefinitionVersionResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateLoggerDefinitionVersionError::from_body(String::from_utf8_lossy(&body)
-                                                                      .as_ref()))
+                Err(CreateLoggerDefinitionVersionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="Creates a subscription definition. You may optionally provide the initial version of the subscription definition or use ``CreateSubscriptionDefinitionVersion`` at a later time."]
-    fn create_subscription_definition
-        (&self,
-         input: &CreateSubscriptionDefinitionRequest)
-         -> Result<CreateSubscriptionDefinitionResponse, CreateSubscriptionDefinitionError> {
+    fn create_subscription_definition(
+        &self,
+        input: &CreateSubscriptionDefinitionRequest,
+    ) -> Result<CreateSubscriptionDefinitionResponse, CreateSubscriptionDefinitionError> {
         let request_uri = "/greengrass/definition/subscriptions";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
@@ -8513,13 +8401,11 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -8529,35 +8415,34 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CreateSubscriptionDefinitionResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<CreateSubscriptionDefinitionResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateSubscriptionDefinitionError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+                Err(CreateSubscriptionDefinitionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Creates a version of a subscription definition which has already been defined."]
-    fn create_subscription_definition_version
-        (&self,
-         input: &CreateSubscriptionDefinitionVersionRequest)
-         -> Result<CreateSubscriptionDefinitionVersionResponse,
-                   CreateSubscriptionDefinitionVersionError> {
-        let request_uri = format!("/greengrass/definition/subscriptions/{subscription_definition_id}/versions",
-                                  subscription_definition_id = input.subscription_definition_id);
+    #[doc = "Creates a version of a subscription definition which has already been defined."]
+    fn create_subscription_definition_version(
+        &self,
+        input: &CreateSubscriptionDefinitionVersionRequest,
+    ) -> Result<CreateSubscriptionDefinitionVersionResponse, CreateSubscriptionDefinitionVersionError>
+    {
+        let request_uri = format!(
+            "/greengrass/definition/subscriptions/{subscription_definition_id}/versions",
+            subscription_definition_id = input.subscription_definition_id
+        );
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
 
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
@@ -8566,13 +8451,11 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -8586,41 +8469,36 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
                     serde_json::from_slice::<CreateSubscriptionDefinitionVersionResponse>(&body)
                         .unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateSubscriptionDefinitionVersionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateSubscriptionDefinitionVersionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="Deletes a core definition. The core definition must not have been used in a deployment."]
-    fn delete_core_definition
-        (&self,
-         input: &DeleteCoreDefinitionRequest)
-         -> Result<DeleteCoreDefinitionResponse, DeleteCoreDefinitionError> {
-        let request_uri = format!("/greengrass/definition/cores/{core_definition_id}",
-                                  core_definition_id = input.core_definition_id);
+    fn delete_core_definition(
+        &self,
+        input: &DeleteCoreDefinitionRequest,
+    ) -> Result<DeleteCoreDefinitionResponse, DeleteCoreDefinitionError> {
+        let request_uri = format!(
+            "/greengrass/definition/cores/{core_definition_id}",
+            core_definition_id = input.core_definition_id
+        );
 
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -8632,41 +8510,36 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<DeleteCoreDefinitionResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteCoreDefinitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteCoreDefinitionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="Deletes a device definition. The device definition must not have been used in a deployment."]
-    fn delete_device_definition
-        (&self,
-         input: &DeleteDeviceDefinitionRequest)
-         -> Result<DeleteDeviceDefinitionResponse, DeleteDeviceDefinitionError> {
-        let request_uri = format!("/greengrass/definition/devices/{device_definition_id}",
-                                  device_definition_id = input.device_definition_id);
+    fn delete_device_definition(
+        &self,
+        input: &DeleteDeviceDefinitionRequest,
+    ) -> Result<DeleteDeviceDefinitionResponse, DeleteDeviceDefinitionError> {
+        let request_uri = format!(
+            "/greengrass/definition/devices/{device_definition_id}",
+            device_definition_id = input.device_definition_id
+        );
 
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -8676,44 +8549,39 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DeleteDeviceDefinitionResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<DeleteDeviceDefinitionResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteDeviceDefinitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteDeviceDefinitionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="Deletes a Lambda function definition. The Lambda function definition must not have been used in a deployment."]
-    fn delete_function_definition
-        (&self,
-         input: &DeleteFunctionDefinitionRequest)
-         -> Result<DeleteFunctionDefinitionResponse, DeleteFunctionDefinitionError> {
-        let request_uri = format!("/greengrass/definition/functions/{function_definition_id}",
-                                  function_definition_id = input.function_definition_id);
+    fn delete_function_definition(
+        &self,
+        input: &DeleteFunctionDefinitionRequest,
+    ) -> Result<DeleteFunctionDefinitionResponse, DeleteFunctionDefinitionError> {
+        let request_uri = format!(
+            "/greengrass/definition/functions/{function_definition_id}",
+            function_definition_id = input.function_definition_id
+        );
 
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -8723,43 +8591,36 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DeleteFunctionDefinitionResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<DeleteFunctionDefinitionResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteFunctionDefinitionError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(DeleteFunctionDefinitionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Deletes a group. The group must not have been used in deployment."]
-    fn delete_group(&self,
-                    input: &DeleteGroupRequest)
-                    -> Result<DeleteGroupResponse, DeleteGroupError> {
+    #[doc = "Deletes a group. The group must not have been used in deployment."]
+    fn delete_group(
+        &self,
+        input: &DeleteGroupRequest,
+    ) -> Result<DeleteGroupResponse, DeleteGroupError> {
         let request_uri = format!("/greengrass/groups/{group_id}", group_id = input.group_id);
 
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
-
-
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -8771,183 +8632,36 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<DeleteGroupResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="Deletes a logger definition. The logger definition must not have been used in a deployment."]
-    fn delete_logger_definition
-        (&self,
-         input: &DeleteLoggerDefinitionRequest)
-         -> Result<DeleteLoggerDefinitionResponse, DeleteLoggerDefinitionError> {
-        let request_uri = format!("/greengrass/definition/loggers/{logger_definition_id}",
-                                  logger_definition_id = input.logger_definition_id);
+    fn delete_logger_definition(
+        &self,
+        input: &DeleteLoggerDefinitionRequest,
+    ) -> Result<DeleteLoggerDefinitionResponse, DeleteLoggerDefinitionError> {
+        let request_uri = format!(
+            "/greengrass/definition/loggers/{logger_definition_id}",
+            logger_definition_id = input.logger_definition_id
+        );
 
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
-
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DeleteLoggerDefinitionResponse>(&body)
-                    .unwrap();
-
-
-
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteLoggerDefinitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
-    }
-
-
-    #[doc="Deletes a subscription definition. The subscription definition must not have been used in a deployment."]
-    fn delete_subscription_definition
-        (&self,
-         input: &DeleteSubscriptionDefinitionRequest)
-         -> Result<DeleteSubscriptionDefinitionResponse, DeleteSubscriptionDefinitionError> {
-        let request_uri = format!("/greengrass/definition/subscriptions/{subscription_definition_id}",
-                                  subscription_definition_id = input.subscription_definition_id);
-
-        let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-
-
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
-
-        match response.status {
-            StatusCode::Ok => {
-
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
-
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DeleteSubscriptionDefinitionResponse>(&body)
-                    .unwrap();
-
-
-
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteSubscriptionDefinitionError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
-            }
-        }
-    }
-
-
-    #[doc="Disassociates the role from a group."]
-    fn disassociate_role_from_group
-        (&self,
-         input: &DisassociateRoleFromGroupRequest)
-         -> Result<DisassociateRoleFromGroupResponse, DisassociateRoleFromGroupError> {
-        let request_uri = format!("/greengrass/groups/{group_id}/role",
-                                  group_id = input.group_id);
-
-        let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-
-
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
-
-        match response.status {
-            StatusCode::Ok => {
-
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
-
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DisassociateRoleFromGroupResponse>(&body)
-                    .unwrap();
-
-
-
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DisassociateRoleFromGroupError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
-            }
-        }
-    }
-
-
-    #[doc="Disassociates the service role from the account. Without a service role, deployments will not work."]
-    fn disassociate_service_role_from_account
-        (&self)
-         -> Result<DisassociateServiceRoleFromAccountResponse,
-                   DisassociateServiceRoleFromAccountError> {
-        let request_uri = "/greengrass/servicerole";
-
-        let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-
-
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
-
-        match response.status {
-            StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -8958,43 +8672,162 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
                 let result =
-                    serde_json::from_slice::<DisassociateServiceRoleFromAccountResponse>(&body)
-                        .unwrap();
-
-
+                    serde_json::from_slice::<DeleteLoggerDefinitionResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DisassociateServiceRoleFromAccountError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteLoggerDefinitionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
+    #[doc="Deletes a subscription definition. The subscription definition must not have been used in a deployment."]
+    fn delete_subscription_definition(
+        &self,
+        input: &DeleteSubscriptionDefinitionRequest,
+    ) -> Result<DeleteSubscriptionDefinitionResponse, DeleteSubscriptionDefinitionError> {
+        let request_uri = format!(
+            "/greengrass/definition/subscriptions/{subscription_definition_id}",
+            subscription_definition_id = input.subscription_definition_id
+        );
 
-    #[doc="Retrieves the role associated with a particular group."]
-    fn get_associated_role(&self,
-                           input: &GetAssociatedRoleRequest)
-                           -> Result<GetAssociatedRoleResponse, GetAssociatedRoleError> {
-        let request_uri = format!("/greengrass/groups/{group_id}/role",
-                                  group_id = input.group_id);
-
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_slice::<DeleteSubscriptionDefinitionResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteSubscriptionDefinitionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    #[doc = "Disassociates the role from a group."]
+    fn disassociate_role_from_group(
+        &self,
+        input: &DisassociateRoleFromGroupRequest,
+    ) -> Result<DisassociateRoleFromGroupResponse, DisassociateRoleFromGroupError> {
+        let request_uri = format!(
+            "/greengrass/groups/{group_id}/role",
+            group_id = input.group_id
+        );
+
+        let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_slice::<DisassociateRoleFromGroupResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisassociateRoleFromGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    #[doc="Disassociates the service role from the account. Without a service role, deployments will not work."]
+    fn disassociate_service_role_from_account(
+        &self,
+    ) -> Result<DisassociateServiceRoleFromAccountResponse, DisassociateServiceRoleFromAccountError>
+    {
+        let request_uri = "/greengrass/servicerole";
+
+        let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<DisassociateServiceRoleFromAccountResponse>(
+                    &body,
+                ).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisassociateServiceRoleFromAccountError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    #[doc = "Retrieves the role associated with a particular group."]
+    fn get_associated_role(
+        &self,
+        input: &GetAssociatedRoleRequest,
+    ) -> Result<GetAssociatedRoleResponse, GetAssociatedRoleError> {
+        let request_uri = format!(
+            "/greengrass/groups/{group_id}/role",
+            group_id = input.group_id
+        );
+
+        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9006,40 +8839,36 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetAssociatedRoleResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetAssociatedRoleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetAssociatedRoleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Retrieves the connectivity information for a core."]
-    fn get_connectivity_info(&self,
-                             input: &GetConnectivityInfoRequest)
-                             -> Result<GetConnectivityInfoResponse, GetConnectivityInfoError> {
-        let request_uri = format!("/greengrass/things/{thing_name}/connectivityInfo",
-                                  thing_name = input.thing_name);
+    #[doc = "Retrieves the connectivity information for a core."]
+    fn get_connectivity_info(
+        &self,
+        input: &GetConnectivityInfoRequest,
+    ) -> Result<GetConnectivityInfoResponse, GetConnectivityInfoError> {
+        let request_uri = format!(
+            "/greengrass/things/{thing_name}/connectivityInfo",
+            thing_name = input.thing_name
+        );
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9051,40 +8880,36 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetConnectivityInfoResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetConnectivityInfoError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetConnectivityInfoError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Retrieves information about a core definition version."]
-    fn get_core_definition(&self,
-                           input: &GetCoreDefinitionRequest)
-                           -> Result<GetCoreDefinitionResponse, GetCoreDefinitionError> {
-        let request_uri = format!("/greengrass/definition/cores/{core_definition_id}",
-                                  core_definition_id = input.core_definition_id);
+    #[doc = "Retrieves information about a core definition version."]
+    fn get_core_definition(
+        &self,
+        input: &GetCoreDefinitionRequest,
+    ) -> Result<GetCoreDefinitionResponse, GetCoreDefinitionError> {
+        let request_uri = format!(
+            "/greengrass/definition/cores/{core_definition_id}",
+            core_definition_id = input.core_definition_id
+        );
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9096,42 +8921,33 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetCoreDefinitionResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetCoreDefinitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetCoreDefinitionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Retrieves information about a core definition version."]
-    fn get_core_definition_version
-        (&self,
-         input: &GetCoreDefinitionVersionRequest)
-         -> Result<GetCoreDefinitionVersionResponse, GetCoreDefinitionVersionError> {
-        let request_uri = format!("/greengrass/definition/cores/{core_definition_id}/versions/{core_definition_version_id}",
-                                  core_definition_id = input.core_definition_id,
-                                  core_definition_version_id = input.core_definition_version_id);
+    #[doc = "Retrieves information about a core definition version."]
+    fn get_core_definition_version(
+        &self,
+        input: &GetCoreDefinitionVersionRequest,
+    ) -> Result<GetCoreDefinitionVersionResponse, GetCoreDefinitionVersionError> {
+        let request_uri = format!("/greengrass/definition/cores/{core_definition_id}/versions/{core_definition_version_id}", core_definition_id = input.core_definition_id, core_definition_version_id = input.core_definition_version_id);
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9141,45 +8957,40 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetCoreDefinitionVersionResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<GetCoreDefinitionVersionResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetCoreDefinitionVersionError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(GetCoreDefinitionVersionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Returns the status of a deployment."]
-    fn get_deployment_status(&self,
-                             input: &GetDeploymentStatusRequest)
-                             -> Result<GetDeploymentStatusResponse, GetDeploymentStatusError> {
-        let request_uri = format!("/greengrass/groups/{group_id}/deployments/{deployment_id}/status",
-                                  deployment_id = input.deployment_id,
-                                  group_id = input.group_id);
+    #[doc = "Returns the status of a deployment."]
+    fn get_deployment_status(
+        &self,
+        input: &GetDeploymentStatusRequest,
+    ) -> Result<GetDeploymentStatusResponse, GetDeploymentStatusError> {
+        let request_uri = format!(
+            "/greengrass/groups/{group_id}/deployments/{deployment_id}/status",
+            deployment_id = input.deployment_id,
+            group_id = input.group_id
+        );
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9191,40 +9002,36 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetDeploymentStatusResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetDeploymentStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetDeploymentStatusError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Retrieves information about a device definition."]
-    fn get_device_definition(&self,
-                             input: &GetDeviceDefinitionRequest)
-                             -> Result<GetDeviceDefinitionResponse, GetDeviceDefinitionError> {
-        let request_uri = format!("/greengrass/definition/devices/{device_definition_id}",
-                                  device_definition_id = input.device_definition_id);
+    #[doc = "Retrieves information about a device definition."]
+    fn get_device_definition(
+        &self,
+        input: &GetDeviceDefinitionRequest,
+    ) -> Result<GetDeviceDefinitionResponse, GetDeviceDefinitionError> {
+        let request_uri = format!(
+            "/greengrass/definition/devices/{device_definition_id}",
+            device_definition_id = input.device_definition_id
+        );
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9236,43 +9043,33 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetDeviceDefinitionResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetDeviceDefinitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetDeviceDefinitionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Retrieves information about a device definition version."]
-    fn get_device_definition_version
-        (&self,
-         input: &GetDeviceDefinitionVersionRequest)
-         -> Result<GetDeviceDefinitionVersionResponse, GetDeviceDefinitionVersionError> {
-        let request_uri = format!("/greengrass/definition/devices/{device_definition_id}/versions/{device_definition_version_id}",
-                                  device_definition_id = input.device_definition_id,
-                                  device_definition_version_id =
-                                      input.device_definition_version_id);
+    #[doc = "Retrieves information about a device definition version."]
+    fn get_device_definition_version(
+        &self,
+        input: &GetDeviceDefinitionVersionRequest,
+    ) -> Result<GetDeviceDefinitionVersionResponse, GetDeviceDefinitionVersionError> {
+        let request_uri = format!("/greengrass/definition/devices/{device_definition_id}/versions/{device_definition_version_id}", device_definition_id = input.device_definition_id, device_definition_version_id = input.device_definition_version_id);
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9282,45 +9079,39 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetDeviceDefinitionVersionResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<GetDeviceDefinitionVersionResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetDeviceDefinitionVersionError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+                Err(GetDeviceDefinitionVersionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="Retrieves information about a Lambda function definition, such as its creation time and latest version."]
-    fn get_function_definition
-        (&self,
-         input: &GetFunctionDefinitionRequest)
-         -> Result<GetFunctionDefinitionResponse, GetFunctionDefinitionError> {
-        let request_uri = format!("/greengrass/definition/functions/{function_definition_id}",
-                                  function_definition_id = input.function_definition_id);
+    fn get_function_definition(
+        &self,
+        input: &GetFunctionDefinitionRequest,
+    ) -> Result<GetFunctionDefinitionResponse, GetFunctionDefinitionError> {
+        let request_uri = format!(
+            "/greengrass/definition/functions/{function_definition_id}",
+            function_definition_id = input.function_definition_id
+        );
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9330,46 +9121,36 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetFunctionDefinitionResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<GetFunctionDefinitionResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetFunctionDefinitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetFunctionDefinitionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="Retrieves information about a Lambda function definition version, such as which Lambda functions are included in the version and their configurations."]
-    fn get_function_definition_version
-        (&self,
-         input: &GetFunctionDefinitionVersionRequest)
-         -> Result<GetFunctionDefinitionVersionResponse, GetFunctionDefinitionVersionError> {
-        let request_uri = format!("/greengrass/definition/functions/{function_definition_id}/versions/{function_definition_version_id}",
-                                  function_definition_id = input.function_definition_id,
-                                  function_definition_version_id =
-                                      input.function_definition_version_id);
+    fn get_function_definition_version(
+        &self,
+        input: &GetFunctionDefinitionVersionRequest,
+    ) -> Result<GetFunctionDefinitionVersionResponse, GetFunctionDefinitionVersionError> {
+        let request_uri = format!("/greengrass/definition/functions/{function_definition_id}/versions/{function_definition_version_id}", function_definition_id = input.function_definition_id, function_definition_version_id = input.function_definition_version_id);
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9379,41 +9160,33 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetFunctionDefinitionVersionResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<GetFunctionDefinitionVersionResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetFunctionDefinitionVersionError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+                Err(GetFunctionDefinitionVersionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Retrieves information about a group."]
+    #[doc = "Retrieves information about a group."]
     fn get_group(&self, input: &GetGroupRequest) -> Result<GetGroupResponse, GetGroupError> {
         let request_uri = format!("/greengrass/groups/{group_id}", group_id = input.group_id);
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
-
-
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9425,90 +9198,37 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetGroupResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Retreives the CA associated with a group. Returns the public key of the CA."]
-    fn get_group_certificate_authority
-        (&self,
-         input: &GetGroupCertificateAuthorityRequest)
-         -> Result<GetGroupCertificateAuthorityResponse, GetGroupCertificateAuthorityError> {
-        let request_uri = format!("/greengrass/groups/{group_id}/certificateauthorities/{certificate_authority_id}",
-                                  certificate_authority_id = input.certificate_authority_id,
-                                  group_id = input.group_id);
+    #[doc = "Retreives the CA associated with a group. Returns the public key of the CA."]
+    fn get_group_certificate_authority(
+        &self,
+        input: &GetGroupCertificateAuthorityRequest,
+    ) -> Result<GetGroupCertificateAuthorityResponse, GetGroupCertificateAuthorityError> {
+        let request_uri = format!(
+            "/greengrass/groups/{group_id}/certificateauthorities/{certificate_authority_id}",
+            certificate_authority_id = input.certificate_authority_id,
+            group_id = input.group_id
+        );
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
-
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetGroupCertificateAuthorityResponse>(&body)
-                    .unwrap();
-
-
-
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetGroupCertificateAuthorityError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
-            }
-        }
-    }
-
-
-    #[doc="Retrieves the current configuration for the CA used by the group."]
-    fn get_group_certificate_configuration
-        (&self,
-         input: &GetGroupCertificateConfigurationRequest)
-         -> Result<GetGroupCertificateConfigurationResponse, GetGroupCertificateConfigurationError> {
-        let request_uri = format!("/greengrass/groups/{group_id}/certificateauthorities/configuration/expiry",
-                                  group_id = input.group_id);
-
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-
-
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
-
-        match response.status {
-            StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9519,44 +9239,83 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
                 let result =
-                    serde_json::from_slice::<GetGroupCertificateConfigurationResponse>(&body)
-                        .unwrap();
-
-
+                    serde_json::from_slice::<GetGroupCertificateAuthorityResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetGroupCertificateConfigurationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetGroupCertificateAuthorityError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Retrieves information about a group version."]
-    fn get_group_version(&self,
-                         input: &GetGroupVersionRequest)
-                         -> Result<GetGroupVersionResponse, GetGroupVersionError> {
-        let request_uri = format!("/greengrass/groups/{group_id}/versions/{group_version_id}",
-                                  group_id = input.group_id,
-                                  group_version_id = input.group_version_id);
+    #[doc = "Retrieves the current configuration for the CA used by the group."]
+    fn get_group_certificate_configuration(
+        &self,
+        input: &GetGroupCertificateConfigurationRequest,
+    ) -> Result<GetGroupCertificateConfigurationResponse, GetGroupCertificateConfigurationError>
+    {
+        let request_uri = format!(
+            "/greengrass/groups/{group_id}/certificateauthorities/configuration/expiry",
+            group_id = input.group_id
+        );
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<GetGroupCertificateConfigurationResponse>(
+                    &body,
+                ).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetGroupCertificateConfigurationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    #[doc = "Retrieves information about a group version."]
+    fn get_group_version(
+        &self,
+        input: &GetGroupVersionRequest,
+    ) -> Result<GetGroupVersionResponse, GetGroupVersionError> {
+        let request_uri = format!(
+            "/greengrass/groups/{group_id}/versions/{group_version_id}",
+            group_id = input.group_id,
+            group_version_id = input.group_version_id
+        );
+
+        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9568,40 +9327,36 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetGroupVersionResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetGroupVersionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetGroupVersionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Retrieves information about a logger definition."]
-    fn get_logger_definition(&self,
-                             input: &GetLoggerDefinitionRequest)
-                             -> Result<GetLoggerDefinitionResponse, GetLoggerDefinitionError> {
-        let request_uri = format!("/greengrass/definition/loggers/{logger_definition_id}",
-                                  logger_definition_id = input.logger_definition_id);
+    #[doc = "Retrieves information about a logger definition."]
+    fn get_logger_definition(
+        &self,
+        input: &GetLoggerDefinitionRequest,
+    ) -> Result<GetLoggerDefinitionResponse, GetLoggerDefinitionError> {
+        let request_uri = format!(
+            "/greengrass/definition/loggers/{logger_definition_id}",
+            logger_definition_id = input.logger_definition_id
+        );
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9613,187 +9368,33 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetLoggerDefinitionResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetLoggerDefinitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetLoggerDefinitionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Retrieves information about a logger definition version."]
-    fn get_logger_definition_version
-        (&self,
-         input: &GetLoggerDefinitionVersionRequest)
-         -> Result<GetLoggerDefinitionVersionResponse, GetLoggerDefinitionVersionError> {
-        let request_uri = format!("/greengrass/definition/loggers/{logger_definition_id}/versions/{logger_definition_version_id}",
-                                  logger_definition_id = input.logger_definition_id,
-                                  logger_definition_version_id =
-                                      input.logger_definition_version_id);
+    #[doc = "Retrieves information about a logger definition version."]
+    fn get_logger_definition_version(
+        &self,
+        input: &GetLoggerDefinitionVersionRequest,
+    ) -> Result<GetLoggerDefinitionVersionResponse, GetLoggerDefinitionVersionError> {
+        let request_uri = format!("/greengrass/definition/loggers/{logger_definition_id}/versions/{logger_definition_version_id}", logger_definition_id = input.logger_definition_id, logger_definition_version_id = input.logger_definition_version_id);
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
-
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetLoggerDefinitionVersionResponse>(&body)
-                    .unwrap();
-
-
-
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetLoggerDefinitionVersionError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
-            }
-        }
-    }
-
-
-    #[doc="Retrieves the service role that is attached to the account."]
-    fn get_service_role_for_account
-        (&self)
-         -> Result<GetServiceRoleForAccountResponse, GetServiceRoleForAccountError> {
-        let request_uri = "/greengrass/servicerole";
-
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-
-
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
-
-        match response.status {
-            StatusCode::Ok => {
-
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
-
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetServiceRoleForAccountResponse>(&body)
-                    .unwrap();
-
-
-
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetServiceRoleForAccountError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
-            }
-        }
-    }
-
-
-    #[doc="Retrieves information about a subscription definition."]
-    fn get_subscription_definition
-        (&self,
-         input: &GetSubscriptionDefinitionRequest)
-         -> Result<GetSubscriptionDefinitionResponse, GetSubscriptionDefinitionError> {
-        let request_uri = format!("/greengrass/definition/subscriptions/{subscription_definition_id}",
-                                  subscription_definition_id = input.subscription_definition_id);
-
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-
-
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
-
-        match response.status {
-            StatusCode::Ok => {
-
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
-
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetSubscriptionDefinitionResponse>(&body)
-                    .unwrap();
-
-
-
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetSubscriptionDefinitionError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
-            }
-        }
-    }
-
-
-    #[doc="Retrieves information about a subscription definition version."]
-    fn get_subscription_definition_version
-        (&self,
-         input: &GetSubscriptionDefinitionVersionRequest)
-         -> Result<GetSubscriptionDefinitionVersionResponse, GetSubscriptionDefinitionVersionError> {
-        let request_uri = format!("/greengrass/definition/subscriptions/{subscription_definition_id}/versions/{subscription_definition_version_id}",
-                                  subscription_definition_id = input.subscription_definition_id,
-                                  subscription_definition_version_id =
-                                      input.subscription_definition_version_id);
-
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-
-
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
-
-        match response.status {
-            StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9804,51 +9405,34 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
                 let result =
-                    serde_json::from_slice::<GetSubscriptionDefinitionVersionResponse>(&body)
-                        .unwrap();
-
-
+                    serde_json::from_slice::<GetLoggerDefinitionVersionResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetSubscriptionDefinitionVersionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetLoggerDefinitionVersionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Lists versions of a core definition."]
-    fn list_core_definition_versions
-        (&self,
-         input: &ListCoreDefinitionVersionsRequest)
-         -> Result<ListCoreDefinitionVersionsResponse, ListCoreDefinitionVersionsError> {
-        let request_uri = format!("/greengrass/definition/cores/{core_definition_id}/versions",
-                                  core_definition_id = input.core_definition_id);
+    #[doc = "Retrieves the service role that is attached to the account."]
+    fn get_service_role_for_account(
+        &self,
+    ) -> Result<GetServiceRoleForAccountResponse, GetServiceRoleForAccountError> {
+        let request_uri = "/greengrass/servicerole";
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-        let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
-            params.put("MaxResults", x);
-        }
-        if let Some(ref x) = input.next_token {
-            params.put("NextToken", x);
-        }
-        request.set_params(params);
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9858,34 +9442,116 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListCoreDefinitionVersionsResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<GetServiceRoleForAccountResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListCoreDefinitionVersionsError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+                Err(GetServiceRoleForAccountError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Retrieves a list of core definitions."]
-    fn list_core_definitions(&self,
-                             input: &ListCoreDefinitionsRequest)
-                             -> Result<ListCoreDefinitionsResponse, ListCoreDefinitionsError> {
-        let request_uri = "/greengrass/definition/cores";
+    #[doc = "Retrieves information about a subscription definition."]
+    fn get_subscription_definition(
+        &self,
+        input: &GetSubscriptionDefinitionRequest,
+    ) -> Result<GetSubscriptionDefinitionResponse, GetSubscriptionDefinitionError> {
+        let request_uri = format!(
+            "/greengrass/definition/subscriptions/{subscription_definition_id}",
+            subscription_definition_id = input.subscription_definition_id
+        );
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
 
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_slice::<GetSubscriptionDefinitionResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetSubscriptionDefinitionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    #[doc = "Retrieves information about a subscription definition version."]
+    fn get_subscription_definition_version(
+        &self,
+        input: &GetSubscriptionDefinitionVersionRequest,
+    ) -> Result<GetSubscriptionDefinitionVersionResponse, GetSubscriptionDefinitionVersionError>
+    {
+        let request_uri = format!("/greengrass/definition/subscriptions/{subscription_definition_id}/versions/{subscription_definition_version_id}", subscription_definition_id = input.subscription_definition_id, subscription_definition_version_id = input.subscription_definition_version_id);
+
+        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<GetSubscriptionDefinitionVersionResponse>(
+                    &body,
+                ).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetSubscriptionDefinitionVersionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    #[doc = "Lists versions of a core definition."]
+    fn list_core_definition_versions(
+        &self,
+        input: &ListCoreDefinitionVersionsRequest,
+    ) -> Result<ListCoreDefinitionVersionsResponse, ListCoreDefinitionVersionsError> {
+        let request_uri = format!(
+            "/greengrass/definition/cores/{core_definition_id}/versions",
+            core_definition_id = input.core_definition_id
+        );
+
+        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
         if let Some(ref x) = input.max_results {
@@ -9901,7 +9567,54 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_slice::<ListCoreDefinitionVersionsResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListCoreDefinitionVersionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    #[doc = "Retrieves a list of core definitions."]
+    fn list_core_definitions(
+        &self,
+        input: &ListCoreDefinitionsRequest,
+    ) -> Result<ListCoreDefinitionsResponse, ListCoreDefinitionsError> {
+        let request_uri = "/greengrass/definition/cores";
+
+        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("MaxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("NextToken", x);
+        }
+        request.set_params(params);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9913,31 +9626,30 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<ListCoreDefinitionsResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListCoreDefinitionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListCoreDefinitionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Returns a history of deployments for the group."]
-    fn list_deployments(&self,
-                        input: &ListDeploymentsRequest)
-                        -> Result<ListDeploymentsResponse, ListDeploymentsError> {
-        let request_uri = format!("/greengrass/groups/{group_id}/deployments",
-                                  group_id = input.group_id);
+    #[doc = "Returns a history of deployments for the group."]
+    fn list_deployments(
+        &self,
+        input: &ListDeploymentsRequest,
+    ) -> Result<ListDeploymentsResponse, ListDeploymentsError> {
+        let request_uri = format!(
+            "/greengrass/groups/{group_id}/deployments",
+            group_id = input.group_id
+        );
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.max_results {
@@ -9953,7 +9665,6 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -9965,32 +9676,30 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<ListDeploymentsResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListDeploymentsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListDeploymentsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Lists the versions of a device definition."]
-    fn list_device_definition_versions
-        (&self,
-         input: &ListDeviceDefinitionVersionsRequest)
-         -> Result<ListDeviceDefinitionVersionsResponse, ListDeviceDefinitionVersionsError> {
-        let request_uri = format!("/greengrass/definition/devices/{device_definition_id}/versions",
-                                  device_definition_id = input.device_definition_id);
+    #[doc = "Lists the versions of a device definition."]
+    fn list_device_definition_versions(
+        &self,
+        input: &ListDeviceDefinitionVersionsRequest,
+    ) -> Result<ListDeviceDefinitionVersionsResponse, ListDeviceDefinitionVersionsError> {
+        let request_uri = format!(
+            "/greengrass/definition/devices/{device_definition_id}/versions",
+            device_definition_id = input.device_definition_id
+        );
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.max_results {
@@ -10006,7 +9715,6 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -10016,36 +9724,31 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListDeviceDefinitionVersionsResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<ListDeviceDefinitionVersionsResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListDeviceDefinitionVersionsError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+                Err(ListDeviceDefinitionVersionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Retrieves a list of device definitions."]
-    fn list_device_definitions
-        (&self,
-         input: &ListDeviceDefinitionsRequest)
-         -> Result<ListDeviceDefinitionsResponse, ListDeviceDefinitionsError> {
+    #[doc = "Retrieves a list of device definitions."]
+    fn list_device_definitions(
+        &self,
+        input: &ListDeviceDefinitionsRequest,
+    ) -> Result<ListDeviceDefinitionsResponse, ListDeviceDefinitionsError> {
         let request_uri = "/greengrass/definition/devices";
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
-
-
         let mut params = Params::new();
         if let Some(ref x) = input.max_results {
             params.put("MaxResults", x);
@@ -10060,61 +9763,6 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
-
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListDeviceDefinitionsResponse>(&body)
-                    .unwrap();
-
-
-
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListDeviceDefinitionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
-    }
-
-
-    #[doc="Lists the versions of a Lambda function definition."]
-    fn list_function_definition_versions
-        (&self,
-         input: &ListFunctionDefinitionVersionsRequest)
-         -> Result<ListFunctionDefinitionVersionsResponse, ListFunctionDefinitionVersionsError> {
-        let request_uri = format!("/greengrass/definition/functions/{function_definition_id}/versions",
-                                  function_definition_id = input.function_definition_id);
-
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-        let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
-            params.put("MaxResults", x);
-        }
-        if let Some(ref x) = input.next_token {
-            params.put("NextToken", x);
-        }
-        request.set_params(params);
-
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
-
-        match response.status {
-            StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -10125,36 +9773,82 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
                 let result =
-                    serde_json::from_slice::<ListFunctionDefinitionVersionsResponse>(&body)
-                        .unwrap();
-
-
+                    serde_json::from_slice::<ListDeviceDefinitionsResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListFunctionDefinitionVersionsError::from_body(String::from_utf8_lossy(&body)
-                                                                       .as_ref()))
+                Err(ListDeviceDefinitionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
+    #[doc = "Lists the versions of a Lambda function definition."]
+    fn list_function_definition_versions(
+        &self,
+        input: &ListFunctionDefinitionVersionsRequest,
+    ) -> Result<ListFunctionDefinitionVersionsResponse, ListFunctionDefinitionVersionsError> {
+        let request_uri = format!(
+            "/greengrass/definition/functions/{function_definition_id}/versions",
+            function_definition_id = input.function_definition_id
+        );
 
-    #[doc="Retrieves a list of Lambda function definitions."]
-    fn list_function_definitions
-        (&self,
-         input: &ListFunctionDefinitionsRequest)
-         -> Result<ListFunctionDefinitionsResponse, ListFunctionDefinitionsError> {
+        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("MaxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("NextToken", x);
+        }
+        request.set_params(params);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<ListFunctionDefinitionVersionsResponse>(
+                    &body,
+                ).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListFunctionDefinitionVersionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    #[doc = "Retrieves a list of Lambda function definitions."]
+    fn list_function_definitions(
+        &self,
+        input: &ListFunctionDefinitionsRequest,
+    ) -> Result<ListFunctionDefinitionsResponse, ListFunctionDefinitionsError> {
         let request_uri = "/greengrass/definition/functions";
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
-
-
         let mut params = Params::new();
         if let Some(ref x) = input.max_results {
             params.put("MaxResults", x);
@@ -10169,55 +9863,6 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
-
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListFunctionDefinitionsResponse>(&body)
-                    .unwrap();
-
-
-
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListFunctionDefinitionsError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
-            }
-        }
-    }
-
-
-    #[doc="Retrieves the current CAs for a group."]
-    fn list_group_certificate_authorities
-        (&self,
-         input: &ListGroupCertificateAuthoritiesRequest)
-         -> Result<ListGroupCertificateAuthoritiesResponse, ListGroupCertificateAuthoritiesError> {
-        let request_uri = format!("/greengrass/groups/{group_id}/certificateauthorities",
-                                  group_id = input.group_id);
-
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-
-
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
-
-        match response.status {
-            StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -10228,35 +9873,75 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
                 let result =
-                    serde_json::from_slice::<ListGroupCertificateAuthoritiesResponse>(&body)
-                        .unwrap();
-
-
+                    serde_json::from_slice::<ListFunctionDefinitionsResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListGroupCertificateAuthoritiesError::from_body(String::from_utf8_lossy(&body)
-                                                                        .as_ref()))
+                Err(ListFunctionDefinitionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="List the versions of a group."]
-    fn list_group_versions(&self,
-                           input: &ListGroupVersionsRequest)
-                           -> Result<ListGroupVersionsResponse, ListGroupVersionsError> {
-        let request_uri = format!("/greengrass/groups/{group_id}/versions",
-                                  group_id = input.group_id);
+    #[doc = "Retrieves the current CAs for a group."]
+    fn list_group_certificate_authorities(
+        &self,
+        input: &ListGroupCertificateAuthoritiesRequest,
+    ) -> Result<ListGroupCertificateAuthoritiesResponse, ListGroupCertificateAuthoritiesError> {
+        let request_uri = format!(
+            "/greengrass/groups/{group_id}/certificateauthorities",
+            group_id = input.group_id
+        );
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
 
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
 
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<ListGroupCertificateAuthoritiesResponse>(
+                    &body,
+                ).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListGroupCertificateAuthoritiesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    #[doc = "List the versions of a group."]
+    fn list_group_versions(
+        &self,
+        input: &ListGroupVersionsRequest,
+    ) -> Result<ListGroupVersionsResponse, ListGroupVersionsError> {
+        let request_uri = format!(
+            "/greengrass/groups/{group_id}/versions",
+            group_id = input.group_id
+        );
+
+        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
         if let Some(ref x) = input.max_results {
@@ -10272,7 +9957,6 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -10284,30 +9968,27 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<ListGroupVersionsResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListGroupVersionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListGroupVersionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Retrieves a list of groups."]
-    fn list_groups(&self,
-                   input: &ListGroupsRequest)
-                   -> Result<ListGroupsResponse, ListGroupsError> {
+    #[doc = "Retrieves a list of groups."]
+    fn list_groups(
+        &self,
+        input: &ListGroupsRequest,
+    ) -> Result<ListGroupsResponse, ListGroupsError> {
         let request_uri = "/greengrass/groups";
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.max_results {
@@ -10323,7 +10004,6 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -10335,32 +10015,30 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<ListGroupsResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListGroupsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListGroupsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Lists the versions of a logger definition."]
-    fn list_logger_definition_versions
-        (&self,
-         input: &ListLoggerDefinitionVersionsRequest)
-         -> Result<ListLoggerDefinitionVersionsResponse, ListLoggerDefinitionVersionsError> {
-        let request_uri = format!("/greengrass/definition/loggers/{logger_definition_id}/versions",
-                                  logger_definition_id = input.logger_definition_id);
+    #[doc = "Lists the versions of a logger definition."]
+    fn list_logger_definition_versions(
+        &self,
+        input: &ListLoggerDefinitionVersionsRequest,
+    ) -> Result<ListLoggerDefinitionVersionsResponse, ListLoggerDefinitionVersionsError> {
+        let request_uri = format!(
+            "/greengrass/definition/loggers/{logger_definition_id}/versions",
+            logger_definition_id = input.logger_definition_id
+        );
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.max_results {
@@ -10376,116 +10054,6 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
-
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListLoggerDefinitionVersionsResponse>(&body)
-                    .unwrap();
-
-
-
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListLoggerDefinitionVersionsError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
-            }
-        }
-    }
-
-
-    #[doc="Retrieves a list of logger definitions."]
-    fn list_logger_definitions
-        (&self,
-         input: &ListLoggerDefinitionsRequest)
-         -> Result<ListLoggerDefinitionsResponse, ListLoggerDefinitionsError> {
-        let request_uri = "/greengrass/definition/loggers";
-
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-        let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
-            params.put("MaxResults", x);
-        }
-        if let Some(ref x) = input.next_token {
-            params.put("NextToken", x);
-        }
-        request.set_params(params);
-
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
-
-        match response.status {
-            StatusCode::Ok => {
-
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
-
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListLoggerDefinitionsResponse>(&body)
-                    .unwrap();
-
-
-
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListLoggerDefinitionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
-    }
-
-
-    #[doc="Lists the versions of a subscription definition."]
-    fn list_subscription_definition_versions
-        (&self,
-         input: &ListSubscriptionDefinitionVersionsRequest)
-         -> Result<ListSubscriptionDefinitionVersionsResponse,
-                   ListSubscriptionDefinitionVersionsError> {
-        let request_uri = format!("/greengrass/definition/subscriptions/{subscription_definition_id}/versions",
-                                  subscription_definition_id = input.subscription_definition_id);
-
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-        let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
-            params.put("MaxResults", x);
-        }
-        if let Some(ref x) = input.next_token {
-            params.put("NextToken", x);
-        }
-        request.set_params(params);
-
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
-
-        match response.status {
-            StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -10496,34 +10064,29 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
                 let result =
-                    serde_json::from_slice::<ListSubscriptionDefinitionVersionsResponse>(&body)
-                        .unwrap();
-
-
+                    serde_json::from_slice::<ListLoggerDefinitionVersionsResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListSubscriptionDefinitionVersionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListLoggerDefinitionVersionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Retrieves a list of subscription definitions."]
-    fn list_subscription_definitions
-        (&self,
-         input: &ListSubscriptionDefinitionsRequest)
-         -> Result<ListSubscriptionDefinitionsResponse, ListSubscriptionDefinitionsError> {
-        let request_uri = "/greengrass/definition/subscriptions";
+    #[doc = "Retrieves a list of logger definitions."]
+    fn list_logger_definitions(
+        &self,
+        input: &ListLoggerDefinitionsRequest,
+    ) -> Result<ListLoggerDefinitionsResponse, ListLoggerDefinitionsError> {
+        let request_uri = "/greengrass/definition/loggers";
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.max_results {
@@ -10539,7 +10102,6 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -10549,46 +10111,143 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListSubscriptionDefinitionsResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<ListLoggerDefinitionsResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListSubscriptionDefinitionsError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(ListLoggerDefinitionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
+    #[doc = "Lists the versions of a subscription definition."]
+    fn list_subscription_definition_versions(
+        &self,
+        input: &ListSubscriptionDefinitionVersionsRequest,
+    ) -> Result<ListSubscriptionDefinitionVersionsResponse, ListSubscriptionDefinitionVersionsError>
+    {
+        let request_uri = format!(
+            "/greengrass/definition/subscriptions/{subscription_definition_id}/versions",
+            subscription_definition_id = input.subscription_definition_id
+        );
+
+        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("MaxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("NextToken", x);
+        }
+        request.set_params(params);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<ListSubscriptionDefinitionVersionsResponse>(
+                    &body,
+                ).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListSubscriptionDefinitionVersionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    #[doc = "Retrieves a list of subscription definitions."]
+    fn list_subscription_definitions(
+        &self,
+        input: &ListSubscriptionDefinitionsRequest,
+    ) -> Result<ListSubscriptionDefinitionsResponse, ListSubscriptionDefinitionsError> {
+        let request_uri = "/greengrass/definition/subscriptions";
+
+        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("MaxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("NextToken", x);
+        }
+        request.set_params(params);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_slice::<ListSubscriptionDefinitionsResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListSubscriptionDefinitionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
 
     #[doc="Updates the connectivity information for the core. Any devices that belong to the group which has this core will receive this information in order to find the location of the core and connect to it."]
-    fn update_connectivity_info
-        (&self,
-         input: &UpdateConnectivityInfoRequest)
-         -> Result<UpdateConnectivityInfoResponse, UpdateConnectivityInfoError> {
-        let request_uri = format!("/greengrass/things/{thing_name}/connectivityInfo",
-                                  thing_name = input.thing_name);
+    fn update_connectivity_info(
+        &self,
+        input: &UpdateConnectivityInfoRequest,
+    ) -> Result<UpdateConnectivityInfoResponse, UpdateConnectivityInfoError> {
+        let request_uri = format!(
+            "/greengrass/things/{thing_name}/connectivityInfo",
+            thing_name = input.thing_name
+        );
 
         let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -10598,45 +10257,42 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<UpdateConnectivityInfoResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<UpdateConnectivityInfoResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateConnectivityInfoError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateConnectivityInfoError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Updates a core definition."]
-    fn update_core_definition
-        (&self,
-         input: &UpdateCoreDefinitionRequest)
-         -> Result<UpdateCoreDefinitionResponse, UpdateCoreDefinitionError> {
-        let request_uri = format!("/greengrass/definition/cores/{core_definition_id}",
-                                  core_definition_id = input.core_definition_id);
+    #[doc = "Updates a core definition."]
+    fn update_core_definition(
+        &self,
+        input: &UpdateCoreDefinitionRequest,
+    ) -> Result<UpdateCoreDefinitionResponse, UpdateCoreDefinitionError> {
+        let request_uri = format!(
+            "/greengrass/definition/cores/{core_definition_id}",
+            core_definition_id = input.core_definition_id
+        );
 
         let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -10648,42 +10304,39 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<UpdateCoreDefinitionResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateCoreDefinitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateCoreDefinitionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Updates a device definition."]
-    fn update_device_definition
-        (&self,
-         input: &UpdateDeviceDefinitionRequest)
-         -> Result<UpdateDeviceDefinitionResponse, UpdateDeviceDefinitionError> {
-        let request_uri = format!("/greengrass/definition/devices/{device_definition_id}",
-                                  device_definition_id = input.device_definition_id);
+    #[doc = "Updates a device definition."]
+    fn update_device_definition(
+        &self,
+        input: &UpdateDeviceDefinitionRequest,
+    ) -> Result<UpdateDeviceDefinitionResponse, UpdateDeviceDefinitionError> {
+        let request_uri = format!(
+            "/greengrass/definition/devices/{device_definition_id}",
+            device_definition_id = input.device_definition_id
+        );
 
         let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -10693,45 +10346,42 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<UpdateDeviceDefinitionResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<UpdateDeviceDefinitionResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateDeviceDefinitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateDeviceDefinitionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Updates a Lambda function definition."]
-    fn update_function_definition
-        (&self,
-         input: &UpdateFunctionDefinitionRequest)
-         -> Result<UpdateFunctionDefinitionResponse, UpdateFunctionDefinitionError> {
-        let request_uri = format!("/greengrass/definition/functions/{function_definition_id}",
-                                  function_definition_id = input.function_definition_id);
+    #[doc = "Updates a Lambda function definition."]
+    fn update_function_definition(
+        &self,
+        input: &UpdateFunctionDefinitionRequest,
+    ) -> Result<UpdateFunctionDefinitionResponse, UpdateFunctionDefinitionError> {
+        let request_uri = format!(
+            "/greengrass/definition/functions/{function_definition_id}",
+            function_definition_id = input.function_definition_id
+        );
 
         let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -10741,44 +10391,39 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<UpdateFunctionDefinitionResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<UpdateFunctionDefinitionResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateFunctionDefinitionError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(UpdateFunctionDefinitionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Updates a group."]
-    fn update_group(&self,
-                    input: &UpdateGroupRequest)
-                    -> Result<UpdateGroupResponse, UpdateGroupError> {
+    #[doc = "Updates a group."]
+    fn update_group(
+        &self,
+        input: &UpdateGroupRequest,
+    ) -> Result<UpdateGroupResponse, UpdateGroupError> {
         let request_uri = format!("/greengrass/groups/{group_id}", group_id = input.group_id);
 
         let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -10790,43 +10435,40 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<UpdateGroupResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Updates the Cert expiry time for a group."]
-    fn update_group_certificate_configuration
-        (&self,
-         input: &UpdateGroupCertificateConfigurationRequest)
-         -> Result<UpdateGroupCertificateConfigurationResponse,
-                   UpdateGroupCertificateConfigurationError> {
-        let request_uri = format!("/greengrass/groups/{group_id}/certificateauthorities/configuration/expiry",
-                                  group_id = input.group_id);
+    #[doc = "Updates the Cert expiry time for a group."]
+    fn update_group_certificate_configuration(
+        &self,
+        input: &UpdateGroupCertificateConfigurationRequest,
+    ) -> Result<UpdateGroupCertificateConfigurationResponse, UpdateGroupCertificateConfigurationError>
+    {
+        let request_uri = format!(
+            "/greengrass/groups/{group_id}/certificateauthorities/configuration/expiry",
+            group_id = input.group_id
+        );
 
         let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -10840,42 +10482,39 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
                     serde_json::from_slice::<UpdateGroupCertificateConfigurationResponse>(&body)
                         .unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateGroupCertificateConfigurationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateGroupCertificateConfigurationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Updates a logger definition."]
-    fn update_logger_definition
-        (&self,
-         input: &UpdateLoggerDefinitionRequest)
-         -> Result<UpdateLoggerDefinitionResponse, UpdateLoggerDefinitionError> {
-        let request_uri = format!("/greengrass/definition/loggers/{logger_definition_id}",
-                                  logger_definition_id = input.logger_definition_id);
+    #[doc = "Updates a logger definition."]
+    fn update_logger_definition(
+        &self,
+        input: &UpdateLoggerDefinitionRequest,
+    ) -> Result<UpdateLoggerDefinitionResponse, UpdateLoggerDefinitionError> {
+        let request_uri = format!(
+            "/greengrass/definition/loggers/{logger_definition_id}",
+            logger_definition_id = input.logger_definition_id
+        );
 
         let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -10885,45 +10524,42 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<UpdateLoggerDefinitionResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<UpdateLoggerDefinitionResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateLoggerDefinitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateLoggerDefinitionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Updates a subscription definition."]
-    fn update_subscription_definition
-        (&self,
-         input: &UpdateSubscriptionDefinitionRequest)
-         -> Result<UpdateSubscriptionDefinitionResponse, UpdateSubscriptionDefinitionError> {
-        let request_uri = format!("/greengrass/definition/subscriptions/{subscription_definition_id}",
-                                  subscription_definition_id = input.subscription_definition_id);
+    #[doc = "Updates a subscription definition."]
+    fn update_subscription_definition(
+        &self,
+        input: &UpdateSubscriptionDefinitionRequest,
+    ) -> Result<UpdateSubscriptionDefinitionResponse, UpdateSubscriptionDefinitionError> {
+        let request_uri = format!(
+            "/greengrass/definition/subscriptions/{subscription_definition_id}",
+            subscription_definition_id = input.subscription_definition_id
+        );
 
         let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -10933,18 +10569,17 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<UpdateSubscriptionDefinitionResponse>(&body)
-                    .unwrap();
-
-
+                let result =
+                    serde_json::from_slice::<UpdateSubscriptionDefinitionResponse>(&body).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateSubscriptionDefinitionError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+                Err(UpdateSubscriptionDefinitionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

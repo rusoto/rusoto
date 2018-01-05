@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -28,2059 +27,2059 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AcceptPortfolioShareInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The portfolio identifier.</p>"]
-    #[serde(rename="PortfolioId")]
+    /// <p>The portfolio identifier.</p>
+    #[serde(rename = "PortfolioId")]
     pub portfolio_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AcceptPortfolioShareOutput;
 
-#[doc="<p>The access level to limit results.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The access level to limit results.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AccessLevelFilter {
-    #[doc="<p>Specifies the access level.</p> <p> <code>Account</code> allows results at the account level. </p> <p> <code>Role</code> allows results based on the federated role of the specified user.</p> <p> <code>User</code> allows results limited to the specified user. </p>"]
-    #[serde(rename="Key")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies the access level.</p> <p> <code>Account</code> allows results at the account level. </p> <p> <code>Role</code> allows results based on the federated role of the specified user.</p> <p> <code>User</code> allows results limited to the specified user. </p>
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    #[doc="<p>Specifies the user to which the access level applies. A value of <code>Self</code> is currently supported.</p>"]
-    #[serde(rename="Value")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies the user to which the access level applies. A value of <code>Self</code> is currently supported.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AssociatePrincipalWithPortfolioInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The portfolio identifier.</p>"]
-    #[serde(rename="PortfolioId")]
+    /// <p>The portfolio identifier.</p>
+    #[serde(rename = "PortfolioId")]
     pub portfolio_id: String,
-    #[doc="<p>The ARN representing the principal (IAM user, role, or group).</p>"]
-    #[serde(rename="PrincipalARN")]
+    /// <p>The ARN representing the principal (IAM user, role, or group).</p>
+    #[serde(rename = "PrincipalARN")]
     pub principal_arn: String,
-    #[doc="<p>The principal type. Must be <code>IAM</code> </p>"]
-    #[serde(rename="PrincipalType")]
+    /// <p>The principal type. Must be <code>IAM</code> </p>
+    #[serde(rename = "PrincipalType")]
     pub principal_type: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AssociatePrincipalWithPortfolioOutput;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AssociateProductWithPortfolioInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The portfolio identifier.</p>"]
-    #[serde(rename="PortfolioId")]
+    /// <p>The portfolio identifier.</p>
+    #[serde(rename = "PortfolioId")]
     pub portfolio_id: String,
-    #[doc="<p>The product identifier.</p>"]
-    #[serde(rename="ProductId")]
+    /// <p>The product identifier.</p>
+    #[serde(rename = "ProductId")]
     pub product_id: String,
-    #[doc="<p>The identifier of the source portfolio to use with this association.</p>"]
-    #[serde(rename="SourcePortfolioId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier of the source portfolio to use with this association.</p>
+    #[serde(rename = "SourcePortfolioId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub source_portfolio_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AssociateProductWithPortfolioOutput;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AssociateTagOptionWithResourceInput {
-    #[doc="<p>The resource identifier.</p>"]
-    #[serde(rename="ResourceId")]
+    /// <p>The resource identifier.</p>
+    #[serde(rename = "ResourceId")]
     pub resource_id: String,
-    #[doc="<p>The TagOption identifier.</p>"]
-    #[serde(rename="TagOptionId")]
+    /// <p>The TagOption identifier.</p>
+    #[serde(rename = "TagOptionId")]
     pub tag_option_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AssociateTagOptionWithResourceOutput;
 
-#[doc="<p>Detailed constraint information.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Detailed constraint information.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ConstraintDetail {
-    #[doc="<p>The identifier of the constraint.</p>"]
-    #[serde(rename="ConstraintId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier of the constraint.</p>
+    #[serde(rename = "ConstraintId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub constraint_id: Option<String>,
-    #[doc="<p>The text description of the constraint.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The text description of the constraint.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The owner of the constraint.</p>"]
-    #[serde(rename="Owner")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The owner of the constraint.</p>
+    #[serde(rename = "Owner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
-    #[doc="<p>The type of the constraint.</p>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of the constraint.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[doc="<p>An administrator-specified constraint to apply when provisioning a product.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>An administrator-specified constraint to apply when provisioning a product.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ConstraintSummary {
-    #[doc="<p>The text description of the constraint.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The text description of the constraint.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The type of the constraint. </p>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of the constraint. </p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateConstraintInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The text description of the constraint.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The text description of the constraint.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>A token to disambiguate duplicate requests. You can create multiple resources using the same input in multiple requests, provided that you also specify a different idempotency token for each request.</p>"]
-    #[serde(rename="IdempotencyToken")]
+    /// <p>A token to disambiguate duplicate requests. You can create multiple resources using the same input in multiple requests, provided that you also specify a different idempotency token for each request.</p>
+    #[serde(rename = "IdempotencyToken")]
     pub idempotency_token: String,
-    #[doc="<p>The constraint parameters. Expected values vary depending on which <b>Type</b> is specified. For examples, see the bottom of this topic.</p> <p>For Type <code>LAUNCH</code>, the <code>RoleArn</code> property is required. </p> <p>For Type <code>NOTIFICATION</code>, the <code>NotificationArns</code> property is required.</p> <p>For Type <code>TEMPLATE</code>, the <code>Rules</code> property is required.</p>"]
-    #[serde(rename="Parameters")]
+    /// <p>The constraint parameters. Expected values vary depending on which <b>Type</b> is specified. For examples, see the bottom of this topic.</p> <p>For Type <code>LAUNCH</code>, the <code>RoleArn</code> property is required. </p> <p>For Type <code>NOTIFICATION</code>, the <code>NotificationArns</code> property is required.</p> <p>For Type <code>TEMPLATE</code>, the <code>Rules</code> property is required.</p>
+    #[serde(rename = "Parameters")]
     pub parameters: String,
-    #[doc="<p>The portfolio identifier.</p>"]
-    #[serde(rename="PortfolioId")]
+    /// <p>The portfolio identifier.</p>
+    #[serde(rename = "PortfolioId")]
     pub portfolio_id: String,
-    #[doc="<p>The product identifier.</p>"]
-    #[serde(rename="ProductId")]
+    /// <p>The product identifier.</p>
+    #[serde(rename = "ProductId")]
     pub product_id: String,
-    #[doc="<p>The type of the constraint. Case-sensitive valid values are: <code>LAUNCH</code>, <code>NOTIFICATION</code>, or <code>TEMPLATE</code>. </p>"]
-    #[serde(rename="Type")]
+    /// <p>The type of the constraint. Case-sensitive valid values are: <code>LAUNCH</code>, <code>NOTIFICATION</code>, or <code>TEMPLATE</code>. </p>
+    #[serde(rename = "Type")]
     pub type_: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateConstraintOutput {
-    #[doc="<p>The resulting detailed constraint information.</p>"]
-    #[serde(rename="ConstraintDetail")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The resulting detailed constraint information.</p>
+    #[serde(rename = "ConstraintDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub constraint_detail: Option<ConstraintDetail>,
-    #[doc="<p>The resulting constraint parameters.</p>"]
-    #[serde(rename="ConstraintParameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The resulting constraint parameters.</p>
+    #[serde(rename = "ConstraintParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub constraint_parameters: Option<String>,
-    #[doc="<p>The status of the current request.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the current request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreatePortfolioInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The text description of the portfolio.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The text description of the portfolio.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The name to use for display purposes.</p>"]
-    #[serde(rename="DisplayName")]
+    /// <p>The name to use for display purposes.</p>
+    #[serde(rename = "DisplayName")]
     pub display_name: String,
-    #[doc="<p>A token to disambiguate duplicate requests. You can create multiple resources using the same input in multiple requests, provided that you also specify a different idempotency token for each request.</p>"]
-    #[serde(rename="IdempotencyToken")]
+    /// <p>A token to disambiguate duplicate requests. You can create multiple resources using the same input in multiple requests, provided that you also specify a different idempotency token for each request.</p>
+    #[serde(rename = "IdempotencyToken")]
     pub idempotency_token: String,
-    #[doc="<p>The name of the portfolio provider.</p>"]
-    #[serde(rename="ProviderName")]
+    /// <p>The name of the portfolio provider.</p>
+    #[serde(rename = "ProviderName")]
     pub provider_name: String,
-    #[doc="<p>Tags to associate with the new portfolio.</p>"]
-    #[serde(rename="Tags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Tags to associate with the new portfolio.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreatePortfolioOutput {
-    #[doc="<p>The resulting detailed portfolio information.</p>"]
-    #[serde(rename="PortfolioDetail")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The resulting detailed portfolio information.</p>
+    #[serde(rename = "PortfolioDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub portfolio_detail: Option<PortfolioDetail>,
-    #[doc="<p>Tags successfully associated with the new portfolio.</p>"]
-    #[serde(rename="Tags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Tags successfully associated with the new portfolio.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreatePortfolioShareInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The account ID with which to share the portfolio.</p>"]
-    #[serde(rename="AccountId")]
+    /// <p>The account ID with which to share the portfolio.</p>
+    #[serde(rename = "AccountId")]
     pub account_id: String,
-    #[doc="<p>The portfolio identifier.</p>"]
-    #[serde(rename="PortfolioId")]
+    /// <p>The portfolio identifier.</p>
+    #[serde(rename = "PortfolioId")]
     pub portfolio_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreatePortfolioShareOutput;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateProductInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The text description of the product.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The text description of the product.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The distributor of the product.</p>"]
-    #[serde(rename="Distributor")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The distributor of the product.</p>
+    #[serde(rename = "Distributor")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub distributor: Option<String>,
-    #[doc="<p>A token to disambiguate duplicate requests. You can create multiple resources using the same input in multiple requests, provided that you also specify a different idempotency token for each request.</p>"]
-    #[serde(rename="IdempotencyToken")]
+    /// <p>A token to disambiguate duplicate requests. You can create multiple resources using the same input in multiple requests, provided that you also specify a different idempotency token for each request.</p>
+    #[serde(rename = "IdempotencyToken")]
     pub idempotency_token: String,
-    #[doc="<p>The name of the product.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the product.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>The owner of the product.</p>"]
-    #[serde(rename="Owner")]
+    /// <p>The owner of the product.</p>
+    #[serde(rename = "Owner")]
     pub owner: String,
-    #[doc="<p>The type of the product to create.</p>"]
-    #[serde(rename="ProductType")]
+    /// <p>The type of the product to create.</p>
+    #[serde(rename = "ProductType")]
     pub product_type: String,
-    #[doc="<p>Parameters for the provisioning artifact.</p>"]
-    #[serde(rename="ProvisioningArtifactParameters")]
+    /// <p>Parameters for the provisioning artifact.</p>
+    #[serde(rename = "ProvisioningArtifactParameters")]
     pub provisioning_artifact_parameters: ProvisioningArtifactProperties,
-    #[doc="<p>Support information about the product.</p>"]
-    #[serde(rename="SupportDescription")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Support information about the product.</p>
+    #[serde(rename = "SupportDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub support_description: Option<String>,
-    #[doc="<p>Contact email for product support.</p>"]
-    #[serde(rename="SupportEmail")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Contact email for product support.</p>
+    #[serde(rename = "SupportEmail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub support_email: Option<String>,
-    #[doc="<p>Contact URL for product support.</p>"]
-    #[serde(rename="SupportUrl")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Contact URL for product support.</p>
+    #[serde(rename = "SupportUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub support_url: Option<String>,
-    #[doc="<p>Tags to associate with the new product.</p>"]
-    #[serde(rename="Tags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Tags to associate with the new product.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateProductOutput {
-    #[doc="<p>The resulting detailed product view information.</p>"]
-    #[serde(rename="ProductViewDetail")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The resulting detailed product view information.</p>
+    #[serde(rename = "ProductViewDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub product_view_detail: Option<ProductViewDetail>,
-    #[doc="<p>The resulting detailed provisioning artifact information.</p>"]
-    #[serde(rename="ProvisioningArtifactDetail")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The resulting detailed provisioning artifact information.</p>
+    #[serde(rename = "ProvisioningArtifactDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_artifact_detail: Option<ProvisioningArtifactDetail>,
-    #[doc="<p>Tags successfully associated with the new product.</p>"]
-    #[serde(rename="Tags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Tags successfully associated with the new product.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateProvisioningArtifactInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>A token to disambiguate duplicate requests. You can create multiple resources using the same input in multiple requests, provided that you also specify a different idempotency token for each request.</p>"]
-    #[serde(rename="IdempotencyToken")]
+    /// <p>A token to disambiguate duplicate requests. You can create multiple resources using the same input in multiple requests, provided that you also specify a different idempotency token for each request.</p>
+    #[serde(rename = "IdempotencyToken")]
     pub idempotency_token: String,
-    #[doc="<p>The parameters to use when creating the new provisioning artifact.</p>"]
-    #[serde(rename="Parameters")]
+    /// <p>The parameters to use when creating the new provisioning artifact.</p>
+    #[serde(rename = "Parameters")]
     pub parameters: ProvisioningArtifactProperties,
-    #[doc="<p>The product identifier.</p>"]
-    #[serde(rename="ProductId")]
+    /// <p>The product identifier.</p>
+    #[serde(rename = "ProductId")]
     pub product_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateProvisioningArtifactOutput {
-    #[doc="<p>Additional information about the creation request for the provisioning artifact.</p>"]
-    #[serde(rename="Info")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Additional information about the creation request for the provisioning artifact.</p>
+    #[serde(rename = "Info")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub info: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The resulting detailed provisioning artifact information.</p>"]
-    #[serde(rename="ProvisioningArtifactDetail")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The resulting detailed provisioning artifact information.</p>
+    #[serde(rename = "ProvisioningArtifactDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_artifact_detail: Option<ProvisioningArtifactDetail>,
-    #[doc="<p>The status of the current request.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the current request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateTagOptionInput {
-    #[doc="<p>The TagOption key.</p>"]
-    #[serde(rename="Key")]
+    /// <p>The TagOption key.</p>
+    #[serde(rename = "Key")]
     pub key: String,
-    #[doc="<p>The TagOption value.</p>"]
-    #[serde(rename="Value")]
+    /// <p>The TagOption value.</p>
+    #[serde(rename = "Value")]
     pub value: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateTagOptionOutput {
-    #[doc="<p>The resulting detailed TagOption information.</p>"]
-    #[serde(rename="TagOptionDetail")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The resulting detailed TagOption information.</p>
+    #[serde(rename = "TagOptionDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_option_detail: Option<TagOptionDetail>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteConstraintInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The identifier of the constraint to delete.</p>"]
-    #[serde(rename="Id")]
+    /// <p>The identifier of the constraint to delete.</p>
+    #[serde(rename = "Id")]
     pub id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteConstraintOutput;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeletePortfolioInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The identifier of the portfolio for the delete request.</p>"]
-    #[serde(rename="Id")]
+    /// <p>The identifier of the portfolio for the delete request.</p>
+    #[serde(rename = "Id")]
     pub id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeletePortfolioOutput;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeletePortfolioShareInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The account ID associated with the share to delete.</p>"]
-    #[serde(rename="AccountId")]
+    /// <p>The account ID associated with the share to delete.</p>
+    #[serde(rename = "AccountId")]
     pub account_id: String,
-    #[doc="<p>The portfolio identifier.</p>"]
-    #[serde(rename="PortfolioId")]
+    /// <p>The portfolio identifier.</p>
+    #[serde(rename = "PortfolioId")]
     pub portfolio_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeletePortfolioShareOutput;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteProductInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The identifier of the product for the delete request.</p>"]
-    #[serde(rename="Id")]
+    /// <p>The identifier of the product for the delete request.</p>
+    #[serde(rename = "Id")]
     pub id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteProductOutput;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteProvisioningArtifactInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The product identifier.</p>"]
-    #[serde(rename="ProductId")]
+    /// <p>The product identifier.</p>
+    #[serde(rename = "ProductId")]
     pub product_id: String,
-    #[doc="<p>The identifier of the provisioning artifact for the delete request. This is sometimes referred to as the product version.</p>"]
-    #[serde(rename="ProvisioningArtifactId")]
+    /// <p>The identifier of the provisioning artifact for the delete request. This is sometimes referred to as the product version.</p>
+    #[serde(rename = "ProvisioningArtifactId")]
     pub provisioning_artifact_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteProvisioningArtifactOutput;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeConstraintInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The identifier of the constraint.</p>"]
-    #[serde(rename="Id")]
+    /// <p>The identifier of the constraint.</p>
+    #[serde(rename = "Id")]
     pub id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeConstraintOutput {
-    #[doc="<p>Detailed constraint information.</p>"]
-    #[serde(rename="ConstraintDetail")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Detailed constraint information.</p>
+    #[serde(rename = "ConstraintDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub constraint_detail: Option<ConstraintDetail>,
-    #[doc="<p>The current parameters associated with the specified constraint.</p>"]
-    #[serde(rename="ConstraintParameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The current parameters associated with the specified constraint.</p>
+    #[serde(rename = "ConstraintParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub constraint_parameters: Option<String>,
-    #[doc="<p>The status of the current request.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the current request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribePortfolioInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The identifier of the portfolio for which to retrieve information.</p>"]
-    #[serde(rename="Id")]
+    /// <p>The identifier of the portfolio for which to retrieve information.</p>
+    #[serde(rename = "Id")]
     pub id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribePortfolioOutput {
-    #[doc="<p>Detailed portfolio information.</p>"]
-    #[serde(rename="PortfolioDetail")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Detailed portfolio information.</p>
+    #[serde(rename = "PortfolioDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub portfolio_detail: Option<PortfolioDetail>,
-    #[doc="<p>TagOptions associated with the portfolio.</p>"]
-    #[serde(rename="TagOptions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>TagOptions associated with the portfolio.</p>
+    #[serde(rename = "TagOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_options: Option<Vec<TagOptionDetail>>,
-    #[doc="<p>Tags associated with the portfolio.</p>"]
-    #[serde(rename="Tags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Tags associated with the portfolio.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeProductAsAdminInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The identifier of the product for which to retrieve information.</p>"]
-    #[serde(rename="Id")]
+    /// <p>The identifier of the product for which to retrieve information.</p>
+    #[serde(rename = "Id")]
     pub id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeProductAsAdminOutput {
-    #[doc="<p>Detailed product view information.</p>"]
-    #[serde(rename="ProductViewDetail")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Detailed product view information.</p>
+    #[serde(rename = "ProductViewDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub product_view_detail: Option<ProductViewDetail>,
-    #[doc="<p>A list of provisioning artifact summaries for the product.</p>"]
-    #[serde(rename="ProvisioningArtifactSummaries")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of provisioning artifact summaries for the product.</p>
+    #[serde(rename = "ProvisioningArtifactSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_artifact_summaries: Option<Vec<ProvisioningArtifactSummary>>,
-    #[doc="<p>List of TagOptions associated with the product.</p>"]
-    #[serde(rename="TagOptions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>List of TagOptions associated with the product.</p>
+    #[serde(rename = "TagOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_options: Option<Vec<TagOptionDetail>>,
-    #[doc="<p>Tags associated with the product.</p>"]
-    #[serde(rename="Tags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Tags associated with the product.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeProductInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The <code>ProductId</code> of the product to describe.</p>"]
-    #[serde(rename="Id")]
+    /// <p>The <code>ProductId</code> of the product to describe.</p>
+    #[serde(rename = "Id")]
     pub id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeProductOutput {
-    #[doc="<p>The summary metadata about the specified product.</p>"]
-    #[serde(rename="ProductViewSummary")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The summary metadata about the specified product.</p>
+    #[serde(rename = "ProductViewSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub product_view_summary: Option<ProductViewSummary>,
-    #[doc="<p>A list of provisioning artifact objects for the specified product. The <code>ProvisioningArtifacts</code> parameter represent the ways the specified product can be provisioned.</p>"]
-    #[serde(rename="ProvisioningArtifacts")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of provisioning artifact objects for the specified product. The <code>ProvisioningArtifacts</code> parameter represent the ways the specified product can be provisioned.</p>
+    #[serde(rename = "ProvisioningArtifacts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_artifacts: Option<Vec<ProvisioningArtifact>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeProductViewInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The <code>ProductViewId</code> of the product to describe.</p>"]
-    #[serde(rename="Id")]
+    /// <p>The <code>ProductViewId</code> of the product to describe.</p>
+    #[serde(rename = "Id")]
     pub id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeProductViewOutput {
-    #[doc="<p>The summary metadata about the specified product.</p>"]
-    #[serde(rename="ProductViewSummary")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The summary metadata about the specified product.</p>
+    #[serde(rename = "ProductViewSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub product_view_summary: Option<ProductViewSummary>,
-    #[doc="<p>A list of provisioning artifact objects for the specified product. The <code>ProvisioningArtifacts</code> represent the ways in which the specified product can be provisioned.</p>"]
-    #[serde(rename="ProvisioningArtifacts")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of provisioning artifact objects for the specified product. The <code>ProvisioningArtifacts</code> represent the ways in which the specified product can be provisioned.</p>
+    #[serde(rename = "ProvisioningArtifacts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_artifacts: Option<Vec<ProvisioningArtifact>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeProvisionedProductInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The provisioned product identifier.</p>"]
-    #[serde(rename="Id")]
+    /// <p>The provisioned product identifier.</p>
+    #[serde(rename = "Id")]
     pub id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeProvisionedProductOutput {
-    #[doc="<p>Detailed provisioned product information.</p>"]
-    #[serde(rename="ProvisionedProductDetail")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Detailed provisioned product information.</p>
+    #[serde(rename = "ProvisionedProductDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_product_detail: Option<ProvisionedProductDetail>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeProvisioningArtifactInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The product identifier.</p>"]
-    #[serde(rename="ProductId")]
+    /// <p>The product identifier.</p>
+    #[serde(rename = "ProductId")]
     pub product_id: String,
-    #[doc="<p>The identifier of the provisioning artifact. This is sometimes referred to as the product version.</p>"]
-    #[serde(rename="ProvisioningArtifactId")]
+    /// <p>The identifier of the provisioning artifact. This is sometimes referred to as the product version.</p>
+    #[serde(rename = "ProvisioningArtifactId")]
     pub provisioning_artifact_id: String,
-    #[doc="<p>Enable a verbose level of details for the provisioning artifact.</p>"]
-    #[serde(rename="Verbose")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Enable a verbose level of details for the provisioning artifact.</p>
+    #[serde(rename = "Verbose")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub verbose: Option<bool>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeProvisioningArtifactOutput {
-    #[doc="<p>Additional information about the provisioning artifact.</p>"]
-    #[serde(rename="Info")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Additional information about the provisioning artifact.</p>
+    #[serde(rename = "Info")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub info: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>Detailed provisioning artifact information.</p>"]
-    #[serde(rename="ProvisioningArtifactDetail")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Detailed provisioning artifact information.</p>
+    #[serde(rename = "ProvisioningArtifactDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_artifact_detail: Option<ProvisioningArtifactDetail>,
-    #[doc="<p>The status of the current request.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the current request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeProvisioningParametersInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The identifier of the path for this product's provisioning. This value is optional if the product has a default path, and is required if there is more than one path for the specified product.</p>"]
-    #[serde(rename="PathId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier of the path for this product's provisioning. This value is optional if the product has a default path, and is required if there is more than one path for the specified product.</p>
+    #[serde(rename = "PathId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub path_id: Option<String>,
-    #[doc="<p>The product identifier.</p>"]
-    #[serde(rename="ProductId")]
+    /// <p>The product identifier.</p>
+    #[serde(rename = "ProductId")]
     pub product_id: String,
-    #[doc="<p>The provisioning artifact identifier for this product. This is sometimes referred to as the product version.</p>"]
-    #[serde(rename="ProvisioningArtifactId")]
+    /// <p>The provisioning artifact identifier for this product. This is sometimes referred to as the product version.</p>
+    #[serde(rename = "ProvisioningArtifactId")]
     pub provisioning_artifact_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeProvisioningParametersOutput {
-    #[doc="<p>The list of constraint summaries that apply to provisioning this product.</p>"]
-    #[serde(rename="ConstraintSummaries")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of constraint summaries that apply to provisioning this product.</p>
+    #[serde(rename = "ConstraintSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub constraint_summaries: Option<Vec<ConstraintSummary>>,
-    #[doc="<p>The list of parameters used to successfully provision the product. Each parameter includes a list of allowable values and additional metadata about each parameter.</p>"]
-    #[serde(rename="ProvisioningArtifactParameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of parameters used to successfully provision the product. Each parameter includes a list of allowable values and additional metadata about each parameter.</p>
+    #[serde(rename = "ProvisioningArtifactParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_artifact_parameters: Option<Vec<ProvisioningArtifactParameter>>,
-    #[doc="<p>List of TagOptions associated with the provisioned provisioning parameters.</p>"]
-    #[serde(rename="TagOptions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>List of TagOptions associated with the provisioned provisioning parameters.</p>
+    #[serde(rename = "TagOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_options: Option<Vec<TagOptionSummary>>,
-    #[doc="<p>Any additional metadata specifically related to the provisioning of the product. For example, see the <code>Version</code> field of the CloudFormation template.</p>"]
-    #[serde(rename="UsageInstructions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Any additional metadata specifically related to the provisioning of the product. For example, see the <code>Version</code> field of the CloudFormation template.</p>
+    #[serde(rename = "UsageInstructions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub usage_instructions: Option<Vec<UsageInstruction>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeRecordInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The record identifier of the ProvisionedProduct object for which to retrieve output information. This is the <code>RecordDetail.RecordId</code> obtained from the request operation's response.</p>"]
-    #[serde(rename="Id")]
+    /// <p>The record identifier of the ProvisionedProduct object for which to retrieve output information. This is the <code>RecordDetail.RecordId</code> obtained from the request operation's response.</p>
+    #[serde(rename = "Id")]
     pub id: String,
-    #[doc="<p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>"]
-    #[serde(rename="PageSize")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>
+    #[serde(rename = "PageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
-    #[doc="<p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>"]
-    #[serde(rename="PageToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>
+    #[serde(rename = "PageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeRecordOutput {
-    #[doc="<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>"]
-    #[serde(rename="NextPageToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
-    #[doc="<p>Detailed record information for the specified product. </p>"]
-    #[serde(rename="RecordDetail")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Detailed record information for the specified product. </p>
+    #[serde(rename = "RecordDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub record_detail: Option<RecordDetail>,
-    #[doc="<p>A list of outputs for the specified Product object created as the result of a request. For example, a CloudFormation-backed product that creates an S3 bucket would have an output for the S3 bucket URL.</p>"]
-    #[serde(rename="RecordOutputs")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of outputs for the specified Product object created as the result of a request. For example, a CloudFormation-backed product that creates an S3 bucket would have an output for the S3 bucket URL.</p>
+    #[serde(rename = "RecordOutputs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub record_outputs: Option<Vec<RecordOutput>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeTagOptionInput {
-    #[doc="<p>The identifier of the TagOption.</p>"]
-    #[serde(rename="Id")]
+    /// <p>The identifier of the TagOption.</p>
+    #[serde(rename = "Id")]
     pub id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeTagOptionOutput {
-    #[doc="<p>The resulting detailed TagOption information.</p>"]
-    #[serde(rename="TagOptionDetail")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The resulting detailed TagOption information.</p>
+    #[serde(rename = "TagOptionDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_option_detail: Option<TagOptionDetail>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DisassociatePrincipalFromPortfolioInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The portfolio identifier.</p>"]
-    #[serde(rename="PortfolioId")]
+    /// <p>The portfolio identifier.</p>
+    #[serde(rename = "PortfolioId")]
     pub portfolio_id: String,
-    #[doc="<p>The ARN representing the principal (IAM user, role, or group).</p>"]
-    #[serde(rename="PrincipalARN")]
+    /// <p>The ARN representing the principal (IAM user, role, or group).</p>
+    #[serde(rename = "PrincipalARN")]
     pub principal_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DisassociatePrincipalFromPortfolioOutput;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DisassociateProductFromPortfolioInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The portfolio identifier.</p>"]
-    #[serde(rename="PortfolioId")]
+    /// <p>The portfolio identifier.</p>
+    #[serde(rename = "PortfolioId")]
     pub portfolio_id: String,
-    #[doc="<p>The product identifier.</p>"]
-    #[serde(rename="ProductId")]
+    /// <p>The product identifier.</p>
+    #[serde(rename = "ProductId")]
     pub product_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DisassociateProductFromPortfolioOutput;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DisassociateTagOptionFromResourceInput {
-    #[doc="<p>Identifier of the resource from which to disassociate the TagOption.</p>"]
-    #[serde(rename="ResourceId")]
+    /// <p>Identifier of the resource from which to disassociate the TagOption.</p>
+    #[serde(rename = "ResourceId")]
     pub resource_id: String,
-    #[doc="<p>Identifier of the TagOption to disassociate from the resource.</p>"]
-    #[serde(rename="TagOptionId")]
+    /// <p>Identifier of the TagOption to disassociate from the resource.</p>
+    #[serde(rename = "TagOptionId")]
     pub tag_option_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DisassociateTagOptionFromResourceOutput;
 
-#[doc="<p>Summary information about a path for a user to have access to a specified product.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Summary information about a path for a user to have access to a specified product.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct LaunchPathSummary {
-    #[doc="<p>List of constraints on the portfolio-product relationship.</p>"]
-    #[serde(rename="ConstraintSummaries")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>List of constraints on the portfolio-product relationship.</p>
+    #[serde(rename = "ConstraintSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub constraint_summaries: Option<Vec<ConstraintSummary>>,
-    #[doc="<p>The unique identifier of the product path.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique identifier of the product path.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>Corresponds to the name of the portfolio to which the user was assigned.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Corresponds to the name of the portfolio to which the user was assigned.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>List of tags used by this launch path.</p>"]
-    #[serde(rename="Tags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>List of tags used by this launch path.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListAcceptedPortfolioSharesInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>"]
-    #[serde(rename="PageSize")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>
+    #[serde(rename = "PageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
-    #[doc="<p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>"]
-    #[serde(rename="PageToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>
+    #[serde(rename = "PageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListAcceptedPortfolioSharesOutput {
-    #[doc="<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>"]
-    #[serde(rename="NextPageToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
-    #[doc="<p>List of detailed portfolio information objects.</p>"]
-    #[serde(rename="PortfolioDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>List of detailed portfolio information objects.</p>
+    #[serde(rename = "PortfolioDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub portfolio_details: Option<Vec<PortfolioDetail>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListConstraintsForPortfolioInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>"]
-    #[serde(rename="PageSize")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>
+    #[serde(rename = "PageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
-    #[doc="<p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>"]
-    #[serde(rename="PageToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>
+    #[serde(rename = "PageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-    #[doc="<p>The portfolio identifier.</p>"]
-    #[serde(rename="PortfolioId")]
+    /// <p>The portfolio identifier.</p>
+    #[serde(rename = "PortfolioId")]
     pub portfolio_id: String,
-    #[doc="<p>The product identifier.</p>"]
-    #[serde(rename="ProductId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The product identifier.</p>
+    #[serde(rename = "ProductId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub product_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListConstraintsForPortfolioOutput {
-    #[doc="<p>List of detailed constraint information objects.</p>"]
-    #[serde(rename="ConstraintDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>List of detailed constraint information objects.</p>
+    #[serde(rename = "ConstraintDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub constraint_details: Option<Vec<ConstraintDetail>>,
-    #[doc="<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>"]
-    #[serde(rename="NextPageToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListLaunchPathsInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>"]
-    #[serde(rename="PageSize")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>
+    #[serde(rename = "PageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
-    #[doc="<p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>"]
-    #[serde(rename="PageToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>
+    #[serde(rename = "PageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-    #[doc="<p>The product identifier. Identifies the product for which to retrieve <code>LaunchPathSummaries</code> information.</p>"]
-    #[serde(rename="ProductId")]
+    /// <p>The product identifier. Identifies the product for which to retrieve <code>LaunchPathSummaries</code> information.</p>
+    #[serde(rename = "ProductId")]
     pub product_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListLaunchPathsOutput {
-    #[doc="<p>List of launch path information summaries for the specified <code>PageToken</code>.</p>"]
-    #[serde(rename="LaunchPathSummaries")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>List of launch path information summaries for the specified <code>PageToken</code>.</p>
+    #[serde(rename = "LaunchPathSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub launch_path_summaries: Option<Vec<LaunchPathSummary>>,
-    #[doc="<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>"]
-    #[serde(rename="NextPageToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListPortfolioAccessInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The portfolio identifier.</p>"]
-    #[serde(rename="PortfolioId")]
+    /// <p>The portfolio identifier.</p>
+    #[serde(rename = "PortfolioId")]
     pub portfolio_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListPortfolioAccessOutput {
-    #[doc="<p>List of account IDs associated with access to the portfolio.</p>"]
-    #[serde(rename="AccountIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>List of account IDs associated with access to the portfolio.</p>
+    #[serde(rename = "AccountIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub account_ids: Option<Vec<String>>,
-    #[doc="<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>"]
-    #[serde(rename="NextPageToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListPortfoliosForProductInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>"]
-    #[serde(rename="PageSize")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>
+    #[serde(rename = "PageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
-    #[doc="<p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>"]
-    #[serde(rename="PageToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>
+    #[serde(rename = "PageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-    #[doc="<p>The product identifier.</p>"]
-    #[serde(rename="ProductId")]
+    /// <p>The product identifier.</p>
+    #[serde(rename = "ProductId")]
     pub product_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListPortfoliosForProductOutput {
-    #[doc="<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>"]
-    #[serde(rename="NextPageToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
-    #[doc="<p>List of detailed portfolio information objects.</p>"]
-    #[serde(rename="PortfolioDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>List of detailed portfolio information objects.</p>
+    #[serde(rename = "PortfolioDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub portfolio_details: Option<Vec<PortfolioDetail>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListPortfoliosInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>"]
-    #[serde(rename="PageSize")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>
+    #[serde(rename = "PageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
-    #[doc="<p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>"]
-    #[serde(rename="PageToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>
+    #[serde(rename = "PageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListPortfoliosOutput {
-    #[doc="<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>"]
-    #[serde(rename="NextPageToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
-    #[doc="<p>List of detailed portfolio information objects.</p>"]
-    #[serde(rename="PortfolioDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>List of detailed portfolio information objects.</p>
+    #[serde(rename = "PortfolioDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub portfolio_details: Option<Vec<PortfolioDetail>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListPrincipalsForPortfolioInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>"]
-    #[serde(rename="PageSize")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>
+    #[serde(rename = "PageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
-    #[doc="<p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>"]
-    #[serde(rename="PageToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>
+    #[serde(rename = "PageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-    #[doc="<p>The portfolio identifier.</p>"]
-    #[serde(rename="PortfolioId")]
+    /// <p>The portfolio identifier.</p>
+    #[serde(rename = "PortfolioId")]
     pub portfolio_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListPrincipalsForPortfolioOutput {
-    #[doc="<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>"]
-    #[serde(rename="NextPageToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
-    #[doc="<p>The IAM principals (users or roles) associated with the portfolio.</p>"]
-    #[serde(rename="Principals")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The IAM principals (users or roles) associated with the portfolio.</p>
+    #[serde(rename = "Principals")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub principals: Option<Vec<Principal>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListProvisioningArtifactsInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The product identifier.</p>"]
-    #[serde(rename="ProductId")]
+    /// <p>The product identifier.</p>
+    #[serde(rename = "ProductId")]
     pub product_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListProvisioningArtifactsOutput {
-    #[doc="<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>"]
-    #[serde(rename="NextPageToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
-    #[doc="<p>List of detailed provisioning artifact information objects.</p>"]
-    #[serde(rename="ProvisioningArtifactDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>List of detailed provisioning artifact information objects.</p>
+    #[serde(rename = "ProvisioningArtifactDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_artifact_details: Option<Vec<ProvisioningArtifactDetail>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListRecordHistoryInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The access level for obtaining results. If left unspecified, <code>User</code> level access is used.</p>"]
-    #[serde(rename="AccessLevelFilter")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The access level for obtaining results. If left unspecified, <code>User</code> level access is used.</p>
+    #[serde(rename = "AccessLevelFilter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub access_level_filter: Option<AccessLevelFilter>,
-    #[doc="<p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>"]
-    #[serde(rename="PageSize")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>
+    #[serde(rename = "PageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
-    #[doc="<p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>"]
-    #[serde(rename="PageToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>
+    #[serde(rename = "PageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-    #[doc="<p>The filter to limit search results. </p>"]
-    #[serde(rename="SearchFilter")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The filter to limit search results. </p>
+    #[serde(rename = "SearchFilter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub search_filter: Option<ListRecordHistorySearchFilter>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListRecordHistoryOutput {
-    #[doc="<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>"]
-    #[serde(rename="NextPageToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
-    #[doc="<p>A list of record detail objects, listed in reverse chronological order.</p>"]
-    #[serde(rename="RecordDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of record detail objects, listed in reverse chronological order.</p>
+    #[serde(rename = "RecordDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub record_details: Option<Vec<RecordDetail>>,
 }
 
-#[doc="<p>The search filter to limit results when listing request history records.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The search filter to limit results when listing request history records.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListRecordHistorySearchFilter {
-    #[doc="<p>The filter key.</p>"]
-    #[serde(rename="Key")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The filter key.</p>
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    #[doc="<p>The filter value for <code>Key</code>.</p>"]
-    #[serde(rename="Value")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The filter value for <code>Key</code>.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListResourcesForTagOptionInput {
-    #[doc="<p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>"]
-    #[serde(rename="PageSize")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>
+    #[serde(rename = "PageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
-    #[doc="<p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>"]
-    #[serde(rename="PageToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>
+    #[serde(rename = "PageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-    #[doc="<p>Resource type.</p>"]
-    #[serde(rename="ResourceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Resource type.</p>
+    #[serde(rename = "ResourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
-    #[doc="<p>Identifier of the TagOption.</p>"]
-    #[serde(rename="TagOptionId")]
+    /// <p>Identifier of the TagOption.</p>
+    #[serde(rename = "TagOptionId")]
     pub tag_option_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListResourcesForTagOptionOutput {
-    #[doc="<p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>"]
-    #[serde(rename="PageToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>
+    #[serde(rename = "PageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-    #[doc="<p>The resulting detailed resource information.</p>"]
-    #[serde(rename="ResourceDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The resulting detailed resource information.</p>
+    #[serde(rename = "ResourceDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_details: Option<Vec<ResourceDetail>>,
 }
 
-#[doc="<p>The ListTagOptions filters.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The ListTagOptions filters.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListTagOptionsFilters {
-    #[doc="<p>The ListTagOptionsFilters active state.</p>"]
-    #[serde(rename="Active")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ListTagOptionsFilters active state.</p>
+    #[serde(rename = "Active")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub active: Option<bool>,
-    #[doc="<p>The ListTagOptionsFilters key.</p>"]
-    #[serde(rename="Key")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ListTagOptionsFilters key.</p>
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    #[doc="<p>The ListTagOptionsFilters value.</p>"]
-    #[serde(rename="Value")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ListTagOptionsFilters value.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListTagOptionsInput {
-    #[doc="<p>The list of filters with which to limit search results. If no search filters are specified, the output is all TagOptions. </p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of filters with which to limit search results. If no search filters are specified, the output is all TagOptions. </p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<ListTagOptionsFilters>,
-    #[doc="<p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>"]
-    #[serde(rename="PageSize")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>
+    #[serde(rename = "PageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
-    #[doc="<p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>"]
-    #[serde(rename="PageToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>
+    #[serde(rename = "PageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListTagOptionsOutput {
-    #[doc="<p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>"]
-    #[serde(rename="PageToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>
+    #[serde(rename = "PageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-    #[doc="<p>The resulting detailed TagOption information.</p>"]
-    #[serde(rename="TagOptionDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The resulting detailed TagOption information.</p>
+    #[serde(rename = "TagOptionDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_option_details: Option<Vec<TagOptionDetail>>,
 }
 
-#[doc="<p>The constraints that the administrator has put on the parameter.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The constraints that the administrator has put on the parameter.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ParameterConstraints {
-    #[doc="<p>The values that the administrator has allowed for the parameter.</p>"]
-    #[serde(rename="AllowedValues")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The values that the administrator has allowed for the parameter.</p>
+    #[serde(rename = "AllowedValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_values: Option<Vec<String>>,
 }
 
-#[doc="<p>Detailed portfolio information.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Detailed portfolio information.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PortfolioDetail {
-    #[doc="<p>The ARN assigned to the portfolio.</p>"]
-    #[serde(rename="ARN")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN assigned to the portfolio.</p>
+    #[serde(rename = "ARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>The UTC timestamp of the creation time.</p>"]
-    #[serde(rename="CreatedTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The UTC timestamp of the creation time.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
-    #[doc="<p>The text description of the portfolio.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The text description of the portfolio.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The name to use for display purposes.</p>"]
-    #[serde(rename="DisplayName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name to use for display purposes.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
-    #[doc="<p>The identifier for the portfolio.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier for the portfolio.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>The name of the portfolio provider.</p>"]
-    #[serde(rename="ProviderName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the portfolio provider.</p>
+    #[serde(rename = "ProviderName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_name: Option<String>,
 }
 
-#[doc="<p>A principal's ARN and type.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A principal's ARN and type.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Principal {
-    #[doc="<p>The ARN representing the principal (IAM user, role, or group).</p>"]
-    #[serde(rename="PrincipalARN")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN representing the principal (IAM user, role, or group).</p>
+    #[serde(rename = "PrincipalARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub principal_arn: Option<String>,
-    #[doc="<p>The principal type. Must be <code>IAM</code> </p>"]
-    #[serde(rename="PrincipalType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The principal type. Must be <code>IAM</code> </p>
+    #[serde(rename = "PrincipalType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub principal_type: Option<String>,
 }
 
-#[doc="<p>A single product view aggregation value/count pair, containing metadata about each product to which the calling user has access.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A single product view aggregation value/count pair, containing metadata about each product to which the calling user has access.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ProductViewAggregationValue {
-    #[doc="<p>An approximate count of the products that match the value.</p>"]
-    #[serde(rename="ApproximateCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An approximate count of the products that match the value.</p>
+    #[serde(rename = "ApproximateCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub approximate_count: Option<i64>,
-    #[doc="<p>The value of the product view aggregation.</p>"]
-    #[serde(rename="Value")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The value of the product view aggregation.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
-#[doc="<p>Detailed product view information.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Detailed product view information.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ProductViewDetail {
-    #[doc="<p>The UTC timestamp of the creation time.</p>"]
-    #[serde(rename="CreatedTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The UTC timestamp of the creation time.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
-    #[doc="<p>The ARN associated with the product.</p>"]
-    #[serde(rename="ProductARN")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN associated with the product.</p>
+    #[serde(rename = "ProductARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub product_arn: Option<String>,
-    #[doc="<p>The summary metadata about the specified product view.</p>"]
-    #[serde(rename="ProductViewSummary")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The summary metadata about the specified product view.</p>
+    #[serde(rename = "ProductViewSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub product_view_summary: Option<ProductViewSummary>,
-    #[doc="<p>Current status of the product.</p> <p> <code>AVAILABLE</code> - Product is available for use.</p> <p> <code>CREATING</code> - Creation of product started, not ready for use.</p> <p> <code>FAILED</code> - Action on product failed.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Current status of the product.</p> <p> <code>AVAILABLE</code> - Product is available for use.</p> <p> <code>CREATING</code> - Creation of product started, not ready for use.</p> <p> <code>FAILED</code> - Action on product failed.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
 
-#[doc="<p>The summary metadata about the specified product.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The summary metadata about the specified product.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ProductViewSummary {
-    #[doc="<p>The distributor of the product. Contact the product administrator for the significance of this value.</p>"]
-    #[serde(rename="Distributor")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The distributor of the product. Contact the product administrator for the significance of this value.</p>
+    #[serde(rename = "Distributor")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub distributor: Option<String>,
-    #[doc="<p>A value of <code>false</code> indicates that the product does not have a default path, while a value of <code>true</code> indicates that it does. If it's false, call <a>ListLaunchPaths</a> to disambiguate between paths. If true, <a>ListLaunchPaths</a> is not required, and the output of the <a>ProductViewSummary</a> operation can be used directly with <a>DescribeProvisioningParameters</a>.</p>"]
-    #[serde(rename="HasDefaultPath")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A value of <code>false</code> indicates that the product does not have a default path, while a value of <code>true</code> indicates that it does. If it's false, call <a>ListLaunchPaths</a> to disambiguate between paths. If true, <a>ListLaunchPaths</a> is not required, and the output of the <a>ProductViewSummary</a> operation can be used directly with <a>DescribeProvisioningParameters</a>.</p>
+    #[serde(rename = "HasDefaultPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub has_default_path: Option<bool>,
-    #[doc="<p>The product view identifier.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The product view identifier.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>The name of the product.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the product.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The owner of the product. Contact the product administrator for the significance of this value.</p>"]
-    #[serde(rename="Owner")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The owner of the product. Contact the product administrator for the significance of this value.</p>
+    #[serde(rename = "Owner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
-    #[doc="<p>The product identifier.</p>"]
-    #[serde(rename="ProductId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The product identifier.</p>
+    #[serde(rename = "ProductId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub product_id: Option<String>,
-    #[doc="<p>Short description of the product.</p>"]
-    #[serde(rename="ShortDescription")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Short description of the product.</p>
+    #[serde(rename = "ShortDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub short_description: Option<String>,
-    #[doc="<p>The description of the support for this Product.</p>"]
-    #[serde(rename="SupportDescription")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The description of the support for this Product.</p>
+    #[serde(rename = "SupportDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub support_description: Option<String>,
-    #[doc="<p>The email contact information to obtain support for this Product.</p>"]
-    #[serde(rename="SupportEmail")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The email contact information to obtain support for this Product.</p>
+    #[serde(rename = "SupportEmail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub support_email: Option<String>,
-    #[doc="<p>The URL information to obtain support for this Product.</p>"]
-    #[serde(rename="SupportUrl")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The URL information to obtain support for this Product.</p>
+    #[serde(rename = "SupportUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub support_url: Option<String>,
-    #[doc="<p>The product type. Contact the product administrator for the significance of this value. If this value is <code>MARKETPLACE</code>, the product was created by AWS Marketplace.</p>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The product type. Contact the product administrator for the significance of this value. If this value is <code>MARKETPLACE</code>, the product was created by AWS Marketplace.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ProvisionProductInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>Passed to CloudFormation. The SNS topic ARNs to which to publish stack-related events.</p>"]
-    #[serde(rename="NotificationArns")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Passed to CloudFormation. The SNS topic ARNs to which to publish stack-related events.</p>
+    #[serde(rename = "NotificationArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_arns: Option<Vec<String>>,
-    #[doc="<p>The identifier of the path for this product's provisioning. This value is optional if the product has a default path, and is required if there is more than one path for the specified product.</p>"]
-    #[serde(rename="PathId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier of the path for this product's provisioning. This value is optional if the product has a default path, and is required if there is more than one path for the specified product.</p>
+    #[serde(rename = "PathId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub path_id: Option<String>,
-    #[doc="<p>The product identifier.</p>"]
-    #[serde(rename="ProductId")]
+    /// <p>The product identifier.</p>
+    #[serde(rename = "ProductId")]
     pub product_id: String,
-    #[doc="<p>An idempotency token that uniquely identifies the provisioning request. </p>"]
-    #[serde(rename="ProvisionToken")]
+    /// <p>An idempotency token that uniquely identifies the provisioning request. </p>
+    #[serde(rename = "ProvisionToken")]
     pub provision_token: String,
-    #[doc="<p>A user-friendly name to identify the ProvisionedProduct object. This value must be unique for the AWS account and cannot be updated after the product is provisioned.</p>"]
-    #[serde(rename="ProvisionedProductName")]
+    /// <p>A user-friendly name to identify the ProvisionedProduct object. This value must be unique for the AWS account and cannot be updated after the product is provisioned.</p>
+    #[serde(rename = "ProvisionedProductName")]
     pub provisioned_product_name: String,
-    #[doc="<p>The provisioning artifact identifier for this product. This is sometimes referred to as the product version.</p>"]
-    #[serde(rename="ProvisioningArtifactId")]
+    /// <p>The provisioning artifact identifier for this product. This is sometimes referred to as the product version.</p>
+    #[serde(rename = "ProvisioningArtifactId")]
     pub provisioning_artifact_id: String,
-    #[doc="<p>Parameters specified by the administrator that are required for provisioning the product.</p>"]
-    #[serde(rename="ProvisioningParameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Parameters specified by the administrator that are required for provisioning the product.</p>
+    #[serde(rename = "ProvisioningParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_parameters: Option<Vec<ProvisioningParameter>>,
-    #[doc="<p>A list of tags to use as provisioning options.</p>"]
-    #[serde(rename="Tags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of tags to use as provisioning options.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ProvisionProductOutput {
-    #[doc="<p>The detailed result of the <a>ProvisionProduct</a> request, containing the inputs made to that request, the current state of the request, a pointer to the ProvisionedProduct object of the request, and a list of any errors that the request encountered. </p>"]
-    #[serde(rename="RecordDetail")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The detailed result of the <a>ProvisionProduct</a> request, containing the inputs made to that request, the current state of the request, a pointer to the ProvisionedProduct object of the request, and a list of any errors that the request encountered. </p>
+    #[serde(rename = "RecordDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub record_detail: Option<RecordDetail>,
 }
 
-#[doc="<p>Detailed information about a ProvisionedProduct object.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Detailed information about a ProvisionedProduct object.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ProvisionedProductDetail {
-    #[doc="<p>The ARN associated with the ProvisionedProduct object.</p>"]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN associated with the ProvisionedProduct object.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>The UTC timestamp of the creation time.</p>"]
-    #[serde(rename="CreatedTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The UTC timestamp of the creation time.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
-    #[doc="<p>The identifier of the ProvisionedProduct object.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier of the ProvisionedProduct object.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>A token to disambiguate duplicate requests. You can create multiple resources using the same input in multiple requests, provided that you also specify a different idempotency token for each request.</p>"]
-    #[serde(rename="IdempotencyToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A token to disambiguate duplicate requests. You can create multiple resources using the same input in multiple requests, provided that you also specify a different idempotency token for each request.</p>
+    #[serde(rename = "IdempotencyToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub idempotency_token: Option<String>,
-    #[doc="<p>The record identifier of the last request performed on this ProvisionedProduct object.</p>"]
-    #[serde(rename="LastRecordId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The record identifier of the last request performed on this ProvisionedProduct object.</p>
+    #[serde(rename = "LastRecordId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_record_id: Option<String>,
-    #[doc="<p>The user-friendly name of the ProvisionedProduct object.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user-friendly name of the ProvisionedProduct object.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The current status of the ProvisionedProduct.</p> <p> <code>AVAILABLE</code> - Stable state, ready to perform any operation. The most recent action request succeeded and completed.</p> <p> <code>UNDER_CHANGE</code> - Transitive state, operations performed may or may not have valid results. Wait for an <code>AVAILABLE</code> status before performing operations.</p> <p> <code>TAINTED</code> - Stable state, ready to perform any operation. The stack has completed the requested operation but is not exactly what was requested. For example, a request to update to a new version failed and the stack rolled back to the current version. </p> <p> <code>ERROR</code> - Something unexpected happened such that the provisioned product exists but the stack is not running. For example, CloudFormation received an invalid parameter value and could not launch the stack.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The current status of the ProvisionedProduct.</p> <p> <code>AVAILABLE</code> - Stable state, ready to perform any operation. The most recent action request succeeded and completed.</p> <p> <code>UNDER_CHANGE</code> - Transitive state, operations performed may or may not have valid results. Wait for an <code>AVAILABLE</code> status before performing operations.</p> <p> <code>TAINTED</code> - Stable state, ready to perform any operation. The stack has completed the requested operation but is not exactly what was requested. For example, a request to update to a new version failed and the stack rolled back to the current version. </p> <p> <code>ERROR</code> - Something unexpected happened such that the provisioned product exists but the stack is not running. For example, CloudFormation received an invalid parameter value and could not launch the stack.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The current status message of the ProvisionedProduct.</p>"]
-    #[serde(rename="StatusMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The current status message of the ProvisionedProduct.</p>
+    #[serde(rename = "StatusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status_message: Option<String>,
-    #[doc="<p>The type of the ProvisionedProduct object.</p>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of the ProvisionedProduct object.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[doc="<p>Contains information indicating the ways in which a product can be provisioned.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains information indicating the ways in which a product can be provisioned.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ProvisioningArtifact {
-    #[doc="<p>The UTC timestamp of the creation time.</p>"]
-    #[serde(rename="CreatedTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The UTC timestamp of the creation time.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
-    #[doc="<p>The text description of the artifact.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The text description of the artifact.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The identifier for the artifact. This is sometimes referred to as the product version.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier for the artifact. This is sometimes referred to as the product version.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>The name of the artifact.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the artifact.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[doc="<p>Detailed provisioning artifact information.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Detailed provisioning artifact information.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ProvisioningArtifactDetail {
-    #[doc="<p>The UTC timestamp of the creation time.</p>"]
-    #[serde(rename="CreatedTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The UTC timestamp of the creation time.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
-    #[doc="<p>The text description of the provisioning artifact.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The text description of the provisioning artifact.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The identifier of the provisioning artifact. This is sometimes referred to as the product version.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier of the provisioning artifact. This is sometimes referred to as the product version.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>The name assigned to the provisioning artifact.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name assigned to the provisioning artifact.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The type of the provisioning artifact. The following provisioning artifact types are used by AWS Marketplace products:</p> <p> <code>MARKETPLACE_AMI</code> - AMI products.</p> <p> <code>MARKETPLACE_CAR</code> - CAR (Cluster and AWS Resources) products.</p>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of the provisioning artifact. The following provisioning artifact types are used by AWS Marketplace products:</p> <p> <code>MARKETPLACE_AMI</code> - AMI products.</p> <p> <code>MARKETPLACE_CAR</code> - CAR (Cluster and AWS Resources) products.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[doc="<p>A parameter used to successfully provision the product. This value includes a list of allowable values and additional metadata. </p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A parameter used to successfully provision the product. This value includes a list of allowable values and additional metadata. </p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ProvisioningArtifactParameter {
-    #[doc="<p>The default value for this parameter.</p>"]
-    #[serde(rename="DefaultValue")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The default value for this parameter.</p>
+    #[serde(rename = "DefaultValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub default_value: Option<String>,
-    #[doc="<p>The text description of the parameter.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The text description of the parameter.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>If this value is true, the value for this parameter is obfuscated from view when the parameter is retrieved. This parameter is used to hide sensitive information.</p>"]
-    #[serde(rename="IsNoEcho")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If this value is true, the value for this parameter is obfuscated from view when the parameter is retrieved. This parameter is used to hide sensitive information.</p>
+    #[serde(rename = "IsNoEcho")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub is_no_echo: Option<bool>,
-    #[doc="<p>The list of constraints that the administrator has put on the parameter.</p>"]
-    #[serde(rename="ParameterConstraints")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of constraints that the administrator has put on the parameter.</p>
+    #[serde(rename = "ParameterConstraints")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_constraints: Option<ParameterConstraints>,
-    #[doc="<p>The parameter key. </p>"]
-    #[serde(rename="ParameterKey")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The parameter key. </p>
+    #[serde(rename = "ParameterKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_key: Option<String>,
-    #[doc="<p>The parameter type.</p>"]
-    #[serde(rename="ParameterType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The parameter type.</p>
+    #[serde(rename = "ParameterType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_type: Option<String>,
 }
 
-#[doc="<p>Provisioning artifact properties. For example request JSON, see <a>CreateProvisioningArtifact</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Provisioning artifact properties. For example request JSON, see <a>CreateProvisioningArtifact</a>.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ProvisioningArtifactProperties {
-    #[doc="<p>The text description of the provisioning artifact properties.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The text description of the provisioning artifact properties.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>Additional information about the provisioning artifact properties. When using this element in a request, you must specify <code>LoadTemplateFromURL</code>. For more information, see <a>CreateProvisioningArtifact</a>.</p>"]
-    #[serde(rename="Info")]
+    /// <p>Additional information about the provisioning artifact properties. When using this element in a request, you must specify <code>LoadTemplateFromURL</code>. For more information, see <a>CreateProvisioningArtifact</a>.</p>
+    #[serde(rename = "Info")]
     pub info: ::std::collections::HashMap<String, String>,
-    #[doc="<p>The name assigned to the provisioning artifact properties.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name assigned to the provisioning artifact properties.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The type of the provisioning artifact properties. The following provisioning artifact property types are used by AWS Marketplace products:</p> <p> <code>MARKETPLACE_AMI</code> - AMI products.</p> <p> <code>MARKETPLACE_CAR</code> - CAR (Cluster and AWS Resources) products.</p>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of the provisioning artifact properties. The following provisioning artifact property types are used by AWS Marketplace products:</p> <p> <code>MARKETPLACE_AMI</code> - AMI products.</p> <p> <code>MARKETPLACE_CAR</code> - CAR (Cluster and AWS Resources) products.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[doc="<p>Stores summary information about a provisioning artifact.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Stores summary information about a provisioning artifact.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ProvisioningArtifactSummary {
-    #[doc="<p>The UTC timestamp of the creation time.</p>"]
-    #[serde(rename="CreatedTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The UTC timestamp of the creation time.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
-    #[doc="<p>The description of the provisioning artifact.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The description of the provisioning artifact.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The identifier of the provisioning artifact.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier of the provisioning artifact.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>The name of the provisioning artifact.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the provisioning artifact.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The provisioning artifact metadata. This data is used with products created by AWS Marketplace.</p>"]
-    #[serde(rename="ProvisioningArtifactMetadata")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The provisioning artifact metadata. This data is used with products created by AWS Marketplace.</p>
+    #[serde(rename = "ProvisioningArtifactMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_artifact_metadata: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[doc="<p>The parameter key-value pairs used to provision a product.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The parameter key-value pairs used to provision a product.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ProvisioningParameter {
-    #[doc="<p>The <code>ProvisioningArtifactParameter.ParameterKey</code> parameter from <a>DescribeProvisioningParameters</a>.</p>"]
-    #[serde(rename="Key")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>ProvisioningArtifactParameter.ParameterKey</code> parameter from <a>DescribeProvisioningParameters</a>.</p>
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    #[doc="<p>The value to use for provisioning. Any constraints on this value can be found in <code>ProvisioningArtifactParameter</code> for <code>Key</code>.</p>"]
-    #[serde(rename="Value")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The value to use for provisioning. Any constraints on this value can be found in <code>ProvisioningArtifactParameter</code> for <code>Key</code>.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
-#[doc="<p>The full details of a specific ProvisionedProduct object.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The full details of a specific ProvisionedProduct object.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RecordDetail {
-    #[doc="<p>The UTC timestamp of the creation time.</p>"]
-    #[serde(rename="CreatedTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The UTC timestamp of the creation time.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
-    #[doc="<p>The identifier of the path for this product's provisioning.</p>"]
-    #[serde(rename="PathId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier of the path for this product's provisioning.</p>
+    #[serde(rename = "PathId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub path_id: Option<String>,
-    #[doc="<p>The product identifier.</p>"]
-    #[serde(rename="ProductId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The product identifier.</p>
+    #[serde(rename = "ProductId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub product_id: Option<String>,
-    #[doc="<p>The identifier of the ProvisionedProduct object.</p>"]
-    #[serde(rename="ProvisionedProductId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier of the ProvisionedProduct object.</p>
+    #[serde(rename = "ProvisionedProductId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_product_id: Option<String>,
-    #[doc="<p>The user-friendly name of the ProvisionedProduct object.</p>"]
-    #[serde(rename="ProvisionedProductName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user-friendly name of the ProvisionedProduct object.</p>
+    #[serde(rename = "ProvisionedProductName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_product_name: Option<String>,
-    #[doc="<p>The type of the ProvisionedProduct object.</p>"]
-    #[serde(rename="ProvisionedProductType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of the ProvisionedProduct object.</p>
+    #[serde(rename = "ProvisionedProductType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_product_type: Option<String>,
-    #[doc="<p>The provisioning artifact identifier for this product. This is sometimes referred to as the product version.</p>"]
-    #[serde(rename="ProvisioningArtifactId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The provisioning artifact identifier for this product. This is sometimes referred to as the product version.</p>
+    #[serde(rename = "ProvisioningArtifactId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_artifact_id: Option<String>,
-    #[doc="<p>A list of errors that occurred while processing the request.</p>"]
-    #[serde(rename="RecordErrors")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of errors that occurred while processing the request.</p>
+    #[serde(rename = "RecordErrors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub record_errors: Option<Vec<RecordError>>,
-    #[doc="<p>The identifier of the ProvisionedProduct object record.</p>"]
-    #[serde(rename="RecordId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier of the ProvisionedProduct object record.</p>
+    #[serde(rename = "RecordId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub record_id: Option<String>,
-    #[doc="<p>List of tags associated with this record.</p>"]
-    #[serde(rename="RecordTags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>List of tags associated with this record.</p>
+    #[serde(rename = "RecordTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub record_tags: Option<Vec<RecordTag>>,
-    #[doc="<p>The record type for this record.</p>"]
-    #[serde(rename="RecordType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The record type for this record.</p>
+    #[serde(rename = "RecordType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub record_type: Option<String>,
-    #[doc="<p>The status of the ProvisionedProduct object.</p> <p> <code>CREATED</code> - Request created but the operation has not yet started.</p> <p> <code>IN_PROGRESS</code> - The requested operation is in-progress.</p> <p> <code>IN_PROGRESS_IN_ERROR</code> - The provisioned product is under change but the requested operation failed and some remediation is occurring. For example, a rollback.</p> <p> <code>SUCCEEDED</code> - The requested operation has successfully completed.</p> <p> <code>FAILED</code> - The requested operation has completed but has failed. Investigate using the error messages returned.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the ProvisionedProduct object.</p> <p> <code>CREATED</code> - Request created but the operation has not yet started.</p> <p> <code>IN_PROGRESS</code> - The requested operation is in-progress.</p> <p> <code>IN_PROGRESS_IN_ERROR</code> - The provisioned product is under change but the requested operation failed and some remediation is occurring. For example, a rollback.</p> <p> <code>SUCCEEDED</code> - The requested operation has successfully completed.</p> <p> <code>FAILED</code> - The requested operation has completed but has failed. Investigate using the error messages returned.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The time when the record for the ProvisionedProduct object was last updated.</p>"]
-    #[serde(rename="UpdatedTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time when the record for the ProvisionedProduct object was last updated.</p>
+    #[serde(rename = "UpdatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_time: Option<f64>,
 }
 
-#[doc="<p>The error code and description resulting from an operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The error code and description resulting from an operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RecordError {
-    #[doc="<p>The numeric value of the error.</p>"]
-    #[serde(rename="Code")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The numeric value of the error.</p>
+    #[serde(rename = "Code")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub code: Option<String>,
-    #[doc="<p>The text description of the error.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The text description of the error.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
 }
 
-#[doc="<p>An output for the specified Product object created as the result of a request. For example, a CloudFormation-backed product that creates an S3 bucket would have an output for the S3 bucket URL.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>An output for the specified Product object created as the result of a request. For example, a CloudFormation-backed product that creates an S3 bucket would have an output for the S3 bucket URL.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RecordOutput {
-    #[doc="<p>The text description of the output.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The text description of the output.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The output key.</p>"]
-    #[serde(rename="OutputKey")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The output key.</p>
+    #[serde(rename = "OutputKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub output_key: Option<String>,
-    #[doc="<p>The output value.</p>"]
-    #[serde(rename="OutputValue")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The output value.</p>
+    #[serde(rename = "OutputValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub output_value: Option<String>,
 }
 
-#[doc="<p>A tag associated with the record, stored as a key-value pair.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A tag associated with the record, stored as a key-value pair.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RecordTag {
-    #[doc="<p>The key for this tag.</p>"]
-    #[serde(rename="Key")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The key for this tag.</p>
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    #[doc="<p>The value for this tag.</p>"]
-    #[serde(rename="Value")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The value for this tag.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct RejectPortfolioShareInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The portfolio identifier.</p>"]
-    #[serde(rename="PortfolioId")]
+    /// <p>The portfolio identifier.</p>
+    #[serde(rename = "PortfolioId")]
     pub portfolio_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RejectPortfolioShareOutput;
 
-#[doc="<p>Detailed resource information.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Detailed resource information.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ResourceDetail {
-    #[doc="<p>ARN of the resource.</p>"]
-    #[serde(rename="ARN")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>ARN of the resource.</p>
+    #[serde(rename = "ARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>Creation time of the resource.</p>"]
-    #[serde(rename="CreatedTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Creation time of the resource.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
-    #[doc="<p>Description of the resource.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Description of the resource.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>Identifier of the resource.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Identifier of the resource.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>Name of the resource.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Name of the resource.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ScanProvisionedProductsInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The access level for obtaining results. If left unspecified, <code>User</code> level access is used.</p>"]
-    #[serde(rename="AccessLevelFilter")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The access level for obtaining results. If left unspecified, <code>User</code> level access is used.</p>
+    #[serde(rename = "AccessLevelFilter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub access_level_filter: Option<AccessLevelFilter>,
-    #[doc="<p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>"]
-    #[serde(rename="PageSize")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>
+    #[serde(rename = "PageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
-    #[doc="<p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>"]
-    #[serde(rename="PageToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>
+    #[serde(rename = "PageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ScanProvisionedProductsOutput {
-    #[doc="<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>"]
-    #[serde(rename="NextPageToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
-    #[doc="<p>A list of ProvisionedProduct detail objects.</p>"]
-    #[serde(rename="ProvisionedProducts")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of ProvisionedProduct detail objects.</p>
+    #[serde(rename = "ProvisionedProducts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_products: Option<Vec<ProvisionedProductDetail>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct SearchProductsAsAdminInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The list of filters with which to limit search results. If no search filters are specified, the output is all the products to which the administrator has access.</p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of filters with which to limit search results. If no search filters are specified, the output is all the products to which the administrator has access.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<::std::collections::HashMap<String, Vec<String>>>,
-    #[doc="<p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>"]
-    #[serde(rename="PageSize")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>
+    #[serde(rename = "PageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
-    #[doc="<p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>"]
-    #[serde(rename="PageToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>
+    #[serde(rename = "PageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-    #[doc="<p>The portfolio identifier.</p>"]
-    #[serde(rename="PortfolioId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The portfolio identifier.</p>
+    #[serde(rename = "PortfolioId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub portfolio_id: Option<String>,
-    #[doc="<p>Access level of the source of the product.</p>"]
-    #[serde(rename="ProductSource")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Access level of the source of the product.</p>
+    #[serde(rename = "ProductSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub product_source: Option<String>,
-    #[doc="<p>The sort field specifier. If no value is specified, results are not sorted.</p>"]
-    #[serde(rename="SortBy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The sort field specifier. If no value is specified, results are not sorted.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sort_by: Option<String>,
-    #[doc="<p>The sort order specifier. If no value is specified, results are not sorted.</p>"]
-    #[serde(rename="SortOrder")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The sort order specifier. If no value is specified, results are not sorted.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sort_order: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct SearchProductsAsAdminOutput {
-    #[doc="<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>"]
-    #[serde(rename="NextPageToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
-    #[doc="<p>List of detailed product view information objects.</p>"]
-    #[serde(rename="ProductViewDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>List of detailed product view information objects.</p>
+    #[serde(rename = "ProductViewDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub product_view_details: Option<Vec<ProductViewDetail>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct SearchProductsInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The list of filters with which to limit search results. If no search filters are specified, the output is all the products to which the calling user has access. </p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of filters with which to limit search results. If no search filters are specified, the output is all the products to which the calling user has access. </p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<::std::collections::HashMap<String, Vec<String>>>,
-    #[doc="<p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>"]
-    #[serde(rename="PageSize")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>
+    #[serde(rename = "PageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
-    #[doc="<p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>"]
-    #[serde(rename="PageToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>
+    #[serde(rename = "PageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-    #[doc="<p>The sort field specifier. If no value is specified, results are not sorted.</p>"]
-    #[serde(rename="SortBy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The sort field specifier. If no value is specified, results are not sorted.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sort_by: Option<String>,
-    #[doc="<p>The sort order specifier. If no value is specified, results are not sorted.</p>"]
-    #[serde(rename="SortOrder")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The sort order specifier. If no value is specified, results are not sorted.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sort_order: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct SearchProductsOutput {
-    #[doc="<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>"]
-    #[serde(rename="NextPageToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
-    #[doc="<p>A list of the product view aggregation value objects.</p>"]
-    #[serde(rename="ProductViewAggregations")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of the product view aggregation value objects.</p>
+    #[serde(rename = "ProductViewAggregations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub product_view_aggregations:
         Option<::std::collections::HashMap<String, Vec<ProductViewAggregationValue>>>,
-    #[doc="<p>A list of the product view summary objects.</p>"]
-    #[serde(rename="ProductViewSummaries")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of the product view summary objects.</p>
+    #[serde(rename = "ProductViewSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub product_view_summaries: Option<Vec<ProductViewSummary>>,
 }
 
-#[doc="<p>Key-value pairs to associate with this provisioning. These tags are entirely discretionary and are propagated to the resources created in the provisioning.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Key-value pairs to associate with this provisioning. These tags are entirely discretionary and are propagated to the resources created in the provisioning.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Tag {
-    #[doc="<p>The <code>ProvisioningArtifactParameter.TagKey</code> parameter from <a>DescribeProvisioningParameters</a>.</p>"]
-    #[serde(rename="Key")]
+    /// <p>The <code>ProvisioningArtifactParameter.TagKey</code> parameter from <a>DescribeProvisioningParameters</a>.</p>
+    #[serde(rename = "Key")]
     pub key: String,
-    #[doc="<p>The desired value for this key.</p>"]
-    #[serde(rename="Value")]
+    /// <p>The desired value for this key.</p>
+    #[serde(rename = "Value")]
     pub value: String,
 }
 
-#[doc="<p>The TagOption details.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The TagOption details.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct TagOptionDetail {
-    #[doc="<p>The TagOptionDetail active state.</p>"]
-    #[serde(rename="Active")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The TagOptionDetail active state.</p>
+    #[serde(rename = "Active")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub active: Option<bool>,
-    #[doc="<p>The TagOptionDetail identifier.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The TagOptionDetail identifier.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>The TagOptionDetail key.</p>"]
-    #[serde(rename="Key")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The TagOptionDetail key.</p>
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    #[doc="<p>The TagOptionDetail value.</p>"]
-    #[serde(rename="Value")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The TagOptionDetail value.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
-#[doc="<p>The TagOption summary key-value pair.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The TagOption summary key-value pair.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct TagOptionSummary {
-    #[doc="<p>The TagOptionSummary key.</p>"]
-    #[serde(rename="Key")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The TagOptionSummary key.</p>
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    #[doc="<p>The TagOptionSummary value.</p>"]
-    #[serde(rename="Values")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The TagOptionSummary value.</p>
+    #[serde(rename = "Values")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct TerminateProvisionedProductInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>If set to true, AWS Service Catalog stops managing the specified ProvisionedProduct object even if it cannot delete the underlying resources.</p>"]
-    #[serde(rename="IgnoreErrors")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If set to true, AWS Service Catalog stops managing the specified ProvisionedProduct object even if it cannot delete the underlying resources.</p>
+    #[serde(rename = "IgnoreErrors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ignore_errors: Option<bool>,
-    #[doc="<p>The identifier of the ProvisionedProduct object to terminate. Specify either <code>ProvisionedProductName</code> or <code>ProvisionedProductId</code>, but not both.</p>"]
-    #[serde(rename="ProvisionedProductId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier of the ProvisionedProduct object to terminate. Specify either <code>ProvisionedProductName</code> or <code>ProvisionedProductId</code>, but not both.</p>
+    #[serde(rename = "ProvisionedProductId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_product_id: Option<String>,
-    #[doc="<p>The name of the ProvisionedProduct object to terminate. Specify either <code>ProvisionedProductName</code> or <code>ProvisionedProductId</code>, but not both.</p>"]
-    #[serde(rename="ProvisionedProductName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the ProvisionedProduct object to terminate. Specify either <code>ProvisionedProductName</code> or <code>ProvisionedProductId</code>, but not both.</p>
+    #[serde(rename = "ProvisionedProductName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_product_name: Option<String>,
-    #[doc="<p>An idempotency token that uniquely identifies the termination request. This token is only valid during the termination process. After the ProvisionedProduct object is terminated, further requests to terminate the same ProvisionedProduct object always return <b>ResourceNotFound</b> regardless of the value of <code>TerminateToken</code>.</p>"]
-    #[serde(rename="TerminateToken")]
+    /// <p>An idempotency token that uniquely identifies the termination request. This token is only valid during the termination process. After the ProvisionedProduct object is terminated, further requests to terminate the same ProvisionedProduct object always return <b>ResourceNotFound</b> regardless of the value of <code>TerminateToken</code>.</p>
+    #[serde(rename = "TerminateToken")]
     pub terminate_token: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct TerminateProvisionedProductOutput {
-    #[doc="<p>The detailed result of the <a>TerminateProvisionedProduct</a> request, containing the inputs made to that request, the current state of the request, a pointer to the ProvisionedProduct object that the request is modifying, and a list of any errors that the request encountered.</p>"]
-    #[serde(rename="RecordDetail")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The detailed result of the <a>TerminateProvisionedProduct</a> request, containing the inputs made to that request, the current state of the request, a pointer to the ProvisionedProduct object that the request is modifying, and a list of any errors that the request encountered.</p>
+    #[serde(rename = "RecordDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub record_detail: Option<RecordDetail>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateConstraintInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The updated text description of the constraint.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The updated text description of the constraint.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The identifier of the constraint to update.</p>"]
-    #[serde(rename="Id")]
+    /// <p>The identifier of the constraint to update.</p>
+    #[serde(rename = "Id")]
     pub id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateConstraintOutput {
-    #[doc="<p>The resulting detailed constraint information.</p>"]
-    #[serde(rename="ConstraintDetail")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The resulting detailed constraint information.</p>
+    #[serde(rename = "ConstraintDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub constraint_detail: Option<ConstraintDetail>,
-    #[doc="<p>The resulting updated constraint parameters.</p>"]
-    #[serde(rename="ConstraintParameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The resulting updated constraint parameters.</p>
+    #[serde(rename = "ConstraintParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub constraint_parameters: Option<String>,
-    #[doc="<p>The status of the current request.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the current request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdatePortfolioInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>Tags to add to the existing list of tags associated with the portfolio.</p>"]
-    #[serde(rename="AddTags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Tags to add to the existing list of tags associated with the portfolio.</p>
+    #[serde(rename = "AddTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub add_tags: Option<Vec<Tag>>,
-    #[doc="<p>The updated text description of the portfolio.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The updated text description of the portfolio.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The name to use for display purposes.</p>"]
-    #[serde(rename="DisplayName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name to use for display purposes.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
-    #[doc="<p>The identifier of the portfolio for the update request.</p>"]
-    #[serde(rename="Id")]
+    /// <p>The identifier of the portfolio for the update request.</p>
+    #[serde(rename = "Id")]
     pub id: String,
-    #[doc="<p>The updated name of the portfolio provider.</p>"]
-    #[serde(rename="ProviderName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The updated name of the portfolio provider.</p>
+    #[serde(rename = "ProviderName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_name: Option<String>,
-    #[doc="<p>Tags to remove from the existing list of tags associated with the portfolio.</p>"]
-    #[serde(rename="RemoveTags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Tags to remove from the existing list of tags associated with the portfolio.</p>
+    #[serde(rename = "RemoveTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub remove_tags: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdatePortfolioOutput {
-    #[doc="<p>The resulting detailed portfolio information.</p>"]
-    #[serde(rename="PortfolioDetail")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The resulting detailed portfolio information.</p>
+    #[serde(rename = "PortfolioDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub portfolio_detail: Option<PortfolioDetail>,
-    #[doc="<p>Tags associated with the portfolio.</p>"]
-    #[serde(rename="Tags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Tags associated with the portfolio.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateProductInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>Tags to add to the existing list of tags associated with the product.</p>"]
-    #[serde(rename="AddTags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Tags to add to the existing list of tags associated with the product.</p>
+    #[serde(rename = "AddTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub add_tags: Option<Vec<Tag>>,
-    #[doc="<p>The updated text description of the product.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The updated text description of the product.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The updated distributor of the product.</p>"]
-    #[serde(rename="Distributor")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The updated distributor of the product.</p>
+    #[serde(rename = "Distributor")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub distributor: Option<String>,
-    #[doc="<p>The identifier of the product for the update request.</p>"]
-    #[serde(rename="Id")]
+    /// <p>The identifier of the product for the update request.</p>
+    #[serde(rename = "Id")]
     pub id: String,
-    #[doc="<p>The updated product name.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The updated product name.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The updated owner of the product.</p>"]
-    #[serde(rename="Owner")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The updated owner of the product.</p>
+    #[serde(rename = "Owner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
-    #[doc="<p>Tags to remove from the existing list of tags associated with the product.</p>"]
-    #[serde(rename="RemoveTags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Tags to remove from the existing list of tags associated with the product.</p>
+    #[serde(rename = "RemoveTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub remove_tags: Option<Vec<String>>,
-    #[doc="<p>The updated support description for the product.</p>"]
-    #[serde(rename="SupportDescription")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The updated support description for the product.</p>
+    #[serde(rename = "SupportDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub support_description: Option<String>,
-    #[doc="<p>The updated support email for the product.</p>"]
-    #[serde(rename="SupportEmail")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The updated support email for the product.</p>
+    #[serde(rename = "SupportEmail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub support_email: Option<String>,
-    #[doc="<p>The updated support URL for the product.</p>"]
-    #[serde(rename="SupportUrl")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The updated support URL for the product.</p>
+    #[serde(rename = "SupportUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub support_url: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateProductOutput {
-    #[doc="<p>The resulting detailed product view information.</p>"]
-    #[serde(rename="ProductViewDetail")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The resulting detailed product view information.</p>
+    #[serde(rename = "ProductViewDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub product_view_detail: Option<ProductViewDetail>,
-    #[doc="<p>Tags associated with the product.</p>"]
-    #[serde(rename="Tags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Tags associated with the product.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateProvisionedProductInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The identifier of the path to use in the updated ProvisionedProduct object. This value is optional if the product has a default path, and is required if there is more than one path for the specified product.</p>"]
-    #[serde(rename="PathId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier of the path to use in the updated ProvisionedProduct object. This value is optional if the product has a default path, and is required if there is more than one path for the specified product.</p>
+    #[serde(rename = "PathId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub path_id: Option<String>,
-    #[doc="<p>The identifier of the ProvisionedProduct object.</p>"]
-    #[serde(rename="ProductId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier of the ProvisionedProduct object.</p>
+    #[serde(rename = "ProductId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub product_id: Option<String>,
-    #[doc="<p>The identifier of the ProvisionedProduct object to update. Specify either <code>ProvisionedProductName</code> or <code>ProvisionedProductId</code>, but not both.</p>"]
-    #[serde(rename="ProvisionedProductId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier of the ProvisionedProduct object to update. Specify either <code>ProvisionedProductName</code> or <code>ProvisionedProductId</code>, but not both.</p>
+    #[serde(rename = "ProvisionedProductId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_product_id: Option<String>,
-    #[doc="<p>The updated name of the ProvisionedProduct object. Specify either <code>ProvisionedProductName</code> or <code>ProvisionedProductId</code>, but not both.</p>"]
-    #[serde(rename="ProvisionedProductName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The updated name of the ProvisionedProduct object. Specify either <code>ProvisionedProductName</code> or <code>ProvisionedProductId</code>, but not both.</p>
+    #[serde(rename = "ProvisionedProductName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_product_name: Option<String>,
-    #[doc="<p>The provisioning artifact identifier for this product. This is sometimes referred to as the product version.</p>"]
-    #[serde(rename="ProvisioningArtifactId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The provisioning artifact identifier for this product. This is sometimes referred to as the product version.</p>
+    #[serde(rename = "ProvisioningArtifactId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_artifact_id: Option<String>,
-    #[doc="<p>A list of <code>ProvisioningParameter</code> objects used to update the ProvisionedProduct object.</p>"]
-    #[serde(rename="ProvisioningParameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of <code>ProvisioningParameter</code> objects used to update the ProvisionedProduct object.</p>
+    #[serde(rename = "ProvisioningParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_parameters: Option<Vec<UpdateProvisioningParameter>>,
-    #[doc="<p>The idempotency token that uniquely identifies the provisioning update request.</p>"]
-    #[serde(rename="UpdateToken")]
+    /// <p>The idempotency token that uniquely identifies the provisioning update request.</p>
+    #[serde(rename = "UpdateToken")]
     pub update_token: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateProvisionedProductOutput {
-    #[doc="<p>The detailed result of the <a>UpdateProvisionedProduct</a> request, containing the inputs made to that request, the current state of the request, a pointer to the ProvisionedProduct object that the request is modifying, and a list of any errors that the request encountered.</p>"]
-    #[serde(rename="RecordDetail")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The detailed result of the <a>UpdateProvisionedProduct</a> request, containing the inputs made to that request, the current state of the request, a pointer to the ProvisionedProduct object that the request is modifying, and a list of any errors that the request encountered.</p>
+    #[serde(rename = "RecordDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub record_detail: Option<RecordDetail>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateProvisioningArtifactInput {
-    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
-    #[serde(rename="AcceptLanguage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    #[doc="<p>The updated text description of the provisioning artifact.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The updated text description of the provisioning artifact.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The updated name of the provisioning artifact.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The updated name of the provisioning artifact.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The product identifier.</p>"]
-    #[serde(rename="ProductId")]
+    /// <p>The product identifier.</p>
+    #[serde(rename = "ProductId")]
     pub product_id: String,
-    #[doc="<p>The identifier of the provisioning artifact for the update request. This is sometimes referred to as the product version.</p>"]
-    #[serde(rename="ProvisioningArtifactId")]
+    /// <p>The identifier of the provisioning artifact for the update request. This is sometimes referred to as the product version.</p>
+    #[serde(rename = "ProvisioningArtifactId")]
     pub provisioning_artifact_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateProvisioningArtifactOutput {
-    #[doc="<p>Additional information about the provisioning artifact update request.</p>"]
-    #[serde(rename="Info")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Additional information about the provisioning artifact update request.</p>
+    #[serde(rename = "Info")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub info: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The resulting detailed provisioning artifact information.</p>"]
-    #[serde(rename="ProvisioningArtifactDetail")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The resulting detailed provisioning artifact information.</p>
+    #[serde(rename = "ProvisioningArtifactDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_artifact_detail: Option<ProvisioningArtifactDetail>,
-    #[doc="<p>The status of the current request.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the current request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
 
-#[doc="<p>The parameter key-value pair used to update a ProvisionedProduct object. If <code>UsePreviousValue</code> is set to true, <code>Value</code> is ignored and the value for <code>Key</code> is kept as previously set (current value).</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The parameter key-value pair used to update a ProvisionedProduct object. If <code>UsePreviousValue</code> is set to true, <code>Value</code> is ignored and the value for <code>Key</code> is kept as previously set (current value).</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateProvisioningParameter {
-    #[doc="<p>The <code>ProvisioningArtifactParameter.ParameterKey</code> parameter from <a>DescribeProvisioningParameters</a>.</p>"]
-    #[serde(rename="Key")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>ProvisioningArtifactParameter.ParameterKey</code> parameter from <a>DescribeProvisioningParameters</a>.</p>
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    #[doc="<p>If true, uses the currently set value for <code>Key</code>, ignoring <code>UpdateProvisioningParameter.Value</code>.</p>"]
-    #[serde(rename="UsePreviousValue")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If true, uses the currently set value for <code>Key</code>, ignoring <code>UpdateProvisioningParameter.Value</code>.</p>
+    #[serde(rename = "UsePreviousValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub use_previous_value: Option<bool>,
-    #[doc="<p>The value to use for updating the product provisioning. Any constraints on this value can be found in the <code>ProvisioningArtifactParameter</code> parameter for <code>Key</code>.</p>"]
-    #[serde(rename="Value")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The value to use for updating the product provisioning. Any constraints on this value can be found in the <code>ProvisioningArtifactParameter</code> parameter for <code>Key</code>.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateTagOptionInput {
-    #[doc="<p>The updated active state.</p>"]
-    #[serde(rename="Active")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The updated active state.</p>
+    #[serde(rename = "Active")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub active: Option<bool>,
-    #[doc="<p>The identifier of the constraint to update.</p>"]
-    #[serde(rename="Id")]
+    /// <p>The identifier of the constraint to update.</p>
+    #[serde(rename = "Id")]
     pub id: String,
-    #[doc="<p>The updated value.</p>"]
-    #[serde(rename="Value")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The updated value.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateTagOptionOutput {
-    #[doc="<p>The resulting detailed TagOption information.</p>"]
-    #[serde(rename="TagOptionDetail")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The resulting detailed TagOption information.</p>
+    #[serde(rename = "TagOptionDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_option_detail: Option<TagOptionDetail>,
 }
 
-#[doc="<p>Additional information provided by the administrator.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Additional information provided by the administrator.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UsageInstruction {
-    #[doc="<p>The usage instruction type for the value.</p>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The usage instruction type for the value.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
-    #[doc="<p>The usage instruction value for this type.</p>"]
-    #[serde(rename="Value")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The usage instruction value for this type.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
@@ -2102,7 +2101,6 @@ pub enum AcceptPortfolioShareError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl AcceptPortfolioShareError {
     pub fn from_body(body: &str) -> AcceptPortfolioShareError {
@@ -2196,7 +2194,6 @@ pub enum AssociatePrincipalWithPortfolioError {
     Unknown(String),
 }
 
-
 impl AssociatePrincipalWithPortfolioError {
     pub fn from_body(body: &str) -> AssociatePrincipalWithPortfolioError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2210,9 +2207,21 @@ impl AssociatePrincipalWithPortfolioError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidParametersException" => AssociatePrincipalWithPortfolioError::InvalidParameters(String::from(error_message)),
-                    "LimitExceededException" => AssociatePrincipalWithPortfolioError::LimitExceeded(String::from(error_message)),
-                    "ResourceNotFoundException" => AssociatePrincipalWithPortfolioError::ResourceNotFound(String::from(error_message)),
+                    "InvalidParametersException" => {
+                        AssociatePrincipalWithPortfolioError::InvalidParameters(String::from(
+                            error_message,
+                        ))
+                    }
+                    "LimitExceededException" => {
+                        AssociatePrincipalWithPortfolioError::LimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundException" => {
+                        AssociatePrincipalWithPortfolioError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         AssociatePrincipalWithPortfolioError::Validation(error_message.to_string())
                     }
@@ -2283,7 +2292,6 @@ pub enum AssociateProductWithPortfolioError {
     Unknown(String),
 }
 
-
 impl AssociateProductWithPortfolioError {
     pub fn from_body(body: &str) -> AssociateProductWithPortfolioError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2297,9 +2305,19 @@ impl AssociateProductWithPortfolioError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidParametersException" => AssociateProductWithPortfolioError::InvalidParameters(String::from(error_message)),
-                    "LimitExceededException" => AssociateProductWithPortfolioError::LimitExceeded(String::from(error_message)),
-                    "ResourceNotFoundException" => AssociateProductWithPortfolioError::ResourceNotFound(String::from(error_message)),
+                    "InvalidParametersException" => {
+                        AssociateProductWithPortfolioError::InvalidParameters(String::from(
+                            error_message,
+                        ))
+                    }
+                    "LimitExceededException" => AssociateProductWithPortfolioError::LimitExceeded(
+                        String::from(error_message),
+                    ),
+                    "ResourceNotFoundException" => {
+                        AssociateProductWithPortfolioError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         AssociateProductWithPortfolioError::Validation(error_message.to_string())
                     }
@@ -2376,7 +2394,6 @@ pub enum AssociateTagOptionWithResourceError {
     Unknown(String),
 }
 
-
 impl AssociateTagOptionWithResourceError {
     pub fn from_body(body: &str) -> AssociateTagOptionWithResourceError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2390,12 +2407,34 @@ impl AssociateTagOptionWithResourceError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DuplicateResourceException" => AssociateTagOptionWithResourceError::DuplicateResource(String::from(error_message)),
-                    "InvalidParametersException" => AssociateTagOptionWithResourceError::InvalidParameters(String::from(error_message)),
-                    "InvalidStateException" => AssociateTagOptionWithResourceError::InvalidState(String::from(error_message)),
-                    "LimitExceededException" => AssociateTagOptionWithResourceError::LimitExceeded(String::from(error_message)),
-                    "ResourceNotFoundException" => AssociateTagOptionWithResourceError::ResourceNotFound(String::from(error_message)),
-                    "TagOptionNotMigratedException" => AssociateTagOptionWithResourceError::TagOptionNotMigrated(String::from(error_message)),
+                    "DuplicateResourceException" => {
+                        AssociateTagOptionWithResourceError::DuplicateResource(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidParametersException" => {
+                        AssociateTagOptionWithResourceError::InvalidParameters(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidStateException" => AssociateTagOptionWithResourceError::InvalidState(
+                        String::from(error_message),
+                    ),
+                    "LimitExceededException" => {
+                        AssociateTagOptionWithResourceError::LimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundException" => {
+                        AssociateTagOptionWithResourceError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "TagOptionNotMigratedException" => {
+                        AssociateTagOptionWithResourceError::TagOptionNotMigrated(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         AssociateTagOptionWithResourceError::Validation(error_message.to_string())
                     }
@@ -2470,7 +2509,6 @@ pub enum CreateConstraintError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateConstraintError {
     pub fn from_body(body: &str) -> CreateConstraintError {
@@ -2566,7 +2604,6 @@ pub enum CreatePortfolioError {
     Unknown(String),
 }
 
-
 impl CreatePortfolioError {
     pub fn from_body(body: &str) -> CreatePortfolioError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2656,7 +2693,6 @@ pub enum CreatePortfolioShareError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreatePortfolioShareError {
     pub fn from_body(body: &str) -> CreatePortfolioShareError {
@@ -2750,7 +2786,6 @@ pub enum CreateProductError {
     Unknown(String),
 }
 
-
 impl CreateProductError {
     pub fn from_body(body: &str) -> CreateProductError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2841,7 +2876,6 @@ pub enum CreateProvisioningArtifactError {
     Unknown(String),
 }
 
-
 impl CreateProvisioningArtifactError {
     pub fn from_body(body: &str) -> CreateProvisioningArtifactError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2855,11 +2889,19 @@ impl CreateProvisioningArtifactError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidParametersException" => CreateProvisioningArtifactError::InvalidParameters(String::from(error_message)),
+                    "InvalidParametersException" => {
+                        CreateProvisioningArtifactError::InvalidParameters(String::from(
+                            error_message,
+                        ))
+                    }
                     "LimitExceededException" => {
                         CreateProvisioningArtifactError::LimitExceeded(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => CreateProvisioningArtifactError::ResourceNotFound(String::from(error_message)),
+                    "ResourceNotFoundException" => {
+                        CreateProvisioningArtifactError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         CreateProvisioningArtifactError::Validation(error_message.to_string())
                     }
@@ -2929,7 +2971,6 @@ pub enum CreateTagOptionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateTagOptionError {
     pub fn from_body(body: &str) -> CreateTagOptionError {
@@ -3019,7 +3060,6 @@ pub enum DeleteConstraintError {
     Unknown(String),
 }
 
-
 impl DeleteConstraintError {
     pub fn from_body(body: &str) -> DeleteConstraintError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3107,7 +3147,6 @@ pub enum DeletePortfolioError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeletePortfolioError {
     pub fn from_body(body: &str) -> DeletePortfolioError {
@@ -3199,7 +3238,6 @@ pub enum DeletePortfolioShareError {
     Unknown(String),
 }
 
-
 impl DeletePortfolioShareError {
     pub fn from_body(body: &str) -> DeletePortfolioShareError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3285,7 +3323,6 @@ pub enum DeleteProductError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteProductError {
     pub fn from_body(body: &str) -> DeleteProductError {
@@ -3381,7 +3418,6 @@ pub enum DeleteProvisioningArtifactError {
     Unknown(String),
 }
 
-
 impl DeleteProvisioningArtifactError {
     pub fn from_body(body: &str) -> DeleteProvisioningArtifactError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3395,11 +3431,19 @@ impl DeleteProvisioningArtifactError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidParametersException" => DeleteProvisioningArtifactError::InvalidParameters(String::from(error_message)),
+                    "InvalidParametersException" => {
+                        DeleteProvisioningArtifactError::InvalidParameters(String::from(
+                            error_message,
+                        ))
+                    }
                     "ResourceInUseException" => {
                         DeleteProvisioningArtifactError::ResourceInUse(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => DeleteProvisioningArtifactError::ResourceNotFound(String::from(error_message)),
+                    "ResourceNotFoundException" => {
+                        DeleteProvisioningArtifactError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DeleteProvisioningArtifactError::Validation(error_message.to_string())
                     }
@@ -3465,7 +3509,6 @@ pub enum DescribeConstraintError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeConstraintError {
     pub fn from_body(body: &str) -> DescribeConstraintError {
@@ -3546,7 +3589,6 @@ pub enum DescribePortfolioError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribePortfolioError {
     pub fn from_body(body: &str) -> DescribePortfolioError {
@@ -3630,7 +3672,6 @@ pub enum DescribeProductError {
     Unknown(String),
 }
 
-
 impl DescribeProductError {
     pub fn from_body(body: &str) -> DescribeProductError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3713,7 +3754,6 @@ pub enum DescribeProductAsAdminError {
     Unknown(String),
 }
 
-
 impl DescribeProductAsAdminError {
     pub fn from_body(body: &str) -> DescribeProductAsAdminError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3795,7 +3835,6 @@ pub enum DescribeProductViewError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeProductViewError {
     pub fn from_body(body: &str) -> DescribeProductViewError {
@@ -3881,7 +3920,6 @@ pub enum DescribeProvisionedProductError {
     Unknown(String),
 }
 
-
 impl DescribeProvisionedProductError {
     pub fn from_body(body: &str) -> DescribeProvisionedProductError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3895,7 +3933,11 @@ impl DescribeProvisionedProductError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ResourceNotFoundException" => DescribeProvisionedProductError::ResourceNotFound(String::from(error_message)),
+                    "ResourceNotFoundException" => {
+                        DescribeProvisionedProductError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeProvisionedProductError::Validation(error_message.to_string())
                     }
@@ -3960,7 +4002,6 @@ pub enum DescribeProvisioningArtifactError {
     Unknown(String),
 }
 
-
 impl DescribeProvisioningArtifactError {
     pub fn from_body(body: &str) -> DescribeProvisioningArtifactError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3974,7 +4015,11 @@ impl DescribeProvisioningArtifactError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ResourceNotFoundException" => DescribeProvisioningArtifactError::ResourceNotFound(String::from(error_message)),
+                    "ResourceNotFoundException" => {
+                        DescribeProvisioningArtifactError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeProvisioningArtifactError::Validation(error_message.to_string())
                     }
@@ -4041,7 +4086,6 @@ pub enum DescribeProvisioningParametersError {
     Unknown(String),
 }
 
-
 impl DescribeProvisioningParametersError {
     pub fn from_body(body: &str) -> DescribeProvisioningParametersError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4055,8 +4099,16 @@ impl DescribeProvisioningParametersError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidParametersException" => DescribeProvisioningParametersError::InvalidParameters(String::from(error_message)),
-                    "ResourceNotFoundException" => DescribeProvisioningParametersError::ResourceNotFound(String::from(error_message)),
+                    "InvalidParametersException" => {
+                        DescribeProvisioningParametersError::InvalidParameters(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundException" => {
+                        DescribeProvisioningParametersError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeProvisioningParametersError::Validation(error_message.to_string())
                     }
@@ -4121,7 +4173,6 @@ pub enum DescribeRecordError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeRecordError {
     pub fn from_body(body: &str) -> DescribeRecordError {
@@ -4202,7 +4253,6 @@ pub enum DescribeTagOptionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeTagOptionError {
     pub fn from_body(body: &str) -> DescribeTagOptionError {
@@ -4290,7 +4340,6 @@ pub enum DisassociatePrincipalFromPortfolioError {
     Unknown(String),
 }
 
-
 impl DisassociatePrincipalFromPortfolioError {
     pub fn from_body(body: &str) -> DisassociatePrincipalFromPortfolioError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4304,12 +4353,19 @@ impl DisassociatePrincipalFromPortfolioError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidParametersException" => DisassociatePrincipalFromPortfolioError::InvalidParameters(String::from(error_message)),
-                    "ResourceNotFoundException" => DisassociatePrincipalFromPortfolioError::ResourceNotFound(String::from(error_message)),
-                    "ValidationException" => {
-                        DisassociatePrincipalFromPortfolioError::Validation(error_message
-                                                                                .to_string())
+                    "InvalidParametersException" => {
+                        DisassociatePrincipalFromPortfolioError::InvalidParameters(String::from(
+                            error_message,
+                        ))
                     }
+                    "ResourceNotFoundException" => {
+                        DisassociatePrincipalFromPortfolioError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => DisassociatePrincipalFromPortfolioError::Validation(
+                        error_message.to_string(),
+                    ),
                     _ => DisassociatePrincipalFromPortfolioError::Unknown(String::from(body)),
                 }
             }
@@ -4376,7 +4432,6 @@ pub enum DisassociateProductFromPortfolioError {
     Unknown(String),
 }
 
-
 impl DisassociateProductFromPortfolioError {
     pub fn from_body(body: &str) -> DisassociateProductFromPortfolioError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4390,9 +4445,21 @@ impl DisassociateProductFromPortfolioError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidParametersException" => DisassociateProductFromPortfolioError::InvalidParameters(String::from(error_message)),
-                    "ResourceInUseException" => DisassociateProductFromPortfolioError::ResourceInUse(String::from(error_message)),
-                    "ResourceNotFoundException" => DisassociateProductFromPortfolioError::ResourceNotFound(String::from(error_message)),
+                    "InvalidParametersException" => {
+                        DisassociateProductFromPortfolioError::InvalidParameters(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceInUseException" => {
+                        DisassociateProductFromPortfolioError::ResourceInUse(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundException" => {
+                        DisassociateProductFromPortfolioError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DisassociateProductFromPortfolioError::Validation(error_message.to_string())
                     }
@@ -4461,7 +4528,6 @@ pub enum DisassociateTagOptionFromResourceError {
     Unknown(String),
 }
 
-
 impl DisassociateTagOptionFromResourceError {
     pub fn from_body(body: &str) -> DisassociateTagOptionFromResourceError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4475,12 +4541,19 @@ impl DisassociateTagOptionFromResourceError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ResourceNotFoundException" => DisassociateTagOptionFromResourceError::ResourceNotFound(String::from(error_message)),
-                    "TagOptionNotMigratedException" => DisassociateTagOptionFromResourceError::TagOptionNotMigrated(String::from(error_message)),
-                    "ValidationException" => {
-                        DisassociateTagOptionFromResourceError::Validation(error_message
-                                                                               .to_string())
+                    "ResourceNotFoundException" => {
+                        DisassociateTagOptionFromResourceError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
                     }
+                    "TagOptionNotMigratedException" => {
+                        DisassociateTagOptionFromResourceError::TagOptionNotMigrated(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => DisassociateTagOptionFromResourceError::Validation(
+                        error_message.to_string(),
+                    ),
                     _ => DisassociateTagOptionFromResourceError::Unknown(String::from(body)),
                 }
             }
@@ -4543,7 +4616,6 @@ pub enum ListAcceptedPortfolioSharesError {
     Unknown(String),
 }
 
-
 impl ListAcceptedPortfolioSharesError {
     pub fn from_body(body: &str) -> ListAcceptedPortfolioSharesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4557,7 +4629,11 @@ impl ListAcceptedPortfolioSharesError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidParametersException" => ListAcceptedPortfolioSharesError::InvalidParameters(String::from(error_message)),
+                    "InvalidParametersException" => {
+                        ListAcceptedPortfolioSharesError::InvalidParameters(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         ListAcceptedPortfolioSharesError::Validation(error_message.to_string())
                     }
@@ -4624,7 +4700,6 @@ pub enum ListConstraintsForPortfolioError {
     Unknown(String),
 }
 
-
 impl ListConstraintsForPortfolioError {
     pub fn from_body(body: &str) -> ListConstraintsForPortfolioError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4638,8 +4713,16 @@ impl ListConstraintsForPortfolioError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidParametersException" => ListConstraintsForPortfolioError::InvalidParameters(String::from(error_message)),
-                    "ResourceNotFoundException" => ListConstraintsForPortfolioError::ResourceNotFound(String::from(error_message)),
+                    "InvalidParametersException" => {
+                        ListConstraintsForPortfolioError::InvalidParameters(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundException" => {
+                        ListConstraintsForPortfolioError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         ListConstraintsForPortfolioError::Validation(error_message.to_string())
                     }
@@ -4706,7 +4789,6 @@ pub enum ListLaunchPathsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListLaunchPathsError {
     pub fn from_body(body: &str) -> ListLaunchPathsError {
@@ -4790,7 +4872,6 @@ pub enum ListPortfolioAccessError {
     Unknown(String),
 }
 
-
 impl ListPortfolioAccessError {
     pub fn from_body(body: &str) -> ListPortfolioAccessError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4870,7 +4951,6 @@ pub enum ListPortfoliosError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListPortfoliosError {
     pub fn from_body(body: &str) -> ListPortfoliosError {
@@ -4952,7 +5032,6 @@ pub enum ListPortfoliosForProductError {
     Unknown(String),
 }
 
-
 impl ListPortfoliosForProductError {
     pub fn from_body(body: &str) -> ListPortfoliosForProductError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4966,7 +5045,11 @@ impl ListPortfoliosForProductError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidParametersException" => ListPortfoliosForProductError::InvalidParameters(String::from(error_message)),
+                    "InvalidParametersException" => {
+                        ListPortfoliosForProductError::InvalidParameters(String::from(
+                            error_message,
+                        ))
+                    }
                     "ResourceNotFoundException" => {
                         ListPortfoliosForProductError::ResourceNotFound(String::from(error_message))
                     }
@@ -5037,7 +5120,6 @@ pub enum ListPrincipalsForPortfolioError {
     Unknown(String),
 }
 
-
 impl ListPrincipalsForPortfolioError {
     pub fn from_body(body: &str) -> ListPrincipalsForPortfolioError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5051,8 +5133,16 @@ impl ListPrincipalsForPortfolioError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidParametersException" => ListPrincipalsForPortfolioError::InvalidParameters(String::from(error_message)),
-                    "ResourceNotFoundException" => ListPrincipalsForPortfolioError::ResourceNotFound(String::from(error_message)),
+                    "InvalidParametersException" => {
+                        ListPrincipalsForPortfolioError::InvalidParameters(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundException" => {
+                        ListPrincipalsForPortfolioError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         ListPrincipalsForPortfolioError::Validation(error_message.to_string())
                     }
@@ -5120,7 +5210,6 @@ pub enum ListProvisioningArtifactsError {
     Unknown(String),
 }
 
-
 impl ListProvisioningArtifactsError {
     pub fn from_body(body: &str) -> ListProvisioningArtifactsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5134,8 +5223,16 @@ impl ListProvisioningArtifactsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidParametersException" => ListProvisioningArtifactsError::InvalidParameters(String::from(error_message)),
-                    "ResourceNotFoundException" => ListProvisioningArtifactsError::ResourceNotFound(String::from(error_message)),
+                    "InvalidParametersException" => {
+                        ListProvisioningArtifactsError::InvalidParameters(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundException" => {
+                        ListProvisioningArtifactsError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         ListProvisioningArtifactsError::Validation(error_message.to_string())
                     }
@@ -5200,7 +5297,6 @@ pub enum ListRecordHistoryError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListRecordHistoryError {
     pub fn from_body(body: &str) -> ListRecordHistoryError {
@@ -5286,7 +5382,6 @@ pub enum ListResourcesForTagOptionError {
     Unknown(String),
 }
 
-
 impl ListResourcesForTagOptionError {
     pub fn from_body(body: &str) -> ListResourcesForTagOptionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5300,9 +5395,21 @@ impl ListResourcesForTagOptionError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidParametersException" => ListResourcesForTagOptionError::InvalidParameters(String::from(error_message)),
-                    "ResourceNotFoundException" => ListResourcesForTagOptionError::ResourceNotFound(String::from(error_message)),
-                    "TagOptionNotMigratedException" => ListResourcesForTagOptionError::TagOptionNotMigrated(String::from(error_message)),
+                    "InvalidParametersException" => {
+                        ListResourcesForTagOptionError::InvalidParameters(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundException" => {
+                        ListResourcesForTagOptionError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "TagOptionNotMigratedException" => {
+                        ListResourcesForTagOptionError::TagOptionNotMigrated(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         ListResourcesForTagOptionError::Validation(error_message.to_string())
                     }
@@ -5370,7 +5477,6 @@ pub enum ListTagOptionsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListTagOptionsError {
     pub fn from_body(body: &str) -> ListTagOptionsError {
@@ -5458,7 +5564,6 @@ pub enum ProvisionProductError {
     Unknown(String),
 }
 
-
 impl ProvisionProductError {
     pub fn from_body(body: &str) -> ProvisionProductError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5545,7 +5650,6 @@ pub enum RejectPortfolioShareError {
     Unknown(String),
 }
 
-
 impl RejectPortfolioShareError {
     pub fn from_body(body: &str) -> RejectPortfolioShareError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5625,7 +5729,6 @@ pub enum ScanProvisionedProductsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ScanProvisionedProductsError {
     pub fn from_body(body: &str) -> ScanProvisionedProductsError {
@@ -5707,7 +5810,6 @@ pub enum SearchProductsError {
     Unknown(String),
 }
 
-
 impl SearchProductsError {
     pub fn from_body(body: &str) -> SearchProductsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5787,7 +5889,6 @@ pub enum SearchProductsAsAdminError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl SearchProductsAsAdminError {
     pub fn from_body(body: &str) -> SearchProductsAsAdminError {
@@ -5873,7 +5974,6 @@ pub enum TerminateProvisionedProductError {
     Unknown(String),
 }
 
-
 impl TerminateProvisionedProductError {
     pub fn from_body(body: &str) -> TerminateProvisionedProductError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5887,7 +5987,11 @@ impl TerminateProvisionedProductError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ResourceNotFoundException" => TerminateProvisionedProductError::ResourceNotFound(String::from(error_message)),
+                    "ResourceNotFoundException" => {
+                        TerminateProvisionedProductError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         TerminateProvisionedProductError::Validation(error_message.to_string())
                     }
@@ -5953,7 +6057,6 @@ pub enum UpdateConstraintError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl UpdateConstraintError {
     pub fn from_body(body: &str) -> UpdateConstraintError {
@@ -6042,7 +6145,6 @@ pub enum UpdatePortfolioError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl UpdatePortfolioError {
     pub fn from_body(body: &str) -> UpdatePortfolioError {
@@ -6138,7 +6240,6 @@ pub enum UpdateProductError {
     Unknown(String),
 }
 
-
 impl UpdateProductError {
     pub fn from_body(body: &str) -> UpdateProductError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6227,7 +6328,6 @@ pub enum UpdateProvisionedProductError {
     Unknown(String),
 }
 
-
 impl UpdateProvisionedProductError {
     pub fn from_body(body: &str) -> UpdateProvisionedProductError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6241,7 +6341,11 @@ impl UpdateProvisionedProductError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidParametersException" => UpdateProvisionedProductError::InvalidParameters(String::from(error_message)),
+                    "InvalidParametersException" => {
+                        UpdateProvisionedProductError::InvalidParameters(String::from(
+                            error_message,
+                        ))
+                    }
                     "ResourceNotFoundException" => {
                         UpdateProvisionedProductError::ResourceNotFound(String::from(error_message))
                     }
@@ -6312,7 +6416,6 @@ pub enum UpdateProvisioningArtifactError {
     Unknown(String),
 }
 
-
 impl UpdateProvisioningArtifactError {
     pub fn from_body(body: &str) -> UpdateProvisioningArtifactError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6326,8 +6429,16 @@ impl UpdateProvisioningArtifactError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidParametersException" => UpdateProvisioningArtifactError::InvalidParameters(String::from(error_message)),
-                    "ResourceNotFoundException" => UpdateProvisioningArtifactError::ResourceNotFound(String::from(error_message)),
+                    "InvalidParametersException" => {
+                        UpdateProvisioningArtifactError::InvalidParameters(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundException" => {
+                        UpdateProvisioningArtifactError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         UpdateProvisioningArtifactError::Validation(error_message.to_string())
                     }
@@ -6398,7 +6509,6 @@ pub enum UpdateTagOptionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl UpdateTagOptionError {
     pub fn from_body(body: &str) -> UpdateTagOptionError {
@@ -6477,339 +6587,317 @@ impl Error for UpdateTagOptionError {
 }
 /// Trait representing the capabilities of the AWS Service Catalog API. AWS Service Catalog clients implement this trait.
 pub trait ServiceCatalog {
-    #[doc="<p>Accepts an offer to share a portfolio.</p>"]
-    fn accept_portfolio_share(&self,
-                              input: &AcceptPortfolioShareInput)
-                              -> Result<AcceptPortfolioShareOutput, AcceptPortfolioShareError>;
+    #[doc = "<p>Accepts an offer to share a portfolio.</p>"]
+    fn accept_portfolio_share(
+        &self,
+        input: &AcceptPortfolioShareInput,
+    ) -> Result<AcceptPortfolioShareOutput, AcceptPortfolioShareError>;
 
+    #[doc = "<p>Associates the specified principal ARN with the specified portfolio.</p>"]
+    fn associate_principal_with_portfolio(
+        &self,
+        input: &AssociatePrincipalWithPortfolioInput,
+    ) -> Result<AssociatePrincipalWithPortfolioOutput, AssociatePrincipalWithPortfolioError>;
 
-    #[doc="<p>Associates the specified principal ARN with the specified portfolio.</p>"]
-    fn associate_principal_with_portfolio
-        (&self,
-         input: &AssociatePrincipalWithPortfolioInput)
-         -> Result<AssociatePrincipalWithPortfolioOutput, AssociatePrincipalWithPortfolioError>;
+    #[doc = "<p>Associates a product with a portfolio.</p>"]
+    fn associate_product_with_portfolio(
+        &self,
+        input: &AssociateProductWithPortfolioInput,
+    ) -> Result<AssociateProductWithPortfolioOutput, AssociateProductWithPortfolioError>;
 
-
-    #[doc="<p>Associates a product with a portfolio.</p>"]
-    fn associate_product_with_portfolio
-        (&self,
-         input: &AssociateProductWithPortfolioInput)
-         -> Result<AssociateProductWithPortfolioOutput, AssociateProductWithPortfolioError>;
-
-
-    #[doc="<p>Associate a TagOption identifier with a resource identifier.</p>"]
-    fn associate_tag_option_with_resource
-        (&self,
-         input: &AssociateTagOptionWithResourceInput)
-         -> Result<AssociateTagOptionWithResourceOutput, AssociateTagOptionWithResourceError>;
-
+    #[doc = "<p>Associate a TagOption identifier with a resource identifier.</p>"]
+    fn associate_tag_option_with_resource(
+        &self,
+        input: &AssociateTagOptionWithResourceInput,
+    ) -> Result<AssociateTagOptionWithResourceOutput, AssociateTagOptionWithResourceError>;
 
     #[doc="<p>Creates a new constraint. For more information, see <a href=\"http://docs.aws.amazon.com/servicecatalog/latest/adminguide/constraints.html\">Using Constraints</a>.</p>"]
-    fn create_constraint(&self,
-                         input: &CreateConstraintInput)
-                         -> Result<CreateConstraintOutput, CreateConstraintError>;
+    fn create_constraint(
+        &self,
+        input: &CreateConstraintInput,
+    ) -> Result<CreateConstraintOutput, CreateConstraintError>;
 
+    #[doc = "<p>Creates a new portfolio.</p>"]
+    fn create_portfolio(
+        &self,
+        input: &CreatePortfolioInput,
+    ) -> Result<CreatePortfolioOutput, CreatePortfolioError>;
 
-    #[doc="<p>Creates a new portfolio.</p>"]
-    fn create_portfolio(&self,
-                        input: &CreatePortfolioInput)
-                        -> Result<CreatePortfolioOutput, CreatePortfolioError>;
+    #[doc = "<p>Creates a new portfolio share.</p>"]
+    fn create_portfolio_share(
+        &self,
+        input: &CreatePortfolioShareInput,
+    ) -> Result<CreatePortfolioShareOutput, CreatePortfolioShareError>;
 
-
-    #[doc="<p>Creates a new portfolio share.</p>"]
-    fn create_portfolio_share(&self,
-                              input: &CreatePortfolioShareInput)
-                              -> Result<CreatePortfolioShareOutput, CreatePortfolioShareError>;
-
-
-    #[doc="<p>Creates a new product.</p>"]
-    fn create_product(&self,
-                      input: &CreateProductInput)
-                      -> Result<CreateProductOutput, CreateProductError>;
-
+    #[doc = "<p>Creates a new product.</p>"]
+    fn create_product(
+        &self,
+        input: &CreateProductInput,
+    ) -> Result<CreateProductOutput, CreateProductError>;
 
     #[doc="<p>Create a new provisioning artifact for the specified product. This operation does not work with a product that has been shared with you.</p> <p>See the bottom of this topic for an example JSON request.</p>"]
-    fn create_provisioning_artifact
-        (&self,
-         input: &CreateProvisioningArtifactInput)
-         -> Result<CreateProvisioningArtifactOutput, CreateProvisioningArtifactError>;
+    fn create_provisioning_artifact(
+        &self,
+        input: &CreateProvisioningArtifactInput,
+    ) -> Result<CreateProvisioningArtifactOutput, CreateProvisioningArtifactError>;
 
+    #[doc = "<p>Create a new TagOption.</p>"]
+    fn create_tag_option(
+        &self,
+        input: &CreateTagOptionInput,
+    ) -> Result<CreateTagOptionOutput, CreateTagOptionError>;
 
-    #[doc="<p>Create a new TagOption.</p>"]
-    fn create_tag_option(&self,
-                         input: &CreateTagOptionInput)
-                         -> Result<CreateTagOptionOutput, CreateTagOptionError>;
-
-
-    #[doc="<p>Deletes the specified constraint.</p>"]
-    fn delete_constraint(&self,
-                         input: &DeleteConstraintInput)
-                         -> Result<DeleteConstraintOutput, DeleteConstraintError>;
-
+    #[doc = "<p>Deletes the specified constraint.</p>"]
+    fn delete_constraint(
+        &self,
+        input: &DeleteConstraintInput,
+    ) -> Result<DeleteConstraintOutput, DeleteConstraintError>;
 
     #[doc="<p>Deletes the specified portfolio. This operation does not work with a portfolio that has been shared with you or if it has products, users, constraints, or shared accounts associated with it.</p>"]
-    fn delete_portfolio(&self,
-                        input: &DeletePortfolioInput)
-                        -> Result<DeletePortfolioOutput, DeletePortfolioError>;
+    fn delete_portfolio(
+        &self,
+        input: &DeletePortfolioInput,
+    ) -> Result<DeletePortfolioOutput, DeletePortfolioError>;
 
-
-    #[doc="<p>Deletes the specified portfolio share.</p>"]
-    fn delete_portfolio_share(&self,
-                              input: &DeletePortfolioShareInput)
-                              -> Result<DeletePortfolioShareOutput, DeletePortfolioShareError>;
-
+    #[doc = "<p>Deletes the specified portfolio share.</p>"]
+    fn delete_portfolio_share(
+        &self,
+        input: &DeletePortfolioShareInput,
+    ) -> Result<DeletePortfolioShareOutput, DeletePortfolioShareError>;
 
     #[doc="<p>Deletes the specified product. This operation does not work with a product that has been shared with you or is associated with a portfolio. </p>"]
-    fn delete_product(&self,
-                      input: &DeleteProductInput)
-                      -> Result<DeleteProductOutput, DeleteProductError>;
-
+    fn delete_product(
+        &self,
+        input: &DeleteProductInput,
+    ) -> Result<DeleteProductOutput, DeleteProductError>;
 
     #[doc="<p>Deletes the specified provisioning artifact. This operation does not work on a provisioning artifact associated with a product that has been shared with you, or on the last provisioning artifact associated with a product (a product must have at least one provisioning artifact).</p>"]
-    fn delete_provisioning_artifact
-        (&self,
-         input: &DeleteProvisioningArtifactInput)
-         -> Result<DeleteProvisioningArtifactOutput, DeleteProvisioningArtifactError>;
+    fn delete_provisioning_artifact(
+        &self,
+        input: &DeleteProvisioningArtifactInput,
+    ) -> Result<DeleteProvisioningArtifactOutput, DeleteProvisioningArtifactError>;
 
-
-    #[doc="<p>Retrieves detailed information for a specified constraint.</p>"]
-    fn describe_constraint(&self,
-                           input: &DescribeConstraintInput)
-                           -> Result<DescribeConstraintOutput, DescribeConstraintError>;
-
+    #[doc = "<p>Retrieves detailed information for a specified constraint.</p>"]
+    fn describe_constraint(
+        &self,
+        input: &DescribeConstraintInput,
+    ) -> Result<DescribeConstraintOutput, DescribeConstraintError>;
 
     #[doc="<p>Retrieves detailed information and any tags associated with the specified portfolio.</p>"]
-    fn describe_portfolio(&self,
-                          input: &DescribePortfolioInput)
-                          -> Result<DescribePortfolioOutput, DescribePortfolioError>;
-
+    fn describe_portfolio(
+        &self,
+        input: &DescribePortfolioInput,
+    ) -> Result<DescribePortfolioOutput, DescribePortfolioError>;
 
     #[doc="<p>Retrieves information about a specified product.</p> <p>This operation is functionally identical to <a>DescribeProductView</a> except that it takes as input <code>ProductId</code> instead of <code>ProductViewId</code>.</p>"]
-    fn describe_product(&self,
-                        input: &DescribeProductInput)
-                        -> Result<DescribeProductOutput, DescribeProductError>;
+    fn describe_product(
+        &self,
+        input: &DescribeProductInput,
+    ) -> Result<DescribeProductOutput, DescribeProductError>;
 
-
-    #[doc="<p>Retrieves information about a specified product, run with administrator access.</p>"]
-    fn describe_product_as_admin
-        (&self,
-         input: &DescribeProductAsAdminInput)
-         -> Result<DescribeProductAsAdminOutput, DescribeProductAsAdminError>;
-
+    #[doc = "<p>Retrieves information about a specified product, run with administrator access.</p>"]
+    fn describe_product_as_admin(
+        &self,
+        input: &DescribeProductAsAdminInput,
+    ) -> Result<DescribeProductAsAdminOutput, DescribeProductAsAdminError>;
 
     #[doc="<p>Retrieves information about a specified product.</p> <p>This operation is functionally identical to <a>DescribeProduct</a> except that it takes as input <code>ProductViewId</code> instead of <code>ProductId</code>.</p>"]
-    fn describe_product_view(&self,
-                             input: &DescribeProductViewInput)
-                             -> Result<DescribeProductViewOutput, DescribeProductViewError>;
+    fn describe_product_view(
+        &self,
+        input: &DescribeProductViewInput,
+    ) -> Result<DescribeProductViewOutput, DescribeProductViewError>;
 
+    #[doc = "<p>Retrieve detailed information about the provisioned product.</p>"]
+    fn describe_provisioned_product(
+        &self,
+        input: &DescribeProvisionedProductInput,
+    ) -> Result<DescribeProvisionedProductOutput, DescribeProvisionedProductError>;
 
-    #[doc="<p>Retrieve detailed information about the provisioned product.</p>"]
-    fn describe_provisioned_product
-        (&self,
-         input: &DescribeProvisionedProductInput)
-         -> Result<DescribeProvisionedProductOutput, DescribeProvisionedProductError>;
-
-
-    #[doc="<p>Retrieves detailed information about the specified provisioning artifact.</p>"]
-    fn describe_provisioning_artifact
-        (&self,
-         input: &DescribeProvisioningArtifactInput)
-         -> Result<DescribeProvisioningArtifactOutput, DescribeProvisioningArtifactError>;
-
+    #[doc = "<p>Retrieves detailed information about the specified provisioning artifact.</p>"]
+    fn describe_provisioning_artifact(
+        &self,
+        input: &DescribeProvisioningArtifactInput,
+    ) -> Result<DescribeProvisioningArtifactOutput, DescribeProvisioningArtifactError>;
 
     #[doc="<p>Provides information about parameters required to provision a specified product in a specified manner. Use this operation to obtain the list of <code>ProvisioningArtifactParameters</code> parameters available to call the <a>ProvisionProduct</a> operation for the specified product.</p> <p>If the output contains a TagOption key with an empty list of values, there is a TagOption conflict for that key. The end user cannot take action to fix the conflict, and launch is not blocked. In subsequent calls to the <code>ProvisionProduct</code> operation, do not include conflicted TagOption keys as tags. Calls to <code>ProvisionProduct</code> with empty TagOption values cause the error \"Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i> \". Calls to <code>ProvisionProduct</code> with conflicted TagOption keys automatically tag the provisioned product with the conflicted keys with the value \"<code>sc-tagoption-conflict-portfolioId-productId</code>\".</p>"]
-    fn describe_provisioning_parameters
-        (&self,
-         input: &DescribeProvisioningParametersInput)
-         -> Result<DescribeProvisioningParametersOutput, DescribeProvisioningParametersError>;
-
+    fn describe_provisioning_parameters(
+        &self,
+        input: &DescribeProvisioningParametersInput,
+    ) -> Result<DescribeProvisioningParametersOutput, DescribeProvisioningParametersError>;
 
     #[doc="<p>Retrieves a paginated list of the full details of a specific request. Use this operation after calling a request operation (<a>ProvisionProduct</a>, <a>TerminateProvisionedProduct</a>, or <a>UpdateProvisionedProduct</a>). </p>"]
-    fn describe_record(&self,
-                       input: &DescribeRecordInput)
-                       -> Result<DescribeRecordOutput, DescribeRecordError>;
+    fn describe_record(
+        &self,
+        input: &DescribeRecordInput,
+    ) -> Result<DescribeRecordOutput, DescribeRecordError>;
 
+    #[doc = "<p>Describes a TagOption.</p>"]
+    fn describe_tag_option(
+        &self,
+        input: &DescribeTagOptionInput,
+    ) -> Result<DescribeTagOptionOutput, DescribeTagOptionError>;
 
-    #[doc="<p>Describes a TagOption.</p>"]
-    fn describe_tag_option(&self,
-                           input: &DescribeTagOptionInput)
-                           -> Result<DescribeTagOptionOutput, DescribeTagOptionError>;
+    #[doc = "<p>Disassociates a previously associated principal ARN from a specified portfolio.</p>"]
+    fn disassociate_principal_from_portfolio(
+        &self,
+        input: &DisassociatePrincipalFromPortfolioInput,
+    ) -> Result<DisassociatePrincipalFromPortfolioOutput, DisassociatePrincipalFromPortfolioError>;
 
+    #[doc = "<p>Disassociates the specified product from the specified portfolio. </p>"]
+    fn disassociate_product_from_portfolio(
+        &self,
+        input: &DisassociateProductFromPortfolioInput,
+    ) -> Result<DisassociateProductFromPortfolioOutput, DisassociateProductFromPortfolioError>;
 
-    #[doc="<p>Disassociates a previously associated principal ARN from a specified portfolio.</p>"]
-    fn disassociate_principal_from_portfolio
-        (&self,
-         input: &DisassociatePrincipalFromPortfolioInput)
-         -> Result<DisassociatePrincipalFromPortfolioOutput,
-                   DisassociatePrincipalFromPortfolioError>;
+    #[doc = "<p>Disassociates a TagOption from a resource.</p>"]
+    fn disassociate_tag_option_from_resource(
+        &self,
+        input: &DisassociateTagOptionFromResourceInput,
+    ) -> Result<DisassociateTagOptionFromResourceOutput, DisassociateTagOptionFromResourceError>;
 
-
-    #[doc="<p>Disassociates the specified product from the specified portfolio. </p>"]
-    fn disassociate_product_from_portfolio
-        (&self,
-         input: &DisassociateProductFromPortfolioInput)
-         -> Result<DisassociateProductFromPortfolioOutput, DisassociateProductFromPortfolioError>;
-
-
-    #[doc="<p>Disassociates a TagOption from a resource.</p>"]
-    fn disassociate_tag_option_from_resource
-        (&self,
-         input: &DisassociateTagOptionFromResourceInput)
-         -> Result<DisassociateTagOptionFromResourceOutput, DisassociateTagOptionFromResourceError>;
-
-
-    #[doc="<p>Lists details of all portfolios for which sharing was accepted by this account.</p>"]
-    fn list_accepted_portfolio_shares
-        (&self,
-         input: &ListAcceptedPortfolioSharesInput)
-         -> Result<ListAcceptedPortfolioSharesOutput, ListAcceptedPortfolioSharesError>;
-
+    #[doc = "<p>Lists details of all portfolios for which sharing was accepted by this account.</p>"]
+    fn list_accepted_portfolio_shares(
+        &self,
+        input: &ListAcceptedPortfolioSharesInput,
+    ) -> Result<ListAcceptedPortfolioSharesOutput, ListAcceptedPortfolioSharesError>;
 
     #[doc="<p>Retrieves detailed constraint information for the specified portfolio and product.</p>"]
-    fn list_constraints_for_portfolio
-        (&self,
-         input: &ListConstraintsForPortfolioInput)
-         -> Result<ListConstraintsForPortfolioOutput, ListConstraintsForPortfolioError>;
-
+    fn list_constraints_for_portfolio(
+        &self,
+        input: &ListConstraintsForPortfolioInput,
+    ) -> Result<ListConstraintsForPortfolioOutput, ListConstraintsForPortfolioError>;
 
     #[doc="<p>Returns a paginated list of all paths to a specified product. A path is how the user has access to a specified product, and is necessary when provisioning a product. A path also determines the constraints put on the product.</p>"]
-    fn list_launch_paths(&self,
-                         input: &ListLaunchPathsInput)
-                         -> Result<ListLaunchPathsOutput, ListLaunchPathsError>;
-
+    fn list_launch_paths(
+        &self,
+        input: &ListLaunchPathsInput,
+    ) -> Result<ListLaunchPathsOutput, ListLaunchPathsError>;
 
     #[doc="<p>Lists the account IDs that have been authorized sharing of the specified portfolio.</p>"]
-    fn list_portfolio_access(&self,
-                             input: &ListPortfolioAccessInput)
-                             -> Result<ListPortfolioAccessOutput, ListPortfolioAccessError>;
+    fn list_portfolio_access(
+        &self,
+        input: &ListPortfolioAccessInput,
+    ) -> Result<ListPortfolioAccessOutput, ListPortfolioAccessError>;
 
+    #[doc = "<p>Lists all portfolios in the catalog.</p>"]
+    fn list_portfolios(
+        &self,
+        input: &ListPortfoliosInput,
+    ) -> Result<ListPortfoliosOutput, ListPortfoliosError>;
 
-    #[doc="<p>Lists all portfolios in the catalog.</p>"]
-    fn list_portfolios(&self,
-                       input: &ListPortfoliosInput)
-                       -> Result<ListPortfoliosOutput, ListPortfoliosError>;
+    #[doc = "<p>Lists all portfolios that the specified product is associated with.</p>"]
+    fn list_portfolios_for_product(
+        &self,
+        input: &ListPortfoliosForProductInput,
+    ) -> Result<ListPortfoliosForProductOutput, ListPortfoliosForProductError>;
 
+    #[doc = "<p>Lists all principal ARNs associated with the specified portfolio.</p>"]
+    fn list_principals_for_portfolio(
+        &self,
+        input: &ListPrincipalsForPortfolioInput,
+    ) -> Result<ListPrincipalsForPortfolioOutput, ListPrincipalsForPortfolioError>;
 
-    #[doc="<p>Lists all portfolios that the specified product is associated with.</p>"]
-    fn list_portfolios_for_product
-        (&self,
-         input: &ListPortfoliosForProductInput)
-         -> Result<ListPortfoliosForProductOutput, ListPortfoliosForProductError>;
-
-
-    #[doc="<p>Lists all principal ARNs associated with the specified portfolio.</p>"]
-    fn list_principals_for_portfolio
-        (&self,
-         input: &ListPrincipalsForPortfolioInput)
-         -> Result<ListPrincipalsForPortfolioOutput, ListPrincipalsForPortfolioError>;
-
-
-    #[doc="<p>Lists all provisioning artifacts associated with the specified product.</p>"]
-    fn list_provisioning_artifacts
-        (&self,
-         input: &ListProvisioningArtifactsInput)
-         -> Result<ListProvisioningArtifactsOutput, ListProvisioningArtifactsError>;
-
+    #[doc = "<p>Lists all provisioning artifacts associated with the specified product.</p>"]
+    fn list_provisioning_artifacts(
+        &self,
+        input: &ListProvisioningArtifactsInput,
+    ) -> Result<ListProvisioningArtifactsOutput, ListProvisioningArtifactsError>;
 
     #[doc="<p>Returns a paginated list of all performed requests, in the form of RecordDetails objects that are filtered as specified.</p>"]
-    fn list_record_history(&self,
-                           input: &ListRecordHistoryInput)
-                           -> Result<ListRecordHistoryOutput, ListRecordHistoryError>;
+    fn list_record_history(
+        &self,
+        input: &ListRecordHistoryInput,
+    ) -> Result<ListRecordHistoryOutput, ListRecordHistoryError>;
 
+    #[doc = "<p>Lists resources associated with a TagOption.</p>"]
+    fn list_resources_for_tag_option(
+        &self,
+        input: &ListResourcesForTagOptionInput,
+    ) -> Result<ListResourcesForTagOptionOutput, ListResourcesForTagOptionError>;
 
-    #[doc="<p>Lists resources associated with a TagOption.</p>"]
-    fn list_resources_for_tag_option
-        (&self,
-         input: &ListResourcesForTagOptionInput)
-         -> Result<ListResourcesForTagOptionOutput, ListResourcesForTagOptionError>;
-
-
-    #[doc="<p>Lists detailed TagOptions information.</p>"]
-    fn list_tag_options(&self,
-                        input: &ListTagOptionsInput)
-                        -> Result<ListTagOptionsOutput, ListTagOptionsError>;
-
+    #[doc = "<p>Lists detailed TagOptions information.</p>"]
+    fn list_tag_options(
+        &self,
+        input: &ListTagOptionsInput,
+    ) -> Result<ListTagOptionsOutput, ListTagOptionsError>;
 
     #[doc="<p>Requests a <i>provision</i> of a specified product. A <i>provisioned product</i> is a resourced instance for a product. For example, provisioning a CloudFormation-template-backed product results in launching a CloudFormation stack and all the underlying resources that come with it. </p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation. The error \"Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>\" indicates that your request contains a tag which has a tag key but no corresponding tag value (value is empty or null). Your call may have included values returned from a <code>DescribeProvisioningParameters</code> call that resulted in a TagOption key with an empty list. This happens when TagOption keys are in conflict. For more information, see <a>DescribeProvisioningParameters</a>.</p>"]
-    fn provision_product(&self,
-                         input: &ProvisionProductInput)
-                         -> Result<ProvisionProductOutput, ProvisionProductError>;
+    fn provision_product(
+        &self,
+        input: &ProvisionProductInput,
+    ) -> Result<ProvisionProductOutput, ProvisionProductError>;
 
-
-    #[doc="<p>Rejects an offer to share a portfolio.</p>"]
-    fn reject_portfolio_share(&self,
-                              input: &RejectPortfolioShareInput)
-                              -> Result<RejectPortfolioShareOutput, RejectPortfolioShareError>;
-
+    #[doc = "<p>Rejects an offer to share a portfolio.</p>"]
+    fn reject_portfolio_share(
+        &self,
+        input: &RejectPortfolioShareInput,
+    ) -> Result<RejectPortfolioShareOutput, RejectPortfolioShareError>;
 
     #[doc="<p>Returns a paginated list of all the ProvisionedProduct objects that are currently available (not terminated). </p>"]
-    fn scan_provisioned_products
-        (&self,
-         input: &ScanProvisionedProductsInput)
-         -> Result<ScanProvisionedProductsOutput, ScanProvisionedProductsError>;
-
+    fn scan_provisioned_products(
+        &self,
+        input: &ScanProvisionedProductsInput,
+    ) -> Result<ScanProvisionedProductsOutput, ScanProvisionedProductsError>;
 
     #[doc="<p>Returns a paginated list all of the <code>Products</code> objects to which the caller has access. </p> <p>The output of this operation can be used as input for other operations, such as <a>DescribeProductView</a>.</p>"]
-    fn search_products(&self,
-                       input: &SearchProductsInput)
-                       -> Result<SearchProductsOutput, SearchProductsError>;
-
+    fn search_products(
+        &self,
+        input: &SearchProductsInput,
+    ) -> Result<SearchProductsOutput, SearchProductsError>;
 
     #[doc="<p>Retrieves summary and status information about all products created within the caller's account. If a portfolio ID is provided, this operation retrieves information for only those products that are associated with the specified portfolio.</p>"]
-    fn search_products_as_admin
-        (&self,
-         input: &SearchProductsAsAdminInput)
-         -> Result<SearchProductsAsAdminOutput, SearchProductsAsAdminError>;
-
+    fn search_products_as_admin(
+        &self,
+        input: &SearchProductsAsAdminInput,
+    ) -> Result<SearchProductsAsAdminOutput, SearchProductsAsAdminError>;
 
     #[doc="<p>Requests termination of an existing ProvisionedProduct object. If there are <code>Tags</code> associated with the object, they are terminated when the ProvisionedProduct object is terminated. </p> <p>This operation does not delete any records associated with the ProvisionedProduct object.</p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation.</p>"]
-    fn terminate_provisioned_product
-        (&self,
-         input: &TerminateProvisionedProductInput)
-         -> Result<TerminateProvisionedProductOutput, TerminateProvisionedProductError>;
+    fn terminate_provisioned_product(
+        &self,
+        input: &TerminateProvisionedProductInput,
+    ) -> Result<TerminateProvisionedProductOutput, TerminateProvisionedProductError>;
 
-
-    #[doc="<p>Updates an existing constraint.</p>"]
-    fn update_constraint(&self,
-                         input: &UpdateConstraintInput)
-                         -> Result<UpdateConstraintOutput, UpdateConstraintError>;
-
+    #[doc = "<p>Updates an existing constraint.</p>"]
+    fn update_constraint(
+        &self,
+        input: &UpdateConstraintInput,
+    ) -> Result<UpdateConstraintOutput, UpdateConstraintError>;
 
     #[doc="<p>Updates the specified portfolio's details. This operation does not work with a product that has been shared with you.</p>"]
-    fn update_portfolio(&self,
-                        input: &UpdatePortfolioInput)
-                        -> Result<UpdatePortfolioOutput, UpdatePortfolioError>;
+    fn update_portfolio(
+        &self,
+        input: &UpdatePortfolioInput,
+    ) -> Result<UpdatePortfolioOutput, UpdatePortfolioError>;
 
-
-    #[doc="<p>Updates an existing product.</p>"]
-    fn update_product(&self,
-                      input: &UpdateProductInput)
-                      -> Result<UpdateProductOutput, UpdateProductError>;
-
+    #[doc = "<p>Updates an existing product.</p>"]
+    fn update_product(
+        &self,
+        input: &UpdateProductInput,
+    ) -> Result<UpdateProductOutput, UpdateProductError>;
 
     #[doc="<p>Requests updates to the configuration of an existing ProvisionedProduct object. If there are tags associated with the object, they cannot be updated or added with this operation. Depending on the specific updates requested, this operation may update with no interruption, with some interruption, or replace the ProvisionedProduct object entirely. </p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation.</p>"]
-    fn update_provisioned_product
-        (&self,
-         input: &UpdateProvisionedProductInput)
-         -> Result<UpdateProvisionedProductOutput, UpdateProvisionedProductError>;
-
+    fn update_provisioned_product(
+        &self,
+        input: &UpdateProvisionedProductInput,
+    ) -> Result<UpdateProvisionedProductOutput, UpdateProvisionedProductError>;
 
     #[doc="<p>Updates an existing provisioning artifact's information. This operation does not work on a provisioning artifact associated with a product that has been shared with you.</p>"]
-    fn update_provisioning_artifact
-        (&self,
-         input: &UpdateProvisioningArtifactInput)
-         -> Result<UpdateProvisioningArtifactOutput, UpdateProvisioningArtifactError>;
+    fn update_provisioning_artifact(
+        &self,
+        input: &UpdateProvisioningArtifactInput,
+    ) -> Result<UpdateProvisioningArtifactOutput, UpdateProvisioningArtifactError>;
 
-
-    #[doc="<p>Updates an existing TagOption.</p>"]
-    fn update_tag_option(&self,
-                         input: &UpdateTagOptionInput)
-                         -> Result<UpdateTagOptionOutput, UpdateTagOptionError>;
+    #[doc = "<p>Updates an existing TagOption.</p>"]
+    fn update_tag_option(
+        &self,
+        input: &UpdateTagOptionInput,
+    ) -> Result<UpdateTagOptionOutput, UpdateTagOptionError>;
 }
 /// A client for the AWS Service Catalog API.
 pub struct ServiceCatalogClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -6817,8 +6905,9 @@ pub struct ServiceCatalogClient<P, D>
 }
 
 impl<P, D> ServiceCatalogClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         ServiceCatalogClient {
@@ -6830,18 +6919,22 @@ impl<P, D> ServiceCatalogClient<P, D>
 }
 
 impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
-    #[doc="<p>Accepts an offer to share a portfolio.</p>"]
-    fn accept_portfolio_share(&self,
-                              input: &AcceptPortfolioShareInput)
-                              -> Result<AcceptPortfolioShareOutput, AcceptPortfolioShareError> {
+    #[doc = "<p>Accepts an offer to share a portfolio.</p>"]
+    fn accept_portfolio_share(
+        &self,
+        input: &AcceptPortfolioShareInput,
+    ) -> Result<AcceptPortfolioShareOutput, AcceptPortfolioShareError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.AcceptPortfolioShare");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.AcceptPortfolioShare",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6853,27 +6946,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AcceptPortfolioShareOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<AcceptPortfolioShareOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AcceptPortfolioShareError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AcceptPortfolioShareError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Associates the specified principal ARN with the specified portfolio.</p>"]
-    fn associate_principal_with_portfolio
-        (&self,
-         input: &AssociatePrincipalWithPortfolioInput)
-         -> Result<AssociatePrincipalWithPortfolioOutput, AssociatePrincipalWithPortfolioError> {
+    #[doc = "<p>Associates the specified principal ARN with the specified portfolio.</p>"]
+    fn associate_principal_with_portfolio(
+        &self,
+        input: &AssociatePrincipalWithPortfolioInput,
+    ) -> Result<AssociatePrincipalWithPortfolioOutput, AssociatePrincipalWithPortfolioError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.AssociatePrincipalWithPortfolio");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.AssociatePrincipalWithPortfolio",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6885,28 +6983,34 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AssociatePrincipalWithPortfolioOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<AssociatePrincipalWithPortfolioOutput>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AssociatePrincipalWithPortfolioError::from_body(String::from_utf8_lossy(&body)
-                                                                        .as_ref()))
+                Err(AssociatePrincipalWithPortfolioError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Associates a product with a portfolio.</p>"]
-    fn associate_product_with_portfolio
-        (&self,
-         input: &AssociateProductWithPortfolioInput)
-         -> Result<AssociateProductWithPortfolioOutput, AssociateProductWithPortfolioError> {
+    #[doc = "<p>Associates a product with a portfolio.</p>"]
+    fn associate_product_with_portfolio(
+        &self,
+        input: &AssociateProductWithPortfolioInput,
+    ) -> Result<AssociateProductWithPortfolioOutput, AssociateProductWithPortfolioError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.AssociateProductWithPortfolio");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.AssociateProductWithPortfolio",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6918,28 +7022,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AssociateProductWithPortfolioOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<AssociateProductWithPortfolioOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AssociateProductWithPortfolioError::from_body(String::from_utf8_lossy(&body)
-                                                                      .as_ref()))
+                Err(AssociateProductWithPortfolioError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Associate a TagOption identifier with a resource identifier.</p>"]
-    fn associate_tag_option_with_resource
-        (&self,
-         input: &AssociateTagOptionWithResourceInput)
-         -> Result<AssociateTagOptionWithResourceOutput, AssociateTagOptionWithResourceError> {
+    #[doc = "<p>Associate a TagOption identifier with a resource identifier.</p>"]
+    fn associate_tag_option_with_resource(
+        &self,
+        input: &AssociateTagOptionWithResourceInput,
+    ) -> Result<AssociateTagOptionWithResourceOutput, AssociateTagOptionWithResourceError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.AssociateTagOptionWithResource");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.AssociateTagOptionWithResource",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6951,27 +7059,34 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AssociateTagOptionWithResourceOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<AssociateTagOptionWithResourceOutput>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AssociateTagOptionWithResourceError::from_body(String::from_utf8_lossy(&body)
-                                                                       .as_ref()))
+                Err(AssociateTagOptionWithResourceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Creates a new constraint. For more information, see <a href=\"http://docs.aws.amazon.com/servicecatalog/latest/adminguide/constraints.html\">Using Constraints</a>.</p>"]
-    fn create_constraint(&self,
-                         input: &CreateConstraintInput)
-                         -> Result<CreateConstraintOutput, CreateConstraintError> {
+    fn create_constraint(
+        &self,
+        input: &CreateConstraintInput,
+    ) -> Result<CreateConstraintOutput, CreateConstraintError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.CreateConstraint");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.CreateConstraint",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6983,28 +7098,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateConstraintOutput>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateConstraintOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateConstraintError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateConstraintError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates a new portfolio.</p>"]
-    fn create_portfolio(&self,
-                        input: &CreatePortfolioInput)
-                        -> Result<CreatePortfolioOutput, CreatePortfolioError> {
+    #[doc = "<p>Creates a new portfolio.</p>"]
+    fn create_portfolio(
+        &self,
+        input: &CreatePortfolioInput,
+    ) -> Result<CreatePortfolioOutput, CreatePortfolioError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.CreatePortfolio");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.CreatePortfolio",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -7016,28 +7135,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreatePortfolioOutput>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreatePortfolioOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreatePortfolioError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreatePortfolioError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates a new portfolio share.</p>"]
-    fn create_portfolio_share(&self,
-                              input: &CreatePortfolioShareInput)
-                              -> Result<CreatePortfolioShareOutput, CreatePortfolioShareError> {
+    #[doc = "<p>Creates a new portfolio share.</p>"]
+    fn create_portfolio_share(
+        &self,
+        input: &CreatePortfolioShareInput,
+    ) -> Result<CreatePortfolioShareOutput, CreatePortfolioShareError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.CreatePortfolioShare");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.CreatePortfolioShare",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -7049,21 +7172,25 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreatePortfolioShareOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreatePortfolioShareOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreatePortfolioShareError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreatePortfolioShareError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates a new product.</p>"]
-    fn create_product(&self,
-                      input: &CreateProductInput)
-                      -> Result<CreateProductOutput, CreateProductError> {
+    #[doc = "<p>Creates a new product.</p>"]
+    fn create_product(
+        &self,
+        input: &CreateProductInput,
+    ) -> Result<CreateProductOutput, CreateProductError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7079,29 +7206,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateProductOutput>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateProductOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateProductError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateProductError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Create a new provisioning artifact for the specified product. This operation does not work with a product that has been shared with you.</p> <p>See the bottom of this topic for an example JSON request.</p>"]
-    fn create_provisioning_artifact
-        (&self,
-         input: &CreateProvisioningArtifactInput)
-         -> Result<CreateProvisioningArtifactOutput, CreateProvisioningArtifactError> {
+    fn create_provisioning_artifact(
+        &self,
+        input: &CreateProvisioningArtifactInput,
+    ) -> Result<CreateProvisioningArtifactOutput, CreateProvisioningArtifactError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.CreateProvisioningArtifact");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.CreateProvisioningArtifact",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -7113,27 +7243,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateProvisioningArtifactOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreateProvisioningArtifactOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateProvisioningArtifactError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+                Err(CreateProvisioningArtifactError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Create a new TagOption.</p>"]
-    fn create_tag_option(&self,
-                         input: &CreateTagOptionInput)
-                         -> Result<CreateTagOptionOutput, CreateTagOptionError> {
+    #[doc = "<p>Create a new TagOption.</p>"]
+    fn create_tag_option(
+        &self,
+        input: &CreateTagOptionInput,
+    ) -> Result<CreateTagOptionOutput, CreateTagOptionError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.CreateTagOption");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.CreateTagOption",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -7145,28 +7280,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateTagOptionOutput>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateTagOptionOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateTagOptionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateTagOptionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes the specified constraint.</p>"]
-    fn delete_constraint(&self,
-                         input: &DeleteConstraintInput)
-                         -> Result<DeleteConstraintOutput, DeleteConstraintError> {
+    #[doc = "<p>Deletes the specified constraint.</p>"]
+    fn delete_constraint(
+        &self,
+        input: &DeleteConstraintInput,
+    ) -> Result<DeleteConstraintOutput, DeleteConstraintError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.DeleteConstraint");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.DeleteConstraint",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -7178,28 +7317,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteConstraintOutput>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteConstraintOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteConstraintError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteConstraintError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Deletes the specified portfolio. This operation does not work with a portfolio that has been shared with you or if it has products, users, constraints, or shared accounts associated with it.</p>"]
-    fn delete_portfolio(&self,
-                        input: &DeletePortfolioInput)
-                        -> Result<DeletePortfolioOutput, DeletePortfolioError> {
+    fn delete_portfolio(
+        &self,
+        input: &DeletePortfolioInput,
+    ) -> Result<DeletePortfolioOutput, DeletePortfolioError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.DeletePortfolio");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.DeletePortfolio",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -7211,28 +7354,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeletePortfolioOutput>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeletePortfolioOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeletePortfolioError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeletePortfolioError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes the specified portfolio share.</p>"]
-    fn delete_portfolio_share(&self,
-                              input: &DeletePortfolioShareInput)
-                              -> Result<DeletePortfolioShareOutput, DeletePortfolioShareError> {
+    #[doc = "<p>Deletes the specified portfolio share.</p>"]
+    fn delete_portfolio_share(
+        &self,
+        input: &DeletePortfolioShareInput,
+    ) -> Result<DeletePortfolioShareOutput, DeletePortfolioShareError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.DeletePortfolioShare");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.DeletePortfolioShare",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -7244,21 +7391,25 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeletePortfolioShareOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DeletePortfolioShareOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeletePortfolioShareError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeletePortfolioShareError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Deletes the specified product. This operation does not work with a product that has been shared with you or is associated with a portfolio. </p>"]
-    fn delete_product(&self,
-                      input: &DeleteProductInput)
-                      -> Result<DeleteProductOutput, DeleteProductError> {
+    fn delete_product(
+        &self,
+        input: &DeleteProductInput,
+    ) -> Result<DeleteProductOutput, DeleteProductError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7274,29 +7425,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteProductOutput>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteProductOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteProductError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteProductError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Deletes the specified provisioning artifact. This operation does not work on a provisioning artifact associated with a product that has been shared with you, or on the last provisioning artifact associated with a product (a product must have at least one provisioning artifact).</p>"]
-    fn delete_provisioning_artifact
-        (&self,
-         input: &DeleteProvisioningArtifactInput)
-         -> Result<DeleteProvisioningArtifactOutput, DeleteProvisioningArtifactError> {
+    fn delete_provisioning_artifact(
+        &self,
+        input: &DeleteProvisioningArtifactInput,
+    ) -> Result<DeleteProvisioningArtifactOutput, DeleteProvisioningArtifactError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.DeleteProvisioningArtifact");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.DeleteProvisioningArtifact",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -7308,27 +7462,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteProvisioningArtifactOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DeleteProvisioningArtifactOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteProvisioningArtifactError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+                Err(DeleteProvisioningArtifactError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves detailed information for a specified constraint.</p>"]
-    fn describe_constraint(&self,
-                           input: &DescribeConstraintInput)
-                           -> Result<DescribeConstraintOutput, DescribeConstraintError> {
+    #[doc = "<p>Retrieves detailed information for a specified constraint.</p>"]
+    fn describe_constraint(
+        &self,
+        input: &DescribeConstraintInput,
+    ) -> Result<DescribeConstraintOutput, DescribeConstraintError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.DescribeConstraint");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.DescribeConstraint",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -7340,28 +7499,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeConstraintOutput>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribeConstraintOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeConstraintError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeConstraintError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Retrieves detailed information and any tags associated with the specified portfolio.</p>"]
-    fn describe_portfolio(&self,
-                          input: &DescribePortfolioInput)
-                          -> Result<DescribePortfolioOutput, DescribePortfolioError> {
+    fn describe_portfolio(
+        &self,
+        input: &DescribePortfolioInput,
+    ) -> Result<DescribePortfolioOutput, DescribePortfolioError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.DescribePortfolio");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.DescribePortfolio",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -7373,28 +7536,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribePortfolioOutput>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribePortfolioOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribePortfolioError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribePortfolioError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Retrieves information about a specified product.</p> <p>This operation is functionally identical to <a>DescribeProductView</a> except that it takes as input <code>ProductId</code> instead of <code>ProductViewId</code>.</p>"]
-    fn describe_product(&self,
-                        input: &DescribeProductInput)
-                        -> Result<DescribeProductOutput, DescribeProductError> {
+    fn describe_product(
+        &self,
+        input: &DescribeProductInput,
+    ) -> Result<DescribeProductOutput, DescribeProductError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.DescribeProduct");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.DescribeProduct",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -7406,29 +7573,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeProductOutput>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribeProductOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeProductError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeProductError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves information about a specified product, run with administrator access.</p>"]
-    fn describe_product_as_admin
-        (&self,
-         input: &DescribeProductAsAdminInput)
-         -> Result<DescribeProductAsAdminOutput, DescribeProductAsAdminError> {
+    #[doc = "<p>Retrieves information about a specified product, run with administrator access.</p>"]
+    fn describe_product_as_admin(
+        &self,
+        input: &DescribeProductAsAdminInput,
+    ) -> Result<DescribeProductAsAdminOutput, DescribeProductAsAdminError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.DescribeProductAsAdmin");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.DescribeProductAsAdmin",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -7440,26 +7610,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeProductAsAdminOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeProductAsAdminOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeProductAsAdminError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeProductAsAdminError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Retrieves information about a specified product.</p> <p>This operation is functionally identical to <a>DescribeProduct</a> except that it takes as input <code>ProductViewId</code> instead of <code>ProductId</code>.</p>"]
-    fn describe_product_view(&self,
-                             input: &DescribeProductViewInput)
-                             -> Result<DescribeProductViewOutput, DescribeProductViewError> {
+    fn describe_product_view(
+        &self,
+        input: &DescribeProductViewInput,
+    ) -> Result<DescribeProductViewOutput, DescribeProductViewError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.DescribeProductView");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.DescribeProductView",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -7471,27 +7647,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeProductViewOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeProductViewOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeProductViewError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeProductViewError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieve detailed information about the provisioned product.</p>"]
-    fn describe_provisioned_product
-        (&self,
-         input: &DescribeProvisionedProductInput)
-         -> Result<DescribeProvisionedProductOutput, DescribeProvisionedProductError> {
+    #[doc = "<p>Retrieve detailed information about the provisioned product.</p>"]
+    fn describe_provisioned_product(
+        &self,
+        input: &DescribeProvisionedProductInput,
+    ) -> Result<DescribeProvisionedProductOutput, DescribeProvisionedProductError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.DescribeProvisionedProduct");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.DescribeProvisionedProduct",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -7503,28 +7684,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeProvisionedProductOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeProvisionedProductOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeProvisionedProductError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+                Err(DescribeProvisionedProductError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves detailed information about the specified provisioning artifact.</p>"]
-    fn describe_provisioning_artifact
-        (&self,
-         input: &DescribeProvisioningArtifactInput)
-         -> Result<DescribeProvisioningArtifactOutput, DescribeProvisioningArtifactError> {
+    #[doc = "<p>Retrieves detailed information about the specified provisioning artifact.</p>"]
+    fn describe_provisioning_artifact(
+        &self,
+        input: &DescribeProvisioningArtifactInput,
+    ) -> Result<DescribeProvisioningArtifactOutput, DescribeProvisioningArtifactError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.DescribeProvisioningArtifact");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.DescribeProvisioningArtifact",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -7536,28 +7721,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeProvisioningArtifactOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeProvisioningArtifactOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeProvisioningArtifactError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+                Err(DescribeProvisioningArtifactError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Provides information about parameters required to provision a specified product in a specified manner. Use this operation to obtain the list of <code>ProvisioningArtifactParameters</code> parameters available to call the <a>ProvisionProduct</a> operation for the specified product.</p> <p>If the output contains a TagOption key with an empty list of values, there is a TagOption conflict for that key. The end user cannot take action to fix the conflict, and launch is not blocked. In subsequent calls to the <code>ProvisionProduct</code> operation, do not include conflicted TagOption keys as tags. Calls to <code>ProvisionProduct</code> with empty TagOption values cause the error \"Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i> \". Calls to <code>ProvisionProduct</code> with conflicted TagOption keys automatically tag the provisioned product with the conflicted keys with the value \"<code>sc-tagoption-conflict-portfolioId-productId</code>\".</p>"]
-    fn describe_provisioning_parameters
-        (&self,
-         input: &DescribeProvisioningParametersInput)
-         -> Result<DescribeProvisioningParametersOutput, DescribeProvisioningParametersError> {
+    fn describe_provisioning_parameters(
+        &self,
+        input: &DescribeProvisioningParametersInput,
+    ) -> Result<DescribeProvisioningParametersOutput, DescribeProvisioningParametersError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.DescribeProvisioningParameters");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.DescribeProvisioningParameters",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -7569,22 +7758,27 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeProvisioningParametersOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<DescribeProvisioningParametersOutput>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeProvisioningParametersError::from_body(String::from_utf8_lossy(&body)
-                                                                       .as_ref()))
+                Err(DescribeProvisioningParametersError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves a paginated list of the full details of a specific request. Use this operation after calling a request operation (<a>ProvisionProduct</a>, <a>TerminateProvisionedProduct</a>, or <a>UpdateProvisionedProduct</a>). </p>"]
-    fn describe_record(&self,
-                       input: &DescribeRecordInput)
-                       -> Result<DescribeRecordOutput, DescribeRecordError> {
+    fn describe_record(
+        &self,
+        input: &DescribeRecordInput,
+    ) -> Result<DescribeRecordOutput, DescribeRecordError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7600,28 +7794,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeRecordOutput>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribeRecordOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeRecordError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeRecordError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Describes a TagOption.</p>"]
-    fn describe_tag_option(&self,
-                           input: &DescribeTagOptionInput)
-                           -> Result<DescribeTagOptionOutput, DescribeTagOptionError> {
+    #[doc = "<p>Describes a TagOption.</p>"]
+    fn describe_tag_option(
+        &self,
+        input: &DescribeTagOptionInput,
+    ) -> Result<DescribeTagOptionOutput, DescribeTagOptionError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.DescribeTagOption");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.DescribeTagOption",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -7633,30 +7831,33 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeTagOptionOutput>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribeTagOptionOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeTagOptionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeTagOptionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Disassociates a previously associated principal ARN from a specified portfolio.</p>"]
-    fn disassociate_principal_from_portfolio
-        (&self,
-         input: &DisassociatePrincipalFromPortfolioInput)
-         -> Result<DisassociatePrincipalFromPortfolioOutput,
-                   DisassociatePrincipalFromPortfolioError> {
+    #[doc = "<p>Disassociates a previously associated principal ARN from a specified portfolio.</p>"]
+    fn disassociate_principal_from_portfolio(
+        &self,
+        input: &DisassociatePrincipalFromPortfolioInput,
+    ) -> Result<DisassociatePrincipalFromPortfolioOutput, DisassociatePrincipalFromPortfolioError>
+    {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.DisassociatePrincipalFromPortfolio");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.DisassociatePrincipalFromPortfolio",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -7668,27 +7869,34 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DisassociatePrincipalFromPortfolioOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<DisassociatePrincipalFromPortfolioOutput>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DisassociatePrincipalFromPortfolioError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DisassociatePrincipalFromPortfolioError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Disassociates the specified product from the specified portfolio. </p>"]
-    fn disassociate_product_from_portfolio
-        (&self,
-         input: &DisassociateProductFromPortfolioInput)
-         -> Result<DisassociateProductFromPortfolioOutput, DisassociateProductFromPortfolioError> {
+    #[doc = "<p>Disassociates the specified product from the specified portfolio. </p>"]
+    fn disassociate_product_from_portfolio(
+        &self,
+        input: &DisassociateProductFromPortfolioInput,
+    ) -> Result<DisassociateProductFromPortfolioOutput, DisassociateProductFromPortfolioError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.DisassociateProductFromPortfolio");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.DisassociateProductFromPortfolio",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -7700,27 +7908,35 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DisassociateProductFromPortfolioOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<DisassociateProductFromPortfolioOutput>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DisassociateProductFromPortfolioError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DisassociateProductFromPortfolioError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Disassociates a TagOption from a resource.</p>"]
-    fn disassociate_tag_option_from_resource
-        (&self,
-         input: &DisassociateTagOptionFromResourceInput)
-         -> Result<DisassociateTagOptionFromResourceOutput, DisassociateTagOptionFromResourceError> {
+    #[doc = "<p>Disassociates a TagOption from a resource.</p>"]
+    fn disassociate_tag_option_from_resource(
+        &self,
+        input: &DisassociateTagOptionFromResourceInput,
+    ) -> Result<DisassociateTagOptionFromResourceOutput, DisassociateTagOptionFromResourceError>
+    {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.DisassociateTagOptionFromResource");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.DisassociateTagOptionFromResource",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -7732,27 +7948,34 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DisassociateTagOptionFromResourceOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<DisassociateTagOptionFromResourceOutput>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DisassociateTagOptionFromResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DisassociateTagOptionFromResourceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists details of all portfolios for which sharing was accepted by this account.</p>"]
-    fn list_accepted_portfolio_shares
-        (&self,
-         input: &ListAcceptedPortfolioSharesInput)
-         -> Result<ListAcceptedPortfolioSharesOutput, ListAcceptedPortfolioSharesError> {
+    #[doc = "<p>Lists details of all portfolios for which sharing was accepted by this account.</p>"]
+    fn list_accepted_portfolio_shares(
+        &self,
+        input: &ListAcceptedPortfolioSharesInput,
+    ) -> Result<ListAcceptedPortfolioSharesOutput, ListAcceptedPortfolioSharesError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.ListAcceptedPortfolioShares");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.ListAcceptedPortfolioShares",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -7764,28 +7987,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListAcceptedPortfolioSharesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListAcceptedPortfolioSharesOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListAcceptedPortfolioSharesError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(ListAcceptedPortfolioSharesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Retrieves detailed constraint information for the specified portfolio and product.</p>"]
-    fn list_constraints_for_portfolio
-        (&self,
-         input: &ListConstraintsForPortfolioInput)
-         -> Result<ListConstraintsForPortfolioOutput, ListConstraintsForPortfolioError> {
+    fn list_constraints_for_portfolio(
+        &self,
+        input: &ListConstraintsForPortfolioInput,
+    ) -> Result<ListConstraintsForPortfolioOutput, ListConstraintsForPortfolioError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.ListConstraintsForPortfolio");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.ListConstraintsForPortfolio",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -7797,27 +8024,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListConstraintsForPortfolioOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListConstraintsForPortfolioOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListConstraintsForPortfolioError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(ListConstraintsForPortfolioError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Returns a paginated list of all paths to a specified product. A path is how the user has access to a specified product, and is necessary when provisioning a product. A path also determines the constraints put on the product.</p>"]
-    fn list_launch_paths(&self,
-                         input: &ListLaunchPathsInput)
-                         -> Result<ListLaunchPathsOutput, ListLaunchPathsError> {
+    fn list_launch_paths(
+        &self,
+        input: &ListLaunchPathsInput,
+    ) -> Result<ListLaunchPathsOutput, ListLaunchPathsError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.ListLaunchPaths");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.ListLaunchPaths",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -7829,28 +8061,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListLaunchPathsOutput>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListLaunchPathsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListLaunchPathsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListLaunchPathsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Lists the account IDs that have been authorized sharing of the specified portfolio.</p>"]
-    fn list_portfolio_access(&self,
-                             input: &ListPortfolioAccessInput)
-                             -> Result<ListPortfolioAccessOutput, ListPortfolioAccessError> {
+    fn list_portfolio_access(
+        &self,
+        input: &ListPortfolioAccessInput,
+    ) -> Result<ListPortfolioAccessOutput, ListPortfolioAccessError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.ListPortfolioAccess");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.ListPortfolioAccess",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -7862,21 +8098,25 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListPortfolioAccessOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListPortfolioAccessOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListPortfolioAccessError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListPortfolioAccessError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists all portfolios in the catalog.</p>"]
-    fn list_portfolios(&self,
-                       input: &ListPortfoliosInput)
-                       -> Result<ListPortfoliosOutput, ListPortfoliosError> {
+    #[doc = "<p>Lists all portfolios in the catalog.</p>"]
+    fn list_portfolios(
+        &self,
+        input: &ListPortfoliosInput,
+    ) -> Result<ListPortfoliosOutput, ListPortfoliosError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7892,29 +8132,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListPortfoliosOutput>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListPortfoliosOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListPortfoliosError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListPortfoliosError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists all portfolios that the specified product is associated with.</p>"]
-    fn list_portfolios_for_product
-        (&self,
-         input: &ListPortfoliosForProductInput)
-         -> Result<ListPortfoliosForProductOutput, ListPortfoliosForProductError> {
+    #[doc = "<p>Lists all portfolios that the specified product is associated with.</p>"]
+    fn list_portfolios_for_product(
+        &self,
+        input: &ListPortfoliosForProductInput,
+    ) -> Result<ListPortfoliosForProductOutput, ListPortfoliosForProductError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.ListPortfoliosForProduct");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.ListPortfoliosForProduct",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -7926,28 +8169,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListPortfoliosForProductOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListPortfoliosForProductOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListPortfoliosForProductError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(ListPortfoliosForProductError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists all principal ARNs associated with the specified portfolio.</p>"]
-    fn list_principals_for_portfolio
-        (&self,
-         input: &ListPrincipalsForPortfolioInput)
-         -> Result<ListPrincipalsForPortfolioOutput, ListPrincipalsForPortfolioError> {
+    #[doc = "<p>Lists all principal ARNs associated with the specified portfolio.</p>"]
+    fn list_principals_for_portfolio(
+        &self,
+        input: &ListPrincipalsForPortfolioInput,
+    ) -> Result<ListPrincipalsForPortfolioOutput, ListPrincipalsForPortfolioError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.ListPrincipalsForPortfolio");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.ListPrincipalsForPortfolio",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -7959,28 +8206,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListPrincipalsForPortfolioOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListPrincipalsForPortfolioOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListPrincipalsForPortfolioError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+                Err(ListPrincipalsForPortfolioError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists all provisioning artifacts associated with the specified product.</p>"]
-    fn list_provisioning_artifacts
-        (&self,
-         input: &ListProvisioningArtifactsInput)
-         -> Result<ListProvisioningArtifactsOutput, ListProvisioningArtifactsError> {
+    #[doc = "<p>Lists all provisioning artifacts associated with the specified product.</p>"]
+    fn list_provisioning_artifacts(
+        &self,
+        input: &ListProvisioningArtifactsInput,
+    ) -> Result<ListProvisioningArtifactsOutput, ListProvisioningArtifactsError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.ListProvisioningArtifacts");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.ListProvisioningArtifacts",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -7992,27 +8243,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListProvisioningArtifactsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListProvisioningArtifactsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListProvisioningArtifactsError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(ListProvisioningArtifactsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Returns a paginated list of all performed requests, in the form of RecordDetails objects that are filtered as specified.</p>"]
-    fn list_record_history(&self,
-                           input: &ListRecordHistoryInput)
-                           -> Result<ListRecordHistoryOutput, ListRecordHistoryError> {
+    fn list_record_history(
+        &self,
+        input: &ListRecordHistoryInput,
+    ) -> Result<ListRecordHistoryOutput, ListRecordHistoryError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.ListRecordHistory");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.ListRecordHistory",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -8024,29 +8280,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListRecordHistoryOutput>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListRecordHistoryOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListRecordHistoryError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListRecordHistoryError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists resources associated with a TagOption.</p>"]
-    fn list_resources_for_tag_option
-        (&self,
-         input: &ListResourcesForTagOptionInput)
-         -> Result<ListResourcesForTagOptionOutput, ListResourcesForTagOptionError> {
+    #[doc = "<p>Lists resources associated with a TagOption.</p>"]
+    fn list_resources_for_tag_option(
+        &self,
+        input: &ListResourcesForTagOptionInput,
+    ) -> Result<ListResourcesForTagOptionOutput, ListResourcesForTagOptionError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.ListResourcesForTagOption");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.ListResourcesForTagOption",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -8058,22 +8317,25 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListResourcesForTagOptionOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListResourcesForTagOptionOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListResourcesForTagOptionError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(ListResourcesForTagOptionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists detailed TagOptions information.</p>"]
-    fn list_tag_options(&self,
-                        input: &ListTagOptionsInput)
-                        -> Result<ListTagOptionsOutput, ListTagOptionsError> {
+    #[doc = "<p>Lists detailed TagOptions information.</p>"]
+    fn list_tag_options(
+        &self,
+        input: &ListTagOptionsInput,
+    ) -> Result<ListTagOptionsOutput, ListTagOptionsError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8089,28 +8351,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListTagOptionsOutput>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListTagOptionsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListTagOptionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListTagOptionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Requests a <i>provision</i> of a specified product. A <i>provisioned product</i> is a resourced instance for a product. For example, provisioning a CloudFormation-template-backed product results in launching a CloudFormation stack and all the underlying resources that come with it. </p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation. The error \"Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>\" indicates that your request contains a tag which has a tag key but no corresponding tag value (value is empty or null). Your call may have included values returned from a <code>DescribeProvisioningParameters</code> call that resulted in a TagOption key with an empty list. This happens when TagOption keys are in conflict. For more information, see <a>DescribeProvisioningParameters</a>.</p>"]
-    fn provision_product(&self,
-                         input: &ProvisionProductInput)
-                         -> Result<ProvisionProductOutput, ProvisionProductError> {
+    fn provision_product(
+        &self,
+        input: &ProvisionProductInput,
+    ) -> Result<ProvisionProductOutput, ProvisionProductError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.ProvisionProduct");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.ProvisionProduct",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -8122,28 +8388,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ProvisionProductOutput>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ProvisionProductOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ProvisionProductError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ProvisionProductError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Rejects an offer to share a portfolio.</p>"]
-    fn reject_portfolio_share(&self,
-                              input: &RejectPortfolioShareInput)
-                              -> Result<RejectPortfolioShareOutput, RejectPortfolioShareError> {
+    #[doc = "<p>Rejects an offer to share a portfolio.</p>"]
+    fn reject_portfolio_share(
+        &self,
+        input: &RejectPortfolioShareInput,
+    ) -> Result<RejectPortfolioShareOutput, RejectPortfolioShareError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.RejectPortfolioShare");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.RejectPortfolioShare",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -8155,27 +8425,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<RejectPortfolioShareOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<RejectPortfolioShareOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(RejectPortfolioShareError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(RejectPortfolioShareError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Returns a paginated list of all the ProvisionedProduct objects that are currently available (not terminated). </p>"]
-    fn scan_provisioned_products
-        (&self,
-         input: &ScanProvisionedProductsInput)
-         -> Result<ScanProvisionedProductsOutput, ScanProvisionedProductsError> {
+    fn scan_provisioned_products(
+        &self,
+        input: &ScanProvisionedProductsInput,
+    ) -> Result<ScanProvisionedProductsOutput, ScanProvisionedProductsError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.ScanProvisionedProducts");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.ScanProvisionedProducts",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -8187,22 +8462,25 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ScanProvisionedProductsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ScanProvisionedProductsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ScanProvisionedProductsError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(ScanProvisionedProductsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns a paginated list all of the <code>Products</code> objects to which the caller has access. </p> <p>The output of this operation can be used as input for other operations, such as <a>DescribeProductView</a>.</p>"]
-    fn search_products(&self,
-                       input: &SearchProductsInput)
-                       -> Result<SearchProductsOutput, SearchProductsError> {
+    fn search_products(
+        &self,
+        input: &SearchProductsInput,
+    ) -> Result<SearchProductsOutput, SearchProductsError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8218,29 +8496,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<SearchProductsOutput>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<SearchProductsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(SearchProductsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(SearchProductsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Retrieves summary and status information about all products created within the caller's account. If a portfolio ID is provided, this operation retrieves information for only those products that are associated with the specified portfolio.</p>"]
-    fn search_products_as_admin
-        (&self,
-         input: &SearchProductsAsAdminInput)
-         -> Result<SearchProductsAsAdminOutput, SearchProductsAsAdminError> {
+    fn search_products_as_admin(
+        &self,
+        input: &SearchProductsAsAdminInput,
+    ) -> Result<SearchProductsAsAdminOutput, SearchProductsAsAdminError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.SearchProductsAsAdmin");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.SearchProductsAsAdmin",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -8252,27 +8533,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<SearchProductsAsAdminOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<SearchProductsAsAdminOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(SearchProductsAsAdminError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(SearchProductsAsAdminError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Requests termination of an existing ProvisionedProduct object. If there are <code>Tags</code> associated with the object, they are terminated when the ProvisionedProduct object is terminated. </p> <p>This operation does not delete any records associated with the ProvisionedProduct object.</p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation.</p>"]
-    fn terminate_provisioned_product
-        (&self,
-         input: &TerminateProvisionedProductInput)
-         -> Result<TerminateProvisionedProductOutput, TerminateProvisionedProductError> {
+    fn terminate_provisioned_product(
+        &self,
+        input: &TerminateProvisionedProductInput,
+    ) -> Result<TerminateProvisionedProductOutput, TerminateProvisionedProductError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.TerminateProvisionedProduct");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.TerminateProvisionedProduct",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -8284,27 +8570,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<TerminateProvisionedProductOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<TerminateProvisionedProductOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(TerminateProvisionedProductError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(TerminateProvisionedProductError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Updates an existing constraint.</p>"]
-    fn update_constraint(&self,
-                         input: &UpdateConstraintInput)
-                         -> Result<UpdateConstraintOutput, UpdateConstraintError> {
+    #[doc = "<p>Updates an existing constraint.</p>"]
+    fn update_constraint(
+        &self,
+        input: &UpdateConstraintInput,
+    ) -> Result<UpdateConstraintOutput, UpdateConstraintError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.UpdateConstraint");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.UpdateConstraint",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -8316,28 +8607,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateConstraintOutput>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<UpdateConstraintOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateConstraintError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateConstraintError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Updates the specified portfolio's details. This operation does not work with a product that has been shared with you.</p>"]
-    fn update_portfolio(&self,
-                        input: &UpdatePortfolioInput)
-                        -> Result<UpdatePortfolioOutput, UpdatePortfolioError> {
+    fn update_portfolio(
+        &self,
+        input: &UpdatePortfolioInput,
+    ) -> Result<UpdatePortfolioOutput, UpdatePortfolioError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.UpdatePortfolio");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.UpdatePortfolio",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -8349,23 +8644,25 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdatePortfolioOutput>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<UpdatePortfolioOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdatePortfolioError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdatePortfolioError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Updates an existing product.</p>"]
-    fn update_product(&self,
-                      input: &UpdateProductInput)
-                      -> Result<UpdateProductOutput, UpdateProductError> {
+    #[doc = "<p>Updates an existing product.</p>"]
+    fn update_product(
+        &self,
+        input: &UpdateProductInput,
+    ) -> Result<UpdateProductOutput, UpdateProductError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8381,29 +8678,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateProductOutput>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<UpdateProductOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateProductError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateProductError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Requests updates to the configuration of an existing ProvisionedProduct object. If there are tags associated with the object, they cannot be updated or added with this operation. Depending on the specific updates requested, this operation may update with no interruption, with some interruption, or replace the ProvisionedProduct object entirely. </p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation.</p>"]
-    fn update_provisioned_product
-        (&self,
-         input: &UpdateProvisionedProductInput)
-         -> Result<UpdateProvisionedProductOutput, UpdateProvisionedProductError> {
+    fn update_provisioned_product(
+        &self,
+        input: &UpdateProvisionedProductInput,
+    ) -> Result<UpdateProvisionedProductOutput, UpdateProvisionedProductError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.UpdateProvisionedProduct");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.UpdateProvisionedProduct",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -8415,28 +8715,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateProvisionedProductOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<UpdateProvisionedProductOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateProvisionedProductError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(UpdateProvisionedProductError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Updates an existing provisioning artifact's information. This operation does not work on a provisioning artifact associated with a product that has been shared with you.</p>"]
-    fn update_provisioning_artifact
-        (&self,
-         input: &UpdateProvisioningArtifactInput)
-         -> Result<UpdateProvisioningArtifactOutput, UpdateProvisioningArtifactError> {
+    fn update_provisioning_artifact(
+        &self,
+        input: &UpdateProvisioningArtifactInput,
+    ) -> Result<UpdateProvisioningArtifactOutput, UpdateProvisioningArtifactError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.UpdateProvisioningArtifact");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.UpdateProvisioningArtifact",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -8448,27 +8752,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateProvisioningArtifactOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<UpdateProvisioningArtifactOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateProvisioningArtifactError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+                Err(UpdateProvisioningArtifactError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Updates an existing TagOption.</p>"]
-    fn update_tag_option(&self,
-                         input: &UpdateTagOptionInput)
-                         -> Result<UpdateTagOptionOutput, UpdateTagOptionError> {
+    #[doc = "<p>Updates an existing TagOption.</p>"]
+    fn update_tag_option(
+        &self,
+        input: &UpdateTagOptionInput,
+    ) -> Result<UpdateTagOptionOutput, UpdateTagOptionError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWS242ServiceCatalogService.UpdateTagOption");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.UpdateTagOption",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -8480,14 +8789,16 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateTagOptionOutput>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<UpdateTagOptionOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateTagOptionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateTagOptionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

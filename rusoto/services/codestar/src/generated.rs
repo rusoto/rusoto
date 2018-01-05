@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -28,495 +27,495 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AssociateTeamMemberRequest {
-    #[doc="<p>A user- or system-generated token that identifies the entity that requested the team member association to the project. This token can be used to repeat the request. </p>"]
-    #[serde(rename="clientRequestToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A user- or system-generated token that identifies the entity that requested the team member association to the project. This token can be used to repeat the request. </p>
+    #[serde(rename = "clientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub client_request_token: Option<String>,
-    #[doc="<p>The ID of the project to which you will add the IAM user.</p>"]
-    #[serde(rename="projectId")]
+    /// <p>The ID of the project to which you will add the IAM user.</p>
+    #[serde(rename = "projectId")]
     pub project_id: String,
-    #[doc="<p>The AWS CodeStar project role that will apply to this user. This role determines what actions a user can take in an AWS CodeStar project.</p>"]
-    #[serde(rename="projectRole")]
+    /// <p>The AWS CodeStar project role that will apply to this user. This role determines what actions a user can take in an AWS CodeStar project.</p>
+    #[serde(rename = "projectRole")]
     pub project_role: String,
-    #[doc="<p>Whether the team member is allowed to use an SSH public/private key pair to remotely access project resources, for example Amazon EC2 instances.</p>"]
-    #[serde(rename="remoteAccessAllowed")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Whether the team member is allowed to use an SSH public/private key pair to remotely access project resources, for example Amazon EC2 instances.</p>
+    #[serde(rename = "remoteAccessAllowed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub remote_access_allowed: Option<bool>,
-    #[doc="<p>The Amazon Resource Name (ARN) for the IAM user you want to add to the DevHub project.</p>"]
-    #[serde(rename="userArn")]
+    /// <p>The Amazon Resource Name (ARN) for the IAM user you want to add to the DevHub project.</p>
+    #[serde(rename = "userArn")]
     pub user_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AssociateTeamMemberResult {
-    #[doc="<p>The user- or system-generated token from the initial request that can be used to repeat the request. </p>"]
-    #[serde(rename="clientRequestToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user- or system-generated token from the initial request that can be used to repeat the request. </p>
+    #[serde(rename = "clientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub client_request_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateProjectRequest {
-    #[doc="<p>Reserved for future use.</p>"]
-    #[serde(rename="clientRequestToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Reserved for future use.</p>
+    #[serde(rename = "clientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub client_request_token: Option<String>,
-    #[doc="<p>Reserved for future use.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Reserved for future use.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>Reserved for future use.</p>"]
-    #[serde(rename="id")]
+    /// <p>Reserved for future use.</p>
+    #[serde(rename = "id")]
     pub id: String,
-    #[doc="<p>Reserved for future use.</p>"]
-    #[serde(rename="name")]
+    /// <p>Reserved for future use.</p>
+    #[serde(rename = "name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateProjectResult {
-    #[doc="<p>Reserved for future use.</p>"]
-    #[serde(rename="arn")]
+    /// <p>Reserved for future use.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
-    #[doc="<p>Reserved for future use.</p>"]
-    #[serde(rename="clientRequestToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Reserved for future use.</p>
+    #[serde(rename = "clientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub client_request_token: Option<String>,
-    #[doc="<p>Reserved for future use.</p>"]
-    #[serde(rename="id")]
+    /// <p>Reserved for future use.</p>
+    #[serde(rename = "id")]
     pub id: String,
-    #[doc="<p>Reserved for future use.</p>"]
-    #[serde(rename="projectTemplateId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Reserved for future use.</p>
+    #[serde(rename = "projectTemplateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub project_template_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateUserProfileRequest {
-    #[doc="<p>The name that will be displayed as the friendly name for the user in AWS CodeStar. </p>"]
-    #[serde(rename="displayName")]
+    /// <p>The name that will be displayed as the friendly name for the user in AWS CodeStar. </p>
+    #[serde(rename = "displayName")]
     pub display_name: String,
-    #[doc="<p>The email address that will be displayed as part of the user's profile in AWS CodeStar.</p>"]
-    #[serde(rename="emailAddress")]
+    /// <p>The email address that will be displayed as part of the user's profile in AWS CodeStar.</p>
+    #[serde(rename = "emailAddress")]
     pub email_address: String,
-    #[doc="<p>The SSH public key associated with the user in AWS CodeStar. If a project owner allows the user remote access to project resources, this public key will be used along with the user's private key for SSH access.</p>"]
-    #[serde(rename="sshPublicKey")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The SSH public key associated with the user in AWS CodeStar. If a project owner allows the user remote access to project resources, this public key will be used along with the user's private key for SSH access.</p>
+    #[serde(rename = "sshPublicKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ssh_public_key: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the user in IAM.</p>"]
-    #[serde(rename="userArn")]
+    /// <p>The Amazon Resource Name (ARN) of the user in IAM.</p>
+    #[serde(rename = "userArn")]
     pub user_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateUserProfileResult {
-    #[doc="<p>The date the user profile was created, in timestamp format.</p>"]
-    #[serde(rename="createdTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the user profile was created, in timestamp format.</p>
+    #[serde(rename = "createdTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_timestamp: Option<f64>,
-    #[doc="<p>The name that is displayed as the friendly name for the user in AWS CodeStar.</p>"]
-    #[serde(rename="displayName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name that is displayed as the friendly name for the user in AWS CodeStar.</p>
+    #[serde(rename = "displayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
-    #[doc="<p>The email address that is displayed as part of the user's profile in AWS CodeStar.</p>"]
-    #[serde(rename="emailAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The email address that is displayed as part of the user's profile in AWS CodeStar.</p>
+    #[serde(rename = "emailAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub email_address: Option<String>,
-    #[doc="<p>The date the user profile was last modified, in timestamp format.</p>"]
-    #[serde(rename="lastModifiedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the user profile was last modified, in timestamp format.</p>
+    #[serde(rename = "lastModifiedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_timestamp: Option<f64>,
-    #[doc="<p>The SSH public key associated with the user in AWS CodeStar. This is the public portion of the public/private keypair the user can use to access project resources if a project owner allows the user remote access to those resources.</p>"]
-    #[serde(rename="sshPublicKey")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The SSH public key associated with the user in AWS CodeStar. This is the public portion of the public/private keypair the user can use to access project resources if a project owner allows the user remote access to those resources.</p>
+    #[serde(rename = "sshPublicKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ssh_public_key: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the user in IAM.</p>"]
-    #[serde(rename="userArn")]
+    /// <p>The Amazon Resource Name (ARN) of the user in IAM.</p>
+    #[serde(rename = "userArn")]
     pub user_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteProjectRequest {
-    #[doc="<p>A user- or system-generated token that identifies the entity that requested project deletion. This token can be used to repeat the request. </p>"]
-    #[serde(rename="clientRequestToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A user- or system-generated token that identifies the entity that requested project deletion. This token can be used to repeat the request. </p>
+    #[serde(rename = "clientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub client_request_token: Option<String>,
-    #[doc="<p>Whether to send a delete request for the primary stack in AWS CloudFormation originally used to generate the project and its resources. This option will delete all AWS resources for the project (except for any buckets in Amazon S3) as well as deleting the project itself. Recommended for most use cases.</p>"]
-    #[serde(rename="deleteStack")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Whether to send a delete request for the primary stack in AWS CloudFormation originally used to generate the project and its resources. This option will delete all AWS resources for the project (except for any buckets in Amazon S3) as well as deleting the project itself. Recommended for most use cases.</p>
+    #[serde(rename = "deleteStack")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub delete_stack: Option<bool>,
-    #[doc="<p>The ID of the project to be deleted in AWS CodeStar.</p>"]
-    #[serde(rename="id")]
+    /// <p>The ID of the project to be deleted in AWS CodeStar.</p>
+    #[serde(rename = "id")]
     pub id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteProjectResult {
-    #[doc="<p>The Amazon Resource Name (ARN) of the deleted project.</p>"]
-    #[serde(rename="projectArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the deleted project.</p>
+    #[serde(rename = "projectArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub project_arn: Option<String>,
-    #[doc="<p>The ID of the primary stack in AWS CloudFormation that will be deleted as part of deleting the project and its resources.</p>"]
-    #[serde(rename="stackId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the primary stack in AWS CloudFormation that will be deleted as part of deleting the project and its resources.</p>
+    #[serde(rename = "stackId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub stack_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteUserProfileRequest {
-    #[doc="<p>The Amazon Resource Name (ARN) of the user to delete from AWS CodeStar.</p>"]
-    #[serde(rename="userArn")]
+    /// <p>The Amazon Resource Name (ARN) of the user to delete from AWS CodeStar.</p>
+    #[serde(rename = "userArn")]
     pub user_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteUserProfileResult {
-    #[doc="<p>The Amazon Resource Name (ARN) of the user deleted from AWS CodeStar.</p>"]
-    #[serde(rename="userArn")]
+    /// <p>The Amazon Resource Name (ARN) of the user deleted from AWS CodeStar.</p>
+    #[serde(rename = "userArn")]
     pub user_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeProjectRequest {
-    #[doc="<p>The ID of the project.</p>"]
-    #[serde(rename="id")]
+    /// <p>The ID of the project.</p>
+    #[serde(rename = "id")]
     pub id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeProjectResult {
-    #[doc="<p>The Amazon Resource Name (ARN) for the project.</p>"]
-    #[serde(rename="arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) for the project.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>A user- or system-generated token that identifies the entity that requested project creation. </p>"]
-    #[serde(rename="clientRequestToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A user- or system-generated token that identifies the entity that requested project creation. </p>
+    #[serde(rename = "clientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub client_request_token: Option<String>,
-    #[doc="<p>The date and time the project was created, in timestamp format.</p>"]
-    #[serde(rename="createdTimeStamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time the project was created, in timestamp format.</p>
+    #[serde(rename = "createdTimeStamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time_stamp: Option<f64>,
-    #[doc="<p>The description of the project, if any.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The description of the project, if any.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The ID of the project.</p>"]
-    #[serde(rename="id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the project.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>The display name for the project.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The display name for the project.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The ID for the AWS CodeStar project template used to create the project.</p>"]
-    #[serde(rename="projectTemplateId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID for the AWS CodeStar project template used to create the project.</p>
+    #[serde(rename = "projectTemplateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub project_template_id: Option<String>,
-    #[doc="<p>The ID of the primary stack in AWS CloudFormation used to generate resources for the project.</p>"]
-    #[serde(rename="stackId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the primary stack in AWS CloudFormation used to generate resources for the project.</p>
+    #[serde(rename = "stackId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub stack_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeUserProfileRequest {
-    #[doc="<p>The Amazon Resource Name (ARN) of the user.</p>"]
-    #[serde(rename="userArn")]
+    /// <p>The Amazon Resource Name (ARN) of the user.</p>
+    #[serde(rename = "userArn")]
     pub user_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeUserProfileResult {
-    #[doc="<p>The date and time when the user profile was created in AWS CodeStar, in timestamp format.</p>"]
-    #[serde(rename="createdTimestamp")]
+    /// <p>The date and time when the user profile was created in AWS CodeStar, in timestamp format.</p>
+    #[serde(rename = "createdTimestamp")]
     pub created_timestamp: f64,
-    #[doc="<p>The display name shown for the user in AWS CodeStar projects. For example, this could be set to both first and last name (\"Mary Major\") or a single name (\"Mary\"). The display name is also used to generate the initial icon associated with the user in AWS CodeStar projects. If spaces are included in the display name, the first character that appears after the space will be used as the second character in the user initial icon. The initial icon displays a maximum of two characters, so a display name with more than one space (for example \"Mary Jane Major\") would generate an initial icon using the first character and the first character after the space (\"MJ\", not \"MM\").</p>"]
-    #[serde(rename="displayName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The display name shown for the user in AWS CodeStar projects. For example, this could be set to both first and last name ("Mary Major") or a single name ("Mary"). The display name is also used to generate the initial icon associated with the user in AWS CodeStar projects. If spaces are included in the display name, the first character that appears after the space will be used as the second character in the user initial icon. The initial icon displays a maximum of two characters, so a display name with more than one space (for example "Mary Jane Major") would generate an initial icon using the first character and the first character after the space ("MJ", not "MM").</p>
+    #[serde(rename = "displayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
-    #[doc="<p>The email address for the user. Optional.</p>"]
-    #[serde(rename="emailAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The email address for the user. Optional.</p>
+    #[serde(rename = "emailAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub email_address: Option<String>,
-    #[doc="<p>The date and time when the user profile was last modified, in timestamp format.</p>"]
-    #[serde(rename="lastModifiedTimestamp")]
+    /// <p>The date and time when the user profile was last modified, in timestamp format.</p>
+    #[serde(rename = "lastModifiedTimestamp")]
     pub last_modified_timestamp: f64,
-    #[doc="<p>The SSH public key associated with the user. This SSH public key is associated with the user profile, and can be used in conjunction with the associated private key for access to project resources, such as Amazon EC2 instances, if a project owner grants remote access to those resources.</p>"]
-    #[serde(rename="sshPublicKey")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The SSH public key associated with the user. This SSH public key is associated with the user profile, and can be used in conjunction with the associated private key for access to project resources, such as Amazon EC2 instances, if a project owner grants remote access to those resources.</p>
+    #[serde(rename = "sshPublicKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ssh_public_key: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the user.</p>"]
-    #[serde(rename="userArn")]
+    /// <p>The Amazon Resource Name (ARN) of the user.</p>
+    #[serde(rename = "userArn")]
     pub user_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DisassociateTeamMemberRequest {
-    #[doc="<p>The ID of the AWS CodeStar project from which you want to remove a team member.</p>"]
-    #[serde(rename="projectId")]
+    /// <p>The ID of the AWS CodeStar project from which you want to remove a team member.</p>
+    #[serde(rename = "projectId")]
     pub project_id: String,
-    #[doc="<p>The Amazon Resource Name (ARN) of the IAM user or group whom you want to remove from the project.</p>"]
-    #[serde(rename="userArn")]
+    /// <p>The Amazon Resource Name (ARN) of the IAM user or group whom you want to remove from the project.</p>
+    #[serde(rename = "userArn")]
     pub user_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DisassociateTeamMemberResult;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListProjectsRequest {
-    #[doc="<p>The maximum amount of data that can be contained in a single set of results.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum amount of data that can be contained in a single set of results.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The continuation token to be used to return the next set of results, if the results cannot be returned in one response.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The continuation token to be used to return the next set of results, if the results cannot be returned in one response.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListProjectsResult {
-    #[doc="<p>The continuation token to use when requesting the next set of results, if there are more results to be returned.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The continuation token to use when requesting the next set of results, if there are more results to be returned.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>A list of projects.</p>"]
-    #[serde(rename="projects")]
+    /// <p>A list of projects.</p>
+    #[serde(rename = "projects")]
     pub projects: Vec<ProjectSummary>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListResourcesRequest {
-    #[doc="<p>he maximum amount of data that can be contained in a single set of results.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>he maximum amount of data that can be contained in a single set of results.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The continuation token for the next set of results, if the results cannot be returned in one response.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The continuation token for the next set of results, if the results cannot be returned in one response.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The ID of the project.</p>"]
-    #[serde(rename="projectId")]
+    /// <p>The ID of the project.</p>
+    #[serde(rename = "projectId")]
     pub project_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListResourcesResult {
-    #[doc="<p>The continuation token to use when requesting the next set of results, if there are more results to be returned.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The continuation token to use when requesting the next set of results, if there are more results to be returned.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>An array of resources associated with the project. </p>"]
-    #[serde(rename="resources")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of resources associated with the project. </p>
+    #[serde(rename = "resources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resources: Option<Vec<Resource>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListTeamMembersRequest {
-    #[doc="<p>The maximum number of team members you want returned in a response.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of team members you want returned in a response.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The continuation token for the next set of results, if the results cannot be returned in one response.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The continuation token for the next set of results, if the results cannot be returned in one response.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The ID of the project for which you want to list team members.</p>"]
-    #[serde(rename="projectId")]
+    /// <p>The ID of the project for which you want to list team members.</p>
+    #[serde(rename = "projectId")]
     pub project_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListTeamMembersResult {
-    #[doc="<p>The continuation token to use when requesting the next set of results, if there are more results to be returned.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The continuation token to use when requesting the next set of results, if there are more results to be returned.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>A list of team member objects for the project.</p>"]
-    #[serde(rename="teamMembers")]
+    /// <p>A list of team member objects for the project.</p>
+    #[serde(rename = "teamMembers")]
     pub team_members: Vec<TeamMember>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListUserProfilesRequest {
-    #[doc="<p>The maximum number of results to return in a response.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of results to return in a response.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The continuation token for the next set of results, if the results cannot be returned in one response.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The continuation token for the next set of results, if the results cannot be returned in one response.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListUserProfilesResult {
-    #[doc="<p>The continuation token to use when requesting the next set of results, if there are more results to be returned.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The continuation token to use when requesting the next set of results, if there are more results to be returned.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>All the user profiles configured in AWS CodeStar for an AWS account.</p>"]
-    #[serde(rename="userProfiles")]
+    /// <p>All the user profiles configured in AWS CodeStar for an AWS account.</p>
+    #[serde(rename = "userProfiles")]
     pub user_profiles: Vec<UserProfileSummary>,
 }
 
-#[doc="<p>Information about the metadata for a project.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about the metadata for a project.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ProjectSummary {
-    #[doc="<p>The Amazon Resource Name (ARN) of the project.</p>"]
-    #[serde(rename="projectArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the project.</p>
+    #[serde(rename = "projectArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub project_arn: Option<String>,
-    #[doc="<p>The ID of the project.</p>"]
-    #[serde(rename="projectId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the project.</p>
+    #[serde(rename = "projectId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub project_id: Option<String>,
 }
 
-#[doc="<p>Information about a resource for a project.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about a resource for a project.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Resource {
-    #[doc="<p>The Amazon Resource Name (ARN) of the resource.</p>"]
-    #[serde(rename="id")]
+    /// <p>The Amazon Resource Name (ARN) of the resource.</p>
+    #[serde(rename = "id")]
     pub id: String,
 }
 
-#[doc="<p>Information about a team member in a project.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about a team member in a project.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct TeamMember {
-    #[doc="<p>The role assigned to the user in the project. Project roles have different levels of access. For more information, see <a href=\"http://docs.aws.amazon.com/codestar/latest/userguide/working-with-teams.html\">Working with Teams</a> in the AWS CodeStar User Guide. </p>"]
-    #[serde(rename="projectRole")]
+    /// <p>The role assigned to the user in the project. Project roles have different levels of access. For more information, see <a href="http://docs.aws.amazon.com/codestar/latest/userguide/working-with-teams.html">Working with Teams</a> in the AWS CodeStar User Guide. </p>
+    #[serde(rename = "projectRole")]
     pub project_role: String,
-    #[doc="<p>Whether the user is allowed to remotely access project resources using an SSH public/private key pair.</p>"]
-    #[serde(rename="remoteAccessAllowed")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Whether the user is allowed to remotely access project resources using an SSH public/private key pair.</p>
+    #[serde(rename = "remoteAccessAllowed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub remote_access_allowed: Option<bool>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the user in IAM.</p>"]
-    #[serde(rename="userArn")]
+    /// <p>The Amazon Resource Name (ARN) of the user in IAM.</p>
+    #[serde(rename = "userArn")]
     pub user_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateProjectRequest {
-    #[doc="<p>The description of the project, if any.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The description of the project, if any.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The ID of the project you want to update.</p>"]
-    #[serde(rename="id")]
+    /// <p>The ID of the project you want to update.</p>
+    #[serde(rename = "id")]
     pub id: String,
-    #[doc="<p>The name of the project you want to update.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the project you want to update.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateProjectResult;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateTeamMemberRequest {
-    #[doc="<p>The ID of the project.</p>"]
-    #[serde(rename="projectId")]
+    /// <p>The ID of the project.</p>
+    #[serde(rename = "projectId")]
     pub project_id: String,
-    #[doc="<p>The role assigned to the user in the project. Project roles have different levels of access. For more information, see <a href=\"http://docs.aws.amazon.com/codestar/latest/userguide/working-with-teams.html\">Working with Teams</a> in the AWS CodeStar User Guide.</p>"]
-    #[serde(rename="projectRole")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The role assigned to the user in the project. Project roles have different levels of access. For more information, see <a href="http://docs.aws.amazon.com/codestar/latest/userguide/working-with-teams.html">Working with Teams</a> in the AWS CodeStar User Guide.</p>
+    #[serde(rename = "projectRole")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub project_role: Option<String>,
-    #[doc="<p>Whether a team member is allowed to remotely access project resources using the SSH public key associated with the user's profile. Even if this is set to True, the user must associate a public key with their profile before the user can access resources.</p>"]
-    #[serde(rename="remoteAccessAllowed")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Whether a team member is allowed to remotely access project resources using the SSH public key associated with the user's profile. Even if this is set to True, the user must associate a public key with their profile before the user can access resources.</p>
+    #[serde(rename = "remoteAccessAllowed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub remote_access_allowed: Option<bool>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the user for whom you want to change team membership attributes.</p>"]
-    #[serde(rename="userArn")]
+    /// <p>The Amazon Resource Name (ARN) of the user for whom you want to change team membership attributes.</p>
+    #[serde(rename = "userArn")]
     pub user_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateTeamMemberResult {
-    #[doc="<p>The project role granted to the user.</p>"]
-    #[serde(rename="projectRole")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The project role granted to the user.</p>
+    #[serde(rename = "projectRole")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub project_role: Option<String>,
-    #[doc="<p>Whether a team member is allowed to remotely access project resources using the SSH public key associated with the user's profile.</p>"]
-    #[serde(rename="remoteAccessAllowed")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Whether a team member is allowed to remotely access project resources using the SSH public key associated with the user's profile.</p>
+    #[serde(rename = "remoteAccessAllowed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub remote_access_allowed: Option<bool>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the user whose team membership attributes were updated.</p>"]
-    #[serde(rename="userArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the user whose team membership attributes were updated.</p>
+    #[serde(rename = "userArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateUserProfileRequest {
-    #[doc="<p>The name that is displayed as the friendly name for the user in AWS CodeStar.</p>"]
-    #[serde(rename="displayName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name that is displayed as the friendly name for the user in AWS CodeStar.</p>
+    #[serde(rename = "displayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
-    #[doc="<p>The email address that is displayed as part of the user's profile in AWS CodeStar.</p>"]
-    #[serde(rename="emailAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The email address that is displayed as part of the user's profile in AWS CodeStar.</p>
+    #[serde(rename = "emailAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub email_address: Option<String>,
-    #[doc="<p>The SSH public key associated with the user in AWS CodeStar. If a project owner allows the user remote access to project resources, this public key will be used along with the user's private key for SSH access.</p>"]
-    #[serde(rename="sshPublicKey")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The SSH public key associated with the user in AWS CodeStar. If a project owner allows the user remote access to project resources, this public key will be used along with the user's private key for SSH access.</p>
+    #[serde(rename = "sshPublicKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ssh_public_key: Option<String>,
-    #[doc="<p>The name that will be displayed as the friendly name for the user in AWS CodeStar.</p>"]
-    #[serde(rename="userArn")]
+    /// <p>The name that will be displayed as the friendly name for the user in AWS CodeStar.</p>
+    #[serde(rename = "userArn")]
     pub user_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateUserProfileResult {
-    #[doc="<p>The date the user profile was created, in timestamp format.</p>"]
-    #[serde(rename="createdTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the user profile was created, in timestamp format.</p>
+    #[serde(rename = "createdTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_timestamp: Option<f64>,
-    #[doc="<p>The name that is displayed as the friendly name for the user in AWS CodeStar.</p>"]
-    #[serde(rename="displayName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name that is displayed as the friendly name for the user in AWS CodeStar.</p>
+    #[serde(rename = "displayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
-    #[doc="<p>The email address that is displayed as part of the user's profile in AWS CodeStar.</p>"]
-    #[serde(rename="emailAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The email address that is displayed as part of the user's profile in AWS CodeStar.</p>
+    #[serde(rename = "emailAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub email_address: Option<String>,
-    #[doc="<p>The date the user profile was last modified, in timestamp format.</p>"]
-    #[serde(rename="lastModifiedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the user profile was last modified, in timestamp format.</p>
+    #[serde(rename = "lastModifiedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_timestamp: Option<f64>,
-    #[doc="<p>The SSH public key associated with the user in AWS CodeStar. This is the public portion of the public/private keypair the user can use to access project resources if a project owner allows the user remote access to those resources.</p>"]
-    #[serde(rename="sshPublicKey")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The SSH public key associated with the user in AWS CodeStar. This is the public portion of the public/private keypair the user can use to access project resources if a project owner allows the user remote access to those resources.</p>
+    #[serde(rename = "sshPublicKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ssh_public_key: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the user in IAM.</p>"]
-    #[serde(rename="userArn")]
+    /// <p>The Amazon Resource Name (ARN) of the user in IAM.</p>
+    #[serde(rename = "userArn")]
     pub user_arn: String,
 }
 
-#[doc="<p>Information about a user's profile in AWS CodeStar.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about a user's profile in AWS CodeStar.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UserProfileSummary {
-    #[doc="<p>The display name of a user in AWS CodeStar. For example, this could be set to both first and last name (\"Mary Major\") or a single name (\"Mary\"). The display name is also used to generate the initial icon associated with the user in AWS CodeStar projects. If spaces are included in the display name, the first character that appears after the space will be used as the second character in the user initial icon. The initial icon displays a maximum of two characters, so a display name with more than one space (for example \"Mary Jane Major\") would generate an initial icon using the first character and the first character after the space (\"MJ\", not \"MM\").</p>"]
-    #[serde(rename="displayName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The display name of a user in AWS CodeStar. For example, this could be set to both first and last name ("Mary Major") or a single name ("Mary"). The display name is also used to generate the initial icon associated with the user in AWS CodeStar projects. If spaces are included in the display name, the first character that appears after the space will be used as the second character in the user initial icon. The initial icon displays a maximum of two characters, so a display name with more than one space (for example "Mary Jane Major") would generate an initial icon using the first character and the first character after the space ("MJ", not "MM").</p>
+    #[serde(rename = "displayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
-    #[doc="<p>The email address associated with the user.</p>"]
-    #[serde(rename="emailAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The email address associated with the user.</p>
+    #[serde(rename = "emailAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub email_address: Option<String>,
-    #[doc="<p>The SSH public key associated with the user in AWS CodeStar. If a project owner allows the user remote access to project resources, this public key will be used along with the user's private key for SSH access.</p>"]
-    #[serde(rename="sshPublicKey")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The SSH public key associated with the user in AWS CodeStar. If a project owner allows the user remote access to project resources, this public key will be used along with the user's private key for SSH access.</p>
+    #[serde(rename = "sshPublicKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ssh_public_key: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the user in IAM.</p>"]
-    #[serde(rename="userArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the user in IAM.</p>
+    #[serde(rename = "userArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_arn: Option<String>,
 }
 
@@ -545,7 +544,6 @@ pub enum AssociateTeamMemberError {
     Unknown(String),
 }
 
-
 impl AssociateTeamMemberError {
     pub fn from_body(body: &str) -> AssociateTeamMemberError {
         match from_str::<SerdeJsonValue>(body) {
@@ -559,7 +557,11 @@ impl AssociateTeamMemberError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ConcurrentModificationException" => AssociateTeamMemberError::ConcurrentModification(String::from(error_message)),
+                    "ConcurrentModificationException" => {
+                        AssociateTeamMemberError::ConcurrentModification(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidServiceRoleException" => {
                         AssociateTeamMemberError::InvalidServiceRole(String::from(error_message))
                     }
@@ -572,7 +574,11 @@ impl AssociateTeamMemberError {
                     "ProjectNotFoundException" => {
                         AssociateTeamMemberError::ProjectNotFound(String::from(error_message))
                     }
-                    "TeamMemberAlreadyAssociatedException" => AssociateTeamMemberError::TeamMemberAlreadyAssociated(String::from(error_message)),
+                    "TeamMemberAlreadyAssociatedException" => {
+                        AssociateTeamMemberError::TeamMemberAlreadyAssociated(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         AssociateTeamMemberError::Validation(error_message.to_string())
                     }
@@ -651,7 +657,6 @@ pub enum CreateProjectError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateProjectError {
     pub fn from_body(body: &str) -> CreateProjectError {
@@ -751,7 +756,6 @@ pub enum CreateUserProfileError {
     Unknown(String),
 }
 
-
 impl CreateUserProfileError {
     pub fn from_body(body: &str) -> CreateUserProfileError {
         match from_str::<SerdeJsonValue>(body) {
@@ -765,7 +769,11 @@ impl CreateUserProfileError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "UserProfileAlreadyExistsException" => CreateUserProfileError::UserProfileAlreadyExists(String::from(error_message)),
+                    "UserProfileAlreadyExistsException" => {
+                        CreateUserProfileError::UserProfileAlreadyExists(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         CreateUserProfileError::Validation(error_message.to_string())
                     }
@@ -831,7 +839,6 @@ pub enum DeleteProjectError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteProjectError {
     pub fn from_body(body: &str) -> DeleteProjectError {
@@ -912,7 +919,6 @@ pub enum DeleteUserProfileError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteUserProfileError {
     pub fn from_body(body: &str) -> DeleteUserProfileError {
@@ -995,7 +1001,6 @@ pub enum DescribeProjectError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeProjectError {
     pub fn from_body(body: &str) -> DescribeProjectError {
@@ -1087,7 +1092,6 @@ pub enum DescribeUserProfileError {
     Unknown(String),
 }
 
-
 impl DescribeUserProfileError {
     pub fn from_body(body: &str) -> DescribeUserProfileError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1172,7 +1176,6 @@ pub enum DisassociateTeamMemberError {
     Unknown(String),
 }
 
-
 impl DisassociateTeamMemberError {
     pub fn from_body(body: &str) -> DisassociateTeamMemberError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1186,7 +1189,11 @@ impl DisassociateTeamMemberError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ConcurrentModificationException" => DisassociateTeamMemberError::ConcurrentModification(String::from(error_message)),
+                    "ConcurrentModificationException" => {
+                        DisassociateTeamMemberError::ConcurrentModification(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidServiceRoleException" => {
                         DisassociateTeamMemberError::InvalidServiceRole(String::from(error_message))
                     }
@@ -1258,7 +1265,6 @@ pub enum ListProjectsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListProjectsError {
     pub fn from_body(body: &str) -> ListProjectsError {
@@ -1339,7 +1345,6 @@ pub enum ListResourcesError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListResourcesError {
     pub fn from_body(body: &str) -> ListResourcesError {
@@ -1425,7 +1430,6 @@ pub enum ListTeamMembersError {
     Unknown(String),
 }
 
-
 impl ListTeamMembersError {
     pub fn from_body(body: &str) -> ListTeamMembersError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1508,7 +1512,6 @@ pub enum ListUserProfilesError {
     Unknown(String),
 }
 
-
 impl ListUserProfilesError {
     pub fn from_body(body: &str) -> ListUserProfilesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1586,7 +1589,6 @@ pub enum UpdateProjectError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl UpdateProjectError {
     pub fn from_body(body: &str) -> UpdateProjectError {
@@ -1675,7 +1677,6 @@ pub enum UpdateTeamMemberError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl UpdateTeamMemberError {
     pub fn from_body(body: &str) -> UpdateTeamMemberError {
@@ -1775,7 +1776,6 @@ pub enum UpdateUserProfileError {
     Unknown(String),
 }
 
-
 impl UpdateUserProfileError {
     pub fn from_body(body: &str) -> UpdateUserProfileError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1843,100 +1843,101 @@ impl Error for UpdateUserProfileError {
 }
 /// Trait representing the capabilities of the CodeStar API. CodeStar clients implement this trait.
 pub trait CodeStar {
-    #[doc="<p>Adds an IAM user to the team for an AWS CodeStar project.</p>"]
-    fn associate_team_member(&self,
-                             input: &AssociateTeamMemberRequest)
-                             -> Result<AssociateTeamMemberResult, AssociateTeamMemberError>;
+    #[doc = "<p>Adds an IAM user to the team for an AWS CodeStar project.</p>"]
+    fn associate_team_member(
+        &self,
+        input: &AssociateTeamMemberRequest,
+    ) -> Result<AssociateTeamMemberResult, AssociateTeamMemberError>;
 
-
-    #[doc="<p>Reserved for future use. To create a project, use the AWS CodeStar console.</p>"]
-    fn create_project(&self,
-                      input: &CreateProjectRequest)
-                      -> Result<CreateProjectResult, CreateProjectError>;
-
+    #[doc = "<p>Reserved for future use. To create a project, use the AWS CodeStar console.</p>"]
+    fn create_project(
+        &self,
+        input: &CreateProjectRequest,
+    ) -> Result<CreateProjectResult, CreateProjectError>;
 
     #[doc="<p>Creates a profile for a user that includes user preferences, such as the display name and email address assocciated with the user, in AWS CodeStar. The user profile is not project-specific. Information in the user profile is displayed wherever the user's information appears to other users in AWS CodeStar.</p>"]
-    fn create_user_profile(&self,
-                           input: &CreateUserProfileRequest)
-                           -> Result<CreateUserProfileResult, CreateUserProfileError>;
-
+    fn create_user_profile(
+        &self,
+        input: &CreateUserProfileRequest,
+    ) -> Result<CreateUserProfileResult, CreateUserProfileError>;
 
     #[doc="<p>Deletes a project, including project resources. Does not delete users associated with the project, but does delete the IAM roles that allowed access to the project.</p>"]
-    fn delete_project(&self,
-                      input: &DeleteProjectRequest)
-                      -> Result<DeleteProjectResult, DeleteProjectError>;
-
+    fn delete_project(
+        &self,
+        input: &DeleteProjectRequest,
+    ) -> Result<DeleteProjectResult, DeleteProjectError>;
 
     #[doc="<p>Deletes a user profile in AWS CodeStar, including all personal preference data associated with that profile, such as display name and email address. It does not delete the history of that user, for example the history of commits made by that user.</p>"]
-    fn delete_user_profile(&self,
-                           input: &DeleteUserProfileRequest)
-                           -> Result<DeleteUserProfileResult, DeleteUserProfileError>;
+    fn delete_user_profile(
+        &self,
+        input: &DeleteUserProfileRequest,
+    ) -> Result<DeleteUserProfileResult, DeleteUserProfileError>;
 
+    #[doc = "<p>Describes a project and its resources.</p>"]
+    fn describe_project(
+        &self,
+        input: &DescribeProjectRequest,
+    ) -> Result<DescribeProjectResult, DescribeProjectError>;
 
-    #[doc="<p>Describes a project and its resources.</p>"]
-    fn describe_project(&self,
-                        input: &DescribeProjectRequest)
-                        -> Result<DescribeProjectResult, DescribeProjectError>;
-
-
-    #[doc="<p>Describes a user in AWS CodeStar and the user attributes across all projects.</p>"]
-    fn describe_user_profile(&self,
-                             input: &DescribeUserProfileRequest)
-                             -> Result<DescribeUserProfileResult, DescribeUserProfileError>;
-
+    #[doc = "<p>Describes a user in AWS CodeStar and the user attributes across all projects.</p>"]
+    fn describe_user_profile(
+        &self,
+        input: &DescribeUserProfileRequest,
+    ) -> Result<DescribeUserProfileResult, DescribeUserProfileError>;
 
     #[doc="<p>Removes a user from a project. Removing a user from a project also removes the IAM policies from that user that allowed access to the project and its resources. Disassociating a team member does not remove that user's profile from AWS CodeStar. It does not remove the user from IAM.</p>"]
-    fn disassociate_team_member
-        (&self,
-         input: &DisassociateTeamMemberRequest)
-         -> Result<DisassociateTeamMemberResult, DisassociateTeamMemberError>;
+    fn disassociate_team_member(
+        &self,
+        input: &DisassociateTeamMemberRequest,
+    ) -> Result<DisassociateTeamMemberResult, DisassociateTeamMemberError>;
 
+    #[doc = "<p>Lists all projects in AWS CodeStar associated with your AWS account.</p>"]
+    fn list_projects(
+        &self,
+        input: &ListProjectsRequest,
+    ) -> Result<ListProjectsResult, ListProjectsError>;
 
-    #[doc="<p>Lists all projects in AWS CodeStar associated with your AWS account.</p>"]
-    fn list_projects(&self,
-                     input: &ListProjectsRequest)
-                     -> Result<ListProjectsResult, ListProjectsError>;
+    #[doc = "<p>Lists resources associated with a project in AWS CodeStar.</p>"]
+    fn list_resources(
+        &self,
+        input: &ListResourcesRequest,
+    ) -> Result<ListResourcesResult, ListResourcesError>;
 
+    #[doc = "<p>Lists all team members associated with a project.</p>"]
+    fn list_team_members(
+        &self,
+        input: &ListTeamMembersRequest,
+    ) -> Result<ListTeamMembersResult, ListTeamMembersError>;
 
-    #[doc="<p>Lists resources associated with a project in AWS CodeStar.</p>"]
-    fn list_resources(&self,
-                      input: &ListResourcesRequest)
-                      -> Result<ListResourcesResult, ListResourcesError>;
+    #[doc = "<p>Lists all the user profiles configured for your AWS account in AWS CodeStar.</p>"]
+    fn list_user_profiles(
+        &self,
+        input: &ListUserProfilesRequest,
+    ) -> Result<ListUserProfilesResult, ListUserProfilesError>;
 
-
-    #[doc="<p>Lists all team members associated with a project.</p>"]
-    fn list_team_members(&self,
-                         input: &ListTeamMembersRequest)
-                         -> Result<ListTeamMembersResult, ListTeamMembersError>;
-
-
-    #[doc="<p>Lists all the user profiles configured for your AWS account in AWS CodeStar.</p>"]
-    fn list_user_profiles(&self,
-                          input: &ListUserProfilesRequest)
-                          -> Result<ListUserProfilesResult, ListUserProfilesError>;
-
-
-    #[doc="<p>Updates a project in AWS CodeStar.</p>"]
-    fn update_project(&self,
-                      input: &UpdateProjectRequest)
-                      -> Result<UpdateProjectResult, UpdateProjectError>;
-
+    #[doc = "<p>Updates a project in AWS CodeStar.</p>"]
+    fn update_project(
+        &self,
+        input: &UpdateProjectRequest,
+    ) -> Result<UpdateProjectResult, UpdateProjectError>;
 
     #[doc="<p>Updates a team member's attributes in an AWS CodeStar project. For example, you can change a team member's role in the project, or change whether they have remote access to project resources.</p>"]
-    fn update_team_member(&self,
-                          input: &UpdateTeamMemberRequest)
-                          -> Result<UpdateTeamMemberResult, UpdateTeamMemberError>;
-
+    fn update_team_member(
+        &self,
+        input: &UpdateTeamMemberRequest,
+    ) -> Result<UpdateTeamMemberResult, UpdateTeamMemberError>;
 
     #[doc="<p>Updates a user's profile in AWS CodeStar. The user profile is not project-specific. Information in the user profile is displayed wherever the user's information appears to other users in AWS CodeStar. </p>"]
-    fn update_user_profile(&self,
-                           input: &UpdateUserProfileRequest)
-                           -> Result<UpdateUserProfileResult, UpdateUserProfileError>;
+    fn update_user_profile(
+        &self,
+        input: &UpdateUserProfileRequest,
+    ) -> Result<UpdateUserProfileResult, UpdateUserProfileError>;
 }
 /// A client for the CodeStar API.
 pub struct CodeStarClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -1944,8 +1945,9 @@ pub struct CodeStarClient<P, D>
 }
 
 impl<P, D> CodeStarClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         CodeStarClient {
@@ -1957,13 +1959,15 @@ impl<P, D> CodeStarClient<P, D>
 }
 
 impl<P, D> CodeStar for CodeStarClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
-    #[doc="<p>Adds an IAM user to the team for an AWS CodeStar project.</p>"]
-    fn associate_team_member(&self,
-                             input: &AssociateTeamMemberRequest)
-                             -> Result<AssociateTeamMemberResult, AssociateTeamMemberError> {
+    #[doc = "<p>Adds an IAM user to the team for an AWS CodeStar project.</p>"]
+    fn associate_team_member(
+        &self,
+        input: &AssociateTeamMemberRequest,
+    ) -> Result<AssociateTeamMemberResult, AssociateTeamMemberError> {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1979,21 +1983,25 @@ impl<P, D> CodeStar for CodeStarClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AssociateTeamMemberResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<AssociateTeamMemberResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AssociateTeamMemberError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AssociateTeamMemberError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Reserved for future use. To create a project, use the AWS CodeStar console.</p>"]
-    fn create_project(&self,
-                      input: &CreateProjectRequest)
-                      -> Result<CreateProjectResult, CreateProjectError> {
+    #[doc = "<p>Reserved for future use. To create a project, use the AWS CodeStar console.</p>"]
+    fn create_project(
+        &self,
+        input: &CreateProjectRequest,
+    ) -> Result<CreateProjectResult, CreateProjectError> {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2009,23 +2017,25 @@ impl<P, D> CodeStar for CodeStarClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateProjectResult>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateProjectResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateProjectError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateProjectError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a profile for a user that includes user preferences, such as the display name and email address assocciated with the user, in AWS CodeStar. The user profile is not project-specific. Information in the user profile is displayed wherever the user's information appears to other users in AWS CodeStar.</p>"]
-    fn create_user_profile(&self,
-                           input: &CreateUserProfileRequest)
-                           -> Result<CreateUserProfileResult, CreateUserProfileError> {
+    fn create_user_profile(
+        &self,
+        input: &CreateUserProfileRequest,
+    ) -> Result<CreateUserProfileResult, CreateUserProfileError> {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2041,23 +2051,25 @@ impl<P, D> CodeStar for CodeStarClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateUserProfileResult>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateUserProfileResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateUserProfileError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateUserProfileError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes a project, including project resources. Does not delete users associated with the project, but does delete the IAM roles that allowed access to the project.</p>"]
-    fn delete_project(&self,
-                      input: &DeleteProjectRequest)
-                      -> Result<DeleteProjectResult, DeleteProjectError> {
+    fn delete_project(
+        &self,
+        input: &DeleteProjectRequest,
+    ) -> Result<DeleteProjectResult, DeleteProjectError> {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2073,23 +2085,25 @@ impl<P, D> CodeStar for CodeStarClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteProjectResult>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteProjectResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteProjectError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteProjectError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes a user profile in AWS CodeStar, including all personal preference data associated with that profile, such as display name and email address. It does not delete the history of that user, for example the history of commits made by that user.</p>"]
-    fn delete_user_profile(&self,
-                           input: &DeleteUserProfileRequest)
-                           -> Result<DeleteUserProfileResult, DeleteUserProfileError> {
+    fn delete_user_profile(
+        &self,
+        input: &DeleteUserProfileRequest,
+    ) -> Result<DeleteUserProfileResult, DeleteUserProfileError> {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2105,23 +2119,25 @@ impl<P, D> CodeStar for CodeStarClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteUserProfileResult>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteUserProfileResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteUserProfileError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteUserProfileError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Describes a project and its resources.</p>"]
-    fn describe_project(&self,
-                        input: &DescribeProjectRequest)
-                        -> Result<DescribeProjectResult, DescribeProjectError> {
+    #[doc = "<p>Describes a project and its resources.</p>"]
+    fn describe_project(
+        &self,
+        input: &DescribeProjectRequest,
+    ) -> Result<DescribeProjectResult, DescribeProjectError> {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2137,23 +2153,25 @@ impl<P, D> CodeStar for CodeStarClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeProjectResult>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribeProjectResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeProjectError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeProjectError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Describes a user in AWS CodeStar and the user attributes across all projects.</p>"]
-    fn describe_user_profile(&self,
-                             input: &DescribeUserProfileRequest)
-                             -> Result<DescribeUserProfileResult, DescribeUserProfileError> {
+    #[doc = "<p>Describes a user in AWS CodeStar and the user attributes across all projects.</p>"]
+    fn describe_user_profile(
+        &self,
+        input: &DescribeUserProfileRequest,
+    ) -> Result<DescribeUserProfileResult, DescribeUserProfileError> {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2169,22 +2187,25 @@ impl<P, D> CodeStar for CodeStarClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeUserProfileResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeUserProfileResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeUserProfileError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeUserProfileError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Removes a user from a project. Removing a user from a project also removes the IAM policies from that user that allowed access to the project and its resources. Disassociating a team member does not remove that user's profile from AWS CodeStar. It does not remove the user from IAM.</p>"]
-    fn disassociate_team_member
-        (&self,
-         input: &DisassociateTeamMemberRequest)
-         -> Result<DisassociateTeamMemberResult, DisassociateTeamMemberError> {
+    fn disassociate_team_member(
+        &self,
+        input: &DisassociateTeamMemberRequest,
+    ) -> Result<DisassociateTeamMemberResult, DisassociateTeamMemberError> {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2200,21 +2221,25 @@ impl<P, D> CodeStar for CodeStarClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DisassociateTeamMemberResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DisassociateTeamMemberResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DisassociateTeamMemberError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DisassociateTeamMemberError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists all projects in AWS CodeStar associated with your AWS account.</p>"]
-    fn list_projects(&self,
-                     input: &ListProjectsRequest)
-                     -> Result<ListProjectsResult, ListProjectsError> {
+    #[doc = "<p>Lists all projects in AWS CodeStar associated with your AWS account.</p>"]
+    fn list_projects(
+        &self,
+        input: &ListProjectsRequest,
+    ) -> Result<ListProjectsResult, ListProjectsError> {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2230,23 +2255,25 @@ impl<P, D> CodeStar for CodeStarClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListProjectsResult>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListProjectsResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListProjectsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListProjectsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists resources associated with a project in AWS CodeStar.</p>"]
-    fn list_resources(&self,
-                      input: &ListResourcesRequest)
-                      -> Result<ListResourcesResult, ListResourcesError> {
+    #[doc = "<p>Lists resources associated with a project in AWS CodeStar.</p>"]
+    fn list_resources(
+        &self,
+        input: &ListResourcesRequest,
+    ) -> Result<ListResourcesResult, ListResourcesError> {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2262,23 +2289,25 @@ impl<P, D> CodeStar for CodeStarClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListResourcesResult>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListResourcesResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListResourcesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListResourcesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists all team members associated with a project.</p>"]
-    fn list_team_members(&self,
-                         input: &ListTeamMembersRequest)
-                         -> Result<ListTeamMembersResult, ListTeamMembersError> {
+    #[doc = "<p>Lists all team members associated with a project.</p>"]
+    fn list_team_members(
+        &self,
+        input: &ListTeamMembersRequest,
+    ) -> Result<ListTeamMembersResult, ListTeamMembersError> {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2294,23 +2323,25 @@ impl<P, D> CodeStar for CodeStarClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListTeamMembersResult>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListTeamMembersResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListTeamMembersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListTeamMembersError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists all the user profiles configured for your AWS account in AWS CodeStar.</p>"]
-    fn list_user_profiles(&self,
-                          input: &ListUserProfilesRequest)
-                          -> Result<ListUserProfilesResult, ListUserProfilesError> {
+    #[doc = "<p>Lists all the user profiles configured for your AWS account in AWS CodeStar.</p>"]
+    fn list_user_profiles(
+        &self,
+        input: &ListUserProfilesRequest,
+    ) -> Result<ListUserProfilesResult, ListUserProfilesError> {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2326,23 +2357,25 @@ impl<P, D> CodeStar for CodeStarClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListUserProfilesResult>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListUserProfilesResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListUserProfilesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListUserProfilesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Updates a project in AWS CodeStar.</p>"]
-    fn update_project(&self,
-                      input: &UpdateProjectRequest)
-                      -> Result<UpdateProjectResult, UpdateProjectError> {
+    #[doc = "<p>Updates a project in AWS CodeStar.</p>"]
+    fn update_project(
+        &self,
+        input: &UpdateProjectRequest,
+    ) -> Result<UpdateProjectResult, UpdateProjectError> {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2358,23 +2391,25 @@ impl<P, D> CodeStar for CodeStarClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateProjectResult>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<UpdateProjectResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateProjectError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateProjectError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Updates a team member's attributes in an AWS CodeStar project. For example, you can change a team member's role in the project, or change whether they have remote access to project resources.</p>"]
-    fn update_team_member(&self,
-                          input: &UpdateTeamMemberRequest)
-                          -> Result<UpdateTeamMemberResult, UpdateTeamMemberError> {
+    fn update_team_member(
+        &self,
+        input: &UpdateTeamMemberRequest,
+    ) -> Result<UpdateTeamMemberResult, UpdateTeamMemberError> {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2390,23 +2425,25 @@ impl<P, D> CodeStar for CodeStarClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateTeamMemberResult>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<UpdateTeamMemberResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateTeamMemberError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateTeamMemberError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Updates a user's profile in AWS CodeStar. The user profile is not project-specific. Information in the user profile is displayed wherever the user's information appears to other users in AWS CodeStar. </p>"]
-    fn update_user_profile(&self,
-                           input: &UpdateUserProfileRequest)
-                           -> Result<UpdateUserProfileResult, UpdateUserProfileError> {
+    fn update_user_profile(
+        &self,
+        input: &UpdateUserProfileRequest,
+    ) -> Result<UpdateUserProfileResult, UpdateUserProfileError> {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2422,14 +2459,16 @@ impl<P, D> CodeStar for CodeStarClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateUserProfileResult>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<UpdateUserProfileResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateUserProfileError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateUserProfileError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

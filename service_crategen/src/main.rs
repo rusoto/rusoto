@@ -4,7 +4,7 @@
 #[macro_use]
 extern crate clap;
 extern crate rayon;
-extern crate rustfmt;
+extern crate rustfmt_nightly;
 extern crate serde;
 #[macro_use]
 extern crate serde_derive;

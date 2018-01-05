@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -28,1939 +27,1933 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[doc="<p>Describes a quota for an AWS account, for example, the number of replication instances allowed.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes a quota for an AWS account, for example, the number of replication instances allowed.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AccountQuota {
-    #[doc="<p>The name of the AWS DMS quota for this AWS account.</p>"]
-    #[serde(rename="AccountQuotaName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the AWS DMS quota for this AWS account.</p>
+    #[serde(rename = "AccountQuotaName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub account_quota_name: Option<String>,
-    #[doc="<p>The maximum allowed value for the quota.</p>"]
-    #[serde(rename="Max")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum allowed value for the quota.</p>
+    #[serde(rename = "Max")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max: Option<i64>,
-    #[doc="<p>The amount currently used toward the quota maximum.</p>"]
-    #[serde(rename="Used")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The amount currently used toward the quota maximum.</p>
+    #[serde(rename = "Used")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub used: Option<i64>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AddTagsToResourceMessage {
-    #[doc="<p>The Amazon Resource Name (ARN) of the AWS DMS resource the tag is to be added to. AWS DMS resources include a replication instance, endpoint, and a replication task.</p>"]
-    #[serde(rename="ResourceArn")]
+    /// <p>The Amazon Resource Name (ARN) of the AWS DMS resource the tag is to be added to. AWS DMS resources include a replication instance, endpoint, and a replication task.</p>
+    #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
-    #[doc="<p>The tag to be assigned to the DMS resource.</p>"]
-    #[serde(rename="Tags")]
+    /// <p>The tag to be assigned to the DMS resource.</p>
+    #[serde(rename = "Tags")]
     pub tags: Vec<Tag>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AddTagsToResourceResponse;
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AvailabilityZone {
-    #[doc="<p>The name of the availability zone.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the availability zone.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[doc="<p>The SSL certificate that can be used to encrypt connections between the endpoints and the replication instance.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The SSL certificate that can be used to encrypt connections between the endpoints and the replication instance.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Certificate {
-    #[doc="<p>The Amazon Resource Name (ARN) for the certificate.</p>"]
-    #[serde(rename="CertificateArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) for the certificate.</p>
+    #[serde(rename = "CertificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_arn: Option<String>,
-    #[doc="<p>The date that the certificate was created.</p>"]
-    #[serde(rename="CertificateCreationDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date that the certificate was created.</p>
+    #[serde(rename = "CertificateCreationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_creation_date: Option<f64>,
-    #[doc="<p>The customer-assigned name of the certificate. Valid characters are A-z and 0-9.</p>"]
-    #[serde(rename="CertificateIdentifier")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The customer-assigned name of the certificate. Valid characters are A-z and 0-9.</p>
+    #[serde(rename = "CertificateIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_identifier: Option<String>,
-    #[doc="<p>The owner of the certificate.</p>"]
-    #[serde(rename="CertificateOwner")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The owner of the certificate.</p>
+    #[serde(rename = "CertificateOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_owner: Option<String>,
-    #[doc="<p>The contents of the .pem X.509 certificate file for the certificate.</p>"]
-    #[serde(rename="CertificatePem")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The contents of the .pem X.509 certificate file for the certificate.</p>
+    #[serde(rename = "CertificatePem")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_pem: Option<String>,
-    #[doc="<p>The location of the imported Oracle Wallet certificate for use with SSL.</p>"]
-    #[serde(rename="CertificateWallet")]
-    #[serde(
-                            deserialize_with="::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-                            serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
-                            default,
-                        )]
+    /// <p>The location of the imported Oracle Wallet certificate for use with SSL.</p>
+    #[serde(rename = "CertificateWallet")]
+    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
     pub certificate_wallet: Option<Vec<u8>>,
-    #[doc="<p>The key length of the cryptographic algorithm being used.</p>"]
-    #[serde(rename="KeyLength")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The key length of the cryptographic algorithm being used.</p>
+    #[serde(rename = "KeyLength")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub key_length: Option<i64>,
-    #[doc="<p>The signing algorithm for the certificate.</p>"]
-    #[serde(rename="SigningAlgorithm")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The signing algorithm for the certificate.</p>
+    #[serde(rename = "SigningAlgorithm")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub signing_algorithm: Option<String>,
-    #[doc="<p>The beginning date that the certificate is valid.</p>"]
-    #[serde(rename="ValidFromDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The beginning date that the certificate is valid.</p>
+    #[serde(rename = "ValidFromDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub valid_from_date: Option<f64>,
-    #[doc="<p>The final date that the certificate is valid.</p>"]
-    #[serde(rename="ValidToDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The final date that the certificate is valid.</p>
+    #[serde(rename = "ValidToDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub valid_to_date: Option<f64>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Connection {
-    #[doc="<p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>"]
-    #[serde(rename="EndpointArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
+    #[serde(rename = "EndpointArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_arn: Option<String>,
-    #[doc="<p>The identifier of the endpoint. Identifiers must begin with a letter; must contain only ASCII letters, digits, and hyphens; and must not end with a hyphen or contain two consecutive hyphens.</p>"]
-    #[serde(rename="EndpointIdentifier")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier of the endpoint. Identifiers must begin with a letter; must contain only ASCII letters, digits, and hyphens; and must not end with a hyphen or contain two consecutive hyphens.</p>
+    #[serde(rename = "EndpointIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_identifier: Option<String>,
-    #[doc="<p>The error message when the connection last failed.</p>"]
-    #[serde(rename="LastFailureMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The error message when the connection last failed.</p>
+    #[serde(rename = "LastFailureMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_failure_message: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the replication instance.</p>"]
-    #[serde(rename="ReplicationInstanceArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the replication instance.</p>
+    #[serde(rename = "ReplicationInstanceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_instance_arn: Option<String>,
-    #[doc="<p>The replication instance identifier. This parameter is stored as a lowercase string.</p>"]
-    #[serde(rename="ReplicationInstanceIdentifier")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The replication instance identifier. This parameter is stored as a lowercase string.</p>
+    #[serde(rename = "ReplicationInstanceIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_instance_identifier: Option<String>,
-    #[doc="<p>The connection status.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The connection status.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateEndpointMessage {
-    #[doc="<p>The Amazon Resource Number (ARN) for the certificate.</p>"]
-    #[serde(rename="CertificateArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Number (ARN) for the certificate.</p>
+    #[serde(rename = "CertificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_arn: Option<String>,
-    #[doc="<p>The name of the endpoint database.</p>"]
-    #[serde(rename="DatabaseName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the endpoint database.</p>
+    #[serde(rename = "DatabaseName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
-    #[doc="<p>Settings in JSON format for the target Amazon DynamoDB endpoint. For more information about the available settings, see the <b>Using Object Mapping to Migrate Data to DynamoDB</b> section at <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.DynamoDB.html\"> Using an Amazon DynamoDB Database as a Target for AWS Database Migration Service</a>. </p>"]
-    #[serde(rename="DynamoDbSettings")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Settings in JSON format for the target Amazon DynamoDB endpoint. For more information about the available settings, see the <b>Using Object Mapping to Migrate Data to DynamoDB</b> section at <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.DynamoDB.html"> Using an Amazon DynamoDB Database as a Target for AWS Database Migration Service</a>. </p>
+    #[serde(rename = "DynamoDbSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub dynamo_db_settings: Option<DynamoDbSettings>,
-    #[doc="<p>The database endpoint identifier. Identifiers must begin with a letter; must contain only ASCII letters, digits, and hyphens; and must not end with a hyphen or contain two consecutive hyphens.</p>"]
-    #[serde(rename="EndpointIdentifier")]
+    /// <p>The database endpoint identifier. Identifiers must begin with a letter; must contain only ASCII letters, digits, and hyphens; and must not end with a hyphen or contain two consecutive hyphens.</p>
+    #[serde(rename = "EndpointIdentifier")]
     pub endpoint_identifier: String,
-    #[doc="<p>The type of endpoint.</p>"]
-    #[serde(rename="EndpointType")]
+    /// <p>The type of endpoint.</p>
+    #[serde(rename = "EndpointType")]
     pub endpoint_type: String,
-    #[doc="<p>The type of engine for the endpoint. Valid values, depending on the EndPointType, include MYSQL, ORACLE, POSTGRES, MARIADB, AURORA, REDSHIFT, S3, SYBASE, DYNAMODB, MONGODB, and SQLSERVER.</p>"]
-    #[serde(rename="EngineName")]
+    /// <p>The type of engine for the endpoint. Valid values, depending on the EndPointType, include MYSQL, ORACLE, POSTGRES, MARIADB, AURORA, REDSHIFT, S3, SYBASE, DYNAMODB, MONGODB, and SQLSERVER.</p>
+    #[serde(rename = "EngineName")]
     pub engine_name: String,
-    #[doc="<p>Additional attributes associated with the connection.</p>"]
-    #[serde(rename="ExtraConnectionAttributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Additional attributes associated with the connection.</p>
+    #[serde(rename = "ExtraConnectionAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_connection_attributes: Option<String>,
-    #[doc="<p>The KMS key identifier that will be used to encrypt the connection parameters. If you do not specify a value for the KmsKeyId parameter, then AWS DMS will use your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS region.</p>"]
-    #[serde(rename="KmsKeyId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The KMS key identifier that will be used to encrypt the connection parameters. If you do not specify a value for the KmsKeyId parameter, then AWS DMS will use your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS region.</p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
-    #[doc="<p>Settings in JSON format for the source MongoDB endpoint. For more information about the available settings, see the <b>Configuration Properties When Using MongoDB as a Source for AWS Database Migration Service</b> section at <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.MongoDB.html\"> Using Amazon S3 as a Target for AWS Database Migration Service</a>. </p>"]
-    #[serde(rename="MongoDbSettings")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Settings in JSON format for the source MongoDB endpoint. For more information about the available settings, see the <b>Configuration Properties When Using MongoDB as a Source for AWS Database Migration Service</b> section at <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.MongoDB.html"> Using Amazon S3 as a Target for AWS Database Migration Service</a>. </p>
+    #[serde(rename = "MongoDbSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub mongo_db_settings: Option<MongoDbSettings>,
-    #[doc="<p>The password to be used to login to the endpoint database.</p>"]
-    #[serde(rename="Password")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The password to be used to login to the endpoint database.</p>
+    #[serde(rename = "Password")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub password: Option<String>,
-    #[doc="<p>The port used by the endpoint database.</p>"]
-    #[serde(rename="Port")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The port used by the endpoint database.</p>
+    #[serde(rename = "Port")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub port: Option<i64>,
-    #[doc="<p>Settings in JSON format for the target S3 endpoint. For more information about the available settings, see the <b>Extra Connection Attributes</b> section at <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html\"> Using Amazon S3 as a Target for AWS Database Migration Service</a>. </p>"]
-    #[serde(rename="S3Settings")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Settings in JSON format for the target S3 endpoint. For more information about the available settings, see the <b>Extra Connection Attributes</b> section at <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html"> Using Amazon S3 as a Target for AWS Database Migration Service</a>. </p>
+    #[serde(rename = "S3Settings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_settings: Option<S3Settings>,
-    #[doc="<p>The name of the server where the endpoint database resides.</p>"]
-    #[serde(rename="ServerName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the server where the endpoint database resides.</p>
+    #[serde(rename = "ServerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub server_name: Option<String>,
-    #[doc="<p>The SSL mode to use for the SSL connection.</p> <p>SSL mode can be one of four values: none, require, verify-ca, verify-full. </p> <p>The default value is none.</p>"]
-    #[serde(rename="SslMode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The SSL mode to use for the SSL connection.</p> <p>SSL mode can be one of four values: none, require, verify-ca, verify-full. </p> <p>The default value is none.</p>
+    #[serde(rename = "SslMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ssl_mode: Option<String>,
-    #[doc="<p>Tags to be added to the endpoint.</p>"]
-    #[serde(rename="Tags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Tags to be added to the endpoint.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    #[doc="<p>The user name to be used to login to the endpoint database.</p>"]
-    #[serde(rename="Username")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user name to be used to login to the endpoint database.</p>
+    #[serde(rename = "Username")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateEndpointResponse {
-    #[doc="<p>The endpoint that was created.</p>"]
-    #[serde(rename="Endpoint")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The endpoint that was created.</p>
+    #[serde(rename = "Endpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint: Option<Endpoint>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateEventSubscriptionMessage {
-    #[doc="<p> A Boolean value; set to <b>true</b> to activate the subscription, or set to <b>false</b> to create the subscription but not activate it. </p>"]
-    #[serde(rename="Enabled")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> A Boolean value; set to <b>true</b> to activate the subscription, or set to <b>false</b> to create the subscription but not activate it. </p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    #[doc="<p> A list of event categories for a source type that you want to subscribe to. You can see a list of the categories for a given source type by calling the <b>DescribeEventCategories</b> action or in the topic <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html\"> Working with Events and Notifications</a> in the AWS Database Migration Service User Guide. </p>"]
-    #[serde(rename="EventCategories")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> A list of event categories for a source type that you want to subscribe to. You can see a list of the categories for a given source type by calling the <b>DescribeEventCategories</b> action or in the topic <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html"> Working with Events and Notifications</a> in the AWS Database Migration Service User Guide. </p>
+    #[serde(rename = "EventCategories")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_categories: Option<Vec<String>>,
-    #[doc="<p> The Amazon Resource Name (ARN) of the Amazon SNS topic created for event notification. The ARN is created by Amazon SNS when you create a topic and subscribe to it. </p>"]
-    #[serde(rename="SnsTopicArn")]
+    /// <p> The Amazon Resource Name (ARN) of the Amazon SNS topic created for event notification. The ARN is created by Amazon SNS when you create a topic and subscribe to it. </p>
+    #[serde(rename = "SnsTopicArn")]
     pub sns_topic_arn: String,
-    #[doc="<p> The list of identifiers of the event sources for which events will be returned. If not specified, then all sources are included in the response. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it cannot end with a hyphen or contain two consecutive hyphens. </p>"]
-    #[serde(rename="SourceIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The list of identifiers of the event sources for which events will be returned. If not specified, then all sources are included in the response. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it cannot end with a hyphen or contain two consecutive hyphens. </p>
+    #[serde(rename = "SourceIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub source_ids: Option<Vec<String>>,
-    #[doc="<p> The type of AWS DMS resource that generates the events. For example, if you want to be notified of events generated by a replication instance, you set this parameter to <code>replication-instance</code>. If this value is not specified, all events are returned. </p> <p>Valid values: replication-instance | migration-task</p>"]
-    #[serde(rename="SourceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The type of AWS DMS resource that generates the events. For example, if you want to be notified of events generated by a replication instance, you set this parameter to <code>replication-instance</code>. If this value is not specified, all events are returned. </p> <p>Valid values: replication-instance | migration-task</p>
+    #[serde(rename = "SourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub source_type: Option<String>,
-    #[doc="<p>The name of the DMS event notification subscription. </p> <p>Constraints: The name must be less than 255 characters. </p>"]
-    #[serde(rename="SubscriptionName")]
+    /// <p>The name of the DMS event notification subscription. </p> <p>Constraints: The name must be less than 255 characters. </p>
+    #[serde(rename = "SubscriptionName")]
     pub subscription_name: String,
-    #[doc="<p>A tag to be attached to the event subscription.</p>"]
-    #[serde(rename="Tags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A tag to be attached to the event subscription.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateEventSubscriptionResponse {
-    #[doc="<p>The event subscription that was created.</p>"]
-    #[serde(rename="EventSubscription")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The event subscription that was created.</p>
+    #[serde(rename = "EventSubscription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_subscription: Option<EventSubscription>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateReplicationInstanceMessage {
-    #[doc="<p>The amount of storage (in gigabytes) to be initially allocated for the replication instance.</p>"]
-    #[serde(rename="AllocatedStorage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The amount of storage (in gigabytes) to be initially allocated for the replication instance.</p>
+    #[serde(rename = "AllocatedStorage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub allocated_storage: Option<i64>,
-    #[doc="<p>Indicates that minor engine upgrades will be applied automatically to the replication instance during the maintenance window.</p> <p>Default: <code>true</code> </p>"]
-    #[serde(rename="AutoMinorVersionUpgrade")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates that minor engine upgrades will be applied automatically to the replication instance during the maintenance window.</p> <p>Default: <code>true</code> </p>
+    #[serde(rename = "AutoMinorVersionUpgrade")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_minor_version_upgrade: Option<bool>,
-    #[doc="<p>The EC2 Availability Zone that the replication instance will be created in.</p> <p>Default: A random, system-chosen Availability Zone in the endpoint's region.</p> <p> Example: <code>us-east-1d</code> </p>"]
-    #[serde(rename="AvailabilityZone")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The EC2 Availability Zone that the replication instance will be created in.</p> <p>Default: A random, system-chosen Availability Zone in the endpoint's region.</p> <p> Example: <code>us-east-1d</code> </p>
+    #[serde(rename = "AvailabilityZone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zone: Option<String>,
-    #[doc="<p>The engine version number of the replication instance.</p>"]
-    #[serde(rename="EngineVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The engine version number of the replication instance.</p>
+    #[serde(rename = "EngineVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_version: Option<String>,
-    #[doc="<p>The KMS key identifier that will be used to encrypt the content on the replication instance. If you do not specify a value for the KmsKeyId parameter, then AWS DMS will use your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS region.</p>"]
-    #[serde(rename="KmsKeyId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The KMS key identifier that will be used to encrypt the content on the replication instance. If you do not specify a value for the KmsKeyId parameter, then AWS DMS will use your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS region.</p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
-    #[doc="<p> Specifies if the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>"]
-    #[serde(rename="MultiAZ")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> Specifies if the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>
+    #[serde(rename = "MultiAZ")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub multi_az: Option<bool>,
-    #[doc="<p>The weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).</p> <p> Format: <code>ddd:hh24:mi-ddd:hh24:mi</code> </p> <p>Default: A 30-minute window selected at random from an 8-hour block of time per region, occurring on a random day of the week.</p> <p>Valid Days: Mon, Tue, Wed, Thu, Fri, Sat, Sun</p> <p>Constraints: Minimum 30-minute window.</p>"]
-    #[serde(rename="PreferredMaintenanceWindow")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).</p> <p> Format: <code>ddd:hh24:mi-ddd:hh24:mi</code> </p> <p>Default: A 30-minute window selected at random from an 8-hour block of time per region, occurring on a random day of the week.</p> <p>Valid Days: Mon, Tue, Wed, Thu, Fri, Sat, Sun</p> <p>Constraints: Minimum 30-minute window.</p>
+    #[serde(rename = "PreferredMaintenanceWindow")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub preferred_maintenance_window: Option<String>,
-    #[doc="<p> Specifies the accessibility options for the replication instance. A value of <code>true</code> represents an instance with a public IP address. A value of <code>false</code> represents an instance with a private IP address. The default value is <code>true</code>. </p>"]
-    #[serde(rename="PubliclyAccessible")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> Specifies the accessibility options for the replication instance. A value of <code>true</code> represents an instance with a public IP address. A value of <code>false</code> represents an instance with a private IP address. The default value is <code>true</code>. </p>
+    #[serde(rename = "PubliclyAccessible")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub publicly_accessible: Option<bool>,
-    #[doc="<p>The compute and memory capacity of the replication instance as specified by the replication instance class.</p> <p> Valid Values: <code>dms.t2.micro | dms.t2.small | dms.t2.medium | dms.t2.large | dms.c4.large | dms.c4.xlarge | dms.c4.2xlarge | dms.c4.4xlarge </code> </p>"]
-    #[serde(rename="ReplicationInstanceClass")]
+    /// <p>The compute and memory capacity of the replication instance as specified by the replication instance class.</p> <p> Valid Values: <code>dms.t2.micro | dms.t2.small | dms.t2.medium | dms.t2.large | dms.c4.large | dms.c4.xlarge | dms.c4.2xlarge | dms.c4.4xlarge </code> </p>
+    #[serde(rename = "ReplicationInstanceClass")]
     pub replication_instance_class: String,
-    #[doc="<p>The replication instance identifier. This parameter is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <p>Example: <code>myrepinstance</code> </p>"]
-    #[serde(rename="ReplicationInstanceIdentifier")]
+    /// <p>The replication instance identifier. This parameter is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <p>Example: <code>myrepinstance</code> </p>
+    #[serde(rename = "ReplicationInstanceIdentifier")]
     pub replication_instance_identifier: String,
-    #[doc="<p>A subnet group to associate with the replication instance.</p>"]
-    #[serde(rename="ReplicationSubnetGroupIdentifier")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A subnet group to associate with the replication instance.</p>
+    #[serde(rename = "ReplicationSubnetGroupIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_subnet_group_identifier: Option<String>,
-    #[doc="<p>Tags to be associated with the replication instance.</p>"]
-    #[serde(rename="Tags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Tags to be associated with the replication instance.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    #[doc="<p> Specifies the VPC security group to be used with the replication instance. The VPC security group must work with the VPC containing the replication instance. </p>"]
-    #[serde(rename="VpcSecurityGroupIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> Specifies the VPC security group to be used with the replication instance. The VPC security group must work with the VPC containing the replication instance. </p>
+    #[serde(rename = "VpcSecurityGroupIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateReplicationInstanceResponse {
-    #[doc="<p>The replication instance that was created.</p>"]
-    #[serde(rename="ReplicationInstance")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The replication instance that was created.</p>
+    #[serde(rename = "ReplicationInstance")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_instance: Option<ReplicationInstance>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateReplicationSubnetGroupMessage {
-    #[doc="<p>The description for the subnet group.</p>"]
-    #[serde(rename="ReplicationSubnetGroupDescription")]
+    /// <p>The description for the subnet group.</p>
+    #[serde(rename = "ReplicationSubnetGroupDescription")]
     pub replication_subnet_group_description: String,
-    #[doc="<p>The name for the replication subnet group. This value is stored as a lowercase string.</p> <p>Constraints: Must contain no more than 255 alphanumeric characters, periods, spaces, underscores, or hyphens. Must not be \"default\".</p> <p>Example: <code>mySubnetgroup</code> </p>"]
-    #[serde(rename="ReplicationSubnetGroupIdentifier")]
+    /// <p>The name for the replication subnet group. This value is stored as a lowercase string.</p> <p>Constraints: Must contain no more than 255 alphanumeric characters, periods, spaces, underscores, or hyphens. Must not be "default".</p> <p>Example: <code>mySubnetgroup</code> </p>
+    #[serde(rename = "ReplicationSubnetGroupIdentifier")]
     pub replication_subnet_group_identifier: String,
-    #[doc="<p>The EC2 subnet IDs for the subnet group.</p>"]
-    #[serde(rename="SubnetIds")]
+    /// <p>The EC2 subnet IDs for the subnet group.</p>
+    #[serde(rename = "SubnetIds")]
     pub subnet_ids: Vec<String>,
-    #[doc="<p>The tag to be assigned to the subnet group.</p>"]
-    #[serde(rename="Tags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The tag to be assigned to the subnet group.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateReplicationSubnetGroupResponse {
-    #[doc="<p>The replication subnet group that was created.</p>"]
-    #[serde(rename="ReplicationSubnetGroup")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The replication subnet group that was created.</p>
+    #[serde(rename = "ReplicationSubnetGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_subnet_group: Option<ReplicationSubnetGroup>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateReplicationTaskMessage {
-    #[doc="<p>The start time for the Change Data Capture (CDC) operation.</p>"]
-    #[serde(rename="CdcStartTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The start time for the Change Data Capture (CDC) operation.</p>
+    #[serde(rename = "CdcStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cdc_start_time: Option<f64>,
-    #[doc="<p>The migration type.</p>"]
-    #[serde(rename="MigrationType")]
+    /// <p>The migration type.</p>
+    #[serde(rename = "MigrationType")]
     pub migration_type: String,
-    #[doc="<p>The Amazon Resource Name (ARN) of the replication instance.</p>"]
-    #[serde(rename="ReplicationInstanceArn")]
+    /// <p>The Amazon Resource Name (ARN) of the replication instance.</p>
+    #[serde(rename = "ReplicationInstanceArn")]
     pub replication_instance_arn: String,
-    #[doc="<p>The replication task identifier.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>"]
-    #[serde(rename="ReplicationTaskIdentifier")]
+    /// <p>The replication task identifier.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>
+    #[serde(rename = "ReplicationTaskIdentifier")]
     pub replication_task_identifier: String,
-    #[doc="<p>Settings for the task, such as target metadata settings. For a complete list of task settings, see <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TaskSettings.html\">Task Settings for AWS Database Migration Service Tasks</a>.</p>"]
-    #[serde(rename="ReplicationTaskSettings")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Settings for the task, such as target metadata settings. For a complete list of task settings, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TaskSettings.html">Task Settings for AWS Database Migration Service Tasks</a>.</p>
+    #[serde(rename = "ReplicationTaskSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task_settings: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>"]
-    #[serde(rename="SourceEndpointArn")]
+    /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
+    #[serde(rename = "SourceEndpointArn")]
     pub source_endpoint_arn: String,
-    #[doc="<p>When using the AWS CLI or boto3, provide the path of the JSON file that contains the table mappings. Precede the path with \"file://\". When working with the DMS API, provide the JSON as the parameter value.</p> <p>For example, --table-mappings file://mappingfile.json</p>"]
-    #[serde(rename="TableMappings")]
+    /// <p>When using the AWS CLI or boto3, provide the path of the JSON file that contains the table mappings. Precede the path with "file://". When working with the DMS API, provide the JSON as the parameter value.</p> <p>For example, --table-mappings file://mappingfile.json</p>
+    #[serde(rename = "TableMappings")]
     pub table_mappings: String,
-    #[doc="<p>Tags to be added to the replication instance.</p>"]
-    #[serde(rename="Tags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Tags to be added to the replication instance.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    #[doc="<p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>"]
-    #[serde(rename="TargetEndpointArn")]
+    /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
+    #[serde(rename = "TargetEndpointArn")]
     pub target_endpoint_arn: String,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateReplicationTaskResponse {
-    #[doc="<p>The replication task that was created.</p>"]
-    #[serde(rename="ReplicationTask")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The replication task that was created.</p>
+    #[serde(rename = "ReplicationTask")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task: Option<ReplicationTask>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteCertificateMessage {
-    #[doc="<p>The Amazon Resource Name (ARN) of the deleted certificate.</p>"]
-    #[serde(rename="CertificateArn")]
+    /// <p>The Amazon Resource Name (ARN) of the deleted certificate.</p>
+    #[serde(rename = "CertificateArn")]
     pub certificate_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteCertificateResponse {
-    #[doc="<p>The Secure Sockets Layer (SSL) certificate.</p>"]
-    #[serde(rename="Certificate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Secure Sockets Layer (SSL) certificate.</p>
+    #[serde(rename = "Certificate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate: Option<Certificate>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteEndpointMessage {
-    #[doc="<p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>"]
-    #[serde(rename="EndpointArn")]
+    /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
+    #[serde(rename = "EndpointArn")]
     pub endpoint_arn: String,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteEndpointResponse {
-    #[doc="<p>The endpoint that was deleted.</p>"]
-    #[serde(rename="Endpoint")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The endpoint that was deleted.</p>
+    #[serde(rename = "Endpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint: Option<Endpoint>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteEventSubscriptionMessage {
-    #[doc="<p>The name of the DMS event notification subscription to be deleted.</p>"]
-    #[serde(rename="SubscriptionName")]
+    /// <p>The name of the DMS event notification subscription to be deleted.</p>
+    #[serde(rename = "SubscriptionName")]
     pub subscription_name: String,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteEventSubscriptionResponse {
-    #[doc="<p>The event subscription that was deleted.</p>"]
-    #[serde(rename="EventSubscription")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The event subscription that was deleted.</p>
+    #[serde(rename = "EventSubscription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_subscription: Option<EventSubscription>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteReplicationInstanceMessage {
-    #[doc="<p>The Amazon Resource Name (ARN) of the replication instance to be deleted.</p>"]
-    #[serde(rename="ReplicationInstanceArn")]
+    /// <p>The Amazon Resource Name (ARN) of the replication instance to be deleted.</p>
+    #[serde(rename = "ReplicationInstanceArn")]
     pub replication_instance_arn: String,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteReplicationInstanceResponse {
-    #[doc="<p>The replication instance that was deleted.</p>"]
-    #[serde(rename="ReplicationInstance")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The replication instance that was deleted.</p>
+    #[serde(rename = "ReplicationInstance")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_instance: Option<ReplicationInstance>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteReplicationSubnetGroupMessage {
-    #[doc="<p>The subnet group name of the replication instance.</p>"]
-    #[serde(rename="ReplicationSubnetGroupIdentifier")]
+    /// <p>The subnet group name of the replication instance.</p>
+    #[serde(rename = "ReplicationSubnetGroupIdentifier")]
     pub replication_subnet_group_identifier: String,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteReplicationSubnetGroupResponse;
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteReplicationTaskMessage {
-    #[doc="<p>The Amazon Resource Name (ARN) of the replication task to be deleted.</p>"]
-    #[serde(rename="ReplicationTaskArn")]
+    /// <p>The Amazon Resource Name (ARN) of the replication task to be deleted.</p>
+    #[serde(rename = "ReplicationTaskArn")]
     pub replication_task_arn: String,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteReplicationTaskResponse {
-    #[doc="<p>The deleted replication task.</p>"]
-    #[serde(rename="ReplicationTask")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The deleted replication task.</p>
+    #[serde(rename = "ReplicationTask")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task: Option<ReplicationTask>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeAccountAttributesMessage;
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeAccountAttributesResponse {
-    #[doc="<p>Account quota information.</p>"]
-    #[serde(rename="AccountQuotas")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Account quota information.</p>
+    #[serde(rename = "AccountQuotas")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub account_quotas: Option<Vec<AccountQuota>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeCertificatesMessage {
-    #[doc="<p>Filters applied to the certificate described in the form of key-value pairs.</p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Filters applied to the certificate described in the form of key-value pairs.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
-    #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 10</p>"]
-    #[serde(rename="MaxRecords")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 10</p>
+    #[serde(rename = "MaxRecords")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_records: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeCertificatesResponse {
-    #[doc="<p>The Secure Sockets Layer (SSL) certificates associated with the replication instance.</p>"]
-    #[serde(rename="Certificates")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Secure Sockets Layer (SSL) certificates associated with the replication instance.</p>
+    #[serde(rename = "Certificates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificates: Option<Vec<Certificate>>,
-    #[doc="<p>The pagination token.</p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The pagination token.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeConnectionsMessage {
-    #[doc="<p>The filters applied to the connection.</p> <p>Valid filter names: endpoint-arn | replication-instance-arn</p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The filters applied to the connection.</p> <p>Valid filter names: endpoint-arn | replication-instance-arn</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
-    #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    #[serde(rename="MaxRecords")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
+    #[serde(rename = "MaxRecords")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_records: Option<i64>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeConnectionsResponse {
-    #[doc="<p>A description of the connections.</p>"]
-    #[serde(rename="Connections")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the connections.</p>
+    #[serde(rename = "Connections")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub connections: Option<Vec<Connection>>,
-    #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeEndpointTypesMessage {
-    #[doc="<p>Filters applied to the describe action.</p> <p>Valid filter names: engine-name | endpoint-type</p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Filters applied to the describe action.</p> <p>Valid filter names: engine-name | endpoint-type</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
-    #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    #[serde(rename="MaxRecords")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
+    #[serde(rename = "MaxRecords")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_records: Option<i64>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeEndpointTypesResponse {
-    #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p>The type of endpoints that are supported.</p>"]
-    #[serde(rename="SupportedEndpointTypes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of endpoints that are supported.</p>
+    #[serde(rename = "SupportedEndpointTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub supported_endpoint_types: Option<Vec<SupportedEndpointType>>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeEndpointsMessage {
-    #[doc="<p>Filters applied to the describe action.</p> <p>Valid filter names: endpoint-arn | endpoint-type | endpoint-id | engine-name</p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Filters applied to the describe action.</p> <p>Valid filter names: endpoint-arn | endpoint-type | endpoint-id | engine-name</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
-    #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    #[serde(rename="MaxRecords")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
+    #[serde(rename = "MaxRecords")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_records: Option<i64>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeEndpointsResponse {
-    #[doc="<p>Endpoint description.</p>"]
-    #[serde(rename="Endpoints")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Endpoint description.</p>
+    #[serde(rename = "Endpoints")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoints: Option<Vec<Endpoint>>,
-    #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeEventCategoriesMessage {
-    #[doc="<p>Filters applied to the action.</p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Filters applied to the action.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
-    #[doc="<p> The type of AWS DMS resource that generates events. </p> <p>Valid values: replication-instance | migration-task</p>"]
-    #[serde(rename="SourceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The type of AWS DMS resource that generates events. </p> <p>Valid values: replication-instance | migration-task</p>
+    #[serde(rename = "SourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub source_type: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeEventCategoriesResponse {
-    #[doc="<p>A list of event categories.</p>"]
-    #[serde(rename="EventCategoryGroupList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of event categories.</p>
+    #[serde(rename = "EventCategoryGroupList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_category_group_list: Option<Vec<EventCategoryGroup>>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeEventSubscriptionsMessage {
-    #[doc="<p>Filters applied to the action.</p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Filters applied to the action.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
-    #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    #[serde(rename="MaxRecords")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
+    #[serde(rename = "MaxRecords")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_records: Option<i64>,
-    #[doc="<p>The name of the AWS DMS event subscription to be described.</p>"]
-    #[serde(rename="SubscriptionName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the AWS DMS event subscription to be described.</p>
+    #[serde(rename = "SubscriptionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subscription_name: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeEventSubscriptionsResponse {
-    #[doc="<p>A list of event subscriptions.</p>"]
-    #[serde(rename="EventSubscriptionsList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of event subscriptions.</p>
+    #[serde(rename = "EventSubscriptionsList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_subscriptions_list: Option<Vec<EventSubscription>>,
-    #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeEventsMessage {
-    #[doc="<p>The duration of the events to be listed.</p>"]
-    #[serde(rename="Duration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The duration of the events to be listed.</p>
+    #[serde(rename = "Duration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub duration: Option<i64>,
-    #[doc="<p>The end time for the events to be listed.</p>"]
-    #[serde(rename="EndTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The end time for the events to be listed.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
-    #[doc="<p>A list of event categories for a source type that you want to subscribe to.</p>"]
-    #[serde(rename="EventCategories")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of event categories for a source type that you want to subscribe to.</p>
+    #[serde(rename = "EventCategories")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_categories: Option<Vec<String>>,
-    #[doc="<p>Filters applied to the action.</p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Filters applied to the action.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
-    #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    #[serde(rename="MaxRecords")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
+    #[serde(rename = "MaxRecords")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_records: Option<i64>,
-    #[doc="<p> The identifier of the event source. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens. It cannot end with a hyphen or contain two consecutive hyphens. </p>"]
-    #[serde(rename="SourceIdentifier")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The identifier of the event source. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens. It cannot end with a hyphen or contain two consecutive hyphens. </p>
+    #[serde(rename = "SourceIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub source_identifier: Option<String>,
-    #[doc="<p>The type of AWS DMS resource that generates events.</p> <p>Valid values: replication-instance | migration-task</p>"]
-    #[serde(rename="SourceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of AWS DMS resource that generates events.</p> <p>Valid values: replication-instance | migration-task</p>
+    #[serde(rename = "SourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub source_type: Option<String>,
-    #[doc="<p>The start time for the events to be listed.</p>"]
-    #[serde(rename="StartTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The start time for the events to be listed.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeEventsResponse {
-    #[doc="<p>The events described.</p>"]
-    #[serde(rename="Events")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The events described.</p>
+    #[serde(rename = "Events")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub events: Option<Vec<Event>>,
-    #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeOrderableReplicationInstancesMessage {
-    #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    #[serde(rename="MaxRecords")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
+    #[serde(rename = "MaxRecords")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_records: Option<i64>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeOrderableReplicationInstancesResponse {
-    #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p>The order-able replication instances available.</p>"]
-    #[serde(rename="OrderableReplicationInstances")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The order-able replication instances available.</p>
+    #[serde(rename = "OrderableReplicationInstances")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub orderable_replication_instances: Option<Vec<OrderableReplicationInstance>>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeRefreshSchemasStatusMessage {
-    #[doc="<p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>"]
-    #[serde(rename="EndpointArn")]
+    /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
+    #[serde(rename = "EndpointArn")]
     pub endpoint_arn: String,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeRefreshSchemasStatusResponse {
-    #[doc="<p>The status of the schema.</p>"]
-    #[serde(rename="RefreshSchemasStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the schema.</p>
+    #[serde(rename = "RefreshSchemasStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub refresh_schemas_status: Option<RefreshSchemasStatus>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeReplicationInstancesMessage {
-    #[doc="<p>Filters applied to the describe action.</p> <p>Valid filter names: replication-instance-arn | replication-instance-id | replication-instance-class | engine-version</p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Filters applied to the describe action.</p> <p>Valid filter names: replication-instance-arn | replication-instance-id | replication-instance-class | engine-version</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
-    #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    #[serde(rename="MaxRecords")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
+    #[serde(rename = "MaxRecords")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_records: Option<i64>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeReplicationInstancesResponse {
-    #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p>The replication instances described.</p>"]
-    #[serde(rename="ReplicationInstances")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The replication instances described.</p>
+    #[serde(rename = "ReplicationInstances")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_instances: Option<Vec<ReplicationInstance>>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeReplicationSubnetGroupsMessage {
-    #[doc="<p>Filters applied to the describe action.</p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Filters applied to the describe action.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
-    #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    #[serde(rename="MaxRecords")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
+    #[serde(rename = "MaxRecords")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_records: Option<i64>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeReplicationSubnetGroupsResponse {
-    #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p>A description of the replication subnet groups.</p>"]
-    #[serde(rename="ReplicationSubnetGroups")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the replication subnet groups.</p>
+    #[serde(rename = "ReplicationSubnetGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_subnet_groups: Option<Vec<ReplicationSubnetGroup>>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeReplicationTasksMessage {
-    #[doc="<p>Filters applied to the describe action.</p> <p>Valid filter names: replication-task-arn | replication-task-id | migration-type | endpoint-arn | replication-instance-arn</p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Filters applied to the describe action.</p> <p>Valid filter names: replication-task-arn | replication-task-id | migration-type | endpoint-arn | replication-instance-arn</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
-    #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    #[serde(rename="MaxRecords")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
+    #[serde(rename = "MaxRecords")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_records: Option<i64>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeReplicationTasksResponse {
-    #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p>A description of the replication tasks.</p>"]
-    #[serde(rename="ReplicationTasks")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the replication tasks.</p>
+    #[serde(rename = "ReplicationTasks")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_tasks: Option<Vec<ReplicationTask>>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeSchemasMessage {
-    #[doc="<p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>"]
-    #[serde(rename="EndpointArn")]
+    /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
+    #[serde(rename = "EndpointArn")]
     pub endpoint_arn: String,
-    #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    #[serde(rename="MaxRecords")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
+    #[serde(rename = "MaxRecords")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_records: Option<i64>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeSchemasResponse {
-    #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p>The described schema.</p>"]
-    #[serde(rename="Schemas")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The described schema.</p>
+    #[serde(rename = "Schemas")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schemas: Option<Vec<String>>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeTableStatisticsMessage {
-    #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    #[serde(rename="MaxRecords")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
+    #[serde(rename = "MaxRecords")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_records: Option<i64>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the replication task.</p>"]
-    #[serde(rename="ReplicationTaskArn")]
+    /// <p>The Amazon Resource Name (ARN) of the replication task.</p>
+    #[serde(rename = "ReplicationTaskArn")]
     pub replication_task_arn: String,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeTableStatisticsResponse {
-    #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the replication task.</p>"]
-    #[serde(rename="ReplicationTaskArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the replication task.</p>
+    #[serde(rename = "ReplicationTaskArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task_arn: Option<String>,
-    #[doc="<p>The table statistics.</p>"]
-    #[serde(rename="TableStatistics")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The table statistics.</p>
+    #[serde(rename = "TableStatistics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub table_statistics: Option<Vec<TableStatistics>>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct DynamoDbSettings {
-    #[doc="<p> The Amazon Resource Name (ARN) used by the service access IAM role. </p>"]
-    #[serde(rename="ServiceAccessRoleArn")]
+    /// <p> The Amazon Resource Name (ARN) used by the service access IAM role. </p>
+    #[serde(rename = "ServiceAccessRoleArn")]
     pub service_access_role_arn: String,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Endpoint {
-    #[doc="<p>The Amazon Resource Name (ARN) used for SSL connection to the endpoint.</p>"]
-    #[serde(rename="CertificateArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) used for SSL connection to the endpoint.</p>
+    #[serde(rename = "CertificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_arn: Option<String>,
-    #[doc="<p>The name of the database at the endpoint.</p>"]
-    #[serde(rename="DatabaseName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the database at the endpoint.</p>
+    #[serde(rename = "DatabaseName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
-    #[doc="<p>The settings for the target DynamoDB database. For more information, see the <code>DynamoDBSettings</code> structure.</p>"]
-    #[serde(rename="DynamoDbSettings")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The settings for the target DynamoDB database. For more information, see the <code>DynamoDBSettings</code> structure.</p>
+    #[serde(rename = "DynamoDbSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub dynamo_db_settings: Option<DynamoDbSettings>,
-    #[doc="<p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>"]
-    #[serde(rename="EndpointArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
+    #[serde(rename = "EndpointArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_arn: Option<String>,
-    #[doc="<p>The database endpoint identifier. Identifiers must begin with a letter; must contain only ASCII letters, digits, and hyphens; and must not end with a hyphen or contain two consecutive hyphens.</p>"]
-    #[serde(rename="EndpointIdentifier")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The database endpoint identifier. Identifiers must begin with a letter; must contain only ASCII letters, digits, and hyphens; and must not end with a hyphen or contain two consecutive hyphens.</p>
+    #[serde(rename = "EndpointIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_identifier: Option<String>,
-    #[doc="<p>The type of endpoint.</p>"]
-    #[serde(rename="EndpointType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of endpoint.</p>
+    #[serde(rename = "EndpointType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_type: Option<String>,
-    #[doc="<p>The database engine name. Valid values, depending on the EndPointType, include MYSQL, ORACLE, POSTGRES, MARIADB, AURORA, REDSHIFT, S3, SYBASE, DYNAMODB, MONGODB, and SQLSERVER.</p>"]
-    #[serde(rename="EngineName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The database engine name. Valid values, depending on the EndPointType, include MYSQL, ORACLE, POSTGRES, MARIADB, AURORA, REDSHIFT, S3, SYBASE, DYNAMODB, MONGODB, and SQLSERVER.</p>
+    #[serde(rename = "EngineName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_name: Option<String>,
-    #[doc="<p> Value returned by a call to CreateEndpoint that can be used for cross-account validation. Use it on a subsequent call to CreateEndpoint to create the endpoint with a cross-account. </p>"]
-    #[serde(rename="ExternalId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> Value returned by a call to CreateEndpoint that can be used for cross-account validation. Use it on a subsequent call to CreateEndpoint to create the endpoint with a cross-account. </p>
+    #[serde(rename = "ExternalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub external_id: Option<String>,
-    #[doc="<p>Additional connection attributes used to connect to the endpoint.</p>"]
-    #[serde(rename="ExtraConnectionAttributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Additional connection attributes used to connect to the endpoint.</p>
+    #[serde(rename = "ExtraConnectionAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_connection_attributes: Option<String>,
-    #[doc="<p>The KMS key identifier that will be used to encrypt the connection parameters. If you do not specify a value for the KmsKeyId parameter, then AWS DMS will use your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS region.</p>"]
-    #[serde(rename="KmsKeyId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The KMS key identifier that will be used to encrypt the connection parameters. If you do not specify a value for the KmsKeyId parameter, then AWS DMS will use your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS region.</p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
-    #[doc="<p>The settings for the MongoDB source endpoint. For more information, see the <code>MongoDbSettings</code> structure.</p>"]
-    #[serde(rename="MongoDbSettings")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The settings for the MongoDB source endpoint. For more information, see the <code>MongoDbSettings</code> structure.</p>
+    #[serde(rename = "MongoDbSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub mongo_db_settings: Option<MongoDbSettings>,
-    #[doc="<p>The port value used to access the endpoint.</p>"]
-    #[serde(rename="Port")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The port value used to access the endpoint.</p>
+    #[serde(rename = "Port")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub port: Option<i64>,
-    #[doc="<p>The settings for the S3 target endpoint. For more information, see the <code>S3Settings</code> structure.</p>"]
-    #[serde(rename="S3Settings")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The settings for the S3 target endpoint. For more information, see the <code>S3Settings</code> structure.</p>
+    #[serde(rename = "S3Settings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_settings: Option<S3Settings>,
-    #[doc="<p>The name of the server at the endpoint.</p>"]
-    #[serde(rename="ServerName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the server at the endpoint.</p>
+    #[serde(rename = "ServerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub server_name: Option<String>,
-    #[doc="<p>The SSL mode used to connect to the endpoint.</p> <p>SSL mode can be one of four values: none, require, verify-ca, verify-full. </p> <p>The default value is none.</p>"]
-    #[serde(rename="SslMode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The SSL mode used to connect to the endpoint.</p> <p>SSL mode can be one of four values: none, require, verify-ca, verify-full. </p> <p>The default value is none.</p>
+    #[serde(rename = "SslMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ssl_mode: Option<String>,
-    #[doc="<p>The status of the endpoint.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the endpoint.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The user name used to connect to the endpoint.</p>"]
-    #[serde(rename="Username")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user name used to connect to the endpoint.</p>
+    #[serde(rename = "Username")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Event {
-    #[doc="<p>The date of the event.</p>"]
-    #[serde(rename="Date")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date of the event.</p>
+    #[serde(rename = "Date")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub date: Option<f64>,
-    #[doc="<p>The event categories available for the specified source type.</p>"]
-    #[serde(rename="EventCategories")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The event categories available for the specified source type.</p>
+    #[serde(rename = "EventCategories")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_categories: Option<Vec<String>>,
-    #[doc="<p>The event message.</p>"]
-    #[serde(rename="Message")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The event message.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
-    #[doc="<p> The identifier of the event source. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it cannot end with a hyphen or contain two consecutive hyphens. </p> <p>Constraints:replication instance, endpoint, migration task</p>"]
-    #[serde(rename="SourceIdentifier")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The identifier of the event source. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it cannot end with a hyphen or contain two consecutive hyphens. </p> <p>Constraints:replication instance, endpoint, migration task</p>
+    #[serde(rename = "SourceIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub source_identifier: Option<String>,
-    #[doc="<p> The type of AWS DMS resource that generates events. </p> <p>Valid values: replication-instance | endpoint | migration-task</p>"]
-    #[serde(rename="SourceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The type of AWS DMS resource that generates events. </p> <p>Valid values: replication-instance | endpoint | migration-task</p>
+    #[serde(rename = "SourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub source_type: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct EventCategoryGroup {
-    #[doc="<p> A list of event categories for a <code>SourceType</code> that you want to subscribe to. </p>"]
-    #[serde(rename="EventCategories")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> A list of event categories for a <code>SourceType</code> that you want to subscribe to. </p>
+    #[serde(rename = "EventCategories")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_categories: Option<Vec<String>>,
-    #[doc="<p> The type of AWS DMS resource that generates events. </p> <p>Valid values: replication-instance | replication-server | security-group | migration-task</p>"]
-    #[serde(rename="SourceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The type of AWS DMS resource that generates events. </p> <p>Valid values: replication-instance | replication-server | security-group | migration-task</p>
+    #[serde(rename = "SourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub source_type: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct EventSubscription {
-    #[doc="<p>The AWS DMS event notification subscription Id.</p>"]
-    #[serde(rename="CustSubscriptionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS DMS event notification subscription Id.</p>
+    #[serde(rename = "CustSubscriptionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cust_subscription_id: Option<String>,
-    #[doc="<p>The AWS customer account associated with the AWS DMS event notification subscription.</p>"]
-    #[serde(rename="CustomerAwsId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS customer account associated with the AWS DMS event notification subscription.</p>
+    #[serde(rename = "CustomerAwsId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_aws_id: Option<String>,
-    #[doc="<p>Boolean value that indicates if the event subscription is enabled.</p>"]
-    #[serde(rename="Enabled")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Boolean value that indicates if the event subscription is enabled.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    #[doc="<p>A lists of event categories.</p>"]
-    #[serde(rename="EventCategoriesList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A lists of event categories.</p>
+    #[serde(rename = "EventCategoriesList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_categories_list: Option<Vec<String>>,
-    #[doc="<p>The topic ARN of the AWS DMS event notification subscription.</p>"]
-    #[serde(rename="SnsTopicArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The topic ARN of the AWS DMS event notification subscription.</p>
+    #[serde(rename = "SnsTopicArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sns_topic_arn: Option<String>,
-    #[doc="<p>A list of source Ids for the event subscription.</p>"]
-    #[serde(rename="SourceIdsList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of source Ids for the event subscription.</p>
+    #[serde(rename = "SourceIdsList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub source_ids_list: Option<Vec<String>>,
-    #[doc="<p> The type of AWS DMS resource that generates events. </p> <p>Valid values: replication-instance | replication-server | security-group | migration-task</p>"]
-    #[serde(rename="SourceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The type of AWS DMS resource that generates events. </p> <p>Valid values: replication-instance | replication-server | security-group | migration-task</p>
+    #[serde(rename = "SourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub source_type: Option<String>,
-    #[doc="<p>The status of the AWS DMS event notification subscription.</p> <p>Constraints:</p> <p>Can be one of the following: creating | modifying | deleting | active | no-permission | topic-not-exist</p> <p>The status \"no-permission\" indicates that AWS DMS no longer has permission to post to the SNS topic. The status \"topic-not-exist\" indicates that the topic was deleted after the subscription was created.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the AWS DMS event notification subscription.</p> <p>Constraints:</p> <p>Can be one of the following: creating | modifying | deleting | active | no-permission | topic-not-exist</p> <p>The status "no-permission" indicates that AWS DMS no longer has permission to post to the SNS topic. The status "topic-not-exist" indicates that the topic was deleted after the subscription was created.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The time the RDS event notification subscription was created.</p>"]
-    #[serde(rename="SubscriptionCreationTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time the RDS event notification subscription was created.</p>
+    #[serde(rename = "SubscriptionCreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subscription_creation_time: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct Filter {
-    #[doc="<p>The name of the filter.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the filter.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>The filter value.</p>"]
-    #[serde(rename="Values")]
+    /// <p>The filter value.</p>
+    #[serde(rename = "Values")]
     pub values: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ImportCertificateMessage {
-    #[doc="<p>The customer-assigned name of the certificate. Valid characters are A-z and 0-9.</p>"]
-    #[serde(rename="CertificateIdentifier")]
+    /// <p>The customer-assigned name of the certificate. Valid characters are A-z and 0-9.</p>
+    #[serde(rename = "CertificateIdentifier")]
     pub certificate_identifier: String,
-    #[doc="<p>The contents of the .pem X.509 certificate file for the certificate.</p>"]
-    #[serde(rename="CertificatePem")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The contents of the .pem X.509 certificate file for the certificate.</p>
+    #[serde(rename = "CertificatePem")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_pem: Option<String>,
-    #[doc="<p>The location of the imported Oracle Wallet certificate for use with SSL.</p>"]
-    #[serde(rename="CertificateWallet")]
-    #[serde(
-                            deserialize_with="::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-                            serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
-                            default,
-                        )]
+    /// <p>The location of the imported Oracle Wallet certificate for use with SSL.</p>
+    #[serde(rename = "CertificateWallet")]
+    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
     pub certificate_wallet: Option<Vec<u8>>,
-    #[doc="<p>The tags associated with the certificate.</p>"]
-    #[serde(rename="Tags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The tags associated with the certificate.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ImportCertificateResponse {
-    #[doc="<p>The certificate to be uploaded.</p>"]
-    #[serde(rename="Certificate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The certificate to be uploaded.</p>
+    #[serde(rename = "Certificate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate: Option<Certificate>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListTagsForResourceMessage {
-    #[doc="<p>The Amazon Resource Name (ARN) string that uniquely identifies the AWS DMS resource.</p>"]
-    #[serde(rename="ResourceArn")]
+    /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the AWS DMS resource.</p>
+    #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListTagsForResourceResponse {
-    #[doc="<p>A list of tags for the resource.</p>"]
-    #[serde(rename="TagList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of tags for the resource.</p>
+    #[serde(rename = "TagList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_list: Option<Vec<Tag>>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ModifyEndpointMessage {
-    #[doc="<p>The Amazon Resource Name (ARN) of the certificate used for SSL connection.</p>"]
-    #[serde(rename="CertificateArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the certificate used for SSL connection.</p>
+    #[serde(rename = "CertificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_arn: Option<String>,
-    #[doc="<p>The name of the endpoint database.</p>"]
-    #[serde(rename="DatabaseName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the endpoint database.</p>
+    #[serde(rename = "DatabaseName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
-    #[doc="<p>Settings in JSON format for the target Amazon DynamoDB endpoint. For more information about the available settings, see the <b>Using Object Mapping to Migrate Data to DynamoDB</b> section at <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.DynamoDB.html\"> Using an Amazon DynamoDB Database as a Target for AWS Database Migration Service</a>. </p>"]
-    #[serde(rename="DynamoDbSettings")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Settings in JSON format for the target Amazon DynamoDB endpoint. For more information about the available settings, see the <b>Using Object Mapping to Migrate Data to DynamoDB</b> section at <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.DynamoDB.html"> Using an Amazon DynamoDB Database as a Target for AWS Database Migration Service</a>. </p>
+    #[serde(rename = "DynamoDbSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub dynamo_db_settings: Option<DynamoDbSettings>,
-    #[doc="<p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>"]
-    #[serde(rename="EndpointArn")]
+    /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
+    #[serde(rename = "EndpointArn")]
     pub endpoint_arn: String,
-    #[doc="<p>The database endpoint identifier. Identifiers must begin with a letter; must contain only ASCII letters, digits, and hyphens; and must not end with a hyphen or contain two consecutive hyphens.</p>"]
-    #[serde(rename="EndpointIdentifier")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The database endpoint identifier. Identifiers must begin with a letter; must contain only ASCII letters, digits, and hyphens; and must not end with a hyphen or contain two consecutive hyphens.</p>
+    #[serde(rename = "EndpointIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_identifier: Option<String>,
-    #[doc="<p>The type of endpoint.</p>"]
-    #[serde(rename="EndpointType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of endpoint.</p>
+    #[serde(rename = "EndpointType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_type: Option<String>,
-    #[doc="<p>The type of engine for the endpoint. Valid values, depending on the EndPointType, include MYSQL, ORACLE, POSTGRES, MARIADB, AURORA, REDSHIFT, S3, DYNAMODB, MONGODB, SYBASE, and SQLSERVER.</p>"]
-    #[serde(rename="EngineName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of engine for the endpoint. Valid values, depending on the EndPointType, include MYSQL, ORACLE, POSTGRES, MARIADB, AURORA, REDSHIFT, S3, DYNAMODB, MONGODB, SYBASE, and SQLSERVER.</p>
+    #[serde(rename = "EngineName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_name: Option<String>,
-    #[doc="<p>Additional attributes associated with the connection.</p>"]
-    #[serde(rename="ExtraConnectionAttributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Additional attributes associated with the connection.</p>
+    #[serde(rename = "ExtraConnectionAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_connection_attributes: Option<String>,
-    #[doc="<p>Settings in JSON format for the source MongoDB endpoint. For more information about the available settings, see the <b>Configuration Properties When Using MongoDB as a Source for AWS Database Migration Service</b> section at <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.MongoDB.html\"> Using Amazon S3 as a Target for AWS Database Migration Service</a>. </p>"]
-    #[serde(rename="MongoDbSettings")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Settings in JSON format for the source MongoDB endpoint. For more information about the available settings, see the <b>Configuration Properties When Using MongoDB as a Source for AWS Database Migration Service</b> section at <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.MongoDB.html"> Using Amazon S3 as a Target for AWS Database Migration Service</a>. </p>
+    #[serde(rename = "MongoDbSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub mongo_db_settings: Option<MongoDbSettings>,
-    #[doc="<p>The password to be used to login to the endpoint database.</p>"]
-    #[serde(rename="Password")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The password to be used to login to the endpoint database.</p>
+    #[serde(rename = "Password")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub password: Option<String>,
-    #[doc="<p>The port used by the endpoint database.</p>"]
-    #[serde(rename="Port")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The port used by the endpoint database.</p>
+    #[serde(rename = "Port")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub port: Option<i64>,
-    #[doc="<p>Settings in JSON format for the target S3 endpoint. For more information about the available settings, see the <b>Extra Connection Attributes</b> section at <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html\"> Using Amazon S3 as a Target for AWS Database Migration Service</a>. </p>"]
-    #[serde(rename="S3Settings")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Settings in JSON format for the target S3 endpoint. For more information about the available settings, see the <b>Extra Connection Attributes</b> section at <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html"> Using Amazon S3 as a Target for AWS Database Migration Service</a>. </p>
+    #[serde(rename = "S3Settings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_settings: Option<S3Settings>,
-    #[doc="<p>The name of the server where the endpoint database resides.</p>"]
-    #[serde(rename="ServerName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the server where the endpoint database resides.</p>
+    #[serde(rename = "ServerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub server_name: Option<String>,
-    #[doc="<p>The SSL mode to be used.</p> <p>SSL mode can be one of four values: none, require, verify-ca, verify-full. </p> <p>The default value is none.</p>"]
-    #[serde(rename="SslMode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The SSL mode to be used.</p> <p>SSL mode can be one of four values: none, require, verify-ca, verify-full. </p> <p>The default value is none.</p>
+    #[serde(rename = "SslMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ssl_mode: Option<String>,
-    #[doc="<p>The user name to be used to login to the endpoint database.</p>"]
-    #[serde(rename="Username")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user name to be used to login to the endpoint database.</p>
+    #[serde(rename = "Username")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ModifyEndpointResponse {
-    #[doc="<p>The modified endpoint.</p>"]
-    #[serde(rename="Endpoint")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The modified endpoint.</p>
+    #[serde(rename = "Endpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint: Option<Endpoint>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ModifyEventSubscriptionMessage {
-    #[doc="<p> A Boolean value; set to <b>true</b> to activate the subscription. </p>"]
-    #[serde(rename="Enabled")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> A Boolean value; set to <b>true</b> to activate the subscription. </p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    #[doc="<p> A list of event categories for a source type that you want to subscribe to. Use the <code>DescribeEventCategories</code> action to see a list of event categories. </p>"]
-    #[serde(rename="EventCategories")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> A list of event categories for a source type that you want to subscribe to. Use the <code>DescribeEventCategories</code> action to see a list of event categories. </p>
+    #[serde(rename = "EventCategories")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_categories: Option<Vec<String>>,
-    #[doc="<p> The Amazon Resource Name (ARN) of the Amazon SNS topic created for event notification. The ARN is created by Amazon SNS when you create a topic and subscribe to it.</p>"]
-    #[serde(rename="SnsTopicArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The Amazon Resource Name (ARN) of the Amazon SNS topic created for event notification. The ARN is created by Amazon SNS when you create a topic and subscribe to it.</p>
+    #[serde(rename = "SnsTopicArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sns_topic_arn: Option<String>,
-    #[doc="<p> The type of AWS DMS resource that generates the events you want to subscribe to. </p> <p>Valid values: replication-instance | migration-task</p>"]
-    #[serde(rename="SourceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The type of AWS DMS resource that generates the events you want to subscribe to. </p> <p>Valid values: replication-instance | migration-task</p>
+    #[serde(rename = "SourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub source_type: Option<String>,
-    #[doc="<p>The name of the AWS DMS event notification subscription to be modified.</p>"]
-    #[serde(rename="SubscriptionName")]
+    /// <p>The name of the AWS DMS event notification subscription to be modified.</p>
+    #[serde(rename = "SubscriptionName")]
     pub subscription_name: String,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ModifyEventSubscriptionResponse {
-    #[doc="<p>The modified event subscription.</p>"]
-    #[serde(rename="EventSubscription")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The modified event subscription.</p>
+    #[serde(rename = "EventSubscription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_subscription: Option<EventSubscription>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ModifyReplicationInstanceMessage {
-    #[doc="<p>The amount of storage (in gigabytes) to be allocated for the replication instance.</p>"]
-    #[serde(rename="AllocatedStorage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The amount of storage (in gigabytes) to be allocated for the replication instance.</p>
+    #[serde(rename = "AllocatedStorage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub allocated_storage: Option<i64>,
-    #[doc="<p>Indicates that major version upgrades are allowed. Changing this parameter does not result in an outage and the change is asynchronously applied as soon as possible.</p> <p>Constraints: This parameter must be set to true when specifying a value for the <code>EngineVersion</code> parameter that is a different major version than the replication instance's current version.</p>"]
-    #[serde(rename="AllowMajorVersionUpgrade")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates that major version upgrades are allowed. Changing this parameter does not result in an outage and the change is asynchronously applied as soon as possible.</p> <p>Constraints: This parameter must be set to true when specifying a value for the <code>EngineVersion</code> parameter that is a different major version than the replication instance's current version.</p>
+    #[serde(rename = "AllowMajorVersionUpgrade")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub allow_major_version_upgrade: Option<bool>,
-    #[doc="<p>Indicates whether the changes should be applied immediately or during the next maintenance window.</p>"]
-    #[serde(rename="ApplyImmediately")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether the changes should be applied immediately or during the next maintenance window.</p>
+    #[serde(rename = "ApplyImmediately")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub apply_immediately: Option<bool>,
-    #[doc="<p> Indicates that minor version upgrades will be applied automatically to the replication instance during the maintenance window. Changing this parameter does not result in an outage except in the following case and the change is asynchronously applied as soon as possible. An outage will result if this parameter is set to <code>true</code> during the maintenance window, and a newer minor version is available, and AWS DMS has enabled auto patching for that engine version. </p>"]
-    #[serde(rename="AutoMinorVersionUpgrade")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> Indicates that minor version upgrades will be applied automatically to the replication instance during the maintenance window. Changing this parameter does not result in an outage except in the following case and the change is asynchronously applied as soon as possible. An outage will result if this parameter is set to <code>true</code> during the maintenance window, and a newer minor version is available, and AWS DMS has enabled auto patching for that engine version. </p>
+    #[serde(rename = "AutoMinorVersionUpgrade")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_minor_version_upgrade: Option<bool>,
-    #[doc="<p>The engine version number of the replication instance.</p>"]
-    #[serde(rename="EngineVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The engine version number of the replication instance.</p>
+    #[serde(rename = "EngineVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_version: Option<String>,
-    #[doc="<p> Specifies if the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>"]
-    #[serde(rename="MultiAZ")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> Specifies if the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>
+    #[serde(rename = "MultiAZ")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub multi_az: Option<bool>,
-    #[doc="<p>The weekly time range (in UTC) during which system maintenance can occur, which might result in an outage. Changing this parameter does not result in an outage, except in the following situation, and the change is asynchronously applied as soon as possible. If moving this window to the current time, there must be at least 30 minutes between the current time and end of the window to ensure pending changes are applied.</p> <p>Default: Uses existing setting</p> <p>Format: ddd:hh24:mi-ddd:hh24:mi</p> <p>Valid Days: Mon | Tue | Wed | Thu | Fri | Sat | Sun</p> <p>Constraints: Must be at least 30 minutes</p>"]
-    #[serde(rename="PreferredMaintenanceWindow")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The weekly time range (in UTC) during which system maintenance can occur, which might result in an outage. Changing this parameter does not result in an outage, except in the following situation, and the change is asynchronously applied as soon as possible. If moving this window to the current time, there must be at least 30 minutes between the current time and end of the window to ensure pending changes are applied.</p> <p>Default: Uses existing setting</p> <p>Format: ddd:hh24:mi-ddd:hh24:mi</p> <p>Valid Days: Mon | Tue | Wed | Thu | Fri | Sat | Sun</p> <p>Constraints: Must be at least 30 minutes</p>
+    #[serde(rename = "PreferredMaintenanceWindow")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub preferred_maintenance_window: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the replication instance.</p>"]
-    #[serde(rename="ReplicationInstanceArn")]
+    /// <p>The Amazon Resource Name (ARN) of the replication instance.</p>
+    #[serde(rename = "ReplicationInstanceArn")]
     pub replication_instance_arn: String,
-    #[doc="<p>The compute and memory capacity of the replication instance.</p> <p> Valid Values: <code>dms.t2.micro | dms.t2.small | dms.t2.medium | dms.t2.large | dms.c4.large | dms.c4.xlarge | dms.c4.2xlarge | dms.c4.4xlarge </code> </p>"]
-    #[serde(rename="ReplicationInstanceClass")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The compute and memory capacity of the replication instance.</p> <p> Valid Values: <code>dms.t2.micro | dms.t2.small | dms.t2.medium | dms.t2.large | dms.c4.large | dms.c4.xlarge | dms.c4.2xlarge | dms.c4.4xlarge </code> </p>
+    #[serde(rename = "ReplicationInstanceClass")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_instance_class: Option<String>,
-    #[doc="<p>The replication instance identifier. This parameter is stored as a lowercase string.</p>"]
-    #[serde(rename="ReplicationInstanceIdentifier")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The replication instance identifier. This parameter is stored as a lowercase string.</p>
+    #[serde(rename = "ReplicationInstanceIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_instance_identifier: Option<String>,
-    #[doc="<p> Specifies the VPC security group to be used with the replication instance. The VPC security group must work with the VPC containing the replication instance. </p>"]
-    #[serde(rename="VpcSecurityGroupIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> Specifies the VPC security group to be used with the replication instance. The VPC security group must work with the VPC containing the replication instance. </p>
+    #[serde(rename = "VpcSecurityGroupIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ModifyReplicationInstanceResponse {
-    #[doc="<p>The modified replication instance.</p>"]
-    #[serde(rename="ReplicationInstance")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The modified replication instance.</p>
+    #[serde(rename = "ReplicationInstance")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_instance: Option<ReplicationInstance>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ModifyReplicationSubnetGroupMessage {
-    #[doc="<p>The description of the replication instance subnet group.</p>"]
-    #[serde(rename="ReplicationSubnetGroupDescription")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The description of the replication instance subnet group.</p>
+    #[serde(rename = "ReplicationSubnetGroupDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_subnet_group_description: Option<String>,
-    #[doc="<p>The name of the replication instance subnet group.</p>"]
-    #[serde(rename="ReplicationSubnetGroupIdentifier")]
+    /// <p>The name of the replication instance subnet group.</p>
+    #[serde(rename = "ReplicationSubnetGroupIdentifier")]
     pub replication_subnet_group_identifier: String,
-    #[doc="<p>A list of subnet IDs.</p>"]
-    #[serde(rename="SubnetIds")]
+    /// <p>A list of subnet IDs.</p>
+    #[serde(rename = "SubnetIds")]
     pub subnet_ids: Vec<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ModifyReplicationSubnetGroupResponse {
-    #[doc="<p>The modified replication subnet group.</p>"]
-    #[serde(rename="ReplicationSubnetGroup")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The modified replication subnet group.</p>
+    #[serde(rename = "ReplicationSubnetGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_subnet_group: Option<ReplicationSubnetGroup>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ModifyReplicationTaskMessage {
-    #[doc="<p>The start time for the Change Data Capture (CDC) operation.</p>"]
-    #[serde(rename="CdcStartTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The start time for the Change Data Capture (CDC) operation.</p>
+    #[serde(rename = "CdcStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cdc_start_time: Option<f64>,
-    #[doc="<p>The migration type.</p> <p>Valid values: full-load | cdc | full-load-and-cdc</p>"]
-    #[serde(rename="MigrationType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The migration type.</p> <p>Valid values: full-load | cdc | full-load-and-cdc</p>
+    #[serde(rename = "MigrationType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub migration_type: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the replication task.</p>"]
-    #[serde(rename="ReplicationTaskArn")]
+    /// <p>The Amazon Resource Name (ARN) of the replication task.</p>
+    #[serde(rename = "ReplicationTaskArn")]
     pub replication_task_arn: String,
-    #[doc="<p>The replication task identifier.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>"]
-    #[serde(rename="ReplicationTaskIdentifier")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The replication task identifier.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>
+    #[serde(rename = "ReplicationTaskIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task_identifier: Option<String>,
-    #[doc="<p>JSON file that contains settings for the task, such as target metadata settings.</p>"]
-    #[serde(rename="ReplicationTaskSettings")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>JSON file that contains settings for the task, such as target metadata settings.</p>
+    #[serde(rename = "ReplicationTaskSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task_settings: Option<String>,
-    #[doc="<p>When using the AWS CLI or boto3, provide the path of the JSON file that contains the table mappings. Precede the path with \"file://\". When working with the DMS API, provide the JSON as the parameter value.</p> <p>For example, --table-mappings file://mappingfile.json</p>"]
-    #[serde(rename="TableMappings")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>When using the AWS CLI or boto3, provide the path of the JSON file that contains the table mappings. Precede the path with "file://". When working with the DMS API, provide the JSON as the parameter value.</p> <p>For example, --table-mappings file://mappingfile.json</p>
+    #[serde(rename = "TableMappings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub table_mappings: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ModifyReplicationTaskResponse {
-    #[doc="<p>The replication task that was modified.</p>"]
-    #[serde(rename="ReplicationTask")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The replication task that was modified.</p>
+    #[serde(rename = "ReplicationTask")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task: Option<ReplicationTask>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct MongoDbSettings {
-    #[doc="<p> The authentication mechanism you use to access the MongoDB source endpoint.</p> <p>Valid values: DEFAULT, MONGODB_CR, SCRAM_SHA_1 </p> <p>DEFAULT – For MongoDB version 2.x, use MONGODB_CR. For MongoDB version 3.x, use SCRAM_SHA_1. This attribute is not used when authType=No.</p>"]
-    #[serde(rename="AuthMechanism")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The authentication mechanism you use to access the MongoDB source endpoint.</p> <p>Valid values: DEFAULT, MONGODB_CR, SCRAM_SHA_1 </p> <p>DEFAULT – For MongoDB version 2.x, use MONGODB_CR. For MongoDB version 3.x, use SCRAM_SHA_1. This attribute is not used when authType=No.</p>
+    #[serde(rename = "AuthMechanism")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_mechanism: Option<String>,
-    #[doc="<p> The MongoDB database name. This attribute is not used when <code>authType=NO</code>. </p> <p>The default is admin.</p>"]
-    #[serde(rename="AuthSource")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The MongoDB database name. This attribute is not used when <code>authType=NO</code>. </p> <p>The default is admin.</p>
+    #[serde(rename = "AuthSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_source: Option<String>,
-    #[doc="<p> The authentication type you use to access the MongoDB source endpoint.</p> <p>Valid values: NO, PASSWORD </p> <p>When NO is selected, user name and password parameters are not used and can be empty. </p>"]
-    #[serde(rename="AuthType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The authentication type you use to access the MongoDB source endpoint.</p> <p>Valid values: NO, PASSWORD </p> <p>When NO is selected, user name and password parameters are not used and can be empty. </p>
+    #[serde(rename = "AuthType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_type: Option<String>,
-    #[doc="<p> The database name on the MongoDB source endpoint. </p>"]
-    #[serde(rename="DatabaseName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The database name on the MongoDB source endpoint. </p>
+    #[serde(rename = "DatabaseName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
-    #[doc="<p> Indicates the number of documents to preview to determine the document organization. Use this attribute when <code>NestingLevel</code> is set to ONE. </p> <p>Must be a positive value greater than 0. Default value is 1000.</p>"]
-    #[serde(rename="DocsToInvestigate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> Indicates the number of documents to preview to determine the document organization. Use this attribute when <code>NestingLevel</code> is set to ONE. </p> <p>Must be a positive value greater than 0. Default value is 1000.</p>
+    #[serde(rename = "DocsToInvestigate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub docs_to_investigate: Option<String>,
-    #[doc="<p> Specifies the document ID. Use this attribute when <code>NestingLevel</code> is set to NONE. </p> <p>Default value is false. </p>"]
-    #[serde(rename="ExtractDocId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> Specifies the document ID. Use this attribute when <code>NestingLevel</code> is set to NONE. </p> <p>Default value is false. </p>
+    #[serde(rename = "ExtractDocId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub extract_doc_id: Option<String>,
-    #[doc="<p> Specifies either document or table mode. </p> <p>Valid values: NONE, ONE</p> <p>Default value is NONE. Specify NONE to use document mode. Specify ONE to use table mode.</p>"]
-    #[serde(rename="NestingLevel")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> Specifies either document or table mode. </p> <p>Valid values: NONE, ONE</p> <p>Default value is NONE. Specify NONE to use document mode. Specify ONE to use table mode.</p>
+    #[serde(rename = "NestingLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub nesting_level: Option<String>,
-    #[doc="<p> The password for the user account you use to access the MongoDB source endpoint. </p>"]
-    #[serde(rename="Password")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The password for the user account you use to access the MongoDB source endpoint. </p>
+    #[serde(rename = "Password")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub password: Option<String>,
-    #[doc="<p> The port value for the MongoDB source endpoint. </p>"]
-    #[serde(rename="Port")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The port value for the MongoDB source endpoint. </p>
+    #[serde(rename = "Port")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub port: Option<i64>,
-    #[doc="<p> The name of the server on the MongoDB source endpoint. </p>"]
-    #[serde(rename="ServerName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The name of the server on the MongoDB source endpoint. </p>
+    #[serde(rename = "ServerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub server_name: Option<String>,
-    #[doc="<p>The user name you use to access the MongoDB source endpoint. </p>"]
-    #[serde(rename="Username")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user name you use to access the MongoDB source endpoint. </p>
+    #[serde(rename = "Username")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct OrderableReplicationInstance {
-    #[doc="<p>The default amount of storage (in gigabytes) that is allocated for the replication instance.</p>"]
-    #[serde(rename="DefaultAllocatedStorage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The default amount of storage (in gigabytes) that is allocated for the replication instance.</p>
+    #[serde(rename = "DefaultAllocatedStorage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub default_allocated_storage: Option<i64>,
-    #[doc="<p>The version of the replication engine.</p>"]
-    #[serde(rename="EngineVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version of the replication engine.</p>
+    #[serde(rename = "EngineVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_version: Option<String>,
-    #[doc="<p>The amount of storage (in gigabytes) that is allocated for the replication instance.</p>"]
-    #[serde(rename="IncludedAllocatedStorage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The amount of storage (in gigabytes) that is allocated for the replication instance.</p>
+    #[serde(rename = "IncludedAllocatedStorage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub included_allocated_storage: Option<i64>,
-    #[doc="<p>The minimum amount of storage (in gigabytes) that can be allocated for the replication instance.</p>"]
-    #[serde(rename="MaxAllocatedStorage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The minimum amount of storage (in gigabytes) that can be allocated for the replication instance.</p>
+    #[serde(rename = "MaxAllocatedStorage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_allocated_storage: Option<i64>,
-    #[doc="<p>The minimum amount of storage (in gigabytes) that can be allocated for the replication instance.</p>"]
-    #[serde(rename="MinAllocatedStorage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The minimum amount of storage (in gigabytes) that can be allocated for the replication instance.</p>
+    #[serde(rename = "MinAllocatedStorage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub min_allocated_storage: Option<i64>,
-    #[doc="<p>The compute and memory capacity of the replication instance.</p> <p> Valid Values: <code>dms.t2.micro | dms.t2.small | dms.t2.medium | dms.t2.large | dms.c4.large | dms.c4.xlarge | dms.c4.2xlarge | dms.c4.4xlarge </code> </p>"]
-    #[serde(rename="ReplicationInstanceClass")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The compute and memory capacity of the replication instance.</p> <p> Valid Values: <code>dms.t2.micro | dms.t2.small | dms.t2.medium | dms.t2.large | dms.c4.large | dms.c4.xlarge | dms.c4.2xlarge | dms.c4.4xlarge </code> </p>
+    #[serde(rename = "ReplicationInstanceClass")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_instance_class: Option<String>,
-    #[doc="<p>The type of storage used by the replication instance.</p>"]
-    #[serde(rename="StorageType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of storage used by the replication instance.</p>
+    #[serde(rename = "StorageType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_type: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct RefreshSchemasMessage {
-    #[doc="<p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>"]
-    #[serde(rename="EndpointArn")]
+    /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
+    #[serde(rename = "EndpointArn")]
     pub endpoint_arn: String,
-    #[doc="<p>The Amazon Resource Name (ARN) of the replication instance.</p>"]
-    #[serde(rename="ReplicationInstanceArn")]
+    /// <p>The Amazon Resource Name (ARN) of the replication instance.</p>
+    #[serde(rename = "ReplicationInstanceArn")]
     pub replication_instance_arn: String,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RefreshSchemasResponse {
-    #[doc="<p>The status of the refreshed schema.</p>"]
-    #[serde(rename="RefreshSchemasStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the refreshed schema.</p>
+    #[serde(rename = "RefreshSchemasStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub refresh_schemas_status: Option<RefreshSchemasStatus>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RefreshSchemasStatus {
-    #[doc="<p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>"]
-    #[serde(rename="EndpointArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
+    #[serde(rename = "EndpointArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_arn: Option<String>,
-    #[doc="<p>The last failure message for the schema.</p>"]
-    #[serde(rename="LastFailureMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The last failure message for the schema.</p>
+    #[serde(rename = "LastFailureMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_failure_message: Option<String>,
-    #[doc="<p>The date the schema was last refreshed.</p>"]
-    #[serde(rename="LastRefreshDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the schema was last refreshed.</p>
+    #[serde(rename = "LastRefreshDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_refresh_date: Option<f64>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the replication instance.</p>"]
-    #[serde(rename="ReplicationInstanceArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the replication instance.</p>
+    #[serde(rename = "ReplicationInstanceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_instance_arn: Option<String>,
-    #[doc="<p>The status of the schema.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the schema.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ReloadTablesMessage {
-    #[doc="<p>The Amazon Resource Name (ARN) of the replication instance. </p>"]
-    #[serde(rename="ReplicationTaskArn")]
+    /// <p>The Amazon Resource Name (ARN) of the replication instance. </p>
+    #[serde(rename = "ReplicationTaskArn")]
     pub replication_task_arn: String,
-    #[doc="<p>The name and schema of the table to be reloaded. </p>"]
-    #[serde(rename="TablesToReload")]
+    /// <p>The name and schema of the table to be reloaded. </p>
+    #[serde(rename = "TablesToReload")]
     pub tables_to_reload: Vec<TableToReload>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ReloadTablesResponse {
-    #[doc="<p>The Amazon Resource Name (ARN) of the replication task. </p>"]
-    #[serde(rename="ReplicationTaskArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the replication task. </p>
+    #[serde(rename = "ReplicationTaskArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task_arn: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct RemoveTagsFromResourceMessage {
-    #[doc="<p>&gt;The Amazon Resource Name (ARN) of the AWS DMS resource the tag is to be removed from.</p>"]
-    #[serde(rename="ResourceArn")]
+    /// <p>&gt;The Amazon Resource Name (ARN) of the AWS DMS resource the tag is to be removed from.</p>
+    #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
-    #[doc="<p>The tag key (name) of the tag to be removed.</p>"]
-    #[serde(rename="TagKeys")]
+    /// <p>The tag key (name) of the tag to be removed.</p>
+    #[serde(rename = "TagKeys")]
     pub tag_keys: Vec<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RemoveTagsFromResourceResponse;
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ReplicationInstance {
-    #[doc="<p>The amount of storage (in gigabytes) that is allocated for the replication instance.</p>"]
-    #[serde(rename="AllocatedStorage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The amount of storage (in gigabytes) that is allocated for the replication instance.</p>
+    #[serde(rename = "AllocatedStorage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub allocated_storage: Option<i64>,
-    #[doc="<p>Boolean value indicating if minor version upgrades will be automatically applied to the instance.</p>"]
-    #[serde(rename="AutoMinorVersionUpgrade")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Boolean value indicating if minor version upgrades will be automatically applied to the instance.</p>
+    #[serde(rename = "AutoMinorVersionUpgrade")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_minor_version_upgrade: Option<bool>,
-    #[doc="<p>The Availability Zone for the instance.</p>"]
-    #[serde(rename="AvailabilityZone")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Availability Zone for the instance.</p>
+    #[serde(rename = "AvailabilityZone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zone: Option<String>,
-    #[doc="<p>The engine version number of the replication instance.</p>"]
-    #[serde(rename="EngineVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The engine version number of the replication instance.</p>
+    #[serde(rename = "EngineVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_version: Option<String>,
-    #[doc="<p>The time the replication instance was created.</p>"]
-    #[serde(rename="InstanceCreateTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time the replication instance was created.</p>
+    #[serde(rename = "InstanceCreateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_create_time: Option<f64>,
-    #[doc="<p>The KMS key identifier that is used to encrypt the content on the replication instance. If you do not specify a value for the KmsKeyId parameter, then AWS DMS will use your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS region.</p>"]
-    #[serde(rename="KmsKeyId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The KMS key identifier that is used to encrypt the content on the replication instance. If you do not specify a value for the KmsKeyId parameter, then AWS DMS will use your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS region.</p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
-    #[doc="<p> Specifies if the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>"]
-    #[serde(rename="MultiAZ")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> Specifies if the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>
+    #[serde(rename = "MultiAZ")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub multi_az: Option<bool>,
-    #[doc="<p>The pending modification values.</p>"]
-    #[serde(rename="PendingModifiedValues")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The pending modification values.</p>
+    #[serde(rename = "PendingModifiedValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub pending_modified_values: Option<ReplicationPendingModifiedValues>,
-    #[doc="<p>The maintenance window times for the replication instance.</p>"]
-    #[serde(rename="PreferredMaintenanceWindow")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maintenance window times for the replication instance.</p>
+    #[serde(rename = "PreferredMaintenanceWindow")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub preferred_maintenance_window: Option<String>,
-    #[doc="<p> Specifies the accessibility options for the replication instance. A value of <code>true</code> represents an instance with a public IP address. A value of <code>false</code> represents an instance with a private IP address. The default value is <code>true</code>. </p>"]
-    #[serde(rename="PubliclyAccessible")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> Specifies the accessibility options for the replication instance. A value of <code>true</code> represents an instance with a public IP address. A value of <code>false</code> represents an instance with a private IP address. The default value is <code>true</code>. </p>
+    #[serde(rename = "PubliclyAccessible")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub publicly_accessible: Option<bool>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the replication instance.</p>"]
-    #[serde(rename="ReplicationInstanceArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the replication instance.</p>
+    #[serde(rename = "ReplicationInstanceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_instance_arn: Option<String>,
-    #[doc="<p>The compute and memory capacity of the replication instance.</p> <p> Valid Values: <code>dms.t2.micro | dms.t2.small | dms.t2.medium | dms.t2.large | dms.c4.large | dms.c4.xlarge | dms.c4.2xlarge | dms.c4.4xlarge </code> </p>"]
-    #[serde(rename="ReplicationInstanceClass")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The compute and memory capacity of the replication instance.</p> <p> Valid Values: <code>dms.t2.micro | dms.t2.small | dms.t2.medium | dms.t2.large | dms.c4.large | dms.c4.xlarge | dms.c4.2xlarge | dms.c4.4xlarge </code> </p>
+    #[serde(rename = "ReplicationInstanceClass")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_instance_class: Option<String>,
-    #[doc="<p>The replication instance identifier. This parameter is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <p>Example: <code>myrepinstance</code> </p>"]
-    #[serde(rename="ReplicationInstanceIdentifier")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The replication instance identifier. This parameter is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <p>Example: <code>myrepinstance</code> </p>
+    #[serde(rename = "ReplicationInstanceIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_instance_identifier: Option<String>,
-    #[doc="<p>The private IP address of the replication instance.</p>"]
-    #[serde(rename="ReplicationInstancePrivateIpAddresses")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The private IP address of the replication instance.</p>
+    #[serde(rename = "ReplicationInstancePrivateIpAddresses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_instance_private_ip_addresses: Option<Vec<String>>,
-    #[doc="<p>The public IP address of the replication instance.</p>"]
-    #[serde(rename="ReplicationInstancePublicIpAddresses")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The public IP address of the replication instance.</p>
+    #[serde(rename = "ReplicationInstancePublicIpAddresses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_instance_public_ip_addresses: Option<Vec<String>>,
-    #[doc="<p>The status of the replication instance.</p>"]
-    #[serde(rename="ReplicationInstanceStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the replication instance.</p>
+    #[serde(rename = "ReplicationInstanceStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_instance_status: Option<String>,
-    #[doc="<p>The subnet group for the replication instance.</p>"]
-    #[serde(rename="ReplicationSubnetGroup")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The subnet group for the replication instance.</p>
+    #[serde(rename = "ReplicationSubnetGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_subnet_group: Option<ReplicationSubnetGroup>,
-    #[doc="<p>The availability zone of the standby replication instance in a Multi-AZ deployment.</p>"]
-    #[serde(rename="SecondaryAvailabilityZone")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The availability zone of the standby replication instance in a Multi-AZ deployment.</p>
+    #[serde(rename = "SecondaryAvailabilityZone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub secondary_availability_zone: Option<String>,
-    #[doc="<p>The VPC security group for the instance.</p>"]
-    #[serde(rename="VpcSecurityGroups")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The VPC security group for the instance.</p>
+    #[serde(rename = "VpcSecurityGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_security_groups: Option<Vec<VpcSecurityGroupMembership>>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ReplicationPendingModifiedValues {
-    #[doc="<p>The amount of storage (in gigabytes) that is allocated for the replication instance.</p>"]
-    #[serde(rename="AllocatedStorage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The amount of storage (in gigabytes) that is allocated for the replication instance.</p>
+    #[serde(rename = "AllocatedStorage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub allocated_storage: Option<i64>,
-    #[doc="<p>The engine version number of the replication instance.</p>"]
-    #[serde(rename="EngineVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The engine version number of the replication instance.</p>
+    #[serde(rename = "EngineVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_version: Option<String>,
-    #[doc="<p> Specifies if the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>"]
-    #[serde(rename="MultiAZ")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> Specifies if the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>
+    #[serde(rename = "MultiAZ")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub multi_az: Option<bool>,
-    #[doc="<p>The compute and memory capacity of the replication instance.</p> <p> Valid Values: <code>dms.t2.micro | dms.t2.small | dms.t2.medium | dms.t2.large | dms.c4.large | dms.c4.xlarge | dms.c4.2xlarge | dms.c4.4xlarge </code> </p>"]
-    #[serde(rename="ReplicationInstanceClass")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The compute and memory capacity of the replication instance.</p> <p> Valid Values: <code>dms.t2.micro | dms.t2.small | dms.t2.medium | dms.t2.large | dms.c4.large | dms.c4.xlarge | dms.c4.2xlarge | dms.c4.4xlarge </code> </p>
+    #[serde(rename = "ReplicationInstanceClass")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_instance_class: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ReplicationSubnetGroup {
-    #[doc="<p>The description of the replication subnet group.</p>"]
-    #[serde(rename="ReplicationSubnetGroupDescription")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The description of the replication subnet group.</p>
+    #[serde(rename = "ReplicationSubnetGroupDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_subnet_group_description: Option<String>,
-    #[doc="<p>The identifier of the replication instance subnet group.</p>"]
-    #[serde(rename="ReplicationSubnetGroupIdentifier")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier of the replication instance subnet group.</p>
+    #[serde(rename = "ReplicationSubnetGroupIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_subnet_group_identifier: Option<String>,
-    #[doc="<p>The status of the subnet group.</p>"]
-    #[serde(rename="SubnetGroupStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the subnet group.</p>
+    #[serde(rename = "SubnetGroupStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_group_status: Option<String>,
-    #[doc="<p>The subnets that are in the subnet group.</p>"]
-    #[serde(rename="Subnets")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The subnets that are in the subnet group.</p>
+    #[serde(rename = "Subnets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subnets: Option<Vec<Subnet>>,
-    #[doc="<p>The ID of the VPC.</p>"]
-    #[serde(rename="VpcId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the VPC.</p>
+    #[serde(rename = "VpcId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ReplicationTask {
-    #[doc="<p>The last error (failure) message generated for the replication instance.</p>"]
-    #[serde(rename="LastFailureMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The last error (failure) message generated for the replication instance.</p>
+    #[serde(rename = "LastFailureMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_failure_message: Option<String>,
-    #[doc="<p>The type of migration.</p>"]
-    #[serde(rename="MigrationType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of migration.</p>
+    #[serde(rename = "MigrationType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub migration_type: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the replication instance.</p>"]
-    #[serde(rename="ReplicationInstanceArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the replication instance.</p>
+    #[serde(rename = "ReplicationInstanceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_instance_arn: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the replication task.</p>"]
-    #[serde(rename="ReplicationTaskArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the replication task.</p>
+    #[serde(rename = "ReplicationTaskArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task_arn: Option<String>,
-    #[doc="<p>The date the replication task was created.</p>"]
-    #[serde(rename="ReplicationTaskCreationDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the replication task was created.</p>
+    #[serde(rename = "ReplicationTaskCreationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task_creation_date: Option<f64>,
-    #[doc="<p>The replication task identifier.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>"]
-    #[serde(rename="ReplicationTaskIdentifier")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The replication task identifier.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>
+    #[serde(rename = "ReplicationTaskIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task_identifier: Option<String>,
-    #[doc="<p>The settings for the replication task.</p>"]
-    #[serde(rename="ReplicationTaskSettings")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The settings for the replication task.</p>
+    #[serde(rename = "ReplicationTaskSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task_settings: Option<String>,
-    #[doc="<p>The date the replication task is scheduled to start.</p>"]
-    #[serde(rename="ReplicationTaskStartDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the replication task is scheduled to start.</p>
+    #[serde(rename = "ReplicationTaskStartDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task_start_date: Option<f64>,
-    #[doc="<p>The statistics for the task, including elapsed time, tables loaded, and table errors.</p>"]
-    #[serde(rename="ReplicationTaskStats")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The statistics for the task, including elapsed time, tables loaded, and table errors.</p>
+    #[serde(rename = "ReplicationTaskStats")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task_stats: Option<ReplicationTaskStats>,
-    #[doc="<p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>"]
-    #[serde(rename="SourceEndpointArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
+    #[serde(rename = "SourceEndpointArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub source_endpoint_arn: Option<String>,
-    #[doc="<p>The status of the replication task.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the replication task.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The reason the replication task was stopped.</p>"]
-    #[serde(rename="StopReason")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The reason the replication task was stopped.</p>
+    #[serde(rename = "StopReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub stop_reason: Option<String>,
-    #[doc="<p>Table mappings specified in the task.</p>"]
-    #[serde(rename="TableMappings")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Table mappings specified in the task.</p>
+    #[serde(rename = "TableMappings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub table_mappings: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>"]
-    #[serde(rename="TargetEndpointArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
+    #[serde(rename = "TargetEndpointArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub target_endpoint_arn: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ReplicationTaskStats {
-    #[doc="<p>The elapsed time of the task, in milliseconds.</p>"]
-    #[serde(rename="ElapsedTimeMillis")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The elapsed time of the task, in milliseconds.</p>
+    #[serde(rename = "ElapsedTimeMillis")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub elapsed_time_millis: Option<i64>,
-    #[doc="<p>The percent complete for the full load migration task.</p>"]
-    #[serde(rename="FullLoadProgressPercent")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The percent complete for the full load migration task.</p>
+    #[serde(rename = "FullLoadProgressPercent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub full_load_progress_percent: Option<i64>,
-    #[doc="<p>The number of errors that have occurred during this task.</p>"]
-    #[serde(rename="TablesErrored")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of errors that have occurred during this task.</p>
+    #[serde(rename = "TablesErrored")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tables_errored: Option<i64>,
-    #[doc="<p>The number of tables loaded for this task.</p>"]
-    #[serde(rename="TablesLoaded")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of tables loaded for this task.</p>
+    #[serde(rename = "TablesLoaded")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tables_loaded: Option<i64>,
-    #[doc="<p>The number of tables currently loading for this task.</p>"]
-    #[serde(rename="TablesLoading")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of tables currently loading for this task.</p>
+    #[serde(rename = "TablesLoading")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tables_loading: Option<i64>,
-    #[doc="<p>The number of tables queued for this task.</p>"]
-    #[serde(rename="TablesQueued")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of tables queued for this task.</p>
+    #[serde(rename = "TablesQueued")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tables_queued: Option<i64>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct S3Settings {
-    #[doc="<p> An optional parameter to set a folder name in the S3 bucket. If provided, tables are created in the path &lt;bucketFolder&gt;/&lt;schema_name&gt;/&lt;table_name&gt;/. If this parameter is not specified, then the path used is &lt;schema_name&gt;/&lt;table_name&gt;/. </p>"]
-    #[serde(rename="BucketFolder")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> An optional parameter to set a folder name in the S3 bucket. If provided, tables are created in the path &lt;bucketFolder&gt;/&lt;schema_name&gt;/&lt;table_name&gt;/. If this parameter is not specified, then the path used is &lt;schema_name&gt;/&lt;table_name&gt;/. </p>
+    #[serde(rename = "BucketFolder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bucket_folder: Option<String>,
-    #[doc="<p> The name of the S3 bucket. </p>"]
-    #[serde(rename="BucketName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The name of the S3 bucket. </p>
+    #[serde(rename = "BucketName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bucket_name: Option<String>,
-    #[doc="<p> An optional parameter to use GZIP to compress the target files. Set to GZIP to compress the target files. Set to NONE (the default) or do not use to leave the files uncompressed. </p>"]
-    #[serde(rename="CompressionType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> An optional parameter to use GZIP to compress the target files. Set to GZIP to compress the target files. Set to NONE (the default) or do not use to leave the files uncompressed. </p>
+    #[serde(rename = "CompressionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compression_type: Option<String>,
-    #[doc="<p> The delimiter used to separate columns in the source files. The default is a comma. </p>"]
-    #[serde(rename="CsvDelimiter")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The delimiter used to separate columns in the source files. The default is a comma. </p>
+    #[serde(rename = "CsvDelimiter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub csv_delimiter: Option<String>,
-    #[doc="<p> The delimiter used to separate rows in the source files. The default is a carriage return (\\n). </p>"]
-    #[serde(rename="CsvRowDelimiter")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The delimiter used to separate rows in the source files. The default is a carriage return (\n). </p>
+    #[serde(rename = "CsvRowDelimiter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub csv_row_delimiter: Option<String>,
-    #[doc="<p> </p>"]
-    #[serde(rename="ExternalTableDefinition")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> </p>
+    #[serde(rename = "ExternalTableDefinition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub external_table_definition: Option<String>,
-    #[doc="<p> The Amazon Resource Name (ARN) used by the service access IAM role. </p>"]
-    #[serde(rename="ServiceAccessRoleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The Amazon Resource Name (ARN) used by the service access IAM role. </p>
+    #[serde(rename = "ServiceAccessRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub service_access_role_arn: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StartReplicationTaskMessage {
-    #[doc="<p>The start time for the Change Data Capture (CDC) operation.</p>"]
-    #[serde(rename="CdcStartTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The start time for the Change Data Capture (CDC) operation.</p>
+    #[serde(rename = "CdcStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cdc_start_time: Option<f64>,
-    #[doc="<p>The Amazon Resource Number (ARN) of the replication task to be started.</p>"]
-    #[serde(rename="ReplicationTaskArn")]
+    /// <p>The Amazon Resource Number (ARN) of the replication task to be started.</p>
+    #[serde(rename = "ReplicationTaskArn")]
     pub replication_task_arn: String,
-    #[doc="<p>The type of replication task.</p>"]
-    #[serde(rename="StartReplicationTaskType")]
+    /// <p>The type of replication task.</p>
+    #[serde(rename = "StartReplicationTaskType")]
     pub start_replication_task_type: String,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StartReplicationTaskResponse {
-    #[doc="<p>The replication task started.</p>"]
-    #[serde(rename="ReplicationTask")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The replication task started.</p>
+    #[serde(rename = "ReplicationTask")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task: Option<ReplicationTask>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StopReplicationTaskMessage {
-    #[doc="<p>The Amazon Resource Number(ARN) of the replication task to be stopped.</p>"]
-    #[serde(rename="ReplicationTaskArn")]
+    /// <p>The Amazon Resource Number(ARN) of the replication task to be stopped.</p>
+    #[serde(rename = "ReplicationTaskArn")]
     pub replication_task_arn: String,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StopReplicationTaskResponse {
-    #[doc="<p>The replication task stopped.</p>"]
-    #[serde(rename="ReplicationTask")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The replication task stopped.</p>
+    #[serde(rename = "ReplicationTask")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task: Option<ReplicationTask>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Subnet {
-    #[doc="<p>The Availability Zone of the subnet.</p>"]
-    #[serde(rename="SubnetAvailabilityZone")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Availability Zone of the subnet.</p>
+    #[serde(rename = "SubnetAvailabilityZone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_availability_zone: Option<AvailabilityZone>,
-    #[doc="<p>The subnet identifier.</p>"]
-    #[serde(rename="SubnetIdentifier")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The subnet identifier.</p>
+    #[serde(rename = "SubnetIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_identifier: Option<String>,
-    #[doc="<p>The status of the subnet.</p>"]
-    #[serde(rename="SubnetStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the subnet.</p>
+    #[serde(rename = "SubnetStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_status: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct SupportedEndpointType {
-    #[doc="<p>The type of endpoint.</p>"]
-    #[serde(rename="EndpointType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of endpoint.</p>
+    #[serde(rename = "EndpointType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_type: Option<String>,
-    #[doc="<p>The database engine name. Valid values, depending on the EndPointType, include MYSQL, ORACLE, POSTGRES, MARIADB, AURORA, REDSHIFT, S3, SYBASE, DYNAMODB, MONGODB, and SQLSERVER.</p>"]
-    #[serde(rename="EngineName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The database engine name. Valid values, depending on the EndPointType, include MYSQL, ORACLE, POSTGRES, MARIADB, AURORA, REDSHIFT, S3, SYBASE, DYNAMODB, MONGODB, and SQLSERVER.</p>
+    #[serde(rename = "EngineName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_name: Option<String>,
-    #[doc="<p>Indicates if Change Data Capture (CDC) is supported.</p>"]
-    #[serde(rename="SupportsCDC")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates if Change Data Capture (CDC) is supported.</p>
+    #[serde(rename = "SupportsCDC")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub supports_cdc: Option<bool>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct TableStatistics {
-    #[doc="<p>The Data Definition Language (DDL) used to build and modify the structure of your tables.</p>"]
-    #[serde(rename="Ddls")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Data Definition Language (DDL) used to build and modify the structure of your tables.</p>
+    #[serde(rename = "Ddls")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ddls: Option<i64>,
-    #[doc="<p>The number of delete actions performed on a table.</p>"]
-    #[serde(rename="Deletes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of delete actions performed on a table.</p>
+    #[serde(rename = "Deletes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deletes: Option<i64>,
-    #[doc="<p>The number of rows that failed conditional checks during the Full Load operation (valid only for DynamoDB as a target migrations).</p>"]
-    #[serde(rename="FullLoadCondtnlChkFailedRows")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of rows that failed conditional checks during the Full Load operation (valid only for DynamoDB as a target migrations).</p>
+    #[serde(rename = "FullLoadCondtnlChkFailedRows")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub full_load_condtnl_chk_failed_rows: Option<i64>,
-    #[doc="<p>The number of rows that failed to load during the Full Load operation (valid only for DynamoDB as a target migrations).</p>"]
-    #[serde(rename="FullLoadErrorRows")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of rows that failed to load during the Full Load operation (valid only for DynamoDB as a target migrations).</p>
+    #[serde(rename = "FullLoadErrorRows")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub full_load_error_rows: Option<i64>,
-    #[doc="<p>The number of rows added during the Full Load operation.</p>"]
-    #[serde(rename="FullLoadRows")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of rows added during the Full Load operation.</p>
+    #[serde(rename = "FullLoadRows")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub full_load_rows: Option<i64>,
-    #[doc="<p>The number of insert actions performed on a table.</p>"]
-    #[serde(rename="Inserts")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of insert actions performed on a table.</p>
+    #[serde(rename = "Inserts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub inserts: Option<i64>,
-    #[doc="<p>The last time the table was updated.</p>"]
-    #[serde(rename="LastUpdateTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The last time the table was updated.</p>
+    #[serde(rename = "LastUpdateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_update_time: Option<f64>,
-    #[doc="<p>The schema name.</p>"]
-    #[serde(rename="SchemaName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The schema name.</p>
+    #[serde(rename = "SchemaName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schema_name: Option<String>,
-    #[doc="<p>The name of the table.</p>"]
-    #[serde(rename="TableName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the table.</p>
+    #[serde(rename = "TableName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub table_name: Option<String>,
-    #[doc="<p>The state of the table.</p>"]
-    #[serde(rename="TableState")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The state of the table.</p>
+    #[serde(rename = "TableState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub table_state: Option<String>,
-    #[doc="<p>The number of update actions performed on a table.</p>"]
-    #[serde(rename="Updates")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of update actions performed on a table.</p>
+    #[serde(rename = "Updates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub updates: Option<i64>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct TableToReload {
-    #[doc="<p>The schema name of the table to be reloaded.</p>"]
-    #[serde(rename="SchemaName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The schema name of the table to be reloaded.</p>
+    #[serde(rename = "SchemaName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schema_name: Option<String>,
-    #[doc="<p>The table name of the table to be reloaded.</p>"]
-    #[serde(rename="TableName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The table name of the table to be reloaded.</p>
+    #[serde(rename = "TableName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub table_name: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Tag {
-    #[doc="<p>A key is the required name of the tag. The string value can be from 1 to 128 Unicode characters in length and cannot be prefixed with \"aws:\" or \"dms:\". The string can only contain only the set of Unicode letters, digits, white-space, '_', '.', '/', '=', '+', '-' (Java regex: \"^([\\\\p{L}\\\\p{Z}\\\\p{N}_.:/=+\\\\-]*)$\").</p>"]
-    #[serde(rename="Key")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A key is the required name of the tag. The string value can be from 1 to 128 Unicode characters in length and cannot be prefixed with "aws:" or "dms:". The string can only contain only the set of Unicode letters, digits, white-space, '_', '.', '/', '=', '+', '-' (Java regex: "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-]*)$").</p>
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    #[doc="<p>A value is the optional value of the tag. The string value can be from 1 to 256 Unicode characters in length and cannot be prefixed with \"aws:\" or \"dms:\". The string can only contain only the set of Unicode letters, digits, white-space, '_', '.', '/', '=', '+', '-' (Java regex: \"^([\\\\p{L}\\\\p{Z}\\\\p{N}_.:/=+\\\\-]*)$\").</p>"]
-    #[serde(rename="Value")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A value is the optional value of the tag. The string value can be from 1 to 256 Unicode characters in length and cannot be prefixed with "aws:" or "dms:". The string can only contain only the set of Unicode letters, digits, white-space, '_', '.', '/', '=', '+', '-' (Java regex: "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-]*)$").</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct TestConnectionMessage {
-    #[doc="<p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>"]
-    #[serde(rename="EndpointArn")]
+    /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
+    #[serde(rename = "EndpointArn")]
     pub endpoint_arn: String,
-    #[doc="<p>The Amazon Resource Name (ARN) of the replication instance.</p>"]
-    #[serde(rename="ReplicationInstanceArn")]
+    /// <p>The Amazon Resource Name (ARN) of the replication instance.</p>
+    #[serde(rename = "ReplicationInstanceArn")]
     pub replication_instance_arn: String,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct TestConnectionResponse {
-    #[doc="<p>The connection tested.</p>"]
-    #[serde(rename="Connection")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The connection tested.</p>
+    #[serde(rename = "Connection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub connection: Option<Connection>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct VpcSecurityGroupMembership {
-    #[doc="<p>The status of the VPC security group.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the VPC security group.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The VPC security group Id.</p>"]
-    #[serde(rename="VpcSecurityGroupId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The VPC security group Id.</p>
+    #[serde(rename = "VpcSecurityGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_security_group_id: Option<String>,
 }
 
@@ -1978,7 +1971,6 @@ pub enum AddTagsToResourceError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl AddTagsToResourceError {
     pub fn from_body(body: &str) -> AddTagsToResourceError {
@@ -2069,7 +2061,6 @@ pub enum CreateEndpointError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateEndpointError {
     pub fn from_body(body: &str) -> CreateEndpointError {
@@ -2177,7 +2168,6 @@ pub enum CreateEventSubscriptionError {
     Unknown(String),
 }
 
-
 impl CreateEventSubscriptionError {
     pub fn from_body(body: &str) -> CreateEventSubscriptionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2191,11 +2181,29 @@ impl CreateEventSubscriptionError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ResourceAlreadyExistsFault" => CreateEventSubscriptionError::ResourceAlreadyExistsFault(String::from(error_message)),
-                    "ResourceNotFoundFault" => CreateEventSubscriptionError::ResourceNotFoundFault(String::from(error_message)),
-                    "ResourceQuotaExceededFault" => CreateEventSubscriptionError::ResourceQuotaExceededFault(String::from(error_message)),
-                    "SNSInvalidTopicFault" => CreateEventSubscriptionError::SNSInvalidTopicFault(String::from(error_message)),
-                    "SNSNoAuthorizationFault" => CreateEventSubscriptionError::SNSNoAuthorizationFault(String::from(error_message)),
+                    "ResourceAlreadyExistsFault" => {
+                        CreateEventSubscriptionError::ResourceAlreadyExistsFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundFault" => {
+                        CreateEventSubscriptionError::ResourceNotFoundFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceQuotaExceededFault" => {
+                        CreateEventSubscriptionError::ResourceQuotaExceededFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "SNSInvalidTopicFault" => CreateEventSubscriptionError::SNSInvalidTopicFault(
+                        String::from(error_message),
+                    ),
+                    "SNSNoAuthorizationFault" => {
+                        CreateEventSubscriptionError::SNSNoAuthorizationFault(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         CreateEventSubscriptionError::Validation(error_message.to_string())
                     }
@@ -2282,7 +2290,6 @@ pub enum CreateReplicationInstanceError {
     Unknown(String),
 }
 
-
 impl CreateReplicationInstanceError {
     pub fn from_body(body: &str) -> CreateReplicationInstanceError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2296,23 +2303,19 @@ impl CreateReplicationInstanceError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AccessDeniedFault" => CreateReplicationInstanceError::AccessDeniedFault(String::from(error_message)),
-                    "InsufficientResourceCapacityFault" => CreateReplicationInstanceError::InsufficientResourceCapacityFault(String::from(error_message)),
-                    "InvalidResourceStateFault" => CreateReplicationInstanceError::InvalidResourceStateFault(String::from(error_message)),
-                    "InvalidSubnet" => {
-                        CreateReplicationInstanceError::InvalidSubnet(String::from(error_message))
-                    }
-                    "KMSKeyNotAccessibleFault" => CreateReplicationInstanceError::KMSKeyNotAccessibleFault(String::from(error_message)),
-                    "ReplicationSubnetGroupDoesNotCoverEnoughAZs" => CreateReplicationInstanceError::ReplicationSubnetGroupDoesNotCoverEnoughAZs(String::from(error_message)),
-                    "ResourceAlreadyExistsFault" => CreateReplicationInstanceError::ResourceAlreadyExistsFault(String::from(error_message)),
-                    "ResourceNotFoundFault" => CreateReplicationInstanceError::ResourceNotFoundFault(String::from(error_message)),
-                    "ResourceQuotaExceededFault" => CreateReplicationInstanceError::ResourceQuotaExceededFault(String::from(error_message)),
-                    "StorageQuotaExceededFault" => CreateReplicationInstanceError::StorageQuotaExceededFault(String::from(error_message)),
-                    "ValidationException" => {
-                        CreateReplicationInstanceError::Validation(error_message.to_string())
-                    }
-                    _ => CreateReplicationInstanceError::Unknown(String::from(body)),
-                }
+                                    "AccessDeniedFault" => CreateReplicationInstanceError::AccessDeniedFault(String::from(error_message)),
+"InsufficientResourceCapacityFault" => CreateReplicationInstanceError::InsufficientResourceCapacityFault(String::from(error_message)),
+"InvalidResourceStateFault" => CreateReplicationInstanceError::InvalidResourceStateFault(String::from(error_message)),
+"InvalidSubnet" => CreateReplicationInstanceError::InvalidSubnet(String::from(error_message)),
+"KMSKeyNotAccessibleFault" => CreateReplicationInstanceError::KMSKeyNotAccessibleFault(String::from(error_message)),
+"ReplicationSubnetGroupDoesNotCoverEnoughAZs" => CreateReplicationInstanceError::ReplicationSubnetGroupDoesNotCoverEnoughAZs(String::from(error_message)),
+"ResourceAlreadyExistsFault" => CreateReplicationInstanceError::ResourceAlreadyExistsFault(String::from(error_message)),
+"ResourceNotFoundFault" => CreateReplicationInstanceError::ResourceNotFoundFault(String::from(error_message)),
+"ResourceQuotaExceededFault" => CreateReplicationInstanceError::ResourceQuotaExceededFault(String::from(error_message)),
+"StorageQuotaExceededFault" => CreateReplicationInstanceError::StorageQuotaExceededFault(String::from(error_message)),
+"ValidationException" => CreateReplicationInstanceError::Validation(error_message.to_string()),
+_ => CreateReplicationInstanceError::Unknown(String::from(body))
+                                }
             }
             Err(_) => CreateReplicationInstanceError::Unknown(String::from(body)),
         }
@@ -2352,7 +2355,9 @@ impl Error for CreateReplicationInstanceError {
             CreateReplicationInstanceError::InvalidResourceStateFault(ref cause) => cause,
             CreateReplicationInstanceError::InvalidSubnet(ref cause) => cause,
             CreateReplicationInstanceError::KMSKeyNotAccessibleFault(ref cause) => cause,
-            CreateReplicationInstanceError::ReplicationSubnetGroupDoesNotCoverEnoughAZs(ref cause) => cause,
+            CreateReplicationInstanceError::ReplicationSubnetGroupDoesNotCoverEnoughAZs(
+                ref cause,
+            ) => cause,
             CreateReplicationInstanceError::ResourceAlreadyExistsFault(ref cause) => cause,
             CreateReplicationInstanceError::ResourceNotFoundFault(ref cause) => cause,
             CreateReplicationInstanceError::ResourceQuotaExceededFault(ref cause) => cause,
@@ -2391,7 +2396,6 @@ pub enum CreateReplicationSubnetGroupError {
     Unknown(String),
 }
 
-
 impl CreateReplicationSubnetGroupError {
     pub fn from_body(body: &str) -> CreateReplicationSubnetGroupError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2405,17 +2409,15 @@ impl CreateReplicationSubnetGroupError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AccessDeniedFault" => CreateReplicationSubnetGroupError::AccessDeniedFault(String::from(error_message)),
-                    "InvalidSubnet" => CreateReplicationSubnetGroupError::InvalidSubnet(String::from(error_message)),
-                    "ReplicationSubnetGroupDoesNotCoverEnoughAZs" => CreateReplicationSubnetGroupError::ReplicationSubnetGroupDoesNotCoverEnoughAZs(String::from(error_message)),
-                    "ResourceAlreadyExistsFault" => CreateReplicationSubnetGroupError::ResourceAlreadyExistsFault(String::from(error_message)),
-                    "ResourceNotFoundFault" => CreateReplicationSubnetGroupError::ResourceNotFoundFault(String::from(error_message)),
-                    "ResourceQuotaExceededFault" => CreateReplicationSubnetGroupError::ResourceQuotaExceededFault(String::from(error_message)),
-                    "ValidationException" => {
-                        CreateReplicationSubnetGroupError::Validation(error_message.to_string())
-                    }
-                    _ => CreateReplicationSubnetGroupError::Unknown(String::from(body)),
-                }
+                                    "AccessDeniedFault" => CreateReplicationSubnetGroupError::AccessDeniedFault(String::from(error_message)),
+"InvalidSubnet" => CreateReplicationSubnetGroupError::InvalidSubnet(String::from(error_message)),
+"ReplicationSubnetGroupDoesNotCoverEnoughAZs" => CreateReplicationSubnetGroupError::ReplicationSubnetGroupDoesNotCoverEnoughAZs(String::from(error_message)),
+"ResourceAlreadyExistsFault" => CreateReplicationSubnetGroupError::ResourceAlreadyExistsFault(String::from(error_message)),
+"ResourceNotFoundFault" => CreateReplicationSubnetGroupError::ResourceNotFoundFault(String::from(error_message)),
+"ResourceQuotaExceededFault" => CreateReplicationSubnetGroupError::ResourceQuotaExceededFault(String::from(error_message)),
+"ValidationException" => CreateReplicationSubnetGroupError::Validation(error_message.to_string()),
+_ => CreateReplicationSubnetGroupError::Unknown(String::from(body))
+                                }
             }
             Err(_) => CreateReplicationSubnetGroupError::Unknown(String::from(body)),
         }
@@ -2452,7 +2454,9 @@ impl Error for CreateReplicationSubnetGroupError {
         match *self {
             CreateReplicationSubnetGroupError::AccessDeniedFault(ref cause) => cause,
             CreateReplicationSubnetGroupError::InvalidSubnet(ref cause) => cause,
-            CreateReplicationSubnetGroupError::ReplicationSubnetGroupDoesNotCoverEnoughAZs(ref cause) => cause,
+            CreateReplicationSubnetGroupError::ReplicationSubnetGroupDoesNotCoverEnoughAZs(
+                ref cause,
+            ) => cause,
             CreateReplicationSubnetGroupError::ResourceAlreadyExistsFault(ref cause) => cause,
             CreateReplicationSubnetGroupError::ResourceNotFoundFault(ref cause) => cause,
             CreateReplicationSubnetGroupError::ResourceQuotaExceededFault(ref cause) => cause,
@@ -2490,7 +2494,6 @@ pub enum CreateReplicationTaskError {
     Unknown(String),
 }
 
-
 impl CreateReplicationTaskError {
     pub fn from_body(body: &str) -> CreateReplicationTaskError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2507,11 +2510,29 @@ impl CreateReplicationTaskError {
                     "AccessDeniedFault" => {
                         CreateReplicationTaskError::AccessDeniedFault(String::from(error_message))
                     }
-                    "InvalidResourceStateFault" => CreateReplicationTaskError::InvalidResourceStateFault(String::from(error_message)),
-                    "KMSKeyNotAccessibleFault" => CreateReplicationTaskError::KMSKeyNotAccessibleFault(String::from(error_message)),
-                    "ResourceAlreadyExistsFault" => CreateReplicationTaskError::ResourceAlreadyExistsFault(String::from(error_message)),
-                    "ResourceNotFoundFault" => CreateReplicationTaskError::ResourceNotFoundFault(String::from(error_message)),
-                    "ResourceQuotaExceededFault" => CreateReplicationTaskError::ResourceQuotaExceededFault(String::from(error_message)),
+                    "InvalidResourceStateFault" => {
+                        CreateReplicationTaskError::InvalidResourceStateFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "KMSKeyNotAccessibleFault" => {
+                        CreateReplicationTaskError::KMSKeyNotAccessibleFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceAlreadyExistsFault" => {
+                        CreateReplicationTaskError::ResourceAlreadyExistsFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundFault" => CreateReplicationTaskError::ResourceNotFoundFault(
+                        String::from(error_message),
+                    ),
+                    "ResourceQuotaExceededFault" => {
+                        CreateReplicationTaskError::ResourceQuotaExceededFault(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         CreateReplicationTaskError::Validation(error_message.to_string())
                     }
@@ -2583,7 +2604,6 @@ pub enum DeleteCertificateError {
     Unknown(String),
 }
 
-
 impl DeleteCertificateError {
     pub fn from_body(body: &str) -> DeleteCertificateError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2597,7 +2617,11 @@ impl DeleteCertificateError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidResourceStateFault" => DeleteCertificateError::InvalidResourceStateFault(String::from(error_message)),
+                    "InvalidResourceStateFault" => {
+                        DeleteCertificateError::InvalidResourceStateFault(String::from(
+                            error_message,
+                        ))
+                    }
                     "ResourceNotFoundFault" => {
                         DeleteCertificateError::ResourceNotFoundFault(String::from(error_message))
                     }
@@ -2667,7 +2691,6 @@ pub enum DeleteEndpointError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteEndpointError {
     pub fn from_body(body: &str) -> DeleteEndpointError {
@@ -2753,7 +2776,6 @@ pub enum DeleteEventSubscriptionError {
     Unknown(String),
 }
 
-
 impl DeleteEventSubscriptionError {
     pub fn from_body(body: &str) -> DeleteEventSubscriptionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2767,8 +2789,16 @@ impl DeleteEventSubscriptionError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidResourceStateFault" => DeleteEventSubscriptionError::InvalidResourceStateFault(String::from(error_message)),
-                    "ResourceNotFoundFault" => DeleteEventSubscriptionError::ResourceNotFoundFault(String::from(error_message)),
+                    "InvalidResourceStateFault" => {
+                        DeleteEventSubscriptionError::InvalidResourceStateFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundFault" => {
+                        DeleteEventSubscriptionError::ResourceNotFoundFault(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DeleteEventSubscriptionError::Validation(error_message.to_string())
                     }
@@ -2836,7 +2866,6 @@ pub enum DeleteReplicationInstanceError {
     Unknown(String),
 }
 
-
 impl DeleteReplicationInstanceError {
     pub fn from_body(body: &str) -> DeleteReplicationInstanceError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2850,8 +2879,16 @@ impl DeleteReplicationInstanceError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidResourceStateFault" => DeleteReplicationInstanceError::InvalidResourceStateFault(String::from(error_message)),
-                    "ResourceNotFoundFault" => DeleteReplicationInstanceError::ResourceNotFoundFault(String::from(error_message)),
+                    "InvalidResourceStateFault" => {
+                        DeleteReplicationInstanceError::InvalidResourceStateFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundFault" => {
+                        DeleteReplicationInstanceError::ResourceNotFoundFault(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DeleteReplicationInstanceError::Validation(error_message.to_string())
                     }
@@ -2919,7 +2956,6 @@ pub enum DeleteReplicationSubnetGroupError {
     Unknown(String),
 }
 
-
 impl DeleteReplicationSubnetGroupError {
     pub fn from_body(body: &str) -> DeleteReplicationSubnetGroupError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2933,8 +2969,16 @@ impl DeleteReplicationSubnetGroupError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidResourceStateFault" => DeleteReplicationSubnetGroupError::InvalidResourceStateFault(String::from(error_message)),
-                    "ResourceNotFoundFault" => DeleteReplicationSubnetGroupError::ResourceNotFoundFault(String::from(error_message)),
+                    "InvalidResourceStateFault" => {
+                        DeleteReplicationSubnetGroupError::InvalidResourceStateFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundFault" => {
+                        DeleteReplicationSubnetGroupError::ResourceNotFoundFault(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DeleteReplicationSubnetGroupError::Validation(error_message.to_string())
                     }
@@ -3002,7 +3046,6 @@ pub enum DeleteReplicationTaskError {
     Unknown(String),
 }
 
-
 impl DeleteReplicationTaskError {
     pub fn from_body(body: &str) -> DeleteReplicationTaskError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3016,8 +3059,14 @@ impl DeleteReplicationTaskError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidResourceStateFault" => DeleteReplicationTaskError::InvalidResourceStateFault(String::from(error_message)),
-                    "ResourceNotFoundFault" => DeleteReplicationTaskError::ResourceNotFoundFault(String::from(error_message)),
+                    "InvalidResourceStateFault" => {
+                        DeleteReplicationTaskError::InvalidResourceStateFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundFault" => DeleteReplicationTaskError::ResourceNotFoundFault(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         DeleteReplicationTaskError::Validation(error_message.to_string())
                     }
@@ -3080,7 +3129,6 @@ pub enum DescribeAccountAttributesError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeAccountAttributesError {
     pub fn from_body(body: &str) -> DescribeAccountAttributesError {
@@ -3158,7 +3206,6 @@ pub enum DescribeCertificatesError {
     Unknown(String),
 }
 
-
 impl DescribeCertificatesError {
     pub fn from_body(body: &str) -> DescribeCertificatesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3172,7 +3219,9 @@ impl DescribeCertificatesError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ResourceNotFoundFault" => DescribeCertificatesError::ResourceNotFoundFault(String::from(error_message)),
+                    "ResourceNotFoundFault" => DescribeCertificatesError::ResourceNotFoundFault(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         DescribeCertificatesError::Validation(error_message.to_string())
                     }
@@ -3236,7 +3285,6 @@ pub enum DescribeConnectionsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeConnectionsError {
     pub fn from_body(body: &str) -> DescribeConnectionsError {
@@ -3316,7 +3364,6 @@ pub enum DescribeEndpointTypesError {
     Unknown(String),
 }
 
-
 impl DescribeEndpointTypesError {
     pub fn from_body(body: &str) -> DescribeEndpointTypesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3392,7 +3439,6 @@ pub enum DescribeEndpointsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeEndpointsError {
     pub fn from_body(body: &str) -> DescribeEndpointsError {
@@ -3472,7 +3518,6 @@ pub enum DescribeEventCategoriesError {
     Unknown(String),
 }
 
-
 impl DescribeEventCategoriesError {
     pub fn from_body(body: &str) -> DescribeEventCategoriesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3549,7 +3594,6 @@ pub enum DescribeEventSubscriptionsError {
     Unknown(String),
 }
 
-
 impl DescribeEventSubscriptionsError {
     pub fn from_body(body: &str) -> DescribeEventSubscriptionsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3563,7 +3607,11 @@ impl DescribeEventSubscriptionsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ResourceNotFoundFault" => DescribeEventSubscriptionsError::ResourceNotFoundFault(String::from(error_message)),
+                    "ResourceNotFoundFault" => {
+                        DescribeEventSubscriptionsError::ResourceNotFoundFault(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeEventSubscriptionsError::Validation(error_message.to_string())
                     }
@@ -3625,7 +3673,6 @@ pub enum DescribeEventsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeEventsError {
     pub fn from_body(body: &str) -> DescribeEventsError {
@@ -3699,7 +3746,6 @@ pub enum DescribeOrderableReplicationInstancesError {
     Unknown(String),
 }
 
-
 impl DescribeOrderableReplicationInstancesError {
     pub fn from_body(body: &str) -> DescribeOrderableReplicationInstancesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3714,8 +3760,9 @@ impl DescribeOrderableReplicationInstancesError {
 
                 match *error_type {
                     "ValidationException" => {
-                        DescribeOrderableReplicationInstancesError::Validation(error_message
-                                                                                   .to_string())
+                        DescribeOrderableReplicationInstancesError::Validation(
+                            error_message.to_string(),
+                        )
                     }
                     _ => DescribeOrderableReplicationInstancesError::Unknown(String::from(body)),
                 }
@@ -3779,7 +3826,6 @@ pub enum DescribeRefreshSchemasStatusError {
     Unknown(String),
 }
 
-
 impl DescribeRefreshSchemasStatusError {
     pub fn from_body(body: &str) -> DescribeRefreshSchemasStatusError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3793,8 +3839,16 @@ impl DescribeRefreshSchemasStatusError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidResourceStateFault" => DescribeRefreshSchemasStatusError::InvalidResourceStateFault(String::from(error_message)),
-                    "ResourceNotFoundFault" => DescribeRefreshSchemasStatusError::ResourceNotFoundFault(String::from(error_message)),
+                    "InvalidResourceStateFault" => {
+                        DescribeRefreshSchemasStatusError::InvalidResourceStateFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundFault" => {
+                        DescribeRefreshSchemasStatusError::ResourceNotFoundFault(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeRefreshSchemasStatusError::Validation(error_message.to_string())
                     }
@@ -3860,7 +3914,6 @@ pub enum DescribeReplicationInstancesError {
     Unknown(String),
 }
 
-
 impl DescribeReplicationInstancesError {
     pub fn from_body(body: &str) -> DescribeReplicationInstancesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3874,7 +3927,11 @@ impl DescribeReplicationInstancesError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ResourceNotFoundFault" => DescribeReplicationInstancesError::ResourceNotFoundFault(String::from(error_message)),
+                    "ResourceNotFoundFault" => {
+                        DescribeReplicationInstancesError::ResourceNotFoundFault(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeReplicationInstancesError::Validation(error_message.to_string())
                     }
@@ -3939,7 +3996,6 @@ pub enum DescribeReplicationSubnetGroupsError {
     Unknown(String),
 }
 
-
 impl DescribeReplicationSubnetGroupsError {
     pub fn from_body(body: &str) -> DescribeReplicationSubnetGroupsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3953,7 +4009,11 @@ impl DescribeReplicationSubnetGroupsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ResourceNotFoundFault" => DescribeReplicationSubnetGroupsError::ResourceNotFoundFault(String::from(error_message)),
+                    "ResourceNotFoundFault" => {
+                        DescribeReplicationSubnetGroupsError::ResourceNotFoundFault(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeReplicationSubnetGroupsError::Validation(error_message.to_string())
                     }
@@ -4018,7 +4078,6 @@ pub enum DescribeReplicationTasksError {
     Unknown(String),
 }
 
-
 impl DescribeReplicationTasksError {
     pub fn from_body(body: &str) -> DescribeReplicationTasksError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4032,7 +4091,11 @@ impl DescribeReplicationTasksError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ResourceNotFoundFault" => DescribeReplicationTasksError::ResourceNotFoundFault(String::from(error_message)),
+                    "ResourceNotFoundFault" => {
+                        DescribeReplicationTasksError::ResourceNotFoundFault(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeReplicationTasksError::Validation(error_message.to_string())
                     }
@@ -4098,7 +4161,6 @@ pub enum DescribeSchemasError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeSchemasError {
     pub fn from_body(body: &str) -> DescribeSchemasError {
@@ -4184,7 +4246,6 @@ pub enum DescribeTableStatisticsError {
     Unknown(String),
 }
 
-
 impl DescribeTableStatisticsError {
     pub fn from_body(body: &str) -> DescribeTableStatisticsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4198,8 +4259,16 @@ impl DescribeTableStatisticsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidResourceStateFault" => DescribeTableStatisticsError::InvalidResourceStateFault(String::from(error_message)),
-                    "ResourceNotFoundFault" => DescribeTableStatisticsError::ResourceNotFoundFault(String::from(error_message)),
+                    "InvalidResourceStateFault" => {
+                        DescribeTableStatisticsError::InvalidResourceStateFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundFault" => {
+                        DescribeTableStatisticsError::ResourceNotFoundFault(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeTableStatisticsError::Validation(error_message.to_string())
                     }
@@ -4267,7 +4336,6 @@ pub enum ImportCertificateError {
     Unknown(String),
 }
 
-
 impl ImportCertificateError {
     pub fn from_body(body: &str) -> ImportCertificateError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4284,7 +4352,11 @@ impl ImportCertificateError {
                     "InvalidCertificateFault" => {
                         ImportCertificateError::InvalidCertificateFault(String::from(error_message))
                     }
-                    "ResourceAlreadyExistsFault" => ImportCertificateError::ResourceAlreadyExistsFault(String::from(error_message)),
+                    "ResourceAlreadyExistsFault" => {
+                        ImportCertificateError::ResourceAlreadyExistsFault(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         ImportCertificateError::Validation(error_message.to_string())
                     }
@@ -4349,7 +4421,6 @@ pub enum ListTagsForResourceError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListTagsForResourceError {
     pub fn from_body(body: &str) -> ListTagsForResourceError {
@@ -4438,7 +4509,6 @@ pub enum ModifyEndpointError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ModifyEndpointError {
     pub fn from_body(body: &str) -> ModifyEndpointError {
@@ -4540,7 +4610,6 @@ pub enum ModifyEventSubscriptionError {
     Unknown(String),
 }
 
-
 impl ModifyEventSubscriptionError {
     pub fn from_body(body: &str) -> ModifyEventSubscriptionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4554,10 +4623,24 @@ impl ModifyEventSubscriptionError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ResourceNotFoundFault" => ModifyEventSubscriptionError::ResourceNotFoundFault(String::from(error_message)),
-                    "ResourceQuotaExceededFault" => ModifyEventSubscriptionError::ResourceQuotaExceededFault(String::from(error_message)),
-                    "SNSInvalidTopicFault" => ModifyEventSubscriptionError::SNSInvalidTopicFault(String::from(error_message)),
-                    "SNSNoAuthorizationFault" => ModifyEventSubscriptionError::SNSNoAuthorizationFault(String::from(error_message)),
+                    "ResourceNotFoundFault" => {
+                        ModifyEventSubscriptionError::ResourceNotFoundFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceQuotaExceededFault" => {
+                        ModifyEventSubscriptionError::ResourceQuotaExceededFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "SNSInvalidTopicFault" => ModifyEventSubscriptionError::SNSInvalidTopicFault(
+                        String::from(error_message),
+                    ),
+                    "SNSNoAuthorizationFault" => {
+                        ModifyEventSubscriptionError::SNSNoAuthorizationFault(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         ModifyEventSubscriptionError::Validation(error_message.to_string())
                     }
@@ -4635,7 +4718,6 @@ pub enum ModifyReplicationInstanceError {
     Unknown(String),
 }
 
-
 impl ModifyReplicationInstanceError {
     pub fn from_body(body: &str) -> ModifyReplicationInstanceError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4649,12 +4731,36 @@ impl ModifyReplicationInstanceError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InsufficientResourceCapacityFault" => ModifyReplicationInstanceError::InsufficientResourceCapacityFault(String::from(error_message)),
-                    "InvalidResourceStateFault" => ModifyReplicationInstanceError::InvalidResourceStateFault(String::from(error_message)),
-                    "ResourceAlreadyExistsFault" => ModifyReplicationInstanceError::ResourceAlreadyExistsFault(String::from(error_message)),
-                    "ResourceNotFoundFault" => ModifyReplicationInstanceError::ResourceNotFoundFault(String::from(error_message)),
-                    "StorageQuotaExceededFault" => ModifyReplicationInstanceError::StorageQuotaExceededFault(String::from(error_message)),
-                    "UpgradeDependencyFailureFault" => ModifyReplicationInstanceError::UpgradeDependencyFailureFault(String::from(error_message)),
+                    "InsufficientResourceCapacityFault" => {
+                        ModifyReplicationInstanceError::InsufficientResourceCapacityFault(
+                            String::from(error_message),
+                        )
+                    }
+                    "InvalidResourceStateFault" => {
+                        ModifyReplicationInstanceError::InvalidResourceStateFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceAlreadyExistsFault" => {
+                        ModifyReplicationInstanceError::ResourceAlreadyExistsFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundFault" => {
+                        ModifyReplicationInstanceError::ResourceNotFoundFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "StorageQuotaExceededFault" => {
+                        ModifyReplicationInstanceError::StorageQuotaExceededFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UpgradeDependencyFailureFault" => {
+                        ModifyReplicationInstanceError::UpgradeDependencyFailureFault(
+                            String::from(error_message),
+                        )
+                    }
                     "ValidationException" => {
                         ModifyReplicationInstanceError::Validation(error_message.to_string())
                     }
@@ -4734,7 +4840,6 @@ pub enum ModifyReplicationSubnetGroupError {
     Unknown(String),
 }
 
-
 impl ModifyReplicationSubnetGroupError {
     pub fn from_body(body: &str) -> ModifyReplicationSubnetGroupError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4748,17 +4853,15 @@ impl ModifyReplicationSubnetGroupError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AccessDeniedFault" => ModifyReplicationSubnetGroupError::AccessDeniedFault(String::from(error_message)),
-                    "InvalidSubnet" => ModifyReplicationSubnetGroupError::InvalidSubnet(String::from(error_message)),
-                    "ReplicationSubnetGroupDoesNotCoverEnoughAZs" => ModifyReplicationSubnetGroupError::ReplicationSubnetGroupDoesNotCoverEnoughAZs(String::from(error_message)),
-                    "ResourceNotFoundFault" => ModifyReplicationSubnetGroupError::ResourceNotFoundFault(String::from(error_message)),
-                    "ResourceQuotaExceededFault" => ModifyReplicationSubnetGroupError::ResourceQuotaExceededFault(String::from(error_message)),
-                    "SubnetAlreadyInUse" => ModifyReplicationSubnetGroupError::SubnetAlreadyInUse(String::from(error_message)),
-                    "ValidationException" => {
-                        ModifyReplicationSubnetGroupError::Validation(error_message.to_string())
-                    }
-                    _ => ModifyReplicationSubnetGroupError::Unknown(String::from(body)),
-                }
+                                    "AccessDeniedFault" => ModifyReplicationSubnetGroupError::AccessDeniedFault(String::from(error_message)),
+"InvalidSubnet" => ModifyReplicationSubnetGroupError::InvalidSubnet(String::from(error_message)),
+"ReplicationSubnetGroupDoesNotCoverEnoughAZs" => ModifyReplicationSubnetGroupError::ReplicationSubnetGroupDoesNotCoverEnoughAZs(String::from(error_message)),
+"ResourceNotFoundFault" => ModifyReplicationSubnetGroupError::ResourceNotFoundFault(String::from(error_message)),
+"ResourceQuotaExceededFault" => ModifyReplicationSubnetGroupError::ResourceQuotaExceededFault(String::from(error_message)),
+"SubnetAlreadyInUse" => ModifyReplicationSubnetGroupError::SubnetAlreadyInUse(String::from(error_message)),
+"ValidationException" => ModifyReplicationSubnetGroupError::Validation(error_message.to_string()),
+_ => ModifyReplicationSubnetGroupError::Unknown(String::from(body))
+                                }
             }
             Err(_) => ModifyReplicationSubnetGroupError::Unknown(String::from(body)),
         }
@@ -4795,7 +4898,9 @@ impl Error for ModifyReplicationSubnetGroupError {
         match *self {
             ModifyReplicationSubnetGroupError::AccessDeniedFault(ref cause) => cause,
             ModifyReplicationSubnetGroupError::InvalidSubnet(ref cause) => cause,
-            ModifyReplicationSubnetGroupError::ReplicationSubnetGroupDoesNotCoverEnoughAZs(ref cause) => cause,
+            ModifyReplicationSubnetGroupError::ReplicationSubnetGroupDoesNotCoverEnoughAZs(
+                ref cause,
+            ) => cause,
             ModifyReplicationSubnetGroupError::ResourceNotFoundFault(ref cause) => cause,
             ModifyReplicationSubnetGroupError::ResourceQuotaExceededFault(ref cause) => cause,
             ModifyReplicationSubnetGroupError::SubnetAlreadyInUse(ref cause) => cause,
@@ -4829,7 +4934,6 @@ pub enum ModifyReplicationTaskError {
     Unknown(String),
 }
 
-
 impl ModifyReplicationTaskError {
     pub fn from_body(body: &str) -> ModifyReplicationTaskError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4843,10 +4947,24 @@ impl ModifyReplicationTaskError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidResourceStateFault" => ModifyReplicationTaskError::InvalidResourceStateFault(String::from(error_message)),
-                    "KMSKeyNotAccessibleFault" => ModifyReplicationTaskError::KMSKeyNotAccessibleFault(String::from(error_message)),
-                    "ResourceAlreadyExistsFault" => ModifyReplicationTaskError::ResourceAlreadyExistsFault(String::from(error_message)),
-                    "ResourceNotFoundFault" => ModifyReplicationTaskError::ResourceNotFoundFault(String::from(error_message)),
+                    "InvalidResourceStateFault" => {
+                        ModifyReplicationTaskError::InvalidResourceStateFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "KMSKeyNotAccessibleFault" => {
+                        ModifyReplicationTaskError::KMSKeyNotAccessibleFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceAlreadyExistsFault" => {
+                        ModifyReplicationTaskError::ResourceAlreadyExistsFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundFault" => ModifyReplicationTaskError::ResourceNotFoundFault(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         ModifyReplicationTaskError::Validation(error_message.to_string())
                     }
@@ -4919,7 +5037,6 @@ pub enum RefreshSchemasError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl RefreshSchemasError {
     pub fn from_body(body: &str) -> RefreshSchemasError {
@@ -5013,7 +5130,6 @@ pub enum ReloadTablesError {
     Unknown(String),
 }
 
-
 impl ReloadTablesError {
     pub fn from_body(body: &str) -> ReloadTablesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5096,7 +5212,6 @@ pub enum RemoveTagsFromResourceError {
     Unknown(String),
 }
 
-
 impl RemoveTagsFromResourceError {
     pub fn from_body(body: &str) -> RemoveTagsFromResourceError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5110,7 +5225,9 @@ impl RemoveTagsFromResourceError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ResourceNotFoundFault" => RemoveTagsFromResourceError::ResourceNotFoundFault(String::from(error_message)),
+                    "ResourceNotFoundFault" => RemoveTagsFromResourceError::ResourceNotFoundFault(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         RemoveTagsFromResourceError::Validation(error_message.to_string())
                     }
@@ -5177,7 +5294,6 @@ pub enum StartReplicationTaskError {
     Unknown(String),
 }
 
-
 impl StartReplicationTaskError {
     pub fn from_body(body: &str) -> StartReplicationTaskError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5191,8 +5307,14 @@ impl StartReplicationTaskError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidResourceStateFault" => StartReplicationTaskError::InvalidResourceStateFault(String::from(error_message)),
-                    "ResourceNotFoundFault" => StartReplicationTaskError::ResourceNotFoundFault(String::from(error_message)),
+                    "InvalidResourceStateFault" => {
+                        StartReplicationTaskError::InvalidResourceStateFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundFault" => StartReplicationTaskError::ResourceNotFoundFault(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         StartReplicationTaskError::Validation(error_message.to_string())
                     }
@@ -5260,7 +5382,6 @@ pub enum StopReplicationTaskError {
     Unknown(String),
 }
 
-
 impl StopReplicationTaskError {
     pub fn from_body(body: &str) -> StopReplicationTaskError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5274,7 +5395,11 @@ impl StopReplicationTaskError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidResourceStateFault" => StopReplicationTaskError::InvalidResourceStateFault(String::from(error_message)),
+                    "InvalidResourceStateFault" => {
+                        StopReplicationTaskError::InvalidResourceStateFault(String::from(
+                            error_message,
+                        ))
+                    }
                     "ResourceNotFoundFault" => {
                         StopReplicationTaskError::ResourceNotFoundFault(String::from(error_message))
                     }
@@ -5348,7 +5473,6 @@ pub enum TestConnectionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl TestConnectionError {
     pub fn from_body(body: &str) -> TestConnectionError {
@@ -5428,268 +5552,252 @@ impl Error for TestConnectionError {
 /// Trait representing the capabilities of the AWS Database Migration Service API. AWS Database Migration Service clients implement this trait.
 pub trait DatabaseMigrationService {
     #[doc="<p>Adds metadata tags to a DMS resource, including replication instance, endpoint, security group, and migration task. These tags can also be used with cost allocation reporting to track cost associated with DMS resources, or used in a Condition statement in an IAM policy for DMS.</p>"]
-    fn add_tags_to_resource(&self,
-                            input: &AddTagsToResourceMessage)
-                            -> Result<AddTagsToResourceResponse, AddTagsToResourceError>;
+    fn add_tags_to_resource(
+        &self,
+        input: &AddTagsToResourceMessage,
+    ) -> Result<AddTagsToResourceResponse, AddTagsToResourceError>;
 
-
-    #[doc="<p>Creates an endpoint using the provided settings.</p>"]
-    fn create_endpoint(&self,
-                       input: &CreateEndpointMessage)
-                       -> Result<CreateEndpointResponse, CreateEndpointError>;
-
+    #[doc = "<p>Creates an endpoint using the provided settings.</p>"]
+    fn create_endpoint(
+        &self,
+        input: &CreateEndpointMessage,
+    ) -> Result<CreateEndpointResponse, CreateEndpointError>;
 
     #[doc="<p> Creates an AWS DMS event notification subscription. </p> <p>You can specify the type of source (<code>SourceType</code>) you want to be notified of, provide a list of AWS DMS source IDs (<code>SourceIds</code>) that triggers the events, and provide a list of event categories (<code>EventCategories</code>) for events you want to be notified of. If you specify both the <code>SourceType</code> and <code>SourceIds</code>, such as <code>SourceType = replication-instance</code> and <code>SourceIdentifier = my-replinstance</code>, you will be notified of all the replication instance events for the specified source. If you specify a <code>SourceType</code> but don't specify a <code>SourceIdentifier</code>, you receive notice of the events for that source type for all your AWS DMS sources. If you don't specify either <code>SourceType</code> nor <code>SourceIdentifier</code>, you will be notified of events generated from all AWS DMS sources belonging to your customer account.</p> <p>For more information about AWS DMS events, see <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html\"> Working with Events and Notifications </a> in the AWS Database MIgration Service User Guide.</p>"]
-    fn create_event_subscription
-        (&self,
-         input: &CreateEventSubscriptionMessage)
-         -> Result<CreateEventSubscriptionResponse, CreateEventSubscriptionError>;
+    fn create_event_subscription(
+        &self,
+        input: &CreateEventSubscriptionMessage,
+    ) -> Result<CreateEventSubscriptionResponse, CreateEventSubscriptionError>;
 
+    #[doc = "<p>Creates the replication instance using the specified parameters.</p>"]
+    fn create_replication_instance(
+        &self,
+        input: &CreateReplicationInstanceMessage,
+    ) -> Result<CreateReplicationInstanceResponse, CreateReplicationInstanceError>;
 
-    #[doc="<p>Creates the replication instance using the specified parameters.</p>"]
-    fn create_replication_instance
-        (&self,
-         input: &CreateReplicationInstanceMessage)
-         -> Result<CreateReplicationInstanceResponse, CreateReplicationInstanceError>;
+    #[doc = "<p>Creates a replication subnet group given a list of the subnet IDs in a VPC.</p>"]
+    fn create_replication_subnet_group(
+        &self,
+        input: &CreateReplicationSubnetGroupMessage,
+    ) -> Result<CreateReplicationSubnetGroupResponse, CreateReplicationSubnetGroupError>;
 
+    #[doc = "<p>Creates a replication task using the specified parameters.</p>"]
+    fn create_replication_task(
+        &self,
+        input: &CreateReplicationTaskMessage,
+    ) -> Result<CreateReplicationTaskResponse, CreateReplicationTaskError>;
 
-    #[doc="<p>Creates a replication subnet group given a list of the subnet IDs in a VPC.</p>"]
-    fn create_replication_subnet_group
-        (&self,
-         input: &CreateReplicationSubnetGroupMessage)
-         -> Result<CreateReplicationSubnetGroupResponse, CreateReplicationSubnetGroupError>;
-
-
-    #[doc="<p>Creates a replication task using the specified parameters.</p>"]
-    fn create_replication_task
-        (&self,
-         input: &CreateReplicationTaskMessage)
-         -> Result<CreateReplicationTaskResponse, CreateReplicationTaskError>;
-
-
-    #[doc="<p>Deletes the specified certificate. </p>"]
-    fn delete_certificate(&self,
-                          input: &DeleteCertificateMessage)
-                          -> Result<DeleteCertificateResponse, DeleteCertificateError>;
-
+    #[doc = "<p>Deletes the specified certificate. </p>"]
+    fn delete_certificate(
+        &self,
+        input: &DeleteCertificateMessage,
+    ) -> Result<DeleteCertificateResponse, DeleteCertificateError>;
 
     #[doc="<p>Deletes the specified endpoint.</p> <note> <p>All tasks associated with the endpoint must be deleted before you can delete the endpoint.</p> </note> <p/>"]
-    fn delete_endpoint(&self,
-                       input: &DeleteEndpointMessage)
-                       -> Result<DeleteEndpointResponse, DeleteEndpointError>;
+    fn delete_endpoint(
+        &self,
+        input: &DeleteEndpointMessage,
+    ) -> Result<DeleteEndpointResponse, DeleteEndpointError>;
 
-
-    #[doc="<p> Deletes an AWS DMS event subscription. </p>"]
-    fn delete_event_subscription
-        (&self,
-         input: &DeleteEventSubscriptionMessage)
-         -> Result<DeleteEventSubscriptionResponse, DeleteEventSubscriptionError>;
-
+    #[doc = "<p> Deletes an AWS DMS event subscription. </p>"]
+    fn delete_event_subscription(
+        &self,
+        input: &DeleteEventSubscriptionMessage,
+    ) -> Result<DeleteEventSubscriptionResponse, DeleteEventSubscriptionError>;
 
     #[doc="<p>Deletes the specified replication instance.</p> <note> <p>You must delete any migration tasks that are associated with the replication instance before you can delete it.</p> </note> <p/>"]
-    fn delete_replication_instance
-        (&self,
-         input: &DeleteReplicationInstanceMessage)
-         -> Result<DeleteReplicationInstanceResponse, DeleteReplicationInstanceError>;
+    fn delete_replication_instance(
+        &self,
+        input: &DeleteReplicationInstanceMessage,
+    ) -> Result<DeleteReplicationInstanceResponse, DeleteReplicationInstanceError>;
 
+    #[doc = "<p>Deletes a subnet group.</p>"]
+    fn delete_replication_subnet_group(
+        &self,
+        input: &DeleteReplicationSubnetGroupMessage,
+    ) -> Result<DeleteReplicationSubnetGroupResponse, DeleteReplicationSubnetGroupError>;
 
-    #[doc="<p>Deletes a subnet group.</p>"]
-    fn delete_replication_subnet_group
-        (&self,
-         input: &DeleteReplicationSubnetGroupMessage)
-         -> Result<DeleteReplicationSubnetGroupResponse, DeleteReplicationSubnetGroupError>;
-
-
-    #[doc="<p>Deletes the specified replication task.</p>"]
-    fn delete_replication_task
-        (&self,
-         input: &DeleteReplicationTaskMessage)
-         -> Result<DeleteReplicationTaskResponse, DeleteReplicationTaskError>;
-
+    #[doc = "<p>Deletes the specified replication task.</p>"]
+    fn delete_replication_task(
+        &self,
+        input: &DeleteReplicationTaskMessage,
+    ) -> Result<DeleteReplicationTaskResponse, DeleteReplicationTaskError>;
 
     #[doc="<p>Lists all of the AWS DMS attributes for a customer account. The attributes include AWS DMS quotas for the account, such as the number of replication instances allowed. The description for a quota includes the quota name, current usage toward that quota, and the quota's maximum value.</p> <p>This command does not take any parameters.</p>"]
-    fn describe_account_attributes
-        (&self)
-         -> Result<DescribeAccountAttributesResponse, DescribeAccountAttributesError>;
+    fn describe_account_attributes(
+        &self,
+    ) -> Result<DescribeAccountAttributesResponse, DescribeAccountAttributesError>;
 
-
-    #[doc="<p>Provides a description of the certificate.</p>"]
-    fn describe_certificates(&self,
-                             input: &DescribeCertificatesMessage)
-                             -> Result<DescribeCertificatesResponse, DescribeCertificatesError>;
-
+    #[doc = "<p>Provides a description of the certificate.</p>"]
+    fn describe_certificates(
+        &self,
+        input: &DescribeCertificatesMessage,
+    ) -> Result<DescribeCertificatesResponse, DescribeCertificatesError>;
 
     #[doc="<p>Describes the status of the connections that have been made between the replication instance and an endpoint. Connections are created when you test an endpoint.</p>"]
-    fn describe_connections(&self,
-                            input: &DescribeConnectionsMessage)
-                            -> Result<DescribeConnectionsResponse, DescribeConnectionsError>;
+    fn describe_connections(
+        &self,
+        input: &DescribeConnectionsMessage,
+    ) -> Result<DescribeConnectionsResponse, DescribeConnectionsError>;
 
+    #[doc = "<p>Returns information about the type of endpoints available.</p>"]
+    fn describe_endpoint_types(
+        &self,
+        input: &DescribeEndpointTypesMessage,
+    ) -> Result<DescribeEndpointTypesResponse, DescribeEndpointTypesError>;
 
-    #[doc="<p>Returns information about the type of endpoints available.</p>"]
-    fn describe_endpoint_types
-        (&self,
-         input: &DescribeEndpointTypesMessage)
-         -> Result<DescribeEndpointTypesResponse, DescribeEndpointTypesError>;
-
-
-    #[doc="<p>Returns information about the endpoints for your account in the current region.</p>"]
-    fn describe_endpoints(&self,
-                          input: &DescribeEndpointsMessage)
-                          -> Result<DescribeEndpointsResponse, DescribeEndpointsError>;
-
+    #[doc = "<p>Returns information about the endpoints for your account in the current region.</p>"]
+    fn describe_endpoints(
+        &self,
+        input: &DescribeEndpointsMessage,
+    ) -> Result<DescribeEndpointsResponse, DescribeEndpointsError>;
 
     #[doc="<p>Lists categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html\"> Working with Events and Notifications </a> in the AWS Database Migration Service User Guide. </p>"]
-    fn describe_event_categories
-        (&self,
-         input: &DescribeEventCategoriesMessage)
-         -> Result<DescribeEventCategoriesResponse, DescribeEventCategoriesError>;
-
+    fn describe_event_categories(
+        &self,
+        input: &DescribeEventCategoriesMessage,
+    ) -> Result<DescribeEventCategoriesResponse, DescribeEventCategoriesError>;
 
     #[doc="<p>Lists all the event subscriptions for a customer account. The description of a subscription includes <code>SubscriptionName</code>, <code>SNSTopicARN</code>, <code>CustomerID</code>, <code>SourceType</code>, <code>SourceID</code>, <code>CreationTime</code>, and <code>Status</code>. </p> <p>If you specify <code>SubscriptionName</code>, this action lists the description for that subscription.</p>"]
-    fn describe_event_subscriptions
-        (&self,
-         input: &DescribeEventSubscriptionsMessage)
-         -> Result<DescribeEventSubscriptionsResponse, DescribeEventSubscriptionsError>;
-
+    fn describe_event_subscriptions(
+        &self,
+        input: &DescribeEventSubscriptionsMessage,
+    ) -> Result<DescribeEventSubscriptionsResponse, DescribeEventSubscriptionsError>;
 
     #[doc="<p> Lists events for a given source identifier and source type. You can also specify a start and end time. For more information on AWS DMS events, see <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html\"> Working with Events and Notifications </a>. </p>"]
-    fn describe_events(&self,
-                       input: &DescribeEventsMessage)
-                       -> Result<DescribeEventsResponse, DescribeEventsError>;
-
+    fn describe_events(
+        &self,
+        input: &DescribeEventsMessage,
+    ) -> Result<DescribeEventsResponse, DescribeEventsError>;
 
     #[doc="<p>Returns information about the replication instance types that can be created in the specified region.</p>"]
-    fn describe_orderable_replication_instances(&self, input: &DescribeOrderableReplicationInstancesMessage)  -> Result<DescribeOrderableReplicationInstancesResponse, DescribeOrderableReplicationInstancesError>;
+    fn describe_orderable_replication_instances(
+        &self,
+        input: &DescribeOrderableReplicationInstancesMessage,
+    ) -> Result<
+        DescribeOrderableReplicationInstancesResponse,
+        DescribeOrderableReplicationInstancesError,
+    >;
 
-
-    #[doc="<p>Returns the status of the RefreshSchemas operation.</p>"]
-    fn describe_refresh_schemas_status
-        (&self,
-         input: &DescribeRefreshSchemasStatusMessage)
-         -> Result<DescribeRefreshSchemasStatusResponse, DescribeRefreshSchemasStatusError>;
-
+    #[doc = "<p>Returns the status of the RefreshSchemas operation.</p>"]
+    fn describe_refresh_schemas_status(
+        &self,
+        input: &DescribeRefreshSchemasStatusMessage,
+    ) -> Result<DescribeRefreshSchemasStatusResponse, DescribeRefreshSchemasStatusError>;
 
     #[doc="<p>Returns information about replication instances for your account in the current region.</p>"]
-    fn describe_replication_instances
-        (&self,
-         input: &DescribeReplicationInstancesMessage)
-         -> Result<DescribeReplicationInstancesResponse, DescribeReplicationInstancesError>;
+    fn describe_replication_instances(
+        &self,
+        input: &DescribeReplicationInstancesMessage,
+    ) -> Result<DescribeReplicationInstancesResponse, DescribeReplicationInstancesError>;
 
-
-    #[doc="<p>Returns information about the replication subnet groups.</p>"]
-    fn describe_replication_subnet_groups
-        (&self,
-         input: &DescribeReplicationSubnetGroupsMessage)
-         -> Result<DescribeReplicationSubnetGroupsResponse, DescribeReplicationSubnetGroupsError>;
-
+    #[doc = "<p>Returns information about the replication subnet groups.</p>"]
+    fn describe_replication_subnet_groups(
+        &self,
+        input: &DescribeReplicationSubnetGroupsMessage,
+    ) -> Result<DescribeReplicationSubnetGroupsResponse, DescribeReplicationSubnetGroupsError>;
 
     #[doc="<p>Returns information about replication tasks for your account in the current region.</p>"]
-    fn describe_replication_tasks
-        (&self,
-         input: &DescribeReplicationTasksMessage)
-         -> Result<DescribeReplicationTasksResponse, DescribeReplicationTasksError>;
+    fn describe_replication_tasks(
+        &self,
+        input: &DescribeReplicationTasksMessage,
+    ) -> Result<DescribeReplicationTasksResponse, DescribeReplicationTasksError>;
 
-
-    #[doc="<p>Returns information about the schema for the specified endpoint.</p> <p/>"]
-    fn describe_schemas(&self,
-                        input: &DescribeSchemasMessage)
-                        -> Result<DescribeSchemasResponse, DescribeSchemasError>;
-
+    #[doc = "<p>Returns information about the schema for the specified endpoint.</p> <p/>"]
+    fn describe_schemas(
+        &self,
+        input: &DescribeSchemasMessage,
+    ) -> Result<DescribeSchemasResponse, DescribeSchemasError>;
 
     #[doc="<p>Returns table statistics on the database migration task, including table name, rows inserted, rows updated, and rows deleted.</p>"]
-    fn describe_table_statistics
-        (&self,
-         input: &DescribeTableStatisticsMessage)
-         -> Result<DescribeTableStatisticsResponse, DescribeTableStatisticsError>;
+    fn describe_table_statistics(
+        &self,
+        input: &DescribeTableStatisticsMessage,
+    ) -> Result<DescribeTableStatisticsResponse, DescribeTableStatisticsError>;
 
+    #[doc = "<p>Uploads the specified certificate.</p>"]
+    fn import_certificate(
+        &self,
+        input: &ImportCertificateMessage,
+    ) -> Result<ImportCertificateResponse, ImportCertificateError>;
 
-    #[doc="<p>Uploads the specified certificate.</p>"]
-    fn import_certificate(&self,
-                          input: &ImportCertificateMessage)
-                          -> Result<ImportCertificateResponse, ImportCertificateError>;
+    #[doc = "<p>Lists all tags for an AWS DMS resource.</p>"]
+    fn list_tags_for_resource(
+        &self,
+        input: &ListTagsForResourceMessage,
+    ) -> Result<ListTagsForResourceResponse, ListTagsForResourceError>;
 
+    #[doc = "<p>Modifies the specified endpoint.</p>"]
+    fn modify_endpoint(
+        &self,
+        input: &ModifyEndpointMessage,
+    ) -> Result<ModifyEndpointResponse, ModifyEndpointError>;
 
-    #[doc="<p>Lists all tags for an AWS DMS resource.</p>"]
-    fn list_tags_for_resource(&self,
-                              input: &ListTagsForResourceMessage)
-                              -> Result<ListTagsForResourceResponse, ListTagsForResourceError>;
-
-
-    #[doc="<p>Modifies the specified endpoint.</p>"]
-    fn modify_endpoint(&self,
-                       input: &ModifyEndpointMessage)
-                       -> Result<ModifyEndpointResponse, ModifyEndpointError>;
-
-
-    #[doc="<p>Modifies an existing AWS DMS event notification subscription. </p>"]
-    fn modify_event_subscription
-        (&self,
-         input: &ModifyEventSubscriptionMessage)
-         -> Result<ModifyEventSubscriptionResponse, ModifyEventSubscriptionError>;
-
+    #[doc = "<p>Modifies an existing AWS DMS event notification subscription. </p>"]
+    fn modify_event_subscription(
+        &self,
+        input: &ModifyEventSubscriptionMessage,
+    ) -> Result<ModifyEventSubscriptionResponse, ModifyEventSubscriptionError>;
 
     #[doc="<p>Modifies the replication instance to apply new settings. You can change one or more parameters by specifying these parameters and the new values in the request.</p> <p>Some settings are applied during the maintenance window.</p> <p/>"]
-    fn modify_replication_instance
-        (&self,
-         input: &ModifyReplicationInstanceMessage)
-         -> Result<ModifyReplicationInstanceResponse, ModifyReplicationInstanceError>;
+    fn modify_replication_instance(
+        &self,
+        input: &ModifyReplicationInstanceMessage,
+    ) -> Result<ModifyReplicationInstanceResponse, ModifyReplicationInstanceError>;
 
-
-    #[doc="<p>Modifies the settings for the specified replication subnet group.</p>"]
-    fn modify_replication_subnet_group
-        (&self,
-         input: &ModifyReplicationSubnetGroupMessage)
-         -> Result<ModifyReplicationSubnetGroupResponse, ModifyReplicationSubnetGroupError>;
-
+    #[doc = "<p>Modifies the settings for the specified replication subnet group.</p>"]
+    fn modify_replication_subnet_group(
+        &self,
+        input: &ModifyReplicationSubnetGroupMessage,
+    ) -> Result<ModifyReplicationSubnetGroupResponse, ModifyReplicationSubnetGroupError>;
 
     #[doc="<p>Modifies the specified replication task.</p> <p>You can't modify the task endpoints. The task must be stopped before you can modify it. </p> <p>For more information about AWS DMS tasks, see the AWS DMS user guide at <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html\"> Working with Migration Tasks </a> </p>"]
-    fn modify_replication_task
-        (&self,
-         input: &ModifyReplicationTaskMessage)
-         -> Result<ModifyReplicationTaskResponse, ModifyReplicationTaskError>;
-
+    fn modify_replication_task(
+        &self,
+        input: &ModifyReplicationTaskMessage,
+    ) -> Result<ModifyReplicationTaskResponse, ModifyReplicationTaskError>;
 
     #[doc="<p>Populates the schema for the specified endpoint. This is an asynchronous operation and can take several minutes. You can check the status of this operation by calling the DescribeRefreshSchemasStatus operation.</p>"]
-    fn refresh_schemas(&self,
-                       input: &RefreshSchemasMessage)
-                       -> Result<RefreshSchemasResponse, RefreshSchemasError>;
+    fn refresh_schemas(
+        &self,
+        input: &RefreshSchemasMessage,
+    ) -> Result<RefreshSchemasResponse, RefreshSchemasError>;
 
+    #[doc = "<p>Reloads the target database table with the source data. </p>"]
+    fn reload_tables(
+        &self,
+        input: &ReloadTablesMessage,
+    ) -> Result<ReloadTablesResponse, ReloadTablesError>;
 
-    #[doc="<p>Reloads the target database table with the source data. </p>"]
-    fn reload_tables(&self,
-                     input: &ReloadTablesMessage)
-                     -> Result<ReloadTablesResponse, ReloadTablesError>;
-
-
-    #[doc="<p>Removes metadata tags from a DMS resource.</p>"]
-    fn remove_tags_from_resource
-        (&self,
-         input: &RemoveTagsFromResourceMessage)
-         -> Result<RemoveTagsFromResourceResponse, RemoveTagsFromResourceError>;
-
+    #[doc = "<p>Removes metadata tags from a DMS resource.</p>"]
+    fn remove_tags_from_resource(
+        &self,
+        input: &RemoveTagsFromResourceMessage,
+    ) -> Result<RemoveTagsFromResourceResponse, RemoveTagsFromResourceError>;
 
     #[doc="<p>Starts the replication task.</p> <p>For more information about AWS DMS tasks, see the AWS DMS user guide at <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html\"> Working with Migration Tasks </a> </p>"]
-    fn start_replication_task
-        (&self,
-         input: &StartReplicationTaskMessage)
-         -> Result<StartReplicationTaskResponse, StartReplicationTaskError>;
+    fn start_replication_task(
+        &self,
+        input: &StartReplicationTaskMessage,
+    ) -> Result<StartReplicationTaskResponse, StartReplicationTaskError>;
 
+    #[doc = "<p>Stops the replication task.</p> <p/>"]
+    fn stop_replication_task(
+        &self,
+        input: &StopReplicationTaskMessage,
+    ) -> Result<StopReplicationTaskResponse, StopReplicationTaskError>;
 
-    #[doc="<p>Stops the replication task.</p> <p/>"]
-    fn stop_replication_task(&self,
-                             input: &StopReplicationTaskMessage)
-                             -> Result<StopReplicationTaskResponse, StopReplicationTaskError>;
-
-
-    #[doc="<p>Tests the connection between the replication instance and the endpoint.</p>"]
-    fn test_connection(&self,
-                       input: &TestConnectionMessage)
-                       -> Result<TestConnectionResponse, TestConnectionError>;
+    #[doc = "<p>Tests the connection between the replication instance and the endpoint.</p>"]
+    fn test_connection(
+        &self,
+        input: &TestConnectionMessage,
+    ) -> Result<TestConnectionResponse, TestConnectionError>;
 }
 /// A client for the AWS Database Migration Service API.
 pub struct DatabaseMigrationServiceClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -5697,8 +5805,9 @@ pub struct DatabaseMigrationServiceClient<P, D>
 }
 
 impl<P, D> DatabaseMigrationServiceClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         DatabaseMigrationServiceClient {
@@ -5710,13 +5819,15 @@ impl<P, D> DatabaseMigrationServiceClient<P, D>
 }
 
 impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     #[doc="<p>Adds metadata tags to a DMS resource, including replication instance, endpoint, security group, and migration task. These tags can also be used with cost allocation reporting to track cost associated with DMS resources, or used in a Condition statement in an IAM policy for DMS.</p>"]
-    fn add_tags_to_resource(&self,
-                            input: &AddTagsToResourceMessage)
-                            -> Result<AddTagsToResourceResponse, AddTagsToResourceError> {
+    fn add_tags_to_resource(
+        &self,
+        input: &AddTagsToResourceMessage,
+    ) -> Result<AddTagsToResourceResponse, AddTagsToResourceError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5732,21 +5843,25 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AddTagsToResourceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<AddTagsToResourceResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AddTagsToResourceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates an endpoint using the provided settings.</p>"]
-    fn create_endpoint(&self,
-                       input: &CreateEndpointMessage)
-                       -> Result<CreateEndpointResponse, CreateEndpointError> {
+    #[doc = "<p>Creates an endpoint using the provided settings.</p>"]
+    fn create_endpoint(
+        &self,
+        input: &CreateEndpointMessage,
+    ) -> Result<CreateEndpointResponse, CreateEndpointError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5762,24 +5877,25 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateEndpointResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateEndpointResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateEndpointError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateEndpointError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p> Creates an AWS DMS event notification subscription. </p> <p>You can specify the type of source (<code>SourceType</code>) you want to be notified of, provide a list of AWS DMS source IDs (<code>SourceIds</code>) that triggers the events, and provide a list of event categories (<code>EventCategories</code>) for events you want to be notified of. If you specify both the <code>SourceType</code> and <code>SourceIds</code>, such as <code>SourceType = replication-instance</code> and <code>SourceIdentifier = my-replinstance</code>, you will be notified of all the replication instance events for the specified source. If you specify a <code>SourceType</code> but don't specify a <code>SourceIdentifier</code>, you receive notice of the events for that source type for all your AWS DMS sources. If you don't specify either <code>SourceType</code> nor <code>SourceIdentifier</code>, you will be notified of events generated from all AWS DMS sources belonging to your customer account.</p> <p>For more information about AWS DMS events, see <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html\"> Working with Events and Notifications </a> in the AWS Database MIgration Service User Guide.</p>"]
-    fn create_event_subscription
-        (&self,
-         input: &CreateEventSubscriptionMessage)
-         -> Result<CreateEventSubscriptionResponse, CreateEventSubscriptionError> {
+    fn create_event_subscription(
+        &self,
+        input: &CreateEventSubscriptionMessage,
+    ) -> Result<CreateEventSubscriptionResponse, CreateEventSubscriptionError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5795,28 +5911,32 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateEventSubscriptionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreateEventSubscriptionResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateEventSubscriptionError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(CreateEventSubscriptionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates the replication instance using the specified parameters.</p>"]
-    fn create_replication_instance
-        (&self,
-         input: &CreateReplicationInstanceMessage)
-         -> Result<CreateReplicationInstanceResponse, CreateReplicationInstanceError> {
+    #[doc = "<p>Creates the replication instance using the specified parameters.</p>"]
+    fn create_replication_instance(
+        &self,
+        input: &CreateReplicationInstanceMessage,
+    ) -> Result<CreateReplicationInstanceResponse, CreateReplicationInstanceError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonDMSv20160101.CreateReplicationInstance");
+        request.add_header(
+            "x-amz-target",
+            "AmazonDMSv20160101.CreateReplicationInstance",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -5828,28 +5948,32 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateReplicationInstanceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreateReplicationInstanceResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateReplicationInstanceError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(CreateReplicationInstanceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates a replication subnet group given a list of the subnet IDs in a VPC.</p>"]
-    fn create_replication_subnet_group
-        (&self,
-         input: &CreateReplicationSubnetGroupMessage)
-         -> Result<CreateReplicationSubnetGroupResponse, CreateReplicationSubnetGroupError> {
+    #[doc = "<p>Creates a replication subnet group given a list of the subnet IDs in a VPC.</p>"]
+    fn create_replication_subnet_group(
+        &self,
+        input: &CreateReplicationSubnetGroupMessage,
+    ) -> Result<CreateReplicationSubnetGroupResponse, CreateReplicationSubnetGroupError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonDMSv20160101.CreateReplicationSubnetGroup");
+        request.add_header(
+            "x-amz-target",
+            "AmazonDMSv20160101.CreateReplicationSubnetGroup",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -5861,23 +5985,27 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateReplicationSubnetGroupResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<CreateReplicationSubnetGroupResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateReplicationSubnetGroupError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+                Err(CreateReplicationSubnetGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates a replication task using the specified parameters.</p>"]
-    fn create_replication_task
-        (&self,
-         input: &CreateReplicationTaskMessage)
-         -> Result<CreateReplicationTaskResponse, CreateReplicationTaskError> {
+    #[doc = "<p>Creates a replication task using the specified parameters.</p>"]
+    fn create_replication_task(
+        &self,
+        input: &CreateReplicationTaskMessage,
+    ) -> Result<CreateReplicationTaskResponse, CreateReplicationTaskError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5893,21 +6021,25 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateReplicationTaskResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreateReplicationTaskResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateReplicationTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateReplicationTaskError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes the specified certificate. </p>"]
-    fn delete_certificate(&self,
-                          input: &DeleteCertificateMessage)
-                          -> Result<DeleteCertificateResponse, DeleteCertificateError> {
+    #[doc = "<p>Deletes the specified certificate. </p>"]
+    fn delete_certificate(
+        &self,
+        input: &DeleteCertificateMessage,
+    ) -> Result<DeleteCertificateResponse, DeleteCertificateError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5923,21 +6055,25 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteCertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DeleteCertificateResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteCertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteCertificateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes the specified endpoint.</p> <note> <p>All tasks associated with the endpoint must be deleted before you can delete the endpoint.</p> </note> <p/>"]
-    fn delete_endpoint(&self,
-                       input: &DeleteEndpointMessage)
-                       -> Result<DeleteEndpointResponse, DeleteEndpointError> {
+    fn delete_endpoint(
+        &self,
+        input: &DeleteEndpointMessage,
+    ) -> Result<DeleteEndpointResponse, DeleteEndpointError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5953,24 +6089,25 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteEndpointResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteEndpointResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteEndpointError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteEndpointError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p> Deletes an AWS DMS event subscription. </p>"]
-    fn delete_event_subscription
-        (&self,
-         input: &DeleteEventSubscriptionMessage)
-         -> Result<DeleteEventSubscriptionResponse, DeleteEventSubscriptionError> {
+    #[doc = "<p> Deletes an AWS DMS event subscription. </p>"]
+    fn delete_event_subscription(
+        &self,
+        input: &DeleteEventSubscriptionMessage,
+    ) -> Result<DeleteEventSubscriptionResponse, DeleteEventSubscriptionError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5986,28 +6123,32 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteEventSubscriptionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DeleteEventSubscriptionResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteEventSubscriptionError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(DeleteEventSubscriptionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Deletes the specified replication instance.</p> <note> <p>You must delete any migration tasks that are associated with the replication instance before you can delete it.</p> </note> <p/>"]
-    fn delete_replication_instance
-        (&self,
-         input: &DeleteReplicationInstanceMessage)
-         -> Result<DeleteReplicationInstanceResponse, DeleteReplicationInstanceError> {
+    fn delete_replication_instance(
+        &self,
+        input: &DeleteReplicationInstanceMessage,
+    ) -> Result<DeleteReplicationInstanceResponse, DeleteReplicationInstanceError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonDMSv20160101.DeleteReplicationInstance");
+        request.add_header(
+            "x-amz-target",
+            "AmazonDMSv20160101.DeleteReplicationInstance",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6019,28 +6160,32 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteReplicationInstanceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DeleteReplicationInstanceResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteReplicationInstanceError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(DeleteReplicationInstanceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes a subnet group.</p>"]
-    fn delete_replication_subnet_group
-        (&self,
-         input: &DeleteReplicationSubnetGroupMessage)
-         -> Result<DeleteReplicationSubnetGroupResponse, DeleteReplicationSubnetGroupError> {
+    #[doc = "<p>Deletes a subnet group.</p>"]
+    fn delete_replication_subnet_group(
+        &self,
+        input: &DeleteReplicationSubnetGroupMessage,
+    ) -> Result<DeleteReplicationSubnetGroupResponse, DeleteReplicationSubnetGroupError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonDMSv20160101.DeleteReplicationSubnetGroup");
+        request.add_header(
+            "x-amz-target",
+            "AmazonDMSv20160101.DeleteReplicationSubnetGroup",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6052,23 +6197,27 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteReplicationSubnetGroupResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<DeleteReplicationSubnetGroupResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteReplicationSubnetGroupError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+                Err(DeleteReplicationSubnetGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes the specified replication task.</p>"]
-    fn delete_replication_task
-        (&self,
-         input: &DeleteReplicationTaskMessage)
-         -> Result<DeleteReplicationTaskResponse, DeleteReplicationTaskError> {
+    #[doc = "<p>Deletes the specified replication task.</p>"]
+    fn delete_replication_task(
+        &self,
+        input: &DeleteReplicationTaskMessage,
+    ) -> Result<DeleteReplicationTaskResponse, DeleteReplicationTaskError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6084,26 +6233,31 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteReplicationTaskResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DeleteReplicationTaskResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteReplicationTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteReplicationTaskError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists all of the AWS DMS attributes for a customer account. The attributes include AWS DMS quotas for the account, such as the number of replication instances allowed. The description for a quota includes the quota name, current usage toward that quota, and the quota's maximum value.</p> <p>This command does not take any parameters.</p>"]
-    fn describe_account_attributes
-        (&self)
-         -> Result<DescribeAccountAttributesResponse, DescribeAccountAttributesError> {
+    fn describe_account_attributes(
+        &self,
+    ) -> Result<DescribeAccountAttributesResponse, DescribeAccountAttributesError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonDMSv20160101.DescribeAccountAttributes");
+        request.add_header(
+            "x-amz-target",
+            "AmazonDMSv20160101.DescribeAccountAttributes",
+        );
         request.set_payload(Some(b"{}".to_vec()));
 
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
@@ -6114,22 +6268,25 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeAccountAttributesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeAccountAttributesResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeAccountAttributesError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(DescribeAccountAttributesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Provides a description of the certificate.</p>"]
-    fn describe_certificates(&self,
-                             input: &DescribeCertificatesMessage)
-                             -> Result<DescribeCertificatesResponse, DescribeCertificatesError> {
+    #[doc = "<p>Provides a description of the certificate.</p>"]
+    fn describe_certificates(
+        &self,
+        input: &DescribeCertificatesMessage,
+    ) -> Result<DescribeCertificatesResponse, DescribeCertificatesError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6145,21 +6302,25 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeCertificatesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeCertificatesResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeCertificatesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeCertificatesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Describes the status of the connections that have been made between the replication instance and an endpoint. Connections are created when you test an endpoint.</p>"]
-    fn describe_connections(&self,
-                            input: &DescribeConnectionsMessage)
-                            -> Result<DescribeConnectionsResponse, DescribeConnectionsError> {
+    fn describe_connections(
+        &self,
+        input: &DescribeConnectionsMessage,
+    ) -> Result<DescribeConnectionsResponse, DescribeConnectionsError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6175,22 +6336,25 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeConnectionsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeConnectionsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeConnectionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeConnectionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Returns information about the type of endpoints available.</p>"]
-    fn describe_endpoint_types
-        (&self,
-         input: &DescribeEndpointTypesMessage)
-         -> Result<DescribeEndpointTypesResponse, DescribeEndpointTypesError> {
+    #[doc = "<p>Returns information about the type of endpoints available.</p>"]
+    fn describe_endpoint_types(
+        &self,
+        input: &DescribeEndpointTypesMessage,
+    ) -> Result<DescribeEndpointTypesResponse, DescribeEndpointTypesError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6206,21 +6370,25 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeEndpointTypesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeEndpointTypesResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeEndpointTypesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeEndpointTypesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Returns information about the endpoints for your account in the current region.</p>"]
-    fn describe_endpoints(&self,
-                          input: &DescribeEndpointsMessage)
-                          -> Result<DescribeEndpointsResponse, DescribeEndpointsError> {
+    #[doc = "<p>Returns information about the endpoints for your account in the current region.</p>"]
+    fn describe_endpoints(
+        &self,
+        input: &DescribeEndpointsMessage,
+    ) -> Result<DescribeEndpointsResponse, DescribeEndpointsError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6236,22 +6404,25 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeEndpointsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeEndpointsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeEndpointsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeEndpointsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html\"> Working with Events and Notifications </a> in the AWS Database Migration Service User Guide. </p>"]
-    fn describe_event_categories
-        (&self,
-         input: &DescribeEventCategoriesMessage)
-         -> Result<DescribeEventCategoriesResponse, DescribeEventCategoriesError> {
+    fn describe_event_categories(
+        &self,
+        input: &DescribeEventCategoriesMessage,
+    ) -> Result<DescribeEventCategoriesResponse, DescribeEventCategoriesError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6267,28 +6438,32 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeEventCategoriesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeEventCategoriesResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeEventCategoriesError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(DescribeEventCategoriesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists all the event subscriptions for a customer account. The description of a subscription includes <code>SubscriptionName</code>, <code>SNSTopicARN</code>, <code>CustomerID</code>, <code>SourceType</code>, <code>SourceID</code>, <code>CreationTime</code>, and <code>Status</code>. </p> <p>If you specify <code>SubscriptionName</code>, this action lists the description for that subscription.</p>"]
-    fn describe_event_subscriptions
-        (&self,
-         input: &DescribeEventSubscriptionsMessage)
-         -> Result<DescribeEventSubscriptionsResponse, DescribeEventSubscriptionsError> {
+    fn describe_event_subscriptions(
+        &self,
+        input: &DescribeEventSubscriptionsMessage,
+    ) -> Result<DescribeEventSubscriptionsResponse, DescribeEventSubscriptionsError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonDMSv20160101.DescribeEventSubscriptions");
+        request.add_header(
+            "x-amz-target",
+            "AmazonDMSv20160101.DescribeEventSubscriptions",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6300,22 +6475,25 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeEventSubscriptionsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeEventSubscriptionsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeEventSubscriptionsError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+                Err(DescribeEventSubscriptionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p> Lists events for a given source identifier and source type. You can also specify a start and end time. For more information on AWS DMS events, see <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html\"> Working with Events and Notifications </a>. </p>"]
-    fn describe_events(&self,
-                       input: &DescribeEventsMessage)
-                       -> Result<DescribeEventsResponse, DescribeEventsError> {
+    fn describe_events(
+        &self,
+        input: &DescribeEventsMessage,
+    ) -> Result<DescribeEventsResponse, DescribeEventsError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6331,26 +6509,35 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeEventsResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribeEventsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeEventsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeEventsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Returns information about the replication instance types that can be created in the specified region.</p>"]
-fn describe_orderable_replication_instances(&self, input: &DescribeOrderableReplicationInstancesMessage)  -> Result<DescribeOrderableReplicationInstancesResponse, DescribeOrderableReplicationInstancesError>{
+    fn describe_orderable_replication_instances(
+        &self,
+        input: &DescribeOrderableReplicationInstancesMessage,
+    ) -> Result<
+        DescribeOrderableReplicationInstancesResponse,
+        DescribeOrderableReplicationInstancesError,
+    > {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonDMSv20160101.DescribeOrderableReplicationInstances");
+        request.add_header(
+            "x-amz-target",
+            "AmazonDMSv20160101.DescribeOrderableReplicationInstances",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6362,27 +6549,34 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeOrderableReplicationInstancesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<DescribeOrderableReplicationInstancesResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeOrderableReplicationInstancesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeOrderableReplicationInstancesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Returns the status of the RefreshSchemas operation.</p>"]
-    fn describe_refresh_schemas_status
-        (&self,
-         input: &DescribeRefreshSchemasStatusMessage)
-         -> Result<DescribeRefreshSchemasStatusResponse, DescribeRefreshSchemasStatusError> {
+    #[doc = "<p>Returns the status of the RefreshSchemas operation.</p>"]
+    fn describe_refresh_schemas_status(
+        &self,
+        input: &DescribeRefreshSchemasStatusMessage,
+    ) -> Result<DescribeRefreshSchemasStatusResponse, DescribeRefreshSchemasStatusError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonDMSv20160101.DescribeRefreshSchemasStatus");
+        request.add_header(
+            "x-amz-target",
+            "AmazonDMSv20160101.DescribeRefreshSchemasStatus",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6394,28 +6588,34 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeRefreshSchemasStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<DescribeRefreshSchemasStatusResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeRefreshSchemasStatusError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+                Err(DescribeRefreshSchemasStatusError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Returns information about replication instances for your account in the current region.</p>"]
-    fn describe_replication_instances
-        (&self,
-         input: &DescribeReplicationInstancesMessage)
-         -> Result<DescribeReplicationInstancesResponse, DescribeReplicationInstancesError> {
+    fn describe_replication_instances(
+        &self,
+        input: &DescribeReplicationInstancesMessage,
+    ) -> Result<DescribeReplicationInstancesResponse, DescribeReplicationInstancesError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonDMSv20160101.DescribeReplicationInstances");
+        request.add_header(
+            "x-amz-target",
+            "AmazonDMSv20160101.DescribeReplicationInstances",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6427,28 +6627,34 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeReplicationInstancesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<DescribeReplicationInstancesResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeReplicationInstancesError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+                Err(DescribeReplicationInstancesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Returns information about the replication subnet groups.</p>"]
-    fn describe_replication_subnet_groups
-        (&self,
-         input: &DescribeReplicationSubnetGroupsMessage)
-         -> Result<DescribeReplicationSubnetGroupsResponse, DescribeReplicationSubnetGroupsError> {
+    #[doc = "<p>Returns information about the replication subnet groups.</p>"]
+    fn describe_replication_subnet_groups(
+        &self,
+        input: &DescribeReplicationSubnetGroupsMessage,
+    ) -> Result<DescribeReplicationSubnetGroupsResponse, DescribeReplicationSubnetGroupsError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonDMSv20160101.DescribeReplicationSubnetGroups");
+        request.add_header(
+            "x-amz-target",
+            "AmazonDMSv20160101.DescribeReplicationSubnetGroups",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6460,28 +6666,34 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeReplicationSubnetGroupsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<DescribeReplicationSubnetGroupsResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeReplicationSubnetGroupsError::from_body(String::from_utf8_lossy(&body)
-                                                                        .as_ref()))
+                Err(DescribeReplicationSubnetGroupsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Returns information about replication tasks for your account in the current region.</p>"]
-    fn describe_replication_tasks
-        (&self,
-         input: &DescribeReplicationTasksMessage)
-         -> Result<DescribeReplicationTasksResponse, DescribeReplicationTasksError> {
+    fn describe_replication_tasks(
+        &self,
+        input: &DescribeReplicationTasksMessage,
+    ) -> Result<DescribeReplicationTasksResponse, DescribeReplicationTasksError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonDMSv20160101.DescribeReplicationTasks");
+        request.add_header(
+            "x-amz-target",
+            "AmazonDMSv20160101.DescribeReplicationTasks",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6493,22 +6705,25 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeReplicationTasksResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeReplicationTasksResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeReplicationTasksError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(DescribeReplicationTasksError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Returns information about the schema for the specified endpoint.</p> <p/>"]
-    fn describe_schemas(&self,
-                        input: &DescribeSchemasMessage)
-                        -> Result<DescribeSchemasResponse, DescribeSchemasError> {
+    #[doc = "<p>Returns information about the schema for the specified endpoint.</p> <p/>"]
+    fn describe_schemas(
+        &self,
+        input: &DescribeSchemasMessage,
+    ) -> Result<DescribeSchemasResponse, DescribeSchemasError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6524,24 +6739,25 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeSchemasResponse>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribeSchemasResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeSchemasError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeSchemasError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns table statistics on the database migration task, including table name, rows inserted, rows updated, and rows deleted.</p>"]
-    fn describe_table_statistics
-        (&self,
-         input: &DescribeTableStatisticsMessage)
-         -> Result<DescribeTableStatisticsResponse, DescribeTableStatisticsError> {
+    fn describe_table_statistics(
+        &self,
+        input: &DescribeTableStatisticsMessage,
+    ) -> Result<DescribeTableStatisticsResponse, DescribeTableStatisticsError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6557,22 +6773,25 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeTableStatisticsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeTableStatisticsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeTableStatisticsError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(DescribeTableStatisticsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Uploads the specified certificate.</p>"]
-    fn import_certificate(&self,
-                          input: &ImportCertificateMessage)
-                          -> Result<ImportCertificateResponse, ImportCertificateError> {
+    #[doc = "<p>Uploads the specified certificate.</p>"]
+    fn import_certificate(
+        &self,
+        input: &ImportCertificateMessage,
+    ) -> Result<ImportCertificateResponse, ImportCertificateError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6588,21 +6807,25 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ImportCertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ImportCertificateResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ImportCertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ImportCertificateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists all tags for an AWS DMS resource.</p>"]
-    fn list_tags_for_resource(&self,
-                              input: &ListTagsForResourceMessage)
-                              -> Result<ListTagsForResourceResponse, ListTagsForResourceError> {
+    #[doc = "<p>Lists all tags for an AWS DMS resource.</p>"]
+    fn list_tags_for_resource(
+        &self,
+        input: &ListTagsForResourceMessage,
+    ) -> Result<ListTagsForResourceResponse, ListTagsForResourceError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6618,21 +6841,25 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListTagsForResourceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListTagsForResourceResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListTagsForResourceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Modifies the specified endpoint.</p>"]
-    fn modify_endpoint(&self,
-                       input: &ModifyEndpointMessage)
-                       -> Result<ModifyEndpointResponse, ModifyEndpointError> {
+    #[doc = "<p>Modifies the specified endpoint.</p>"]
+    fn modify_endpoint(
+        &self,
+        input: &ModifyEndpointMessage,
+    ) -> Result<ModifyEndpointResponse, ModifyEndpointError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6648,24 +6875,25 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ModifyEndpointResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ModifyEndpointResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ModifyEndpointError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ModifyEndpointError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Modifies an existing AWS DMS event notification subscription. </p>"]
-    fn modify_event_subscription
-        (&self,
-         input: &ModifyEventSubscriptionMessage)
-         -> Result<ModifyEventSubscriptionResponse, ModifyEventSubscriptionError> {
+    #[doc = "<p>Modifies an existing AWS DMS event notification subscription. </p>"]
+    fn modify_event_subscription(
+        &self,
+        input: &ModifyEventSubscriptionMessage,
+    ) -> Result<ModifyEventSubscriptionResponse, ModifyEventSubscriptionError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6681,28 +6909,32 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ModifyEventSubscriptionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ModifyEventSubscriptionResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ModifyEventSubscriptionError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(ModifyEventSubscriptionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Modifies the replication instance to apply new settings. You can change one or more parameters by specifying these parameters and the new values in the request.</p> <p>Some settings are applied during the maintenance window.</p> <p/>"]
-    fn modify_replication_instance
-        (&self,
-         input: &ModifyReplicationInstanceMessage)
-         -> Result<ModifyReplicationInstanceResponse, ModifyReplicationInstanceError> {
+    fn modify_replication_instance(
+        &self,
+        input: &ModifyReplicationInstanceMessage,
+    ) -> Result<ModifyReplicationInstanceResponse, ModifyReplicationInstanceError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonDMSv20160101.ModifyReplicationInstance");
+        request.add_header(
+            "x-amz-target",
+            "AmazonDMSv20160101.ModifyReplicationInstance",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6714,28 +6946,32 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ModifyReplicationInstanceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ModifyReplicationInstanceResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ModifyReplicationInstanceError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(ModifyReplicationInstanceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Modifies the settings for the specified replication subnet group.</p>"]
-    fn modify_replication_subnet_group
-        (&self,
-         input: &ModifyReplicationSubnetGroupMessage)
-         -> Result<ModifyReplicationSubnetGroupResponse, ModifyReplicationSubnetGroupError> {
+    #[doc = "<p>Modifies the settings for the specified replication subnet group.</p>"]
+    fn modify_replication_subnet_group(
+        &self,
+        input: &ModifyReplicationSubnetGroupMessage,
+    ) -> Result<ModifyReplicationSubnetGroupResponse, ModifyReplicationSubnetGroupError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonDMSv20160101.ModifyReplicationSubnetGroup");
+        request.add_header(
+            "x-amz-target",
+            "AmazonDMSv20160101.ModifyReplicationSubnetGroup",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6747,23 +6983,27 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ModifyReplicationSubnetGroupResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<ModifyReplicationSubnetGroupResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ModifyReplicationSubnetGroupError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+                Err(ModifyReplicationSubnetGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Modifies the specified replication task.</p> <p>You can't modify the task endpoints. The task must be stopped before you can modify it. </p> <p>For more information about AWS DMS tasks, see the AWS DMS user guide at <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html\"> Working with Migration Tasks </a> </p>"]
-    fn modify_replication_task
-        (&self,
-         input: &ModifyReplicationTaskMessage)
-         -> Result<ModifyReplicationTaskResponse, ModifyReplicationTaskError> {
+    fn modify_replication_task(
+        &self,
+        input: &ModifyReplicationTaskMessage,
+    ) -> Result<ModifyReplicationTaskResponse, ModifyReplicationTaskError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6779,21 +7019,25 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ModifyReplicationTaskResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ModifyReplicationTaskResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ModifyReplicationTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ModifyReplicationTaskError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Populates the schema for the specified endpoint. This is an asynchronous operation and can take several minutes. You can check the status of this operation by calling the DescribeRefreshSchemasStatus operation.</p>"]
-    fn refresh_schemas(&self,
-                       input: &RefreshSchemasMessage)
-                       -> Result<RefreshSchemasResponse, RefreshSchemasError> {
+    fn refresh_schemas(
+        &self,
+        input: &RefreshSchemasMessage,
+    ) -> Result<RefreshSchemasResponse, RefreshSchemasError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6809,23 +7053,25 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<RefreshSchemasResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<RefreshSchemasResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(RefreshSchemasError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(RefreshSchemasError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Reloads the target database table with the source data. </p>"]
-    fn reload_tables(&self,
-                     input: &ReloadTablesMessage)
-                     -> Result<ReloadTablesResponse, ReloadTablesError> {
+    #[doc = "<p>Reloads the target database table with the source data. </p>"]
+    fn reload_tables(
+        &self,
+        input: &ReloadTablesMessage,
+    ) -> Result<ReloadTablesResponse, ReloadTablesError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6841,24 +7087,25 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ReloadTablesResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ReloadTablesResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ReloadTablesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ReloadTablesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Removes metadata tags from a DMS resource.</p>"]
-    fn remove_tags_from_resource
-        (&self,
-         input: &RemoveTagsFromResourceMessage)
-         -> Result<RemoveTagsFromResourceResponse, RemoveTagsFromResourceError> {
+    #[doc = "<p>Removes metadata tags from a DMS resource.</p>"]
+    fn remove_tags_from_resource(
+        &self,
+        input: &RemoveTagsFromResourceMessage,
+    ) -> Result<RemoveTagsFromResourceResponse, RemoveTagsFromResourceError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6874,22 +7121,25 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<RemoveTagsFromResourceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<RemoveTagsFromResourceResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(RemoveTagsFromResourceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Starts the replication task.</p> <p>For more information about AWS DMS tasks, see the AWS DMS user guide at <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html\"> Working with Migration Tasks </a> </p>"]
-    fn start_replication_task
-        (&self,
-         input: &StartReplicationTaskMessage)
-         -> Result<StartReplicationTaskResponse, StartReplicationTaskError> {
+    fn start_replication_task(
+        &self,
+        input: &StartReplicationTaskMessage,
+    ) -> Result<StartReplicationTaskResponse, StartReplicationTaskError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6905,21 +7155,25 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StartReplicationTaskResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<StartReplicationTaskResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StartReplicationTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(StartReplicationTaskError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Stops the replication task.</p> <p/>"]
-    fn stop_replication_task(&self,
-                             input: &StopReplicationTaskMessage)
-                             -> Result<StopReplicationTaskResponse, StopReplicationTaskError> {
+    #[doc = "<p>Stops the replication task.</p> <p/>"]
+    fn stop_replication_task(
+        &self,
+        input: &StopReplicationTaskMessage,
+    ) -> Result<StopReplicationTaskResponse, StopReplicationTaskError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6935,21 +7189,25 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StopReplicationTaskResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<StopReplicationTaskResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StopReplicationTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(StopReplicationTaskError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Tests the connection between the replication instance and the endpoint.</p>"]
-    fn test_connection(&self,
-                       input: &TestConnectionMessage)
-                       -> Result<TestConnectionResponse, TestConnectionError> {
+    #[doc = "<p>Tests the connection between the replication instance and the endpoint.</p>"]
+    fn test_connection(
+        &self,
+        input: &TestConnectionMessage,
+    ) -> Result<TestConnectionResponse, TestConnectionError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6965,14 +7223,16 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<TestConnectionResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<TestConnectionResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(TestConnectionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(TestConnectionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

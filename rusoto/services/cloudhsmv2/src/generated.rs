@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -28,372 +27,372 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[doc="<p>Contains information about a backup of an AWS CloudHSM cluster.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains information about a backup of an AWS CloudHSM cluster.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Backup {
-    #[doc="<p>The identifier (ID) of the backup.</p>"]
-    #[serde(rename="BackupId")]
+    /// <p>The identifier (ID) of the backup.</p>
+    #[serde(rename = "BackupId")]
     pub backup_id: String,
-    #[doc="<p>The state of the backup.</p>"]
-    #[serde(rename="BackupState")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The state of the backup.</p>
+    #[serde(rename = "BackupState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub backup_state: Option<String>,
-    #[doc="<p>The identifier (ID) of the cluster that was backed up.</p>"]
-    #[serde(rename="ClusterId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier (ID) of the cluster that was backed up.</p>
+    #[serde(rename = "ClusterId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster_id: Option<String>,
-    #[doc="<p>The date and time when the backup was created.</p>"]
-    #[serde(rename="CreateTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time when the backup was created.</p>
+    #[serde(rename = "CreateTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub create_timestamp: Option<f64>,
 }
 
-#[doc="<p>Contains one or more certificates or a certificate signing request (CSR).</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains one or more certificates or a certificate signing request (CSR).</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Certificates {
-    #[doc="<p>The HSM hardware certificate issued (signed) by AWS CloudHSM.</p>"]
-    #[serde(rename="AwsHardwareCertificate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The HSM hardware certificate issued (signed) by AWS CloudHSM.</p>
+    #[serde(rename = "AwsHardwareCertificate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_hardware_certificate: Option<String>,
-    #[doc="<p>The cluster certificate issued (signed) by the issuing certificate authority (CA) of the cluster's owner.</p>"]
-    #[serde(rename="ClusterCertificate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The cluster certificate issued (signed) by the issuing certificate authority (CA) of the cluster's owner.</p>
+    #[serde(rename = "ClusterCertificate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster_certificate: Option<String>,
-    #[doc="<p>The cluster's certificate signing request (CSR). The CSR exists only when the cluster's state is <code>UNINITIALIZED</code>.</p>"]
-    #[serde(rename="ClusterCsr")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The cluster's certificate signing request (CSR). The CSR exists only when the cluster's state is <code>UNINITIALIZED</code>.</p>
+    #[serde(rename = "ClusterCsr")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster_csr: Option<String>,
-    #[doc="<p>The HSM certificate issued (signed) by the HSM hardware.</p>"]
-    #[serde(rename="HsmCertificate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The HSM certificate issued (signed) by the HSM hardware.</p>
+    #[serde(rename = "HsmCertificate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hsm_certificate: Option<String>,
-    #[doc="<p>The HSM hardware certificate issued (signed) by the hardware manufacturer.</p>"]
-    #[serde(rename="ManufacturerHardwareCertificate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The HSM hardware certificate issued (signed) by the hardware manufacturer.</p>
+    #[serde(rename = "ManufacturerHardwareCertificate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub manufacturer_hardware_certificate: Option<String>,
 }
 
-#[doc="<p>Contains information about an AWS CloudHSM cluster.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains information about an AWS CloudHSM cluster.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Cluster {
-    #[doc="<p>The cluster's backup policy.</p>"]
-    #[serde(rename="BackupPolicy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The cluster's backup policy.</p>
+    #[serde(rename = "BackupPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub backup_policy: Option<String>,
-    #[doc="<p>Contains one or more certificates or a certificate signing request (CSR).</p>"]
-    #[serde(rename="Certificates")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Contains one or more certificates or a certificate signing request (CSR).</p>
+    #[serde(rename = "Certificates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificates: Option<Certificates>,
-    #[doc="<p>The cluster's identifier (ID).</p>"]
-    #[serde(rename="ClusterId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The cluster's identifier (ID).</p>
+    #[serde(rename = "ClusterId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster_id: Option<String>,
-    #[doc="<p>The date and time when the cluster was created.</p>"]
-    #[serde(rename="CreateTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time when the cluster was created.</p>
+    #[serde(rename = "CreateTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub create_timestamp: Option<f64>,
-    #[doc="<p>The type of HSM that the cluster contains.</p>"]
-    #[serde(rename="HsmType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of HSM that the cluster contains.</p>
+    #[serde(rename = "HsmType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hsm_type: Option<String>,
-    #[doc="<p>Contains information about the HSMs in the cluster.</p>"]
-    #[serde(rename="Hsms")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Contains information about the HSMs in the cluster.</p>
+    #[serde(rename = "Hsms")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hsms: Option<Vec<Hsm>>,
-    #[doc="<p>The default password for the cluster's Pre-Crypto Officer (PRECO) user.</p>"]
-    #[serde(rename="PreCoPassword")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The default password for the cluster's Pre-Crypto Officer (PRECO) user.</p>
+    #[serde(rename = "PreCoPassword")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub pre_co_password: Option<String>,
-    #[doc="<p>The identifier (ID) of the cluster's security group.</p>"]
-    #[serde(rename="SecurityGroup")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier (ID) of the cluster's security group.</p>
+    #[serde(rename = "SecurityGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub security_group: Option<String>,
-    #[doc="<p>The identifier (ID) of the backup used to create the cluster. This value exists only when the cluster was created from a backup.</p>"]
-    #[serde(rename="SourceBackupId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier (ID) of the backup used to create the cluster. This value exists only when the cluster was created from a backup.</p>
+    #[serde(rename = "SourceBackupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub source_backup_id: Option<String>,
-    #[doc="<p>The cluster's state.</p>"]
-    #[serde(rename="State")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The cluster's state.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
-    #[doc="<p>A description of the cluster's state.</p>"]
-    #[serde(rename="StateMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the cluster's state.</p>
+    #[serde(rename = "StateMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub state_message: Option<String>,
-    #[doc="<p>A map of the cluster's subnets and their corresponding Availability Zones.</p>"]
-    #[serde(rename="SubnetMapping")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A map of the cluster's subnets and their corresponding Availability Zones.</p>
+    #[serde(rename = "SubnetMapping")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_mapping: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The identifier (ID) of the virtual private cloud (VPC) that contains the cluster.</p>"]
-    #[serde(rename="VpcId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier (ID) of the virtual private cloud (VPC) that contains the cluster.</p>
+    #[serde(rename = "VpcId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateClusterRequest {
-    #[doc="<p>The type of HSM to use in the cluster. Currently the only allowed value is <code>hsm1.medium</code>.</p>"]
-    #[serde(rename="HsmType")]
+    /// <p>The type of HSM to use in the cluster. Currently the only allowed value is <code>hsm1.medium</code>.</p>
+    #[serde(rename = "HsmType")]
     pub hsm_type: String,
-    #[doc="<p>The identifier (ID) of the cluster backup to restore. Use this value to restore the cluster from a backup instead of creating a new cluster. To find the backup ID, use <a>DescribeBackups</a>.</p>"]
-    #[serde(rename="SourceBackupId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier (ID) of the cluster backup to restore. Use this value to restore the cluster from a backup instead of creating a new cluster. To find the backup ID, use <a>DescribeBackups</a>.</p>
+    #[serde(rename = "SourceBackupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub source_backup_id: Option<String>,
-    #[doc="<p>The identifiers (IDs) of the subnets where you are creating the cluster. You must specify at least one subnet. If you specify multiple subnets, they must meet the following criteria:</p> <ul> <li> <p>All subnets must be in the same virtual private cloud (VPC).</p> </li> <li> <p>You can specify only one subnet per Availability Zone.</p> </li> </ul>"]
-    #[serde(rename="SubnetIds")]
+    /// <p>The identifiers (IDs) of the subnets where you are creating the cluster. You must specify at least one subnet. If you specify multiple subnets, they must meet the following criteria:</p> <ul> <li> <p>All subnets must be in the same virtual private cloud (VPC).</p> </li> <li> <p>You can specify only one subnet per Availability Zone.</p> </li> </ul>
+    #[serde(rename = "SubnetIds")]
     pub subnet_ids: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateClusterResponse {
-    #[doc="<p>Information about the cluster that was created.</p>"]
-    #[serde(rename="Cluster")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the cluster that was created.</p>
+    #[serde(rename = "Cluster")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster: Option<Cluster>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateHsmRequest {
-    #[doc="<p>The Availability Zone where you are creating the HSM. To find the cluster's Availability Zones, use <a>DescribeClusters</a>.</p>"]
-    #[serde(rename="AvailabilityZone")]
+    /// <p>The Availability Zone where you are creating the HSM. To find the cluster's Availability Zones, use <a>DescribeClusters</a>.</p>
+    #[serde(rename = "AvailabilityZone")]
     pub availability_zone: String,
-    #[doc="<p>The identifier (ID) of the HSM's cluster. To find the cluster ID, use <a>DescribeClusters</a>.</p>"]
-    #[serde(rename="ClusterId")]
+    /// <p>The identifier (ID) of the HSM's cluster. To find the cluster ID, use <a>DescribeClusters</a>.</p>
+    #[serde(rename = "ClusterId")]
     pub cluster_id: String,
-    #[doc="<p>The HSM's IP address. If you specify an IP address, use an available address from the subnet that maps to the Availability Zone where you are creating the HSM. If you don't specify an IP address, one is chosen for you from that subnet.</p>"]
-    #[serde(rename="IpAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The HSM's IP address. If you specify an IP address, use an available address from the subnet that maps to the Availability Zone where you are creating the HSM. If you don't specify an IP address, one is chosen for you from that subnet.</p>
+    #[serde(rename = "IpAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_address: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateHsmResponse {
-    #[doc="<p>Information about the HSM that was created.</p>"]
-    #[serde(rename="Hsm")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the HSM that was created.</p>
+    #[serde(rename = "Hsm")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hsm: Option<Hsm>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteClusterRequest {
-    #[doc="<p>The identifier (ID) of the cluster that you are deleting. To find the cluster ID, use <a>DescribeClusters</a>.</p>"]
-    #[serde(rename="ClusterId")]
+    /// <p>The identifier (ID) of the cluster that you are deleting. To find the cluster ID, use <a>DescribeClusters</a>.</p>
+    #[serde(rename = "ClusterId")]
     pub cluster_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteClusterResponse {
-    #[doc="<p>Information about the cluster that was deleted.</p>"]
-    #[serde(rename="Cluster")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the cluster that was deleted.</p>
+    #[serde(rename = "Cluster")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster: Option<Cluster>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteHsmRequest {
-    #[doc="<p>The identifier (ID) of the cluster that contains the HSM that you are deleting.</p>"]
-    #[serde(rename="ClusterId")]
+    /// <p>The identifier (ID) of the cluster that contains the HSM that you are deleting.</p>
+    #[serde(rename = "ClusterId")]
     pub cluster_id: String,
-    #[doc="<p>The identifier (ID) of the elastic network interface (ENI) of the HSM that you are deleting.</p>"]
-    #[serde(rename="EniId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier (ID) of the elastic network interface (ENI) of the HSM that you are deleting.</p>
+    #[serde(rename = "EniId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub eni_id: Option<String>,
-    #[doc="<p>The IP address of the elastic network interface (ENI) of the HSM that you are deleting.</p>"]
-    #[serde(rename="EniIp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The IP address of the elastic network interface (ENI) of the HSM that you are deleting.</p>
+    #[serde(rename = "EniIp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub eni_ip: Option<String>,
-    #[doc="<p>The identifier (ID) of the HSM that you are deleting.</p>"]
-    #[serde(rename="HsmId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier (ID) of the HSM that you are deleting.</p>
+    #[serde(rename = "HsmId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hsm_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteHsmResponse {
-    #[doc="<p>The identifier (ID) of the HSM that was deleted.</p>"]
-    #[serde(rename="HsmId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier (ID) of the HSM that was deleted.</p>
+    #[serde(rename = "HsmId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hsm_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeBackupsRequest {
-    #[doc="<p>One or more filters to limit the items returned in the response.</p> <p>Use the <code>backupIds</code> filter to return only the specified backups. Specify backups by their backup identifier (ID).</p> <p>Use the <code>clusterIds</code> filter to return only the backups for the specified clusters. Specify clusters by their cluster identifier (ID).</p> <p>Use the <code>states</code> filter to return only backups that match the specified state.</p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>One or more filters to limit the items returned in the response.</p> <p>Use the <code>backupIds</code> filter to return only the specified backups. Specify backups by their backup identifier (ID).</p> <p>Use the <code>clusterIds</code> filter to return only the backups for the specified clusters. Specify clusters by their cluster identifier (ID).</p> <p>Use the <code>states</code> filter to return only backups that match the specified state.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<::std::collections::HashMap<String, Vec<String>>>,
-    #[doc="<p>The maximum number of backups to return in the response. When there are more backups than the number you specify, the response contains a <code>NextToken</code> value.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of backups to return in the response. When there are more backups than the number you specify, the response contains a <code>NextToken</code> value.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The <code>NextToken</code> value that you received in the previous response. Use this value to get more backups.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>NextToken</code> value that you received in the previous response. Use this value to get more backups.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeBackupsResponse {
-    #[doc="<p>A list of backups.</p>"]
-    #[serde(rename="Backups")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of backups.</p>
+    #[serde(rename = "Backups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub backups: Option<Vec<Backup>>,
-    #[doc="<p>An opaque string that indicates that the response contains only a subset of backups. Use this value in a subsequent <code>DescribeBackups</code> request to get more backups.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An opaque string that indicates that the response contains only a subset of backups. Use this value in a subsequent <code>DescribeBackups</code> request to get more backups.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeClustersRequest {
-    #[doc="<p>One or more filters to limit the items returned in the response.</p> <p>Use the <code>clusterIds</code> filter to return only the specified clusters. Specify clusters by their cluster identifier (ID).</p> <p>Use the <code>vpcIds</code> filter to return only the clusters in the specified virtual private clouds (VPCs). Specify VPCs by their VPC identifier (ID).</p> <p>Use the <code>states</code> filter to return only clusters that match the specified state.</p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>One or more filters to limit the items returned in the response.</p> <p>Use the <code>clusterIds</code> filter to return only the specified clusters. Specify clusters by their cluster identifier (ID).</p> <p>Use the <code>vpcIds</code> filter to return only the clusters in the specified virtual private clouds (VPCs). Specify VPCs by their VPC identifier (ID).</p> <p>Use the <code>states</code> filter to return only clusters that match the specified state.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<::std::collections::HashMap<String, Vec<String>>>,
-    #[doc="<p>The maximum number of clusters to return in the response. When there are more clusters than the number you specify, the response contains a <code>NextToken</code> value.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of clusters to return in the response. When there are more clusters than the number you specify, the response contains a <code>NextToken</code> value.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The <code>NextToken</code> value that you received in the previous response. Use this value to get more clusters.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>NextToken</code> value that you received in the previous response. Use this value to get more clusters.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeClustersResponse {
-    #[doc="<p>A list of clusters.</p>"]
-    #[serde(rename="Clusters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of clusters.</p>
+    #[serde(rename = "Clusters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub clusters: Option<Vec<Cluster>>,
-    #[doc="<p>An opaque string that indicates that the response contains only a subset of clusters. Use this value in a subsequent <code>DescribeClusters</code> request to get more clusters.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An opaque string that indicates that the response contains only a subset of clusters. Use this value in a subsequent <code>DescribeClusters</code> request to get more clusters.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Contains information about a hardware security module (HSM) in an AWS CloudHSM cluster.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains information about a hardware security module (HSM) in an AWS CloudHSM cluster.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Hsm {
-    #[doc="<p>The Availability Zone that contains the HSM.</p>"]
-    #[serde(rename="AvailabilityZone")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Availability Zone that contains the HSM.</p>
+    #[serde(rename = "AvailabilityZone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zone: Option<String>,
-    #[doc="<p>The identifier (ID) of the cluster that contains the HSM.</p>"]
-    #[serde(rename="ClusterId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier (ID) of the cluster that contains the HSM.</p>
+    #[serde(rename = "ClusterId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster_id: Option<String>,
-    #[doc="<p>The identifier (ID) of the HSM's elastic network interface (ENI).</p>"]
-    #[serde(rename="EniId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier (ID) of the HSM's elastic network interface (ENI).</p>
+    #[serde(rename = "EniId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub eni_id: Option<String>,
-    #[doc="<p>The IP address of the HSM's elastic network interface (ENI).</p>"]
-    #[serde(rename="EniIp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The IP address of the HSM's elastic network interface (ENI).</p>
+    #[serde(rename = "EniIp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub eni_ip: Option<String>,
-    #[doc="<p>The HSM's identifier (ID).</p>"]
-    #[serde(rename="HsmId")]
+    /// <p>The HSM's identifier (ID).</p>
+    #[serde(rename = "HsmId")]
     pub hsm_id: String,
-    #[doc="<p>The HSM's state.</p>"]
-    #[serde(rename="State")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The HSM's state.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
-    #[doc="<p>A description of the HSM's state.</p>"]
-    #[serde(rename="StateMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the HSM's state.</p>
+    #[serde(rename = "StateMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub state_message: Option<String>,
-    #[doc="<p>The subnet that contains the HSM's elastic network interface (ENI).</p>"]
-    #[serde(rename="SubnetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The subnet that contains the HSM's elastic network interface (ENI).</p>
+    #[serde(rename = "SubnetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct InitializeClusterRequest {
-    #[doc="<p>The identifier (ID) of the cluster that you are claiming. To find the cluster ID, use <a>DescribeClusters</a>.</p>"]
-    #[serde(rename="ClusterId")]
+    /// <p>The identifier (ID) of the cluster that you are claiming. To find the cluster ID, use <a>DescribeClusters</a>.</p>
+    #[serde(rename = "ClusterId")]
     pub cluster_id: String,
-    #[doc="<p>The cluster certificate issued (signed) by your issuing certificate authority (CA). The certificate must be in PEM format.</p>"]
-    #[serde(rename="SignedCert")]
+    /// <p>The cluster certificate issued (signed) by your issuing certificate authority (CA). The certificate must be in PEM format.</p>
+    #[serde(rename = "SignedCert")]
     pub signed_cert: String,
-    #[doc="<p>The issuing certificate of the issuing certificate authority (CA) that issued (signed) the cluster certificate. This can be a root (self-signed) certificate or a certificate chain that begins with the certificate that issued the cluster certificate and ends with a root certificate. The certificate or certificate chain must be in PEM format.</p>"]
-    #[serde(rename="TrustAnchor")]
+    /// <p>The issuing certificate of the issuing certificate authority (CA) that issued (signed) the cluster certificate. This can be a root (self-signed) certificate or a certificate chain that begins with the certificate that issued the cluster certificate and ends with a root certificate. The certificate or certificate chain must be in PEM format.</p>
+    #[serde(rename = "TrustAnchor")]
     pub trust_anchor: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct InitializeClusterResponse {
-    #[doc="<p>The cluster's state.</p>"]
-    #[serde(rename="State")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The cluster's state.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
-    #[doc="<p>A description of the cluster's state.</p>"]
-    #[serde(rename="StateMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the cluster's state.</p>
+    #[serde(rename = "StateMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub state_message: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListTagsRequest {
-    #[doc="<p>The maximum number of tags to return in the response. When there are more tags than the number you specify, the response contains a <code>NextToken</code> value.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of tags to return in the response. When there are more tags than the number you specify, the response contains a <code>NextToken</code> value.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The <code>NextToken</code> value that you received in the previous response. Use this value to get more tags.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>NextToken</code> value that you received in the previous response. Use this value to get more tags.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The cluster identifier (ID) for the cluster whose tags you are getting. To find the cluster ID, use <a>DescribeClusters</a>.</p>"]
-    #[serde(rename="ResourceId")]
+    /// <p>The cluster identifier (ID) for the cluster whose tags you are getting. To find the cluster ID, use <a>DescribeClusters</a>.</p>
+    #[serde(rename = "ResourceId")]
     pub resource_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListTagsResponse {
-    #[doc="<p>An opaque string that indicates that the response contains only a subset of tags. Use this value in a subsequent <code>ListTags</code> request to get more tags.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An opaque string that indicates that the response contains only a subset of tags. Use this value in a subsequent <code>ListTags</code> request to get more tags.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>A list of tags.</p>"]
-    #[serde(rename="TagList")]
+    /// <p>A list of tags.</p>
+    #[serde(rename = "TagList")]
     pub tag_list: Vec<Tag>,
 }
 
-#[doc="<p>Contains a tag. A tag is a key-value pair.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Contains a tag. A tag is a key-value pair.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Tag {
-    #[doc="<p>The key of the tag.</p>"]
-    #[serde(rename="Key")]
+    /// <p>The key of the tag.</p>
+    #[serde(rename = "Key")]
     pub key: String,
-    #[doc="<p>The value of the tag.</p>"]
-    #[serde(rename="Value")]
+    /// <p>The value of the tag.</p>
+    #[serde(rename = "Value")]
     pub value: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct TagResourceRequest {
-    #[doc="<p>The cluster identifier (ID) for the cluster that you are tagging. To find the cluster ID, use <a>DescribeClusters</a>.</p>"]
-    #[serde(rename="ResourceId")]
+    /// <p>The cluster identifier (ID) for the cluster that you are tagging. To find the cluster ID, use <a>DescribeClusters</a>.</p>
+    #[serde(rename = "ResourceId")]
     pub resource_id: String,
-    #[doc="<p>A list of one or more tags.</p>"]
-    #[serde(rename="TagList")]
+    /// <p>A list of one or more tags.</p>
+    #[serde(rename = "TagList")]
     pub tag_list: Vec<Tag>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct TagResourceResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UntagResourceRequest {
-    #[doc="<p>The cluster identifier (ID) for the cluster whose tags you are removing. To find the cluster ID, use <a>DescribeClusters</a>.</p>"]
-    #[serde(rename="ResourceId")]
+    /// <p>The cluster identifier (ID) for the cluster whose tags you are removing. To find the cluster ID, use <a>DescribeClusters</a>.</p>
+    #[serde(rename = "ResourceId")]
     pub resource_id: String,
-    #[doc="<p>A list of one or more tag keys for the tags that you are removing. Specify only the tag keys, not the tag values.</p>"]
-    #[serde(rename="TagKeyList")]
+    /// <p>A list of one or more tag keys for the tags that you are removing. Specify only the tag keys, not the tag values.</p>
+    #[serde(rename = "TagKeyList")]
     pub tag_key_list: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UntagResourceResponse;
 
 /// Errors returned by CreateCluster
@@ -418,7 +417,6 @@ pub enum CreateClusterError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateClusterError {
     pub fn from_body(body: &str) -> CreateClusterError {
@@ -522,7 +520,6 @@ pub enum CreateHsmError {
     Unknown(String),
 }
 
-
 impl CreateHsmError {
     pub fn from_body(body: &str) -> CreateHsmError {
         match from_str::<SerdeJsonValue>(body) {
@@ -622,7 +619,6 @@ pub enum DeleteClusterError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteClusterError {
     pub fn from_body(body: &str) -> DeleteClusterError {
@@ -726,7 +722,6 @@ pub enum DeleteHsmError {
     Unknown(String),
 }
 
-
 impl DeleteHsmError {
     pub fn from_body(body: &str) -> DeleteHsmError {
         match from_str::<SerdeJsonValue>(body) {
@@ -826,7 +821,6 @@ pub enum DescribeBackupsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeBackupsError {
     pub fn from_body(body: &str) -> DescribeBackupsError {
@@ -928,7 +922,6 @@ pub enum DescribeClustersError {
     Unknown(String),
 }
 
-
 impl DescribeClustersError {
     pub fn from_body(body: &str) -> DescribeClustersError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1027,7 +1020,6 @@ pub enum InitializeClusterError {
     Unknown(String),
 }
 
-
 impl InitializeClusterError {
     pub fn from_body(body: &str) -> InitializeClusterError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1050,7 +1042,11 @@ impl InitializeClusterError {
                     "CloudHsmInvalidRequestException" => {
                         InitializeClusterError::CloudHsmInvalidRequest(String::from(error_message))
                     }
-                    "CloudHsmResourceNotFoundException" => InitializeClusterError::CloudHsmResourceNotFound(String::from(error_message)),
+                    "CloudHsmResourceNotFoundException" => {
+                        InitializeClusterError::CloudHsmResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
                     "CloudHsmServiceException" => {
                         InitializeClusterError::CloudHsmService(String::from(error_message))
                     }
@@ -1129,7 +1125,6 @@ pub enum ListTagsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListTagsError {
     pub fn from_body(body: &str) -> ListTagsError {
@@ -1230,7 +1225,6 @@ pub enum TagResourceError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl TagResourceError {
     pub fn from_body(body: &str) -> TagResourceError {
@@ -1334,7 +1328,6 @@ pub enum UntagResourceError {
     Unknown(String),
 }
 
-
 impl UntagResourceError {
     pub fn from_body(body: &str) -> UntagResourceError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1416,63 +1409,62 @@ impl Error for UntagResourceError {
 }
 /// Trait representing the capabilities of the CloudHSM V2 API. CloudHSM V2 clients implement this trait.
 pub trait CloudHsmv2 {
-    #[doc="<p>Creates a new AWS CloudHSM cluster.</p>"]
-    fn create_cluster(&self,
-                      input: &CreateClusterRequest)
-                      -> Result<CreateClusterResponse, CreateClusterError>;
-
+    #[doc = "<p>Creates a new AWS CloudHSM cluster.</p>"]
+    fn create_cluster(
+        &self,
+        input: &CreateClusterRequest,
+    ) -> Result<CreateClusterResponse, CreateClusterError>;
 
     #[doc="<p>Creates a new hardware security module (HSM) in the specified AWS CloudHSM cluster.</p>"]
     fn create_hsm(&self, input: &CreateHsmRequest) -> Result<CreateHsmResponse, CreateHsmError>;
 
-
     #[doc="<p>Deletes the specified AWS CloudHSM cluster. Before you can delete a cluster, you must delete all HSMs in the cluster. To see if the cluster contains any HSMs, use <a>DescribeClusters</a>. To delete an HSM, use <a>DeleteHsm</a>.</p>"]
-    fn delete_cluster(&self,
-                      input: &DeleteClusterRequest)
-                      -> Result<DeleteClusterResponse, DeleteClusterError>;
-
+    fn delete_cluster(
+        &self,
+        input: &DeleteClusterRequest,
+    ) -> Result<DeleteClusterResponse, DeleteClusterError>;
 
     #[doc="<p>Deletes the specified HSM. To specify an HSM, you can use its identifier (ID), the IP address of the HSM's elastic network interface (ENI), or the ID of the HSM's ENI. You need to specify only one of these values. To find these values, use <a>DescribeClusters</a>.</p>"]
     fn delete_hsm(&self, input: &DeleteHsmRequest) -> Result<DeleteHsmResponse, DeleteHsmError>;
 
-
     #[doc="<p>Gets information about backups of AWS CloudHSM clusters.</p> <p>This is a paginated operation, which means that each response might contain only a subset of all the backups. When the response contains only a subset of backups, it includes a <code>NextToken</code> value. Use this value in a subsequent <code>DescribeBackups</code> request to get more backups. When you receive a response with no <code>NextToken</code> (or an empty or null value), that means there are no more backups to get.</p>"]
-    fn describe_backups(&self,
-                        input: &DescribeBackupsRequest)
-                        -> Result<DescribeBackupsResponse, DescribeBackupsError>;
-
+    fn describe_backups(
+        &self,
+        input: &DescribeBackupsRequest,
+    ) -> Result<DescribeBackupsResponse, DescribeBackupsError>;
 
     #[doc="<p>Gets information about AWS CloudHSM clusters.</p> <p>This is a paginated operation, which means that each response might contain only a subset of all the clusters. When the response contains only a subset of clusters, it includes a <code>NextToken</code> value. Use this value in a subsequent <code>DescribeClusters</code> request to get more clusters. When you receive a response with no <code>NextToken</code> (or an empty or null value), that means there are no more clusters to get.</p>"]
-    fn describe_clusters(&self,
-                         input: &DescribeClustersRequest)
-                         -> Result<DescribeClustersResponse, DescribeClustersError>;
-
+    fn describe_clusters(
+        &self,
+        input: &DescribeClustersRequest,
+    ) -> Result<DescribeClustersResponse, DescribeClustersError>;
 
     #[doc="<p>Claims an AWS CloudHSM cluster by submitting the cluster certificate issued by your issuing certificate authority (CA) and the CA's root certificate. Before you can claim a cluster, you must sign the cluster's certificate signing request (CSR) with your issuing CA. To get the cluster's CSR, use <a>DescribeClusters</a>.</p>"]
-    fn initialize_cluster(&self,
-                          input: &InitializeClusterRequest)
-                          -> Result<InitializeClusterResponse, InitializeClusterError>;
-
+    fn initialize_cluster(
+        &self,
+        input: &InitializeClusterRequest,
+    ) -> Result<InitializeClusterResponse, InitializeClusterError>;
 
     #[doc="<p>Gets a list of tags for the specified AWS CloudHSM cluster.</p> <p>This is a paginated operation, which means that each response might contain only a subset of all the tags. When the response contains only a subset of tags, it includes a <code>NextToken</code> value. Use this value in a subsequent <code>ListTags</code> request to get more tags. When you receive a response with no <code>NextToken</code> (or an empty or null value), that means there are no more tags to get.</p>"]
     fn list_tags(&self, input: &ListTagsRequest) -> Result<ListTagsResponse, ListTagsError>;
 
+    #[doc = "<p>Adds or overwrites one or more tags for the specified AWS CloudHSM cluster.</p>"]
+    fn tag_resource(
+        &self,
+        input: &TagResourceRequest,
+    ) -> Result<TagResourceResponse, TagResourceError>;
 
-    #[doc="<p>Adds or overwrites one or more tags for the specified AWS CloudHSM cluster.</p>"]
-    fn tag_resource(&self,
-                    input: &TagResourceRequest)
-                    -> Result<TagResourceResponse, TagResourceError>;
-
-
-    #[doc="<p>Removes the specified tag or tags from the specified AWS CloudHSM cluster.</p>"]
-    fn untag_resource(&self,
-                      input: &UntagResourceRequest)
-                      -> Result<UntagResourceResponse, UntagResourceError>;
+    #[doc = "<p>Removes the specified tag or tags from the specified AWS CloudHSM cluster.</p>"]
+    fn untag_resource(
+        &self,
+        input: &UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, UntagResourceError>;
 }
 /// A client for the CloudHSM V2 API.
 pub struct CloudHsmv2Client<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -1480,8 +1472,9 @@ pub struct CloudHsmv2Client<P, D>
 }
 
 impl<P, D> CloudHsmv2Client<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         CloudHsmv2Client {
@@ -1493,13 +1486,15 @@ impl<P, D> CloudHsmv2Client<P, D>
 }
 
 impl<P, D> CloudHsmv2 for CloudHsmv2Client<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
-    #[doc="<p>Creates a new AWS CloudHSM cluster.</p>"]
-    fn create_cluster(&self,
-                      input: &CreateClusterRequest)
-                      -> Result<CreateClusterResponse, CreateClusterError> {
+    #[doc = "<p>Creates a new AWS CloudHSM cluster.</p>"]
+    fn create_cluster(
+        &self,
+        input: &CreateClusterRequest,
+    ) -> Result<CreateClusterResponse, CreateClusterError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
         request.set_endpoint_prefix("cloudhsmv2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1515,18 +1510,19 @@ impl<P, D> CloudHsmv2 for CloudHsmv2Client<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateClusterResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateClusterResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateClusterError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateClusterError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Creates a new hardware security module (HSM) in the specified AWS CloudHSM cluster.</p>"]
     fn create_hsm(&self, input: &CreateHsmRequest) -> Result<CreateHsmResponse, CreateHsmError> {
@@ -1545,23 +1541,25 @@ impl<P, D> CloudHsmv2 for CloudHsmv2Client<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateHsmResponse>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateHsmResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateHsmError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateHsmError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes the specified AWS CloudHSM cluster. Before you can delete a cluster, you must delete all HSMs in the cluster. To see if the cluster contains any HSMs, use <a>DescribeClusters</a>. To delete an HSM, use <a>DeleteHsm</a>.</p>"]
-    fn delete_cluster(&self,
-                      input: &DeleteClusterRequest)
-                      -> Result<DeleteClusterResponse, DeleteClusterError> {
+    fn delete_cluster(
+        &self,
+        input: &DeleteClusterRequest,
+    ) -> Result<DeleteClusterResponse, DeleteClusterError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
         request.set_endpoint_prefix("cloudhsmv2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1577,18 +1575,19 @@ impl<P, D> CloudHsmv2 for CloudHsmv2Client<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteClusterResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteClusterResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteClusterError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteClusterError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Deletes the specified HSM. To specify an HSM, you can use its identifier (ID), the IP address of the HSM's elastic network interface (ENI), or the ID of the HSM's ENI. You need to specify only one of these values. To find these values, use <a>DescribeClusters</a>.</p>"]
     fn delete_hsm(&self, input: &DeleteHsmRequest) -> Result<DeleteHsmResponse, DeleteHsmError> {
@@ -1607,23 +1606,25 @@ impl<P, D> CloudHsmv2 for CloudHsmv2Client<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteHsmResponse>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteHsmResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteHsmError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteHsmError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Gets information about backups of AWS CloudHSM clusters.</p> <p>This is a paginated operation, which means that each response might contain only a subset of all the backups. When the response contains only a subset of backups, it includes a <code>NextToken</code> value. Use this value in a subsequent <code>DescribeBackups</code> request to get more backups. When you receive a response with no <code>NextToken</code> (or an empty or null value), that means there are no more backups to get.</p>"]
-    fn describe_backups(&self,
-                        input: &DescribeBackupsRequest)
-                        -> Result<DescribeBackupsResponse, DescribeBackupsError> {
+    fn describe_backups(
+        &self,
+        input: &DescribeBackupsRequest,
+    ) -> Result<DescribeBackupsResponse, DescribeBackupsError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
         request.set_endpoint_prefix("cloudhsmv2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1639,23 +1640,25 @@ impl<P, D> CloudHsmv2 for CloudHsmv2Client<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeBackupsResponse>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribeBackupsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeBackupsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeBackupsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Gets information about AWS CloudHSM clusters.</p> <p>This is a paginated operation, which means that each response might contain only a subset of all the clusters. When the response contains only a subset of clusters, it includes a <code>NextToken</code> value. Use this value in a subsequent <code>DescribeClusters</code> request to get more clusters. When you receive a response with no <code>NextToken</code> (or an empty or null value), that means there are no more clusters to get.</p>"]
-    fn describe_clusters(&self,
-                         input: &DescribeClustersRequest)
-                         -> Result<DescribeClustersResponse, DescribeClustersError> {
+    fn describe_clusters(
+        &self,
+        input: &DescribeClustersRequest,
+    ) -> Result<DescribeClustersResponse, DescribeClustersError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
         request.set_endpoint_prefix("cloudhsmv2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1671,23 +1674,25 @@ impl<P, D> CloudHsmv2 for CloudHsmv2Client<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeClustersResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribeClustersResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeClustersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeClustersError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Claims an AWS CloudHSM cluster by submitting the cluster certificate issued by your issuing certificate authority (CA) and the CA's root certificate. Before you can claim a cluster, you must sign the cluster's certificate signing request (CSR) with your issuing CA. To get the cluster's CSR, use <a>DescribeClusters</a>.</p>"]
-    fn initialize_cluster(&self,
-                          input: &InitializeClusterRequest)
-                          -> Result<InitializeClusterResponse, InitializeClusterError> {
+    fn initialize_cluster(
+        &self,
+        input: &InitializeClusterRequest,
+    ) -> Result<InitializeClusterResponse, InitializeClusterError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
         request.set_endpoint_prefix("cloudhsmv2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1703,16 +1708,19 @@ impl<P, D> CloudHsmv2 for CloudHsmv2Client<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<InitializeClusterResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<InitializeClusterResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(InitializeClusterError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(InitializeClusterError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Gets a list of tags for the specified AWS CloudHSM cluster.</p> <p>This is a paginated operation, which means that each response might contain only a subset of all the tags. When the response contains only a subset of tags, it includes a <code>NextToken</code> value. Use this value in a subsequent <code>ListTags</code> request to get more tags. When you receive a response with no <code>NextToken</code> (or an empty or null value), that means there are no more tags to get.</p>"]
     fn list_tags(&self, input: &ListTagsRequest) -> Result<ListTagsResponse, ListTagsError> {
@@ -1731,23 +1739,25 @@ impl<P, D> CloudHsmv2 for CloudHsmv2Client<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListTagsResponse>(String::from_utf8_lossy(&body)
-                                                                .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListTagsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListTagsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Adds or overwrites one or more tags for the specified AWS CloudHSM cluster.</p>"]
-    fn tag_resource(&self,
-                    input: &TagResourceRequest)
-                    -> Result<TagResourceResponse, TagResourceError> {
+    #[doc = "<p>Adds or overwrites one or more tags for the specified AWS CloudHSM cluster.</p>"]
+    fn tag_resource(
+        &self,
+        input: &TagResourceRequest,
+    ) -> Result<TagResourceResponse, TagResourceError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
         request.set_endpoint_prefix("cloudhsmv2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1763,23 +1773,25 @@ impl<P, D> CloudHsmv2 for CloudHsmv2Client<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<TagResourceResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<TagResourceResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(TagResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(TagResourceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Removes the specified tag or tags from the specified AWS CloudHSM cluster.</p>"]
-    fn untag_resource(&self,
-                      input: &UntagResourceRequest)
-                      -> Result<UntagResourceResponse, UntagResourceError> {
+    #[doc = "<p>Removes the specified tag or tags from the specified AWS CloudHSM cluster.</p>"]
+    fn untag_resource(
+        &self,
+        input: &UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, UntagResourceError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
         request.set_endpoint_prefix("cloudhsmv2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1795,14 +1807,16 @@ impl<P, D> CloudHsmv2 for CloudHsmv2Client<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UntagResourceResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<UntagResourceResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UntagResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UntagResourceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

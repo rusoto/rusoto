@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -28,2972 +27,2971 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Action {
-    #[serde(rename="Arguments")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "Arguments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arguments: Option<::std::collections::HashMap<String, String>>,
-    #[serde(rename="JobName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "JobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct BatchCreatePartitionRequest {
-    #[doc="<p>The ID of the catalog in which the partion is to be created. Currently, this should be the AWS account ID.</p>"]
-    #[serde(rename="CatalogId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the catalog in which the partion is to be created. Currently, this should be the AWS account ID.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    #[doc="<p>The name of the metadata database in which the partition is to be created.</p>"]
-    #[serde(rename="DatabaseName")]
+    /// <p>The name of the metadata database in which the partition is to be created.</p>
+    #[serde(rename = "DatabaseName")]
     pub database_name: String,
-    #[doc="<p>A list of <code>PartitionInput</code> structures that define the partitions to be created.</p>"]
-    #[serde(rename="PartitionInputList")]
+    /// <p>A list of <code>PartitionInput</code> structures that define the partitions to be created.</p>
+    #[serde(rename = "PartitionInputList")]
     pub partition_input_list: Vec<PartitionInput>,
-    #[doc="<p>The name of the metadata table in which the partition is to be created.</p>"]
-    #[serde(rename="TableName")]
+    /// <p>The name of the metadata table in which the partition is to be created.</p>
+    #[serde(rename = "TableName")]
     pub table_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct BatchCreatePartitionResponse {
-    #[doc="<p>Errors encountered when trying to create the requested partitions.</p>"]
-    #[serde(rename="Errors")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Errors encountered when trying to create the requested partitions.</p>
+    #[serde(rename = "Errors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub errors: Option<Vec<PartitionError>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct BatchDeleteConnectionRequest {
-    #[doc="<p>The ID of the Data Catalog in which the connections reside. If none is supplied, the AWS account ID is used by default.</p>"]
-    #[serde(rename="CatalogId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Data Catalog in which the connections reside. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    #[doc="<p>A list of names of the connections to delete.</p>"]
-    #[serde(rename="ConnectionNameList")]
+    /// <p>A list of names of the connections to delete.</p>
+    #[serde(rename = "ConnectionNameList")]
     pub connection_name_list: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct BatchDeleteConnectionResponse {
-    #[doc="<p>A map of the names of connections that were not successfully deleted to error details.</p>"]
-    #[serde(rename="Errors")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A map of the names of connections that were not successfully deleted to error details.</p>
+    #[serde(rename = "Errors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub errors: Option<::std::collections::HashMap<String, ErrorDetail>>,
-    #[doc="<p>A list of names of the connection definitions that were successfully deleted.</p>"]
-    #[serde(rename="Succeeded")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of names of the connection definitions that were successfully deleted.</p>
+    #[serde(rename = "Succeeded")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub succeeded: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct BatchDeletePartitionRequest {
-    #[doc="<p>The ID of the Data Catalog where the partition to be deleted resides. If none is supplied, the AWS account ID is used by default.</p>"]
-    #[serde(rename="CatalogId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Data Catalog where the partition to be deleted resides. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    #[doc="<p>The name of the catalog database in which the table in question resides.</p>"]
-    #[serde(rename="DatabaseName")]
+    /// <p>The name of the catalog database in which the table in question resides.</p>
+    #[serde(rename = "DatabaseName")]
     pub database_name: String,
-    #[doc="<p>A list of <code>PartitionInput</code> structures that define the partitions to be deleted.</p>"]
-    #[serde(rename="PartitionsToDelete")]
+    /// <p>A list of <code>PartitionInput</code> structures that define the partitions to be deleted.</p>
+    #[serde(rename = "PartitionsToDelete")]
     pub partitions_to_delete: Vec<PartitionValueList>,
-    #[doc="<p>The name of the table where the partitions to be deleted is located.</p>"]
-    #[serde(rename="TableName")]
+    /// <p>The name of the table where the partitions to be deleted is located.</p>
+    #[serde(rename = "TableName")]
     pub table_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct BatchDeletePartitionResponse {
-    #[doc="<p>Errors encountered when trying to delete the requested partitions.</p>"]
-    #[serde(rename="Errors")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Errors encountered when trying to delete the requested partitions.</p>
+    #[serde(rename = "Errors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub errors: Option<Vec<PartitionError>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct BatchDeleteTableRequest {
-    #[doc="<p>The ID of the Data Catalog where the table resides. If none is supplied, the AWS account ID is used by default.</p>"]
-    #[serde(rename="CatalogId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Data Catalog where the table resides. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    #[doc="<p>The name of the catalog database where the tables to delete reside.</p>"]
-    #[serde(rename="DatabaseName")]
+    /// <p>The name of the catalog database where the tables to delete reside.</p>
+    #[serde(rename = "DatabaseName")]
     pub database_name: String,
-    #[doc="<p>A list of the table to delete.</p>"]
-    #[serde(rename="TablesToDelete")]
+    /// <p>A list of the table to delete.</p>
+    #[serde(rename = "TablesToDelete")]
     pub tables_to_delete: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct BatchDeleteTableResponse {
-    #[doc="<p>A list of errors encountered in attempting to delete the specified tables.</p>"]
-    #[serde(rename="Errors")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of errors encountered in attempting to delete the specified tables.</p>
+    #[serde(rename = "Errors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub errors: Option<Vec<TableError>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct BatchGetPartitionRequest {
-    #[doc="<p>The ID of the Data Catalog where the partitions in question reside. If none is supplied, the AWS account ID is used by default.</p>"]
-    #[serde(rename="CatalogId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Data Catalog where the partitions in question reside. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    #[doc="<p>The name of the catalog database where the partitions reside.</p>"]
-    #[serde(rename="DatabaseName")]
+    /// <p>The name of the catalog database where the partitions reside.</p>
+    #[serde(rename = "DatabaseName")]
     pub database_name: String,
-    #[doc="<p>A list of partition values identifying the partitions to retrieve.</p>"]
-    #[serde(rename="PartitionsToGet")]
+    /// <p>A list of partition values identifying the partitions to retrieve.</p>
+    #[serde(rename = "PartitionsToGet")]
     pub partitions_to_get: Vec<PartitionValueList>,
-    #[doc="<p>The name of the partitions' table.</p>"]
-    #[serde(rename="TableName")]
+    /// <p>The name of the partitions' table.</p>
+    #[serde(rename = "TableName")]
     pub table_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct BatchGetPartitionResponse {
-    #[doc="<p>A list of the requested partitions.</p>"]
-    #[serde(rename="Partitions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of the requested partitions.</p>
+    #[serde(rename = "Partitions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub partitions: Option<Vec<Partition>>,
-    #[doc="<p>A list of the partition values in the request for which partions were not returned.</p>"]
-    #[serde(rename="UnprocessedKeys")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of the partition values in the request for which partions were not returned.</p>
+    #[serde(rename = "UnprocessedKeys")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub unprocessed_keys: Option<Vec<PartitionValueList>>,
 }
 
-#[doc="<p>Specifies a table definition in the Data Catalog.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Specifies a table definition in the Data Catalog.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CatalogEntry {
-    #[doc="<p>The database in which the table metadata resides.</p>"]
-    #[serde(rename="DatabaseName")]
+    /// <p>The database in which the table metadata resides.</p>
+    #[serde(rename = "DatabaseName")]
     pub database_name: String,
-    #[doc="<p>The name of the table in question.</p>"]
-    #[serde(rename="TableName")]
+    /// <p>The name of the table in question.</p>
+    #[serde(rename = "TableName")]
     pub table_name: String,
 }
 
-#[doc="<p>A structure containing migration status information.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A structure containing migration status information.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CatalogImportStatus {
-    #[doc="<p>True if the migration has completed, or False otherwise.</p>"]
-    #[serde(rename="ImportCompleted")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>True if the migration has completed, or False otherwise.</p>
+    #[serde(rename = "ImportCompleted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub import_completed: Option<bool>,
-    #[doc="<p>The time that the migration was started.</p>"]
-    #[serde(rename="ImportTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time that the migration was started.</p>
+    #[serde(rename = "ImportTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub import_time: Option<f64>,
-    #[doc="<p>The name of the person who initiated the migration.</p>"]
-    #[serde(rename="ImportedBy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the person who initiated the migration.</p>
+    #[serde(rename = "ImportedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub imported_by: Option<String>,
 }
 
-#[doc="<p>Classifiers are written in Python and triggered during a Crawl Task. You can write your own Classifiers to best categorize your data sources and specify the appropriate schemas to use for them. A Classifier first checks whether a given file is in a format it can handle, and then, if so, creates a schema in the form of a <code>StructType</code> object that matches that data format.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Classifiers are written in Python and triggered during a Crawl Task. You can write your own Classifiers to best categorize your data sources and specify the appropriate schemas to use for them. A Classifier first checks whether a given file is in a format it can handle, and then, if so, creates a schema in the form of a <code>StructType</code> object that matches that data format.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Classifier {
-    #[doc="<p>A GrokClassifier object.</p>"]
-    #[serde(rename="GrokClassifier")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A GrokClassifier object.</p>
+    #[serde(rename = "GrokClassifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub grok_classifier: Option<GrokClassifier>,
 }
 
-#[doc="<p>Represents a directional edge in a directed acyclic graph (DAG).</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Represents a directional edge in a directed acyclic graph (DAG).</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct CodeGenEdge {
-    #[doc="<p>The ID of the node at which the edge starts.</p>"]
-    #[serde(rename="Source")]
+    /// <p>The ID of the node at which the edge starts.</p>
+    #[serde(rename = "Source")]
     pub source: String,
-    #[doc="<p>The ID of the node at which the edge ends.</p>"]
-    #[serde(rename="Target")]
+    /// <p>The ID of the node at which the edge ends.</p>
+    #[serde(rename = "Target")]
     pub target: String,
-    #[doc="<p>The target of the edge.</p>"]
-    #[serde(rename="TargetParameter")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The target of the edge.</p>
+    #[serde(rename = "TargetParameter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub target_parameter: Option<String>,
 }
 
-#[doc="<p>Represents a node in a directed acyclic graph (DAG)</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Represents a node in a directed acyclic graph (DAG)</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct CodeGenNode {
-    #[doc="<p>Properties of the node, in the form of name-value pairs.</p>"]
-    #[serde(rename="Args")]
+    /// <p>Properties of the node, in the form of name-value pairs.</p>
+    #[serde(rename = "Args")]
     pub args: Vec<CodeGenNodeArg>,
-    #[doc="<p>A node identifier that is unique within the node's graph.</p>"]
-    #[serde(rename="Id")]
+    /// <p>A node identifier that is unique within the node's graph.</p>
+    #[serde(rename = "Id")]
     pub id: String,
-    #[doc="<p>The line number of the node.</p>"]
-    #[serde(rename="LineNumber")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The line number of the node.</p>
+    #[serde(rename = "LineNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub line_number: Option<i64>,
-    #[doc="<p>The type of node this is.</p>"]
-    #[serde(rename="NodeType")]
+    /// <p>The type of node this is.</p>
+    #[serde(rename = "NodeType")]
     pub node_type: String,
 }
 
-#[doc="<p>An argument or property of a node.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>An argument or property of a node.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct CodeGenNodeArg {
-    #[doc="<p>The name of the argument or property.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the argument or property.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>True if the value is used as a parameter.</p>"]
-    #[serde(rename="Param")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>True if the value is used as a parameter.</p>
+    #[serde(rename = "Param")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub param: Option<bool>,
-    #[doc="<p>The value of the argument or property.</p>"]
-    #[serde(rename="Value")]
+    /// <p>The value of the argument or property.</p>
+    #[serde(rename = "Value")]
     pub value: String,
 }
 
-#[doc="<p>A column in a <code>Table</code>.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>A column in a <code>Table</code>.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Column {
-    #[doc="<p>Free-form text comment.</p>"]
-    #[serde(rename="Comment")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Free-form text comment.</p>
+    #[serde(rename = "Comment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub comment: Option<String>,
-    #[doc="<p>The name of the <code>Column</code>.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the <code>Column</code>.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>The datatype of data in the <code>Column</code>.</p>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The datatype of data in the <code>Column</code>.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Condition {
-    #[serde(rename="JobName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "JobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
-    #[serde(rename="LogicalOperator")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "LogicalOperator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub logical_operator: Option<String>,
-    #[serde(rename="State")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
 }
 
-#[doc="<p>Defines a connection to a data source.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Defines a connection to a data source.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Connection {
-    #[doc="<p>A list of key-value pairs used as parameters for this connection.</p>"]
-    #[serde(rename="ConnectionProperties")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of key-value pairs used as parameters for this connection.</p>
+    #[serde(rename = "ConnectionProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_properties: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The type of the connection.</p>"]
-    #[serde(rename="ConnectionType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of the connection.</p>
+    #[serde(rename = "ConnectionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_type: Option<String>,
-    #[doc="<p>The time this connection definition was created.</p>"]
-    #[serde(rename="CreationTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time this connection definition was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    #[doc="<p>Description of the connection.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Description of the connection.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The user, group or role that last updated this connection definition.</p>"]
-    #[serde(rename="LastUpdatedBy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user, group or role that last updated this connection definition.</p>
+    #[serde(rename = "LastUpdatedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_by: Option<String>,
-    #[doc="<p>The last time this connection definition was updated.</p>"]
-    #[serde(rename="LastUpdatedTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The last time this connection definition was updated.</p>
+    #[serde(rename = "LastUpdatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_time: Option<f64>,
-    #[doc="<p>A list of criteria that can be used in selecting this connection.</p>"]
-    #[serde(rename="MatchCriteria")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of criteria that can be used in selecting this connection.</p>
+    #[serde(rename = "MatchCriteria")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub match_criteria: Option<Vec<String>>,
-    #[doc="<p>The name of the connection definition.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the connection definition.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>A map of physical connection requirements, such as VPC and SecurityGroup, needed for making this connection successfully.</p>"]
-    #[serde(rename="PhysicalConnectionRequirements")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A map of physical connection requirements, such as VPC and SecurityGroup, needed for making this connection successfully.</p>
+    #[serde(rename = "PhysicalConnectionRequirements")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub physical_connection_requirements: Option<PhysicalConnectionRequirements>,
 }
 
-#[doc="<p>A structure used to specify a connection to create or update.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>A structure used to specify a connection to create or update.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ConnectionInput {
-    #[doc="<p>A list of key-value pairs used as parameters for this connection.</p>"]
-    #[serde(rename="ConnectionProperties")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of key-value pairs used as parameters for this connection.</p>
+    #[serde(rename = "ConnectionProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_properties: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The type of the connection.</p>"]
-    #[serde(rename="ConnectionType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of the connection.</p>
+    #[serde(rename = "ConnectionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_type: Option<String>,
-    #[doc="<p>Description of the connection.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Description of the connection.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>A list of criteria that can be used in selecting this connection.</p>"]
-    #[serde(rename="MatchCriteria")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of criteria that can be used in selecting this connection.</p>
+    #[serde(rename = "MatchCriteria")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub match_criteria: Option<Vec<String>>,
-    #[doc="<p>The name of the connection.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the connection.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>A map of physical connection requirements, such as VPC and SecurityGroup, needed for making this connection successfully.</p>"]
-    #[serde(rename="PhysicalConnectionRequirements")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A map of physical connection requirements, such as VPC and SecurityGroup, needed for making this connection successfully.</p>
+    #[serde(rename = "PhysicalConnectionRequirements")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub physical_connection_requirements: Option<PhysicalConnectionRequirements>,
 }
 
-#[doc="<p>Specifies the connections used by a job.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Specifies the connections used by a job.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ConnectionsList {
-    #[doc="<p>A list of connections used by the job.</p>"]
-    #[serde(rename="Connections")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of connections used by the job.</p>
+    #[serde(rename = "Connections")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub connections: Option<Vec<String>>,
 }
 
-#[doc="<p>Specifies a crawler program that examines a data source and uses classifiers to try to its schema. If successful, the crawler records metatdata concerning the data source in the Data Catalog.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Specifies a crawler program that examines a data source and uses classifiers to try to its schema. If successful, the crawler records metatdata concerning the data source in the Data Catalog.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Crawler {
-    #[doc="<p>A list of custom <code>Classifier</code>s associated with this Crawler.</p>"]
-    #[serde(rename="Classifiers")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of custom <code>Classifier</code>s associated with this Crawler.</p>
+    #[serde(rename = "Classifiers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub classifiers: Option<Vec<String>>,
-    #[doc="<p>If this Crawler is running, contains the total time elapsed since the last crawl began.</p>"]
-    #[serde(rename="CrawlElapsedTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If this Crawler is running, contains the total time elapsed since the last crawl began.</p>
+    #[serde(rename = "CrawlElapsedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub crawl_elapsed_time: Option<i64>,
-    #[doc="<p>The time when the Crawler was created.</p>"]
-    #[serde(rename="CreationTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time when the Crawler was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    #[doc="<p>The <code>Database</code> where this Crawler's output should be stored.</p>"]
-    #[serde(rename="DatabaseName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>Database</code> where this Crawler's output should be stored.</p>
+    #[serde(rename = "DatabaseName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
-    #[doc="<p>A description of this Crawler and where it should be used.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of this Crawler and where it should be used.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The status of the last crawl, and potentially error information if an error occurred.</p>"]
-    #[serde(rename="LastCrawl")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the last crawl, and potentially error information if an error occurred.</p>
+    #[serde(rename = "LastCrawl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_crawl: Option<LastCrawlInfo>,
-    #[doc="<p>The time the Crawler was last updated.</p>"]
-    #[serde(rename="LastUpdated")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time the Crawler was last updated.</p>
+    #[serde(rename = "LastUpdated")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated: Option<f64>,
-    #[doc="<p>The <code>Crawler</code> name.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>Crawler</code> name.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The ARN of an IAM role used to access customer resources such as data in S3.</p>"]
-    #[serde(rename="Role")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of an IAM role used to access customer resources such as data in S3.</p>
+    #[serde(rename = "Role")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
-    #[doc="<p>A <code>Schedule</code> object that specifies the schedule on which this Crawler is to be run.</p>"]
-    #[serde(rename="Schedule")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A <code>Schedule</code> object that specifies the schedule on which this Crawler is to be run.</p>
+    #[serde(rename = "Schedule")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<Schedule>,
-    #[doc="<p>Sets policy for the crawler's update and delete behavior.</p>"]
-    #[serde(rename="SchemaChangePolicy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Sets policy for the crawler's update and delete behavior.</p>
+    #[serde(rename = "SchemaChangePolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schema_change_policy: Option<SchemaChangePolicy>,
-    #[doc="<p>Indicates whether this Crawler is running, or whether a run is pending.</p>"]
-    #[serde(rename="State")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether this Crawler is running, or whether a run is pending.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
-    #[doc="<p>The table prefix used for catalog tables created.</p>"]
-    #[serde(rename="TablePrefix")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The table prefix used for catalog tables created.</p>
+    #[serde(rename = "TablePrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub table_prefix: Option<String>,
-    #[doc="<p>A collection of targets to crawl.</p>"]
-    #[serde(rename="Targets")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A collection of targets to crawl.</p>
+    #[serde(rename = "Targets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<CrawlerTargets>,
-    #[doc="<p>The version of the Crawler.</p>"]
-    #[serde(rename="Version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version of the Crawler.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<i64>,
 }
 
-#[doc="<p>Metrics for a specified crawler.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Metrics for a specified crawler.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CrawlerMetrics {
-    #[doc="<p>The name of the crawler.</p>"]
-    #[serde(rename="CrawlerName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the crawler.</p>
+    #[serde(rename = "CrawlerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub crawler_name: Option<String>,
-    #[doc="<p>The duration of the crawler's most recent run, in seconds.</p>"]
-    #[serde(rename="LastRuntimeSeconds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The duration of the crawler's most recent run, in seconds.</p>
+    #[serde(rename = "LastRuntimeSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_runtime_seconds: Option<f64>,
-    #[doc="<p>The median duration of this crawler's runs, in seconds.</p>"]
-    #[serde(rename="MedianRuntimeSeconds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The median duration of this crawler's runs, in seconds.</p>
+    #[serde(rename = "MedianRuntimeSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub median_runtime_seconds: Option<f64>,
-    #[doc="<p>True if the crawler is estimating its </p>"]
-    #[serde(rename="StillEstimating")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>True if the crawler is estimating its </p>
+    #[serde(rename = "StillEstimating")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub still_estimating: Option<bool>,
-    #[doc="<p>A list of the tables created by this crawler.</p>"]
-    #[serde(rename="TablesCreated")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of the tables created by this crawler.</p>
+    #[serde(rename = "TablesCreated")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tables_created: Option<i64>,
-    #[doc="<p>A list of the tables deleted by this crawler.</p>"]
-    #[serde(rename="TablesDeleted")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of the tables deleted by this crawler.</p>
+    #[serde(rename = "TablesDeleted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tables_deleted: Option<i64>,
-    #[doc="<p>A list of the tables created by this crawler.</p>"]
-    #[serde(rename="TablesUpdated")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of the tables created by this crawler.</p>
+    #[serde(rename = "TablesUpdated")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tables_updated: Option<i64>,
-    #[doc="<p>The estimated time left to complete a running crawl.</p>"]
-    #[serde(rename="TimeLeftSeconds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The estimated time left to complete a running crawl.</p>
+    #[serde(rename = "TimeLeftSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub time_left_seconds: Option<f64>,
 }
 
-#[doc="<p>Specifies crawler targets.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Specifies crawler targets.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct CrawlerTargets {
-    #[doc="<p>Specifies JDBC targets.</p>"]
-    #[serde(rename="JdbcTargets")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies JDBC targets.</p>
+    #[serde(rename = "JdbcTargets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub jdbc_targets: Option<Vec<JdbcTarget>>,
-    #[doc="<p>Specifies targets in AWS S3.</p>"]
-    #[serde(rename="S3Targets")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies targets in AWS S3.</p>
+    #[serde(rename = "S3Targets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_targets: Option<Vec<S3Target>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateClassifierRequest {
-    #[doc="<p>A grok classifier to create.</p>"]
-    #[serde(rename="GrokClassifier")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A grok classifier to create.</p>
+    #[serde(rename = "GrokClassifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub grok_classifier: Option<CreateGrokClassifierRequest>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateClassifierResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateConnectionRequest {
-    #[doc="<p>The ID of the Data Catalog in which to create the connection. If none is supplied, the AWS account ID is used by default.</p>"]
-    #[serde(rename="CatalogId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Data Catalog in which to create the connection. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    #[doc="<p>A <code>ConnectionInput</code> object defining the connection to create.</p>"]
-    #[serde(rename="ConnectionInput")]
+    /// <p>A <code>ConnectionInput</code> object defining the connection to create.</p>
+    #[serde(rename = "ConnectionInput")]
     pub connection_input: ConnectionInput,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateConnectionResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateCrawlerRequest {
-    #[doc="<p>A list of custom <code>Classifier</code> names that the user has registered. By default, all AWS classifiers are included in a crawl, but these custom classifiers always override the default classifiers for a given classification.</p>"]
-    #[serde(rename="Classifiers")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of custom <code>Classifier</code> names that the user has registered. By default, all AWS classifiers are included in a crawl, but these custom classifiers always override the default classifiers for a given classification.</p>
+    #[serde(rename = "Classifiers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub classifiers: Option<Vec<String>>,
-    #[doc="<p>The Glue <code>Database</code> where results will be stored, such as: <code>arn:aws:daylight:us-east-1::database/sometable/*</code>.</p>"]
-    #[serde(rename="DatabaseName")]
+    /// <p>The Glue <code>Database</code> where results will be stored, such as: <code>arn:aws:daylight:us-east-1::database/sometable/*</code>.</p>
+    #[serde(rename = "DatabaseName")]
     pub database_name: String,
-    #[doc="<p>A description of the new <code>Crawler</code>.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the new <code>Crawler</code>.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>Name of the new <code>Crawler</code>.</p>"]
-    #[serde(rename="Name")]
+    /// <p>Name of the new <code>Crawler</code>.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>The AWS ARN of the IAM role used by the new <code>Crawler</code> to access customer resources.</p>"]
-    #[serde(rename="Role")]
+    /// <p>The AWS ARN of the IAM role used by the new <code>Crawler</code> to access customer resources.</p>
+    #[serde(rename = "Role")]
     pub role: String,
-    #[doc="<p>A cron expression that can be used as a Cloudwatch event (see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html\">CloudWatch Schedule Expression Syntax</a>. For example, to run every day at 12:15 UTC, specify: <code>cron(15 12 * * ? *)</code>.</p>"]
-    #[serde(rename="Schedule")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A cron expression that can be used as a Cloudwatch event (see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html">CloudWatch Schedule Expression Syntax</a>. For example, to run every day at 12:15 UTC, specify: <code>cron(15 12 * * ? *)</code>.</p>
+    #[serde(rename = "Schedule")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
-    #[doc="<p>Policy for the crawler's update and deletion behavior.</p>"]
-    #[serde(rename="SchemaChangePolicy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Policy for the crawler's update and deletion behavior.</p>
+    #[serde(rename = "SchemaChangePolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schema_change_policy: Option<SchemaChangePolicy>,
-    #[doc="<p>The table prefix used for catalog tables created.</p>"]
-    #[serde(rename="TablePrefix")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The table prefix used for catalog tables created.</p>
+    #[serde(rename = "TablePrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub table_prefix: Option<String>,
-    #[doc="<p>A list of collection of targets to crawl.</p>"]
-    #[serde(rename="Targets")]
+    /// <p>A list of collection of targets to crawl.</p>
+    #[serde(rename = "Targets")]
     pub targets: CrawlerTargets,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateCrawlerResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateDatabaseRequest {
-    #[doc="<p>The ID of the Data Catalog in which to create the database. If none is supplied, the AWS account ID is used by default.</p>"]
-    #[serde(rename="CatalogId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Data Catalog in which to create the database. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    #[doc="<p>A <code>DatabaseInput</code> object defining the metadata database to create in the catalog.</p>"]
-    #[serde(rename="DatabaseInput")]
+    /// <p>A <code>DatabaseInput</code> object defining the metadata database to create in the catalog.</p>
+    #[serde(rename = "DatabaseInput")]
     pub database_input: DatabaseInput,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateDatabaseResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateDevEndpointRequest {
-    #[doc="<p>The name to be assigned to the new DevEndpoint.</p>"]
-    #[serde(rename="EndpointName")]
+    /// <p>The name to be assigned to the new DevEndpoint.</p>
+    #[serde(rename = "EndpointName")]
     pub endpoint_name: String,
-    #[doc="<p>Path to one or more Java Jars in an S3 bucket that should be loaded in your DevEndpoint.</p>"]
-    #[serde(rename="ExtraJarsS3Path")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Path to one or more Java Jars in an S3 bucket that should be loaded in your DevEndpoint.</p>
+    #[serde(rename = "ExtraJarsS3Path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_jars_s3_path: Option<String>,
-    #[doc="<p>Path to one or more Python libraries in an S3 bucket that should be loaded in your DevEndpoint.</p>"]
-    #[serde(rename="ExtraPythonLibsS3Path")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Path to one or more Python libraries in an S3 bucket that should be loaded in your DevEndpoint.</p>
+    #[serde(rename = "ExtraPythonLibsS3Path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_python_libs_s3_path: Option<String>,
-    #[doc="<p>The number of nodes to use.</p>"]
-    #[serde(rename="NumberOfNodes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of nodes to use.</p>
+    #[serde(rename = "NumberOfNodes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_nodes: Option<i64>,
-    #[doc="<p>The public key to use for authentication.</p>"]
-    #[serde(rename="PublicKey")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The public key to use for authentication.</p>
+    #[serde(rename = "PublicKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub public_key: Option<String>,
-    #[doc="<p>The IAM role for the DevEndpoint.</p>"]
-    #[serde(rename="RoleArn")]
+    /// <p>The IAM role for the DevEndpoint.</p>
+    #[serde(rename = "RoleArn")]
     pub role_arn: String,
-    #[doc="<p>Security group IDs for the security groups to be used by the new DevEndpoint.</p>"]
-    #[serde(rename="SecurityGroupIds")]
+    /// <p>Security group IDs for the security groups to be used by the new DevEndpoint.</p>
+    #[serde(rename = "SecurityGroupIds")]
     pub security_group_ids: Vec<String>,
-    #[doc="<p>The subnet ID for the new DevEndpoint to use.</p>"]
-    #[serde(rename="SubnetId")]
+    /// <p>The subnet ID for the new DevEndpoint to use.</p>
+    #[serde(rename = "SubnetId")]
     pub subnet_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateDevEndpointResponse {
-    #[doc="<p>The AWS availability zone where this DevEndpoint is located.</p>"]
-    #[serde(rename="AvailabilityZone")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS availability zone where this DevEndpoint is located.</p>
+    #[serde(rename = "AvailabilityZone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zone: Option<String>,
-    #[doc="<p>The point in time at which this DevEndpoint was created.</p>"]
-    #[serde(rename="CreatedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The point in time at which this DevEndpoint was created.</p>
+    #[serde(rename = "CreatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_timestamp: Option<f64>,
-    #[doc="<p>The name assigned to the new DevEndpoint.</p>"]
-    #[serde(rename="EndpointName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name assigned to the new DevEndpoint.</p>
+    #[serde(rename = "EndpointName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_name: Option<String>,
-    #[doc="<p>Path to one or more Java Jars in an S3 bucket that will be loaded in your DevEndpoint.</p>"]
-    #[serde(rename="ExtraJarsS3Path")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Path to one or more Java Jars in an S3 bucket that will be loaded in your DevEndpoint.</p>
+    #[serde(rename = "ExtraJarsS3Path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_jars_s3_path: Option<String>,
-    #[doc="<p>Path to one or more Python libraries in an S3 bucket that will be loaded in your DevEndpoint.</p>"]
-    #[serde(rename="ExtraPythonLibsS3Path")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Path to one or more Python libraries in an S3 bucket that will be loaded in your DevEndpoint.</p>
+    #[serde(rename = "ExtraPythonLibsS3Path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_python_libs_s3_path: Option<String>,
-    #[doc="<p>The reason for a current failure in this DevEndpoint.</p>"]
-    #[serde(rename="FailureReason")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The reason for a current failure in this DevEndpoint.</p>
+    #[serde(rename = "FailureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_reason: Option<String>,
-    #[doc="<p>The number of nodes in this DevEndpoint.</p>"]
-    #[serde(rename="NumberOfNodes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of nodes in this DevEndpoint.</p>
+    #[serde(rename = "NumberOfNodes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_nodes: Option<i64>,
-    #[doc="<p>The AWS ARN of the role assigned to the new DevEndpoint.</p>"]
-    #[serde(rename="RoleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS ARN of the role assigned to the new DevEndpoint.</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
-    #[doc="<p>The security groups assigned to the new DevEndpoint.</p>"]
-    #[serde(rename="SecurityGroupIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The security groups assigned to the new DevEndpoint.</p>
+    #[serde(rename = "SecurityGroupIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub security_group_ids: Option<Vec<String>>,
-    #[doc="<p>The current status of the new DevEndpoint.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The current status of the new DevEndpoint.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The subnet ID assigned to the new DevEndpoint.</p>"]
-    #[serde(rename="SubnetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The subnet ID assigned to the new DevEndpoint.</p>
+    #[serde(rename = "SubnetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_id: Option<String>,
-    #[doc="<p>The ID of the VPC used by this DevEndpoint.</p>"]
-    #[serde(rename="VpcId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the VPC used by this DevEndpoint.</p>
+    #[serde(rename = "VpcId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_id: Option<String>,
-    #[doc="<p>The address of the YARN endpoint used by this DevEndpoint.</p>"]
-    #[serde(rename="YarnEndpointAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The address of the YARN endpoint used by this DevEndpoint.</p>
+    #[serde(rename = "YarnEndpointAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub yarn_endpoint_address: Option<String>,
 }
 
-#[doc="<p>Specifies a Grok classifier for CreateClassifier to create.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Specifies a Grok classifier for CreateClassifier to create.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateGrokClassifierRequest {
-    #[doc="<p>The type of result that the classifier matches, such as Twitter Json, Omniture logs, Cloudwatch logs, and so forth.</p>"]
-    #[serde(rename="Classification")]
+    /// <p>The type of result that the classifier matches, such as Twitter Json, Omniture logs, Cloudwatch logs, and so forth.</p>
+    #[serde(rename = "Classification")]
     pub classification: String,
-    #[doc="<p>Custom grok patterns used by this classifier.</p>"]
-    #[serde(rename="CustomPatterns")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Custom grok patterns used by this classifier.</p>
+    #[serde(rename = "CustomPatterns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_patterns: Option<String>,
-    #[doc="<p>The grok pattern used by this classifier.</p>"]
-    #[serde(rename="GrokPattern")]
+    /// <p>The grok pattern used by this classifier.</p>
+    #[serde(rename = "GrokPattern")]
     pub grok_pattern: String,
-    #[doc="<p>The name of the new Classifier.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the new Classifier.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateJobRequest {
-    #[doc="<p>The number of capacity units allocated to this job.</p>"]
-    #[serde(rename="AllocatedCapacity")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of capacity units allocated to this job.</p>
+    #[serde(rename = "AllocatedCapacity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub allocated_capacity: Option<i64>,
-    #[doc="<p>The JobCommand that executes this job.</p>"]
-    #[serde(rename="Command")]
+    /// <p>The JobCommand that executes this job.</p>
+    #[serde(rename = "Command")]
     pub command: JobCommand,
-    #[doc="<p>The connections used for this job.</p>"]
-    #[serde(rename="Connections")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The connections used for this job.</p>
+    #[serde(rename = "Connections")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub connections: Option<ConnectionsList>,
-    #[doc="<p>The default parameters for this job.</p>"]
-    #[serde(rename="DefaultArguments")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The default parameters for this job.</p>
+    #[serde(rename = "DefaultArguments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub default_arguments: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>Description of the job.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Description of the job.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>An ExecutionProperty specifying the maximum number of concurrent runs allowed for this job.</p>"]
-    #[serde(rename="ExecutionProperty")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An ExecutionProperty specifying the maximum number of concurrent runs allowed for this job.</p>
+    #[serde(rename = "ExecutionProperty")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_property: Option<ExecutionProperty>,
-    #[doc="<p>Location of the logs for this job.</p>"]
-    #[serde(rename="LogUri")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Location of the logs for this job.</p>
+    #[serde(rename = "LogUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub log_uri: Option<String>,
-    #[doc="<p>The maximum number of times to retry this job if it fails.</p>"]
-    #[serde(rename="MaxRetries")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of times to retry this job if it fails.</p>
+    #[serde(rename = "MaxRetries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_retries: Option<i64>,
-    #[doc="<p>The name you assign to this job.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name you assign to this job.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>The role associated with this job.</p>"]
-    #[serde(rename="Role")]
+    /// <p>The role associated with this job.</p>
+    #[serde(rename = "Role")]
     pub role: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateJobResponse {
-    #[doc="<p>The unique name of the new job that has been created.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique name of the new job that has been created.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreatePartitionRequest {
-    #[doc="<p>The ID of the catalog in which the partion is to be created. Currently, this should be the AWS account ID.</p>"]
-    #[serde(rename="CatalogId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the catalog in which the partion is to be created. Currently, this should be the AWS account ID.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    #[doc="<p>The name of the metadata database in which the partition is to be created.</p>"]
-    #[serde(rename="DatabaseName")]
+    /// <p>The name of the metadata database in which the partition is to be created.</p>
+    #[serde(rename = "DatabaseName")]
     pub database_name: String,
-    #[doc="<p>A <code>PartitionInput</code> structure defining the partition to be created.</p>"]
-    #[serde(rename="PartitionInput")]
+    /// <p>A <code>PartitionInput</code> structure defining the partition to be created.</p>
+    #[serde(rename = "PartitionInput")]
     pub partition_input: PartitionInput,
-    #[doc="<p>The name of the metadata table in which the partition is to be created.</p>"]
-    #[serde(rename="TableName")]
+    /// <p>The name of the metadata table in which the partition is to be created.</p>
+    #[serde(rename = "TableName")]
     pub table_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreatePartitionResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateScriptRequest {
-    #[doc="<p>A list of the edges in the DAG.</p>"]
-    #[serde(rename="DagEdges")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of the edges in the DAG.</p>
+    #[serde(rename = "DagEdges")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub dag_edges: Option<Vec<CodeGenEdge>>,
-    #[doc="<p>A list of the nodes in the DAG.</p>"]
-    #[serde(rename="DagNodes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of the nodes in the DAG.</p>
+    #[serde(rename = "DagNodes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub dag_nodes: Option<Vec<CodeGenNode>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateScriptResponse {
-    #[doc="<p>The Python script generated from the DAG.</p>"]
-    #[serde(rename="PythonScript")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Python script generated from the DAG.</p>
+    #[serde(rename = "PythonScript")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub python_script: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateTableRequest {
-    #[doc="<p>The ID of the Data Catalog in which to create the <code>Table</code>. If none is supplied, the AWS account ID is used by default.</p>"]
-    #[serde(rename="CatalogId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Data Catalog in which to create the <code>Table</code>. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    #[doc="<p>The catalog database in which to create the new table.</p>"]
-    #[serde(rename="DatabaseName")]
+    /// <p>The catalog database in which to create the new table.</p>
+    #[serde(rename = "DatabaseName")]
     pub database_name: String,
-    #[doc="<p>The <code>TableInput</code> object that defines the metadata table to create in the catalog.</p>"]
-    #[serde(rename="TableInput")]
+    /// <p>The <code>TableInput</code> object that defines the metadata table to create in the catalog.</p>
+    #[serde(rename = "TableInput")]
     pub table_input: TableInput,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateTableResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateTriggerRequest {
-    #[doc="<p>The actions initiated by this trigger when it fires.</p>"]
-    #[serde(rename="Actions")]
+    /// <p>The actions initiated by this trigger when it fires.</p>
+    #[serde(rename = "Actions")]
     pub actions: Vec<Action>,
-    #[doc="<p>A description of the new trigger.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the new trigger.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The name to assign to the new trigger.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name to assign to the new trigger.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>A predicate to specify when the new trigger should fire.</p>"]
-    #[serde(rename="Predicate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A predicate to specify when the new trigger should fire.</p>
+    #[serde(rename = "Predicate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub predicate: Option<Predicate>,
-    #[doc="<p>A cron schedule expression for the new trigger.</p>"]
-    #[serde(rename="Schedule")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A cron schedule expression for the new trigger.</p>
+    #[serde(rename = "Schedule")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
-    #[doc="<p>The type of the new trigger.</p>"]
-    #[serde(rename="Type")]
+    /// <p>The type of the new trigger.</p>
+    #[serde(rename = "Type")]
     pub type_: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateTriggerResponse {
-    #[doc="<p>The name assigned to the new trigger.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name assigned to the new trigger.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateUserDefinedFunctionRequest {
-    #[doc="<p>The ID of the Data Catalog in which to create the function. If none is supplied, the AWS account ID is used by default.</p>"]
-    #[serde(rename="CatalogId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Data Catalog in which to create the function. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    #[doc="<p>The name of the catalog database in which to create the function.</p>"]
-    #[serde(rename="DatabaseName")]
+    /// <p>The name of the catalog database in which to create the function.</p>
+    #[serde(rename = "DatabaseName")]
     pub database_name: String,
-    #[doc="<p>A <code>FunctionInput</code> object that defines the function to create in the Data Catalog.</p>"]
-    #[serde(rename="FunctionInput")]
+    /// <p>A <code>FunctionInput</code> object that defines the function to create in the Data Catalog.</p>
+    #[serde(rename = "FunctionInput")]
     pub function_input: UserDefinedFunctionInput,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateUserDefinedFunctionResponse;
 
-#[doc="<p>The <code>Database</code> object represents a logical grouping of tables that may reside in a Hive metastore or an RDBMS.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The <code>Database</code> object represents a logical grouping of tables that may reside in a Hive metastore or an RDBMS.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Database {
-    #[doc="<p>The time at which the metadata database was created in the catalog.</p>"]
-    #[serde(rename="CreateTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time at which the metadata database was created in the catalog.</p>
+    #[serde(rename = "CreateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<f64>,
-    #[doc="<p>Description of the database.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Description of the database.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The location of the database (for example, an HDFS path).</p>"]
-    #[serde(rename="LocationUri")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The location of the database (for example, an HDFS path).</p>
+    #[serde(rename = "LocationUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub location_uri: Option<String>,
-    #[doc="<p>Name of the database.</p>"]
-    #[serde(rename="Name")]
+    /// <p>Name of the database.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>A list of key-value pairs that define parameters and properties of the database.</p>"]
-    #[serde(rename="Parameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of key-value pairs that define parameters and properties of the database.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[doc="<p>The structure used to create or updata a database.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The structure used to create or updata a database.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DatabaseInput {
-    #[doc="<p>Description of the database</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Description of the database</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The location of the database (for example, an HDFS path).</p>"]
-    #[serde(rename="LocationUri")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The location of the database (for example, an HDFS path).</p>
+    #[serde(rename = "LocationUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub location_uri: Option<String>,
-    #[doc="<p>Name of the database.</p>"]
-    #[serde(rename="Name")]
+    /// <p>Name of the database.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>A list of key-value pairs that define parameters and properties of the database.</p>"]
-    #[serde(rename="Parameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of key-value pairs that define parameters and properties of the database.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteClassifierRequest {
-    #[doc="<p>Name of the <code>Classifier</code> to remove.</p>"]
-    #[serde(rename="Name")]
+    /// <p>Name of the <code>Classifier</code> to remove.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteClassifierResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteConnectionRequest {
-    #[doc="<p>The ID of the Data Catalog in which the connection resides. If none is supplied, the AWS account ID is used by default.</p>"]
-    #[serde(rename="CatalogId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Data Catalog in which the connection resides. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    #[doc="<p>The name of the connection to delete.</p>"]
-    #[serde(rename="ConnectionName")]
+    /// <p>The name of the connection to delete.</p>
+    #[serde(rename = "ConnectionName")]
     pub connection_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteConnectionResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteCrawlerRequest {
-    #[doc="<p>Name of the <code>Crawler</code> to remove.</p>"]
-    #[serde(rename="Name")]
+    /// <p>Name of the <code>Crawler</code> to remove.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteCrawlerResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteDatabaseRequest {
-    #[doc="<p>The ID of the Data Catalog in which the database resides. If none is supplied, the AWS account ID is used by default.</p>"]
-    #[serde(rename="CatalogId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Data Catalog in which the database resides. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    #[doc="<p>The name of the Database to delete.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the Database to delete.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteDatabaseResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteDevEndpointRequest {
-    #[doc="<p>The name of the DevEndpoint.</p>"]
-    #[serde(rename="EndpointName")]
+    /// <p>The name of the DevEndpoint.</p>
+    #[serde(rename = "EndpointName")]
     pub endpoint_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteDevEndpointResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteJobRequest {
-    #[doc="<p>The name of the job to delete.</p>"]
-    #[serde(rename="JobName")]
+    /// <p>The name of the job to delete.</p>
+    #[serde(rename = "JobName")]
     pub job_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteJobResponse {
-    #[doc="<p>The name of the job that was deleted.</p>"]
-    #[serde(rename="JobName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the job that was deleted.</p>
+    #[serde(rename = "JobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeletePartitionRequest {
-    #[doc="<p>The ID of the Data Catalog where the partition to be deleted resides. If none is supplied, the AWS account ID is used by default.</p>"]
-    #[serde(rename="CatalogId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Data Catalog where the partition to be deleted resides. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    #[doc="<p>The name of the catalog database in which the table in question resides.</p>"]
-    #[serde(rename="DatabaseName")]
+    /// <p>The name of the catalog database in which the table in question resides.</p>
+    #[serde(rename = "DatabaseName")]
     pub database_name: String,
-    #[doc="<p>The values that define the partition.</p>"]
-    #[serde(rename="PartitionValues")]
+    /// <p>The values that define the partition.</p>
+    #[serde(rename = "PartitionValues")]
     pub partition_values: Vec<String>,
-    #[doc="<p>The name of the table where the partition to be deleted is located.</p>"]
-    #[serde(rename="TableName")]
+    /// <p>The name of the table where the partition to be deleted is located.</p>
+    #[serde(rename = "TableName")]
     pub table_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeletePartitionResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteTableRequest {
-    #[doc="<p>The ID of the Data Catalog where the table resides. If none is supplied, the AWS account ID is used by default.</p>"]
-    #[serde(rename="CatalogId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Data Catalog where the table resides. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    #[doc="<p>The name of the catalog database in which the table resides.</p>"]
-    #[serde(rename="DatabaseName")]
+    /// <p>The name of the catalog database in which the table resides.</p>
+    #[serde(rename = "DatabaseName")]
     pub database_name: String,
-    #[doc="<p>The name of the table to be deleted.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the table to be deleted.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteTableResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteTriggerRequest {
-    #[doc="<p>The name of the trigger to delete.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the trigger to delete.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteTriggerResponse {
-    #[doc="<p>The name of the trigger that was deleted.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the trigger that was deleted.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteUserDefinedFunctionRequest {
-    #[doc="<p>The ID of the Data Catalog where the function to be deleted is located. If none is supplied, the AWS account ID is used by default.</p>"]
-    #[serde(rename="CatalogId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Data Catalog where the function to be deleted is located. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    #[doc="<p>The name of the catalog database where the function is located.</p>"]
-    #[serde(rename="DatabaseName")]
+    /// <p>The name of the catalog database where the function is located.</p>
+    #[serde(rename = "DatabaseName")]
     pub database_name: String,
-    #[doc="<p>The name of the function definition to be deleted.</p>"]
-    #[serde(rename="FunctionName")]
+    /// <p>The name of the function definition to be deleted.</p>
+    #[serde(rename = "FunctionName")]
     pub function_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteUserDefinedFunctionResponse;
 
-#[doc="<p>A development endpoint where a developer can remotely debug ETL scripts.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A development endpoint where a developer can remotely debug ETL scripts.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DevEndpoint {
-    #[doc="<p>The AWS availability zone where this DevEndpoint is located.</p>"]
-    #[serde(rename="AvailabilityZone")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS availability zone where this DevEndpoint is located.</p>
+    #[serde(rename = "AvailabilityZone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zone: Option<String>,
-    #[doc="<p>The point in time at which this DevEndpoint was created.</p>"]
-    #[serde(rename="CreatedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The point in time at which this DevEndpoint was created.</p>
+    #[serde(rename = "CreatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_timestamp: Option<f64>,
-    #[doc="<p>The name of the DevEndpoint.</p>"]
-    #[serde(rename="EndpointName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the DevEndpoint.</p>
+    #[serde(rename = "EndpointName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_name: Option<String>,
-    #[doc="<p>Path to one or more Java Jars in an S3 bucket that should be loaded in your DevEndpoint.</p>"]
-    #[serde(rename="ExtraJarsS3Path")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Path to one or more Java Jars in an S3 bucket that should be loaded in your DevEndpoint.</p>
+    #[serde(rename = "ExtraJarsS3Path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_jars_s3_path: Option<String>,
-    #[doc="<p>Path to one or more Python libraries in an S3 bucket that should be loaded in your DevEndpoint.</p>"]
-    #[serde(rename="ExtraPythonLibsS3Path")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Path to one or more Python libraries in an S3 bucket that should be loaded in your DevEndpoint.</p>
+    #[serde(rename = "ExtraPythonLibsS3Path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_python_libs_s3_path: Option<String>,
-    #[doc="<p>The reason for a current failure in this DevEndpoint.</p>"]
-    #[serde(rename="FailureReason")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The reason for a current failure in this DevEndpoint.</p>
+    #[serde(rename = "FailureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_reason: Option<String>,
-    #[doc="<p>The point in time at which this DevEndpoint was last modified.</p>"]
-    #[serde(rename="LastModifiedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The point in time at which this DevEndpoint was last modified.</p>
+    #[serde(rename = "LastModifiedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_timestamp: Option<f64>,
-    #[doc="<p>The status of the last update.</p>"]
-    #[serde(rename="LastUpdateStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the last update.</p>
+    #[serde(rename = "LastUpdateStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_update_status: Option<String>,
-    #[doc="<p>The number of nodes used by this DevEndpoint.</p>"]
-    #[serde(rename="NumberOfNodes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of nodes used by this DevEndpoint.</p>
+    #[serde(rename = "NumberOfNodes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_nodes: Option<i64>,
-    #[doc="<p>The public address used by this DevEndpoint.</p>"]
-    #[serde(rename="PublicAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The public address used by this DevEndpoint.</p>
+    #[serde(rename = "PublicAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub public_address: Option<String>,
-    #[doc="<p>The public key to be used by this DevEndpoint for authentication.</p>"]
-    #[serde(rename="PublicKey")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The public key to be used by this DevEndpoint for authentication.</p>
+    #[serde(rename = "PublicKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub public_key: Option<String>,
-    #[doc="<p>The AWS ARN of the IAM role used in this DevEndpoint.</p>"]
-    #[serde(rename="RoleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS ARN of the IAM role used in this DevEndpoint.</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
-    #[doc="<p>A list of security group identifiers used in this DevEndpoint.</p>"]
-    #[serde(rename="SecurityGroupIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of security group identifiers used in this DevEndpoint.</p>
+    #[serde(rename = "SecurityGroupIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub security_group_ids: Option<Vec<String>>,
-    #[doc="<p>The current status of this DevEndpoint.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The current status of this DevEndpoint.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The subnet ID for this DevEndpoint.</p>"]
-    #[serde(rename="SubnetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The subnet ID for this DevEndpoint.</p>
+    #[serde(rename = "SubnetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_id: Option<String>,
-    #[doc="<p>The ID of the virtual private cloud (VPC) used by this DevEndpoint.</p>"]
-    #[serde(rename="VpcId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the virtual private cloud (VPC) used by this DevEndpoint.</p>
+    #[serde(rename = "VpcId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_id: Option<String>,
-    #[doc="<p>The YARN endpoint address used by this DevEndpoint.</p>"]
-    #[serde(rename="YarnEndpointAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The YARN endpoint address used by this DevEndpoint.</p>
+    #[serde(rename = "YarnEndpointAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub yarn_endpoint_address: Option<String>,
 }
 
-#[doc="<p>Custom libraries to be loaded into a DevEndpoint.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Custom libraries to be loaded into a DevEndpoint.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DevEndpointCustomLibraries {
-    #[doc="<p>Path to one or more Java Jars in an S3 bucket that should be loaded in your DevEndpoint.</p>"]
-    #[serde(rename="ExtraJarsS3Path")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Path to one or more Java Jars in an S3 bucket that should be loaded in your DevEndpoint.</p>
+    #[serde(rename = "ExtraJarsS3Path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_jars_s3_path: Option<String>,
-    #[doc="<p>Path to one or more Python libraries in an S3 bucket that should be loaded in your DevEndpoint.</p>"]
-    #[serde(rename="ExtraPythonLibsS3Path")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Path to one or more Python libraries in an S3 bucket that should be loaded in your DevEndpoint.</p>
+    #[serde(rename = "ExtraPythonLibsS3Path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_python_libs_s3_path: Option<String>,
 }
 
-#[doc="<p>Contains details about an error.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains details about an error.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ErrorDetail {
-    #[doc="<p>The code associated with this error.</p>"]
-    #[serde(rename="ErrorCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The code associated with this error.</p>
+    #[serde(rename = "ErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_code: Option<String>,
-    #[doc="<p>A message describing the error.</p>"]
-    #[serde(rename="ErrorMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A message describing the error.</p>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
 }
 
-#[doc="<p>An execution property of a job.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>An execution property of a job.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ExecutionProperty {
-    #[doc="<p>The maximum number of concurrent runs allowed for a job.</p>"]
-    #[serde(rename="MaxConcurrentRuns")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of concurrent runs allowed for a job.</p>
+    #[serde(rename = "MaxConcurrentRuns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_concurrent_runs: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetCatalogImportStatusRequest {
-    #[doc="<p>The ID of the catalog to migrate. Currently, this should be the AWS account ID.</p>"]
-    #[serde(rename="CatalogId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the catalog to migrate. Currently, this should be the AWS account ID.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetCatalogImportStatusResponse {
-    #[doc="<p>The status of the specified catalog migration.</p>"]
-    #[serde(rename="ImportStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the specified catalog migration.</p>
+    #[serde(rename = "ImportStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub import_status: Option<CatalogImportStatus>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetClassifierRequest {
-    #[doc="<p>Name of the <code>Classifier</code> to retrieve.</p>"]
-    #[serde(rename="Name")]
+    /// <p>Name of the <code>Classifier</code> to retrieve.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetClassifierResponse {
-    #[doc="<p>The requested <code>Classifier</code>.</p>"]
-    #[serde(rename="Classifier")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The requested <code>Classifier</code>.</p>
+    #[serde(rename = "Classifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub classifier: Option<Classifier>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetClassifiersRequest {
-    #[doc="<p>Size of the list to return (optional).</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Size of the list to return (optional).</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>An optional continuation token.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An optional continuation token.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetClassifiersResponse {
-    #[doc="<p>The requested list of <code>Classifier</code> objects.</p>"]
-    #[serde(rename="Classifiers")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The requested list of <code>Classifier</code> objects.</p>
+    #[serde(rename = "Classifiers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub classifiers: Option<Vec<Classifier>>,
-    #[doc="<p>A continuation token.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A continuation token.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetConnectionRequest {
-    #[doc="<p>The ID of the Data Catalog in which the connection resides. If none is supplied, the AWS account ID is used by default.</p>"]
-    #[serde(rename="CatalogId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Data Catalog in which the connection resides. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    #[doc="<p>The name of the connection definition to retrieve.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the connection definition to retrieve.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetConnectionResponse {
-    #[doc="<p>The requested connection definition.</p>"]
-    #[serde(rename="Connection")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The requested connection definition.</p>
+    #[serde(rename = "Connection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub connection: Option<Connection>,
 }
 
-#[doc="<p>Filters the connection definitions returned by the <code>GetConnections</code> API.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Filters the connection definitions returned by the <code>GetConnections</code> API.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetConnectionsFilter {
-    #[doc="<p>The type of connections to return.</p>"]
-    #[serde(rename="ConnectionType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of connections to return.</p>
+    #[serde(rename = "ConnectionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_type: Option<String>,
-    #[doc="<p>A criteria string that must match the criteria recorded in the connection definition for that connection definition to be returned.</p>"]
-    #[serde(rename="MatchCriteria")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A criteria string that must match the criteria recorded in the connection definition for that connection definition to be returned.</p>
+    #[serde(rename = "MatchCriteria")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub match_criteria: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetConnectionsRequest {
-    #[doc="<p>The ID of the Data Catalog in which the connections reside. If none is supplied, the AWS account ID is used by default.</p>"]
-    #[serde(rename="CatalogId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Data Catalog in which the connections reside. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    #[doc="<p>A filter that controls which connections will be returned.</p>"]
-    #[serde(rename="Filter")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A filter that controls which connections will be returned.</p>
+    #[serde(rename = "Filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<GetConnectionsFilter>,
-    #[doc="<p>The maximum number of connections to return in one response.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of connections to return in one response.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>A continuation token, if this is a continuation call.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A continuation token, if this is a continuation call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetConnectionsResponse {
-    #[doc="<p>A list of requested connection definitions.</p>"]
-    #[serde(rename="ConnectionList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of requested connection definitions.</p>
+    #[serde(rename = "ConnectionList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_list: Option<Vec<Connection>>,
-    #[doc="<p>A continuation token, if the list of connections returned does not include the last of the filtered connections.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A continuation token, if the list of connections returned does not include the last of the filtered connections.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetCrawlerMetricsRequest {
-    #[doc="<p>A list of the names of crawlers about which to retrieve metrics.</p>"]
-    #[serde(rename="CrawlerNameList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of the names of crawlers about which to retrieve metrics.</p>
+    #[serde(rename = "CrawlerNameList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub crawler_name_list: Option<Vec<String>>,
-    #[doc="<p>The maximum size of a list to return.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum size of a list to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>A continuation token, if this is a continuation call.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A continuation token, if this is a continuation call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetCrawlerMetricsResponse {
-    #[doc="<p>A list of metrics for the specified crawler.</p>"]
-    #[serde(rename="CrawlerMetricsList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of metrics for the specified crawler.</p>
+    #[serde(rename = "CrawlerMetricsList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub crawler_metrics_list: Option<Vec<CrawlerMetrics>>,
-    #[doc="<p>A continuation token, if the returned list does not contain the last metric available.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A continuation token, if the returned list does not contain the last metric available.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetCrawlerRequest {
-    #[doc="<p>Name of the <code>Crawler</code> to retrieve metadata for.</p>"]
-    #[serde(rename="Name")]
+    /// <p>Name of the <code>Crawler</code> to retrieve metadata for.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetCrawlerResponse {
-    #[doc="<p>The metadata for the specified <code>Crawler</code>.</p>"]
-    #[serde(rename="Crawler")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The metadata for the specified <code>Crawler</code>.</p>
+    #[serde(rename = "Crawler")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub crawler: Option<Crawler>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetCrawlersRequest {
-    #[doc="<p>The number of Crawlers to return on each call.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of Crawlers to return on each call.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>A continuation token, if this is a continuation request.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A continuation token, if this is a continuation request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetCrawlersResponse {
-    #[doc="<p>A list of <code>Crawler</code> metadata.</p>"]
-    #[serde(rename="Crawlers")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of <code>Crawler</code> metadata.</p>
+    #[serde(rename = "Crawlers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub crawlers: Option<Vec<Crawler>>,
-    #[doc="<p>A continuation token, if the returned list has not reached the end of those defined in this customer account.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A continuation token, if the returned list has not reached the end of those defined in this customer account.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDatabaseRequest {
-    #[doc="<p>The ID of the Data Catalog in which the database resides. If none is supplied, the AWS account ID is used by default.</p>"]
-    #[serde(rename="CatalogId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Data Catalog in which the database resides. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    #[doc="<p>The name of the database to retrieve.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the database to retrieve.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetDatabaseResponse {
-    #[doc="<p>The definition of the specified database in the catalog.</p>"]
-    #[serde(rename="Database")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The definition of the specified database in the catalog.</p>
+    #[serde(rename = "Database")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub database: Option<Database>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDatabasesRequest {
-    #[doc="<p>The ID of the Data Catalog from which to retrieve <code>Databases</code>. If none is supplied, the AWS account ID is used by default.</p>"]
-    #[serde(rename="CatalogId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Data Catalog from which to retrieve <code>Databases</code>. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    #[doc="<p>The maximum number of databases to return in one response.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of databases to return in one response.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>A continuation token, if this is a continuation call.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A continuation token, if this is a continuation call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetDatabasesResponse {
-    #[doc="<p>A list of <code>Database</code> objects from the specified catalog.</p>"]
-    #[serde(rename="DatabaseList")]
+    /// <p>A list of <code>Database</code> objects from the specified catalog.</p>
+    #[serde(rename = "DatabaseList")]
     pub database_list: Vec<Database>,
-    #[doc="<p>A continuation token for paginating the returned list of tokens, returned if the current segment of the list is not the last.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A continuation token for paginating the returned list of tokens, returned if the current segment of the list is not the last.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDataflowGraphRequest {
-    #[doc="<p>The Python script to transform.</p>"]
-    #[serde(rename="PythonScript")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Python script to transform.</p>
+    #[serde(rename = "PythonScript")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub python_script: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetDataflowGraphResponse {
-    #[doc="<p>A list of the edges in the resulting DAG.</p>"]
-    #[serde(rename="DagEdges")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of the edges in the resulting DAG.</p>
+    #[serde(rename = "DagEdges")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub dag_edges: Option<Vec<CodeGenEdge>>,
-    #[doc="<p>A list of the nodes in the resulting DAG.</p>"]
-    #[serde(rename="DagNodes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of the nodes in the resulting DAG.</p>
+    #[serde(rename = "DagNodes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub dag_nodes: Option<Vec<CodeGenNode>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDevEndpointRequest {
-    #[doc="<p>Name of the DevEndpoint for which to retrieve information.</p>"]
-    #[serde(rename="EndpointName")]
+    /// <p>Name of the DevEndpoint for which to retrieve information.</p>
+    #[serde(rename = "EndpointName")]
     pub endpoint_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetDevEndpointResponse {
-    #[doc="<p>A DevEndpoint definition.</p>"]
-    #[serde(rename="DevEndpoint")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A DevEndpoint definition.</p>
+    #[serde(rename = "DevEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub dev_endpoint: Option<DevEndpoint>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDevEndpointsRequest {
-    #[doc="<p>The maximum size of information to return.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum size of information to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>A continuation token, if this is a continuation call.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A continuation token, if this is a continuation call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetDevEndpointsResponse {
-    #[doc="<p>A list of DevEndpoint definitions.</p>"]
-    #[serde(rename="DevEndpoints")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of DevEndpoint definitions.</p>
+    #[serde(rename = "DevEndpoints")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub dev_endpoints: Option<Vec<DevEndpoint>>,
-    #[doc="<p>A continuation token, if not all DevEndpoint definitions have yet been returned.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A continuation token, if not all DevEndpoint definitions have yet been returned.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetJobRequest {
-    #[doc="<p>The name of the job to retrieve.</p>"]
-    #[serde(rename="JobName")]
+    /// <p>The name of the job to retrieve.</p>
+    #[serde(rename = "JobName")]
     pub job_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetJobResponse {
-    #[doc="<p>The requested job definition.</p>"]
-    #[serde(rename="Job")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The requested job definition.</p>
+    #[serde(rename = "Job")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub job: Option<Job>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetJobRunRequest {
-    #[doc="<p>Name of the job being run.</p>"]
-    #[serde(rename="JobName")]
+    /// <p>Name of the job being run.</p>
+    #[serde(rename = "JobName")]
     pub job_name: String,
-    #[doc="<p>A list of the predecessor runs to return as well.</p>"]
-    #[serde(rename="PredecessorsIncluded")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of the predecessor runs to return as well.</p>
+    #[serde(rename = "PredecessorsIncluded")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub predecessors_included: Option<bool>,
-    #[doc="<p>The ID of the job run.</p>"]
-    #[serde(rename="RunId")]
+    /// <p>The ID of the job run.</p>
+    #[serde(rename = "RunId")]
     pub run_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetJobRunResponse {
-    #[doc="<p>The requested job-run metadata.</p>"]
-    #[serde(rename="JobRun")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The requested job-run metadata.</p>
+    #[serde(rename = "JobRun")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub job_run: Option<JobRun>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetJobRunsRequest {
-    #[doc="<p>The name of the job for which to retrieve all job runs.</p>"]
-    #[serde(rename="JobName")]
+    /// <p>The name of the job for which to retrieve all job runs.</p>
+    #[serde(rename = "JobName")]
     pub job_name: String,
-    #[doc="<p>The maximum size of the response.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum size of the response.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>A continuation token, if this is a continuation call.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A continuation token, if this is a continuation call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetJobRunsResponse {
-    #[doc="<p>A list of job-run metatdata objects.</p>"]
-    #[serde(rename="JobRuns")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of job-run metatdata objects.</p>
+    #[serde(rename = "JobRuns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub job_runs: Option<Vec<JobRun>>,
-    #[doc="<p>A continuation token, if not all reequested job runs have been returned.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A continuation token, if not all reequested job runs have been returned.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetJobsRequest {
-    #[doc="<p>The maximum size of the response.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum size of the response.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>A continuation token, if this is a continuation call.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A continuation token, if this is a continuation call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetJobsResponse {
-    #[doc="<p>A list of jobs.</p>"]
-    #[serde(rename="Jobs")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of jobs.</p>
+    #[serde(rename = "Jobs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub jobs: Option<Vec<Job>>,
-    #[doc="<p>A continuation token, if not all jobs have yet been returned.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A continuation token, if not all jobs have yet been returned.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetMappingRequest {
-    #[doc="<p>Parameters for the mapping.</p>"]
-    #[serde(rename="Location")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Parameters for the mapping.</p>
+    #[serde(rename = "Location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<Location>,
-    #[doc="<p>A list of target tables.</p>"]
-    #[serde(rename="Sinks")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of target tables.</p>
+    #[serde(rename = "Sinks")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sinks: Option<Vec<CatalogEntry>>,
-    #[doc="<p>Specifies the source table.</p>"]
-    #[serde(rename="Source")]
+    /// <p>Specifies the source table.</p>
+    #[serde(rename = "Source")]
     pub source: CatalogEntry,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetMappingResponse {
-    #[doc="<p>A list of mappings to the specified targets.</p>"]
-    #[serde(rename="Mapping")]
+    /// <p>A list of mappings to the specified targets.</p>
+    #[serde(rename = "Mapping")]
     pub mapping: Vec<MappingEntry>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetPartitionRequest {
-    #[doc="<p>The ID of the Data Catalog where the partition in question resides. If none is supplied, the AWS account ID is used by default.</p>"]
-    #[serde(rename="CatalogId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Data Catalog where the partition in question resides. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    #[doc="<p>The name of the catalog database where the partition resides.</p>"]
-    #[serde(rename="DatabaseName")]
+    /// <p>The name of the catalog database where the partition resides.</p>
+    #[serde(rename = "DatabaseName")]
     pub database_name: String,
-    #[doc="<p>The values that define the partition.</p>"]
-    #[serde(rename="PartitionValues")]
+    /// <p>The values that define the partition.</p>
+    #[serde(rename = "PartitionValues")]
     pub partition_values: Vec<String>,
-    #[doc="<p>The name of the partition's table.</p>"]
-    #[serde(rename="TableName")]
+    /// <p>The name of the partition's table.</p>
+    #[serde(rename = "TableName")]
     pub table_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetPartitionResponse {
-    #[doc="<p>The requested information, in the form of a <code>Partition</code> object.</p>"]
-    #[serde(rename="Partition")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The requested information, in the form of a <code>Partition</code> object.</p>
+    #[serde(rename = "Partition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub partition: Option<Partition>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetPartitionsRequest {
-    #[doc="<p>The ID of the Data Catalog where the partitions in question reside. If none is supplied, the AWS account ID is used by default.</p>"]
-    #[serde(rename="CatalogId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Data Catalog where the partitions in question reside. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    #[doc="<p>The name of the catalog database where the partitions reside.</p>"]
-    #[serde(rename="DatabaseName")]
+    /// <p>The name of the catalog database where the partitions reside.</p>
+    #[serde(rename = "DatabaseName")]
     pub database_name: String,
-    #[doc="<p>An expression filtering the partitions to be returned.</p>"]
-    #[serde(rename="Expression")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An expression filtering the partitions to be returned.</p>
+    #[serde(rename = "Expression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub expression: Option<String>,
-    #[doc="<p>The maximum number of partitions to return in a single response.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of partitions to return in a single response.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>A continuation token, if this is not the first call to retrieve these partitions.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A continuation token, if this is not the first call to retrieve these partitions.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The segment of the table's partitions to scan in this request.</p>"]
-    #[serde(rename="Segment")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The segment of the table's partitions to scan in this request.</p>
+    #[serde(rename = "Segment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub segment: Option<Segment>,
-    #[doc="<p>The name of the partitions' table.</p>"]
-    #[serde(rename="TableName")]
+    /// <p>The name of the partitions' table.</p>
+    #[serde(rename = "TableName")]
     pub table_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetPartitionsResponse {
-    #[doc="<p>A continuation token, if the returned list of partitions does not does not include the last one.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A continuation token, if the returned list of partitions does not does not include the last one.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>A list of requested partitions.</p>"]
-    #[serde(rename="Partitions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of requested partitions.</p>
+    #[serde(rename = "Partitions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub partitions: Option<Vec<Partition>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetPlanRequest {
-    #[doc="<p>Parameters for the mapping.</p>"]
-    #[serde(rename="Location")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Parameters for the mapping.</p>
+    #[serde(rename = "Location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<Location>,
-    #[doc="<p>The list of mappings from a source table to target tables.</p>"]
-    #[serde(rename="Mapping")]
+    /// <p>The list of mappings from a source table to target tables.</p>
+    #[serde(rename = "Mapping")]
     pub mapping: Vec<MappingEntry>,
-    #[doc="<p>The target tables.</p>"]
-    #[serde(rename="Sinks")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The target tables.</p>
+    #[serde(rename = "Sinks")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sinks: Option<Vec<CatalogEntry>>,
-    #[doc="<p>The source table.</p>"]
-    #[serde(rename="Source")]
+    /// <p>The source table.</p>
+    #[serde(rename = "Source")]
     pub source: CatalogEntry,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetPlanResponse {
-    #[doc="<p>A python script to perform the mapping.</p>"]
-    #[serde(rename="PythonScript")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A python script to perform the mapping.</p>
+    #[serde(rename = "PythonScript")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub python_script: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetTableRequest {
-    #[doc="<p>The ID of the Data Catalog where the table resides. If none is supplied, the AWS account ID is used by default.</p>"]
-    #[serde(rename="CatalogId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Data Catalog where the table resides. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    #[doc="<p>The name of the database in the catalog in which the table resides.</p>"]
-    #[serde(rename="DatabaseName")]
+    /// <p>The name of the database in the catalog in which the table resides.</p>
+    #[serde(rename = "DatabaseName")]
     pub database_name: String,
-    #[doc="<p>The name of the table for which to retrieve the definition.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the table for which to retrieve the definition.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetTableResponse {
-    #[doc="<p>The <code>Table</code> object that defines the specified table.</p>"]
-    #[serde(rename="Table")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>Table</code> object that defines the specified table.</p>
+    #[serde(rename = "Table")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub table: Option<Table>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetTableVersionsRequest {
-    #[doc="<p>The ID of the Data Catalog where the tables reside. If none is supplied, the AWS account ID is used by default.</p>"]
-    #[serde(rename="CatalogId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Data Catalog where the tables reside. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    #[doc="<p>The database in the catalog in which the table resides.</p>"]
-    #[serde(rename="DatabaseName")]
+    /// <p>The database in the catalog in which the table resides.</p>
+    #[serde(rename = "DatabaseName")]
     pub database_name: String,
-    #[doc="<p>The maximum number of table versions to return in one response.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of table versions to return in one response.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>A continuation token, if this is not the first call.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A continuation token, if this is not the first call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The name of the table.</p>"]
-    #[serde(rename="TableName")]
+    /// <p>The name of the table.</p>
+    #[serde(rename = "TableName")]
     pub table_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetTableVersionsResponse {
-    #[doc="<p>A continuation token, if the list of available versions does not include the last one.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A continuation token, if the list of available versions does not include the last one.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>A list of strings identifying available versions of the specified table.</p>"]
-    #[serde(rename="TableVersions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of strings identifying available versions of the specified table.</p>
+    #[serde(rename = "TableVersions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub table_versions: Option<Vec<TableVersion>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetTablesRequest {
-    #[doc="<p>The ID of the Data Catalog where the tables reside. If none is supplied, the AWS account ID is used by default.</p>"]
-    #[serde(rename="CatalogId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Data Catalog where the tables reside. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    #[doc="<p>The database in the catalog whose tables to list.</p>"]
-    #[serde(rename="DatabaseName")]
+    /// <p>The database in the catalog whose tables to list.</p>
+    #[serde(rename = "DatabaseName")]
     pub database_name: String,
-    #[doc="<p>A regular expression pattern. If present, only those tables whose names match the pattern are returned.</p>"]
-    #[serde(rename="Expression")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A regular expression pattern. If present, only those tables whose names match the pattern are returned.</p>
+    #[serde(rename = "Expression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub expression: Option<String>,
-    #[doc="<p>The maximum number of tables to return in a single response.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of tables to return in a single response.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>A continuation token, included if this is a continuation call.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A continuation token, included if this is a continuation call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetTablesResponse {
-    #[doc="<p>A continuation token, present if the current list segment is not the last.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A continuation token, present if the current list segment is not the last.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>A list of the requested <code>Table</code> objects.</p>"]
-    #[serde(rename="TableList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of the requested <code>Table</code> objects.</p>
+    #[serde(rename = "TableList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub table_list: Option<Vec<Table>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetTriggerRequest {
-    #[doc="<p>The name of the trigger to retrieve.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the trigger to retrieve.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetTriggerResponse {
-    #[doc="<p>The requested trigger definition.</p>"]
-    #[serde(rename="Trigger")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The requested trigger definition.</p>
+    #[serde(rename = "Trigger")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub trigger: Option<Trigger>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetTriggersRequest {
-    #[doc="<p>The name of the job for which to retrieve triggers.</p>"]
-    #[serde(rename="DependentJobName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the job for which to retrieve triggers.</p>
+    #[serde(rename = "DependentJobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub dependent_job_name: Option<String>,
-    #[doc="<p>The maximum size of the response.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum size of the response.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>A continuation token, if this is a continuation call.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A continuation token, if this is a continuation call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetTriggersResponse {
-    #[doc="<p>A continuation token, if not all the requested triggers have yet been returned.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A continuation token, if not all the requested triggers have yet been returned.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>A list of triggers for the specified job.</p>"]
-    #[serde(rename="Triggers")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of triggers for the specified job.</p>
+    #[serde(rename = "Triggers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub triggers: Option<Vec<Trigger>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetUserDefinedFunctionRequest {
-    #[doc="<p>The ID of the Data Catalog where the function to be retrieved is located. If none is supplied, the AWS account ID is used by default.</p>"]
-    #[serde(rename="CatalogId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Data Catalog where the function to be retrieved is located. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    #[doc="<p>The name of the catalog database where the function is located.</p>"]
-    #[serde(rename="DatabaseName")]
+    /// <p>The name of the catalog database where the function is located.</p>
+    #[serde(rename = "DatabaseName")]
     pub database_name: String,
-    #[doc="<p>The name of the function.</p>"]
-    #[serde(rename="FunctionName")]
+    /// <p>The name of the function.</p>
+    #[serde(rename = "FunctionName")]
     pub function_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetUserDefinedFunctionResponse {
-    #[doc="<p>The requested function definition.</p>"]
-    #[serde(rename="UserDefinedFunction")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The requested function definition.</p>
+    #[serde(rename = "UserDefinedFunction")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_defined_function: Option<UserDefinedFunction>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetUserDefinedFunctionsRequest {
-    #[doc="<p>The ID of the Data Catalog where the functions to be retrieved are located. If none is supplied, the AWS account ID is used by default.</p>"]
-    #[serde(rename="CatalogId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Data Catalog where the functions to be retrieved are located. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    #[doc="<p>The name of the catalog database where the functions are located.</p>"]
-    #[serde(rename="DatabaseName")]
+    /// <p>The name of the catalog database where the functions are located.</p>
+    #[serde(rename = "DatabaseName")]
     pub database_name: String,
-    #[doc="<p>The maximum number of functions to return in one response.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of functions to return in one response.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>A continuation token, if this is a continuation call.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A continuation token, if this is a continuation call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>An optional function-name pattern string that filters the function definitions returned.</p>"]
-    #[serde(rename="Pattern")]
+    /// <p>An optional function-name pattern string that filters the function definitions returned.</p>
+    #[serde(rename = "Pattern")]
     pub pattern: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetUserDefinedFunctionsResponse {
-    #[doc="<p>A continuation token, if the list of functions returned does not include the last requested function.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A continuation token, if the list of functions returned does not include the last requested function.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>A list of requested function definitions.</p>"]
-    #[serde(rename="UserDefinedFunctions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of requested function definitions.</p>
+    #[serde(rename = "UserDefinedFunctions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_defined_functions: Option<Vec<UserDefinedFunction>>,
 }
 
-#[doc="<p>A classifier that uses <code>grok</code>.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A classifier that uses <code>grok</code>.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GrokClassifier {
-    #[doc="<p>The data form that the classifier matches, such as Twitter, JSON, Omniture Logs, and so forth.</p>"]
-    #[serde(rename="Classification")]
+    /// <p>The data form that the classifier matches, such as Twitter, JSON, Omniture Logs, and so forth.</p>
+    #[serde(rename = "Classification")]
     pub classification: String,
-    #[doc="<p>The time this classifier was registered.</p>"]
-    #[serde(rename="CreationTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time this classifier was registered.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    #[doc="<p>Custom grok patterns used by this classifier.</p>"]
-    #[serde(rename="CustomPatterns")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Custom grok patterns used by this classifier.</p>
+    #[serde(rename = "CustomPatterns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_patterns: Option<String>,
-    #[doc="<p>The grok pattern used by this classifier.</p>"]
-    #[serde(rename="GrokPattern")]
+    /// <p>The grok pattern used by this classifier.</p>
+    #[serde(rename = "GrokPattern")]
     pub grok_pattern: String,
-    #[doc="<p>The time this classifier was last updated.</p>"]
-    #[serde(rename="LastUpdated")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time this classifier was last updated.</p>
+    #[serde(rename = "LastUpdated")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated: Option<f64>,
-    #[doc="<p>The name of the classifier.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the classifier.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>The version of this classifier.</p>"]
-    #[serde(rename="Version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version of this classifier.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ImportCatalogToGlueRequest {
-    #[doc="<p>The ID of the catalog to import. Currently, this should be the AWS account ID.</p>"]
-    #[serde(rename="CatalogId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the catalog to import. Currently, this should be the AWS account ID.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ImportCatalogToGlueResponse;
 
-#[doc="<p>Specifies a JDBC target for a crawl.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Specifies a JDBC target for a crawl.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct JdbcTarget {
-    #[doc="<p>The name of the connection to use for the JDBC target.</p>"]
-    #[serde(rename="ConnectionName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the connection to use for the JDBC target.</p>
+    #[serde(rename = "ConnectionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_name: Option<String>,
-    #[doc="<p>A list of items to exclude from the crawl.</p>"]
-    #[serde(rename="Exclusions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of items to exclude from the crawl.</p>
+    #[serde(rename = "Exclusions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub exclusions: Option<Vec<String>>,
-    #[doc="<p>The path of the JDBC target.</p>"]
-    #[serde(rename="Path")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The path of the JDBC target.</p>
+    #[serde(rename = "Path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub path: Option<String>,
 }
 
-#[doc="<p>Specifies a job in the Data Catalog.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Specifies a job in the Data Catalog.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Job {
-    #[doc="<p>The number of capacity units allocated to this job.</p>"]
-    #[serde(rename="AllocatedCapacity")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of capacity units allocated to this job.</p>
+    #[serde(rename = "AllocatedCapacity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub allocated_capacity: Option<i64>,
-    #[doc="<p>The JobCommand that executes this job.</p>"]
-    #[serde(rename="Command")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The JobCommand that executes this job.</p>
+    #[serde(rename = "Command")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub command: Option<JobCommand>,
-    #[doc="<p>The connections used for this job.</p>"]
-    #[serde(rename="Connections")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The connections used for this job.</p>
+    #[serde(rename = "Connections")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub connections: Option<ConnectionsList>,
-    #[doc="<p>The time and date that this job specification was created.</p>"]
-    #[serde(rename="CreatedOn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time and date that this job specification was created.</p>
+    #[serde(rename = "CreatedOn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_on: Option<f64>,
-    #[doc="<p>The default parameters for this job.</p>"]
-    #[serde(rename="DefaultArguments")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The default parameters for this job.</p>
+    #[serde(rename = "DefaultArguments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub default_arguments: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>Description of this job.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Description of this job.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>An ExecutionProperty specifying the maximum number of concurrent runs allowed for this job.</p>"]
-    #[serde(rename="ExecutionProperty")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An ExecutionProperty specifying the maximum number of concurrent runs allowed for this job.</p>
+    #[serde(rename = "ExecutionProperty")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_property: Option<ExecutionProperty>,
-    #[doc="<p>The last point in time when this job specification was modified.</p>"]
-    #[serde(rename="LastModifiedOn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The last point in time when this job specification was modified.</p>
+    #[serde(rename = "LastModifiedOn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_on: Option<f64>,
-    #[doc="<p>Location of the logs for this job.</p>"]
-    #[serde(rename="LogUri")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Location of the logs for this job.</p>
+    #[serde(rename = "LogUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub log_uri: Option<String>,
-    #[doc="<p>The maximum number of times to retry this job if it fails.</p>"]
-    #[serde(rename="MaxRetries")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of times to retry this job if it fails.</p>
+    #[serde(rename = "MaxRetries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_retries: Option<i64>,
-    #[doc="<p>The name you assign to this job.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name you assign to this job.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The role associated with this job.</p>"]
-    #[serde(rename="Role")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The role associated with this job.</p>
+    #[serde(rename = "Role")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
 }
 
-#[doc="<p>Defines a point which a job can resume processing.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Defines a point which a job can resume processing.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct JobBookmarkEntry {
-    #[doc="<p>The attempt ID number.</p>"]
-    #[serde(rename="Attempt")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The attempt ID number.</p>
+    #[serde(rename = "Attempt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub attempt: Option<i64>,
-    #[doc="<p>The bookmark itself.</p>"]
-    #[serde(rename="JobBookmark")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The bookmark itself.</p>
+    #[serde(rename = "JobBookmark")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub job_bookmark: Option<String>,
-    #[doc="<p>Name of the job in question.</p>"]
-    #[serde(rename="JobName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Name of the job in question.</p>
+    #[serde(rename = "JobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
-    #[doc="<p>The run ID number.</p>"]
-    #[serde(rename="Run")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The run ID number.</p>
+    #[serde(rename = "Run")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub run: Option<i64>,
-    #[doc="<p>Version of the job.</p>"]
-    #[serde(rename="Version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Version of the job.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<i64>,
 }
 
-#[doc="<p>Specifies code that executes a job.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Specifies code that executes a job.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct JobCommand {
-    #[doc="<p>The name of this job command.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of this job command.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>Specifies the location of a script that executes a job.</p>"]
-    #[serde(rename="ScriptLocation")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies the location of a script that executes a job.</p>
+    #[serde(rename = "ScriptLocation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub script_location: Option<String>,
 }
 
-#[doc="<p>Contains information about a job run.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains information about a job run.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct JobRun {
-    #[doc="<p>The amount of infrastructure capacity allocated to this job run.</p>"]
-    #[serde(rename="AllocatedCapacity")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The amount of infrastructure capacity allocated to this job run.</p>
+    #[serde(rename = "AllocatedCapacity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub allocated_capacity: Option<i64>,
-    #[doc="<p>The job arguments associated with this run.</p>"]
-    #[serde(rename="Arguments")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The job arguments associated with this run.</p>
+    #[serde(rename = "Arguments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arguments: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The number or the attempt to run this job.</p>"]
-    #[serde(rename="Attempt")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number or the attempt to run this job.</p>
+    #[serde(rename = "Attempt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub attempt: Option<i64>,
-    #[doc="<p>The date and time this job run completed.</p>"]
-    #[serde(rename="CompletedOn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time this job run completed.</p>
+    #[serde(rename = "CompletedOn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub completed_on: Option<f64>,
-    #[doc="<p>An error message associated with this job run.</p>"]
-    #[serde(rename="ErrorMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An error message associated with this job run.</p>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
-    #[doc="<p>The ID of this job run.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of this job run.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>The name of the job being run.</p>"]
-    #[serde(rename="JobName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the job being run.</p>
+    #[serde(rename = "JobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
-    #[doc="<p>The current state of the job run.</p>"]
-    #[serde(rename="JobRunState")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The current state of the job run.</p>
+    #[serde(rename = "JobRunState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub job_run_state: Option<String>,
-    #[doc="<p>The last time this job run was modified.</p>"]
-    #[serde(rename="LastModifiedOn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The last time this job run was modified.</p>
+    #[serde(rename = "LastModifiedOn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_on: Option<f64>,
-    #[doc="<p>A list of predecessors to this job run.</p>"]
-    #[serde(rename="PredecessorRuns")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of predecessors to this job run.</p>
+    #[serde(rename = "PredecessorRuns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub predecessor_runs: Option<Vec<Predecessor>>,
-    #[doc="<p>The ID of the previous run of this job.</p>"]
-    #[serde(rename="PreviousRunId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the previous run of this job.</p>
+    #[serde(rename = "PreviousRunId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub previous_run_id: Option<String>,
-    #[doc="<p>The date and time at which this job run was started.</p>"]
-    #[serde(rename="StartedOn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time at which this job run was started.</p>
+    #[serde(rename = "StartedOn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub started_on: Option<f64>,
-    #[doc="<p>The name of the trigger for this job run.</p>"]
-    #[serde(rename="TriggerName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the trigger for this job run.</p>
+    #[serde(rename = "TriggerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub trigger_name: Option<String>,
 }
 
-#[doc="<p>Specifies information used to update an existing job.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Specifies information used to update an existing job.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct JobUpdate {
-    #[doc="<p>The number of capacity units allocated to this job.</p>"]
-    #[serde(rename="AllocatedCapacity")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of capacity units allocated to this job.</p>
+    #[serde(rename = "AllocatedCapacity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub allocated_capacity: Option<i64>,
-    #[doc="<p>The JobCommand that executes this job.</p>"]
-    #[serde(rename="Command")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The JobCommand that executes this job.</p>
+    #[serde(rename = "Command")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub command: Option<JobCommand>,
-    #[doc="<p>The connections used for this job.</p>"]
-    #[serde(rename="Connections")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The connections used for this job.</p>
+    #[serde(rename = "Connections")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub connections: Option<ConnectionsList>,
-    #[doc="<p>The default parameters for this job.</p>"]
-    #[serde(rename="DefaultArguments")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The default parameters for this job.</p>
+    #[serde(rename = "DefaultArguments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub default_arguments: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>Description of the job.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Description of the job.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>An ExecutionProperty specifying the maximum number of concurrent runs allowed for this job.</p>"]
-    #[serde(rename="ExecutionProperty")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An ExecutionProperty specifying the maximum number of concurrent runs allowed for this job.</p>
+    #[serde(rename = "ExecutionProperty")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_property: Option<ExecutionProperty>,
-    #[doc="<p>Location of the logs for this job.</p>"]
-    #[serde(rename="LogUri")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Location of the logs for this job.</p>
+    #[serde(rename = "LogUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub log_uri: Option<String>,
-    #[doc="<p>The maximum number of times to retry this job if it fails.</p>"]
-    #[serde(rename="MaxRetries")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of times to retry this job if it fails.</p>
+    #[serde(rename = "MaxRetries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_retries: Option<i64>,
-    #[doc="<p>The role associated with this job.</p>"]
-    #[serde(rename="Role")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The role associated with this job.</p>
+    #[serde(rename = "Role")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
 }
 
-#[doc="<p>Status and error information about the most recent crawl.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Status and error information about the most recent crawl.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct LastCrawlInfo {
-    #[doc="<p>Error information about the last crawl, if an error occurred.</p>"]
-    #[serde(rename="ErrorMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Error information about the last crawl, if an error occurred.</p>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
-    #[doc="<p>The log group for the last crawl.</p>"]
-    #[serde(rename="LogGroup")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The log group for the last crawl.</p>
+    #[serde(rename = "LogGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub log_group: Option<String>,
-    #[doc="<p>The log stream for the last crawl.</p>"]
-    #[serde(rename="LogStream")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The log stream for the last crawl.</p>
+    #[serde(rename = "LogStream")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub log_stream: Option<String>,
-    #[doc="<p>The prefix for a message about this crawl.</p>"]
-    #[serde(rename="MessagePrefix")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The prefix for a message about this crawl.</p>
+    #[serde(rename = "MessagePrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub message_prefix: Option<String>,
-    #[doc="<p>The time at which the crawl started.</p>"]
-    #[serde(rename="StartTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time at which the crawl started.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
-    #[doc="<p>Status of the last crawl.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Status of the last crawl.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
 
-#[doc="<p>The location of resources.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The location of resources.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct Location {
-    #[doc="<p>A JDBC location.</p>"]
-    #[serde(rename="Jdbc")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A JDBC location.</p>
+    #[serde(rename = "Jdbc")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub jdbc: Option<Vec<CodeGenNodeArg>>,
-    #[doc="<p>An AWS S3 location.</p>"]
-    #[serde(rename="S3")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An AWS S3 location.</p>
+    #[serde(rename = "S3")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub s3: Option<Vec<CodeGenNodeArg>>,
 }
 
-#[doc="<p>Defines a mapping.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Defines a mapping.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct MappingEntry {
-    #[doc="<p>The source path.</p>"]
-    #[serde(rename="SourcePath")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The source path.</p>
+    #[serde(rename = "SourcePath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub source_path: Option<String>,
-    #[doc="<p>The name of the source table.</p>"]
-    #[serde(rename="SourceTable")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the source table.</p>
+    #[serde(rename = "SourceTable")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub source_table: Option<String>,
-    #[doc="<p>The source type.</p>"]
-    #[serde(rename="SourceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The source type.</p>
+    #[serde(rename = "SourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub source_type: Option<String>,
-    #[doc="<p>The target path.</p>"]
-    #[serde(rename="TargetPath")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The target path.</p>
+    #[serde(rename = "TargetPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub target_path: Option<String>,
-    #[doc="<p>The target table.</p>"]
-    #[serde(rename="TargetTable")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The target table.</p>
+    #[serde(rename = "TargetTable")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub target_table: Option<String>,
-    #[doc="<p>The target type.</p>"]
-    #[serde(rename="TargetType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The target type.</p>
+    #[serde(rename = "TargetType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub target_type: Option<String>,
 }
 
-#[doc="<p>Specifies the sort order of a sorted column.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Specifies the sort order of a sorted column.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Order {
-    #[doc="<p>The name of the column.</p>"]
-    #[serde(rename="Column")]
+    /// <p>The name of the column.</p>
+    #[serde(rename = "Column")]
     pub column: String,
-    #[doc="<p>Indicates that the column is sorted in ascending order (<code>== 1</code>), or in descending order (<code>==0</code>).</p>"]
-    #[serde(rename="SortOrder")]
+    /// <p>Indicates that the column is sorted in ascending order (<code>== 1</code>), or in descending order (<code>==0</code>).</p>
+    #[serde(rename = "SortOrder")]
     pub sort_order: i64,
 }
 
-#[doc="<p>Represents a slice of table data.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents a slice of table data.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Partition {
-    #[doc="<p>The time at which the partition was created.</p>"]
-    #[serde(rename="CreationTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time at which the partition was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    #[doc="<p>The name of the catalog database where the table in question is located.</p>"]
-    #[serde(rename="DatabaseName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the catalog database where the table in question is located.</p>
+    #[serde(rename = "DatabaseName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
-    #[doc="<p>The last time at which the partition was accessed.</p>"]
-    #[serde(rename="LastAccessTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The last time at which the partition was accessed.</p>
+    #[serde(rename = "LastAccessTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_access_time: Option<f64>,
-    #[doc="<p>The last time at which column statistics were computed for this partition.</p>"]
-    #[serde(rename="LastAnalyzedTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The last time at which column statistics were computed for this partition.</p>
+    #[serde(rename = "LastAnalyzedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_analyzed_time: Option<f64>,
-    #[doc="<p>Partition parameters, in the form of a list of key-value pairs.</p>"]
-    #[serde(rename="Parameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Partition parameters, in the form of a list of key-value pairs.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>Provides information about the physical location where the partition is stored.</p>"]
-    #[serde(rename="StorageDescriptor")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Provides information about the physical location where the partition is stored.</p>
+    #[serde(rename = "StorageDescriptor")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_descriptor: Option<StorageDescriptor>,
-    #[doc="<p>The name of the table in question.</p>"]
-    #[serde(rename="TableName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the table in question.</p>
+    #[serde(rename = "TableName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub table_name: Option<String>,
-    #[doc="<p>The values of the partition.</p>"]
-    #[serde(rename="Values")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The values of the partition.</p>
+    #[serde(rename = "Values")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
 }
 
-#[doc="<p>Contains information about a partition error.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains information about a partition error.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PartitionError {
-    #[doc="<p>Details about the partition error.</p>"]
-    #[serde(rename="ErrorDetail")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Details about the partition error.</p>
+    #[serde(rename = "ErrorDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_detail: Option<ErrorDetail>,
-    #[doc="<p>The values that define the partition.</p>"]
-    #[serde(rename="PartitionValues")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The values that define the partition.</p>
+    #[serde(rename = "PartitionValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub partition_values: Option<Vec<String>>,
 }
 
-#[doc="<p>The structure used to create and update a partion.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The structure used to create and update a partion.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct PartitionInput {
-    #[doc="<p>The last time at which the partition was accessed.</p>"]
-    #[serde(rename="LastAccessTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The last time at which the partition was accessed.</p>
+    #[serde(rename = "LastAccessTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_access_time: Option<f64>,
-    #[doc="<p>The last time at which column statistics were computed for this partition.</p>"]
-    #[serde(rename="LastAnalyzedTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The last time at which column statistics were computed for this partition.</p>
+    #[serde(rename = "LastAnalyzedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_analyzed_time: Option<f64>,
-    #[doc="<p>Partition parameters, in the form of a list of key-value pairs.</p>"]
-    #[serde(rename="Parameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Partition parameters, in the form of a list of key-value pairs.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>Provides information about the physical location where the partition is stored.</p>"]
-    #[serde(rename="StorageDescriptor")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Provides information about the physical location where the partition is stored.</p>
+    #[serde(rename = "StorageDescriptor")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_descriptor: Option<StorageDescriptor>,
-    #[doc="<p>The values of the partition.</p>"]
-    #[serde(rename="Values")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The values of the partition.</p>
+    #[serde(rename = "Values")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct PartitionValueList {
-    #[serde(rename="Values")]
-    pub values: Vec<String>,
+    #[serde(rename = "Values")] pub values: Vec<String>,
 }
 
-#[doc="<p>Specifies the physical requirements for a connection.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Specifies the physical requirements for a connection.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct PhysicalConnectionRequirements {
-    #[doc="<p>The connection's availability zone.</p>"]
-    #[serde(rename="AvailabilityZone")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The connection's availability zone.</p>
+    #[serde(rename = "AvailabilityZone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zone: Option<String>,
-    #[doc="<p>The security group ID list used by the connection.</p>"]
-    #[serde(rename="SecurityGroupIdList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The security group ID list used by the connection.</p>
+    #[serde(rename = "SecurityGroupIdList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub security_group_id_list: Option<Vec<String>>,
-    #[doc="<p>The subnet ID used by the connection.</p>"]
-    #[serde(rename="SubnetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The subnet ID used by the connection.</p>
+    #[serde(rename = "SubnetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_id: Option<String>,
 }
 
-#[doc="<p>A job run that preceded this one.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A job run that preceded this one.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Predecessor {
-    #[doc="<p>The name of the predecessor job.</p>"]
-    #[serde(rename="JobName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the predecessor job.</p>
+    #[serde(rename = "JobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
-    #[doc="<p>The job-run ID of the precessor job run.</p>"]
-    #[serde(rename="RunId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The job-run ID of the precessor job run.</p>
+    #[serde(rename = "RunId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub run_id: Option<String>,
 }
 
-#[doc="<p>Defines the predicate of the trigger, which determines when it fires.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Defines the predicate of the trigger, which determines when it fires.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Predicate {
-    #[doc="<p>A list of the conditions that determine when the trigger will fire.</p>"]
-    #[serde(rename="Conditions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of the conditions that determine when the trigger will fire.</p>
+    #[serde(rename = "Conditions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub conditions: Option<Vec<Condition>>,
-    #[doc="<p>Currently \"OR\" is not supported.</p>"]
-    #[serde(rename="Logical")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Currently "OR" is not supported.</p>
+    #[serde(rename = "Logical")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub logical: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ResetJobBookmarkRequest {
-    #[doc="<p>The name of the job in question.</p>"]
-    #[serde(rename="JobName")]
+    /// <p>The name of the job in question.</p>
+    #[serde(rename = "JobName")]
     pub job_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ResetJobBookmarkResponse {
-    #[doc="<p>The reset bookmark entry.</p>"]
-    #[serde(rename="JobBookmarkEntry")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The reset bookmark entry.</p>
+    #[serde(rename = "JobBookmarkEntry")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub job_bookmark_entry: Option<JobBookmarkEntry>,
 }
 
-#[doc="<p>URIs for function resources.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>URIs for function resources.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ResourceUri {
-    #[doc="<p>The type of the resource.</p>"]
-    #[serde(rename="ResourceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of the resource.</p>
+    #[serde(rename = "ResourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
-    #[doc="<p>The URI for accessing the resource.</p>"]
-    #[serde(rename="Uri")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The URI for accessing the resource.</p>
+    #[serde(rename = "Uri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub uri: Option<String>,
 }
 
-#[doc="<p>Specifies a crawler target in AWS S3.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Specifies a crawler target in AWS S3.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct S3Target {
-    #[doc="<p>A list of S3 objects to exclude from the crawl.</p>"]
-    #[serde(rename="Exclusions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of S3 objects to exclude from the crawl.</p>
+    #[serde(rename = "Exclusions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub exclusions: Option<Vec<String>>,
-    #[doc="<p>The path to the S3 target.</p>"]
-    #[serde(rename="Path")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The path to the S3 target.</p>
+    #[serde(rename = "Path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub path: Option<String>,
 }
 
-#[doc="<p>A scheduling object using a <code>cron</code> statement to schedule an event.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A scheduling object using a <code>cron</code> statement to schedule an event.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Schedule {
-    #[doc="<p>A <code>cron</code> expression that can be used as a Cloudwatch event to schedule something (see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html\">CloudWatch Schedule Expression Syntax</a>. For example, to run something every day at 12:15 UTC, you would specify: <code>cron(15 12 * * ? *)</code>.</p>"]
-    #[serde(rename="ScheduleExpression")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A <code>cron</code> expression that can be used as a Cloudwatch event to schedule something (see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html">CloudWatch Schedule Expression Syntax</a>. For example, to run something every day at 12:15 UTC, you would specify: <code>cron(15 12 * * ? *)</code>.</p>
+    #[serde(rename = "ScheduleExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_expression: Option<String>,
-    #[doc="<p>The state of the schedule.</p>"]
-    #[serde(rename="State")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The state of the schedule.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
 }
 
-#[doc="<p>Crawler policy for update and deletion behavior.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Crawler policy for update and deletion behavior.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct SchemaChangePolicy {
-    #[doc="<p>The deletion behavior.</p>"]
-    #[serde(rename="DeleteBehavior")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The deletion behavior.</p>
+    #[serde(rename = "DeleteBehavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub delete_behavior: Option<String>,
-    #[doc="<p>The update behavior.</p>"]
-    #[serde(rename="UpdateBehavior")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The update behavior.</p>
+    #[serde(rename = "UpdateBehavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub update_behavior: Option<String>,
 }
 
-#[doc="<p>Defines a non-overlapping region of a table's partitions, allowing multiple requests to be executed in parallel.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Defines a non-overlapping region of a table's partitions, allowing multiple requests to be executed in parallel.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct Segment {
-    #[doc="<p>The zero-based index number of the this segment. For example, if the total number of segments is 4, SegmentNumber values will range from zero through three.</p>"]
-    #[serde(rename="SegmentNumber")]
+    /// <p>The zero-based index number of the this segment. For example, if the total number of segments is 4, SegmentNumber values will range from zero through three.</p>
+    #[serde(rename = "SegmentNumber")]
     pub segment_number: i64,
-    #[doc="<p>The total numer of segments.</p>"]
-    #[serde(rename="TotalSegments")]
+    /// <p>The total numer of segments.</p>
+    #[serde(rename = "TotalSegments")]
     pub total_segments: i64,
 }
 
-#[doc="<p>Information about a serialization/deserialization program (SerDe) which serves as an extractor and loader.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Information about a serialization/deserialization program (SerDe) which serves as an extractor and loader.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct SerDeInfo {
-    #[doc="<p>Name of the SerDe.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Name of the SerDe.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>A list of initialization parameters for the SerDe, in key-value form.</p>"]
-    #[serde(rename="Parameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of initialization parameters for the SerDe, in key-value form.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>Usually the class that implements the SerDe. An example is: <code>org.apache.hadoop.hive.serde2.columnar.ColumnarSerDe</code>.</p>"]
-    #[serde(rename="SerializationLibrary")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Usually the class that implements the SerDe. An example is: <code>org.apache.hadoop.hive.serde2.columnar.ColumnarSerDe</code>.</p>
+    #[serde(rename = "SerializationLibrary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub serialization_library: Option<String>,
 }
 
-#[doc="<p>Specifies skewed values in a table. Skewed are ones that occur with very high frequency.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Specifies skewed values in a table. Skewed are ones that occur with very high frequency.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct SkewedInfo {
-    #[doc="<p>A list of names of columns that contain skewed values.</p>"]
-    #[serde(rename="SkewedColumnNames")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of names of columns that contain skewed values.</p>
+    #[serde(rename = "SkewedColumnNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub skewed_column_names: Option<Vec<String>>,
-    #[doc="<p>A mapping of skewed values to the columns that contain them.</p>"]
-    #[serde(rename="SkewedColumnValueLocationMaps")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A mapping of skewed values to the columns that contain them.</p>
+    #[serde(rename = "SkewedColumnValueLocationMaps")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub skewed_column_value_location_maps: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>A list of values that appear so frequently as to be considered skewed.</p>"]
-    #[serde(rename="SkewedColumnValues")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of values that appear so frequently as to be considered skewed.</p>
+    #[serde(rename = "SkewedColumnValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub skewed_column_values: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StartCrawlerRequest {
-    #[doc="<p>Name of the <code>Crawler</code> to start.</p>"]
-    #[serde(rename="Name")]
+    /// <p>Name of the <code>Crawler</code> to start.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StartCrawlerResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StartCrawlerScheduleRequest {
-    #[doc="<p>Name of the crawler to schedule.</p>"]
-    #[serde(rename="CrawlerName")]
+    /// <p>Name of the crawler to schedule.</p>
+    #[serde(rename = "CrawlerName")]
     pub crawler_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StartCrawlerScheduleResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StartJobRunRequest {
-    #[doc="<p>The infrastructure capacity to allocate to this job.</p>"]
-    #[serde(rename="AllocatedCapacity")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The infrastructure capacity to allocate to this job.</p>
+    #[serde(rename = "AllocatedCapacity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub allocated_capacity: Option<i64>,
-    #[doc="<p>Specific arguments for this job run.</p>"]
-    #[serde(rename="Arguments")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specific arguments for this job run.</p>
+    #[serde(rename = "Arguments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arguments: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The name of the job to start.</p>"]
-    #[serde(rename="JobName")]
+    /// <p>The name of the job to start.</p>
+    #[serde(rename = "JobName")]
     pub job_name: String,
-    #[doc="<p>The ID of the job run to start.</p>"]
-    #[serde(rename="JobRunId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the job run to start.</p>
+    #[serde(rename = "JobRunId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub job_run_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StartJobRunResponse {
-    #[doc="<p>The ID assigned to this job run.</p>"]
-    #[serde(rename="JobRunId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID assigned to this job run.</p>
+    #[serde(rename = "JobRunId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub job_run_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StartTriggerRequest {
-    #[doc="<p>The name of the trigger to start.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the trigger to start.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StartTriggerResponse {
-    #[doc="<p>The name of the trigger that was started.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the trigger that was started.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StopCrawlerRequest {
-    #[doc="<p>Name of the <code>Crawler</code> to stop.</p>"]
-    #[serde(rename="Name")]
+    /// <p>Name of the <code>Crawler</code> to stop.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StopCrawlerResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StopCrawlerScheduleRequest {
-    #[doc="<p>Name of the crawler whose schedule state to set.</p>"]
-    #[serde(rename="CrawlerName")]
+    /// <p>Name of the crawler whose schedule state to set.</p>
+    #[serde(rename = "CrawlerName")]
     pub crawler_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StopCrawlerScheduleResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StopTriggerRequest {
-    #[doc="<p>The name of the trigger to stop.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the trigger to stop.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StopTriggerResponse {
-    #[doc="<p>The name of the trigger that was stopped.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the trigger that was stopped.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[doc="<p>Describes the physical storage of table data.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Describes the physical storage of table data.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct StorageDescriptor {
-    #[doc="<p>A list of reducer grouping columns, clustering columns, and bucketing columns in the table.</p>"]
-    #[serde(rename="BucketColumns")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of reducer grouping columns, clustering columns, and bucketing columns in the table.</p>
+    #[serde(rename = "BucketColumns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bucket_columns: Option<Vec<String>>,
-    #[doc="<p>A list of the <code>Columns</code> in the table.</p>"]
-    #[serde(rename="Columns")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of the <code>Columns</code> in the table.</p>
+    #[serde(rename = "Columns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub columns: Option<Vec<Column>>,
-    #[doc="<p>True if the data in the table is compressed, or False if not.</p>"]
-    #[serde(rename="Compressed")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>True if the data in the table is compressed, or False if not.</p>
+    #[serde(rename = "Compressed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compressed: Option<bool>,
-    #[doc="<p>The input format: <code>SequenceFileInputFormat</code> (binary), or <code>TextInputFormat</code>, or a custom format.</p>"]
-    #[serde(rename="InputFormat")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The input format: <code>SequenceFileInputFormat</code> (binary), or <code>TextInputFormat</code>, or a custom format.</p>
+    #[serde(rename = "InputFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub input_format: Option<String>,
-    #[doc="<p>The physical location of the table. By default this takes the form of the warehouse location, followed by the database location in the warehouse, followed by the table name.</p>"]
-    #[serde(rename="Location")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The physical location of the table. By default this takes the form of the warehouse location, followed by the database location in the warehouse, followed by the table name.</p>
+    #[serde(rename = "Location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
-    #[doc="<p>Must be specified if the table contains any dimension columns.</p>"]
-    #[serde(rename="NumberOfBuckets")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Must be specified if the table contains any dimension columns.</p>
+    #[serde(rename = "NumberOfBuckets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_buckets: Option<i64>,
-    #[doc="<p>The output format: <code>SequenceFileOutputFormat</code> (binary), or <code>IgnoreKeyTextOutputFormat</code>, or a custom format.</p>"]
-    #[serde(rename="OutputFormat")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The output format: <code>SequenceFileOutputFormat</code> (binary), or <code>IgnoreKeyTextOutputFormat</code>, or a custom format.</p>
+    #[serde(rename = "OutputFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub output_format: Option<String>,
-    #[doc="<p>User-supplied properties in key-value form.</p>"]
-    #[serde(rename="Parameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>User-supplied properties in key-value form.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>Serialization/deserialization (SerDe) information.</p>"]
-    #[serde(rename="SerdeInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Serialization/deserialization (SerDe) information.</p>
+    #[serde(rename = "SerdeInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub serde_info: Option<SerDeInfo>,
-    #[doc="<p>Information about values that appear very frequently in a column (skewed values).</p>"]
-    #[serde(rename="SkewedInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about values that appear very frequently in a column (skewed values).</p>
+    #[serde(rename = "SkewedInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub skewed_info: Option<SkewedInfo>,
-    #[doc="<p>A list specifying the sort order of each bucket in the table.</p>"]
-    #[serde(rename="SortColumns")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list specifying the sort order of each bucket in the table.</p>
+    #[serde(rename = "SortColumns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sort_columns: Option<Vec<Order>>,
-    #[doc="<p>True if the table data is stored in subdirectories, or False if not.</p>"]
-    #[serde(rename="StoredAsSubDirectories")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>True if the table data is stored in subdirectories, or False if not.</p>
+    #[serde(rename = "StoredAsSubDirectories")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub stored_as_sub_directories: Option<bool>,
 }
 
-#[doc="<p>Represents a collection of related data organized in columns and rows.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents a collection of related data organized in columns and rows.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Table {
-    #[doc="<p>Time when the table definition was created in the Data Catalog.</p>"]
-    #[serde(rename="CreateTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Time when the table definition was created in the Data Catalog.</p>
+    #[serde(rename = "CreateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<f64>,
-    #[doc="<p>Person or entity who created the table.</p>"]
-    #[serde(rename="CreatedBy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Person or entity who created the table.</p>
+    #[serde(rename = "CreatedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_by: Option<String>,
-    #[doc="<p>Name of the metadata database where the table metadata resides.</p>"]
-    #[serde(rename="DatabaseName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Name of the metadata database where the table metadata resides.</p>
+    #[serde(rename = "DatabaseName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
-    #[doc="<p>Description of the table.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Description of the table.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>Last time the table was accessed. This is usually taken from HDFS, and may not be reliable.</p>"]
-    #[serde(rename="LastAccessTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Last time the table was accessed. This is usually taken from HDFS, and may not be reliable.</p>
+    #[serde(rename = "LastAccessTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_access_time: Option<f64>,
-    #[doc="<p>Last time column statistics were computed for this table.</p>"]
-    #[serde(rename="LastAnalyzedTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Last time column statistics were computed for this table.</p>
+    #[serde(rename = "LastAnalyzedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_analyzed_time: Option<f64>,
-    #[doc="<p>Name of the table.</p>"]
-    #[serde(rename="Name")]
+    /// <p>Name of the table.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>Owner of the table.</p>"]
-    #[serde(rename="Owner")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Owner of the table.</p>
+    #[serde(rename = "Owner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
-    #[doc="<p>Properties associated with this table, as a list of key-value pairs.</p>"]
-    #[serde(rename="Parameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Properties associated with this table, as a list of key-value pairs.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>A list of columns by which the table is partitioned. Only primitive types are supported as partition keys.</p>"]
-    #[serde(rename="PartitionKeys")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of columns by which the table is partitioned. Only primitive types are supported as partition keys.</p>
+    #[serde(rename = "PartitionKeys")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub partition_keys: Option<Vec<Column>>,
-    #[doc="<p>Retention time for this table.</p>"]
-    #[serde(rename="Retention")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Retention time for this table.</p>
+    #[serde(rename = "Retention")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub retention: Option<i64>,
-    #[doc="<p>A storage descriptor containing information about the physical storage of this table.</p>"]
-    #[serde(rename="StorageDescriptor")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A storage descriptor containing information about the physical storage of this table.</p>
+    #[serde(rename = "StorageDescriptor")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_descriptor: Option<StorageDescriptor>,
-    #[doc="<p>The type of this table (<code>EXTERNAL_TABLE</code>, <code>VIRTUAL_VIEW</code>, etc.).</p>"]
-    #[serde(rename="TableType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of this table (<code>EXTERNAL_TABLE</code>, <code>VIRTUAL_VIEW</code>, etc.).</p>
+    #[serde(rename = "TableType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub table_type: Option<String>,
-    #[doc="<p>Last time the table was updated.</p>"]
-    #[serde(rename="UpdateTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Last time the table was updated.</p>
+    #[serde(rename = "UpdateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub update_time: Option<f64>,
-    #[doc="<p>If the table is a view, the expanded text of the view; otherwise <code>null</code>.</p>"]
-    #[serde(rename="ViewExpandedText")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the table is a view, the expanded text of the view; otherwise <code>null</code>.</p>
+    #[serde(rename = "ViewExpandedText")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub view_expanded_text: Option<String>,
-    #[doc="<p>If the table is a view, the original text of the view; otherwise <code>null</code>.</p>"]
-    #[serde(rename="ViewOriginalText")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the table is a view, the original text of the view; otherwise <code>null</code>.</p>
+    #[serde(rename = "ViewOriginalText")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub view_original_text: Option<String>,
 }
 
-#[doc="<p>An error record for table operations.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>An error record for table operations.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct TableError {
-    #[doc="<p>Detail about the error.</p>"]
-    #[serde(rename="ErrorDetail")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Detail about the error.</p>
+    #[serde(rename = "ErrorDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_detail: Option<ErrorDetail>,
-    #[doc="<p>Name of the table.</p>"]
-    #[serde(rename="TableName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Name of the table.</p>
+    #[serde(rename = "TableName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub table_name: Option<String>,
 }
 
-#[doc="<p>Structure used to create or update the table.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Structure used to create or update the table.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct TableInput {
-    #[doc="<p>Description of the table.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Description of the table.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>Last time the table was accessed.</p>"]
-    #[serde(rename="LastAccessTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Last time the table was accessed.</p>
+    #[serde(rename = "LastAccessTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_access_time: Option<f64>,
-    #[doc="<p>Last time column statistics were computed for this table.</p>"]
-    #[serde(rename="LastAnalyzedTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Last time column statistics were computed for this table.</p>
+    #[serde(rename = "LastAnalyzedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_analyzed_time: Option<f64>,
-    #[doc="<p>Name of the table.</p>"]
-    #[serde(rename="Name")]
+    /// <p>Name of the table.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>Owner of the table.</p>"]
-    #[serde(rename="Owner")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Owner of the table.</p>
+    #[serde(rename = "Owner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
-    #[doc="<p>Properties associated with this table, as a list of key-value pairs.</p>"]
-    #[serde(rename="Parameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Properties associated with this table, as a list of key-value pairs.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>A list of columns by which the table is partitioned. Only primitive types are supported as partition keys.</p>"]
-    #[serde(rename="PartitionKeys")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of columns by which the table is partitioned. Only primitive types are supported as partition keys.</p>
+    #[serde(rename = "PartitionKeys")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub partition_keys: Option<Vec<Column>>,
-    #[doc="<p>Retention time for this table.</p>"]
-    #[serde(rename="Retention")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Retention time for this table.</p>
+    #[serde(rename = "Retention")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub retention: Option<i64>,
-    #[doc="<p>A storage descriptor containing information about the physical storage of this table.</p>"]
-    #[serde(rename="StorageDescriptor")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A storage descriptor containing information about the physical storage of this table.</p>
+    #[serde(rename = "StorageDescriptor")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_descriptor: Option<StorageDescriptor>,
-    #[doc="<p>The type of this table (<code>EXTERNAL_TABLE</code>, <code>VIRTUAL_VIEW</code>, etc.).</p>"]
-    #[serde(rename="TableType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of this table (<code>EXTERNAL_TABLE</code>, <code>VIRTUAL_VIEW</code>, etc.).</p>
+    #[serde(rename = "TableType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub table_type: Option<String>,
-    #[doc="<p>If the table is a view, the expanded text of the view; otherwise <code>null</code>.</p>"]
-    #[serde(rename="ViewExpandedText")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the table is a view, the expanded text of the view; otherwise <code>null</code>.</p>
+    #[serde(rename = "ViewExpandedText")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub view_expanded_text: Option<String>,
-    #[doc="<p>If the table is a view, the original text of the view; otherwise <code>null</code>.</p>"]
-    #[serde(rename="ViewOriginalText")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the table is a view, the original text of the view; otherwise <code>null</code>.</p>
+    #[serde(rename = "ViewOriginalText")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub view_original_text: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct TableVersion {
-    #[serde(rename="Table")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "Table")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub table: Option<Table>,
-    #[serde(rename="VersionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "VersionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version_id: Option<String>,
 }
 
-#[doc="<p>Information about a specific trigger.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about a specific trigger.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Trigger {
-    #[doc="<p>The actions initiated by this trigger.</p>"]
-    #[serde(rename="Actions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The actions initiated by this trigger.</p>
+    #[serde(rename = "Actions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub actions: Option<Vec<Action>>,
-    #[doc="<p>A description of this trigger.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of this trigger.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The trigger ID.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The trigger ID.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>Name of the trigger.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Name of the trigger.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The predicate of this trigger.</p>"]
-    #[serde(rename="Predicate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The predicate of this trigger.</p>
+    #[serde(rename = "Predicate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub predicate: Option<Predicate>,
-    #[doc="<p>A cron schedule expression.</p>"]
-    #[serde(rename="Schedule")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A cron schedule expression.</p>
+    #[serde(rename = "Schedule")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
-    #[doc="<p>The current state of the trigger.</p>"]
-    #[serde(rename="State")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The current state of the trigger.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
-    #[doc="<p>The type of trigger that this is.</p>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of trigger that this is.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[doc="<p>A structure used to provide information used to updata a trigger.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>A structure used to provide information used to updata a trigger.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct TriggerUpdate {
-    #[doc="<p>The actions initiated by this trigger.</p>"]
-    #[serde(rename="Actions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The actions initiated by this trigger.</p>
+    #[serde(rename = "Actions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub actions: Option<Vec<Action>>,
-    #[doc="<p>A description of this trigger.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of this trigger.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The name of the trigger.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the trigger.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The predicate of this trigger, which defines when it will fire.</p>"]
-    #[serde(rename="Predicate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The predicate of this trigger, which defines when it will fire.</p>
+    #[serde(rename = "Predicate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub predicate: Option<Predicate>,
-    #[doc="<p>A cron expression specifying the schedule.</p>"]
-    #[serde(rename="Schedule")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A cron expression specifying the schedule.</p>
+    #[serde(rename = "Schedule")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateClassifierRequest {
-    #[doc="<p>A <code>GrokClassifier</code> object with updated fields.</p>"]
-    #[serde(rename="GrokClassifier")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A <code>GrokClassifier</code> object with updated fields.</p>
+    #[serde(rename = "GrokClassifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub grok_classifier: Option<UpdateGrokClassifierRequest>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateClassifierResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateConnectionRequest {
-    #[doc="<p>The ID of the Data Catalog in which the connection resides. If none is supplied, the AWS account ID is used by default.</p>"]
-    #[serde(rename="CatalogId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Data Catalog in which the connection resides. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    #[doc="<p>A <code>ConnectionInput</code> object that redefines the connection in question.</p>"]
-    #[serde(rename="ConnectionInput")]
+    /// <p>A <code>ConnectionInput</code> object that redefines the connection in question.</p>
+    #[serde(rename = "ConnectionInput")]
     pub connection_input: ConnectionInput,
-    #[doc="<p>The name of the connection definition to update.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the connection definition to update.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateConnectionResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateCrawlerRequest {
-    #[doc="<p>A list of custom <code>Classifier</code> names that the user has registered. By default, all AWS classifiers are included in a crawl, but these custom classifiers always override the default classifiers for a given classification.</p>"]
-    #[serde(rename="Classifiers")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of custom <code>Classifier</code> names that the user has registered. By default, all AWS classifiers are included in a crawl, but these custom classifiers always override the default classifiers for a given classification.</p>
+    #[serde(rename = "Classifiers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub classifiers: Option<Vec<String>>,
-    #[doc="<p>The Glue <code>Database</code> where results will be stored, such as: <code>arn:aws:daylight:us-east-1::database/sometable/*</code>.</p>"]
-    #[serde(rename="DatabaseName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Glue <code>Database</code> where results will be stored, such as: <code>arn:aws:daylight:us-east-1::database/sometable/*</code>.</p>
+    #[serde(rename = "DatabaseName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
-    #[doc="<p>A description of the new <code>Crawler</code>.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the new <code>Crawler</code>.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>Name of the new <code>Crawler</code>.</p>"]
-    #[serde(rename="Name")]
+    /// <p>Name of the new <code>Crawler</code>.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>The AWS ARN of the IAM role used by the new <code>Crawler</code> to access customer resources.</p>"]
-    #[serde(rename="Role")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS ARN of the IAM role used by the new <code>Crawler</code> to access customer resources.</p>
+    #[serde(rename = "Role")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
-    #[doc="<p>A cron expression that can be used as a Cloudwatch event (see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html\">CloudWatch Schedule Expression Syntax</a>. For example, to run every day at 12:15 UTC, specify: <code>cron(15 12 * * ? *)</code>.</p>"]
-    #[serde(rename="Schedule")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A cron expression that can be used as a Cloudwatch event (see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html">CloudWatch Schedule Expression Syntax</a>. For example, to run every day at 12:15 UTC, specify: <code>cron(15 12 * * ? *)</code>.</p>
+    #[serde(rename = "Schedule")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
-    #[doc="<p>Policy for the crawler's update and deletion behavior.</p>"]
-    #[serde(rename="SchemaChangePolicy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Policy for the crawler's update and deletion behavior.</p>
+    #[serde(rename = "SchemaChangePolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schema_change_policy: Option<SchemaChangePolicy>,
-    #[doc="<p>The table prefix used for catalog tables created.</p>"]
-    #[serde(rename="TablePrefix")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The table prefix used for catalog tables created.</p>
+    #[serde(rename = "TablePrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub table_prefix: Option<String>,
-    #[doc="<p>A list of collection of targets to crawl.</p>"]
-    #[serde(rename="Targets")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of collection of targets to crawl.</p>
+    #[serde(rename = "Targets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<CrawlerTargets>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateCrawlerResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateCrawlerScheduleRequest {
-    #[doc="<p>Name of the crawler whose schedule to update.</p>"]
-    #[serde(rename="CrawlerName")]
+    /// <p>Name of the crawler whose schedule to update.</p>
+    #[serde(rename = "CrawlerName")]
     pub crawler_name: String,
-    #[doc="<p>Cron expression of the updated schedule.</p>"]
-    #[serde(rename="Schedule")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Cron expression of the updated schedule.</p>
+    #[serde(rename = "Schedule")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateCrawlerScheduleResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateDatabaseRequest {
-    #[doc="<p>The ID of the Data Catalog in which the metadata database resides. If none is supplied, the AWS account ID is used by default.</p>"]
-    #[serde(rename="CatalogId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Data Catalog in which the metadata database resides. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    #[doc="<p>A <code>DatabaseInput</code> object specifying the new definition of the metadata database in the catalog.</p>"]
-    #[serde(rename="DatabaseInput")]
+    /// <p>A <code>DatabaseInput</code> object specifying the new definition of the metadata database in the catalog.</p>
+    #[serde(rename = "DatabaseInput")]
     pub database_input: DatabaseInput,
-    #[doc="<p>The name of the metadata database to update in the catalog.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the metadata database to update in the catalog.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateDatabaseResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateDevEndpointRequest {
-    #[doc="<p>Custom Python or Java custom libraries to be loaded in the DevEndpoint.</p>"]
-    #[serde(rename="CustomLibraries")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Custom Python or Java custom libraries to be loaded in the DevEndpoint.</p>
+    #[serde(rename = "CustomLibraries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_libraries: Option<DevEndpointCustomLibraries>,
-    #[doc="<p>The name of the DevEndpoint to be updated.</p>"]
-    #[serde(rename="EndpointName")]
+    /// <p>The name of the DevEndpoint to be updated.</p>
+    #[serde(rename = "EndpointName")]
     pub endpoint_name: String,
-    #[doc="<p>The public key for the DevEndpoint to use.</p>"]
-    #[serde(rename="PublicKey")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The public key for the DevEndpoint to use.</p>
+    #[serde(rename = "PublicKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub public_key: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateDevEndpointResponse;
 
-#[doc="<p>Specifies a Grok classifier to update when passed to UpdateClassifier.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Specifies a Grok classifier to update when passed to UpdateClassifier.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateGrokClassifierRequest {
-    #[doc="<p>The type of result that the classifier matches, such as Twitter Json, Omniture logs, Cloudwatch logs, and so forth.</p>"]
-    #[serde(rename="Classification")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of result that the classifier matches, such as Twitter Json, Omniture logs, Cloudwatch logs, and so forth.</p>
+    #[serde(rename = "Classification")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub classification: Option<String>,
-    #[doc="<p>Custom grok patterns used by this classifier.</p>"]
-    #[serde(rename="CustomPatterns")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Custom grok patterns used by this classifier.</p>
+    #[serde(rename = "CustomPatterns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_patterns: Option<String>,
-    #[doc="<p>The grok pattern used by this classifier.</p>"]
-    #[serde(rename="GrokPattern")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The grok pattern used by this classifier.</p>
+    #[serde(rename = "GrokPattern")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub grok_pattern: Option<String>,
-    #[doc="<p>The name of the <code>GrokClassifier</code>.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the <code>GrokClassifier</code>.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateJobRequest {
-    #[doc="<p>Name of the job definition to update.</p>"]
-    #[serde(rename="JobName")]
+    /// <p>Name of the job definition to update.</p>
+    #[serde(rename = "JobName")]
     pub job_name: String,
-    #[doc="<p>Specifies the values with which to update the job.</p>"]
-    #[serde(rename="JobUpdate")]
+    /// <p>Specifies the values with which to update the job.</p>
+    #[serde(rename = "JobUpdate")]
     pub job_update: JobUpdate,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateJobResponse {
-    #[doc="<p>Returns the name of the updated job.</p>"]
-    #[serde(rename="JobName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Returns the name of the updated job.</p>
+    #[serde(rename = "JobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdatePartitionRequest {
-    #[doc="<p>The ID of the Data Catalog where the partition to be updated resides. If none is supplied, the AWS account ID is used by default.</p>"]
-    #[serde(rename="CatalogId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Data Catalog where the partition to be updated resides. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    #[doc="<p>The name of the catalog database in which the table in question resides.</p>"]
-    #[serde(rename="DatabaseName")]
+    /// <p>The name of the catalog database in which the table in question resides.</p>
+    #[serde(rename = "DatabaseName")]
     pub database_name: String,
-    #[doc="<p>The new partition object to which to update the partition.</p>"]
-    #[serde(rename="PartitionInput")]
+    /// <p>The new partition object to which to update the partition.</p>
+    #[serde(rename = "PartitionInput")]
     pub partition_input: PartitionInput,
-    #[doc="<p>A list of the values defining the partition.</p>"]
-    #[serde(rename="PartitionValueList")]
+    /// <p>A list of the values defining the partition.</p>
+    #[serde(rename = "PartitionValueList")]
     pub partition_value_list: Vec<String>,
-    #[doc="<p>The name of the table where the partition to be updated is located.</p>"]
-    #[serde(rename="TableName")]
+    /// <p>The name of the table where the partition to be updated is located.</p>
+    #[serde(rename = "TableName")]
     pub table_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdatePartitionResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateTableRequest {
-    #[doc="<p>The ID of the Data Catalog where the table resides. If none is supplied, the AWS account ID is used by default.</p>"]
-    #[serde(rename="CatalogId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Data Catalog where the table resides. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    #[doc="<p>The name of the catalog database in which the table resides.</p>"]
-    #[serde(rename="DatabaseName")]
+    /// <p>The name of the catalog database in which the table resides.</p>
+    #[serde(rename = "DatabaseName")]
     pub database_name: String,
-    #[doc="<p>An updated <code>TableInput</code> object to define the metadata table in the catalog.</p>"]
-    #[serde(rename="TableInput")]
+    /// <p>An updated <code>TableInput</code> object to define the metadata table in the catalog.</p>
+    #[serde(rename = "TableInput")]
     pub table_input: TableInput,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateTableResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateTriggerRequest {
-    #[doc="<p>The name of the trigger to update.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the trigger to update.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>The new values with which to update the trigger.</p>"]
-    #[serde(rename="TriggerUpdate")]
+    /// <p>The new values with which to update the trigger.</p>
+    #[serde(rename = "TriggerUpdate")]
     pub trigger_update: TriggerUpdate,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateTriggerResponse {
-    #[doc="<p>The resulting trigger definition.</p>"]
-    #[serde(rename="Trigger")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The resulting trigger definition.</p>
+    #[serde(rename = "Trigger")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub trigger: Option<Trigger>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateUserDefinedFunctionRequest {
-    #[doc="<p>The ID of the Data Catalog where the function to be updated is located. If none is supplied, the AWS account ID is used by default.</p>"]
-    #[serde(rename="CatalogId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Data Catalog where the function to be updated is located. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    #[doc="<p>The name of the catalog database where the function to be updated is located.</p>"]
-    #[serde(rename="DatabaseName")]
+    /// <p>The name of the catalog database where the function to be updated is located.</p>
+    #[serde(rename = "DatabaseName")]
     pub database_name: String,
-    #[doc="<p>A <code>FunctionInput</code> object that re-defines the function in the Data Catalog.</p>"]
-    #[serde(rename="FunctionInput")]
+    /// <p>A <code>FunctionInput</code> object that re-defines the function in the Data Catalog.</p>
+    #[serde(rename = "FunctionInput")]
     pub function_input: UserDefinedFunctionInput,
-    #[doc="<p>The name of the function.</p>"]
-    #[serde(rename="FunctionName")]
+    /// <p>The name of the function.</p>
+    #[serde(rename = "FunctionName")]
     pub function_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateUserDefinedFunctionResponse;
 
-#[doc="<p>Represents the equivalent of a Hive user-defined function (<code>UDF</code>) definition.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the equivalent of a Hive user-defined function (<code>UDF</code>) definition.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UserDefinedFunction {
-    #[doc="<p>The Java class that contains the function code.</p>"]
-    #[serde(rename="ClassName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Java class that contains the function code.</p>
+    #[serde(rename = "ClassName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub class_name: Option<String>,
-    #[doc="<p>The time at which the function was created.</p>"]
-    #[serde(rename="CreateTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time at which the function was created.</p>
+    #[serde(rename = "CreateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<f64>,
-    #[doc="<p>The name of the function.</p>"]
-    #[serde(rename="FunctionName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the function.</p>
+    #[serde(rename = "FunctionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub function_name: Option<String>,
-    #[doc="<p>The owner of the function.</p>"]
-    #[serde(rename="OwnerName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The owner of the function.</p>
+    #[serde(rename = "OwnerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_name: Option<String>,
-    #[doc="<p>The owner type.</p>"]
-    #[serde(rename="OwnerType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The owner type.</p>
+    #[serde(rename = "OwnerType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_type: Option<String>,
-    #[doc="<p>The resource URIs for the function.</p>"]
-    #[serde(rename="ResourceUris")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The resource URIs for the function.</p>
+    #[serde(rename = "ResourceUris")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_uris: Option<Vec<ResourceUri>>,
 }
 
-#[doc="<p>A structure used to create or updata a user-defined function.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>A structure used to create or updata a user-defined function.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UserDefinedFunctionInput {
-    #[doc="<p>The Java class that contains the function code.</p>"]
-    #[serde(rename="ClassName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Java class that contains the function code.</p>
+    #[serde(rename = "ClassName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub class_name: Option<String>,
-    #[doc="<p>The name of the function.</p>"]
-    #[serde(rename="FunctionName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the function.</p>
+    #[serde(rename = "FunctionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub function_name: Option<String>,
-    #[doc="<p>The owner of the function.</p>"]
-    #[serde(rename="OwnerName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The owner of the function.</p>
+    #[serde(rename = "OwnerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_name: Option<String>,
-    #[doc="<p>The owner type.</p>"]
-    #[serde(rename="OwnerType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The owner type.</p>
+    #[serde(rename = "OwnerType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_type: Option<String>,
-    #[doc="<p>The resource URIs for the function.</p>"]
-    #[serde(rename="ResourceUris")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The resource URIs for the function.</p>
+    #[serde(rename = "ResourceUris")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_uris: Option<Vec<ResourceUri>>,
 }
 
@@ -3021,7 +3019,6 @@ pub enum BatchCreatePartitionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl BatchCreatePartitionError {
     pub fn from_body(body: &str) -> BatchCreatePartitionError {
@@ -3051,7 +3048,11 @@ impl BatchCreatePartitionError {
                     "OperationTimeoutException" => {
                         BatchCreatePartitionError::OperationTimeout(String::from(error_message))
                     }
-                    "ResourceNumberLimitExceededException" => BatchCreatePartitionError::ResourceNumberLimitExceeded(String::from(error_message)),
+                    "ResourceNumberLimitExceededException" => {
+                        BatchCreatePartitionError::ResourceNumberLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         BatchCreatePartitionError::Validation(error_message.to_string())
                     }
@@ -3122,7 +3123,6 @@ pub enum BatchDeleteConnectionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl BatchDeleteConnectionError {
     pub fn from_body(body: &str) -> BatchDeleteConnectionError {
@@ -3213,7 +3213,6 @@ pub enum BatchDeletePartitionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl BatchDeletePartitionError {
     pub fn from_body(body: &str) -> BatchDeletePartitionError {
@@ -3313,7 +3312,6 @@ pub enum BatchDeleteTableError {
     Unknown(String),
 }
 
-
 impl BatchDeleteTableError {
     pub fn from_body(body: &str) -> BatchDeleteTableError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3409,7 +3407,6 @@ pub enum BatchGetPartitionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl BatchGetPartitionError {
     pub fn from_body(body: &str) -> BatchGetPartitionError {
@@ -3507,7 +3504,6 @@ pub enum CreateClassifierError {
     Unknown(String),
 }
 
-
 impl CreateClassifierError {
     pub fn from_body(body: &str) -> CreateClassifierError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3597,7 +3593,6 @@ pub enum CreateConnectionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateConnectionError {
     pub fn from_body(body: &str) -> CreateConnectionError {
@@ -3690,7 +3685,6 @@ pub enum CreateCrawlerError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateCrawlerError {
     pub fn from_body(body: &str) -> CreateCrawlerError {
@@ -3790,7 +3784,6 @@ pub enum CreateDatabaseError {
     Unknown(String),
 }
 
-
 impl CreateDatabaseError {
     pub fn from_body(body: &str) -> CreateDatabaseError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3816,7 +3809,11 @@ impl CreateDatabaseError {
                     "OperationTimeoutException" => {
                         CreateDatabaseError::OperationTimeout(String::from(error_message))
                     }
-                    "ResourceNumberLimitExceededException" => CreateDatabaseError::ResourceNumberLimitExceeded(String::from(error_message)),
+                    "ResourceNumberLimitExceededException" => {
+                        CreateDatabaseError::ResourceNumberLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         CreateDatabaseError::Validation(error_message.to_string())
                     }
@@ -3895,7 +3892,6 @@ pub enum CreateDevEndpointError {
     Unknown(String),
 }
 
-
 impl CreateDevEndpointError {
     pub fn from_body(body: &str) -> CreateDevEndpointError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3915,7 +3911,11 @@ impl CreateDevEndpointError {
                     "AlreadyExistsException" => {
                         CreateDevEndpointError::AlreadyExists(String::from(error_message))
                     }
-                    "IdempotentParameterMismatchException" => CreateDevEndpointError::IdempotentParameterMismatch(String::from(error_message)),
+                    "IdempotentParameterMismatchException" => {
+                        CreateDevEndpointError::IdempotentParameterMismatch(String::from(
+                            error_message,
+                        ))
+                    }
                     "InternalServiceException" => {
                         CreateDevEndpointError::InternalService(String::from(error_message))
                     }
@@ -3925,7 +3925,11 @@ impl CreateDevEndpointError {
                     "OperationTimeoutException" => {
                         CreateDevEndpointError::OperationTimeout(String::from(error_message))
                     }
-                    "ResourceNumberLimitExceededException" => CreateDevEndpointError::ResourceNumberLimitExceeded(String::from(error_message)),
+                    "ResourceNumberLimitExceededException" => {
+                        CreateDevEndpointError::ResourceNumberLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         CreateDevEndpointError::Validation(error_message.to_string())
                     }
@@ -4005,7 +4009,6 @@ pub enum CreateJobError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateJobError {
     pub fn from_body(body: &str) -> CreateJobError {
@@ -4113,7 +4116,6 @@ pub enum CreatePartitionError {
     Unknown(String),
 }
 
-
 impl CreatePartitionError {
     pub fn from_body(body: &str) -> CreatePartitionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4142,7 +4144,11 @@ impl CreatePartitionError {
                     "OperationTimeoutException" => {
                         CreatePartitionError::OperationTimeout(String::from(error_message))
                     }
-                    "ResourceNumberLimitExceededException" => CreatePartitionError::ResourceNumberLimitExceeded(String::from(error_message)),
+                    "ResourceNumberLimitExceededException" => {
+                        CreatePartitionError::ResourceNumberLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         CreatePartitionError::Validation(error_message.to_string())
                     }
@@ -4213,7 +4219,6 @@ pub enum CreateScriptError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateScriptError {
     pub fn from_body(body: &str) -> CreateScriptError {
@@ -4310,7 +4315,6 @@ pub enum CreateTableError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateTableError {
     pub fn from_body(body: &str) -> CreateTableError {
@@ -4418,7 +4422,6 @@ pub enum CreateTriggerError {
     Unknown(String),
 }
 
-
 impl CreateTriggerError {
     pub fn from_body(body: &str) -> CreateTriggerError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4521,7 +4524,6 @@ pub enum CreateUserDefinedFunctionError {
     Unknown(String),
 }
 
-
 impl CreateUserDefinedFunctionError {
     pub fn from_body(body: &str) -> CreateUserDefinedFunctionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4547,7 +4549,11 @@ impl CreateUserDefinedFunctionError {
                     "InvalidInputException" => {
                         CreateUserDefinedFunctionError::InvalidInput(String::from(error_message))
                     }
-                    "OperationTimeoutException" => CreateUserDefinedFunctionError::OperationTimeout(String::from(error_message)),
+                    "OperationTimeoutException" => {
+                        CreateUserDefinedFunctionError::OperationTimeout(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         CreateUserDefinedFunctionError::Validation(error_message.to_string())
                     }
@@ -4617,7 +4623,6 @@ pub enum DeleteClassifierError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteClassifierError {
     pub fn from_body(body: &str) -> DeleteClassifierError {
@@ -4702,7 +4707,6 @@ pub enum DeleteConnectionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteConnectionError {
     pub fn from_body(body: &str) -> DeleteConnectionError {
@@ -4791,7 +4795,6 @@ pub enum DeleteCrawlerError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteCrawlerError {
     pub fn from_body(body: &str) -> DeleteCrawlerError {
@@ -4889,7 +4892,6 @@ pub enum DeleteDatabaseError {
     Unknown(String),
 }
 
-
 impl DeleteDatabaseError {
     pub fn from_body(body: &str) -> DeleteDatabaseError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4985,7 +4987,6 @@ pub enum DeleteDevEndpointError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteDevEndpointError {
     pub fn from_body(body: &str) -> DeleteDevEndpointError {
@@ -5083,7 +5084,6 @@ pub enum DeleteJobError {
     Unknown(String),
 }
 
-
 impl DeleteJobError {
     pub fn from_body(body: &str) -> DeleteJobError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5173,7 +5173,6 @@ pub enum DeletePartitionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeletePartitionError {
     pub fn from_body(body: &str) -> DeletePartitionError {
@@ -5271,7 +5270,6 @@ pub enum DeleteTableError {
     Unknown(String),
 }
 
-
 impl DeleteTableError {
     pub fn from_body(body: &str) -> DeleteTableError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5366,7 +5364,6 @@ pub enum DeleteTriggerError {
     Unknown(String),
 }
 
-
 impl DeleteTriggerError {
     pub fn from_body(body: &str) -> DeleteTriggerError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5459,7 +5456,6 @@ pub enum DeleteUserDefinedFunctionError {
     Unknown(String),
 }
 
-
 impl DeleteUserDefinedFunctionError {
     pub fn from_body(body: &str) -> DeleteUserDefinedFunctionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5482,7 +5478,11 @@ impl DeleteUserDefinedFunctionError {
                     "InvalidInputException" => {
                         DeleteUserDefinedFunctionError::InvalidInput(String::from(error_message))
                     }
-                    "OperationTimeoutException" => DeleteUserDefinedFunctionError::OperationTimeout(String::from(error_message)),
+                    "OperationTimeoutException" => {
+                        DeleteUserDefinedFunctionError::OperationTimeout(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DeleteUserDefinedFunctionError::Validation(error_message.to_string())
                     }
@@ -5551,7 +5551,6 @@ pub enum GetCatalogImportStatusError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetCatalogImportStatusError {
     pub fn from_body(body: &str) -> GetCatalogImportStatusError {
@@ -5639,7 +5638,6 @@ pub enum GetClassifierError {
     Unknown(String),
 }
 
-
 impl GetClassifierError {
     pub fn from_body(body: &str) -> GetClassifierError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5722,7 +5720,6 @@ pub enum GetClassifiersError {
     Unknown(String),
 }
 
-
 impl GetClassifiersError {
     pub fn from_body(body: &str) -> GetClassifiersError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5802,7 +5799,6 @@ pub enum GetConnectionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetConnectionError {
     pub fn from_body(body: &str) -> GetConnectionError {
@@ -5888,7 +5884,6 @@ pub enum GetConnectionsError {
     Unknown(String),
 }
 
-
 impl GetConnectionsError {
     pub fn from_body(body: &str) -> GetConnectionsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5973,7 +5968,6 @@ pub enum GetCrawlerError {
     Unknown(String),
 }
 
-
 impl GetCrawlerError {
     pub fn from_body(body: &str) -> GetCrawlerError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6054,7 +6048,6 @@ pub enum GetCrawlerMetricsError {
     Unknown(String),
 }
 
-
 impl GetCrawlerMetricsError {
     pub fn from_body(body: &str) -> GetCrawlerMetricsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6134,7 +6127,6 @@ pub enum GetCrawlersError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetCrawlersError {
     pub fn from_body(body: &str) -> GetCrawlersError {
@@ -6219,7 +6211,6 @@ pub enum GetDatabaseError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetDatabaseError {
     pub fn from_body(body: &str) -> GetDatabaseError {
@@ -6315,7 +6306,6 @@ pub enum GetDatabasesError {
     Unknown(String),
 }
 
-
 impl GetDatabasesError {
     pub fn from_body(body: &str) -> GetDatabasesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6405,7 +6395,6 @@ pub enum GetDataflowGraphError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetDataflowGraphError {
     pub fn from_body(body: &str) -> GetDataflowGraphError {
@@ -6498,7 +6487,6 @@ pub enum GetDevEndpointError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetDevEndpointError {
     pub fn from_body(body: &str) -> GetDevEndpointError {
@@ -6596,7 +6584,6 @@ pub enum GetDevEndpointsError {
     Unknown(String),
 }
 
-
 impl GetDevEndpointsError {
     pub fn from_body(body: &str) -> GetDevEndpointsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6693,7 +6680,6 @@ pub enum GetJobError {
     Unknown(String),
 }
 
-
 impl GetJobError {
     pub fn from_body(body: &str) -> GetJobError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6787,7 +6773,6 @@ pub enum GetJobRunError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetJobRunError {
     pub fn from_body(body: &str) -> GetJobRunError {
@@ -6883,7 +6868,6 @@ pub enum GetJobRunsError {
     Unknown(String),
 }
 
-
 impl GetJobRunsError {
     pub fn from_body(body: &str) -> GetJobRunsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6978,7 +6962,6 @@ pub enum GetJobsError {
     Unknown(String),
 }
 
-
 impl GetJobsError {
     pub fn from_body(body: &str) -> GetJobsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -7071,7 +7054,6 @@ pub enum GetMappingError {
     Unknown(String),
 }
 
-
 impl GetMappingError {
     pub fn from_body(body: &str) -> GetMappingError {
         match from_str::<SerdeJsonValue>(body) {
@@ -7161,7 +7143,6 @@ pub enum GetPartitionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetPartitionError {
     pub fn from_body(body: &str) -> GetPartitionError {
@@ -7259,7 +7240,6 @@ pub enum GetPartitionsError {
     Unknown(String),
 }
 
-
 impl GetPartitionsError {
     pub fn from_body(body: &str) -> GetPartitionsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -7354,7 +7334,6 @@ pub enum GetPlanError {
     Unknown(String),
 }
 
-
 impl GetPlanError {
     pub fn from_body(body: &str) -> GetPlanError {
         match from_str::<SerdeJsonValue>(body) {
@@ -7444,7 +7423,6 @@ pub enum GetTableError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetTableError {
     pub fn from_body(body: &str) -> GetTableError {
@@ -7539,7 +7517,6 @@ pub enum GetTableVersionsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetTableVersionsError {
     pub fn from_body(body: &str) -> GetTableVersionsError {
@@ -7637,7 +7614,6 @@ pub enum GetTablesError {
     Unknown(String),
 }
 
-
 impl GetTablesError {
     pub fn from_body(body: &str) -> GetTablesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -7732,7 +7708,6 @@ pub enum GetTriggerError {
     Unknown(String),
 }
 
-
 impl GetTriggerError {
     pub fn from_body(body: &str) -> GetTriggerError {
         match from_str::<SerdeJsonValue>(body) {
@@ -7826,7 +7801,6 @@ pub enum GetTriggersError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetTriggersError {
     pub fn from_body(body: &str) -> GetTriggersError {
@@ -7923,7 +7897,6 @@ pub enum GetUserDefinedFunctionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetUserDefinedFunctionError {
     pub fn from_body(body: &str) -> GetUserDefinedFunctionError {
@@ -8023,7 +7996,6 @@ pub enum GetUserDefinedFunctionsError {
     Unknown(String),
 }
 
-
 impl GetUserDefinedFunctionsError {
     pub fn from_body(body: &str) -> GetUserDefinedFunctionsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -8118,7 +8090,6 @@ pub enum ImportCatalogToGlueError {
     Unknown(String),
 }
 
-
 impl ImportCatalogToGlueError {
     pub fn from_body(body: &str) -> ImportCatalogToGlueError {
         match from_str::<SerdeJsonValue>(body) {
@@ -8208,7 +8179,6 @@ pub enum ResetJobBookmarkError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ResetJobBookmarkError {
     pub fn from_body(body: &str) -> ResetJobBookmarkError {
@@ -8304,7 +8274,6 @@ pub enum StartCrawlerError {
     Unknown(String),
 }
 
-
 impl StartCrawlerError {
     pub fn from_body(body: &str) -> StartCrawlerError {
         match from_str::<SerdeJsonValue>(body) {
@@ -8399,7 +8368,6 @@ pub enum StartCrawlerScheduleError {
     Unknown(String),
 }
 
-
 impl StartCrawlerScheduleError {
     pub fn from_body(body: &str) -> StartCrawlerScheduleError {
         match from_str::<SerdeJsonValue>(body) {
@@ -8425,7 +8393,11 @@ impl StartCrawlerScheduleError {
                     "SchedulerRunningException" => {
                         StartCrawlerScheduleError::SchedulerRunning(String::from(error_message))
                     }
-                    "SchedulerTransitioningException" => StartCrawlerScheduleError::SchedulerTransitioning(String::from(error_message)),
+                    "SchedulerTransitioningException" => {
+                        StartCrawlerScheduleError::SchedulerTransitioning(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         StartCrawlerScheduleError::Validation(error_message.to_string())
                     }
@@ -8503,7 +8475,6 @@ pub enum StartJobRunError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl StartJobRunError {
     pub fn from_body(body: &str) -> StartJobRunError {
@@ -8613,7 +8584,6 @@ pub enum StartTriggerError {
     Unknown(String),
 }
 
-
 impl StartTriggerError {
     pub fn from_body(body: &str) -> StartTriggerError {
         match from_str::<SerdeJsonValue>(body) {
@@ -8718,7 +8688,6 @@ pub enum StopCrawlerError {
     Unknown(String),
 }
 
-
 impl StopCrawlerError {
     pub fn from_body(body: &str) -> StopCrawlerError {
         match from_str::<SerdeJsonValue>(body) {
@@ -8815,7 +8784,6 @@ pub enum StopCrawlerScheduleError {
     Unknown(String),
 }
 
-
 impl StopCrawlerScheduleError {
     pub fn from_body(body: &str) -> StopCrawlerScheduleError {
         match from_str::<SerdeJsonValue>(body) {
@@ -8838,7 +8806,11 @@ impl StopCrawlerScheduleError {
                     "SchedulerNotRunningException" => {
                         StopCrawlerScheduleError::SchedulerNotRunning(String::from(error_message))
                     }
-                    "SchedulerTransitioningException" => StopCrawlerScheduleError::SchedulerTransitioning(String::from(error_message)),
+                    "SchedulerTransitioningException" => {
+                        StopCrawlerScheduleError::SchedulerTransitioning(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         StopCrawlerScheduleError::Validation(error_message.to_string())
                     }
@@ -8911,7 +8883,6 @@ pub enum StopTriggerError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl StopTriggerError {
     pub fn from_body(body: &str) -> StopTriggerError {
@@ -9009,7 +8980,6 @@ pub enum UpdateClassifierError {
     Unknown(String),
 }
 
-
 impl UpdateClassifierError {
     pub fn from_body(body: &str) -> UpdateClassifierError {
         match from_str::<SerdeJsonValue>(body) {
@@ -9104,7 +9074,6 @@ pub enum UpdateConnectionError {
     Unknown(String),
 }
 
-
 impl UpdateConnectionError {
     pub fn from_body(body: &str) -> UpdateConnectionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -9198,7 +9167,6 @@ pub enum UpdateCrawlerError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl UpdateCrawlerError {
     pub fn from_body(body: &str) -> UpdateCrawlerError {
@@ -9302,7 +9270,6 @@ pub enum UpdateCrawlerScheduleError {
     Unknown(String),
 }
 
-
 impl UpdateCrawlerScheduleError {
     pub fn from_body(body: &str) -> UpdateCrawlerScheduleError {
         match from_str::<SerdeJsonValue>(body) {
@@ -9325,7 +9292,11 @@ impl UpdateCrawlerScheduleError {
                     "OperationTimeoutException" => {
                         UpdateCrawlerScheduleError::OperationTimeout(String::from(error_message))
                     }
-                    "SchedulerTransitioningException" => UpdateCrawlerScheduleError::SchedulerTransitioning(String::from(error_message)),
+                    "SchedulerTransitioningException" => {
+                        UpdateCrawlerScheduleError::SchedulerTransitioning(String::from(
+                            error_message,
+                        ))
+                    }
                     "VersionMismatchException" => {
                         UpdateCrawlerScheduleError::VersionMismatch(String::from(error_message))
                     }
@@ -9402,7 +9373,6 @@ pub enum UpdateDatabaseError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl UpdateDatabaseError {
     pub fn from_body(body: &str) -> UpdateDatabaseError {
@@ -9499,7 +9469,6 @@ pub enum UpdateDevEndpointError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl UpdateDevEndpointError {
     pub fn from_body(body: &str) -> UpdateDevEndpointError {
@@ -9599,7 +9568,6 @@ pub enum UpdateJobError {
     Unknown(String),
 }
 
-
 impl UpdateJobError {
     pub fn from_body(body: &str) -> UpdateJobError {
         match from_str::<SerdeJsonValue>(body) {
@@ -9693,7 +9661,6 @@ pub enum UpdatePartitionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl UpdatePartitionError {
     pub fn from_body(body: &str) -> UpdatePartitionError {
@@ -9792,7 +9759,6 @@ pub enum UpdateTableError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl UpdateTableError {
     pub fn from_body(body: &str) -> UpdateTableError {
@@ -9894,7 +9860,6 @@ pub enum UpdateTriggerError {
     Unknown(String),
 }
 
-
 impl UpdateTriggerError {
     pub fn from_body(body: &str) -> UpdateTriggerError {
         match from_str::<SerdeJsonValue>(body) {
@@ -9991,7 +9956,6 @@ pub enum UpdateUserDefinedFunctionError {
     Unknown(String),
 }
 
-
 impl UpdateUserDefinedFunctionError {
     pub fn from_body(body: &str) -> UpdateUserDefinedFunctionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -10014,7 +9978,11 @@ impl UpdateUserDefinedFunctionError {
                     "InvalidInputException" => {
                         UpdateUserDefinedFunctionError::InvalidInput(String::from(error_message))
                     }
-                    "OperationTimeoutException" => UpdateUserDefinedFunctionError::OperationTimeout(String::from(error_message)),
+                    "OperationTimeoutException" => {
+                        UpdateUserDefinedFunctionError::OperationTimeout(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         UpdateUserDefinedFunctionError::Validation(error_message.to_string())
                     }
@@ -10069,446 +10037,422 @@ impl Error for UpdateUserDefinedFunctionError {
 }
 /// Trait representing the capabilities of the AWS Glue API. AWS Glue clients implement this trait.
 pub trait Glue {
-    #[doc="<p>Creates one or more partitions in a batch operation.</p>"]
-    fn batch_create_partition
-        (&self,
-         input: &BatchCreatePartitionRequest)
-         -> Result<BatchCreatePartitionResponse, BatchCreatePartitionError>;
+    #[doc = "<p>Creates one or more partitions in a batch operation.</p>"]
+    fn batch_create_partition(
+        &self,
+        input: &BatchCreatePartitionRequest,
+    ) -> Result<BatchCreatePartitionResponse, BatchCreatePartitionError>;
 
+    #[doc = "<p>Deletes a list of connection definitions from the Data Catalog.</p>"]
+    fn batch_delete_connection(
+        &self,
+        input: &BatchDeleteConnectionRequest,
+    ) -> Result<BatchDeleteConnectionResponse, BatchDeleteConnectionError>;
 
-    #[doc="<p>Deletes a list of connection definitions from the Data Catalog.</p>"]
-    fn batch_delete_connection
-        (&self,
-         input: &BatchDeleteConnectionRequest)
-         -> Result<BatchDeleteConnectionResponse, BatchDeleteConnectionError>;
+    #[doc = "<p>Deletes one or more partitions in a batch operation.</p>"]
+    fn batch_delete_partition(
+        &self,
+        input: &BatchDeletePartitionRequest,
+    ) -> Result<BatchDeletePartitionResponse, BatchDeletePartitionError>;
 
+    #[doc = "<p>Deletes multiple tables at once.</p>"]
+    fn batch_delete_table(
+        &self,
+        input: &BatchDeleteTableRequest,
+    ) -> Result<BatchDeleteTableResponse, BatchDeleteTableError>;
 
-    #[doc="<p>Deletes one or more partitions in a batch operation.</p>"]
-    fn batch_delete_partition
-        (&self,
-         input: &BatchDeletePartitionRequest)
-         -> Result<BatchDeletePartitionResponse, BatchDeletePartitionError>;
+    #[doc = "<p>Retrieves partitions in a batch request.</p>"]
+    fn batch_get_partition(
+        &self,
+        input: &BatchGetPartitionRequest,
+    ) -> Result<BatchGetPartitionResponse, BatchGetPartitionError>;
 
+    #[doc = "<p>Creates a <code>Classifier</code> in the user's account.</p>"]
+    fn create_classifier(
+        &self,
+        input: &CreateClassifierRequest,
+    ) -> Result<CreateClassifierResponse, CreateClassifierError>;
 
-    #[doc="<p>Deletes multiple tables at once.</p>"]
-    fn batch_delete_table(&self,
-                          input: &BatchDeleteTableRequest)
-                          -> Result<BatchDeleteTableResponse, BatchDeleteTableError>;
-
-
-    #[doc="<p>Retrieves partitions in a batch request.</p>"]
-    fn batch_get_partition(&self,
-                           input: &BatchGetPartitionRequest)
-                           -> Result<BatchGetPartitionResponse, BatchGetPartitionError>;
-
-
-    #[doc="<p>Creates a <code>Classifier</code> in the user's account.</p>"]
-    fn create_classifier(&self,
-                         input: &CreateClassifierRequest)
-                         -> Result<CreateClassifierResponse, CreateClassifierError>;
-
-
-    #[doc="<p>Creates a connection definition in the Data Catalog.</p>"]
-    fn create_connection(&self,
-                         input: &CreateConnectionRequest)
-                         -> Result<CreateConnectionResponse, CreateConnectionError>;
-
+    #[doc = "<p>Creates a connection definition in the Data Catalog.</p>"]
+    fn create_connection(
+        &self,
+        input: &CreateConnectionRequest,
+    ) -> Result<CreateConnectionResponse, CreateConnectionError>;
 
     #[doc="<p>Creates a new <code>Crawler</code> with specified targets, role, configuration, and optional schedule. At least one crawl target must be specified, in either the <i>s3Targets</i> or the <i>jdbcTargets</i> field.</p>"]
-    fn create_crawler(&self,
-                      input: &CreateCrawlerRequest)
-                      -> Result<CreateCrawlerResponse, CreateCrawlerError>;
+    fn create_crawler(
+        &self,
+        input: &CreateCrawlerRequest,
+    ) -> Result<CreateCrawlerResponse, CreateCrawlerError>;
 
+    #[doc = "<p>Creates a new database in a Data Catalog.</p>"]
+    fn create_database(
+        &self,
+        input: &CreateDatabaseRequest,
+    ) -> Result<CreateDatabaseResponse, CreateDatabaseError>;
 
-    #[doc="<p>Creates a new database in a Data Catalog.</p>"]
-    fn create_database(&self,
-                       input: &CreateDatabaseRequest)
-                       -> Result<CreateDatabaseResponse, CreateDatabaseError>;
+    #[doc = "<p>Creates a new DevEndpoint.</p>"]
+    fn create_dev_endpoint(
+        &self,
+        input: &CreateDevEndpointRequest,
+    ) -> Result<CreateDevEndpointResponse, CreateDevEndpointError>;
 
-
-    #[doc="<p>Creates a new DevEndpoint.</p>"]
-    fn create_dev_endpoint(&self,
-                           input: &CreateDevEndpointRequest)
-                           -> Result<CreateDevEndpointResponse, CreateDevEndpointError>;
-
-
-    #[doc="<p>Creates a new job.</p>"]
+    #[doc = "<p>Creates a new job.</p>"]
     fn create_job(&self, input: &CreateJobRequest) -> Result<CreateJobResponse, CreateJobError>;
 
+    #[doc = "<p>Creates a new partition.</p>"]
+    fn create_partition(
+        &self,
+        input: &CreatePartitionRequest,
+    ) -> Result<CreatePartitionResponse, CreatePartitionError>;
 
-    #[doc="<p>Creates a new partition.</p>"]
-    fn create_partition(&self,
-                        input: &CreatePartitionRequest)
-                        -> Result<CreatePartitionResponse, CreatePartitionError>;
+    #[doc = "<p>Transforms a directed acyclic graph (DAG) into a Python script.</p>"]
+    fn create_script(
+        &self,
+        input: &CreateScriptRequest,
+    ) -> Result<CreateScriptResponse, CreateScriptError>;
 
+    #[doc = "<p>Creates a new table definition in the Data Catalog.</p>"]
+    fn create_table(
+        &self,
+        input: &CreateTableRequest,
+    ) -> Result<CreateTableResponse, CreateTableError>;
 
-    #[doc="<p>Transforms a directed acyclic graph (DAG) into a Python script.</p>"]
-    fn create_script(&self,
-                     input: &CreateScriptRequest)
-                     -> Result<CreateScriptResponse, CreateScriptError>;
+    #[doc = "<p>Creates a new trigger.</p>"]
+    fn create_trigger(
+        &self,
+        input: &CreateTriggerRequest,
+    ) -> Result<CreateTriggerResponse, CreateTriggerError>;
 
+    #[doc = "<p>Creates a new function definition in the Data Catalog.</p>"]
+    fn create_user_defined_function(
+        &self,
+        input: &CreateUserDefinedFunctionRequest,
+    ) -> Result<CreateUserDefinedFunctionResponse, CreateUserDefinedFunctionError>;
 
-    #[doc="<p>Creates a new table definition in the Data Catalog.</p>"]
-    fn create_table(&self,
-                    input: &CreateTableRequest)
-                    -> Result<CreateTableResponse, CreateTableError>;
+    #[doc = "<p>Removes a <code>Classifier</code> from the metadata store.</p>"]
+    fn delete_classifier(
+        &self,
+        input: &DeleteClassifierRequest,
+    ) -> Result<DeleteClassifierResponse, DeleteClassifierError>;
 
-
-    #[doc="<p>Creates a new trigger.</p>"]
-    fn create_trigger(&self,
-                      input: &CreateTriggerRequest)
-                      -> Result<CreateTriggerResponse, CreateTriggerError>;
-
-
-    #[doc="<p>Creates a new function definition in the Data Catalog.</p>"]
-    fn create_user_defined_function
-        (&self,
-         input: &CreateUserDefinedFunctionRequest)
-         -> Result<CreateUserDefinedFunctionResponse, CreateUserDefinedFunctionError>;
-
-
-    #[doc="<p>Removes a <code>Classifier</code> from the metadata store.</p>"]
-    fn delete_classifier(&self,
-                         input: &DeleteClassifierRequest)
-                         -> Result<DeleteClassifierResponse, DeleteClassifierError>;
-
-
-    #[doc="<p>Deletes a connection from the Data Catalog.</p>"]
-    fn delete_connection(&self,
-                         input: &DeleteConnectionRequest)
-                         -> Result<DeleteConnectionResponse, DeleteConnectionError>;
-
+    #[doc = "<p>Deletes a connection from the Data Catalog.</p>"]
+    fn delete_connection(
+        &self,
+        input: &DeleteConnectionRequest,
+    ) -> Result<DeleteConnectionResponse, DeleteConnectionError>;
 
     #[doc="<p>Removes a specified <code>Crawler</code> from the metadata store, unless the <code>Crawler</code> state is <code>RUNNING</code>.</p>"]
-    fn delete_crawler(&self,
-                      input: &DeleteCrawlerRequest)
-                      -> Result<DeleteCrawlerResponse, DeleteCrawlerError>;
+    fn delete_crawler(
+        &self,
+        input: &DeleteCrawlerRequest,
+    ) -> Result<DeleteCrawlerResponse, DeleteCrawlerError>;
 
+    #[doc = "<p>Removes a specified Database from a Data Catalog.</p>"]
+    fn delete_database(
+        &self,
+        input: &DeleteDatabaseRequest,
+    ) -> Result<DeleteDatabaseResponse, DeleteDatabaseError>;
 
-    #[doc="<p>Removes a specified Database from a Data Catalog.</p>"]
-    fn delete_database(&self,
-                       input: &DeleteDatabaseRequest)
-                       -> Result<DeleteDatabaseResponse, DeleteDatabaseError>;
+    #[doc = "<p>Deletes a specified DevEndpoint.</p>"]
+    fn delete_dev_endpoint(
+        &self,
+        input: &DeleteDevEndpointRequest,
+    ) -> Result<DeleteDevEndpointResponse, DeleteDevEndpointError>;
 
-
-    #[doc="<p>Deletes a specified DevEndpoint.</p>"]
-    fn delete_dev_endpoint(&self,
-                           input: &DeleteDevEndpointRequest)
-                           -> Result<DeleteDevEndpointResponse, DeleteDevEndpointError>;
-
-
-    #[doc="<p>Deletes a specified job.</p>"]
+    #[doc = "<p>Deletes a specified job.</p>"]
     fn delete_job(&self, input: &DeleteJobRequest) -> Result<DeleteJobResponse, DeleteJobError>;
 
+    #[doc = "<p>Deletes a specified partition.</p>"]
+    fn delete_partition(
+        &self,
+        input: &DeletePartitionRequest,
+    ) -> Result<DeletePartitionResponse, DeletePartitionError>;
 
-    #[doc="<p>Deletes a specified partition.</p>"]
-    fn delete_partition(&self,
-                        input: &DeletePartitionRequest)
-                        -> Result<DeletePartitionResponse, DeletePartitionError>;
+    #[doc = "<p>Removes a table definition from the Data Catalog.</p>"]
+    fn delete_table(
+        &self,
+        input: &DeleteTableRequest,
+    ) -> Result<DeleteTableResponse, DeleteTableError>;
 
+    #[doc = "<p>Deletes a specified trigger.</p>"]
+    fn delete_trigger(
+        &self,
+        input: &DeleteTriggerRequest,
+    ) -> Result<DeleteTriggerResponse, DeleteTriggerError>;
 
-    #[doc="<p>Removes a table definition from the Data Catalog.</p>"]
-    fn delete_table(&self,
-                    input: &DeleteTableRequest)
-                    -> Result<DeleteTableResponse, DeleteTableError>;
+    #[doc = "<p>Deletes an existing function definition from the Data Catalog.</p>"]
+    fn delete_user_defined_function(
+        &self,
+        input: &DeleteUserDefinedFunctionRequest,
+    ) -> Result<DeleteUserDefinedFunctionResponse, DeleteUserDefinedFunctionError>;
 
+    #[doc = "<p>Retrieves the status of a migration operation.</p>"]
+    fn get_catalog_import_status(
+        &self,
+        input: &GetCatalogImportStatusRequest,
+    ) -> Result<GetCatalogImportStatusResponse, GetCatalogImportStatusError>;
 
-    #[doc="<p>Deletes a specified trigger.</p>"]
-    fn delete_trigger(&self,
-                      input: &DeleteTriggerRequest)
-                      -> Result<DeleteTriggerResponse, DeleteTriggerError>;
+    #[doc = "<p>Retrieve a <code>Classifier</code> by name.</p>"]
+    fn get_classifier(
+        &self,
+        input: &GetClassifierRequest,
+    ) -> Result<GetClassifierResponse, GetClassifierError>;
 
+    #[doc = "<p>Lists all Classifier objects in the metadata store.</p>"]
+    fn get_classifiers(
+        &self,
+        input: &GetClassifiersRequest,
+    ) -> Result<GetClassifiersResponse, GetClassifiersError>;
 
-    #[doc="<p>Deletes an existing function definition from the Data Catalog.</p>"]
-    fn delete_user_defined_function
-        (&self,
-         input: &DeleteUserDefinedFunctionRequest)
-         -> Result<DeleteUserDefinedFunctionResponse, DeleteUserDefinedFunctionError>;
+    #[doc = "<p>Retrieves a connection definition from the Data Catalog.</p>"]
+    fn get_connection(
+        &self,
+        input: &GetConnectionRequest,
+    ) -> Result<GetConnectionResponse, GetConnectionError>;
 
+    #[doc = "<p>Retrieves a list of connection definitions from the Data Catalog.</p>"]
+    fn get_connections(
+        &self,
+        input: &GetConnectionsRequest,
+    ) -> Result<GetConnectionsResponse, GetConnectionsError>;
 
-    #[doc="<p>Retrieves the status of a migration operation.</p>"]
-    fn get_catalog_import_status
-        (&self,
-         input: &GetCatalogImportStatusRequest)
-         -> Result<GetCatalogImportStatusResponse, GetCatalogImportStatusError>;
+    #[doc = "<p>Retrieves metadata for a specified <code>Crawler</code>.</p>"]
+    fn get_crawler(&self, input: &GetCrawlerRequest)
+        -> Result<GetCrawlerResponse, GetCrawlerError>;
 
-
-    #[doc="<p>Retrieve a <code>Classifier</code> by name.</p>"]
-    fn get_classifier(&self,
-                      input: &GetClassifierRequest)
-                      -> Result<GetClassifierResponse, GetClassifierError>;
-
-
-    #[doc="<p>Lists all Classifier objects in the metadata store.</p>"]
-    fn get_classifiers(&self,
-                       input: &GetClassifiersRequest)
-                       -> Result<GetClassifiersResponse, GetClassifiersError>;
-
-
-    #[doc="<p>Retrieves a connection definition from the Data Catalog.</p>"]
-    fn get_connection(&self,
-                      input: &GetConnectionRequest)
-                      -> Result<GetConnectionResponse, GetConnectionError>;
-
-
-    #[doc="<p>Retrieves a list of connection definitions from the Data Catalog.</p>"]
-    fn get_connections(&self,
-                       input: &GetConnectionsRequest)
-                       -> Result<GetConnectionsResponse, GetConnectionsError>;
-
-
-    #[doc="<p>Retrieves metadata for a specified <code>Crawler</code>.</p>"]
-    fn get_crawler(&self,
-                   input: &GetCrawlerRequest)
-                   -> Result<GetCrawlerResponse, GetCrawlerError>;
-
-
-    #[doc="<p>Retrieves metrics about specified crawlers.</p>"]
-    fn get_crawler_metrics(&self,
-                           input: &GetCrawlerMetricsRequest)
-                           -> Result<GetCrawlerMetricsResponse, GetCrawlerMetricsError>;
-
+    #[doc = "<p>Retrieves metrics about specified crawlers.</p>"]
+    fn get_crawler_metrics(
+        &self,
+        input: &GetCrawlerMetricsRequest,
+    ) -> Result<GetCrawlerMetricsResponse, GetCrawlerMetricsError>;
 
     #[doc="<p>Retrieves metadata for all <code>Crawlers</code> defined in the customer account.</p>"]
-    fn get_crawlers(&self,
-                    input: &GetCrawlersRequest)
-                    -> Result<GetCrawlersResponse, GetCrawlersError>;
+    fn get_crawlers(
+        &self,
+        input: &GetCrawlersRequest,
+    ) -> Result<GetCrawlersResponse, GetCrawlersError>;
 
+    #[doc = "<p>Retrieves the definition of a specified database.</p>"]
+    fn get_database(
+        &self,
+        input: &GetDatabaseRequest,
+    ) -> Result<GetDatabaseResponse, GetDatabaseError>;
 
-    #[doc="<p>Retrieves the definition of a specified database.</p>"]
-    fn get_database(&self,
-                    input: &GetDatabaseRequest)
-                    -> Result<GetDatabaseResponse, GetDatabaseError>;
+    #[doc = "<p>Retrieves all Databases defined in a given Data Catalog.</p>"]
+    fn get_databases(
+        &self,
+        input: &GetDatabasesRequest,
+    ) -> Result<GetDatabasesResponse, GetDatabasesError>;
 
+    #[doc = "<p>Transforms a Python script into a directed acyclic graph (DAG). </p>"]
+    fn get_dataflow_graph(
+        &self,
+        input: &GetDataflowGraphRequest,
+    ) -> Result<GetDataflowGraphResponse, GetDataflowGraphError>;
 
-    #[doc="<p>Retrieves all Databases defined in a given Data Catalog.</p>"]
-    fn get_databases(&self,
-                     input: &GetDatabasesRequest)
-                     -> Result<GetDatabasesResponse, GetDatabasesError>;
+    #[doc = "<p>Retrieves information about a specified DevEndpoint.</p>"]
+    fn get_dev_endpoint(
+        &self,
+        input: &GetDevEndpointRequest,
+    ) -> Result<GetDevEndpointResponse, GetDevEndpointError>;
 
+    #[doc = "<p>Retrieves all the DevEndpoints in this AWS account.</p>"]
+    fn get_dev_endpoints(
+        &self,
+        input: &GetDevEndpointsRequest,
+    ) -> Result<GetDevEndpointsResponse, GetDevEndpointsError>;
 
-    #[doc="<p>Transforms a Python script into a directed acyclic graph (DAG). </p>"]
-    fn get_dataflow_graph(&self,
-                          input: &GetDataflowGraphRequest)
-                          -> Result<GetDataflowGraphResponse, GetDataflowGraphError>;
-
-
-    #[doc="<p>Retrieves information about a specified DevEndpoint.</p>"]
-    fn get_dev_endpoint(&self,
-                        input: &GetDevEndpointRequest)
-                        -> Result<GetDevEndpointResponse, GetDevEndpointError>;
-
-
-    #[doc="<p>Retrieves all the DevEndpoints in this AWS account.</p>"]
-    fn get_dev_endpoints(&self,
-                         input: &GetDevEndpointsRequest)
-                         -> Result<GetDevEndpointsResponse, GetDevEndpointsError>;
-
-
-    #[doc="<p>Retrieves an existing job definition.</p>"]
+    #[doc = "<p>Retrieves an existing job definition.</p>"]
     fn get_job(&self, input: &GetJobRequest) -> Result<GetJobResponse, GetJobError>;
 
-
-    #[doc="<p>Retrieves the metadata for a given job run.</p>"]
+    #[doc = "<p>Retrieves the metadata for a given job run.</p>"]
     fn get_job_run(&self, input: &GetJobRunRequest) -> Result<GetJobRunResponse, GetJobRunError>;
 
+    #[doc = "<p>Retrieves metadata for all runs of a given job.</p>"]
+    fn get_job_runs(
+        &self,
+        input: &GetJobRunsRequest,
+    ) -> Result<GetJobRunsResponse, GetJobRunsError>;
 
-    #[doc="<p>Retrieves metadata for all runs of a given job.</p>"]
-    fn get_job_runs(&self,
-                    input: &GetJobRunsRequest)
-                    -> Result<GetJobRunsResponse, GetJobRunsError>;
-
-
-    #[doc="<p>Retrieves all current jobs.</p>"]
+    #[doc = "<p>Retrieves all current jobs.</p>"]
     fn get_jobs(&self, input: &GetJobsRequest) -> Result<GetJobsResponse, GetJobsError>;
 
+    #[doc = "<p>Creates mappings.</p>"]
+    fn get_mapping(&self, input: &GetMappingRequest)
+        -> Result<GetMappingResponse, GetMappingError>;
 
-    #[doc="<p>Creates mappings.</p>"]
-    fn get_mapping(&self,
-                   input: &GetMappingRequest)
-                   -> Result<GetMappingResponse, GetMappingError>;
+    #[doc = "<p>Retrieves information about a specified partition.</p>"]
+    fn get_partition(
+        &self,
+        input: &GetPartitionRequest,
+    ) -> Result<GetPartitionResponse, GetPartitionError>;
 
+    #[doc = "<p>Retrieves information about the partitions in a table.</p>"]
+    fn get_partitions(
+        &self,
+        input: &GetPartitionsRequest,
+    ) -> Result<GetPartitionsResponse, GetPartitionsError>;
 
-    #[doc="<p>Retrieves information about a specified partition.</p>"]
-    fn get_partition(&self,
-                     input: &GetPartitionRequest)
-                     -> Result<GetPartitionResponse, GetPartitionError>;
-
-
-    #[doc="<p>Retrieves information about the partitions in a table.</p>"]
-    fn get_partitions(&self,
-                      input: &GetPartitionsRequest)
-                      -> Result<GetPartitionsResponse, GetPartitionsError>;
-
-
-    #[doc="<p>Gets a Python script to perform a specified mapping.</p>"]
+    #[doc = "<p>Gets a Python script to perform a specified mapping.</p>"]
     fn get_plan(&self, input: &GetPlanRequest) -> Result<GetPlanResponse, GetPlanError>;
-
 
     #[doc="<p>Retrieves the <code>Table</code> definition in a Data Catalog for a specified table.</p>"]
     fn get_table(&self, input: &GetTableRequest) -> Result<GetTableResponse, GetTableError>;
 
-
     #[doc="<p>Retrieves a list of strings that identify available versions of a specified table.</p>"]
-    fn get_table_versions(&self,
-                          input: &GetTableVersionsRequest)
-                          -> Result<GetTableVersionsResponse, GetTableVersionsError>;
-
+    fn get_table_versions(
+        &self,
+        input: &GetTableVersionsRequest,
+    ) -> Result<GetTableVersionsResponse, GetTableVersionsError>;
 
     #[doc="<p>Retrieves the definitions of some or all of the tables in a given <code>Database</code>.</p>"]
     fn get_tables(&self, input: &GetTablesRequest) -> Result<GetTablesResponse, GetTablesError>;
 
+    #[doc = "<p>Retrieves the definition of a trigger.</p>"]
+    fn get_trigger(&self, input: &GetTriggerRequest)
+        -> Result<GetTriggerResponse, GetTriggerError>;
 
-    #[doc="<p>Retrieves the definition of a trigger.</p>"]
-    fn get_trigger(&self,
-                   input: &GetTriggerRequest)
-                   -> Result<GetTriggerResponse, GetTriggerError>;
+    #[doc = "<p>Gets all the triggers associated with a job.</p>"]
+    fn get_triggers(
+        &self,
+        input: &GetTriggersRequest,
+    ) -> Result<GetTriggersResponse, GetTriggersError>;
 
+    #[doc = "<p>Retrieves a specified function definition from the Data Catalog.</p>"]
+    fn get_user_defined_function(
+        &self,
+        input: &GetUserDefinedFunctionRequest,
+    ) -> Result<GetUserDefinedFunctionResponse, GetUserDefinedFunctionError>;
 
-    #[doc="<p>Gets all the triggers associated with a job.</p>"]
-    fn get_triggers(&self,
-                    input: &GetTriggersRequest)
-                    -> Result<GetTriggersResponse, GetTriggersError>;
+    #[doc = "<p>Retrieves a multiple function definitions from the Data Catalog.</p>"]
+    fn get_user_defined_functions(
+        &self,
+        input: &GetUserDefinedFunctionsRequest,
+    ) -> Result<GetUserDefinedFunctionsResponse, GetUserDefinedFunctionsError>;
 
+    #[doc = "<p>Imports an existing Athena Data Catalog to AWS Glue</p>"]
+    fn import_catalog_to_glue(
+        &self,
+        input: &ImportCatalogToGlueRequest,
+    ) -> Result<ImportCatalogToGlueResponse, ImportCatalogToGlueError>;
 
-    #[doc="<p>Retrieves a specified function definition from the Data Catalog.</p>"]
-    fn get_user_defined_function
-        (&self,
-         input: &GetUserDefinedFunctionRequest)
-         -> Result<GetUserDefinedFunctionResponse, GetUserDefinedFunctionError>;
-
-
-    #[doc="<p>Retrieves a multiple function definitions from the Data Catalog.</p>"]
-    fn get_user_defined_functions
-        (&self,
-         input: &GetUserDefinedFunctionsRequest)
-         -> Result<GetUserDefinedFunctionsResponse, GetUserDefinedFunctionsError>;
-
-
-    #[doc="<p>Imports an existing Athena Data Catalog to AWS Glue</p>"]
-    fn import_catalog_to_glue(&self,
-                              input: &ImportCatalogToGlueRequest)
-                              -> Result<ImportCatalogToGlueResponse, ImportCatalogToGlueError>;
-
-
-    #[doc="<p>Resets a bookmark entry.</p>"]
-    fn reset_job_bookmark(&self,
-                          input: &ResetJobBookmarkRequest)
-                          -> Result<ResetJobBookmarkResponse, ResetJobBookmarkError>;
-
+    #[doc = "<p>Resets a bookmark entry.</p>"]
+    fn reset_job_bookmark(
+        &self,
+        input: &ResetJobBookmarkRequest,
+    ) -> Result<ResetJobBookmarkResponse, ResetJobBookmarkError>;
 
     #[doc="<p>Starts a crawl using the specified <code>Crawler</code>, regardless of what is scheduled. If the <code>Crawler</code> is already running, does nothing.</p>"]
-    fn start_crawler(&self,
-                     input: &StartCrawlerRequest)
-                     -> Result<StartCrawlerResponse, StartCrawlerError>;
-
+    fn start_crawler(
+        &self,
+        input: &StartCrawlerRequest,
+    ) -> Result<StartCrawlerResponse, StartCrawlerError>;
 
     #[doc="<p>Changes the schedule state of the specified crawler to <code>SCHEDULED</code>, unless the crawler is already running or the schedule state is already <code>SCHEDULED</code>.</p>"]
-    fn start_crawler_schedule
-        (&self,
-         input: &StartCrawlerScheduleRequest)
-         -> Result<StartCrawlerScheduleResponse, StartCrawlerScheduleError>;
+    fn start_crawler_schedule(
+        &self,
+        input: &StartCrawlerScheduleRequest,
+    ) -> Result<StartCrawlerScheduleResponse, StartCrawlerScheduleError>;
 
+    #[doc = "<p>Runs a job.</p>"]
+    fn start_job_run(
+        &self,
+        input: &StartJobRunRequest,
+    ) -> Result<StartJobRunResponse, StartJobRunError>;
 
-    #[doc="<p>Runs a job.</p>"]
-    fn start_job_run(&self,
-                     input: &StartJobRunRequest)
-                     -> Result<StartJobRunResponse, StartJobRunError>;
+    #[doc = "<p>Starts an existing trigger.</p>"]
+    fn start_trigger(
+        &self,
+        input: &StartTriggerRequest,
+    ) -> Result<StartTriggerResponse, StartTriggerError>;
 
-
-    #[doc="<p>Starts an existing trigger.</p>"]
-    fn start_trigger(&self,
-                     input: &StartTriggerRequest)
-                     -> Result<StartTriggerResponse, StartTriggerError>;
-
-
-    #[doc="<p>If the specified <code>Crawler</code> is running, stops the crawl.</p>"]
-    fn stop_crawler(&self,
-                    input: &StopCrawlerRequest)
-                    -> Result<StopCrawlerResponse, StopCrawlerError>;
-
+    #[doc = "<p>If the specified <code>Crawler</code> is running, stops the crawl.</p>"]
+    fn stop_crawler(
+        &self,
+        input: &StopCrawlerRequest,
+    ) -> Result<StopCrawlerResponse, StopCrawlerError>;
 
     #[doc="<p>Sets the schedule state of the specified crawler to <code>NOT_SCHEDULED</code>, but does not stop the crawler if it is already running.</p>"]
-    fn stop_crawler_schedule(&self,
-                             input: &StopCrawlerScheduleRequest)
-                             -> Result<StopCrawlerScheduleResponse, StopCrawlerScheduleError>;
+    fn stop_crawler_schedule(
+        &self,
+        input: &StopCrawlerScheduleRequest,
+    ) -> Result<StopCrawlerScheduleResponse, StopCrawlerScheduleError>;
 
+    #[doc = "<p>Stops a specified trigger.</p>"]
+    fn stop_trigger(
+        &self,
+        input: &StopTriggerRequest,
+    ) -> Result<StopTriggerResponse, StopTriggerError>;
 
-    #[doc="<p>Stops a specified trigger.</p>"]
-    fn stop_trigger(&self,
-                    input: &StopTriggerRequest)
-                    -> Result<StopTriggerResponse, StopTriggerError>;
+    #[doc = "<p>Modifies an existing <code>Classifier</code>.</p>"]
+    fn update_classifier(
+        &self,
+        input: &UpdateClassifierRequest,
+    ) -> Result<UpdateClassifierResponse, UpdateClassifierError>;
 
-
-    #[doc="<p>Modifies an existing <code>Classifier</code>.</p>"]
-    fn update_classifier(&self,
-                         input: &UpdateClassifierRequest)
-                         -> Result<UpdateClassifierResponse, UpdateClassifierError>;
-
-
-    #[doc="<p>Updates a connection definition in the Data Catalog.</p>"]
-    fn update_connection(&self,
-                         input: &UpdateConnectionRequest)
-                         -> Result<UpdateConnectionResponse, UpdateConnectionError>;
-
+    #[doc = "<p>Updates a connection definition in the Data Catalog.</p>"]
+    fn update_connection(
+        &self,
+        input: &UpdateConnectionRequest,
+    ) -> Result<UpdateConnectionResponse, UpdateConnectionError>;
 
     #[doc="<p>Updates a <code>Crawler</code>. If a <code>Crawler</code> is running, you must stop it using <code>StopCrawler</code> before updating it.</p>"]
-    fn update_crawler(&self,
-                      input: &UpdateCrawlerRequest)
-                      -> Result<UpdateCrawlerResponse, UpdateCrawlerError>;
+    fn update_crawler(
+        &self,
+        input: &UpdateCrawlerRequest,
+    ) -> Result<UpdateCrawlerResponse, UpdateCrawlerError>;
 
+    #[doc = "<p>Updates the schedule of a crawler using a Cron expression. </p>"]
+    fn update_crawler_schedule(
+        &self,
+        input: &UpdateCrawlerScheduleRequest,
+    ) -> Result<UpdateCrawlerScheduleResponse, UpdateCrawlerScheduleError>;
 
-    #[doc="<p>Updates the schedule of a crawler using a Cron expression. </p>"]
-    fn update_crawler_schedule
-        (&self,
-         input: &UpdateCrawlerScheduleRequest)
-         -> Result<UpdateCrawlerScheduleResponse, UpdateCrawlerScheduleError>;
+    #[doc = "<p>Updates an existing database definition in a Data Catalog.</p>"]
+    fn update_database(
+        &self,
+        input: &UpdateDatabaseRequest,
+    ) -> Result<UpdateDatabaseResponse, UpdateDatabaseError>;
 
+    #[doc = "<p>Updates a specified DevEndpoint.</p>"]
+    fn update_dev_endpoint(
+        &self,
+        input: &UpdateDevEndpointRequest,
+    ) -> Result<UpdateDevEndpointResponse, UpdateDevEndpointError>;
 
-    #[doc="<p>Updates an existing database definition in a Data Catalog.</p>"]
-    fn update_database(&self,
-                       input: &UpdateDatabaseRequest)
-                       -> Result<UpdateDatabaseResponse, UpdateDatabaseError>;
-
-
-    #[doc="<p>Updates a specified DevEndpoint.</p>"]
-    fn update_dev_endpoint(&self,
-                           input: &UpdateDevEndpointRequest)
-                           -> Result<UpdateDevEndpointResponse, UpdateDevEndpointError>;
-
-
-    #[doc="<p>Updates an existing job definition.</p>"]
+    #[doc = "<p>Updates an existing job definition.</p>"]
     fn update_job(&self, input: &UpdateJobRequest) -> Result<UpdateJobResponse, UpdateJobError>;
 
+    #[doc = "<p>Updates a partition.</p>"]
+    fn update_partition(
+        &self,
+        input: &UpdatePartitionRequest,
+    ) -> Result<UpdatePartitionResponse, UpdatePartitionError>;
 
-    #[doc="<p>Updates a partition.</p>"]
-    fn update_partition(&self,
-                        input: &UpdatePartitionRequest)
-                        -> Result<UpdatePartitionResponse, UpdatePartitionError>;
+    #[doc = "<p>Updates a metadata table in the Data Catalog.</p>"]
+    fn update_table(
+        &self,
+        input: &UpdateTableRequest,
+    ) -> Result<UpdateTableResponse, UpdateTableError>;
 
+    #[doc = "<p>Updates a trigger definition.</p>"]
+    fn update_trigger(
+        &self,
+        input: &UpdateTriggerRequest,
+    ) -> Result<UpdateTriggerResponse, UpdateTriggerError>;
 
-    #[doc="<p>Updates a metadata table in the Data Catalog.</p>"]
-    fn update_table(&self,
-                    input: &UpdateTableRequest)
-                    -> Result<UpdateTableResponse, UpdateTableError>;
-
-
-    #[doc="<p>Updates a trigger definition.</p>"]
-    fn update_trigger(&self,
-                      input: &UpdateTriggerRequest)
-                      -> Result<UpdateTriggerResponse, UpdateTriggerError>;
-
-
-    #[doc="<p>Updates an existing function definition in the Data Catalog.</p>"]
-    fn update_user_defined_function
-        (&self,
-         input: &UpdateUserDefinedFunctionRequest)
-         -> Result<UpdateUserDefinedFunctionResponse, UpdateUserDefinedFunctionError>;
+    #[doc = "<p>Updates an existing function definition in the Data Catalog.</p>"]
+    fn update_user_defined_function(
+        &self,
+        input: &UpdateUserDefinedFunctionRequest,
+    ) -> Result<UpdateUserDefinedFunctionResponse, UpdateUserDefinedFunctionError>;
 }
 /// A client for the AWS Glue API.
 pub struct GlueClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -10516,8 +10460,9 @@ pub struct GlueClient<P, D>
 }
 
 impl<P, D> GlueClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         GlueClient {
@@ -10529,14 +10474,15 @@ impl<P, D> GlueClient<P, D>
 }
 
 impl<P, D> Glue for GlueClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
-    #[doc="<p>Creates one or more partitions in a batch operation.</p>"]
-    fn batch_create_partition
-        (&self,
-         input: &BatchCreatePartitionRequest)
-         -> Result<BatchCreatePartitionResponse, BatchCreatePartitionError> {
+    #[doc = "<p>Creates one or more partitions in a batch operation.</p>"]
+    fn batch_create_partition(
+        &self,
+        input: &BatchCreatePartitionRequest,
+    ) -> Result<BatchCreatePartitionResponse, BatchCreatePartitionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10552,22 +10498,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<BatchCreatePartitionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<BatchCreatePartitionResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(BatchCreatePartitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(BatchCreatePartitionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes a list of connection definitions from the Data Catalog.</p>"]
-    fn batch_delete_connection
-        (&self,
-         input: &BatchDeleteConnectionRequest)
-         -> Result<BatchDeleteConnectionResponse, BatchDeleteConnectionError> {
+    #[doc = "<p>Deletes a list of connection definitions from the Data Catalog.</p>"]
+    fn batch_delete_connection(
+        &self,
+        input: &BatchDeleteConnectionRequest,
+    ) -> Result<BatchDeleteConnectionResponse, BatchDeleteConnectionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10583,22 +10532,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<BatchDeleteConnectionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<BatchDeleteConnectionResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(BatchDeleteConnectionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(BatchDeleteConnectionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes one or more partitions in a batch operation.</p>"]
-    fn batch_delete_partition
-        (&self,
-         input: &BatchDeletePartitionRequest)
-         -> Result<BatchDeletePartitionResponse, BatchDeletePartitionError> {
+    #[doc = "<p>Deletes one or more partitions in a batch operation.</p>"]
+    fn batch_delete_partition(
+        &self,
+        input: &BatchDeletePartitionRequest,
+    ) -> Result<BatchDeletePartitionResponse, BatchDeletePartitionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10614,21 +10566,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<BatchDeletePartitionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<BatchDeletePartitionResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(BatchDeletePartitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(BatchDeletePartitionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes multiple tables at once.</p>"]
-    fn batch_delete_table(&self,
-                          input: &BatchDeleteTableRequest)
-                          -> Result<BatchDeleteTableResponse, BatchDeleteTableError> {
+    #[doc = "<p>Deletes multiple tables at once.</p>"]
+    fn batch_delete_table(
+        &self,
+        input: &BatchDeleteTableRequest,
+    ) -> Result<BatchDeleteTableResponse, BatchDeleteTableError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10644,23 +10600,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<BatchDeleteTableResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<BatchDeleteTableResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(BatchDeleteTableError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(BatchDeleteTableError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves partitions in a batch request.</p>"]
-    fn batch_get_partition(&self,
-                           input: &BatchGetPartitionRequest)
-                           -> Result<BatchGetPartitionResponse, BatchGetPartitionError> {
+    #[doc = "<p>Retrieves partitions in a batch request.</p>"]
+    fn batch_get_partition(
+        &self,
+        input: &BatchGetPartitionRequest,
+    ) -> Result<BatchGetPartitionResponse, BatchGetPartitionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10676,21 +10634,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<BatchGetPartitionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<BatchGetPartitionResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(BatchGetPartitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(BatchGetPartitionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates a <code>Classifier</code> in the user's account.</p>"]
-    fn create_classifier(&self,
-                         input: &CreateClassifierRequest)
-                         -> Result<CreateClassifierResponse, CreateClassifierError> {
+    #[doc = "<p>Creates a <code>Classifier</code> in the user's account.</p>"]
+    fn create_classifier(
+        &self,
+        input: &CreateClassifierRequest,
+    ) -> Result<CreateClassifierResponse, CreateClassifierError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10706,23 +10668,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateClassifierResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateClassifierResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateClassifierError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateClassifierError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates a connection definition in the Data Catalog.</p>"]
-    fn create_connection(&self,
-                         input: &CreateConnectionRequest)
-                         -> Result<CreateConnectionResponse, CreateConnectionError> {
+    #[doc = "<p>Creates a connection definition in the Data Catalog.</p>"]
+    fn create_connection(
+        &self,
+        input: &CreateConnectionRequest,
+    ) -> Result<CreateConnectionResponse, CreateConnectionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10738,23 +10702,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateConnectionResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateConnectionResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateConnectionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateConnectionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a new <code>Crawler</code> with specified targets, role, configuration, and optional schedule. At least one crawl target must be specified, in either the <i>s3Targets</i> or the <i>jdbcTargets</i> field.</p>"]
-    fn create_crawler(&self,
-                      input: &CreateCrawlerRequest)
-                      -> Result<CreateCrawlerResponse, CreateCrawlerError> {
+    fn create_crawler(
+        &self,
+        input: &CreateCrawlerRequest,
+    ) -> Result<CreateCrawlerResponse, CreateCrawlerError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10770,23 +10736,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateCrawlerResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateCrawlerResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateCrawlerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateCrawlerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates a new database in a Data Catalog.</p>"]
-    fn create_database(&self,
-                       input: &CreateDatabaseRequest)
-                       -> Result<CreateDatabaseResponse, CreateDatabaseError> {
+    #[doc = "<p>Creates a new database in a Data Catalog.</p>"]
+    fn create_database(
+        &self,
+        input: &CreateDatabaseRequest,
+    ) -> Result<CreateDatabaseResponse, CreateDatabaseError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10802,23 +10770,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateDatabaseResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateDatabaseResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateDatabaseError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateDatabaseError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates a new DevEndpoint.</p>"]
-    fn create_dev_endpoint(&self,
-                           input: &CreateDevEndpointRequest)
-                           -> Result<CreateDevEndpointResponse, CreateDevEndpointError> {
+    #[doc = "<p>Creates a new DevEndpoint.</p>"]
+    fn create_dev_endpoint(
+        &self,
+        input: &CreateDevEndpointRequest,
+    ) -> Result<CreateDevEndpointResponse, CreateDevEndpointError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10834,18 +10804,21 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateDevEndpointResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreateDevEndpointResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateDevEndpointError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateDevEndpointError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates a new job.</p>"]
+    #[doc = "<p>Creates a new job.</p>"]
     fn create_job(&self, input: &CreateJobRequest) -> Result<CreateJobResponse, CreateJobError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
@@ -10862,23 +10835,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateJobResponse>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateJobResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateJobError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates a new partition.</p>"]
-    fn create_partition(&self,
-                        input: &CreatePartitionRequest)
-                        -> Result<CreatePartitionResponse, CreatePartitionError> {
+    #[doc = "<p>Creates a new partition.</p>"]
+    fn create_partition(
+        &self,
+        input: &CreatePartitionRequest,
+    ) -> Result<CreatePartitionResponse, CreatePartitionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10894,23 +10869,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreatePartitionResponse>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreatePartitionResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreatePartitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreatePartitionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Transforms a directed acyclic graph (DAG) into a Python script.</p>"]
-    fn create_script(&self,
-                     input: &CreateScriptRequest)
-                     -> Result<CreateScriptResponse, CreateScriptError> {
+    #[doc = "<p>Transforms a directed acyclic graph (DAG) into a Python script.</p>"]
+    fn create_script(
+        &self,
+        input: &CreateScriptRequest,
+    ) -> Result<CreateScriptResponse, CreateScriptError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10926,23 +10903,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateScriptResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateScriptResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateScriptError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateScriptError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates a new table definition in the Data Catalog.</p>"]
-    fn create_table(&self,
-                    input: &CreateTableRequest)
-                    -> Result<CreateTableResponse, CreateTableError> {
+    #[doc = "<p>Creates a new table definition in the Data Catalog.</p>"]
+    fn create_table(
+        &self,
+        input: &CreateTableRequest,
+    ) -> Result<CreateTableResponse, CreateTableError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10958,23 +10937,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateTableResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateTableResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateTableError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateTableError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates a new trigger.</p>"]
-    fn create_trigger(&self,
-                      input: &CreateTriggerRequest)
-                      -> Result<CreateTriggerResponse, CreateTriggerError> {
+    #[doc = "<p>Creates a new trigger.</p>"]
+    fn create_trigger(
+        &self,
+        input: &CreateTriggerRequest,
+    ) -> Result<CreateTriggerResponse, CreateTriggerError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10990,24 +10971,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateTriggerResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateTriggerResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateTriggerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateTriggerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates a new function definition in the Data Catalog.</p>"]
-    fn create_user_defined_function
-        (&self,
-         input: &CreateUserDefinedFunctionRequest)
-         -> Result<CreateUserDefinedFunctionResponse, CreateUserDefinedFunctionError> {
+    #[doc = "<p>Creates a new function definition in the Data Catalog.</p>"]
+    fn create_user_defined_function(
+        &self,
+        input: &CreateUserDefinedFunctionRequest,
+    ) -> Result<CreateUserDefinedFunctionResponse, CreateUserDefinedFunctionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11023,22 +11005,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateUserDefinedFunctionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreateUserDefinedFunctionResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateUserDefinedFunctionError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(CreateUserDefinedFunctionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Removes a <code>Classifier</code> from the metadata store.</p>"]
-    fn delete_classifier(&self,
-                         input: &DeleteClassifierRequest)
-                         -> Result<DeleteClassifierResponse, DeleteClassifierError> {
+    #[doc = "<p>Removes a <code>Classifier</code> from the metadata store.</p>"]
+    fn delete_classifier(
+        &self,
+        input: &DeleteClassifierRequest,
+    ) -> Result<DeleteClassifierResponse, DeleteClassifierError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11054,23 +11039,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteClassifierResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteClassifierResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteClassifierError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteClassifierError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes a connection from the Data Catalog.</p>"]
-    fn delete_connection(&self,
-                         input: &DeleteConnectionRequest)
-                         -> Result<DeleteConnectionResponse, DeleteConnectionError> {
+    #[doc = "<p>Deletes a connection from the Data Catalog.</p>"]
+    fn delete_connection(
+        &self,
+        input: &DeleteConnectionRequest,
+    ) -> Result<DeleteConnectionResponse, DeleteConnectionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11086,23 +11073,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteConnectionResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteConnectionResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteConnectionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteConnectionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Removes a specified <code>Crawler</code> from the metadata store, unless the <code>Crawler</code> state is <code>RUNNING</code>.</p>"]
-    fn delete_crawler(&self,
-                      input: &DeleteCrawlerRequest)
-                      -> Result<DeleteCrawlerResponse, DeleteCrawlerError> {
+    fn delete_crawler(
+        &self,
+        input: &DeleteCrawlerRequest,
+    ) -> Result<DeleteCrawlerResponse, DeleteCrawlerError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11118,23 +11107,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteCrawlerResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteCrawlerResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteCrawlerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteCrawlerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Removes a specified Database from a Data Catalog.</p>"]
-    fn delete_database(&self,
-                       input: &DeleteDatabaseRequest)
-                       -> Result<DeleteDatabaseResponse, DeleteDatabaseError> {
+    #[doc = "<p>Removes a specified Database from a Data Catalog.</p>"]
+    fn delete_database(
+        &self,
+        input: &DeleteDatabaseRequest,
+    ) -> Result<DeleteDatabaseResponse, DeleteDatabaseError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11150,23 +11141,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteDatabaseResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteDatabaseResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteDatabaseError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteDatabaseError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes a specified DevEndpoint.</p>"]
-    fn delete_dev_endpoint(&self,
-                           input: &DeleteDevEndpointRequest)
-                           -> Result<DeleteDevEndpointResponse, DeleteDevEndpointError> {
+    #[doc = "<p>Deletes a specified DevEndpoint.</p>"]
+    fn delete_dev_endpoint(
+        &self,
+        input: &DeleteDevEndpointRequest,
+    ) -> Result<DeleteDevEndpointResponse, DeleteDevEndpointError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11182,18 +11175,21 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteDevEndpointResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DeleteDevEndpointResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteDevEndpointError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteDevEndpointError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes a specified job.</p>"]
+    #[doc = "<p>Deletes a specified job.</p>"]
     fn delete_job(&self, input: &DeleteJobRequest) -> Result<DeleteJobResponse, DeleteJobError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
@@ -11210,23 +11206,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteJobResponse>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteJobResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteJobError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes a specified partition.</p>"]
-    fn delete_partition(&self,
-                        input: &DeletePartitionRequest)
-                        -> Result<DeletePartitionResponse, DeletePartitionError> {
+    #[doc = "<p>Deletes a specified partition.</p>"]
+    fn delete_partition(
+        &self,
+        input: &DeletePartitionRequest,
+    ) -> Result<DeletePartitionResponse, DeletePartitionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11242,23 +11240,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeletePartitionResponse>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeletePartitionResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeletePartitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeletePartitionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Removes a table definition from the Data Catalog.</p>"]
-    fn delete_table(&self,
-                    input: &DeleteTableRequest)
-                    -> Result<DeleteTableResponse, DeleteTableError> {
+    #[doc = "<p>Removes a table definition from the Data Catalog.</p>"]
+    fn delete_table(
+        &self,
+        input: &DeleteTableRequest,
+    ) -> Result<DeleteTableResponse, DeleteTableError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11274,23 +11274,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteTableResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteTableResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteTableError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteTableError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes a specified trigger.</p>"]
-    fn delete_trigger(&self,
-                      input: &DeleteTriggerRequest)
-                      -> Result<DeleteTriggerResponse, DeleteTriggerError> {
+    #[doc = "<p>Deletes a specified trigger.</p>"]
+    fn delete_trigger(
+        &self,
+        input: &DeleteTriggerRequest,
+    ) -> Result<DeleteTriggerResponse, DeleteTriggerError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11306,24 +11308,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteTriggerResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteTriggerResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteTriggerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteTriggerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes an existing function definition from the Data Catalog.</p>"]
-    fn delete_user_defined_function
-        (&self,
-         input: &DeleteUserDefinedFunctionRequest)
-         -> Result<DeleteUserDefinedFunctionResponse, DeleteUserDefinedFunctionError> {
+    #[doc = "<p>Deletes an existing function definition from the Data Catalog.</p>"]
+    fn delete_user_defined_function(
+        &self,
+        input: &DeleteUserDefinedFunctionRequest,
+    ) -> Result<DeleteUserDefinedFunctionResponse, DeleteUserDefinedFunctionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11339,23 +11342,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteUserDefinedFunctionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DeleteUserDefinedFunctionResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteUserDefinedFunctionError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(DeleteUserDefinedFunctionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves the status of a migration operation.</p>"]
-    fn get_catalog_import_status
-        (&self,
-         input: &GetCatalogImportStatusRequest)
-         -> Result<GetCatalogImportStatusResponse, GetCatalogImportStatusError> {
+    #[doc = "<p>Retrieves the status of a migration operation.</p>"]
+    fn get_catalog_import_status(
+        &self,
+        input: &GetCatalogImportStatusRequest,
+    ) -> Result<GetCatalogImportStatusResponse, GetCatalogImportStatusError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11371,21 +11376,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetCatalogImportStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetCatalogImportStatusResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetCatalogImportStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetCatalogImportStatusError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieve a <code>Classifier</code> by name.</p>"]
-    fn get_classifier(&self,
-                      input: &GetClassifierRequest)
-                      -> Result<GetClassifierResponse, GetClassifierError> {
+    #[doc = "<p>Retrieve a <code>Classifier</code> by name.</p>"]
+    fn get_classifier(
+        &self,
+        input: &GetClassifierRequest,
+    ) -> Result<GetClassifierResponse, GetClassifierError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11401,23 +11410,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetClassifierResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetClassifierResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetClassifierError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetClassifierError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists all Classifier objects in the metadata store.</p>"]
-    fn get_classifiers(&self,
-                       input: &GetClassifiersRequest)
-                       -> Result<GetClassifiersResponse, GetClassifiersError> {
+    #[doc = "<p>Lists all Classifier objects in the metadata store.</p>"]
+    fn get_classifiers(
+        &self,
+        input: &GetClassifiersRequest,
+    ) -> Result<GetClassifiersResponse, GetClassifiersError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11433,23 +11444,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetClassifiersResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetClassifiersResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetClassifiersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetClassifiersError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves a connection definition from the Data Catalog.</p>"]
-    fn get_connection(&self,
-                      input: &GetConnectionRequest)
-                      -> Result<GetConnectionResponse, GetConnectionError> {
+    #[doc = "<p>Retrieves a connection definition from the Data Catalog.</p>"]
+    fn get_connection(
+        &self,
+        input: &GetConnectionRequest,
+    ) -> Result<GetConnectionResponse, GetConnectionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11465,23 +11478,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetConnectionResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetConnectionResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetConnectionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetConnectionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves a list of connection definitions from the Data Catalog.</p>"]
-    fn get_connections(&self,
-                       input: &GetConnectionsRequest)
-                       -> Result<GetConnectionsResponse, GetConnectionsError> {
+    #[doc = "<p>Retrieves a list of connection definitions from the Data Catalog.</p>"]
+    fn get_connections(
+        &self,
+        input: &GetConnectionsRequest,
+    ) -> Result<GetConnectionsResponse, GetConnectionsError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11497,23 +11512,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetConnectionsResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetConnectionsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetConnectionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetConnectionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves metadata for a specified <code>Crawler</code>.</p>"]
-    fn get_crawler(&self,
-                   input: &GetCrawlerRequest)
-                   -> Result<GetCrawlerResponse, GetCrawlerError> {
+    #[doc = "<p>Retrieves metadata for a specified <code>Crawler</code>.</p>"]
+    fn get_crawler(
+        &self,
+        input: &GetCrawlerRequest,
+    ) -> Result<GetCrawlerResponse, GetCrawlerError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11529,23 +11546,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetCrawlerResponse>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetCrawlerResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetCrawlerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetCrawlerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves metrics about specified crawlers.</p>"]
-    fn get_crawler_metrics(&self,
-                           input: &GetCrawlerMetricsRequest)
-                           -> Result<GetCrawlerMetricsResponse, GetCrawlerMetricsError> {
+    #[doc = "<p>Retrieves metrics about specified crawlers.</p>"]
+    fn get_crawler_metrics(
+        &self,
+        input: &GetCrawlerMetricsRequest,
+    ) -> Result<GetCrawlerMetricsResponse, GetCrawlerMetricsError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11561,21 +11580,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetCrawlerMetricsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetCrawlerMetricsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetCrawlerMetricsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetCrawlerMetricsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves metadata for all <code>Crawlers</code> defined in the customer account.</p>"]
-    fn get_crawlers(&self,
-                    input: &GetCrawlersRequest)
-                    -> Result<GetCrawlersResponse, GetCrawlersError> {
+    fn get_crawlers(
+        &self,
+        input: &GetCrawlersRequest,
+    ) -> Result<GetCrawlersResponse, GetCrawlersError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11591,23 +11614,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetCrawlersResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetCrawlersResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetCrawlersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetCrawlersError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves the definition of a specified database.</p>"]
-    fn get_database(&self,
-                    input: &GetDatabaseRequest)
-                    -> Result<GetDatabaseResponse, GetDatabaseError> {
+    #[doc = "<p>Retrieves the definition of a specified database.</p>"]
+    fn get_database(
+        &self,
+        input: &GetDatabaseRequest,
+    ) -> Result<GetDatabaseResponse, GetDatabaseError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11623,23 +11648,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetDatabaseResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetDatabaseResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetDatabaseError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetDatabaseError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves all Databases defined in a given Data Catalog.</p>"]
-    fn get_databases(&self,
-                     input: &GetDatabasesRequest)
-                     -> Result<GetDatabasesResponse, GetDatabasesError> {
+    #[doc = "<p>Retrieves all Databases defined in a given Data Catalog.</p>"]
+    fn get_databases(
+        &self,
+        input: &GetDatabasesRequest,
+    ) -> Result<GetDatabasesResponse, GetDatabasesError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11655,23 +11682,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetDatabasesResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetDatabasesResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetDatabasesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetDatabasesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Transforms a Python script into a directed acyclic graph (DAG). </p>"]
-    fn get_dataflow_graph(&self,
-                          input: &GetDataflowGraphRequest)
-                          -> Result<GetDataflowGraphResponse, GetDataflowGraphError> {
+    #[doc = "<p>Transforms a Python script into a directed acyclic graph (DAG). </p>"]
+    fn get_dataflow_graph(
+        &self,
+        input: &GetDataflowGraphRequest,
+    ) -> Result<GetDataflowGraphResponse, GetDataflowGraphError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11687,23 +11716,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetDataflowGraphResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetDataflowGraphResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetDataflowGraphError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetDataflowGraphError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves information about a specified DevEndpoint.</p>"]
-    fn get_dev_endpoint(&self,
-                        input: &GetDevEndpointRequest)
-                        -> Result<GetDevEndpointResponse, GetDevEndpointError> {
+    #[doc = "<p>Retrieves information about a specified DevEndpoint.</p>"]
+    fn get_dev_endpoint(
+        &self,
+        input: &GetDevEndpointRequest,
+    ) -> Result<GetDevEndpointResponse, GetDevEndpointError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11719,23 +11750,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetDevEndpointResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetDevEndpointResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetDevEndpointError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetDevEndpointError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves all the DevEndpoints in this AWS account.</p>"]
-    fn get_dev_endpoints(&self,
-                         input: &GetDevEndpointsRequest)
-                         -> Result<GetDevEndpointsResponse, GetDevEndpointsError> {
+    #[doc = "<p>Retrieves all the DevEndpoints in this AWS account.</p>"]
+    fn get_dev_endpoints(
+        &self,
+        input: &GetDevEndpointsRequest,
+    ) -> Result<GetDevEndpointsResponse, GetDevEndpointsError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11751,20 +11784,21 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetDevEndpointsResponse>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetDevEndpointsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetDevEndpointsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetDevEndpointsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves an existing job definition.</p>"]
+    #[doc = "<p>Retrieves an existing job definition.</p>"]
     fn get_job(&self, input: &GetJobRequest) -> Result<GetJobResponse, GetJobError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
@@ -11781,19 +11815,22 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetJobResponse>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+                Ok(
+                    serde_json::from_str::<GetJobResponse>(String::from_utf8_lossy(&body).as_ref())
+                        .unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetJobError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves the metadata for a given job run.</p>"]
+    #[doc = "<p>Retrieves the metadata for a given job run.</p>"]
     fn get_job_run(&self, input: &GetJobRunRequest) -> Result<GetJobRunResponse, GetJobRunError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
@@ -11810,23 +11847,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetJobRunResponse>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetJobRunResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetJobRunError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetJobRunError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves metadata for all runs of a given job.</p>"]
-    fn get_job_runs(&self,
-                    input: &GetJobRunsRequest)
-                    -> Result<GetJobRunsResponse, GetJobRunsError> {
+    #[doc = "<p>Retrieves metadata for all runs of a given job.</p>"]
+    fn get_job_runs(
+        &self,
+        input: &GetJobRunsRequest,
+    ) -> Result<GetJobRunsResponse, GetJobRunsError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11842,20 +11881,21 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetJobRunsResponse>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetJobRunsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetJobRunsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetJobRunsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves all current jobs.</p>"]
+    #[doc = "<p>Retrieves all current jobs.</p>"]
     fn get_jobs(&self, input: &GetJobsRequest) -> Result<GetJobsResponse, GetJobsError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
@@ -11872,22 +11912,27 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetJobsResponse>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+                Ok(
+                    serde_json::from_str::<GetJobsResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetJobsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetJobsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates mappings.</p>"]
-    fn get_mapping(&self,
-                   input: &GetMappingRequest)
-                   -> Result<GetMappingResponse, GetMappingError> {
+    #[doc = "<p>Creates mappings.</p>"]
+    fn get_mapping(
+        &self,
+        input: &GetMappingRequest,
+    ) -> Result<GetMappingResponse, GetMappingError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11903,23 +11948,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetMappingResponse>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetMappingResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetMappingError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetMappingError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves information about a specified partition.</p>"]
-    fn get_partition(&self,
-                     input: &GetPartitionRequest)
-                     -> Result<GetPartitionResponse, GetPartitionError> {
+    #[doc = "<p>Retrieves information about a specified partition.</p>"]
+    fn get_partition(
+        &self,
+        input: &GetPartitionRequest,
+    ) -> Result<GetPartitionResponse, GetPartitionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11935,23 +11982,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetPartitionResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetPartitionResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetPartitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetPartitionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves information about the partitions in a table.</p>"]
-    fn get_partitions(&self,
-                      input: &GetPartitionsRequest)
-                      -> Result<GetPartitionsResponse, GetPartitionsError> {
+    #[doc = "<p>Retrieves information about the partitions in a table.</p>"]
+    fn get_partitions(
+        &self,
+        input: &GetPartitionsRequest,
+    ) -> Result<GetPartitionsResponse, GetPartitionsError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11967,20 +12016,21 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetPartitionsResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetPartitionsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetPartitionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetPartitionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets a Python script to perform a specified mapping.</p>"]
+    #[doc = "<p>Gets a Python script to perform a specified mapping.</p>"]
     fn get_plan(&self, input: &GetPlanRequest) -> Result<GetPlanResponse, GetPlanError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
@@ -11997,17 +12047,21 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetPlanResponse>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+                Ok(
+                    serde_json::from_str::<GetPlanResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetPlanError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetPlanError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Retrieves the <code>Table</code> definition in a Data Catalog for a specified table.</p>"]
     fn get_table(&self, input: &GetTableRequest) -> Result<GetTableResponse, GetTableError> {
@@ -12026,23 +12080,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetTableResponse>(String::from_utf8_lossy(&body)
-                                                                .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetTableResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetTableError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetTableError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves a list of strings that identify available versions of a specified table.</p>"]
-    fn get_table_versions(&self,
-                          input: &GetTableVersionsRequest)
-                          -> Result<GetTableVersionsResponse, GetTableVersionsError> {
+    fn get_table_versions(
+        &self,
+        input: &GetTableVersionsRequest,
+    ) -> Result<GetTableVersionsResponse, GetTableVersionsError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -12058,18 +12114,19 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetTableVersionsResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetTableVersionsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetTableVersionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetTableVersionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Retrieves the definitions of some or all of the tables in a given <code>Database</code>.</p>"]
     fn get_tables(&self, input: &GetTablesRequest) -> Result<GetTablesResponse, GetTablesError> {
@@ -12088,23 +12145,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetTablesResponse>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetTablesResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetTablesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetTablesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves the definition of a trigger.</p>"]
-    fn get_trigger(&self,
-                   input: &GetTriggerRequest)
-                   -> Result<GetTriggerResponse, GetTriggerError> {
+    #[doc = "<p>Retrieves the definition of a trigger.</p>"]
+    fn get_trigger(
+        &self,
+        input: &GetTriggerRequest,
+    ) -> Result<GetTriggerResponse, GetTriggerError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -12120,23 +12179,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetTriggerResponse>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetTriggerResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetTriggerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetTriggerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets all the triggers associated with a job.</p>"]
-    fn get_triggers(&self,
-                    input: &GetTriggersRequest)
-                    -> Result<GetTriggersResponse, GetTriggersError> {
+    #[doc = "<p>Gets all the triggers associated with a job.</p>"]
+    fn get_triggers(
+        &self,
+        input: &GetTriggersRequest,
+    ) -> Result<GetTriggersResponse, GetTriggersError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -12152,24 +12213,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetTriggersResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetTriggersResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetTriggersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetTriggersError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves a specified function definition from the Data Catalog.</p>"]
-    fn get_user_defined_function
-        (&self,
-         input: &GetUserDefinedFunctionRequest)
-         -> Result<GetUserDefinedFunctionResponse, GetUserDefinedFunctionError> {
+    #[doc = "<p>Retrieves a specified function definition from the Data Catalog.</p>"]
+    fn get_user_defined_function(
+        &self,
+        input: &GetUserDefinedFunctionRequest,
+    ) -> Result<GetUserDefinedFunctionResponse, GetUserDefinedFunctionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -12185,22 +12247,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetUserDefinedFunctionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetUserDefinedFunctionResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetUserDefinedFunctionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetUserDefinedFunctionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves a multiple function definitions from the Data Catalog.</p>"]
-    fn get_user_defined_functions
-        (&self,
-         input: &GetUserDefinedFunctionsRequest)
-         -> Result<GetUserDefinedFunctionsResponse, GetUserDefinedFunctionsError> {
+    #[doc = "<p>Retrieves a multiple function definitions from the Data Catalog.</p>"]
+    fn get_user_defined_functions(
+        &self,
+        input: &GetUserDefinedFunctionsRequest,
+    ) -> Result<GetUserDefinedFunctionsResponse, GetUserDefinedFunctionsError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -12216,22 +12281,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetUserDefinedFunctionsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetUserDefinedFunctionsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetUserDefinedFunctionsError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(GetUserDefinedFunctionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Imports an existing Athena Data Catalog to AWS Glue</p>"]
-    fn import_catalog_to_glue(&self,
-                              input: &ImportCatalogToGlueRequest)
-                              -> Result<ImportCatalogToGlueResponse, ImportCatalogToGlueError> {
+    #[doc = "<p>Imports an existing Athena Data Catalog to AWS Glue</p>"]
+    fn import_catalog_to_glue(
+        &self,
+        input: &ImportCatalogToGlueRequest,
+    ) -> Result<ImportCatalogToGlueResponse, ImportCatalogToGlueError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -12247,21 +12315,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ImportCatalogToGlueResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ImportCatalogToGlueResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ImportCatalogToGlueError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ImportCatalogToGlueError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Resets a bookmark entry.</p>"]
-    fn reset_job_bookmark(&self,
-                          input: &ResetJobBookmarkRequest)
-                          -> Result<ResetJobBookmarkResponse, ResetJobBookmarkError> {
+    #[doc = "<p>Resets a bookmark entry.</p>"]
+    fn reset_job_bookmark(
+        &self,
+        input: &ResetJobBookmarkRequest,
+    ) -> Result<ResetJobBookmarkResponse, ResetJobBookmarkError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -12277,23 +12349,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ResetJobBookmarkResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ResetJobBookmarkResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ResetJobBookmarkError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ResetJobBookmarkError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Starts a crawl using the specified <code>Crawler</code>, regardless of what is scheduled. If the <code>Crawler</code> is already running, does nothing.</p>"]
-    fn start_crawler(&self,
-                     input: &StartCrawlerRequest)
-                     -> Result<StartCrawlerResponse, StartCrawlerError> {
+    fn start_crawler(
+        &self,
+        input: &StartCrawlerRequest,
+    ) -> Result<StartCrawlerResponse, StartCrawlerError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -12309,24 +12383,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StartCrawlerResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<StartCrawlerResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StartCrawlerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(StartCrawlerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Changes the schedule state of the specified crawler to <code>SCHEDULED</code>, unless the crawler is already running or the schedule state is already <code>SCHEDULED</code>.</p>"]
-    fn start_crawler_schedule
-        (&self,
-         input: &StartCrawlerScheduleRequest)
-         -> Result<StartCrawlerScheduleResponse, StartCrawlerScheduleError> {
+    fn start_crawler_schedule(
+        &self,
+        input: &StartCrawlerScheduleRequest,
+    ) -> Result<StartCrawlerScheduleResponse, StartCrawlerScheduleError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -12342,21 +12417,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StartCrawlerScheduleResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<StartCrawlerScheduleResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StartCrawlerScheduleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(StartCrawlerScheduleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Runs a job.</p>"]
-    fn start_job_run(&self,
-                     input: &StartJobRunRequest)
-                     -> Result<StartJobRunResponse, StartJobRunError> {
+    #[doc = "<p>Runs a job.</p>"]
+    fn start_job_run(
+        &self,
+        input: &StartJobRunRequest,
+    ) -> Result<StartJobRunResponse, StartJobRunError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -12372,23 +12451,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StartJobRunResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<StartJobRunResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StartJobRunError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(StartJobRunError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Starts an existing trigger.</p>"]
-    fn start_trigger(&self,
-                     input: &StartTriggerRequest)
-                     -> Result<StartTriggerResponse, StartTriggerError> {
+    #[doc = "<p>Starts an existing trigger.</p>"]
+    fn start_trigger(
+        &self,
+        input: &StartTriggerRequest,
+    ) -> Result<StartTriggerResponse, StartTriggerError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -12404,23 +12485,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StartTriggerResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<StartTriggerResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StartTriggerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(StartTriggerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>If the specified <code>Crawler</code> is running, stops the crawl.</p>"]
-    fn stop_crawler(&self,
-                    input: &StopCrawlerRequest)
-                    -> Result<StopCrawlerResponse, StopCrawlerError> {
+    #[doc = "<p>If the specified <code>Crawler</code> is running, stops the crawl.</p>"]
+    fn stop_crawler(
+        &self,
+        input: &StopCrawlerRequest,
+    ) -> Result<StopCrawlerResponse, StopCrawlerError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -12436,23 +12519,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StopCrawlerResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<StopCrawlerResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StopCrawlerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(StopCrawlerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Sets the schedule state of the specified crawler to <code>NOT_SCHEDULED</code>, but does not stop the crawler if it is already running.</p>"]
-    fn stop_crawler_schedule(&self,
-                             input: &StopCrawlerScheduleRequest)
-                             -> Result<StopCrawlerScheduleResponse, StopCrawlerScheduleError> {
+    fn stop_crawler_schedule(
+        &self,
+        input: &StopCrawlerScheduleRequest,
+    ) -> Result<StopCrawlerScheduleResponse, StopCrawlerScheduleError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -12468,21 +12553,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StopCrawlerScheduleResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<StopCrawlerScheduleResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StopCrawlerScheduleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(StopCrawlerScheduleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Stops a specified trigger.</p>"]
-    fn stop_trigger(&self,
-                    input: &StopTriggerRequest)
-                    -> Result<StopTriggerResponse, StopTriggerError> {
+    #[doc = "<p>Stops a specified trigger.</p>"]
+    fn stop_trigger(
+        &self,
+        input: &StopTriggerRequest,
+    ) -> Result<StopTriggerResponse, StopTriggerError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -12498,23 +12587,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StopTriggerResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<StopTriggerResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StopTriggerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(StopTriggerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Modifies an existing <code>Classifier</code>.</p>"]
-    fn update_classifier(&self,
-                         input: &UpdateClassifierRequest)
-                         -> Result<UpdateClassifierResponse, UpdateClassifierError> {
+    #[doc = "<p>Modifies an existing <code>Classifier</code>.</p>"]
+    fn update_classifier(
+        &self,
+        input: &UpdateClassifierRequest,
+    ) -> Result<UpdateClassifierResponse, UpdateClassifierError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -12530,23 +12621,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateClassifierResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<UpdateClassifierResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateClassifierError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateClassifierError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Updates a connection definition in the Data Catalog.</p>"]
-    fn update_connection(&self,
-                         input: &UpdateConnectionRequest)
-                         -> Result<UpdateConnectionResponse, UpdateConnectionError> {
+    #[doc = "<p>Updates a connection definition in the Data Catalog.</p>"]
+    fn update_connection(
+        &self,
+        input: &UpdateConnectionRequest,
+    ) -> Result<UpdateConnectionResponse, UpdateConnectionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -12562,23 +12655,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateConnectionResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<UpdateConnectionResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateConnectionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateConnectionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Updates a <code>Crawler</code>. If a <code>Crawler</code> is running, you must stop it using <code>StopCrawler</code> before updating it.</p>"]
-    fn update_crawler(&self,
-                      input: &UpdateCrawlerRequest)
-                      -> Result<UpdateCrawlerResponse, UpdateCrawlerError> {
+    fn update_crawler(
+        &self,
+        input: &UpdateCrawlerRequest,
+    ) -> Result<UpdateCrawlerResponse, UpdateCrawlerError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -12594,24 +12689,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateCrawlerResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<UpdateCrawlerResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateCrawlerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateCrawlerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Updates the schedule of a crawler using a Cron expression. </p>"]
-    fn update_crawler_schedule
-        (&self,
-         input: &UpdateCrawlerScheduleRequest)
-         -> Result<UpdateCrawlerScheduleResponse, UpdateCrawlerScheduleError> {
+    #[doc = "<p>Updates the schedule of a crawler using a Cron expression. </p>"]
+    fn update_crawler_schedule(
+        &self,
+        input: &UpdateCrawlerScheduleRequest,
+    ) -> Result<UpdateCrawlerScheduleResponse, UpdateCrawlerScheduleError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -12627,21 +12723,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateCrawlerScheduleResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<UpdateCrawlerScheduleResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateCrawlerScheduleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateCrawlerScheduleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Updates an existing database definition in a Data Catalog.</p>"]
-    fn update_database(&self,
-                       input: &UpdateDatabaseRequest)
-                       -> Result<UpdateDatabaseResponse, UpdateDatabaseError> {
+    #[doc = "<p>Updates an existing database definition in a Data Catalog.</p>"]
+    fn update_database(
+        &self,
+        input: &UpdateDatabaseRequest,
+    ) -> Result<UpdateDatabaseResponse, UpdateDatabaseError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -12657,23 +12757,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateDatabaseResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<UpdateDatabaseResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateDatabaseError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateDatabaseError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Updates a specified DevEndpoint.</p>"]
-    fn update_dev_endpoint(&self,
-                           input: &UpdateDevEndpointRequest)
-                           -> Result<UpdateDevEndpointResponse, UpdateDevEndpointError> {
+    #[doc = "<p>Updates a specified DevEndpoint.</p>"]
+    fn update_dev_endpoint(
+        &self,
+        input: &UpdateDevEndpointRequest,
+    ) -> Result<UpdateDevEndpointResponse, UpdateDevEndpointError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -12689,18 +12791,21 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateDevEndpointResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<UpdateDevEndpointResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateDevEndpointError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateDevEndpointError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Updates an existing job definition.</p>"]
+    #[doc = "<p>Updates an existing job definition.</p>"]
     fn update_job(&self, input: &UpdateJobRequest) -> Result<UpdateJobResponse, UpdateJobError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
@@ -12717,23 +12822,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateJobResponse>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<UpdateJobResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateJobError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Updates a partition.</p>"]
-    fn update_partition(&self,
-                        input: &UpdatePartitionRequest)
-                        -> Result<UpdatePartitionResponse, UpdatePartitionError> {
+    #[doc = "<p>Updates a partition.</p>"]
+    fn update_partition(
+        &self,
+        input: &UpdatePartitionRequest,
+    ) -> Result<UpdatePartitionResponse, UpdatePartitionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -12749,23 +12856,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdatePartitionResponse>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<UpdatePartitionResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdatePartitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdatePartitionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Updates a metadata table in the Data Catalog.</p>"]
-    fn update_table(&self,
-                    input: &UpdateTableRequest)
-                    -> Result<UpdateTableResponse, UpdateTableError> {
+    #[doc = "<p>Updates a metadata table in the Data Catalog.</p>"]
+    fn update_table(
+        &self,
+        input: &UpdateTableRequest,
+    ) -> Result<UpdateTableResponse, UpdateTableError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -12781,23 +12890,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateTableResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<UpdateTableResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateTableError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateTableError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Updates a trigger definition.</p>"]
-    fn update_trigger(&self,
-                      input: &UpdateTriggerRequest)
-                      -> Result<UpdateTriggerResponse, UpdateTriggerError> {
+    #[doc = "<p>Updates a trigger definition.</p>"]
+    fn update_trigger(
+        &self,
+        input: &UpdateTriggerRequest,
+    ) -> Result<UpdateTriggerResponse, UpdateTriggerError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -12813,24 +12924,25 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateTriggerResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<UpdateTriggerResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateTriggerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateTriggerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Updates an existing function definition in the Data Catalog.</p>"]
-    fn update_user_defined_function
-        (&self,
-         input: &UpdateUserDefinedFunctionRequest)
-         -> Result<UpdateUserDefinedFunctionResponse, UpdateUserDefinedFunctionError> {
+    #[doc = "<p>Updates an existing function definition in the Data Catalog.</p>"]
+    fn update_user_defined_function(
+        &self,
+        input: &UpdateUserDefinedFunctionRequest,
+    ) -> Result<UpdateUserDefinedFunctionResponse, UpdateUserDefinedFunctionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -12846,13 +12958,16 @@ impl<P, D> Glue for GlueClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateUserDefinedFunctionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<UpdateUserDefinedFunctionResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateUserDefinedFunctionError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(UpdateUserDefinedFunctionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

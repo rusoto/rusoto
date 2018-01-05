@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -31,7 +30,7 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use xml::reader::XmlEvent;
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
-use rusoto_core::xmlutil::{characters, end_element, start_element, skip_tree, peek_at_name};
+use rusoto_core::xmlutil::{characters, end_element, peek_at_name, skip_tree, start_element};
 use rusoto_core::xmlerror::*;
 
 enum DeserializerNext {
@@ -39,25 +38,26 @@ enum DeserializerNext {
     Skip,
     Element(String),
 }
-#[doc="<p>Information about the <code>AccessLog</code> attribute.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Information about the <code>AccessLog</code> attribute.</p>
+#[derive(Default, Debug, Clone)]
 pub struct AccessLog {
-    #[doc="<p>The interval for publishing the access logs. You can specify an interval of either 5 minutes or 60 minutes.</p> <p>Default: 60 minutes</p>"]
+    /// <p>The interval for publishing the access logs. You can specify an interval of either 5 minutes or 60 minutes.</p> <p>Default: 60 minutes</p>
     pub emit_interval: Option<i64>,
-    #[doc="<p>Specifies whether access logs are enabled for the load balancer.</p>"]
+    /// <p>Specifies whether access logs are enabled for the load balancer.</p>
     pub enabled: bool,
-    #[doc="<p>The name of the Amazon S3 bucket where the access logs are stored.</p>"]
+    /// <p>The name of the Amazon S3 bucket where the access logs are stored.</p>
     pub s3_bucket_name: Option<String>,
-    #[doc="<p>The logical hierarchy you created for your Amazon S3 bucket, for example <code>my-bucket-prefix/prod</code>. If the prefix is not provided, the log is placed at the root level of the bucket.</p>"]
+    /// <p>The logical hierarchy you created for your Amazon S3 bucket, for example <code>my-bucket-prefix/prod</code>. If the prefix is not provided, the log is placed at the root level of the bucket.</p>
     pub s3_bucket_prefix: Option<String>,
 }
 
 struct AccessLogDeserializer;
 impl AccessLogDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<AccessLog, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AccessLog, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = AccessLog::default();
@@ -72,30 +72,29 @@ impl AccessLogDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "EmitInterval" => {
-                            obj.emit_interval =
-                                Some(try!(AccessLogIntervalDeserializer::deserialize("EmitInterval",
-                                                                                     stack)));
-                        }
-                        "Enabled" => {
-                            obj.enabled = try!(AccessLogEnabledDeserializer::deserialize("Enabled",
-                                                                                         stack));
-                        }
-                        "S3BucketName" => {
-                            obj.s3_bucket_name =
-                                Some(try!(S3BucketNameDeserializer::deserialize("S3BucketName",
-                                                                                stack)));
-                        }
-                        "S3BucketPrefix" => {
-                            obj.s3_bucket_prefix =
-                                Some(try!(AccessLogPrefixDeserializer::deserialize("S3BucketPrefix",
-                                                                                   stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "EmitInterval" => {
+                        obj.emit_interval = Some(try!(
+                            AccessLogIntervalDeserializer::deserialize("EmitInterval", stack)
+                        ));
                     }
-                }
+                    "Enabled" => {
+                        obj.enabled =
+                            try!(AccessLogEnabledDeserializer::deserialize("Enabled", stack));
+                    }
+                    "S3BucketName" => {
+                        obj.s3_bucket_name = Some(try!(S3BucketNameDeserializer::deserialize(
+                            "S3BucketName",
+                            stack
+                        )));
+                    }
+                    "S3BucketPrefix" => {
+                        obj.s3_bucket_prefix = Some(try!(
+                            AccessLogPrefixDeserializer::deserialize("S3BucketPrefix", stack)
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -106,7 +105,6 @@ impl AccessLogDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -120,102 +118,108 @@ impl AccessLogSerializer {
         }
 
         if let Some(ref field_value) = obj.emit_interval {
-            params.put(&format!("{}{}", prefix, "EmitInterval"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "EmitInterval"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
-        params.put(&format!("{}{}", prefix, "Enabled"),
-                   &obj.enabled.to_string().replace("+", "%2B"));
+        params.put(
+            &format!("{}{}", prefix, "Enabled"),
+            &obj.enabled.to_string().replace("+", "%2B"),
+        );
         if let Some(ref field_value) = obj.s3_bucket_name {
-            params.put(&format!("{}{}", prefix, "S3BucketName"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "S3BucketName"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.s3_bucket_prefix {
-            params.put(&format!("{}{}", prefix, "S3BucketPrefix"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "S3BucketPrefix"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-
     }
 }
 
 struct AccessLogEnabledDeserializer;
 impl AccessLogEnabledDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<bool, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct AccessLogIntervalDeserializer;
 impl AccessLogIntervalDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<i64, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct AccessLogPrefixDeserializer;
 impl AccessLogPrefixDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct AccessPointNameDeserializer;
 impl AccessPointNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct AccessPointPortDeserializer;
 impl AccessPointPortDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<i64, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Contains the parameters for EnableAvailabilityZonesForLoadBalancer.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the parameters for EnableAvailabilityZonesForLoadBalancer.</p>
+#[derive(Default, Debug, Clone)]
 pub struct AddAvailabilityZonesInput {
-    #[doc="<p>The Availability Zones. These must be in the same region as the load balancer.</p>"]
+    /// <p>The Availability Zones. These must be in the same region as the load balancer.</p>
     pub availability_zones: Vec<String>,
-    #[doc="<p>The name of the load balancer.</p>"]
+    /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
 }
-
 
 /// Serialize `AddAvailabilityZonesInput` contents to a `SignedRequest`.
 struct AddAvailabilityZonesInputSerializer;
@@ -226,28 +230,32 @@ impl AddAvailabilityZonesInputSerializer {
             prefix.push_str(".");
         }
 
-        AvailabilityZonesSerializer::serialize(params,
-                                               &format!("{}{}", prefix, "AvailabilityZones"),
-                                               &obj.availability_zones);
-        params.put(&format!("{}{}", prefix, "LoadBalancerName"),
-                   &obj.load_balancer_name.replace("+", "%2B"));
-
+        AvailabilityZonesSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "AvailabilityZones"),
+            &obj.availability_zones,
+        );
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerName"),
+            &obj.load_balancer_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>Contains the output of EnableAvailabilityZonesForLoadBalancer.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the output of EnableAvailabilityZonesForLoadBalancer.</p>
+#[derive(Default, Debug, Clone)]
 pub struct AddAvailabilityZonesOutput {
-    #[doc="<p>The updated list of Availability Zones for the load balancer.</p>"]
+    /// <p>The updated list of Availability Zones for the load balancer.</p>
     pub availability_zones: Option<Vec<String>>,
 }
 
 struct AddAvailabilityZonesOutputDeserializer;
 impl AddAvailabilityZonesOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<AddAvailabilityZonesOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AddAvailabilityZonesOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = AddAvailabilityZonesOutput::default();
@@ -262,16 +270,14 @@ impl AddAvailabilityZonesOutputDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "AvailabilityZones" => {
-                            obj.availability_zones =
-                                Some(try!(AvailabilityZonesDeserializer::deserialize("AvailabilityZones",
-                                                                                     stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AvailabilityZones" => {
+                        obj.availability_zones = Some(try!(
+                            AvailabilityZonesDeserializer::deserialize("AvailabilityZones", stack)
+                        ));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -282,18 +288,16 @@ impl AddAvailabilityZonesOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Contains the parameters for AddTags.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the parameters for AddTags.</p>
+#[derive(Default, Debug, Clone)]
 pub struct AddTagsInput {
-    #[doc="<p>The name of the load balancer. You can specify one load balancer only.</p>"]
+    /// <p>The name of the load balancer. You can specify one load balancer only.</p>
     pub load_balancer_names: Vec<String>,
-    #[doc="<p>The tags.</p>"]
+    /// <p>The tags.</p>
     pub tags: Vec<Tag>,
 }
-
 
 /// Serialize `AddTagsInput` contents to a `SignedRequest`.
 struct AddTagsInputSerializer;
@@ -304,24 +308,26 @@ impl AddTagsInputSerializer {
             prefix.push_str(".");
         }
 
-        LoadBalancerNamesSerializer::serialize(params,
-                                               &format!("{}{}", prefix, "LoadBalancerNames"),
-                                               &obj.load_balancer_names);
+        LoadBalancerNamesSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "LoadBalancerNames"),
+            &obj.load_balancer_names,
+        );
         TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), &obj.tags);
-
     }
 }
 
-#[doc="<p>Contains the output of AddTags.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the output of AddTags.</p>
+#[derive(Default, Debug, Clone)]
 pub struct AddTagsOutput;
 
 struct AddTagsOutputDeserializer;
 impl AddTagsOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<AddTagsOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AddTagsOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let obj = AddTagsOutput::default();
@@ -329,24 +335,24 @@ impl AddTagsOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>This data type is reserved.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>This data type is reserved.</p>
+#[derive(Default, Debug, Clone)]
 pub struct AdditionalAttribute {
-    #[doc="<p>This parameter is reserved.</p>"]
+    /// <p>This parameter is reserved.</p>
     pub key: Option<String>,
-    #[doc="<p>This parameter is reserved.</p>"]
+    /// <p>This parameter is reserved.</p>
     pub value: Option<String>,
 }
 
 struct AdditionalAttributeDeserializer;
 impl AdditionalAttributeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<AdditionalAttribute, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AdditionalAttribute, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = AdditionalAttribute::default();
@@ -361,19 +367,21 @@ impl AdditionalAttributeDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Key" => {
-                            obj.key =
-                                Some(try!(AdditionalAttributeKeyDeserializer::deserialize("Key",
-                                                                                          stack)));
-                        }
-                        "Value" => {
-                            obj.value = Some(try!(AdditionalAttributeValueDeserializer::deserialize("Value", stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Key" => {
+                        obj.key = Some(try!(AdditionalAttributeKeyDeserializer::deserialize(
+                            "Key",
+                            stack
+                        )));
                     }
-                }
+                    "Value" => {
+                        obj.value = Some(try!(AdditionalAttributeValueDeserializer::deserialize(
+                            "Value",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -384,7 +392,6 @@ impl AdditionalAttributeDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -398,52 +405,55 @@ impl AdditionalAttributeSerializer {
         }
 
         if let Some(ref field_value) = obj.key {
-            params.put(&format!("{}{}", prefix, "Key"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "Key"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.value {
-            params.put(&format!("{}{}", prefix, "Value"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "Value"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-
     }
 }
 
 struct AdditionalAttributeKeyDeserializer;
 impl AdditionalAttributeKeyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct AdditionalAttributeValueDeserializer;
 impl AdditionalAttributeValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct AdditionalAttributesDeserializer;
 impl AdditionalAttributesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<AdditionalAttribute>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<AdditionalAttribute>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -459,8 +469,10 @@ impl AdditionalAttributesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(AdditionalAttributeDeserializer::deserialize("member",
-                                                                                   stack)));
+                        obj.push(try!(AdditionalAttributeDeserializer::deserialize(
+                            "member",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -476,7 +488,6 @@ impl AdditionalAttributesDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 
@@ -494,10 +505,10 @@ impl AdditionalAttributesSerializer {
 struct AppCookieStickinessPoliciesDeserializer;
 impl AppCookieStickinessPoliciesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<AppCookieStickinessPolicy>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<AppCookieStickinessPolicy>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -513,8 +524,10 @@ impl AppCookieStickinessPoliciesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(AppCookieStickinessPolicyDeserializer::deserialize("member",
-                                                                                         stack)));
+                        obj.push(try!(AppCookieStickinessPolicyDeserializer::deserialize(
+                            "member",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -530,24 +543,24 @@ impl AppCookieStickinessPoliciesDeserializer {
         }
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Information about a policy for application-controlled session stickiness.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Information about a policy for application-controlled session stickiness.</p>
+#[derive(Default, Debug, Clone)]
 pub struct AppCookieStickinessPolicy {
-    #[doc="<p>The name of the application cookie used for stickiness.</p>"]
+    /// <p>The name of the application cookie used for stickiness.</p>
     pub cookie_name: Option<String>,
-    #[doc="<p>The mnemonic name for the policy being created. The name must be unique within a set of policies for this load balancer.</p>"]
+    /// <p>The mnemonic name for the policy being created. The name must be unique within a set of policies for this load balancer.</p>
     pub policy_name: Option<String>,
 }
 
 struct AppCookieStickinessPolicyDeserializer;
 impl AppCookieStickinessPolicyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<AppCookieStickinessPolicy, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AppCookieStickinessPolicy, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = AppCookieStickinessPolicy::default();
@@ -562,21 +575,21 @@ impl AppCookieStickinessPolicyDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "CookieName" => {
-                            obj.cookie_name =
-                                Some(try!(CookieNameDeserializer::deserialize("CookieName",
-                                                                              stack)));
-                        }
-                        "PolicyName" => {
-                            obj.policy_name =
-                                Some(try!(PolicyNameDeserializer::deserialize("PolicyName",
-                                                                              stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "CookieName" => {
+                        obj.cookie_name = Some(try!(CookieNameDeserializer::deserialize(
+                            "CookieName",
+                            stack
+                        )));
                     }
-                }
+                    "PolicyName" => {
+                        obj.policy_name = Some(try!(PolicyNameDeserializer::deserialize(
+                            "PolicyName",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -587,18 +600,16 @@ impl AppCookieStickinessPolicyDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Contains the parameters for ApplySecurityGroupsToLoadBalancer.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the parameters for ApplySecurityGroupsToLoadBalancer.</p>
+#[derive(Default, Debug, Clone)]
 pub struct ApplySecurityGroupsToLoadBalancerInput {
-    #[doc="<p>The name of the load balancer.</p>"]
+    /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
-    #[doc="<p>The IDs of the security groups to associate with the load balancer. Note that you cannot specify the name of the security group.</p>"]
+    /// <p>The IDs of the security groups to associate with the load balancer. Note that you cannot specify the name of the security group.</p>
     pub security_groups: Vec<String>,
 }
-
 
 /// Serialize `ApplySecurityGroupsToLoadBalancerInput` contents to a `SignedRequest`.
 struct ApplySecurityGroupsToLoadBalancerInputSerializer;
@@ -609,29 +620,32 @@ impl ApplySecurityGroupsToLoadBalancerInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "LoadBalancerName"),
-                   &obj.load_balancer_name.replace("+", "%2B"));
-        SecurityGroupsSerializer::serialize(params,
-                                            &format!("{}{}", prefix, "SecurityGroups"),
-                                            &obj.security_groups);
-
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerName"),
+            &obj.load_balancer_name.replace("+", "%2B"),
+        );
+        SecurityGroupsSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "SecurityGroups"),
+            &obj.security_groups,
+        );
     }
 }
 
-#[doc="<p>Contains the output of ApplySecurityGroupsToLoadBalancer.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the output of ApplySecurityGroupsToLoadBalancer.</p>
+#[derive(Default, Debug, Clone)]
 pub struct ApplySecurityGroupsToLoadBalancerOutput {
-    #[doc="<p>The IDs of the security groups associated with the load balancer.</p>"]
+    /// <p>The IDs of the security groups associated with the load balancer.</p>
     pub security_groups: Option<Vec<String>>,
 }
 
 struct ApplySecurityGroupsToLoadBalancerOutputDeserializer;
 impl ApplySecurityGroupsToLoadBalancerOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<ApplySecurityGroupsToLoadBalancerOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ApplySecurityGroupsToLoadBalancerOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = ApplySecurityGroupsToLoadBalancerOutput::default();
@@ -646,16 +660,15 @@ impl ApplySecurityGroupsToLoadBalancerOutputDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "SecurityGroups" => {
-                            obj.security_groups =
-                                Some(try!(SecurityGroupsDeserializer::deserialize("SecurityGroups",
-                                                                                  stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "SecurityGroups" => {
+                        obj.security_groups = Some(try!(SecurityGroupsDeserializer::deserialize(
+                            "SecurityGroups",
+                            stack
+                        )));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -666,18 +679,16 @@ impl ApplySecurityGroupsToLoadBalancerOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Contains the parameters for AttachLoaBalancerToSubnets.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the parameters for AttachLoaBalancerToSubnets.</p>
+#[derive(Default, Debug, Clone)]
 pub struct AttachLoadBalancerToSubnetsInput {
-    #[doc="<p>The name of the load balancer.</p>"]
+    /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
-    #[doc="<p>The IDs of the subnets to add. You can add only one subnet per Availability Zone.</p>"]
+    /// <p>The IDs of the subnets to add. You can add only one subnet per Availability Zone.</p>
     pub subnets: Vec<String>,
 }
-
 
 /// Serialize `AttachLoadBalancerToSubnetsInput` contents to a `SignedRequest`.
 struct AttachLoadBalancerToSubnetsInputSerializer;
@@ -688,27 +699,28 @@ impl AttachLoadBalancerToSubnetsInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "LoadBalancerName"),
-                   &obj.load_balancer_name.replace("+", "%2B"));
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerName"),
+            &obj.load_balancer_name.replace("+", "%2B"),
+        );
         SubnetsSerializer::serialize(params, &format!("{}{}", prefix, "Subnets"), &obj.subnets);
-
     }
 }
 
-#[doc="<p>Contains the output of AttachLoadBalancerToSubnets.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the output of AttachLoadBalancerToSubnets.</p>
+#[derive(Default, Debug, Clone)]
 pub struct AttachLoadBalancerToSubnetsOutput {
-    #[doc="<p>The IDs of the subnets attached to the load balancer.</p>"]
+    /// <p>The IDs of the subnets attached to the load balancer.</p>
     pub subnets: Option<Vec<String>>,
 }
 
 struct AttachLoadBalancerToSubnetsOutputDeserializer;
 impl AttachLoadBalancerToSubnetsOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<AttachLoadBalancerToSubnetsOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AttachLoadBalancerToSubnetsOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = AttachLoadBalancerToSubnetsOutput::default();
@@ -723,15 +735,13 @@ impl AttachLoadBalancerToSubnetsOutputDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Subnets" => {
-                            obj.subnets = Some(try!(SubnetsDeserializer::deserialize("Subnets",
-                                                                                     stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Subnets" => {
+                        obj.subnets =
+                            Some(try!(SubnetsDeserializer::deserialize("Subnets", stack)));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -742,72 +752,71 @@ impl AttachLoadBalancerToSubnetsOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct AttributeNameDeserializer;
 impl AttributeNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct AttributeTypeDeserializer;
 impl AttributeTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct AttributeValueDeserializer;
 impl AttributeValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct AvailabilityZoneDeserializer;
 impl AvailabilityZoneDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct AvailabilityZonesDeserializer;
 impl AvailabilityZonesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<String>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -823,7 +832,10 @@ impl AvailabilityZonesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(AvailabilityZoneDeserializer::deserialize("member", stack)));
+                        obj.push(try!(AvailabilityZoneDeserializer::deserialize(
+                            "member",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -839,7 +851,6 @@ impl AvailabilityZonesDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 
@@ -854,21 +865,22 @@ impl AvailabilityZonesSerializer {
     }
 }
 
-#[doc="<p>Information about the configuration of an EC2 instance.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Information about the configuration of an EC2 instance.</p>
+#[derive(Default, Debug, Clone)]
 pub struct BackendServerDescription {
-    #[doc="<p>The port on which the EC2 instance is listening.</p>"]
+    /// <p>The port on which the EC2 instance is listening.</p>
     pub instance_port: Option<i64>,
-    #[doc="<p>The names of the policies enabled for the EC2 instance.</p>"]
+    /// <p>The names of the policies enabled for the EC2 instance.</p>
     pub policy_names: Option<Vec<String>>,
 }
 
 struct BackendServerDescriptionDeserializer;
 impl BackendServerDescriptionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<BackendServerDescription, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<BackendServerDescription, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = BackendServerDescription::default();
@@ -883,21 +895,21 @@ impl BackendServerDescriptionDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "InstancePort" => {
-                            obj.instance_port =
-                                Some(try!(InstancePortDeserializer::deserialize("InstancePort",
-                                                                                stack)));
-                        }
-                        "PolicyNames" => {
-                            obj.policy_names =
-                                Some(try!(PolicyNamesDeserializer::deserialize("PolicyNames",
-                                                                               stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "InstancePort" => {
+                        obj.instance_port = Some(try!(InstancePortDeserializer::deserialize(
+                            "InstancePort",
+                            stack
+                        )));
                     }
-                }
+                    "PolicyNames" => {
+                        obj.policy_names = Some(try!(PolicyNamesDeserializer::deserialize(
+                            "PolicyNames",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -908,16 +920,15 @@ impl BackendServerDescriptionDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct BackendServerDescriptionsDeserializer;
 impl BackendServerDescriptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<BackendServerDescription>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<BackendServerDescription>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -933,8 +944,10 @@ impl BackendServerDescriptionsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(BackendServerDescriptionDeserializer::deserialize("member",
-                                                                                        stack)));
+                        obj.push(try!(BackendServerDescriptionDeserializer::deserialize(
+                            "member",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -950,32 +963,30 @@ impl BackendServerDescriptionsDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 struct CardinalityDeserializer;
 impl CardinalityDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Contains the parameters for ConfigureHealthCheck.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the parameters for ConfigureHealthCheck.</p>
+#[derive(Default, Debug, Clone)]
 pub struct ConfigureHealthCheckInput {
-    #[doc="<p>The configuration information.</p>"]
+    /// <p>The configuration information.</p>
     pub health_check: HealthCheck,
-    #[doc="<p>The name of the load balancer.</p>"]
+    /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
 }
-
 
 /// Serialize `ConfigureHealthCheckInput` contents to a `SignedRequest`.
 struct ConfigureHealthCheckInputSerializer;
@@ -986,28 +997,32 @@ impl ConfigureHealthCheckInputSerializer {
             prefix.push_str(".");
         }
 
-        HealthCheckSerializer::serialize(params,
-                                         &format!("{}{}", prefix, "HealthCheck"),
-                                         &obj.health_check);
-        params.put(&format!("{}{}", prefix, "LoadBalancerName"),
-                   &obj.load_balancer_name.replace("+", "%2B"));
-
+        HealthCheckSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "HealthCheck"),
+            &obj.health_check,
+        );
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerName"),
+            &obj.load_balancer_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>Contains the output of ConfigureHealthCheck.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the output of ConfigureHealthCheck.</p>
+#[derive(Default, Debug, Clone)]
 pub struct ConfigureHealthCheckOutput {
-    #[doc="<p>The updated health check.</p>"]
+    /// <p>The updated health check.</p>
     pub health_check: Option<HealthCheck>,
 }
 
 struct ConfigureHealthCheckOutputDeserializer;
 impl ConfigureHealthCheckOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<ConfigureHealthCheckOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ConfigureHealthCheckOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = ConfigureHealthCheckOutput::default();
@@ -1022,16 +1037,15 @@ impl ConfigureHealthCheckOutputDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "HealthCheck" => {
-                            obj.health_check =
-                                Some(try!(HealthCheckDeserializer::deserialize("HealthCheck",
-                                                                               stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "HealthCheck" => {
+                        obj.health_check = Some(try!(HealthCheckDeserializer::deserialize(
+                            "HealthCheck",
+                            stack
+                        )));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1042,24 +1056,24 @@ impl ConfigureHealthCheckOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Information about the <code>ConnectionDraining</code> attribute.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Information about the <code>ConnectionDraining</code> attribute.</p>
+#[derive(Default, Debug, Clone)]
 pub struct ConnectionDraining {
-    #[doc="<p>Specifies whether connection draining is enabled for the load balancer.</p>"]
+    /// <p>Specifies whether connection draining is enabled for the load balancer.</p>
     pub enabled: bool,
-    #[doc="<p>The maximum time, in seconds, to keep the existing connections open before deregistering the instances.</p>"]
+    /// <p>The maximum time, in seconds, to keep the existing connections open before deregistering the instances.</p>
     pub timeout: Option<i64>,
 }
 
 struct ConnectionDrainingDeserializer;
 impl ConnectionDrainingDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<ConnectionDraining, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ConnectionDraining, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = ConnectionDraining::default();
@@ -1074,19 +1088,20 @@ impl ConnectionDrainingDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Enabled" => {
-                            obj.enabled =
-                                try!(ConnectionDrainingEnabledDeserializer::deserialize("Enabled",
-                                                                                        stack));
-                        }
-                        "Timeout" => {
-                            obj.timeout = Some(try!(ConnectionDrainingTimeoutDeserializer::deserialize("Timeout", stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Enabled" => {
+                        obj.enabled = try!(ConnectionDrainingEnabledDeserializer::deserialize(
+                            "Enabled",
+                            stack
+                        ));
                     }
-                }
+                    "Timeout" => {
+                        obj.timeout = Some(try!(
+                            ConnectionDrainingTimeoutDeserializer::deserialize("Timeout", stack)
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1097,7 +1112,6 @@ impl ConnectionDrainingDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -1110,57 +1124,61 @@ impl ConnectionDrainingSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Enabled"),
-                   &obj.enabled.to_string().replace("+", "%2B"));
+        params.put(
+            &format!("{}{}", prefix, "Enabled"),
+            &obj.enabled.to_string().replace("+", "%2B"),
+        );
         if let Some(ref field_value) = obj.timeout {
-            params.put(&format!("{}{}", prefix, "Timeout"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "Timeout"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
-
     }
 }
 
 struct ConnectionDrainingEnabledDeserializer;
 impl ConnectionDrainingEnabledDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<bool, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct ConnectionDrainingTimeoutDeserializer;
 impl ConnectionDrainingTimeoutDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<i64, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Information about the <code>ConnectionSettings</code> attribute.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Information about the <code>ConnectionSettings</code> attribute.</p>
+#[derive(Default, Debug, Clone)]
 pub struct ConnectionSettings {
-    #[doc="<p>The time, in seconds, that the connection is allowed to be idle (no data has been sent over the connection) before it is closed by the load balancer.</p>"]
+    /// <p>The time, in seconds, that the connection is allowed to be idle (no data has been sent over the connection) before it is closed by the load balancer.</p>
     pub idle_timeout: i64,
 }
 
 struct ConnectionSettingsDeserializer;
 impl ConnectionSettingsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<ConnectionSettings, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ConnectionSettings, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = ConnectionSettings::default();
@@ -1175,15 +1193,13 @@ impl ConnectionSettingsDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "IdleTimeout" => {
-                            obj.idle_timeout = try!(IdleTimeoutDeserializer::deserialize("IdleTimeout",
-                                                                                         stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "IdleTimeout" => {
+                        obj.idle_timeout =
+                            try!(IdleTimeoutDeserializer::deserialize("IdleTimeout", stack));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1194,7 +1210,6 @@ impl ConnectionSettingsDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -1207,59 +1222,59 @@ impl ConnectionSettingsSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "IdleTimeout"),
-                   &obj.idle_timeout.to_string().replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "IdleTimeout"),
+            &obj.idle_timeout.to_string().replace("+", "%2B"),
+        );
     }
 }
 
 struct CookieExpirationPeriodDeserializer;
 impl CookieExpirationPeriodDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<i64, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct CookieNameDeserializer;
 impl CookieNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Contains the parameters for CreateLoadBalancer.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the parameters for CreateLoadBalancer.</p>
+#[derive(Default, Debug, Clone)]
 pub struct CreateAccessPointInput {
-    #[doc="<p>One or more Availability Zones from the same region as the load balancer.</p> <p>You must specify at least one Availability Zone.</p> <p>You can add more Availability Zones after you create the load balancer using <a>EnableAvailabilityZonesForLoadBalancer</a>.</p>"]
+    /// <p>One or more Availability Zones from the same region as the load balancer.</p> <p>You must specify at least one Availability Zone.</p> <p>You can add more Availability Zones after you create the load balancer using <a>EnableAvailabilityZonesForLoadBalancer</a>.</p>
     pub availability_zones: Option<Vec<String>>,
-    #[doc="<p>The listeners.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-listener-config.html\">Listeners for Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>The listeners.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-listener-config.html">Listeners for Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>
     pub listeners: Vec<Listener>,
-    #[doc="<p>The name of the load balancer.</p> <p>This name must be unique within your set of load balancers for the region, must have a maximum of 32 characters, must contain only alphanumeric characters or hyphens, and cannot begin or end with a hyphen.</p>"]
+    /// <p>The name of the load balancer.</p> <p>This name must be unique within your set of load balancers for the region, must have a maximum of 32 characters, must contain only alphanumeric characters or hyphens, and cannot begin or end with a hyphen.</p>
     pub load_balancer_name: String,
-    #[doc="<p>The type of a load balancer. Valid only for load balancers in a VPC.</p> <p>By default, Elastic Load Balancing creates an Internet-facing load balancer with a DNS name that resolves to public IP addresses. For more information about Internet-facing and Internal load balancers, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/how-elastic-load-balancing-works.html#load-balancer-scheme\">Load Balancer Scheme</a> in the <i>Elastic Load Balancing User Guide</i>.</p> <p>Specify <code>internal</code> to create a load balancer with a DNS name that resolves to private IP addresses.</p>"]
+    /// <p>The type of a load balancer. Valid only for load balancers in a VPC.</p> <p>By default, Elastic Load Balancing creates an Internet-facing load balancer with a DNS name that resolves to public IP addresses. For more information about Internet-facing and Internal load balancers, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/how-elastic-load-balancing-works.html#load-balancer-scheme">Load Balancer Scheme</a> in the <i>Elastic Load Balancing User Guide</i>.</p> <p>Specify <code>internal</code> to create a load balancer with a DNS name that resolves to private IP addresses.</p>
     pub scheme: Option<String>,
-    #[doc="<p>The IDs of the security groups to assign to the load balancer.</p>"]
+    /// <p>The IDs of the security groups to assign to the load balancer.</p>
     pub security_groups: Option<Vec<String>>,
-    #[doc="<p>The IDs of the subnets in your VPC to attach to the load balancer. Specify one subnet per Availability Zone specified in <code>AvailabilityZones</code>.</p>"]
+    /// <p>The IDs of the subnets in your VPC to attach to the load balancer. Specify one subnet per Availability Zone specified in <code>AvailabilityZones</code>.</p>
     pub subnets: Option<Vec<String>>,
-    #[doc="<p>A list of tags to assign to the load balancer.</p> <p>For more information about tagging your load balancer, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/add-remove-tags.html\">Tag Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>A list of tags to assign to the load balancer.</p> <p>For more information about tagging your load balancer, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/add-remove-tags.html">Tag Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>
     pub tags: Option<Vec<Tag>>,
 }
-
 
 /// Serialize `CreateAccessPointInput` contents to a `SignedRequest`.
 struct CreateAccessPointInputSerializer;
@@ -1271,23 +1286,33 @@ impl CreateAccessPointInputSerializer {
         }
 
         if let Some(ref field_value) = obj.availability_zones {
-            AvailabilityZonesSerializer::serialize(params,
-                                                   &format!("{}{}", prefix, "AvailabilityZones"),
-                                                   field_value);
+            AvailabilityZonesSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "AvailabilityZones"),
+                field_value,
+            );
         }
-        ListenersSerializer::serialize(params,
-                                       &format!("{}{}", prefix, "Listeners"),
-                                       &obj.listeners);
-        params.put(&format!("{}{}", prefix, "LoadBalancerName"),
-                   &obj.load_balancer_name.replace("+", "%2B"));
+        ListenersSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "Listeners"),
+            &obj.listeners,
+        );
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerName"),
+            &obj.load_balancer_name.replace("+", "%2B"),
+        );
         if let Some(ref field_value) = obj.scheme {
-            params.put(&format!("{}{}", prefix, "Scheme"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "Scheme"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.security_groups {
-            SecurityGroupsSerializer::serialize(params,
-                                                &format!("{}{}", prefix, "SecurityGroups"),
-                                                field_value);
+            SecurityGroupsSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "SecurityGroups"),
+                field_value,
+            );
         }
         if let Some(ref field_value) = obj.subnets {
             SubnetsSerializer::serialize(params, &format!("{}{}", prefix, "Subnets"), field_value);
@@ -1295,23 +1320,23 @@ impl CreateAccessPointInputSerializer {
         if let Some(ref field_value) = obj.tags {
             TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
         }
-
     }
 }
 
-#[doc="<p>Contains the output for CreateLoadBalancer.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the output for CreateLoadBalancer.</p>
+#[derive(Default, Debug, Clone)]
 pub struct CreateAccessPointOutput {
-    #[doc="<p>The DNS name of the load balancer.</p>"]
+    /// <p>The DNS name of the load balancer.</p>
     pub dns_name: Option<String>,
 }
 
 struct CreateAccessPointOutputDeserializer;
 impl CreateAccessPointOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<CreateAccessPointOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateAccessPointOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = CreateAccessPointOutput::default();
@@ -1326,15 +1351,13 @@ impl CreateAccessPointOutputDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "DNSName" => {
-                            obj.dns_name = Some(try!(DNSNameDeserializer::deserialize("DNSName",
-                                                                                      stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "DNSName" => {
+                        obj.dns_name =
+                            Some(try!(DNSNameDeserializer::deserialize("DNSName", stack)));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1345,20 +1368,18 @@ impl CreateAccessPointOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Contains the parameters for CreateAppCookieStickinessPolicy.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the parameters for CreateAppCookieStickinessPolicy.</p>
+#[derive(Default, Debug, Clone)]
 pub struct CreateAppCookieStickinessPolicyInput {
-    #[doc="<p>The name of the application cookie used for stickiness.</p>"]
+    /// <p>The name of the application cookie used for stickiness.</p>
     pub cookie_name: String,
-    #[doc="<p>The name of the load balancer.</p>"]
+    /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
-    #[doc="<p>The name of the policy being created. Policy names must consist of alphanumeric characters and dashes (-). This name must be unique within the set of policies for this load balancer.</p>"]
+    /// <p>The name of the policy being created. Policy names must consist of alphanumeric characters and dashes (-). This name must be unique within the set of policies for this load balancer.</p>
     pub policy_name: String,
 }
-
 
 /// Serialize `CreateAppCookieStickinessPolicyInput` contents to a `SignedRequest`.
 struct CreateAppCookieStickinessPolicyInputSerializer;
@@ -1369,27 +1390,32 @@ impl CreateAppCookieStickinessPolicyInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "CookieName"),
-                   &obj.cookie_name.replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "LoadBalancerName"),
-                   &obj.load_balancer_name.replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "PolicyName"),
-                   &obj.policy_name.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "CookieName"),
+            &obj.cookie_name.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerName"),
+            &obj.load_balancer_name.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "PolicyName"),
+            &obj.policy_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>Contains the output for CreateAppCookieStickinessPolicy.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the output for CreateAppCookieStickinessPolicy.</p>
+#[derive(Default, Debug, Clone)]
 pub struct CreateAppCookieStickinessPolicyOutput;
 
 struct CreateAppCookieStickinessPolicyOutputDeserializer;
 impl CreateAppCookieStickinessPolicyOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<CreateAppCookieStickinessPolicyOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateAppCookieStickinessPolicyOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let obj = CreateAppCookieStickinessPolicyOutput::default();
@@ -1397,20 +1423,18 @@ impl CreateAppCookieStickinessPolicyOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Contains the parameters for CreateLBCookieStickinessPolicy.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the parameters for CreateLBCookieStickinessPolicy.</p>
+#[derive(Default, Debug, Clone)]
 pub struct CreateLBCookieStickinessPolicyInput {
-    #[doc="<p>The time period, in seconds, after which the cookie should be considered stale. If you do not specify this parameter, the default value is 0, which indicates that the sticky session should last for the duration of the browser session.</p>"]
+    /// <p>The time period, in seconds, after which the cookie should be considered stale. If you do not specify this parameter, the default value is 0, which indicates that the sticky session should last for the duration of the browser session.</p>
     pub cookie_expiration_period: Option<i64>,
-    #[doc="<p>The name of the load balancer.</p>"]
+    /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
-    #[doc="<p>The name of the policy being created. Policy names must consist of alphanumeric characters and dashes (-). This name must be unique within the set of policies for this load balancer.</p>"]
+    /// <p>The name of the policy being created. Policy names must consist of alphanumeric characters and dashes (-). This name must be unique within the set of policies for this load balancer.</p>
     pub policy_name: String,
 }
-
 
 /// Serialize `CreateLBCookieStickinessPolicyInput` contents to a `SignedRequest`.
 struct CreateLBCookieStickinessPolicyInputSerializer;
@@ -1422,28 +1446,33 @@ impl CreateLBCookieStickinessPolicyInputSerializer {
         }
 
         if let Some(ref field_value) = obj.cookie_expiration_period {
-            params.put(&format!("{}{}", prefix, "CookieExpirationPeriod"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "CookieExpirationPeriod"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
-        params.put(&format!("{}{}", prefix, "LoadBalancerName"),
-                   &obj.load_balancer_name.replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "PolicyName"),
-                   &obj.policy_name.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerName"),
+            &obj.load_balancer_name.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "PolicyName"),
+            &obj.policy_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>Contains the output for CreateLBCookieStickinessPolicy.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the output for CreateLBCookieStickinessPolicy.</p>
+#[derive(Default, Debug, Clone)]
 pub struct CreateLBCookieStickinessPolicyOutput;
 
 struct CreateLBCookieStickinessPolicyOutputDeserializer;
 impl CreateLBCookieStickinessPolicyOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<CreateLBCookieStickinessPolicyOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateLBCookieStickinessPolicyOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let obj = CreateLBCookieStickinessPolicyOutput::default();
@@ -1451,18 +1480,16 @@ impl CreateLBCookieStickinessPolicyOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Contains the parameters for CreateLoadBalancerListeners.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the parameters for CreateLoadBalancerListeners.</p>
+#[derive(Default, Debug, Clone)]
 pub struct CreateLoadBalancerListenerInput {
-    #[doc="<p>The listeners.</p>"]
+    /// <p>The listeners.</p>
     pub listeners: Vec<Listener>,
-    #[doc="<p>The name of the load balancer.</p>"]
+    /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
 }
-
 
 /// Serialize `CreateLoadBalancerListenerInput` contents to a `SignedRequest`.
 struct CreateLoadBalancerListenerInputSerializer;
@@ -1473,26 +1500,29 @@ impl CreateLoadBalancerListenerInputSerializer {
             prefix.push_str(".");
         }
 
-        ListenersSerializer::serialize(params,
-                                       &format!("{}{}", prefix, "Listeners"),
-                                       &obj.listeners);
-        params.put(&format!("{}{}", prefix, "LoadBalancerName"),
-                   &obj.load_balancer_name.replace("+", "%2B"));
-
+        ListenersSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "Listeners"),
+            &obj.listeners,
+        );
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerName"),
+            &obj.load_balancer_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>Contains the parameters for CreateLoadBalancerListener.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the parameters for CreateLoadBalancerListener.</p>
+#[derive(Default, Debug, Clone)]
 pub struct CreateLoadBalancerListenerOutput;
 
 struct CreateLoadBalancerListenerOutputDeserializer;
 impl CreateLoadBalancerListenerOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<CreateLoadBalancerListenerOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateLoadBalancerListenerOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let obj = CreateLoadBalancerListenerOutput::default();
@@ -1500,22 +1530,20 @@ impl CreateLoadBalancerListenerOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Contains the parameters for CreateLoadBalancerPolicy.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the parameters for CreateLoadBalancerPolicy.</p>
+#[derive(Default, Debug, Clone)]
 pub struct CreateLoadBalancerPolicyInput {
-    #[doc="<p>The name of the load balancer.</p>"]
+    /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
-    #[doc="<p>The policy attributes.</p>"]
+    /// <p>The policy attributes.</p>
     pub policy_attributes: Option<Vec<PolicyAttribute>>,
-    #[doc="<p>The name of the load balancer policy to be created. This name must be unique within the set of policies for this load balancer.</p>"]
+    /// <p>The name of the load balancer policy to be created. This name must be unique within the set of policies for this load balancer.</p>
     pub policy_name: String,
-    #[doc="<p>The name of the base policy type. To get the list of policy types, use <a>DescribeLoadBalancerPolicyTypes</a>.</p>"]
+    /// <p>The name of the base policy type. To get the list of policy types, use <a>DescribeLoadBalancerPolicyTypes</a>.</p>
     pub policy_type_name: String,
 }
-
 
 /// Serialize `CreateLoadBalancerPolicyInput` contents to a `SignedRequest`.
 struct CreateLoadBalancerPolicyInputSerializer;
@@ -1526,31 +1554,39 @@ impl CreateLoadBalancerPolicyInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "LoadBalancerName"),
-                   &obj.load_balancer_name.replace("+", "%2B"));
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerName"),
+            &obj.load_balancer_name.replace("+", "%2B"),
+        );
         if let Some(ref field_value) = obj.policy_attributes {
-            PolicyAttributesSerializer::serialize(params,
-                                                  &format!("{}{}", prefix, "PolicyAttributes"),
-                                                  field_value);
+            PolicyAttributesSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "PolicyAttributes"),
+                field_value,
+            );
         }
-        params.put(&format!("{}{}", prefix, "PolicyName"),
-                   &obj.policy_name.replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "PolicyTypeName"),
-                   &obj.policy_type_name.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "PolicyName"),
+            &obj.policy_name.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "PolicyTypeName"),
+            &obj.policy_type_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>Contains the output of CreateLoadBalancerPolicy.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the output of CreateLoadBalancerPolicy.</p>
+#[derive(Default, Debug, Clone)]
 pub struct CreateLoadBalancerPolicyOutput;
 
 struct CreateLoadBalancerPolicyOutputDeserializer;
 impl CreateLoadBalancerPolicyOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<CreateLoadBalancerPolicyOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateLoadBalancerPolicyOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let obj = CreateLoadBalancerPolicyOutput::default();
@@ -1558,36 +1594,36 @@ impl CreateLoadBalancerPolicyOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct CreatedTimeDeserializer;
 impl CreatedTimeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Information about the <code>CrossZoneLoadBalancing</code> attribute.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Information about the <code>CrossZoneLoadBalancing</code> attribute.</p>
+#[derive(Default, Debug, Clone)]
 pub struct CrossZoneLoadBalancing {
-    #[doc="<p>Specifies whether cross-zone load balancing is enabled for the load balancer.</p>"]
+    /// <p>Specifies whether cross-zone load balancing is enabled for the load balancer.</p>
     pub enabled: bool,
 }
 
 struct CrossZoneLoadBalancingDeserializer;
 impl CrossZoneLoadBalancingDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<CrossZoneLoadBalancing, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CrossZoneLoadBalancing, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = CrossZoneLoadBalancing::default();
@@ -1602,16 +1638,16 @@ impl CrossZoneLoadBalancingDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Enabled" => {
-                            obj.enabled =
-                                try!(CrossZoneLoadBalancingEnabledDeserializer::deserialize("Enabled",
-                                                                                            stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Enabled" => {
+                        obj.enabled =
+                            try!(CrossZoneLoadBalancingEnabledDeserializer::deserialize(
+                                "Enabled",
+                                stack
+                            ));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1622,7 +1658,6 @@ impl CrossZoneLoadBalancingDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -1635,61 +1670,61 @@ impl CrossZoneLoadBalancingSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Enabled"),
-                   &obj.enabled.to_string().replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "Enabled"),
+            &obj.enabled.to_string().replace("+", "%2B"),
+        );
     }
 }
 
 struct CrossZoneLoadBalancingEnabledDeserializer;
 impl CrossZoneLoadBalancingEnabledDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<bool, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct DNSNameDeserializer;
 impl DNSNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct DefaultValueDeserializer;
 impl DefaultValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Contains the parameters for DeleteLoadBalancer.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the parameters for DeleteLoadBalancer.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DeleteAccessPointInput {
-    #[doc="<p>The name of the load balancer.</p>"]
+    /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
 }
-
 
 /// Serialize `DeleteAccessPointInput` contents to a `SignedRequest`.
 struct DeleteAccessPointInputSerializer;
@@ -1700,22 +1735,24 @@ impl DeleteAccessPointInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "LoadBalancerName"),
-                   &obj.load_balancer_name.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerName"),
+            &obj.load_balancer_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>Contains the output of DeleteLoadBalancer.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the output of DeleteLoadBalancer.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DeleteAccessPointOutput;
 
 struct DeleteAccessPointOutputDeserializer;
 impl DeleteAccessPointOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DeleteAccessPointOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteAccessPointOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let obj = DeleteAccessPointOutput::default();
@@ -1723,18 +1760,16 @@ impl DeleteAccessPointOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Contains the parameters for DeleteLoadBalancerListeners.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the parameters for DeleteLoadBalancerListeners.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DeleteLoadBalancerListenerInput {
-    #[doc="<p>The name of the load balancer.</p>"]
+    /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
-    #[doc="<p>The client port numbers of the listeners.</p>"]
+    /// <p>The client port numbers of the listeners.</p>
     pub load_balancer_ports: Vec<i64>,
 }
-
 
 /// Serialize `DeleteLoadBalancerListenerInput` contents to a `SignedRequest`.
 struct DeleteLoadBalancerListenerInputSerializer;
@@ -1745,26 +1780,29 @@ impl DeleteLoadBalancerListenerInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "LoadBalancerName"),
-                   &obj.load_balancer_name.replace("+", "%2B"));
-        PortsSerializer::serialize(params,
-                                   &format!("{}{}", prefix, "LoadBalancerPorts"),
-                                   &obj.load_balancer_ports);
-
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerName"),
+            &obj.load_balancer_name.replace("+", "%2B"),
+        );
+        PortsSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "LoadBalancerPorts"),
+            &obj.load_balancer_ports,
+        );
     }
 }
 
-#[doc="<p>Contains the output of DeleteLoadBalancerListeners.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the output of DeleteLoadBalancerListeners.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DeleteLoadBalancerListenerOutput;
 
 struct DeleteLoadBalancerListenerOutputDeserializer;
 impl DeleteLoadBalancerListenerOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<DeleteLoadBalancerListenerOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteLoadBalancerListenerOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let obj = DeleteLoadBalancerListenerOutput::default();
@@ -1772,18 +1810,16 @@ impl DeleteLoadBalancerListenerOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Contains the parameters for DeleteLoadBalancerPolicy.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the parameters for DeleteLoadBalancerPolicy.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DeleteLoadBalancerPolicyInput {
-    #[doc="<p>The name of the load balancer.</p>"]
+    /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
-    #[doc="<p>The name of the policy.</p>"]
+    /// <p>The name of the policy.</p>
     pub policy_name: String,
 }
-
 
 /// Serialize `DeleteLoadBalancerPolicyInput` contents to a `SignedRequest`.
 struct DeleteLoadBalancerPolicyInputSerializer;
@@ -1794,24 +1830,28 @@ impl DeleteLoadBalancerPolicyInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "LoadBalancerName"),
-                   &obj.load_balancer_name.replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "PolicyName"),
-                   &obj.policy_name.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerName"),
+            &obj.load_balancer_name.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "PolicyName"),
+            &obj.policy_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>Contains the output of DeleteLoadBalancerPolicy.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the output of DeleteLoadBalancerPolicy.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DeleteLoadBalancerPolicyOutput;
 
 struct DeleteLoadBalancerPolicyOutputDeserializer;
 impl DeleteLoadBalancerPolicyOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DeleteLoadBalancerPolicyOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteLoadBalancerPolicyOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let obj = DeleteLoadBalancerPolicyOutput::default();
@@ -1819,18 +1859,16 @@ impl DeleteLoadBalancerPolicyOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Contains the parameters for DeregisterInstancesFromLoadBalancer.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the parameters for DeregisterInstancesFromLoadBalancer.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DeregisterEndPointsInput {
-    #[doc="<p>The IDs of the instances.</p>"]
+    /// <p>The IDs of the instances.</p>
     pub instances: Vec<Instance>,
-    #[doc="<p>The name of the load balancer.</p>"]
+    /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
 }
-
 
 /// Serialize `DeregisterEndPointsInput` contents to a `SignedRequest`.
 struct DeregisterEndPointsInputSerializer;
@@ -1841,28 +1879,32 @@ impl DeregisterEndPointsInputSerializer {
             prefix.push_str(".");
         }
 
-        InstancesSerializer::serialize(params,
-                                       &format!("{}{}", prefix, "Instances"),
-                                       &obj.instances);
-        params.put(&format!("{}{}", prefix, "LoadBalancerName"),
-                   &obj.load_balancer_name.replace("+", "%2B"));
-
+        InstancesSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "Instances"),
+            &obj.instances,
+        );
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerName"),
+            &obj.load_balancer_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>Contains the output of DeregisterInstancesFromLoadBalancer.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the output of DeregisterInstancesFromLoadBalancer.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DeregisterEndPointsOutput {
-    #[doc="<p>The remaining instances registered with the load balancer.</p>"]
+    /// <p>The remaining instances registered with the load balancer.</p>
     pub instances: Option<Vec<Instance>>,
 }
 
 struct DeregisterEndPointsOutputDeserializer;
 impl DeregisterEndPointsOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DeregisterEndPointsOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeregisterEndPointsOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DeregisterEndPointsOutput::default();
@@ -1877,15 +1919,13 @@ impl DeregisterEndPointsOutputDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Instances" => {
-                            obj.instances = Some(try!(InstancesDeserializer::deserialize("Instances",
-                                                                                         stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Instances" => {
+                        obj.instances =
+                            Some(try!(InstancesDeserializer::deserialize("Instances", stack)));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1896,20 +1936,18 @@ impl DeregisterEndPointsOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Contains the parameters for DescribeLoadBalancers.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the parameters for DescribeLoadBalancers.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DescribeAccessPointsInput {
-    #[doc="<p>The names of the load balancers.</p>"]
+    /// <p>The names of the load balancers.</p>
     pub load_balancer_names: Option<Vec<String>>,
-    #[doc="<p>The marker for the next set of results. (You received this marker from a previous call.)</p>"]
+    /// <p>The marker for the next set of results. (You received this marker from a previous call.)</p>
     pub marker: Option<String>,
-    #[doc="<p>The maximum number of results to return with this call (a number from 1 to 400). The default is 400.</p>"]
+    /// <p>The maximum number of results to return with this call (a number from 1 to 400). The default is 400.</p>
     pub page_size: Option<i64>,
 }
-
 
 /// Serialize `DescribeAccessPointsInput` contents to a `SignedRequest`.
 struct DescribeAccessPointsInputSerializer;
@@ -1921,37 +1959,43 @@ impl DescribeAccessPointsInputSerializer {
         }
 
         if let Some(ref field_value) = obj.load_balancer_names {
-            LoadBalancerNamesSerializer::serialize(params,
-                                                   &format!("{}{}", prefix, "LoadBalancerNames"),
-                                                   field_value);
+            LoadBalancerNamesSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "LoadBalancerNames"),
+                field_value,
+            );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "Marker"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.page_size {
-            params.put(&format!("{}{}", prefix, "PageSize"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "PageSize"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
-
     }
 }
 
-#[doc="<p>Contains the parameters for DescribeLoadBalancers.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the parameters for DescribeLoadBalancers.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DescribeAccessPointsOutput {
-    #[doc="<p>Information about the load balancers.</p>"]
+    /// <p>Information about the load balancers.</p>
     pub load_balancer_descriptions: Option<Vec<LoadBalancerDescription>>,
-    #[doc="<p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>"]
+    /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
     pub next_marker: Option<String>,
 }
 
 struct DescribeAccessPointsOutputDeserializer;
 impl DescribeAccessPointsOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DescribeAccessPointsOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeAccessPointsOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DescribeAccessPointsOutput::default();
@@ -1966,18 +2010,20 @@ impl DescribeAccessPointsOutputDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "LoadBalancerDescriptions" => {
-                            obj.load_balancer_descriptions = Some(try!(LoadBalancerDescriptionsDeserializer::deserialize("LoadBalancerDescriptions", stack)));
-                        }
-                        "NextMarker" => {
-                            obj.next_marker = Some(try!(MarkerDeserializer::deserialize("NextMarker",
-                                                                                        stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "LoadBalancerDescriptions" => {
+                        obj.load_balancer_descriptions =
+                            Some(try!(LoadBalancerDescriptionsDeserializer::deserialize(
+                                "LoadBalancerDescriptions",
+                                stack
+                            )));
                     }
-                }
+                    "NextMarker" => {
+                        obj.next_marker =
+                            Some(try!(MarkerDeserializer::deserialize("NextMarker", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1988,17 +2034,15 @@ impl DescribeAccessPointsOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default, Debug, Clone)]
 pub struct DescribeAccountLimitsInput {
-    #[doc="<p>The marker for the next set of results. (You received this marker from a previous call.)</p>"]
+    /// <p>The marker for the next set of results. (You received this marker from a previous call.)</p>
     pub marker: Option<String>,
-    #[doc="<p>The maximum number of results to return with this call.</p>"]
+    /// <p>The maximum number of results to return with this call.</p>
     pub page_size: Option<i64>,
 }
-
 
 /// Serialize `DescribeAccountLimitsInput` contents to a `SignedRequest`.
 struct DescribeAccountLimitsInputSerializer;
@@ -2010,31 +2054,35 @@ impl DescribeAccountLimitsInputSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "Marker"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.page_size {
-            params.put(&format!("{}{}", prefix, "PageSize"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "PageSize"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
-
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default, Debug, Clone)]
 pub struct DescribeAccountLimitsOutput {
-    #[doc="<p>Information about the limits.</p>"]
+    /// <p>Information about the limits.</p>
     pub limits: Option<Vec<Limit>>,
-    #[doc="<p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>"]
+    /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
     pub next_marker: Option<String>,
 }
 
 struct DescribeAccountLimitsOutputDeserializer;
 impl DescribeAccountLimitsOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DescribeAccountLimitsOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeAccountLimitsOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DescribeAccountLimitsOutput::default();
@@ -2049,19 +2097,16 @@ impl DescribeAccountLimitsOutputDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Limits" => {
-                            obj.limits = Some(try!(LimitsDeserializer::deserialize("Limits",
-                                                                                   stack)));
-                        }
-                        "NextMarker" => {
-                            obj.next_marker = Some(try!(MarkerDeserializer::deserialize("NextMarker",
-                                                                                        stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Limits" => {
+                        obj.limits = Some(try!(LimitsDeserializer::deserialize("Limits", stack)));
                     }
-                }
+                    "NextMarker" => {
+                        obj.next_marker =
+                            Some(try!(MarkerDeserializer::deserialize("NextMarker", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -2072,18 +2117,16 @@ impl DescribeAccountLimitsOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Contains the parameters for DescribeInstanceHealth.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the parameters for DescribeInstanceHealth.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DescribeEndPointStateInput {
-    #[doc="<p>The IDs of the instances.</p>"]
+    /// <p>The IDs of the instances.</p>
     pub instances: Option<Vec<Instance>>,
-    #[doc="<p>The name of the load balancer.</p>"]
+    /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
 }
-
 
 /// Serialize `DescribeEndPointStateInput` contents to a `SignedRequest`.
 struct DescribeEndPointStateInputSerializer;
@@ -2095,29 +2138,33 @@ impl DescribeEndPointStateInputSerializer {
         }
 
         if let Some(ref field_value) = obj.instances {
-            InstancesSerializer::serialize(params,
-                                           &format!("{}{}", prefix, "Instances"),
-                                           field_value);
+            InstancesSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Instances"),
+                field_value,
+            );
         }
-        params.put(&format!("{}{}", prefix, "LoadBalancerName"),
-                   &obj.load_balancer_name.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerName"),
+            &obj.load_balancer_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>Contains the output for DescribeInstanceHealth.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the output for DescribeInstanceHealth.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DescribeEndPointStateOutput {
-    #[doc="<p>Information about the health of the instances.</p>"]
+    /// <p>Information about the health of the instances.</p>
     pub instance_states: Option<Vec<InstanceState>>,
 }
 
 struct DescribeEndPointStateOutputDeserializer;
 impl DescribeEndPointStateOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DescribeEndPointStateOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeEndPointStateOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DescribeEndPointStateOutput::default();
@@ -2132,16 +2179,15 @@ impl DescribeEndPointStateOutputDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "InstanceStates" => {
-                            obj.instance_states =
-                                Some(try!(InstanceStatesDeserializer::deserialize("InstanceStates",
-                                                                                  stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "InstanceStates" => {
+                        obj.instance_states = Some(try!(InstanceStatesDeserializer::deserialize(
+                            "InstanceStates",
+                            stack
+                        )));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -2152,16 +2198,14 @@ impl DescribeEndPointStateOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Contains the parameters for DescribeLoadBalancerAttributes.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the parameters for DescribeLoadBalancerAttributes.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DescribeLoadBalancerAttributesInput {
-    #[doc="<p>The name of the load balancer.</p>"]
+    /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
 }
-
 
 /// Serialize `DescribeLoadBalancerAttributesInput` contents to a `SignedRequest`.
 struct DescribeLoadBalancerAttributesInputSerializer;
@@ -2172,26 +2216,27 @@ impl DescribeLoadBalancerAttributesInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "LoadBalancerName"),
-                   &obj.load_balancer_name.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerName"),
+            &obj.load_balancer_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>Contains the output of DescribeLoadBalancerAttributes.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the output of DescribeLoadBalancerAttributes.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DescribeLoadBalancerAttributesOutput {
-    #[doc="<p>Information about the load balancer attributes.</p>"]
+    /// <p>Information about the load balancer attributes.</p>
     pub load_balancer_attributes: Option<LoadBalancerAttributes>,
 }
 
 struct DescribeLoadBalancerAttributesOutputDeserializer;
 impl DescribeLoadBalancerAttributesOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<DescribeLoadBalancerAttributesOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeLoadBalancerAttributesOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DescribeLoadBalancerAttributesOutput::default();
@@ -2206,16 +2251,16 @@ impl DescribeLoadBalancerAttributesOutputDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "LoadBalancerAttributes" => {
-                            obj.load_balancer_attributes =
-                                Some(try!(LoadBalancerAttributesDeserializer::deserialize("LoadBalancerAttributes",
-                                                                                          stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "LoadBalancerAttributes" => {
+                        obj.load_balancer_attributes =
+                            Some(try!(LoadBalancerAttributesDeserializer::deserialize(
+                                "LoadBalancerAttributes",
+                                stack
+                            )));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -2226,18 +2271,16 @@ impl DescribeLoadBalancerAttributesOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Contains the parameters for DescribeLoadBalancerPolicies.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the parameters for DescribeLoadBalancerPolicies.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DescribeLoadBalancerPoliciesInput {
-    #[doc="<p>The name of the load balancer.</p>"]
+    /// <p>The name of the load balancer.</p>
     pub load_balancer_name: Option<String>,
-    #[doc="<p>The names of the policies.</p>"]
+    /// <p>The names of the policies.</p>
     pub policy_names: Option<Vec<String>>,
 }
-
 
 /// Serialize `DescribeLoadBalancerPoliciesInput` contents to a `SignedRequest`.
 struct DescribeLoadBalancerPoliciesInputSerializer;
@@ -2249,32 +2292,35 @@ impl DescribeLoadBalancerPoliciesInputSerializer {
         }
 
         if let Some(ref field_value) = obj.load_balancer_name {
-            params.put(&format!("{}{}", prefix, "LoadBalancerName"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "LoadBalancerName"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.policy_names {
-            PolicyNamesSerializer::serialize(params,
-                                             &format!("{}{}", prefix, "PolicyNames"),
-                                             field_value);
+            PolicyNamesSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "PolicyNames"),
+                field_value,
+            );
         }
-
     }
 }
 
-#[doc="<p>Contains the output of DescribeLoadBalancerPolicies.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the output of DescribeLoadBalancerPolicies.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DescribeLoadBalancerPoliciesOutput {
-    #[doc="<p>Information about the policies.</p>"]
+    /// <p>Information about the policies.</p>
     pub policy_descriptions: Option<Vec<PolicyDescription>>,
 }
 
 struct DescribeLoadBalancerPoliciesOutputDeserializer;
 impl DescribeLoadBalancerPoliciesOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<DescribeLoadBalancerPoliciesOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeLoadBalancerPoliciesOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DescribeLoadBalancerPoliciesOutput::default();
@@ -2289,16 +2335,16 @@ impl DescribeLoadBalancerPoliciesOutputDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "PolicyDescriptions" => {
-                            obj.policy_descriptions =
-                                Some(try!(PolicyDescriptionsDeserializer::deserialize("PolicyDescriptions",
-                                                                                      stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "PolicyDescriptions" => {
+                        obj.policy_descriptions =
+                            Some(try!(PolicyDescriptionsDeserializer::deserialize(
+                                "PolicyDescriptions",
+                                stack
+                            )));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -2309,16 +2355,14 @@ impl DescribeLoadBalancerPoliciesOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Contains the parameters for DescribeLoadBalancerPolicyTypes.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the parameters for DescribeLoadBalancerPolicyTypes.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DescribeLoadBalancerPolicyTypesInput {
-    #[doc="<p>The names of the policy types. If no names are specified, describes all policy types defined by Elastic Load Balancing.</p>"]
+    /// <p>The names of the policy types. If no names are specified, describes all policy types defined by Elastic Load Balancing.</p>
     pub policy_type_names: Option<Vec<String>>,
 }
-
 
 /// Serialize `DescribeLoadBalancerPolicyTypesInput` contents to a `SignedRequest`.
 struct DescribeLoadBalancerPolicyTypesInputSerializer;
@@ -2330,28 +2374,29 @@ impl DescribeLoadBalancerPolicyTypesInputSerializer {
         }
 
         if let Some(ref field_value) = obj.policy_type_names {
-            PolicyTypeNamesSerializer::serialize(params,
-                                                 &format!("{}{}", prefix, "PolicyTypeNames"),
-                                                 field_value);
+            PolicyTypeNamesSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "PolicyTypeNames"),
+                field_value,
+            );
         }
-
     }
 }
 
-#[doc="<p>Contains the output of DescribeLoadBalancerPolicyTypes.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the output of DescribeLoadBalancerPolicyTypes.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DescribeLoadBalancerPolicyTypesOutput {
-    #[doc="<p>Information about the policy types.</p>"]
+    /// <p>Information about the policy types.</p>
     pub policy_type_descriptions: Option<Vec<PolicyTypeDescription>>,
 }
 
 struct DescribeLoadBalancerPolicyTypesOutputDeserializer;
 impl DescribeLoadBalancerPolicyTypesOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<DescribeLoadBalancerPolicyTypesOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeLoadBalancerPolicyTypesOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DescribeLoadBalancerPolicyTypesOutput::default();
@@ -2366,16 +2411,16 @@ impl DescribeLoadBalancerPolicyTypesOutputDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "PolicyTypeDescriptions" => {
-                            obj.policy_type_descriptions =
-                                Some(try!(PolicyTypeDescriptionsDeserializer::deserialize("PolicyTypeDescriptions",
-                                                                                          stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "PolicyTypeDescriptions" => {
+                        obj.policy_type_descriptions =
+                            Some(try!(PolicyTypeDescriptionsDeserializer::deserialize(
+                                "PolicyTypeDescriptions",
+                                stack
+                            )));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -2386,16 +2431,14 @@ impl DescribeLoadBalancerPolicyTypesOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Contains the parameters for DescribeTags.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the parameters for DescribeTags.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DescribeTagsInput {
-    #[doc="<p>The names of the load balancers.</p>"]
+    /// <p>The names of the load balancers.</p>
     pub load_balancer_names: Vec<String>,
 }
-
 
 /// Serialize `DescribeTagsInput` contents to a `SignedRequest`.
 struct DescribeTagsInputSerializer;
@@ -2406,26 +2449,28 @@ impl DescribeTagsInputSerializer {
             prefix.push_str(".");
         }
 
-        LoadBalancerNamesMax20Serializer::serialize(params,
-                                                    &format!("{}{}", prefix, "LoadBalancerNames"),
-                                                    &obj.load_balancer_names);
-
+        LoadBalancerNamesMax20Serializer::serialize(
+            params,
+            &format!("{}{}", prefix, "LoadBalancerNames"),
+            &obj.load_balancer_names,
+        );
     }
 }
 
-#[doc="<p>Contains the output for DescribeTags.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the output for DescribeTags.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DescribeTagsOutput {
-    #[doc="<p>Information about the tags.</p>"]
+    /// <p>Information about the tags.</p>
     pub tag_descriptions: Option<Vec<TagDescription>>,
 }
 
 struct DescribeTagsOutputDeserializer;
 impl DescribeTagsOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DescribeTagsOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeTagsOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DescribeTagsOutput::default();
@@ -2440,16 +2485,14 @@ impl DescribeTagsOutputDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "TagDescriptions" => {
-                            obj.tag_descriptions =
-                                Some(try!(TagDescriptionsDeserializer::deserialize("TagDescriptions",
-                                                                                   stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "TagDescriptions" => {
+                        obj.tag_descriptions = Some(try!(
+                            TagDescriptionsDeserializer::deserialize("TagDescriptions", stack)
+                        ));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -2460,32 +2503,30 @@ impl DescribeTagsOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct DescriptionDeserializer;
 impl DescriptionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Contains the parameters for DetachLoadBalancerFromSubnets.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the parameters for DetachLoadBalancerFromSubnets.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DetachLoadBalancerFromSubnetsInput {
-    #[doc="<p>The name of the load balancer.</p>"]
+    /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
-    #[doc="<p>The IDs of the subnets.</p>"]
+    /// <p>The IDs of the subnets.</p>
     pub subnets: Vec<String>,
 }
-
 
 /// Serialize `DetachLoadBalancerFromSubnetsInput` contents to a `SignedRequest`.
 struct DetachLoadBalancerFromSubnetsInputSerializer;
@@ -2496,27 +2537,28 @@ impl DetachLoadBalancerFromSubnetsInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "LoadBalancerName"),
-                   &obj.load_balancer_name.replace("+", "%2B"));
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerName"),
+            &obj.load_balancer_name.replace("+", "%2B"),
+        );
         SubnetsSerializer::serialize(params, &format!("{}{}", prefix, "Subnets"), &obj.subnets);
-
     }
 }
 
-#[doc="<p>Contains the output of DetachLoadBalancerFromSubnets.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the output of DetachLoadBalancerFromSubnets.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DetachLoadBalancerFromSubnetsOutput {
-    #[doc="<p>The IDs of the remaining subnets for the load balancer.</p>"]
+    /// <p>The IDs of the remaining subnets for the load balancer.</p>
     pub subnets: Option<Vec<String>>,
 }
 
 struct DetachLoadBalancerFromSubnetsOutputDeserializer;
 impl DetachLoadBalancerFromSubnetsOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<DetachLoadBalancerFromSubnetsOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DetachLoadBalancerFromSubnetsOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DetachLoadBalancerFromSubnetsOutput::default();
@@ -2531,15 +2573,13 @@ impl DetachLoadBalancerFromSubnetsOutputDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Subnets" => {
-                            obj.subnets = Some(try!(SubnetsDeserializer::deserialize("Subnets",
-                                                                                     stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Subnets" => {
+                        obj.subnets =
+                            Some(try!(SubnetsDeserializer::deserialize("Subnets", stack)));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -2550,30 +2590,30 @@ impl DetachLoadBalancerFromSubnetsOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Information about a health check.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Information about a health check.</p>
+#[derive(Default, Debug, Clone)]
 pub struct HealthCheck {
-    #[doc="<p>The number of consecutive health checks successes required before moving the instance to the <code>Healthy</code> state.</p>"]
+    /// <p>The number of consecutive health checks successes required before moving the instance to the <code>Healthy</code> state.</p>
     pub healthy_threshold: i64,
-    #[doc="<p>The approximate interval, in seconds, between health checks of an individual instance.</p>"]
+    /// <p>The approximate interval, in seconds, between health checks of an individual instance.</p>
     pub interval: i64,
-    #[doc="<p>The instance being checked. The protocol is either TCP, HTTP, HTTPS, or SSL. The range of valid ports is one (1) through 65535.</p> <p>TCP is the default, specified as a TCP: port pair, for example \"TCP:5000\". In this case, a health check simply attempts to open a TCP connection to the instance on the specified port. Failure to connect within the configured timeout is considered unhealthy.</p> <p>SSL is also specified as SSL: port pair, for example, SSL:5000.</p> <p>For HTTP/HTTPS, you must include a ping path in the string. HTTP is specified as a HTTP:port;/;PathToPing; grouping, for example \"HTTP:80/weather/us/wa/seattle\". In this case, a HTTP GET request is issued to the instance on the given port and path. Any answer other than \"200 OK\" within the timeout period is considered unhealthy.</p> <p>The total length of the HTTP ping target must be 1024 16-bit Unicode characters or less.</p>"]
+    /// <p>The instance being checked. The protocol is either TCP, HTTP, HTTPS, or SSL. The range of valid ports is one (1) through 65535.</p> <p>TCP is the default, specified as a TCP: port pair, for example "TCP:5000". In this case, a health check simply attempts to open a TCP connection to the instance on the specified port. Failure to connect within the configured timeout is considered unhealthy.</p> <p>SSL is also specified as SSL: port pair, for example, SSL:5000.</p> <p>For HTTP/HTTPS, you must include a ping path in the string. HTTP is specified as a HTTP:port;/;PathToPing; grouping, for example "HTTP:80/weather/us/wa/seattle". In this case, a HTTP GET request is issued to the instance on the given port and path. Any answer other than "200 OK" within the timeout period is considered unhealthy.</p> <p>The total length of the HTTP ping target must be 1024 16-bit Unicode characters or less.</p>
     pub target: String,
-    #[doc="<p>The amount of time, in seconds, during which no response means a failed health check.</p> <p>This value must be less than the <code>Interval</code> value.</p>"]
+    /// <p>The amount of time, in seconds, during which no response means a failed health check.</p> <p>This value must be less than the <code>Interval</code> value.</p>
     pub timeout: i64,
-    #[doc="<p>The number of consecutive health check failures required before moving the instance to the <code>Unhealthy</code> state.</p>"]
+    /// <p>The number of consecutive health check failures required before moving the instance to the <code>Unhealthy</code> state.</p>
     pub unhealthy_threshold: i64,
 }
 
 struct HealthCheckDeserializer;
 impl HealthCheckDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<HealthCheck, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<HealthCheck, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = HealthCheck::default();
@@ -2588,34 +2628,38 @@ impl HealthCheckDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "HealthyThreshold" => {
-                            obj.healthy_threshold =
-                                try!(HealthyThresholdDeserializer::deserialize("HealthyThreshold",
-                                                                               stack));
-                        }
-                        "Interval" => {
-                            obj.interval =
-                                try!(HealthCheckIntervalDeserializer::deserialize("Interval",
-                                                                                  stack));
-                        }
-                        "Target" => {
-                            obj.target = try!(HealthCheckTargetDeserializer::deserialize("Target",
-                                                                                         stack));
-                        }
-                        "Timeout" => {
-                            obj.timeout = try!(HealthCheckTimeoutDeserializer::deserialize("Timeout",
-                                                                                           stack));
-                        }
-                        "UnhealthyThreshold" => {
-                            obj.unhealthy_threshold =
-                                try!(UnhealthyThresholdDeserializer::deserialize("UnhealthyThreshold",
-                                                                                 stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "HealthyThreshold" => {
+                        obj.healthy_threshold = try!(HealthyThresholdDeserializer::deserialize(
+                            "HealthyThreshold",
+                            stack
+                        ));
                     }
-                }
+                    "Interval" => {
+                        obj.interval = try!(HealthCheckIntervalDeserializer::deserialize(
+                            "Interval",
+                            stack
+                        ));
+                    }
+                    "Target" => {
+                        obj.target =
+                            try!(HealthCheckTargetDeserializer::deserialize("Target", stack));
+                    }
+                    "Timeout" => {
+                        obj.timeout = try!(HealthCheckTimeoutDeserializer::deserialize(
+                            "Timeout",
+                            stack
+                        ));
+                    }
+                    "UnhealthyThreshold" => {
+                        obj.unhealthy_threshold =
+                            try!(UnhealthyThresholdDeserializer::deserialize(
+                                "UnhealthyThreshold",
+                                stack
+                            ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -2626,7 +2670,6 @@ impl HealthCheckDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -2639,103 +2682,113 @@ impl HealthCheckSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "HealthyThreshold"),
-                   &obj.healthy_threshold.to_string().replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "Interval"),
-                   &obj.interval.to_string().replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "Target"),
-                   &obj.target.replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "Timeout"),
-                   &obj.timeout.to_string().replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "UnhealthyThreshold"),
-                   &obj.unhealthy_threshold.to_string().replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "HealthyThreshold"),
+            &obj.healthy_threshold.to_string().replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "Interval"),
+            &obj.interval.to_string().replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "Target"),
+            &obj.target.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "Timeout"),
+            &obj.timeout.to_string().replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "UnhealthyThreshold"),
+            &obj.unhealthy_threshold.to_string().replace("+", "%2B"),
+        );
     }
 }
 
 struct HealthCheckIntervalDeserializer;
 impl HealthCheckIntervalDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<i64, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct HealthCheckTargetDeserializer;
 impl HealthCheckTargetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct HealthCheckTimeoutDeserializer;
 impl HealthCheckTimeoutDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<i64, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct HealthyThresholdDeserializer;
 impl HealthyThresholdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<i64, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct IdleTimeoutDeserializer;
 impl IdleTimeoutDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<i64, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>The ID of an EC2 instance.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The ID of an EC2 instance.</p>
+#[derive(Default, Debug, Clone)]
 pub struct Instance {
-    #[doc="<p>The instance ID.</p>"]
+    /// <p>The instance ID.</p>
     pub instance_id: Option<String>,
 }
 
 struct InstanceDeserializer;
 impl InstanceDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Instance, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Instance, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = Instance::default();
@@ -2750,16 +2803,15 @@ impl InstanceDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "InstanceId" => {
-                            obj.instance_id =
-                                Some(try!(InstanceIdDeserializer::deserialize("InstanceId",
-                                                                              stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "InstanceId" => {
+                        obj.instance_id = Some(try!(InstanceIdDeserializer::deserialize(
+                            "InstanceId",
+                            stack
+                        )));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -2770,7 +2822,6 @@ impl InstanceDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -2784,60 +2835,62 @@ impl InstanceSerializer {
         }
 
         if let Some(ref field_value) = obj.instance_id {
-            params.put(&format!("{}{}", prefix, "InstanceId"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "InstanceId"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-
     }
 }
 
 struct InstanceIdDeserializer;
 impl InstanceIdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct InstancePortDeserializer;
 impl InstancePortDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<i64, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Information about the state of an EC2 instance.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Information about the state of an EC2 instance.</p>
+#[derive(Default, Debug, Clone)]
 pub struct InstanceState {
-    #[doc="<p>A description of the instance state. This string can contain one or more of the following messages.</p> <ul> <li> <p> <code>N/A</code> </p> </li> <li> <p> <code>A transient error occurred. Please try again later.</code> </p> </li> <li> <p> <code>Instance has failed at least the UnhealthyThreshold number of health checks consecutively.</code> </p> </li> <li> <p> <code>Instance has not passed the configured HealthyThreshold number of health checks consecutively.</code> </p> </li> <li> <p> <code>Instance registration is still in progress.</code> </p> </li> <li> <p> <code>Instance is in the EC2 Availability Zone for which LoadBalancer is not configured to route traffic to.</code> </p> </li> <li> <p> <code>Instance is not currently registered with the LoadBalancer.</code> </p> </li> <li> <p> <code>Instance deregistration currently in progress.</code> </p> </li> <li> <p> <code>Disable Availability Zone is currently in progress.</code> </p> </li> <li> <p> <code>Instance is in pending state.</code> </p> </li> <li> <p> <code>Instance is in stopped state.</code> </p> </li> <li> <p> <code>Instance is in terminated state.</code> </p> </li> </ul>"]
+    /// <p>A description of the instance state. This string can contain one or more of the following messages.</p> <ul> <li> <p> <code>N/A</code> </p> </li> <li> <p> <code>A transient error occurred. Please try again later.</code> </p> </li> <li> <p> <code>Instance has failed at least the UnhealthyThreshold number of health checks consecutively.</code> </p> </li> <li> <p> <code>Instance has not passed the configured HealthyThreshold number of health checks consecutively.</code> </p> </li> <li> <p> <code>Instance registration is still in progress.</code> </p> </li> <li> <p> <code>Instance is in the EC2 Availability Zone for which LoadBalancer is not configured to route traffic to.</code> </p> </li> <li> <p> <code>Instance is not currently registered with the LoadBalancer.</code> </p> </li> <li> <p> <code>Instance deregistration currently in progress.</code> </p> </li> <li> <p> <code>Disable Availability Zone is currently in progress.</code> </p> </li> <li> <p> <code>Instance is in pending state.</code> </p> </li> <li> <p> <code>Instance is in stopped state.</code> </p> </li> <li> <p> <code>Instance is in terminated state.</code> </p> </li> </ul>
     pub description: Option<String>,
-    #[doc="<p>The ID of the instance.</p>"]
+    /// <p>The ID of the instance.</p>
     pub instance_id: Option<String>,
-    #[doc="<p>Information about the cause of <code>OutOfService</code> instances. Specifically, whether the cause is Elastic Load Balancing or the instance.</p> <p>Valid values: <code>ELB</code> | <code>Instance</code> | <code>N/A</code> </p>"]
+    /// <p>Information about the cause of <code>OutOfService</code> instances. Specifically, whether the cause is Elastic Load Balancing or the instance.</p> <p>Valid values: <code>ELB</code> | <code>Instance</code> | <code>N/A</code> </p>
     pub reason_code: Option<String>,
-    #[doc="<p>The current state of the instance.</p> <p>Valid values: <code>InService</code> | <code>OutOfService</code> | <code>Unknown</code> </p>"]
+    /// <p>The current state of the instance.</p> <p>Valid values: <code>InService</code> | <code>OutOfService</code> | <code>Unknown</code> </p>
     pub state: Option<String>,
 }
 
 struct InstanceStateDeserializer;
 impl InstanceStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<InstanceState, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<InstanceState, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = InstanceState::default();
@@ -2852,29 +2905,30 @@ impl InstanceStateDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Description" => {
-                            obj.description =
-                                Some(try!(DescriptionDeserializer::deserialize("Description",
-                                                                               stack)));
-                        }
-                        "InstanceId" => {
-                            obj.instance_id =
-                                Some(try!(InstanceIdDeserializer::deserialize("InstanceId",
-                                                                              stack)));
-                        }
-                        "ReasonCode" => {
-                            obj.reason_code =
-                                Some(try!(ReasonCodeDeserializer::deserialize("ReasonCode",
-                                                                              stack)));
-                        }
-                        "State" => {
-                            obj.state = Some(try!(StateDeserializer::deserialize("State", stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Description" => {
+                        obj.description = Some(try!(DescriptionDeserializer::deserialize(
+                            "Description",
+                            stack
+                        )));
                     }
-                }
+                    "InstanceId" => {
+                        obj.instance_id = Some(try!(InstanceIdDeserializer::deserialize(
+                            "InstanceId",
+                            stack
+                        )));
+                    }
+                    "ReasonCode" => {
+                        obj.reason_code = Some(try!(ReasonCodeDeserializer::deserialize(
+                            "ReasonCode",
+                            stack
+                        )));
+                    }
+                    "State" => {
+                        obj.state = Some(try!(StateDeserializer::deserialize("State", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -2885,16 +2939,15 @@ impl InstanceStateDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct InstanceStatesDeserializer;
 impl InstanceStatesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<InstanceState>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<InstanceState>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -2910,7 +2963,10 @@ impl InstanceStatesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(InstanceStateDeserializer::deserialize("member", stack)));
+                        obj.push(try!(InstanceStateDeserializer::deserialize(
+                            "member",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -2926,16 +2982,15 @@ impl InstanceStatesDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 struct InstancesDeserializer;
 impl InstancesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<Instance>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<Instance>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -2967,7 +3022,6 @@ impl InstancesDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 
@@ -2985,10 +3039,10 @@ impl InstancesSerializer {
 struct LBCookieStickinessPoliciesDeserializer;
 impl LBCookieStickinessPoliciesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<LBCookieStickinessPolicy>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<LBCookieStickinessPolicy>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -3004,8 +3058,10 @@ impl LBCookieStickinessPoliciesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(LBCookieStickinessPolicyDeserializer::deserialize("member",
-                                                                                        stack)));
+                        obj.push(try!(LBCookieStickinessPolicyDeserializer::deserialize(
+                            "member",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -3021,24 +3077,24 @@ impl LBCookieStickinessPoliciesDeserializer {
         }
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Information about a policy for duration-based session stickiness.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Information about a policy for duration-based session stickiness.</p>
+#[derive(Default, Debug, Clone)]
 pub struct LBCookieStickinessPolicy {
-    #[doc="<p>The time period, in seconds, after which the cookie should be considered stale. If this parameter is not specified, the stickiness session lasts for the duration of the browser session.</p>"]
+    /// <p>The time period, in seconds, after which the cookie should be considered stale. If this parameter is not specified, the stickiness session lasts for the duration of the browser session.</p>
     pub cookie_expiration_period: Option<i64>,
-    #[doc="<p>The name of the policy. This name must be unique within the set of policies for this load balancer.</p>"]
+    /// <p>The name of the policy. This name must be unique within the set of policies for this load balancer.</p>
     pub policy_name: Option<String>,
 }
 
 struct LBCookieStickinessPolicyDeserializer;
 impl LBCookieStickinessPolicyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<LBCookieStickinessPolicy, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<LBCookieStickinessPolicy, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = LBCookieStickinessPolicy::default();
@@ -3053,21 +3109,22 @@ impl LBCookieStickinessPolicyDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "CookieExpirationPeriod" => {
-                            obj.cookie_expiration_period =
-                                Some(try!(CookieExpirationPeriodDeserializer::deserialize("CookieExpirationPeriod",
-                                                                                          stack)));
-                        }
-                        "PolicyName" => {
-                            obj.policy_name =
-                                Some(try!(PolicyNameDeserializer::deserialize("PolicyName",
-                                                                              stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "CookieExpirationPeriod" => {
+                        obj.cookie_expiration_period =
+                            Some(try!(CookieExpirationPeriodDeserializer::deserialize(
+                                "CookieExpirationPeriod",
+                                stack
+                            )));
                     }
-                }
+                    "PolicyName" => {
+                        obj.policy_name = Some(try!(PolicyNameDeserializer::deserialize(
+                            "PolicyName",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -3078,24 +3135,24 @@ impl LBCookieStickinessPolicyDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Information about an Elastic Load Balancing resource limit for your AWS account.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Information about an Elastic Load Balancing resource limit for your AWS account.</p>
+#[derive(Default, Debug, Clone)]
 pub struct Limit {
-    #[doc="<p>The maximum value of the limit.</p>"]
+    /// <p>The maximum value of the limit.</p>
     pub max: Option<String>,
-    #[doc="<p>The name of the limit. The possible values are:</p> <ul> <li> <p>classic-listeners</p> </li> <li> <p>classic-load-balancers</p> </li> </ul>"]
+    /// <p>The name of the limit. The possible values are:</p> <ul> <li> <p>classic-listeners</p> </li> <li> <p>classic-load-balancers</p> </li> </ul>
     pub name: Option<String>,
 }
 
 struct LimitDeserializer;
 impl LimitDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Limit, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Limit, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = Limit::default();
@@ -3110,17 +3167,15 @@ impl LimitDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Max" => {
-                            obj.max = Some(try!(MaxDeserializer::deserialize("Max", stack)));
-                        }
-                        "Name" => {
-                            obj.name = Some(try!(NameDeserializer::deserialize("Name", stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Max" => {
+                        obj.max = Some(try!(MaxDeserializer::deserialize("Max", stack)));
                     }
-                }
+                    "Name" => {
+                        obj.name = Some(try!(NameDeserializer::deserialize("Name", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -3131,16 +3186,15 @@ impl LimitDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct LimitsDeserializer;
 impl LimitsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<Limit>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<Limit>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -3172,30 +3226,30 @@ impl LimitsDeserializer {
         }
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Information about a listener.</p> <p>For information about the protocols and the ports supported by Elastic Load Balancing, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-listener-config.html\">Listeners for Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Information about a listener.</p> <p>For information about the protocols and the ports supported by Elastic Load Balancing, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-listener-config.html">Listeners for Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>
+#[derive(Default, Debug, Clone)]
 pub struct Listener {
-    #[doc="<p>The port on which the instance is listening.</p>"]
+    /// <p>The port on which the instance is listening.</p>
     pub instance_port: i64,
-    #[doc="<p>The protocol to use for routing traffic to instances: HTTP, HTTPS, TCP, or SSL.</p> <p>If the front-end protocol is HTTP, HTTPS, TCP, or SSL, <code>InstanceProtocol</code> must be at the same protocol.</p> <p>If there is another listener with the same <code>InstancePort</code> whose <code>InstanceProtocol</code> is secure, (HTTPS or SSL), the listener's <code>InstanceProtocol</code> must also be secure.</p> <p>If there is another listener with the same <code>InstancePort</code> whose <code>InstanceProtocol</code> is HTTP or TCP, the listener's <code>InstanceProtocol</code> must be HTTP or TCP.</p>"]
+    /// <p>The protocol to use for routing traffic to instances: HTTP, HTTPS, TCP, or SSL.</p> <p>If the front-end protocol is HTTP, HTTPS, TCP, or SSL, <code>InstanceProtocol</code> must be at the same protocol.</p> <p>If there is another listener with the same <code>InstancePort</code> whose <code>InstanceProtocol</code> is secure, (HTTPS or SSL), the listener's <code>InstanceProtocol</code> must also be secure.</p> <p>If there is another listener with the same <code>InstancePort</code> whose <code>InstanceProtocol</code> is HTTP or TCP, the listener's <code>InstanceProtocol</code> must be HTTP or TCP.</p>
     pub instance_protocol: Option<String>,
-    #[doc="<p>The port on which the load balancer is listening. On EC2-VPC, you can specify any port from the range 1-65535. On EC2-Classic, you can specify any port from the following list: 25, 80, 443, 465, 587, 1024-65535.</p>"]
+    /// <p>The port on which the load balancer is listening. On EC2-VPC, you can specify any port from the range 1-65535. On EC2-Classic, you can specify any port from the following list: 25, 80, 443, 465, 587, 1024-65535.</p>
     pub load_balancer_port: i64,
-    #[doc="<p>The load balancer transport protocol to use for routing: HTTP, HTTPS, TCP, or SSL.</p>"]
+    /// <p>The load balancer transport protocol to use for routing: HTTP, HTTPS, TCP, or SSL.</p>
     pub protocol: String,
-    #[doc="<p>The Amazon Resource Name (ARN) of the server certificate.</p>"]
+    /// <p>The Amazon Resource Name (ARN) of the server certificate.</p>
     pub ssl_certificate_id: Option<String>,
 }
 
 struct ListenerDeserializer;
 impl ListenerDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Listener, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Listener, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = Listener::default();
@@ -3210,34 +3264,33 @@ impl ListenerDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "InstancePort" => {
-                            obj.instance_port = try!(InstancePortDeserializer::deserialize("InstancePort",
-                                                                                           stack));
-                        }
-                        "InstanceProtocol" => {
-                            obj.instance_protocol =
-                                Some(try!(ProtocolDeserializer::deserialize("InstanceProtocol",
-                                                                            stack)));
-                        }
-                        "LoadBalancerPort" => {
-                            obj.load_balancer_port =
-                                try!(AccessPointPortDeserializer::deserialize("LoadBalancerPort",
-                                                                              stack));
-                        }
-                        "Protocol" => {
-                            obj.protocol = try!(ProtocolDeserializer::deserialize("Protocol",
-                                                                                  stack));
-                        }
-                        "SSLCertificateId" => {
-                            obj.ssl_certificate_id =
-                                Some(try!(SSLCertificateIdDeserializer::deserialize("SSLCertificateId",
-                                                                                    stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "InstancePort" => {
+                        obj.instance_port =
+                            try!(InstancePortDeserializer::deserialize("InstancePort", stack));
                     }
-                }
+                    "InstanceProtocol" => {
+                        obj.instance_protocol = Some(try!(ProtocolDeserializer::deserialize(
+                            "InstanceProtocol",
+                            stack
+                        )));
+                    }
+                    "LoadBalancerPort" => {
+                        obj.load_balancer_port = try!(AccessPointPortDeserializer::deserialize(
+                            "LoadBalancerPort",
+                            stack
+                        ));
+                    }
+                    "Protocol" => {
+                        obj.protocol = try!(ProtocolDeserializer::deserialize("Protocol", stack));
+                    }
+                    "SSLCertificateId" => {
+                        obj.ssl_certificate_id = Some(try!(
+                            SSLCertificateIdDeserializer::deserialize("SSLCertificateId", stack)
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -3248,7 +3301,6 @@ impl ListenerDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -3261,39 +3313,49 @@ impl ListenerSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "InstancePort"),
-                   &obj.instance_port.to_string().replace("+", "%2B"));
+        params.put(
+            &format!("{}{}", prefix, "InstancePort"),
+            &obj.instance_port.to_string().replace("+", "%2B"),
+        );
         if let Some(ref field_value) = obj.instance_protocol {
-            params.put(&format!("{}{}", prefix, "InstanceProtocol"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "InstanceProtocol"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-        params.put(&format!("{}{}", prefix, "LoadBalancerPort"),
-                   &obj.load_balancer_port.to_string().replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "Protocol"),
-                   &obj.protocol.replace("+", "%2B"));
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerPort"),
+            &obj.load_balancer_port.to_string().replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "Protocol"),
+            &obj.protocol.replace("+", "%2B"),
+        );
         if let Some(ref field_value) = obj.ssl_certificate_id {
-            params.put(&format!("{}{}", prefix, "SSLCertificateId"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "SSLCertificateId"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-
     }
 }
 
-#[doc="<p>The policies enabled for a listener.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The policies enabled for a listener.</p>
+#[derive(Default, Debug, Clone)]
 pub struct ListenerDescription {
-    #[doc="<p>The listener.</p>"]
+    /// <p>The listener.</p>
     pub listener: Option<Listener>,
-    #[doc="<p>The policies. If there are no policies enabled, the list is empty.</p>"]
+    /// <p>The policies. If there are no policies enabled, the list is empty.</p>
     pub policy_names: Option<Vec<String>>,
 }
 
 struct ListenerDescriptionDeserializer;
 impl ListenerDescriptionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<ListenerDescription, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListenerDescription, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = ListenerDescription::default();
@@ -3308,20 +3370,19 @@ impl ListenerDescriptionDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Listener" => {
-                            obj.listener = Some(try!(ListenerDeserializer::deserialize("Listener",
-                                                                                       stack)));
-                        }
-                        "PolicyNames" => {
-                            obj.policy_names =
-                                Some(try!(PolicyNamesDeserializer::deserialize("PolicyNames",
-                                                                               stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Listener" => {
+                        obj.listener =
+                            Some(try!(ListenerDeserializer::deserialize("Listener", stack)));
                     }
-                }
+                    "PolicyNames" => {
+                        obj.policy_names = Some(try!(PolicyNamesDeserializer::deserialize(
+                            "PolicyNames",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -3332,16 +3393,15 @@ impl ListenerDescriptionDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct ListenerDescriptionsDeserializer;
 impl ListenerDescriptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<ListenerDescription>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<ListenerDescription>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -3357,8 +3417,10 @@ impl ListenerDescriptionsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(ListenerDescriptionDeserializer::deserialize("member",
-                                                                                   stack)));
+                        obj.push(try!(ListenerDescriptionDeserializer::deserialize(
+                            "member",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -3374,7 +3436,6 @@ impl ListenerDescriptionsDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 
@@ -3389,27 +3450,28 @@ impl ListenersSerializer {
     }
 }
 
-#[doc="<p>The attributes for a load balancer.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The attributes for a load balancer.</p>
+#[derive(Default, Debug, Clone)]
 pub struct LoadBalancerAttributes {
-    #[doc="<p>If enabled, the load balancer captures detailed information of all requests and delivers the information to the Amazon S3 bucket that you specify.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-access-logs.html\">Enable Access Logs</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>If enabled, the load balancer captures detailed information of all requests and delivers the information to the Amazon S3 bucket that you specify.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-access-logs.html">Enable Access Logs</a> in the <i>Classic Load Balancer Guide</i>.</p>
     pub access_log: Option<AccessLog>,
-    #[doc="<p>This parameter is reserved.</p>"]
+    /// <p>This parameter is reserved.</p>
     pub additional_attributes: Option<Vec<AdditionalAttribute>>,
-    #[doc="<p>If enabled, the load balancer allows existing requests to complete before the load balancer shifts traffic away from a deregistered or unhealthy instance.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/config-conn-drain.html\">Configure Connection Draining</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>If enabled, the load balancer allows existing requests to complete before the load balancer shifts traffic away from a deregistered or unhealthy instance.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/config-conn-drain.html">Configure Connection Draining</a> in the <i>Classic Load Balancer Guide</i>.</p>
     pub connection_draining: Option<ConnectionDraining>,
-    #[doc="<p>If enabled, the load balancer allows the connections to remain idle (no data is sent over the connection) for the specified duration.</p> <p>By default, Elastic Load Balancing maintains a 60-second idle connection timeout for both front-end and back-end connections of your load balancer. For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/config-idle-timeout.html\">Configure Idle Connection Timeout</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>If enabled, the load balancer allows the connections to remain idle (no data is sent over the connection) for the specified duration.</p> <p>By default, Elastic Load Balancing maintains a 60-second idle connection timeout for both front-end and back-end connections of your load balancer. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/config-idle-timeout.html">Configure Idle Connection Timeout</a> in the <i>Classic Load Balancer Guide</i>.</p>
     pub connection_settings: Option<ConnectionSettings>,
-    #[doc="<p>If enabled, the load balancer routes the request traffic evenly across all instances regardless of the Availability Zones.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-crosszone-lb.html\">Configure Cross-Zone Load Balancing</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>If enabled, the load balancer routes the request traffic evenly across all instances regardless of the Availability Zones.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-crosszone-lb.html">Configure Cross-Zone Load Balancing</a> in the <i>Classic Load Balancer Guide</i>.</p>
     pub cross_zone_load_balancing: Option<CrossZoneLoadBalancing>,
 }
 
 struct LoadBalancerAttributesDeserializer;
 impl LoadBalancerAttributesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<LoadBalancerAttributes, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<LoadBalancerAttributes, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = LoadBalancerAttributes::default();
@@ -3424,35 +3486,41 @@ impl LoadBalancerAttributesDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "AccessLog" => {
-                            obj.access_log = Some(try!(AccessLogDeserializer::deserialize("AccessLog",
-                                                                                          stack)));
-                        }
-                        "AdditionalAttributes" => {
-                            obj.additional_attributes =
-                                Some(try!(AdditionalAttributesDeserializer::deserialize("AdditionalAttributes",
-                                                                                        stack)));
-                        }
-                        "ConnectionDraining" => {
-                            obj.connection_draining =
-                                Some(try!(ConnectionDrainingDeserializer::deserialize("ConnectionDraining",
-                                                                                      stack)));
-                        }
-                        "ConnectionSettings" => {
-                            obj.connection_settings =
-                                Some(try!(ConnectionSettingsDeserializer::deserialize("ConnectionSettings",
-                                                                                      stack)));
-                        }
-                        "CrossZoneLoadBalancing" => {
-                            obj.cross_zone_load_balancing =
-                                Some(try!(CrossZoneLoadBalancingDeserializer::deserialize("CrossZoneLoadBalancing",
-                                                                                          stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AccessLog" => {
+                        obj.access_log =
+                            Some(try!(AccessLogDeserializer::deserialize("AccessLog", stack)));
                     }
-                }
+                    "AdditionalAttributes" => {
+                        obj.additional_attributes =
+                            Some(try!(AdditionalAttributesDeserializer::deserialize(
+                                "AdditionalAttributes",
+                                stack
+                            )));
+                    }
+                    "ConnectionDraining" => {
+                        obj.connection_draining =
+                            Some(try!(ConnectionDrainingDeserializer::deserialize(
+                                "ConnectionDraining",
+                                stack
+                            )));
+                    }
+                    "ConnectionSettings" => {
+                        obj.connection_settings =
+                            Some(try!(ConnectionSettingsDeserializer::deserialize(
+                                "ConnectionSettings",
+                                stack
+                            )));
+                    }
+                    "CrossZoneLoadBalancing" => {
+                        obj.cross_zone_load_balancing =
+                            Some(try!(CrossZoneLoadBalancingDeserializer::deserialize(
+                                "CrossZoneLoadBalancing",
+                                stack
+                            )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -3463,7 +3531,6 @@ impl LoadBalancerAttributesDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -3477,81 +3544,87 @@ impl LoadBalancerAttributesSerializer {
         }
 
         if let Some(ref field_value) = obj.access_log {
-            AccessLogSerializer::serialize(params,
-                                           &format!("{}{}", prefix, "AccessLog"),
-                                           field_value);
+            AccessLogSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "AccessLog"),
+                field_value,
+            );
         }
         if let Some(ref field_value) = obj.additional_attributes {
-            AdditionalAttributesSerializer::serialize(params,
-                                                      &format!("{}{}",
-                                                              prefix,
-                                                              "AdditionalAttributes"),
-                                                      field_value);
+            AdditionalAttributesSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "AdditionalAttributes"),
+                field_value,
+            );
         }
         if let Some(ref field_value) = obj.connection_draining {
-            ConnectionDrainingSerializer::serialize(params,
-                                                    &format!("{}{}", prefix, "ConnectionDraining"),
-                                                    field_value);
+            ConnectionDrainingSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "ConnectionDraining"),
+                field_value,
+            );
         }
         if let Some(ref field_value) = obj.connection_settings {
-            ConnectionSettingsSerializer::serialize(params,
-                                                    &format!("{}{}", prefix, "ConnectionSettings"),
-                                                    field_value);
+            ConnectionSettingsSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "ConnectionSettings"),
+                field_value,
+            );
         }
         if let Some(ref field_value) = obj.cross_zone_load_balancing {
-            CrossZoneLoadBalancingSerializer::serialize(params,
-                                                        &format!("{}{}",
-                                                                prefix,
-                                                                "CrossZoneLoadBalancing"),
-                                                        field_value);
+            CrossZoneLoadBalancingSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "CrossZoneLoadBalancing"),
+                field_value,
+            );
         }
-
     }
 }
 
-#[doc="<p>Information about a load balancer.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Information about a load balancer.</p>
+#[derive(Default, Debug, Clone)]
 pub struct LoadBalancerDescription {
-    #[doc="<p>The Availability Zones for the load balancer.</p>"]
+    /// <p>The Availability Zones for the load balancer.</p>
     pub availability_zones: Option<Vec<String>>,
-    #[doc="<p>Information about your EC2 instances.</p>"]
+    /// <p>Information about your EC2 instances.</p>
     pub backend_server_descriptions: Option<Vec<BackendServerDescription>>,
-    #[doc="<p>The DNS name of the load balancer.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/using-domain-names-with-elb.html\">Configure a Custom Domain Name</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>The DNS name of the load balancer.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/using-domain-names-with-elb.html">Configure a Custom Domain Name</a> in the <i>Classic Load Balancer Guide</i>.</p>
     pub canonical_hosted_zone_name: Option<String>,
-    #[doc="<p>The ID of the Amazon Route 53 hosted zone for the load balancer.</p>"]
+    /// <p>The ID of the Amazon Route 53 hosted zone for the load balancer.</p>
     pub canonical_hosted_zone_name_id: Option<String>,
-    #[doc="<p>The date and time the load balancer was created.</p>"]
+    /// <p>The date and time the load balancer was created.</p>
     pub created_time: Option<String>,
-    #[doc="<p>The DNS name of the load balancer.</p>"]
+    /// <p>The DNS name of the load balancer.</p>
     pub dns_name: Option<String>,
-    #[doc="<p>Information about the health checks conducted on the load balancer.</p>"]
+    /// <p>Information about the health checks conducted on the load balancer.</p>
     pub health_check: Option<HealthCheck>,
-    #[doc="<p>The IDs of the instances for the load balancer.</p>"]
+    /// <p>The IDs of the instances for the load balancer.</p>
     pub instances: Option<Vec<Instance>>,
-    #[doc="<p>The listeners for the load balancer.</p>"]
+    /// <p>The listeners for the load balancer.</p>
     pub listener_descriptions: Option<Vec<ListenerDescription>>,
-    #[doc="<p>The name of the load balancer.</p>"]
+    /// <p>The name of the load balancer.</p>
     pub load_balancer_name: Option<String>,
-    #[doc="<p>The policies defined for the load balancer.</p>"]
+    /// <p>The policies defined for the load balancer.</p>
     pub policies: Option<Policies>,
-    #[doc="<p>The type of load balancer. Valid only for load balancers in a VPC.</p> <p>If <code>Scheme</code> is <code>internet-facing</code>, the load balancer has a public DNS name that resolves to a public IP address.</p> <p>If <code>Scheme</code> is <code>internal</code>, the load balancer has a public DNS name that resolves to a private IP address.</p>"]
+    /// <p>The type of load balancer. Valid only for load balancers in a VPC.</p> <p>If <code>Scheme</code> is <code>internet-facing</code>, the load balancer has a public DNS name that resolves to a public IP address.</p> <p>If <code>Scheme</code> is <code>internal</code>, the load balancer has a public DNS name that resolves to a private IP address.</p>
     pub scheme: Option<String>,
-    #[doc="<p>The security groups for the load balancer. Valid only for load balancers in a VPC.</p>"]
+    /// <p>The security groups for the load balancer. Valid only for load balancers in a VPC.</p>
     pub security_groups: Option<Vec<String>>,
-    #[doc="<p>The security group for the load balancer, which you can use as part of your inbound rules for your registered instances. To only allow traffic from load balancers, add a security group rule that specifies this source security group as the inbound source.</p>"]
+    /// <p>The security group for the load balancer, which you can use as part of your inbound rules for your registered instances. To only allow traffic from load balancers, add a security group rule that specifies this source security group as the inbound source.</p>
     pub source_security_group: Option<SourceSecurityGroup>,
-    #[doc="<p>The IDs of the subnets for the load balancer.</p>"]
+    /// <p>The IDs of the subnets for the load balancer.</p>
     pub subnets: Option<Vec<String>>,
-    #[doc="<p>The ID of the VPC for the load balancer.</p>"]
+    /// <p>The ID of the VPC for the load balancer.</p>
     pub vpc_id: Option<String>,
 }
 
 struct LoadBalancerDescriptionDeserializer;
 impl LoadBalancerDescriptionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<LoadBalancerDescription, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<LoadBalancerDescription, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = LoadBalancerDescription::default();
@@ -3566,83 +3639,93 @@ impl LoadBalancerDescriptionDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "AvailabilityZones" => {
-                            obj.availability_zones =
-                                Some(try!(AvailabilityZonesDeserializer::deserialize("AvailabilityZones",
-                                                                                     stack)));
-                        }
-                        "BackendServerDescriptions" => {
-                            obj.backend_server_descriptions = Some(try!(BackendServerDescriptionsDeserializer::deserialize("BackendServerDescriptions", stack)));
-                        }
-                        "CanonicalHostedZoneName" => {
-                            obj.canonical_hosted_zone_name =
-                                Some(try!(DNSNameDeserializer::deserialize("CanonicalHostedZoneName",
-                                                                           stack)));
-                        }
-                        "CanonicalHostedZoneNameID" => {
-                            obj.canonical_hosted_zone_name_id =
-                                Some(try!(DNSNameDeserializer::deserialize("CanonicalHostedZoneNameID",
-                                                                           stack)));
-                        }
-                        "CreatedTime" => {
-                            obj.created_time =
-                                Some(try!(CreatedTimeDeserializer::deserialize("CreatedTime",
-                                                                               stack)));
-                        }
-                        "DNSName" => {
-                            obj.dns_name = Some(try!(DNSNameDeserializer::deserialize("DNSName",
-                                                                                      stack)));
-                        }
-                        "HealthCheck" => {
-                            obj.health_check =
-                                Some(try!(HealthCheckDeserializer::deserialize("HealthCheck",
-                                                                               stack)));
-                        }
-                        "Instances" => {
-                            obj.instances = Some(try!(InstancesDeserializer::deserialize("Instances",
-                                                                                         stack)));
-                        }
-                        "ListenerDescriptions" => {
-                            obj.listener_descriptions =
-                                Some(try!(ListenerDescriptionsDeserializer::deserialize("ListenerDescriptions",
-                                                                                        stack)));
-                        }
-                        "LoadBalancerName" => {
-                            obj.load_balancer_name =
-                                Some(try!(AccessPointNameDeserializer::deserialize("LoadBalancerName",
-                                                                                   stack)));
-                        }
-                        "Policies" => {
-                            obj.policies = Some(try!(PoliciesDeserializer::deserialize("Policies",
-                                                                                       stack)));
-                        }
-                        "Scheme" => {
-                            obj.scheme =
-                                Some(try!(LoadBalancerSchemeDeserializer::deserialize("Scheme",
-                                                                                      stack)));
-                        }
-                        "SecurityGroups" => {
-                            obj.security_groups =
-                                Some(try!(SecurityGroupsDeserializer::deserialize("SecurityGroups",
-                                                                                  stack)));
-                        }
-                        "SourceSecurityGroup" => {
-                            obj.source_security_group =
-                                Some(try!(SourceSecurityGroupDeserializer::deserialize("SourceSecurityGroup",
-                                                                                       stack)));
-                        }
-                        "Subnets" => {
-                            obj.subnets = Some(try!(SubnetsDeserializer::deserialize("Subnets",
-                                                                                     stack)));
-                        }
-                        "VPCId" => {
-                            obj.vpc_id = Some(try!(VPCIdDeserializer::deserialize("VPCId", stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AvailabilityZones" => {
+                        obj.availability_zones = Some(try!(
+                            AvailabilityZonesDeserializer::deserialize("AvailabilityZones", stack)
+                        ));
                     }
-                }
+                    "BackendServerDescriptions" => {
+                        obj.backend_server_descriptions =
+                            Some(try!(BackendServerDescriptionsDeserializer::deserialize(
+                                "BackendServerDescriptions",
+                                stack
+                            )));
+                    }
+                    "CanonicalHostedZoneName" => {
+                        obj.canonical_hosted_zone_name = Some(try!(
+                            DNSNameDeserializer::deserialize("CanonicalHostedZoneName", stack)
+                        ));
+                    }
+                    "CanonicalHostedZoneNameID" => {
+                        obj.canonical_hosted_zone_name_id = Some(try!(
+                            DNSNameDeserializer::deserialize("CanonicalHostedZoneNameID", stack)
+                        ));
+                    }
+                    "CreatedTime" => {
+                        obj.created_time = Some(try!(CreatedTimeDeserializer::deserialize(
+                            "CreatedTime",
+                            stack
+                        )));
+                    }
+                    "DNSName" => {
+                        obj.dns_name =
+                            Some(try!(DNSNameDeserializer::deserialize("DNSName", stack)));
+                    }
+                    "HealthCheck" => {
+                        obj.health_check = Some(try!(HealthCheckDeserializer::deserialize(
+                            "HealthCheck",
+                            stack
+                        )));
+                    }
+                    "Instances" => {
+                        obj.instances =
+                            Some(try!(InstancesDeserializer::deserialize("Instances", stack)));
+                    }
+                    "ListenerDescriptions" => {
+                        obj.listener_descriptions =
+                            Some(try!(ListenerDescriptionsDeserializer::deserialize(
+                                "ListenerDescriptions",
+                                stack
+                            )));
+                    }
+                    "LoadBalancerName" => {
+                        obj.load_balancer_name = Some(try!(
+                            AccessPointNameDeserializer::deserialize("LoadBalancerName", stack)
+                        ));
+                    }
+                    "Policies" => {
+                        obj.policies =
+                            Some(try!(PoliciesDeserializer::deserialize("Policies", stack)));
+                    }
+                    "Scheme" => {
+                        obj.scheme = Some(try!(LoadBalancerSchemeDeserializer::deserialize(
+                            "Scheme",
+                            stack
+                        )));
+                    }
+                    "SecurityGroups" => {
+                        obj.security_groups = Some(try!(SecurityGroupsDeserializer::deserialize(
+                            "SecurityGroups",
+                            stack
+                        )));
+                    }
+                    "SourceSecurityGroup" => {
+                        obj.source_security_group =
+                            Some(try!(SourceSecurityGroupDeserializer::deserialize(
+                                "SourceSecurityGroup",
+                                stack
+                            )));
+                    }
+                    "Subnets" => {
+                        obj.subnets =
+                            Some(try!(SubnetsDeserializer::deserialize("Subnets", stack)));
+                    }
+                    "VPCId" => {
+                        obj.vpc_id = Some(try!(VPCIdDeserializer::deserialize("VPCId", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -3653,16 +3736,15 @@ impl LoadBalancerDescriptionDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct LoadBalancerDescriptionsDeserializer;
 impl LoadBalancerDescriptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<LoadBalancerDescription>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<LoadBalancerDescription>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -3678,8 +3760,10 @@ impl LoadBalancerDescriptionsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(LoadBalancerDescriptionDeserializer::deserialize("member",
-                                                                                       stack)));
+                        obj.push(try!(LoadBalancerDescriptionDeserializer::deserialize(
+                            "member",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -3695,7 +3779,6 @@ impl LoadBalancerDescriptionsDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 
@@ -3709,7 +3792,6 @@ impl LoadBalancerNamesSerializer {
         }
     }
 }
-
 
 /// Serialize `LoadBalancerNamesMax20` contents to a `SignedRequest`.
 struct LoadBalancerNamesMax20Serializer;
@@ -3725,54 +3807,53 @@ impl LoadBalancerNamesMax20Serializer {
 struct LoadBalancerSchemeDeserializer;
 impl LoadBalancerSchemeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct MarkerDeserializer;
 impl MarkerDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct MaxDeserializer;
 impl MaxDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Contains the parameters for ModifyLoadBalancerAttributes.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the parameters for ModifyLoadBalancerAttributes.</p>
+#[derive(Default, Debug, Clone)]
 pub struct ModifyLoadBalancerAttributesInput {
-    #[doc="<p>The attributes for the load balancer.</p>"]
+    /// <p>The attributes for the load balancer.</p>
     pub load_balancer_attributes: LoadBalancerAttributes,
-    #[doc="<p>The name of the load balancer.</p>"]
+    /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
 }
-
 
 /// Serialize `ModifyLoadBalancerAttributesInput` contents to a `SignedRequest`.
 struct ModifyLoadBalancerAttributesInputSerializer;
@@ -3783,33 +3864,34 @@ impl ModifyLoadBalancerAttributesInputSerializer {
             prefix.push_str(".");
         }
 
-        LoadBalancerAttributesSerializer::serialize(params,
-                                                    &format!("{}{}",
-                                                            prefix,
-                                                            "LoadBalancerAttributes"),
-                                                    &obj.load_balancer_attributes);
-        params.put(&format!("{}{}", prefix, "LoadBalancerName"),
-                   &obj.load_balancer_name.replace("+", "%2B"));
-
+        LoadBalancerAttributesSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "LoadBalancerAttributes"),
+            &obj.load_balancer_attributes,
+        );
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerName"),
+            &obj.load_balancer_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>Contains the output of ModifyLoadBalancerAttributes.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the output of ModifyLoadBalancerAttributes.</p>
+#[derive(Default, Debug, Clone)]
 pub struct ModifyLoadBalancerAttributesOutput {
-    #[doc="<p>Information about the load balancer attributes.</p>"]
+    /// <p>Information about the load balancer attributes.</p>
     pub load_balancer_attributes: Option<LoadBalancerAttributes>,
-    #[doc="<p>The name of the load balancer.</p>"]
+    /// <p>The name of the load balancer.</p>
     pub load_balancer_name: Option<String>,
 }
 
 struct ModifyLoadBalancerAttributesOutputDeserializer;
 impl ModifyLoadBalancerAttributesOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<ModifyLoadBalancerAttributesOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyLoadBalancerAttributesOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = ModifyLoadBalancerAttributesOutput::default();
@@ -3824,21 +3906,21 @@ impl ModifyLoadBalancerAttributesOutputDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "LoadBalancerAttributes" => {
-                            obj.load_balancer_attributes =
-                                Some(try!(LoadBalancerAttributesDeserializer::deserialize("LoadBalancerAttributes",
-                                                                                          stack)));
-                        }
-                        "LoadBalancerName" => {
-                            obj.load_balancer_name =
-                                Some(try!(AccessPointNameDeserializer::deserialize("LoadBalancerName",
-                                                                                   stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "LoadBalancerAttributes" => {
+                        obj.load_balancer_attributes =
+                            Some(try!(LoadBalancerAttributesDeserializer::deserialize(
+                                "LoadBalancerAttributes",
+                                stack
+                            )));
                     }
-                }
+                    "LoadBalancerName" => {
+                        obj.load_balancer_name = Some(try!(
+                            AccessPointNameDeserializer::deserialize("LoadBalancerName", stack)
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -3849,40 +3931,40 @@ impl ModifyLoadBalancerAttributesOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct NameDeserializer;
 impl NameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>The policies for a load balancer.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The policies for a load balancer.</p>
+#[derive(Default, Debug, Clone)]
 pub struct Policies {
-    #[doc="<p>The stickiness policies created using <a>CreateAppCookieStickinessPolicy</a>.</p>"]
+    /// <p>The stickiness policies created using <a>CreateAppCookieStickinessPolicy</a>.</p>
     pub app_cookie_stickiness_policies: Option<Vec<AppCookieStickinessPolicy>>,
-    #[doc="<p>The stickiness policies created using <a>CreateLBCookieStickinessPolicy</a>.</p>"]
+    /// <p>The stickiness policies created using <a>CreateLBCookieStickinessPolicy</a>.</p>
     pub lb_cookie_stickiness_policies: Option<Vec<LBCookieStickinessPolicy>>,
-    #[doc="<p>The policies other than the stickiness policies.</p>"]
+    /// <p>The policies other than the stickiness policies.</p>
     pub other_policies: Option<Vec<String>>,
 }
 
 struct PoliciesDeserializer;
 impl PoliciesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Policies, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Policies, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = Policies::default();
@@ -3897,22 +3979,29 @@ impl PoliciesDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "AppCookieStickinessPolicies" => {
-                            obj.app_cookie_stickiness_policies = Some(try!(AppCookieStickinessPoliciesDeserializer::deserialize("AppCookieStickinessPolicies", stack)));
-                        }
-                        "LBCookieStickinessPolicies" => {
-                            obj.lb_cookie_stickiness_policies = Some(try!(LBCookieStickinessPoliciesDeserializer::deserialize("LBCookieStickinessPolicies", stack)));
-                        }
-                        "OtherPolicies" => {
-                            obj.other_policies =
-                                Some(try!(PolicyNamesDeserializer::deserialize("OtherPolicies",
-                                                                               stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AppCookieStickinessPolicies" => {
+                        obj.app_cookie_stickiness_policies =
+                            Some(try!(AppCookieStickinessPoliciesDeserializer::deserialize(
+                                "AppCookieStickinessPolicies",
+                                stack
+                            )));
                     }
-                }
+                    "LBCookieStickinessPolicies" => {
+                        obj.lb_cookie_stickiness_policies =
+                            Some(try!(LBCookieStickinessPoliciesDeserializer::deserialize(
+                                "LBCookieStickinessPolicies",
+                                stack
+                            )));
+                    }
+                    "OtherPolicies" => {
+                        obj.other_policies = Some(try!(PolicyNamesDeserializer::deserialize(
+                            "OtherPolicies",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -3923,18 +4012,16 @@ impl PoliciesDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Information about a policy attribute.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Information about a policy attribute.</p>
+#[derive(Default, Debug, Clone)]
 pub struct PolicyAttribute {
-    #[doc="<p>The name of the attribute.</p>"]
+    /// <p>The name of the attribute.</p>
     pub attribute_name: Option<String>,
-    #[doc="<p>The value of the attribute.</p>"]
+    /// <p>The value of the attribute.</p>
     pub attribute_value: Option<String>,
 }
-
 
 /// Serialize `PolicyAttribute` contents to a `SignedRequest`.
 struct PolicyAttributeSerializer;
@@ -3946,32 +4033,36 @@ impl PolicyAttributeSerializer {
         }
 
         if let Some(ref field_value) = obj.attribute_name {
-            params.put(&format!("{}{}", prefix, "AttributeName"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "AttributeName"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.attribute_value {
-            params.put(&format!("{}{}", prefix, "AttributeValue"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "AttributeValue"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-
     }
 }
 
-#[doc="<p>Information about a policy attribute.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Information about a policy attribute.</p>
+#[derive(Default, Debug, Clone)]
 pub struct PolicyAttributeDescription {
-    #[doc="<p>The name of the attribute.</p>"]
+    /// <p>The name of the attribute.</p>
     pub attribute_name: Option<String>,
-    #[doc="<p>The value of the attribute.</p>"]
+    /// <p>The value of the attribute.</p>
     pub attribute_value: Option<String>,
 }
 
 struct PolicyAttributeDescriptionDeserializer;
 impl PolicyAttributeDescriptionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<PolicyAttributeDescription, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PolicyAttributeDescription, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = PolicyAttributeDescription::default();
@@ -3989,14 +4080,14 @@ impl PolicyAttributeDescriptionDeserializer {
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "AttributeName" => {
-                            obj.attribute_name =
-                                Some(try!(AttributeNameDeserializer::deserialize("AttributeName",
-                                                                                 stack)));
+                            obj.attribute_name = Some(try!(
+                                AttributeNameDeserializer::deserialize("AttributeName", stack)
+                            ));
                         }
                         "AttributeValue" => {
-                            obj.attribute_value =
-                                Some(try!(AttributeValueDeserializer::deserialize("AttributeValue",
-                                                                                  stack)));
+                            obj.attribute_value = Some(try!(
+                                AttributeValueDeserializer::deserialize("AttributeValue", stack)
+                            ));
                         }
                         _ => skip_tree(stack),
                     }
@@ -4011,17 +4102,15 @@ impl PolicyAttributeDescriptionDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct PolicyAttributeDescriptionsDeserializer;
 impl PolicyAttributeDescriptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<Vec<PolicyAttributeDescription>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<PolicyAttributeDescription>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -4037,8 +4126,10 @@ impl PolicyAttributeDescriptionsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(PolicyAttributeDescriptionDeserializer::deserialize("member",
-                                                                                          stack)));
+                        obj.push(try!(PolicyAttributeDescriptionDeserializer::deserialize(
+                            "member",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -4054,30 +4145,30 @@ impl PolicyAttributeDescriptionsDeserializer {
         }
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Information about a policy attribute type.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Information about a policy attribute type.</p>
+#[derive(Default, Debug, Clone)]
 pub struct PolicyAttributeTypeDescription {
-    #[doc="<p>The name of the attribute.</p>"]
+    /// <p>The name of the attribute.</p>
     pub attribute_name: Option<String>,
-    #[doc="<p>The type of the attribute. For example, <code>Boolean</code> or <code>Integer</code>.</p>"]
+    /// <p>The type of the attribute. For example, <code>Boolean</code> or <code>Integer</code>.</p>
     pub attribute_type: Option<String>,
-    #[doc="<p>The cardinality of the attribute.</p> <p>Valid values:</p> <ul> <li> <p>ONE(1) : Single value required</p> </li> <li> <p>ZERO_OR_ONE(0..1) : Up to one value is allowed</p> </li> <li> <p>ZERO_OR_MORE(0..*) : Optional. Multiple values are allowed</p> </li> <li> <p>ONE_OR_MORE(1..*0) : Required. Multiple values are allowed</p> </li> </ul>"]
+    /// <p>The cardinality of the attribute.</p> <p>Valid values:</p> <ul> <li> <p>ONE(1) : Single value required</p> </li> <li> <p>ZERO_OR_ONE(0..1) : Up to one value is allowed</p> </li> <li> <p>ZERO_OR_MORE(0..*) : Optional. Multiple values are allowed</p> </li> <li> <p>ONE_OR_MORE(1..*0) : Required. Multiple values are allowed</p> </li> </ul>
     pub cardinality: Option<String>,
-    #[doc="<p>The default value of the attribute, if applicable.</p>"]
+    /// <p>The default value of the attribute, if applicable.</p>
     pub default_value: Option<String>,
-    #[doc="<p>A description of the attribute.</p>"]
+    /// <p>A description of the attribute.</p>
     pub description: Option<String>,
 }
 
 struct PolicyAttributeTypeDescriptionDeserializer;
 impl PolicyAttributeTypeDescriptionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<PolicyAttributeTypeDescription, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PolicyAttributeTypeDescription, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = PolicyAttributeTypeDescription::default();
@@ -4095,29 +4186,32 @@ impl PolicyAttributeTypeDescriptionDeserializer {
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "AttributeName" => {
-                            obj.attribute_name =
-                                Some(try!(AttributeNameDeserializer::deserialize("AttributeName",
-                                                                                 stack)));
+                            obj.attribute_name = Some(try!(
+                                AttributeNameDeserializer::deserialize("AttributeName", stack)
+                            ));
                         }
                         "AttributeType" => {
-                            obj.attribute_type =
-                                Some(try!(AttributeTypeDeserializer::deserialize("AttributeType",
-                                                                                 stack)));
+                            obj.attribute_type = Some(try!(
+                                AttributeTypeDeserializer::deserialize("AttributeType", stack)
+                            ));
                         }
                         "Cardinality" => {
-                            obj.cardinality =
-                                Some(try!(CardinalityDeserializer::deserialize("Cardinality",
-                                                                               stack)));
+                            obj.cardinality = Some(try!(CardinalityDeserializer::deserialize(
+                                "Cardinality",
+                                stack
+                            )));
                         }
                         "DefaultValue" => {
-                            obj.default_value =
-                                Some(try!(DefaultValueDeserializer::deserialize("DefaultValue",
-                                                                                stack)));
+                            obj.default_value = Some(try!(DefaultValueDeserializer::deserialize(
+                                "DefaultValue",
+                                stack
+                            )));
                         }
                         "Description" => {
-                            obj.description =
-                                Some(try!(DescriptionDeserializer::deserialize("Description",
-                                                                               stack)));
+                            obj.description = Some(try!(DescriptionDeserializer::deserialize(
+                                "Description",
+                                stack
+                            )));
                         }
                         _ => skip_tree(stack),
                     }
@@ -4132,17 +4226,15 @@ impl PolicyAttributeTypeDescriptionDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct PolicyAttributeTypeDescriptionsDeserializer;
 impl PolicyAttributeTypeDescriptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<Vec<PolicyAttributeTypeDescription>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<PolicyAttributeTypeDescription>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -4158,7 +4250,12 @@ impl PolicyAttributeTypeDescriptionsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(PolicyAttributeTypeDescriptionDeserializer::deserialize("member", stack)));
+                        obj.push(try!(
+                            PolicyAttributeTypeDescriptionDeserializer::deserialize(
+                                "member",
+                                stack
+                            )
+                        ));
                     } else {
                         skip_tree(stack);
                     }
@@ -4174,7 +4271,6 @@ impl PolicyAttributeTypeDescriptionsDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 
@@ -4189,23 +4285,24 @@ impl PolicyAttributesSerializer {
     }
 }
 
-#[doc="<p>Information about a policy.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Information about a policy.</p>
+#[derive(Default, Debug, Clone)]
 pub struct PolicyDescription {
-    #[doc="<p>The policy attributes.</p>"]
+    /// <p>The policy attributes.</p>
     pub policy_attribute_descriptions: Option<Vec<PolicyAttributeDescription>>,
-    #[doc="<p>The name of the policy.</p>"]
+    /// <p>The name of the policy.</p>
     pub policy_name: Option<String>,
-    #[doc="<p>The name of the policy type.</p>"]
+    /// <p>The name of the policy type.</p>
     pub policy_type_name: Option<String>,
 }
 
 struct PolicyDescriptionDeserializer;
 impl PolicyDescriptionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<PolicyDescription, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PolicyDescription, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = PolicyDescription::default();
@@ -4220,24 +4317,27 @@ impl PolicyDescriptionDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "PolicyAttributeDescriptions" => {
-                            obj.policy_attribute_descriptions = Some(try!(PolicyAttributeDescriptionsDeserializer::deserialize("PolicyAttributeDescriptions", stack)));
-                        }
-                        "PolicyName" => {
-                            obj.policy_name =
-                                Some(try!(PolicyNameDeserializer::deserialize("PolicyName",
-                                                                              stack)));
-                        }
-                        "PolicyTypeName" => {
-                            obj.policy_type_name =
-                                Some(try!(PolicyTypeNameDeserializer::deserialize("PolicyTypeName",
-                                                                                  stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "PolicyAttributeDescriptions" => {
+                        obj.policy_attribute_descriptions =
+                            Some(try!(PolicyAttributeDescriptionsDeserializer::deserialize(
+                                "PolicyAttributeDescriptions",
+                                stack
+                            )));
                     }
-                }
+                    "PolicyName" => {
+                        obj.policy_name = Some(try!(PolicyNameDeserializer::deserialize(
+                            "PolicyName",
+                            stack
+                        )));
+                    }
+                    "PolicyTypeName" => {
+                        obj.policy_type_name = Some(try!(
+                            PolicyTypeNameDeserializer::deserialize("PolicyTypeName", stack)
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -4248,16 +4348,15 @@ impl PolicyDescriptionDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct PolicyDescriptionsDeserializer;
 impl PolicyDescriptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<PolicyDescription>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<PolicyDescription>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -4273,7 +4372,10 @@ impl PolicyDescriptionsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(PolicyDescriptionDeserializer::deserialize("member", stack)));
+                        obj.push(try!(PolicyDescriptionDeserializer::deserialize(
+                            "member",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -4289,30 +4391,29 @@ impl PolicyDescriptionsDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 struct PolicyNameDeserializer;
 impl PolicyNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct PolicyNamesDeserializer;
 impl PolicyNamesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<String>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -4344,7 +4445,6 @@ impl PolicyNamesDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 
@@ -4359,23 +4459,24 @@ impl PolicyNamesSerializer {
     }
 }
 
-#[doc="<p>Information about a policy type.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Information about a policy type.</p>
+#[derive(Default, Debug, Clone)]
 pub struct PolicyTypeDescription {
-    #[doc="<p>A description of the policy type.</p>"]
+    /// <p>A description of the policy type.</p>
     pub description: Option<String>,
-    #[doc="<p>The description of the policy attributes associated with the policies defined by Elastic Load Balancing.</p>"]
+    /// <p>The description of the policy attributes associated with the policies defined by Elastic Load Balancing.</p>
     pub policy_attribute_type_descriptions: Option<Vec<PolicyAttributeTypeDescription>>,
-    #[doc="<p>The name of the policy type.</p>"]
+    /// <p>The name of the policy type.</p>
     pub policy_type_name: Option<String>,
 }
 
 struct PolicyTypeDescriptionDeserializer;
 impl PolicyTypeDescriptionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<PolicyTypeDescription, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PolicyTypeDescription, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = PolicyTypeDescription::default();
@@ -4390,24 +4491,28 @@ impl PolicyTypeDescriptionDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Description" => {
-                            obj.description =
-                                Some(try!(DescriptionDeserializer::deserialize("Description",
-                                                                               stack)));
-                        }
-                        "PolicyAttributeTypeDescriptions" => {
-                            obj.policy_attribute_type_descriptions = Some(try!(PolicyAttributeTypeDescriptionsDeserializer::deserialize("PolicyAttributeTypeDescriptions", stack)));
-                        }
-                        "PolicyTypeName" => {
-                            obj.policy_type_name =
-                                Some(try!(PolicyTypeNameDeserializer::deserialize("PolicyTypeName",
-                                                                                  stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Description" => {
+                        obj.description = Some(try!(DescriptionDeserializer::deserialize(
+                            "Description",
+                            stack
+                        )));
                     }
-                }
+                    "PolicyAttributeTypeDescriptions" => {
+                        obj.policy_attribute_type_descriptions = Some(try!(
+                            PolicyAttributeTypeDescriptionsDeserializer::deserialize(
+                                "PolicyAttributeTypeDescriptions",
+                                stack
+                            )
+                        ));
+                    }
+                    "PolicyTypeName" => {
+                        obj.policy_type_name = Some(try!(
+                            PolicyTypeNameDeserializer::deserialize("PolicyTypeName", stack)
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -4418,16 +4523,15 @@ impl PolicyTypeDescriptionDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct PolicyTypeDescriptionsDeserializer;
 impl PolicyTypeDescriptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<PolicyTypeDescription>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<PolicyTypeDescription>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -4443,8 +4547,10 @@ impl PolicyTypeDescriptionsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(PolicyTypeDescriptionDeserializer::deserialize("member",
-                                                                                     stack)));
+                        obj.push(try!(PolicyTypeDescriptionDeserializer::deserialize(
+                            "member",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -4460,21 +4566,20 @@ impl PolicyTypeDescriptionsDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 struct PolicyTypeNameDeserializer;
 impl PolicyTypeNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -4488,7 +4593,6 @@ impl PolicyTypeNamesSerializer {
         }
     }
 }
-
 
 /// Serialize `Ports` contents to a `SignedRequest`.
 struct PortsSerializer;
@@ -4504,40 +4608,39 @@ impl PortsSerializer {
 struct ProtocolDeserializer;
 impl ProtocolDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct ReasonCodeDeserializer;
 impl ReasonCodeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Contains the parameters for RegisterInstancesWithLoadBalancer.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the parameters for RegisterInstancesWithLoadBalancer.</p>
+#[derive(Default, Debug, Clone)]
 pub struct RegisterEndPointsInput {
-    #[doc="<p>The IDs of the instances.</p>"]
+    /// <p>The IDs of the instances.</p>
     pub instances: Vec<Instance>,
-    #[doc="<p>The name of the load balancer.</p>"]
+    /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
 }
-
 
 /// Serialize `RegisterEndPointsInput` contents to a `SignedRequest`.
 struct RegisterEndPointsInputSerializer;
@@ -4548,28 +4651,32 @@ impl RegisterEndPointsInputSerializer {
             prefix.push_str(".");
         }
 
-        InstancesSerializer::serialize(params,
-                                       &format!("{}{}", prefix, "Instances"),
-                                       &obj.instances);
-        params.put(&format!("{}{}", prefix, "LoadBalancerName"),
-                   &obj.load_balancer_name.replace("+", "%2B"));
-
+        InstancesSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "Instances"),
+            &obj.instances,
+        );
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerName"),
+            &obj.load_balancer_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>Contains the output of RegisterInstancesWithLoadBalancer.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the output of RegisterInstancesWithLoadBalancer.</p>
+#[derive(Default, Debug, Clone)]
 pub struct RegisterEndPointsOutput {
-    #[doc="<p>The updated list of instances for the load balancer.</p>"]
+    /// <p>The updated list of instances for the load balancer.</p>
     pub instances: Option<Vec<Instance>>,
 }
 
 struct RegisterEndPointsOutputDeserializer;
 impl RegisterEndPointsOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<RegisterEndPointsOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RegisterEndPointsOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = RegisterEndPointsOutput::default();
@@ -4584,15 +4691,13 @@ impl RegisterEndPointsOutputDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Instances" => {
-                            obj.instances = Some(try!(InstancesDeserializer::deserialize("Instances",
-                                                                                         stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Instances" => {
+                        obj.instances =
+                            Some(try!(InstancesDeserializer::deserialize("Instances", stack)));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -4603,18 +4708,16 @@ impl RegisterEndPointsOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Contains the parameters for DisableAvailabilityZonesForLoadBalancer.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the parameters for DisableAvailabilityZonesForLoadBalancer.</p>
+#[derive(Default, Debug, Clone)]
 pub struct RemoveAvailabilityZonesInput {
-    #[doc="<p>The Availability Zones.</p>"]
+    /// <p>The Availability Zones.</p>
     pub availability_zones: Vec<String>,
-    #[doc="<p>The name of the load balancer.</p>"]
+    /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
 }
-
 
 /// Serialize `RemoveAvailabilityZonesInput` contents to a `SignedRequest`.
 struct RemoveAvailabilityZonesInputSerializer;
@@ -4625,28 +4728,32 @@ impl RemoveAvailabilityZonesInputSerializer {
             prefix.push_str(".");
         }
 
-        AvailabilityZonesSerializer::serialize(params,
-                                               &format!("{}{}", prefix, "AvailabilityZones"),
-                                               &obj.availability_zones);
-        params.put(&format!("{}{}", prefix, "LoadBalancerName"),
-                   &obj.load_balancer_name.replace("+", "%2B"));
-
+        AvailabilityZonesSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "AvailabilityZones"),
+            &obj.availability_zones,
+        );
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerName"),
+            &obj.load_balancer_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>Contains the output for DisableAvailabilityZonesForLoadBalancer.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the output for DisableAvailabilityZonesForLoadBalancer.</p>
+#[derive(Default, Debug, Clone)]
 pub struct RemoveAvailabilityZonesOutput {
-    #[doc="<p>The remaining Availability Zones for the load balancer.</p>"]
+    /// <p>The remaining Availability Zones for the load balancer.</p>
     pub availability_zones: Option<Vec<String>>,
 }
 
 struct RemoveAvailabilityZonesOutputDeserializer;
 impl RemoveAvailabilityZonesOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<RemoveAvailabilityZonesOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RemoveAvailabilityZonesOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = RemoveAvailabilityZonesOutput::default();
@@ -4661,16 +4768,14 @@ impl RemoveAvailabilityZonesOutputDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "AvailabilityZones" => {
-                            obj.availability_zones =
-                                Some(try!(AvailabilityZonesDeserializer::deserialize("AvailabilityZones",
-                                                                                     stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AvailabilityZones" => {
+                        obj.availability_zones = Some(try!(
+                            AvailabilityZonesDeserializer::deserialize("AvailabilityZones", stack)
+                        ));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -4681,18 +4786,16 @@ impl RemoveAvailabilityZonesOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Contains the parameters for RemoveTags.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the parameters for RemoveTags.</p>
+#[derive(Default, Debug, Clone)]
 pub struct RemoveTagsInput {
-    #[doc="<p>The name of the load balancer. You can specify a maximum of one load balancer name.</p>"]
+    /// <p>The name of the load balancer. You can specify a maximum of one load balancer name.</p>
     pub load_balancer_names: Vec<String>,
-    #[doc="<p>The list of tag keys to remove.</p>"]
+    /// <p>The list of tag keys to remove.</p>
     pub tags: Vec<TagKeyOnly>,
 }
-
 
 /// Serialize `RemoveTagsInput` contents to a `SignedRequest`.
 struct RemoveTagsInputSerializer;
@@ -4703,24 +4806,26 @@ impl RemoveTagsInputSerializer {
             prefix.push_str(".");
         }
 
-        LoadBalancerNamesSerializer::serialize(params,
-                                               &format!("{}{}", prefix, "LoadBalancerNames"),
-                                               &obj.load_balancer_names);
+        LoadBalancerNamesSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "LoadBalancerNames"),
+            &obj.load_balancer_names,
+        );
         TagKeyListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), &obj.tags);
-
     }
 }
 
-#[doc="<p>Contains the output of RemoveTags.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the output of RemoveTags.</p>
+#[derive(Default, Debug, Clone)]
 pub struct RemoveTagsOutput;
 
 struct RemoveTagsOutputDeserializer;
 impl RemoveTagsOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<RemoveTagsOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RemoveTagsOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let obj = RemoveTagsOutput::default();
@@ -4728,86 +4833,85 @@ impl RemoveTagsOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct S3BucketNameDeserializer;
 impl S3BucketNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct SSLCertificateIdDeserializer;
 impl SSLCertificateIdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct SecurityGroupIdDeserializer;
 impl SecurityGroupIdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct SecurityGroupNameDeserializer;
 impl SecurityGroupNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct SecurityGroupOwnerAliasDeserializer;
 impl SecurityGroupOwnerAliasDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct SecurityGroupsDeserializer;
 impl SecurityGroupsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<String>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -4823,7 +4927,10 @@ impl SecurityGroupsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(SecurityGroupIdDeserializer::deserialize("member", stack)));
+                        obj.push(try!(SecurityGroupIdDeserializer::deserialize(
+                            "member",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -4839,7 +4946,6 @@ impl SecurityGroupsDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 
@@ -4854,50 +4960,56 @@ impl SecurityGroupsSerializer {
     }
 }
 
-#[doc="<p>Contains the parameters for SetLoadBalancerListenerSSLCertificate.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the parameters for SetLoadBalancerListenerSSLCertificate.</p>
+#[derive(Default, Debug, Clone)]
 pub struct SetLoadBalancerListenerSSLCertificateInput {
-    #[doc="<p>The name of the load balancer.</p>"]
+    /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
-    #[doc="<p>The port that uses the specified SSL certificate.</p>"]
+    /// <p>The port that uses the specified SSL certificate.</p>
     pub load_balancer_port: i64,
-    #[doc="<p>The Amazon Resource Name (ARN) of the SSL certificate.</p>"]
+    /// <p>The Amazon Resource Name (ARN) of the SSL certificate.</p>
     pub ssl_certificate_id: String,
 }
-
 
 /// Serialize `SetLoadBalancerListenerSSLCertificateInput` contents to a `SignedRequest`.
 struct SetLoadBalancerListenerSSLCertificateInputSerializer;
 impl SetLoadBalancerListenerSSLCertificateInputSerializer {
-    fn serialize(params: &mut Params,
-                 name: &str,
-                 obj: &SetLoadBalancerListenerSSLCertificateInput) {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &SetLoadBalancerListenerSSLCertificateInput,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "LoadBalancerName"),
-                   &obj.load_balancer_name.replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "LoadBalancerPort"),
-                   &obj.load_balancer_port.to_string().replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "SSLCertificateId"),
-                   &obj.ssl_certificate_id.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerName"),
+            &obj.load_balancer_name.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerPort"),
+            &obj.load_balancer_port.to_string().replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "SSLCertificateId"),
+            &obj.ssl_certificate_id.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>Contains the output of SetLoadBalancerListenerSSLCertificate.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the output of SetLoadBalancerListenerSSLCertificate.</p>
+#[derive(Default, Debug, Clone)]
 pub struct SetLoadBalancerListenerSSLCertificateOutput;
 
 struct SetLoadBalancerListenerSSLCertificateOutputDeserializer;
 impl SetLoadBalancerListenerSSLCertificateOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<SetLoadBalancerListenerSSLCertificateOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SetLoadBalancerListenerSSLCertificateOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let obj = SetLoadBalancerListenerSSLCertificateOutput::default();
@@ -4905,54 +5017,59 @@ impl SetLoadBalancerListenerSSLCertificateOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Contains the parameters for SetLoadBalancerPoliciesForBackendServer.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the parameters for SetLoadBalancerPoliciesForBackendServer.</p>
+#[derive(Default, Debug, Clone)]
 pub struct SetLoadBalancerPoliciesForBackendServerInput {
-    #[doc="<p>The port number associated with the EC2 instance.</p>"]
+    /// <p>The port number associated with the EC2 instance.</p>
     pub instance_port: i64,
-    #[doc="<p>The name of the load balancer.</p>"]
+    /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
-    #[doc="<p>The names of the policies. If the list is empty, then all current polices are removed from the EC2 instance.</p>"]
+    /// <p>The names of the policies. If the list is empty, then all current polices are removed from the EC2 instance.</p>
     pub policy_names: Vec<String>,
 }
-
 
 /// Serialize `SetLoadBalancerPoliciesForBackendServerInput` contents to a `SignedRequest`.
 struct SetLoadBalancerPoliciesForBackendServerInputSerializer;
 impl SetLoadBalancerPoliciesForBackendServerInputSerializer {
-    fn serialize(params: &mut Params,
-                 name: &str,
-                 obj: &SetLoadBalancerPoliciesForBackendServerInput) {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &SetLoadBalancerPoliciesForBackendServerInput,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "InstancePort"),
-                   &obj.instance_port.to_string().replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "LoadBalancerName"),
-                   &obj.load_balancer_name.replace("+", "%2B"));
-        PolicyNamesSerializer::serialize(params,
-                                         &format!("{}{}", prefix, "PolicyNames"),
-                                         &obj.policy_names);
-
+        params.put(
+            &format!("{}{}", prefix, "InstancePort"),
+            &obj.instance_port.to_string().replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerName"),
+            &obj.load_balancer_name.replace("+", "%2B"),
+        );
+        PolicyNamesSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "PolicyNames"),
+            &obj.policy_names,
+        );
     }
 }
 
-#[doc="<p>Contains the output of SetLoadBalancerPoliciesForBackendServer.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the output of SetLoadBalancerPoliciesForBackendServer.</p>
+#[derive(Default, Debug, Clone)]
 pub struct SetLoadBalancerPoliciesForBackendServerOutput;
 
 struct SetLoadBalancerPoliciesForBackendServerOutputDeserializer;
 impl SetLoadBalancerPoliciesForBackendServerOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<SetLoadBalancerPoliciesForBackendServerOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SetLoadBalancerPoliciesForBackendServerOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let obj = SetLoadBalancerPoliciesForBackendServerOutput::default();
@@ -4960,20 +5077,18 @@ impl SetLoadBalancerPoliciesForBackendServerOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Contains the parameters for SetLoadBalancePoliciesOfListener.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the parameters for SetLoadBalancePoliciesOfListener.</p>
+#[derive(Default, Debug, Clone)]
 pub struct SetLoadBalancerPoliciesOfListenerInput {
-    #[doc="<p>The name of the load balancer.</p>"]
+    /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
-    #[doc="<p>The external port of the load balancer.</p>"]
+    /// <p>The external port of the load balancer.</p>
     pub load_balancer_port: i64,
-    #[doc="<p>The names of the policies. This list must include all policies to be enabled. If you omit a policy that is currently enabled, it is disabled. If the list is empty, all current policies are disabled.</p>"]
+    /// <p>The names of the policies. This list must include all policies to be enabled. If you omit a policy that is currently enabled, it is disabled. If the list is empty, all current policies are disabled.</p>
     pub policy_names: Vec<String>,
 }
-
 
 /// Serialize `SetLoadBalancerPoliciesOfListenerInput` contents to a `SignedRequest`.
 struct SetLoadBalancerPoliciesOfListenerInputSerializer;
@@ -4984,28 +5099,33 @@ impl SetLoadBalancerPoliciesOfListenerInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "LoadBalancerName"),
-                   &obj.load_balancer_name.replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "LoadBalancerPort"),
-                   &obj.load_balancer_port.to_string().replace("+", "%2B"));
-        PolicyNamesSerializer::serialize(params,
-                                         &format!("{}{}", prefix, "PolicyNames"),
-                                         &obj.policy_names);
-
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerName"),
+            &obj.load_balancer_name.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerPort"),
+            &obj.load_balancer_port.to_string().replace("+", "%2B"),
+        );
+        PolicyNamesSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "PolicyNames"),
+            &obj.policy_names,
+        );
     }
 }
 
-#[doc="<p>Contains the output of SetLoadBalancePoliciesOfListener.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Contains the output of SetLoadBalancePoliciesOfListener.</p>
+#[derive(Default, Debug, Clone)]
 pub struct SetLoadBalancerPoliciesOfListenerOutput;
 
 struct SetLoadBalancerPoliciesOfListenerOutputDeserializer;
 impl SetLoadBalancerPoliciesOfListenerOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<SetLoadBalancerPoliciesOfListenerOutput, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SetLoadBalancerPoliciesOfListenerOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let obj = SetLoadBalancerPoliciesOfListenerOutput::default();
@@ -5013,24 +5133,24 @@ impl SetLoadBalancerPoliciesOfListenerOutputDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Information about a source security group.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Information about a source security group.</p>
+#[derive(Default, Debug, Clone)]
 pub struct SourceSecurityGroup {
-    #[doc="<p>The name of the security group.</p>"]
+    /// <p>The name of the security group.</p>
     pub group_name: Option<String>,
-    #[doc="<p>The owner of the security group.</p>"]
+    /// <p>The owner of the security group.</p>
     pub owner_alias: Option<String>,
 }
 
 struct SourceSecurityGroupDeserializer;
 impl SourceSecurityGroupDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<SourceSecurityGroup, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SourceSecurityGroup, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = SourceSecurityGroup::default();
@@ -5045,21 +5165,20 @@ impl SourceSecurityGroupDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "GroupName" => {
-                            obj.group_name =
-                                Some(try!(SecurityGroupNameDeserializer::deserialize("GroupName",
-                                                                                     stack)));
-                        }
-                        "OwnerAlias" => {
-                            obj.owner_alias =
-                                Some(try!(SecurityGroupOwnerAliasDeserializer::deserialize("OwnerAlias",
-                                                                                           stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "GroupName" => {
+                        obj.group_name = Some(try!(SecurityGroupNameDeserializer::deserialize(
+                            "GroupName",
+                            stack
+                        )));
                     }
-                }
+                    "OwnerAlias" => {
+                        obj.owner_alias = Some(try!(
+                            SecurityGroupOwnerAliasDeserializer::deserialize("OwnerAlias", stack)
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -5070,44 +5189,43 @@ impl SourceSecurityGroupDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct StateDeserializer;
 impl StateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct SubnetIdDeserializer;
 impl SubnetIdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct SubnetsDeserializer;
 impl SubnetsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<String>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -5139,7 +5257,6 @@ impl SubnetsDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 
@@ -5154,21 +5271,22 @@ impl SubnetsSerializer {
     }
 }
 
-#[doc="<p>Information about a tag.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Information about a tag.</p>
+#[derive(Default, Debug, Clone)]
 pub struct Tag {
-    #[doc="<p>The key of the tag.</p>"]
+    /// <p>The key of the tag.</p>
     pub key: String,
-    #[doc="<p>The value of the tag.</p>"]
+    /// <p>The value of the tag.</p>
     pub value: Option<String>,
 }
 
 struct TagDeserializer;
 impl TagDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Tag, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Tag, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = Tag::default();
@@ -5183,18 +5301,15 @@ impl TagDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Key" => {
-                            obj.key = try!(TagKeyDeserializer::deserialize("Key", stack));
-                        }
-                        "Value" => {
-                            obj.value = Some(try!(TagValueDeserializer::deserialize("Value",
-                                                                                    stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Key" => {
+                        obj.key = try!(TagKeyDeserializer::deserialize("Key", stack));
                     }
-                }
+                    "Value" => {
+                        obj.value = Some(try!(TagValueDeserializer::deserialize("Value", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -5205,7 +5320,6 @@ impl TagDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -5218,31 +5332,35 @@ impl TagSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Key"),
-                   &obj.key.replace("+", "%2B"));
+        params.put(
+            &format!("{}{}", prefix, "Key"),
+            &obj.key.replace("+", "%2B"),
+        );
         if let Some(ref field_value) = obj.value {
-            params.put(&format!("{}{}", prefix, "Value"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "Value"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-
     }
 }
 
-#[doc="<p>The tags associated with a load balancer.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The tags associated with a load balancer.</p>
+#[derive(Default, Debug, Clone)]
 pub struct TagDescription {
-    #[doc="<p>The name of the load balancer.</p>"]
+    /// <p>The name of the load balancer.</p>
     pub load_balancer_name: Option<String>,
-    #[doc="<p>The tags.</p>"]
+    /// <p>The tags.</p>
     pub tags: Option<Vec<Tag>>,
 }
 
 struct TagDescriptionDeserializer;
 impl TagDescriptionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<TagDescription, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TagDescription, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = TagDescription::default();
@@ -5257,19 +5375,17 @@ impl TagDescriptionDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "LoadBalancerName" => {
-                            obj.load_balancer_name =
-                                Some(try!(AccessPointNameDeserializer::deserialize("LoadBalancerName",
-                                                                                   stack)));
-                        }
-                        "Tags" => {
-                            obj.tags = Some(try!(TagListDeserializer::deserialize("Tags", stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "LoadBalancerName" => {
+                        obj.load_balancer_name = Some(try!(
+                            AccessPointNameDeserializer::deserialize("LoadBalancerName", stack)
+                        ));
                     }
-                }
+                    "Tags" => {
+                        obj.tags = Some(try!(TagListDeserializer::deserialize("Tags", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -5280,16 +5396,15 @@ impl TagDescriptionDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct TagDescriptionsDeserializer;
 impl TagDescriptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<TagDescription>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<TagDescription>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -5305,7 +5420,10 @@ impl TagDescriptionsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(TagDescriptionDeserializer::deserialize("member", stack)));
+                        obj.push(try!(TagDescriptionDeserializer::deserialize(
+                            "member",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -5321,21 +5439,20 @@ impl TagDescriptionsDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 struct TagKeyDeserializer;
 impl TagKeyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -5350,13 +5467,12 @@ impl TagKeyListSerializer {
     }
 }
 
-#[doc="<p>The key of a tag.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The key of a tag.</p>
+#[derive(Default, Debug, Clone)]
 pub struct TagKeyOnly {
-    #[doc="<p>The name of the key.</p>"]
+    /// <p>The name of the key.</p>
     pub key: Option<String>,
 }
-
 
 /// Serialize `TagKeyOnly` contents to a `SignedRequest`.
 struct TagKeyOnlySerializer;
@@ -5368,20 +5484,21 @@ impl TagKeyOnlySerializer {
         }
 
         if let Some(ref field_value) = obj.key {
-            params.put(&format!("{}{}", prefix, "Key"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "Key"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-
     }
 }
 
 struct TagListDeserializer;
 impl TagListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<Tag>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<Tag>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -5413,7 +5530,6 @@ impl TagListDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 
@@ -5431,43 +5547,43 @@ impl TagListSerializer {
 struct TagValueDeserializer;
 impl TagValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct UnhealthyThresholdDeserializer;
 impl UnhealthyThresholdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<i64, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct VPCIdDeserializer;
 impl VPCIdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 /// Errors returned by AddTags
@@ -5489,7 +5605,6 @@ pub enum AddTagsError {
     Unknown(String),
 }
 
-
 impl AddTagsError {
     pub fn from_body(body: &str) -> AddTagsError {
         let reader = EventReader::new(body.as_bytes());
@@ -5497,20 +5612,18 @@ impl AddTagsError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessPointNotFoundException" => {
-                        AddTagsError::AccessPointNotFound(String::from(parsed_error.message))
-                    }
-                    "DuplicateTagKeysException" => {
-                        AddTagsError::DuplicateTagKeys(String::from(parsed_error.message))
-                    }
-                    "TooManyTagsException" => {
-                        AddTagsError::TooManyTags(String::from(parsed_error.message))
-                    }
-                    _ => AddTagsError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessPointNotFoundException" => {
+                    AddTagsError::AccessPointNotFound(String::from(parsed_error.message))
                 }
-            }
+                "DuplicateTagKeysException" => {
+                    AddTagsError::DuplicateTagKeys(String::from(parsed_error.message))
+                }
+                "TooManyTagsException" => {
+                    AddTagsError::TooManyTags(String::from(parsed_error.message))
+                }
+                _ => AddTagsError::Unknown(String::from(body)),
+            },
             Err(_) => AddTagsError::Unknown(body.to_string()),
         }
     }
@@ -5574,7 +5687,6 @@ pub enum ApplySecurityGroupsToLoadBalancerError {
     Unknown(String),
 }
 
-
 impl ApplySecurityGroupsToLoadBalancerError {
     pub fn from_body(body: &str) -> ApplySecurityGroupsToLoadBalancerError {
         let reader = EventReader::new(body.as_bytes());
@@ -5582,14 +5694,24 @@ impl ApplySecurityGroupsToLoadBalancerError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessPointNotFoundException" => ApplySecurityGroupsToLoadBalancerError::AccessPointNotFound(String::from(parsed_error.message)),
-                    "InvalidConfigurationRequestException" => ApplySecurityGroupsToLoadBalancerError::InvalidConfigurationRequest(String::from(parsed_error.message)),
-                    "InvalidSecurityGroupException" => ApplySecurityGroupsToLoadBalancerError::InvalidSecurityGroup(String::from(parsed_error.message)),
-                    _ => ApplySecurityGroupsToLoadBalancerError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessPointNotFoundException" => {
+                    ApplySecurityGroupsToLoadBalancerError::AccessPointNotFound(String::from(
+                        parsed_error.message,
+                    ))
                 }
-            }
+                "InvalidConfigurationRequestException" => {
+                    ApplySecurityGroupsToLoadBalancerError::InvalidConfigurationRequest(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "InvalidSecurityGroupException" => {
+                    ApplySecurityGroupsToLoadBalancerError::InvalidSecurityGroup(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => ApplySecurityGroupsToLoadBalancerError::Unknown(String::from(body)),
+            },
             Err(_) => ApplySecurityGroupsToLoadBalancerError::Unknown(body.to_string()),
         }
     }
@@ -5657,7 +5779,6 @@ pub enum AttachLoadBalancerToSubnetsError {
     Unknown(String),
 }
 
-
 impl AttachLoadBalancerToSubnetsError {
     pub fn from_body(body: &str) -> AttachLoadBalancerToSubnetsError {
         let reader = EventReader::new(body.as_bytes());
@@ -5665,15 +5786,25 @@ impl AttachLoadBalancerToSubnetsError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessPointNotFoundException" => AttachLoadBalancerToSubnetsError::AccessPointNotFound(String::from(parsed_error.message)),
-                    "InvalidConfigurationRequestException" => AttachLoadBalancerToSubnetsError::InvalidConfigurationRequest(String::from(parsed_error.message)),
-                    "InvalidSubnetException" => AttachLoadBalancerToSubnetsError::InvalidSubnet(String::from(parsed_error.message)),
-                    "SubnetNotFoundException" => AttachLoadBalancerToSubnetsError::SubnetNotFound(String::from(parsed_error.message)),
-                    _ => AttachLoadBalancerToSubnetsError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessPointNotFoundException" => {
+                    AttachLoadBalancerToSubnetsError::AccessPointNotFound(String::from(
+                        parsed_error.message,
+                    ))
                 }
-            }
+                "InvalidConfigurationRequestException" => {
+                    AttachLoadBalancerToSubnetsError::InvalidConfigurationRequest(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidSubnetException" => AttachLoadBalancerToSubnetsError::InvalidSubnet(
+                    String::from(parsed_error.message),
+                ),
+                "SubnetNotFoundException" => AttachLoadBalancerToSubnetsError::SubnetNotFound(
+                    String::from(parsed_error.message),
+                ),
+                _ => AttachLoadBalancerToSubnetsError::Unknown(String::from(body)),
+            },
             Err(_) => AttachLoadBalancerToSubnetsError::Unknown(body.to_string()),
         }
     }
@@ -5736,7 +5867,6 @@ pub enum ConfigureHealthCheckError {
     Unknown(String),
 }
 
-
 impl ConfigureHealthCheckError {
     pub fn from_body(body: &str) -> ConfigureHealthCheckError {
         let reader = EventReader::new(body.as_bytes());
@@ -5744,12 +5874,12 @@ impl ConfigureHealthCheckError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessPointNotFoundException" => ConfigureHealthCheckError::AccessPointNotFound(String::from(parsed_error.message)),
-                    _ => ConfigureHealthCheckError::Unknown(String::from(body)),
-                }
-            }
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessPointNotFoundException" => ConfigureHealthCheckError::AccessPointNotFound(
+                    String::from(parsed_error.message),
+                ),
+                _ => ConfigureHealthCheckError::Unknown(String::from(body)),
+            },
             Err(_) => ConfigureHealthCheckError::Unknown(body.to_string()),
         }
     }
@@ -5815,7 +5945,6 @@ pub enum CreateAppCookieStickinessPolicyError {
     Unknown(String),
 }
 
-
 impl CreateAppCookieStickinessPolicyError {
     pub fn from_body(body: &str) -> CreateAppCookieStickinessPolicyError {
         let reader = EventReader::new(body.as_bytes());
@@ -5823,15 +5952,29 @@ impl CreateAppCookieStickinessPolicyError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessPointNotFoundException" => CreateAppCookieStickinessPolicyError::AccessPointNotFound(String::from(parsed_error.message)),
-                    "DuplicatePolicyNameException" => CreateAppCookieStickinessPolicyError::DuplicatePolicyName(String::from(parsed_error.message)),
-                    "InvalidConfigurationRequestException" => CreateAppCookieStickinessPolicyError::InvalidConfigurationRequest(String::from(parsed_error.message)),
-                    "TooManyPoliciesException" => CreateAppCookieStickinessPolicyError::TooManyPolicies(String::from(parsed_error.message)),
-                    _ => CreateAppCookieStickinessPolicyError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessPointNotFoundException" => {
+                    CreateAppCookieStickinessPolicyError::AccessPointNotFound(String::from(
+                        parsed_error.message,
+                    ))
                 }
-            }
+                "DuplicatePolicyNameException" => {
+                    CreateAppCookieStickinessPolicyError::DuplicatePolicyName(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidConfigurationRequestException" => {
+                    CreateAppCookieStickinessPolicyError::InvalidConfigurationRequest(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "TooManyPoliciesException" => {
+                    CreateAppCookieStickinessPolicyError::TooManyPolicies(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => CreateAppCookieStickinessPolicyError::Unknown(String::from(body)),
+            },
             Err(_) => CreateAppCookieStickinessPolicyError::Unknown(body.to_string()),
         }
     }
@@ -5900,7 +6043,6 @@ pub enum CreateLBCookieStickinessPolicyError {
     Unknown(String),
 }
 
-
 impl CreateLBCookieStickinessPolicyError {
     pub fn from_body(body: &str) -> CreateLBCookieStickinessPolicyError {
         let reader = EventReader::new(body.as_bytes());
@@ -5908,15 +6050,29 @@ impl CreateLBCookieStickinessPolicyError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessPointNotFoundException" => CreateLBCookieStickinessPolicyError::AccessPointNotFound(String::from(parsed_error.message)),
-                    "DuplicatePolicyNameException" => CreateLBCookieStickinessPolicyError::DuplicatePolicyName(String::from(parsed_error.message)),
-                    "InvalidConfigurationRequestException" => CreateLBCookieStickinessPolicyError::InvalidConfigurationRequest(String::from(parsed_error.message)),
-                    "TooManyPoliciesException" => CreateLBCookieStickinessPolicyError::TooManyPolicies(String::from(parsed_error.message)),
-                    _ => CreateLBCookieStickinessPolicyError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessPointNotFoundException" => {
+                    CreateLBCookieStickinessPolicyError::AccessPointNotFound(String::from(
+                        parsed_error.message,
+                    ))
                 }
-            }
+                "DuplicatePolicyNameException" => {
+                    CreateLBCookieStickinessPolicyError::DuplicatePolicyName(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidConfigurationRequestException" => {
+                    CreateLBCookieStickinessPolicyError::InvalidConfigurationRequest(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "TooManyPoliciesException" => {
+                    CreateLBCookieStickinessPolicyError::TooManyPolicies(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => CreateLBCookieStickinessPolicyError::Unknown(String::from(body)),
+            },
             Err(_) => CreateLBCookieStickinessPolicyError::Unknown(body.to_string()),
         }
     }
@@ -5999,7 +6155,6 @@ pub enum CreateLoadBalancerError {
     Unknown(String),
 }
 
-
 impl CreateLoadBalancerError {
     pub fn from_body(body: &str) -> CreateLoadBalancerError {
         let reader = EventReader::new(body.as_bytes());
@@ -6007,30 +6162,46 @@ impl CreateLoadBalancerError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "CertificateNotFoundException" => CreateLoadBalancerError::CertificateNotFound(String::from(parsed_error.message)),
-                    "DuplicateAccessPointNameException" => CreateLoadBalancerError::DuplicateAccessPointName(String::from(parsed_error.message)),
-                    "DuplicateTagKeysException" => CreateLoadBalancerError::DuplicateTagKeys(String::from(parsed_error.message)),
-                    "InvalidConfigurationRequestException" => CreateLoadBalancerError::InvalidConfigurationRequest(String::from(parsed_error.message)),
-                    "InvalidSchemeException" => {
-                        CreateLoadBalancerError::InvalidScheme(String::from(parsed_error.message))
-                    }
-                    "InvalidSecurityGroupException" => CreateLoadBalancerError::InvalidSecurityGroup(String::from(parsed_error.message)),
-                    "InvalidSubnetException" => {
-                        CreateLoadBalancerError::InvalidSubnet(String::from(parsed_error.message))
-                    }
-                    "SubnetNotFoundException" => {
-                        CreateLoadBalancerError::SubnetNotFound(String::from(parsed_error.message))
-                    }
-                    "TooManyAccessPointsException" => CreateLoadBalancerError::TooManyAccessPoints(String::from(parsed_error.message)),
-                    "TooManyTagsException" => {
-                        CreateLoadBalancerError::TooManyTags(String::from(parsed_error.message))
-                    }
-                    "UnsupportedProtocolException" => CreateLoadBalancerError::UnsupportedProtocol(String::from(parsed_error.message)),
-                    _ => CreateLoadBalancerError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "CertificateNotFoundException" => {
+                    CreateLoadBalancerError::CertificateNotFound(String::from(parsed_error.message))
                 }
-            }
+                "DuplicateAccessPointNameException" => {
+                    CreateLoadBalancerError::DuplicateAccessPointName(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "DuplicateTagKeysException" => {
+                    CreateLoadBalancerError::DuplicateTagKeys(String::from(parsed_error.message))
+                }
+                "InvalidConfigurationRequestException" => {
+                    CreateLoadBalancerError::InvalidConfigurationRequest(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidSchemeException" => {
+                    CreateLoadBalancerError::InvalidScheme(String::from(parsed_error.message))
+                }
+                "InvalidSecurityGroupException" => CreateLoadBalancerError::InvalidSecurityGroup(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidSubnetException" => {
+                    CreateLoadBalancerError::InvalidSubnet(String::from(parsed_error.message))
+                }
+                "SubnetNotFoundException" => {
+                    CreateLoadBalancerError::SubnetNotFound(String::from(parsed_error.message))
+                }
+                "TooManyAccessPointsException" => {
+                    CreateLoadBalancerError::TooManyAccessPoints(String::from(parsed_error.message))
+                }
+                "TooManyTagsException" => {
+                    CreateLoadBalancerError::TooManyTags(String::from(parsed_error.message))
+                }
+                "UnsupportedProtocolException" => {
+                    CreateLoadBalancerError::UnsupportedProtocol(String::from(parsed_error.message))
+                }
+                _ => CreateLoadBalancerError::Unknown(String::from(body)),
+            },
             Err(_) => CreateLoadBalancerError::Unknown(body.to_string()),
         }
     }
@@ -6108,7 +6279,6 @@ pub enum CreateLoadBalancerListenersError {
     Unknown(String),
 }
 
-
 impl CreateLoadBalancerListenersError {
     pub fn from_body(body: &str) -> CreateLoadBalancerListenersError {
         let reader = EventReader::new(body.as_bytes());
@@ -6116,16 +6286,34 @@ impl CreateLoadBalancerListenersError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessPointNotFoundException" => CreateLoadBalancerListenersError::AccessPointNotFound(String::from(parsed_error.message)),
-                    "CertificateNotFoundException" => CreateLoadBalancerListenersError::CertificateNotFound(String::from(parsed_error.message)),
-                    "DuplicateListenerException" => CreateLoadBalancerListenersError::DuplicateListener(String::from(parsed_error.message)),
-                    "InvalidConfigurationRequestException" => CreateLoadBalancerListenersError::InvalidConfigurationRequest(String::from(parsed_error.message)),
-                    "UnsupportedProtocolException" => CreateLoadBalancerListenersError::UnsupportedProtocol(String::from(parsed_error.message)),
-                    _ => CreateLoadBalancerListenersError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessPointNotFoundException" => {
+                    CreateLoadBalancerListenersError::AccessPointNotFound(String::from(
+                        parsed_error.message,
+                    ))
                 }
-            }
+                "CertificateNotFoundException" => {
+                    CreateLoadBalancerListenersError::CertificateNotFound(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "DuplicateListenerException" => {
+                    CreateLoadBalancerListenersError::DuplicateListener(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidConfigurationRequestException" => {
+                    CreateLoadBalancerListenersError::InvalidConfigurationRequest(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "UnsupportedProtocolException" => {
+                    CreateLoadBalancerListenersError::UnsupportedProtocol(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => CreateLoadBalancerListenersError::Unknown(String::from(body)),
+            },
             Err(_) => CreateLoadBalancerListenersError::Unknown(body.to_string()),
         }
     }
@@ -6197,7 +6385,6 @@ pub enum CreateLoadBalancerPolicyError {
     Unknown(String),
 }
 
-
 impl CreateLoadBalancerPolicyError {
     pub fn from_body(body: &str) -> CreateLoadBalancerPolicyError {
         let reader = EventReader::new(body.as_bytes());
@@ -6205,16 +6392,32 @@ impl CreateLoadBalancerPolicyError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessPointNotFoundException" => CreateLoadBalancerPolicyError::AccessPointNotFound(String::from(parsed_error.message)),
-                    "DuplicatePolicyNameException" => CreateLoadBalancerPolicyError::DuplicatePolicyName(String::from(parsed_error.message)),
-                    "InvalidConfigurationRequestException" => CreateLoadBalancerPolicyError::InvalidConfigurationRequest(String::from(parsed_error.message)),
-                    "PolicyTypeNotFoundException" => CreateLoadBalancerPolicyError::PolicyTypeNotFound(String::from(parsed_error.message)),
-                    "TooManyPoliciesException" => CreateLoadBalancerPolicyError::TooManyPolicies(String::from(parsed_error.message)),
-                    _ => CreateLoadBalancerPolicyError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessPointNotFoundException" => {
+                    CreateLoadBalancerPolicyError::AccessPointNotFound(String::from(
+                        parsed_error.message,
+                    ))
                 }
-            }
+                "DuplicatePolicyNameException" => {
+                    CreateLoadBalancerPolicyError::DuplicatePolicyName(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidConfigurationRequestException" => {
+                    CreateLoadBalancerPolicyError::InvalidConfigurationRequest(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "PolicyTypeNotFoundException" => {
+                    CreateLoadBalancerPolicyError::PolicyTypeNotFound(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "TooManyPoliciesException" => CreateLoadBalancerPolicyError::TooManyPolicies(
+                    String::from(parsed_error.message),
+                ),
+                _ => CreateLoadBalancerPolicyError::Unknown(String::from(body)),
+            },
             Err(_) => CreateLoadBalancerPolicyError::Unknown(body.to_string()),
         }
     }
@@ -6276,7 +6479,6 @@ pub enum DeleteLoadBalancerError {
     Unknown(String),
 }
 
-
 impl DeleteLoadBalancerError {
     pub fn from_body(body: &str) -> DeleteLoadBalancerError {
         let reader = EventReader::new(body.as_bytes());
@@ -6284,11 +6486,9 @@ impl DeleteLoadBalancerError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    _ => DeleteLoadBalancerError::Unknown(String::from(body)),
-                }
-            }
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => DeleteLoadBalancerError::Unknown(String::from(body)),
+            },
             Err(_) => DeleteLoadBalancerError::Unknown(body.to_string()),
         }
     }
@@ -6347,7 +6547,6 @@ pub enum DeleteLoadBalancerListenersError {
     Unknown(String),
 }
 
-
 impl DeleteLoadBalancerListenersError {
     pub fn from_body(body: &str) -> DeleteLoadBalancerListenersError {
         let reader = EventReader::new(body.as_bytes());
@@ -6355,12 +6554,14 @@ impl DeleteLoadBalancerListenersError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessPointNotFoundException" => DeleteLoadBalancerListenersError::AccessPointNotFound(String::from(parsed_error.message)),
-                    _ => DeleteLoadBalancerListenersError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessPointNotFoundException" => {
+                    DeleteLoadBalancerListenersError::AccessPointNotFound(String::from(
+                        parsed_error.message,
+                    ))
                 }
-            }
+                _ => DeleteLoadBalancerListenersError::Unknown(String::from(body)),
+            },
             Err(_) => DeleteLoadBalancerListenersError::Unknown(body.to_string()),
         }
     }
@@ -6422,7 +6623,6 @@ pub enum DeleteLoadBalancerPolicyError {
     Unknown(String),
 }
 
-
 impl DeleteLoadBalancerPolicyError {
     pub fn from_body(body: &str) -> DeleteLoadBalancerPolicyError {
         let reader = EventReader::new(body.as_bytes());
@@ -6430,13 +6630,19 @@ impl DeleteLoadBalancerPolicyError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessPointNotFoundException" => DeleteLoadBalancerPolicyError::AccessPointNotFound(String::from(parsed_error.message)),
-                    "InvalidConfigurationRequestException" => DeleteLoadBalancerPolicyError::InvalidConfigurationRequest(String::from(parsed_error.message)),
-                    _ => DeleteLoadBalancerPolicyError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessPointNotFoundException" => {
+                    DeleteLoadBalancerPolicyError::AccessPointNotFound(String::from(
+                        parsed_error.message,
+                    ))
                 }
-            }
+                "InvalidConfigurationRequestException" => {
+                    DeleteLoadBalancerPolicyError::InvalidConfigurationRequest(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => DeleteLoadBalancerPolicyError::Unknown(String::from(body)),
+            },
             Err(_) => DeleteLoadBalancerPolicyError::Unknown(body.to_string()),
         }
     }
@@ -6499,7 +6705,6 @@ pub enum DeregisterInstancesFromLoadBalancerError {
     Unknown(String),
 }
 
-
 impl DeregisterInstancesFromLoadBalancerError {
     pub fn from_body(body: &str) -> DeregisterInstancesFromLoadBalancerError {
         let reader = EventReader::new(body.as_bytes());
@@ -6507,13 +6712,19 @@ impl DeregisterInstancesFromLoadBalancerError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessPointNotFoundException" => DeregisterInstancesFromLoadBalancerError::AccessPointNotFound(String::from(parsed_error.message)),
-                    "InvalidEndPointException" => DeregisterInstancesFromLoadBalancerError::InvalidEndPoint(String::from(parsed_error.message)),
-                    _ => DeregisterInstancesFromLoadBalancerError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessPointNotFoundException" => {
+                    DeregisterInstancesFromLoadBalancerError::AccessPointNotFound(String::from(
+                        parsed_error.message,
+                    ))
                 }
-            }
+                "InvalidEndPointException" => {
+                    DeregisterInstancesFromLoadBalancerError::InvalidEndPoint(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => DeregisterInstancesFromLoadBalancerError::Unknown(String::from(body)),
+            },
             Err(_) => DeregisterInstancesFromLoadBalancerError::Unknown(body.to_string()),
         }
     }
@@ -6572,7 +6783,6 @@ pub enum DescribeAccountLimitsError {
     Unknown(String),
 }
 
-
 impl DescribeAccountLimitsError {
     pub fn from_body(body: &str) -> DescribeAccountLimitsError {
         let reader = EventReader::new(body.as_bytes());
@@ -6580,11 +6790,9 @@ impl DescribeAccountLimitsError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    _ => DescribeAccountLimitsError::Unknown(String::from(body)),
-                }
-            }
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => DescribeAccountLimitsError::Unknown(String::from(body)),
+            },
             Err(_) => DescribeAccountLimitsError::Unknown(body.to_string()),
         }
     }
@@ -6645,7 +6853,6 @@ pub enum DescribeInstanceHealthError {
     Unknown(String),
 }
 
-
 impl DescribeInstanceHealthError {
     pub fn from_body(body: &str) -> DescribeInstanceHealthError {
         let reader = EventReader::new(body.as_bytes());
@@ -6653,13 +6860,17 @@ impl DescribeInstanceHealthError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessPointNotFoundException" => DescribeInstanceHealthError::AccessPointNotFound(String::from(parsed_error.message)),
-                    "InvalidEndPointException" => DescribeInstanceHealthError::InvalidEndPoint(String::from(parsed_error.message)),
-                    _ => DescribeInstanceHealthError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessPointNotFoundException" => {
+                    DescribeInstanceHealthError::AccessPointNotFound(String::from(
+                        parsed_error.message,
+                    ))
                 }
-            }
+                "InvalidEndPointException" => {
+                    DescribeInstanceHealthError::InvalidEndPoint(String::from(parsed_error.message))
+                }
+                _ => DescribeInstanceHealthError::Unknown(String::from(body)),
+            },
             Err(_) => DescribeInstanceHealthError::Unknown(body.to_string()),
         }
     }
@@ -6722,7 +6933,6 @@ pub enum DescribeLoadBalancerAttributesError {
     Unknown(String),
 }
 
-
 impl DescribeLoadBalancerAttributesError {
     pub fn from_body(body: &str) -> DescribeLoadBalancerAttributesError {
         let reader = EventReader::new(body.as_bytes());
@@ -6730,13 +6940,19 @@ impl DescribeLoadBalancerAttributesError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessPointNotFoundException" => DescribeLoadBalancerAttributesError::AccessPointNotFound(String::from(parsed_error.message)),
-                    "LoadBalancerAttributeNotFoundException" => DescribeLoadBalancerAttributesError::LoadBalancerAttributeNotFound(String::from(parsed_error.message)),
-                    _ => DescribeLoadBalancerAttributesError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessPointNotFoundException" => {
+                    DescribeLoadBalancerAttributesError::AccessPointNotFound(String::from(
+                        parsed_error.message,
+                    ))
                 }
-            }
+                "LoadBalancerAttributeNotFoundException" => {
+                    DescribeLoadBalancerAttributesError::LoadBalancerAttributeNotFound(
+                        String::from(parsed_error.message),
+                    )
+                }
+                _ => DescribeLoadBalancerAttributesError::Unknown(String::from(body)),
+            },
             Err(_) => DescribeLoadBalancerAttributesError::Unknown(body.to_string()),
         }
     }
@@ -6799,7 +7015,6 @@ pub enum DescribeLoadBalancerPoliciesError {
     Unknown(String),
 }
 
-
 impl DescribeLoadBalancerPoliciesError {
     pub fn from_body(body: &str) -> DescribeLoadBalancerPoliciesError {
         let reader = EventReader::new(body.as_bytes());
@@ -6807,13 +7022,17 @@ impl DescribeLoadBalancerPoliciesError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessPointNotFoundException" => DescribeLoadBalancerPoliciesError::AccessPointNotFound(String::from(parsed_error.message)),
-                    "PolicyNotFoundException" => DescribeLoadBalancerPoliciesError::PolicyNotFound(String::from(parsed_error.message)),
-                    _ => DescribeLoadBalancerPoliciesError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessPointNotFoundException" => {
+                    DescribeLoadBalancerPoliciesError::AccessPointNotFound(String::from(
+                        parsed_error.message,
+                    ))
                 }
-            }
+                "PolicyNotFoundException" => DescribeLoadBalancerPoliciesError::PolicyNotFound(
+                    String::from(parsed_error.message),
+                ),
+                _ => DescribeLoadBalancerPoliciesError::Unknown(String::from(body)),
+            },
             Err(_) => DescribeLoadBalancerPoliciesError::Unknown(body.to_string()),
         }
     }
@@ -6874,7 +7093,6 @@ pub enum DescribeLoadBalancerPolicyTypesError {
     Unknown(String),
 }
 
-
 impl DescribeLoadBalancerPolicyTypesError {
     pub fn from_body(body: &str) -> DescribeLoadBalancerPolicyTypesError {
         let reader = EventReader::new(body.as_bytes());
@@ -6882,12 +7100,14 @@ impl DescribeLoadBalancerPolicyTypesError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "PolicyTypeNotFoundException" => DescribeLoadBalancerPolicyTypesError::PolicyTypeNotFound(String::from(parsed_error.message)),
-                    _ => DescribeLoadBalancerPolicyTypesError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "PolicyTypeNotFoundException" => {
+                    DescribeLoadBalancerPolicyTypesError::PolicyTypeNotFound(String::from(
+                        parsed_error.message,
+                    ))
                 }
-            }
+                _ => DescribeLoadBalancerPolicyTypesError::Unknown(String::from(body)),
+            },
             Err(_) => DescribeLoadBalancerPolicyTypesError::Unknown(body.to_string()),
         }
     }
@@ -6949,7 +7169,6 @@ pub enum DescribeLoadBalancersError {
     Unknown(String),
 }
 
-
 impl DescribeLoadBalancersError {
     pub fn from_body(body: &str) -> DescribeLoadBalancersError {
         let reader = EventReader::new(body.as_bytes());
@@ -6957,13 +7176,15 @@ impl DescribeLoadBalancersError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessPointNotFoundException" => DescribeLoadBalancersError::AccessPointNotFound(String::from(parsed_error.message)),
-                    "DependencyThrottleException" => DescribeLoadBalancersError::DependencyThrottle(String::from(parsed_error.message)),
-                    _ => DescribeLoadBalancersError::Unknown(String::from(body)),
-                }
-            }
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessPointNotFoundException" => DescribeLoadBalancersError::AccessPointNotFound(
+                    String::from(parsed_error.message),
+                ),
+                "DependencyThrottleException" => DescribeLoadBalancersError::DependencyThrottle(
+                    String::from(parsed_error.message),
+                ),
+                _ => DescribeLoadBalancersError::Unknown(String::from(body)),
+            },
             Err(_) => DescribeLoadBalancersError::Unknown(body.to_string()),
         }
     }
@@ -7024,7 +7245,6 @@ pub enum DescribeTagsError {
     Unknown(String),
 }
 
-
 impl DescribeTagsError {
     pub fn from_body(body: &str) -> DescribeTagsError {
         let reader = EventReader::new(body.as_bytes());
@@ -7032,14 +7252,12 @@ impl DescribeTagsError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessPointNotFoundException" => {
-                        DescribeTagsError::AccessPointNotFound(String::from(parsed_error.message))
-                    }
-                    _ => DescribeTagsError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessPointNotFoundException" => {
+                    DescribeTagsError::AccessPointNotFound(String::from(parsed_error.message))
                 }
-            }
+                _ => DescribeTagsError::Unknown(String::from(body)),
+            },
             Err(_) => DescribeTagsError::Unknown(body.to_string()),
         }
     }
@@ -7099,7 +7317,6 @@ pub enum DetachLoadBalancerFromSubnetsError {
     Unknown(String),
 }
 
-
 impl DetachLoadBalancerFromSubnetsError {
     pub fn from_body(body: &str) -> DetachLoadBalancerFromSubnetsError {
         let reader = EventReader::new(body.as_bytes());
@@ -7107,13 +7324,19 @@ impl DetachLoadBalancerFromSubnetsError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessPointNotFoundException" => DetachLoadBalancerFromSubnetsError::AccessPointNotFound(String::from(parsed_error.message)),
-                    "InvalidConfigurationRequestException" => DetachLoadBalancerFromSubnetsError::InvalidConfigurationRequest(String::from(parsed_error.message)),
-                    _ => DetachLoadBalancerFromSubnetsError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessPointNotFoundException" => {
+                    DetachLoadBalancerFromSubnetsError::AccessPointNotFound(String::from(
+                        parsed_error.message,
+                    ))
                 }
-            }
+                "InvalidConfigurationRequestException" => {
+                    DetachLoadBalancerFromSubnetsError::InvalidConfigurationRequest(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => DetachLoadBalancerFromSubnetsError::Unknown(String::from(body)),
+            },
             Err(_) => DetachLoadBalancerFromSubnetsError::Unknown(body.to_string()),
         }
     }
@@ -7176,7 +7399,6 @@ pub enum DisableAvailabilityZonesForLoadBalancerError {
     Unknown(String),
 }
 
-
 impl DisableAvailabilityZonesForLoadBalancerError {
     pub fn from_body(body: &str) -> DisableAvailabilityZonesForLoadBalancerError {
         let reader = EventReader::new(body.as_bytes());
@@ -7184,13 +7406,19 @@ impl DisableAvailabilityZonesForLoadBalancerError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessPointNotFoundException" => DisableAvailabilityZonesForLoadBalancerError::AccessPointNotFound(String::from(parsed_error.message)),
-                    "InvalidConfigurationRequestException" => DisableAvailabilityZonesForLoadBalancerError::InvalidConfigurationRequest(String::from(parsed_error.message)),
-                    _ => DisableAvailabilityZonesForLoadBalancerError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessPointNotFoundException" => {
+                    DisableAvailabilityZonesForLoadBalancerError::AccessPointNotFound(
+                        String::from(parsed_error.message),
+                    )
                 }
-            }
+                "InvalidConfigurationRequestException" => {
+                    DisableAvailabilityZonesForLoadBalancerError::InvalidConfigurationRequest(
+                        String::from(parsed_error.message),
+                    )
+                }
+                _ => DisableAvailabilityZonesForLoadBalancerError::Unknown(String::from(body)),
+            },
             Err(_) => DisableAvailabilityZonesForLoadBalancerError::Unknown(body.to_string()),
         }
     }
@@ -7226,7 +7454,9 @@ impl Error for DisableAvailabilityZonesForLoadBalancerError {
     fn description(&self) -> &str {
         match *self {
             DisableAvailabilityZonesForLoadBalancerError::AccessPointNotFound(ref cause) => cause,
-            DisableAvailabilityZonesForLoadBalancerError::InvalidConfigurationRequest(ref cause) => cause,
+            DisableAvailabilityZonesForLoadBalancerError::InvalidConfigurationRequest(
+                ref cause,
+            ) => cause,
             DisableAvailabilityZonesForLoadBalancerError::Validation(ref cause) => cause,
             DisableAvailabilityZonesForLoadBalancerError::Credentials(ref err) => err.description(),
             DisableAvailabilityZonesForLoadBalancerError::HttpDispatch(ref dispatch_error) => {
@@ -7251,7 +7481,6 @@ pub enum EnableAvailabilityZonesForLoadBalancerError {
     Unknown(String),
 }
 
-
 impl EnableAvailabilityZonesForLoadBalancerError {
     pub fn from_body(body: &str) -> EnableAvailabilityZonesForLoadBalancerError {
         let reader = EventReader::new(body.as_bytes());
@@ -7259,12 +7488,14 @@ impl EnableAvailabilityZonesForLoadBalancerError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessPointNotFoundException" => EnableAvailabilityZonesForLoadBalancerError::AccessPointNotFound(String::from(parsed_error.message)),
-                    _ => EnableAvailabilityZonesForLoadBalancerError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessPointNotFoundException" => {
+                    EnableAvailabilityZonesForLoadBalancerError::AccessPointNotFound(String::from(
+                        parsed_error.message,
+                    ))
                 }
-            }
+                _ => EnableAvailabilityZonesForLoadBalancerError::Unknown(String::from(body)),
+            },
             Err(_) => EnableAvailabilityZonesForLoadBalancerError::Unknown(body.to_string()),
         }
     }
@@ -7328,7 +7559,6 @@ pub enum ModifyLoadBalancerAttributesError {
     Unknown(String),
 }
 
-
 impl ModifyLoadBalancerAttributesError {
     pub fn from_body(body: &str) -> ModifyLoadBalancerAttributesError {
         let reader = EventReader::new(body.as_bytes());
@@ -7336,14 +7566,24 @@ impl ModifyLoadBalancerAttributesError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessPointNotFoundException" => ModifyLoadBalancerAttributesError::AccessPointNotFound(String::from(parsed_error.message)),
-                    "InvalidConfigurationRequestException" => ModifyLoadBalancerAttributesError::InvalidConfigurationRequest(String::from(parsed_error.message)),
-                    "LoadBalancerAttributeNotFoundException" => ModifyLoadBalancerAttributesError::LoadBalancerAttributeNotFound(String::from(parsed_error.message)),
-                    _ => ModifyLoadBalancerAttributesError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessPointNotFoundException" => {
+                    ModifyLoadBalancerAttributesError::AccessPointNotFound(String::from(
+                        parsed_error.message,
+                    ))
                 }
-            }
+                "InvalidConfigurationRequestException" => {
+                    ModifyLoadBalancerAttributesError::InvalidConfigurationRequest(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "LoadBalancerAttributeNotFoundException" => {
+                    ModifyLoadBalancerAttributesError::LoadBalancerAttributeNotFound(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => ModifyLoadBalancerAttributesError::Unknown(String::from(body)),
+            },
             Err(_) => ModifyLoadBalancerAttributesError::Unknown(body.to_string()),
         }
     }
@@ -7407,7 +7647,6 @@ pub enum RegisterInstancesWithLoadBalancerError {
     Unknown(String),
 }
 
-
 impl RegisterInstancesWithLoadBalancerError {
     pub fn from_body(body: &str) -> RegisterInstancesWithLoadBalancerError {
         let reader = EventReader::new(body.as_bytes());
@@ -7415,13 +7654,19 @@ impl RegisterInstancesWithLoadBalancerError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessPointNotFoundException" => RegisterInstancesWithLoadBalancerError::AccessPointNotFound(String::from(parsed_error.message)),
-                    "InvalidEndPointException" => RegisterInstancesWithLoadBalancerError::InvalidEndPoint(String::from(parsed_error.message)),
-                    _ => RegisterInstancesWithLoadBalancerError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessPointNotFoundException" => {
+                    RegisterInstancesWithLoadBalancerError::AccessPointNotFound(String::from(
+                        parsed_error.message,
+                    ))
                 }
-            }
+                "InvalidEndPointException" => {
+                    RegisterInstancesWithLoadBalancerError::InvalidEndPoint(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => RegisterInstancesWithLoadBalancerError::Unknown(String::from(body)),
+            },
             Err(_) => RegisterInstancesWithLoadBalancerError::Unknown(body.to_string()),
         }
     }
@@ -7482,7 +7727,6 @@ pub enum RemoveTagsError {
     Unknown(String),
 }
 
-
 impl RemoveTagsError {
     pub fn from_body(body: &str) -> RemoveTagsError {
         let reader = EventReader::new(body.as_bytes());
@@ -7490,14 +7734,12 @@ impl RemoveTagsError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessPointNotFoundException" => {
-                        RemoveTagsError::AccessPointNotFound(String::from(parsed_error.message))
-                    }
-                    _ => RemoveTagsError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessPointNotFoundException" => {
+                    RemoveTagsError::AccessPointNotFound(String::from(parsed_error.message))
                 }
-            }
+                _ => RemoveTagsError::Unknown(String::from(body)),
+            },
             Err(_) => RemoveTagsError::Unknown(body.to_string()),
         }
     }
@@ -7563,7 +7805,6 @@ pub enum SetLoadBalancerListenerSSLCertificateError {
     Unknown(String),
 }
 
-
 impl SetLoadBalancerListenerSSLCertificateError {
     pub fn from_body(body: &str) -> SetLoadBalancerListenerSSLCertificateError {
         let reader = EventReader::new(body.as_bytes());
@@ -7571,16 +7812,34 @@ impl SetLoadBalancerListenerSSLCertificateError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessPointNotFoundException" => SetLoadBalancerListenerSSLCertificateError::AccessPointNotFound(String::from(parsed_error.message)),
-                    "CertificateNotFoundException" => SetLoadBalancerListenerSSLCertificateError::CertificateNotFound(String::from(parsed_error.message)),
-                    "InvalidConfigurationRequestException" => SetLoadBalancerListenerSSLCertificateError::InvalidConfigurationRequest(String::from(parsed_error.message)),
-                    "ListenerNotFoundException" => SetLoadBalancerListenerSSLCertificateError::ListenerNotFound(String::from(parsed_error.message)),
-                    "UnsupportedProtocolException" => SetLoadBalancerListenerSSLCertificateError::UnsupportedProtocol(String::from(parsed_error.message)),
-                    _ => SetLoadBalancerListenerSSLCertificateError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessPointNotFoundException" => {
+                    SetLoadBalancerListenerSSLCertificateError::AccessPointNotFound(String::from(
+                        parsed_error.message,
+                    ))
                 }
-            }
+                "CertificateNotFoundException" => {
+                    SetLoadBalancerListenerSSLCertificateError::CertificateNotFound(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidConfigurationRequestException" => {
+                    SetLoadBalancerListenerSSLCertificateError::InvalidConfigurationRequest(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "ListenerNotFoundException" => {
+                    SetLoadBalancerListenerSSLCertificateError::ListenerNotFound(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "UnsupportedProtocolException" => {
+                    SetLoadBalancerListenerSSLCertificateError::UnsupportedProtocol(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => SetLoadBalancerListenerSSLCertificateError::Unknown(String::from(body)),
+            },
             Err(_) => SetLoadBalancerListenerSSLCertificateError::Unknown(body.to_string()),
         }
     }
@@ -7650,7 +7909,6 @@ pub enum SetLoadBalancerPoliciesForBackendServerError {
     Unknown(String),
 }
 
-
 impl SetLoadBalancerPoliciesForBackendServerError {
     pub fn from_body(body: &str) -> SetLoadBalancerPoliciesForBackendServerError {
         let reader = EventReader::new(body.as_bytes());
@@ -7658,14 +7916,24 @@ impl SetLoadBalancerPoliciesForBackendServerError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessPointNotFoundException" => SetLoadBalancerPoliciesForBackendServerError::AccessPointNotFound(String::from(parsed_error.message)),
-                    "InvalidConfigurationRequestException" => SetLoadBalancerPoliciesForBackendServerError::InvalidConfigurationRequest(String::from(parsed_error.message)),
-                    "PolicyNotFoundException" => SetLoadBalancerPoliciesForBackendServerError::PolicyNotFound(String::from(parsed_error.message)),
-                    _ => SetLoadBalancerPoliciesForBackendServerError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessPointNotFoundException" => {
+                    SetLoadBalancerPoliciesForBackendServerError::AccessPointNotFound(
+                        String::from(parsed_error.message),
+                    )
                 }
-            }
+                "InvalidConfigurationRequestException" => {
+                    SetLoadBalancerPoliciesForBackendServerError::InvalidConfigurationRequest(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "PolicyNotFoundException" => {
+                    SetLoadBalancerPoliciesForBackendServerError::PolicyNotFound(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => SetLoadBalancerPoliciesForBackendServerError::Unknown(String::from(body)),
+            },
             Err(_) => SetLoadBalancerPoliciesForBackendServerError::Unknown(body.to_string()),
         }
     }
@@ -7701,7 +7969,9 @@ impl Error for SetLoadBalancerPoliciesForBackendServerError {
     fn description(&self) -> &str {
         match *self {
             SetLoadBalancerPoliciesForBackendServerError::AccessPointNotFound(ref cause) => cause,
-            SetLoadBalancerPoliciesForBackendServerError::InvalidConfigurationRequest(ref cause) => cause,
+            SetLoadBalancerPoliciesForBackendServerError::InvalidConfigurationRequest(
+                ref cause,
+            ) => cause,
             SetLoadBalancerPoliciesForBackendServerError::PolicyNotFound(ref cause) => cause,
             SetLoadBalancerPoliciesForBackendServerError::Validation(ref cause) => cause,
             SetLoadBalancerPoliciesForBackendServerError::Credentials(ref err) => err.description(),
@@ -7733,7 +8003,6 @@ pub enum SetLoadBalancerPoliciesOfListenerError {
     Unknown(String),
 }
 
-
 impl SetLoadBalancerPoliciesOfListenerError {
     pub fn from_body(body: &str) -> SetLoadBalancerPoliciesOfListenerError {
         let reader = EventReader::new(body.as_bytes());
@@ -7741,15 +8010,29 @@ impl SetLoadBalancerPoliciesOfListenerError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessPointNotFoundException" => SetLoadBalancerPoliciesOfListenerError::AccessPointNotFound(String::from(parsed_error.message)),
-                    "InvalidConfigurationRequestException" => SetLoadBalancerPoliciesOfListenerError::InvalidConfigurationRequest(String::from(parsed_error.message)),
-                    "ListenerNotFoundException" => SetLoadBalancerPoliciesOfListenerError::ListenerNotFound(String::from(parsed_error.message)),
-                    "PolicyNotFoundException" => SetLoadBalancerPoliciesOfListenerError::PolicyNotFound(String::from(parsed_error.message)),
-                    _ => SetLoadBalancerPoliciesOfListenerError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessPointNotFoundException" => {
+                    SetLoadBalancerPoliciesOfListenerError::AccessPointNotFound(String::from(
+                        parsed_error.message,
+                    ))
                 }
-            }
+                "InvalidConfigurationRequestException" => {
+                    SetLoadBalancerPoliciesOfListenerError::InvalidConfigurationRequest(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "ListenerNotFoundException" => {
+                    SetLoadBalancerPoliciesOfListenerError::ListenerNotFound(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "PolicyNotFoundException" => {
+                    SetLoadBalancerPoliciesOfListenerError::PolicyNotFound(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => SetLoadBalancerPoliciesOfListenerError::Unknown(String::from(body)),
+            },
             Err(_) => SetLoadBalancerPoliciesOfListenerError::Unknown(body.to_string()),
         }
     }
@@ -7802,193 +8085,182 @@ pub trait Elb {
     #[doc="<p>Adds the specified tags to the specified load balancer. Each load balancer can have a maximum of 10 tags.</p> <p>Each tag consists of a key and an optional value. If a tag with the same key is already associated with the load balancer, <code>AddTags</code> updates its value.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/add-remove-tags.html\">Tag Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
     fn add_tags(&self, input: &AddTagsInput) -> Result<AddTagsOutput, AddTagsError>;
 
-
     #[doc="<p>Associates one or more security groups with your load balancer in a virtual private cloud (VPC). The specified security groups override the previously associated security groups.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-security-groups.html#elb-vpc-security-groups\">Security Groups for Load Balancers in a VPC</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
-    fn apply_security_groups_to_load_balancer
-        (&self,
-         input: &ApplySecurityGroupsToLoadBalancerInput)
-         -> Result<ApplySecurityGroupsToLoadBalancerOutput, ApplySecurityGroupsToLoadBalancerError>;
-
+    fn apply_security_groups_to_load_balancer(
+        &self,
+        input: &ApplySecurityGroupsToLoadBalancerInput,
+    ) -> Result<ApplySecurityGroupsToLoadBalancerOutput, ApplySecurityGroupsToLoadBalancerError>;
 
     #[doc="<p>Adds one or more subnets to the set of configured subnets for the specified load balancer.</p> <p>The load balancer evenly distributes requests across all registered subnets. For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-manage-subnets.html\">Add or Remove Subnets for Your Load Balancer in a VPC</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
-    fn attach_load_balancer_to_subnets
-        (&self,
-         input: &AttachLoadBalancerToSubnetsInput)
-         -> Result<AttachLoadBalancerToSubnetsOutput, AttachLoadBalancerToSubnetsError>;
-
+    fn attach_load_balancer_to_subnets(
+        &self,
+        input: &AttachLoadBalancerToSubnetsInput,
+    ) -> Result<AttachLoadBalancerToSubnetsOutput, AttachLoadBalancerToSubnetsError>;
 
     #[doc="<p>Specifies the health check settings to use when evaluating the health state of your EC2 instances.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-healthchecks.html\">Configure Health Checks for Your Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
-    fn configure_health_check(&self,
-                              input: &ConfigureHealthCheckInput)
-                              -> Result<ConfigureHealthCheckOutput, ConfigureHealthCheckError>;
-
+    fn configure_health_check(
+        &self,
+        input: &ConfigureHealthCheckInput,
+    ) -> Result<ConfigureHealthCheckOutput, ConfigureHealthCheckError>;
 
     #[doc="<p>Generates a stickiness policy with sticky session lifetimes that follow that of an application-generated cookie. This policy can be associated only with HTTP/HTTPS listeners.</p> <p>This policy is similar to the policy created by <a>CreateLBCookieStickinessPolicy</a>, except that the lifetime of the special Elastic Load Balancing cookie, <code>AWSELB</code>, follows the lifetime of the application-generated cookie specified in the policy configuration. The load balancer only inserts a new stickiness cookie when the application response includes a new application cookie.</p> <p>If the application cookie is explicitly removed or expires, the session stops being sticky until a new application cookie is issued.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-application\">Application-Controlled Session Stickiness</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
-    fn create_app_cookie_stickiness_policy
-        (&self,
-         input: &CreateAppCookieStickinessPolicyInput)
-         -> Result<CreateAppCookieStickinessPolicyOutput, CreateAppCookieStickinessPolicyError>;
-
+    fn create_app_cookie_stickiness_policy(
+        &self,
+        input: &CreateAppCookieStickinessPolicyInput,
+    ) -> Result<CreateAppCookieStickinessPolicyOutput, CreateAppCookieStickinessPolicyError>;
 
     #[doc="<p>Generates a stickiness policy with sticky session lifetimes controlled by the lifetime of the browser (user-agent) or a specified expiration period. This policy can be associated only with HTTP/HTTPS listeners.</p> <p>When a load balancer implements this policy, the load balancer uses a special cookie to track the instance for each request. When the load balancer receives a request, it first checks to see if this cookie is present in the request. If so, the load balancer sends the request to the application server specified in the cookie. If not, the load balancer sends the request to a server that is chosen based on the existing load-balancing algorithm.</p> <p>A cookie is inserted into the response for binding subsequent requests from the same user to that server. The validity of the cookie is based on the cookie expiration time, which is specified in the policy configuration.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-duration\">Duration-Based Session Stickiness</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
-    fn create_lb_cookie_stickiness_policy
-        (&self,
-         input: &CreateLBCookieStickinessPolicyInput)
-         -> Result<CreateLBCookieStickinessPolicyOutput, CreateLBCookieStickinessPolicyError>;
-
+    fn create_lb_cookie_stickiness_policy(
+        &self,
+        input: &CreateLBCookieStickinessPolicyInput,
+    ) -> Result<CreateLBCookieStickinessPolicyOutput, CreateLBCookieStickinessPolicyError>;
 
     #[doc="<p>Creates a Classic Load Balancer.</p> <p>You can add listeners, security groups, subnets, and tags when you create your load balancer, or you can add them later using <a>CreateLoadBalancerListeners</a>, <a>ApplySecurityGroupsToLoadBalancer</a>, <a>AttachLoadBalancerToSubnets</a>, and <a>AddTags</a>.</p> <p>To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>You can create up to 20 load balancers per region per account. You can request an increase for the number of load balancers for your account. For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-limits.html\">Limits for Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
-    fn create_load_balancer(&self,
-                            input: &CreateAccessPointInput)
-                            -> Result<CreateAccessPointOutput, CreateLoadBalancerError>;
-
+    fn create_load_balancer(
+        &self,
+        input: &CreateAccessPointInput,
+    ) -> Result<CreateAccessPointOutput, CreateLoadBalancerError>;
 
     #[doc="<p>Creates one or more listeners for the specified load balancer. If a listener with the specified port does not already exist, it is created; otherwise, the properties of the new listener must match the properties of the existing listener.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-listener-config.html\">Listeners for Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
-    fn create_load_balancer_listeners
-        (&self,
-         input: &CreateLoadBalancerListenerInput)
-         -> Result<CreateLoadBalancerListenerOutput, CreateLoadBalancerListenersError>;
-
+    fn create_load_balancer_listeners(
+        &self,
+        input: &CreateLoadBalancerListenerInput,
+    ) -> Result<CreateLoadBalancerListenerOutput, CreateLoadBalancerListenersError>;
 
     #[doc="<p>Creates a policy with the specified attributes for the specified load balancer.</p> <p>Policies are settings that are saved for your load balancer and that can be applied to the listener or the application server, depending on the policy type.</p>"]
-    fn create_load_balancer_policy
-        (&self,
-         input: &CreateLoadBalancerPolicyInput)
-         -> Result<CreateLoadBalancerPolicyOutput, CreateLoadBalancerPolicyError>;
-
+    fn create_load_balancer_policy(
+        &self,
+        input: &CreateLoadBalancerPolicyInput,
+    ) -> Result<CreateLoadBalancerPolicyOutput, CreateLoadBalancerPolicyError>;
 
     #[doc="<p>Deletes the specified load balancer.</p> <p>If you are attempting to recreate a load balancer, you must reconfigure all settings. The DNS name associated with a deleted load balancer are no longer usable. The name and associated DNS record of the deleted load balancer no longer exist and traffic sent to any of its IP addresses is no longer delivered to your instances.</p> <p>If the load balancer does not exist or has already been deleted, the call to <code>DeleteLoadBalancer</code> still succeeds.</p>"]
-    fn delete_load_balancer(&self,
-                            input: &DeleteAccessPointInput)
-                            -> Result<DeleteAccessPointOutput, DeleteLoadBalancerError>;
+    fn delete_load_balancer(
+        &self,
+        input: &DeleteAccessPointInput,
+    ) -> Result<DeleteAccessPointOutput, DeleteLoadBalancerError>;
 
-
-    #[doc="<p>Deletes the specified listeners from the specified load balancer.</p>"]
-    fn delete_load_balancer_listeners
-        (&self,
-         input: &DeleteLoadBalancerListenerInput)
-         -> Result<DeleteLoadBalancerListenerOutput, DeleteLoadBalancerListenersError>;
-
+    #[doc = "<p>Deletes the specified listeners from the specified load balancer.</p>"]
+    fn delete_load_balancer_listeners(
+        &self,
+        input: &DeleteLoadBalancerListenerInput,
+    ) -> Result<DeleteLoadBalancerListenerOutput, DeleteLoadBalancerListenersError>;
 
     #[doc="<p>Deletes the specified policy from the specified load balancer. This policy must not be enabled for any listeners.</p>"]
-    fn delete_load_balancer_policy
-        (&self,
-         input: &DeleteLoadBalancerPolicyInput)
-         -> Result<DeleteLoadBalancerPolicyOutput, DeleteLoadBalancerPolicyError>;
-
+    fn delete_load_balancer_policy(
+        &self,
+        input: &DeleteLoadBalancerPolicyInput,
+    ) -> Result<DeleteLoadBalancerPolicyOutput, DeleteLoadBalancerPolicyError>;
 
     #[doc="<p>Deregisters the specified instances from the specified load balancer. After the instance is deregistered, it no longer receives traffic from the load balancer.</p> <p>You can use <a>DescribeLoadBalancers</a> to verify that the instance is deregistered from the load balancer.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-deregister-register-instances.html\">Register or De-Register EC2 Instances</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
-    fn deregister_instances_from_load_balancer
-        (&self,
-         input: &DeregisterEndPointsInput)
-         -> Result<DeregisterEndPointsOutput, DeregisterInstancesFromLoadBalancerError>;
-
+    fn deregister_instances_from_load_balancer(
+        &self,
+        input: &DeregisterEndPointsInput,
+    ) -> Result<DeregisterEndPointsOutput, DeregisterInstancesFromLoadBalancerError>;
 
     #[doc="<p>Describes the current Elastic Load Balancing resource limits for your AWS account.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-limits.html\">Limits for Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
-    fn describe_account_limits
-        (&self,
-         input: &DescribeAccountLimitsInput)
-         -> Result<DescribeAccountLimitsOutput, DescribeAccountLimitsError>;
-
+    fn describe_account_limits(
+        &self,
+        input: &DescribeAccountLimitsInput,
+    ) -> Result<DescribeAccountLimitsOutput, DescribeAccountLimitsError>;
 
     #[doc="<p>Describes the state of the specified instances with respect to the specified load balancer. If no instances are specified, the call describes the state of all instances that are currently registered with the load balancer. If instances are specified, their state is returned even if they are no longer registered with the load balancer. The state of terminated instances is not returned.</p>"]
-    fn describe_instance_health
-        (&self,
-         input: &DescribeEndPointStateInput)
-         -> Result<DescribeEndPointStateOutput, DescribeInstanceHealthError>;
+    fn describe_instance_health(
+        &self,
+        input: &DescribeEndPointStateInput,
+    ) -> Result<DescribeEndPointStateOutput, DescribeInstanceHealthError>;
 
-
-    #[doc="<p>Describes the attributes for the specified load balancer.</p>"]
-    fn describe_load_balancer_attributes
-        (&self,
-         input: &DescribeLoadBalancerAttributesInput)
-         -> Result<DescribeLoadBalancerAttributesOutput, DescribeLoadBalancerAttributesError>;
-
+    #[doc = "<p>Describes the attributes for the specified load balancer.</p>"]
+    fn describe_load_balancer_attributes(
+        &self,
+        input: &DescribeLoadBalancerAttributesInput,
+    ) -> Result<DescribeLoadBalancerAttributesOutput, DescribeLoadBalancerAttributesError>;
 
     #[doc="<p>Describes the specified policies.</p> <p>If you specify a load balancer name, the action returns the descriptions of all policies created for the load balancer. If you specify a policy name associated with your load balancer, the action returns the description of that policy. If you don't specify a load balancer name, the action returns descriptions of the specified sample policies, or descriptions of all sample policies. The names of the sample policies have the <code>ELBSample-</code> prefix.</p>"]
-    fn describe_load_balancer_policies
-        (&self,
-         input: &DescribeLoadBalancerPoliciesInput)
-         -> Result<DescribeLoadBalancerPoliciesOutput, DescribeLoadBalancerPoliciesError>;
-
+    fn describe_load_balancer_policies(
+        &self,
+        input: &DescribeLoadBalancerPoliciesInput,
+    ) -> Result<DescribeLoadBalancerPoliciesOutput, DescribeLoadBalancerPoliciesError>;
 
     #[doc="<p>Describes the specified load balancer policy types or all load balancer policy types.</p> <p>The description of each type indicates how it can be used. For example, some policies can be used only with layer 7 listeners, some policies can be used only with layer 4 listeners, and some policies can be used only with your EC2 instances.</p> <p>You can use <a>CreateLoadBalancerPolicy</a> to create a policy configuration for any of these policy types. Then, depending on the policy type, use either <a>SetLoadBalancerPoliciesOfListener</a> or <a>SetLoadBalancerPoliciesForBackendServer</a> to set the policy.</p>"]
-    fn describe_load_balancer_policy_types
-        (&self,
-         input: &DescribeLoadBalancerPolicyTypesInput)
-         -> Result<DescribeLoadBalancerPolicyTypesOutput, DescribeLoadBalancerPolicyTypesError>;
-
+    fn describe_load_balancer_policy_types(
+        &self,
+        input: &DescribeLoadBalancerPolicyTypesInput,
+    ) -> Result<DescribeLoadBalancerPolicyTypesOutput, DescribeLoadBalancerPolicyTypesError>;
 
     #[doc="<p>Describes the specified the load balancers. If no load balancers are specified, the call describes all of your load balancers.</p>"]
-    fn describe_load_balancers
-        (&self,
-         input: &DescribeAccessPointsInput)
-         -> Result<DescribeAccessPointsOutput, DescribeLoadBalancersError>;
+    fn describe_load_balancers(
+        &self,
+        input: &DescribeAccessPointsInput,
+    ) -> Result<DescribeAccessPointsOutput, DescribeLoadBalancersError>;
 
-
-    #[doc="<p>Describes the tags associated with the specified load balancers.</p>"]
-    fn describe_tags(&self,
-                     input: &DescribeTagsInput)
-                     -> Result<DescribeTagsOutput, DescribeTagsError>;
-
+    #[doc = "<p>Describes the tags associated with the specified load balancers.</p>"]
+    fn describe_tags(
+        &self,
+        input: &DescribeTagsInput,
+    ) -> Result<DescribeTagsOutput, DescribeTagsError>;
 
     #[doc="<p>Removes the specified subnets from the set of configured subnets for the load balancer.</p> <p>After a subnet is removed, all EC2 instances registered with the load balancer in the removed subnet go into the <code>OutOfService</code> state. Then, the load balancer balances the traffic among the remaining routable subnets.</p>"]
-    fn detach_load_balancer_from_subnets
-        (&self,
-         input: &DetachLoadBalancerFromSubnetsInput)
-         -> Result<DetachLoadBalancerFromSubnetsOutput, DetachLoadBalancerFromSubnetsError>;
-
+    fn detach_load_balancer_from_subnets(
+        &self,
+        input: &DetachLoadBalancerFromSubnetsInput,
+    ) -> Result<DetachLoadBalancerFromSubnetsOutput, DetachLoadBalancerFromSubnetsError>;
 
     #[doc="<p>Removes the specified Availability Zones from the set of Availability Zones for the specified load balancer.</p> <p>There must be at least one Availability Zone registered with a load balancer at all times. After an Availability Zone is removed, all instances registered with the load balancer that are in the removed Availability Zone go into the <code>OutOfService</code> state. Then, the load balancer attempts to equally balance the traffic among its remaining Availability Zones.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-az.html\">Add or Remove Availability Zones</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
-    fn disable_availability_zones_for_load_balancer
-        (&self,
-         input: &RemoveAvailabilityZonesInput)
-         -> Result<RemoveAvailabilityZonesOutput, DisableAvailabilityZonesForLoadBalancerError>;
-
+    fn disable_availability_zones_for_load_balancer(
+        &self,
+        input: &RemoveAvailabilityZonesInput,
+    ) -> Result<RemoveAvailabilityZonesOutput, DisableAvailabilityZonesForLoadBalancerError>;
 
     #[doc="<p>Adds the specified Availability Zones to the set of Availability Zones for the specified load balancer.</p> <p>The load balancer evenly distributes requests across all its registered Availability Zones that contain instances.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-az.html\">Add or Remove Availability Zones</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
-    fn enable_availability_zones_for_load_balancer
-        (&self,
-         input: &AddAvailabilityZonesInput)
-         -> Result<AddAvailabilityZonesOutput, EnableAvailabilityZonesForLoadBalancerError>;
-
+    fn enable_availability_zones_for_load_balancer(
+        &self,
+        input: &AddAvailabilityZonesInput,
+    ) -> Result<AddAvailabilityZonesOutput, EnableAvailabilityZonesForLoadBalancerError>;
 
     #[doc="<p>Modifies the attributes of the specified load balancer.</p> <p>You can modify the load balancer attributes, such as <code>AccessLogs</code>, <code>ConnectionDraining</code>, and <code>CrossZoneLoadBalancing</code> by either enabling or disabling them. Or, you can modify the load balancer attribute <code>ConnectionSettings</code> by specifying an idle connection timeout value for your load balancer.</p> <p>For more information, see the following in the <i>Classic Load Balancer Guide</i>:</p> <ul> <li> <p> <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-crosszone-lb.html\">Cross-Zone Load Balancing</a> </p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/config-conn-drain.html\">Connection Draining</a> </p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/access-log-collection.html\">Access Logs</a> </p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/config-idle-timeout.html\">Idle Connection Timeout</a> </p> </li> </ul>"]
-    fn modify_load_balancer_attributes
-        (&self,
-         input: &ModifyLoadBalancerAttributesInput)
-         -> Result<ModifyLoadBalancerAttributesOutput, ModifyLoadBalancerAttributesError>;
-
+    fn modify_load_balancer_attributes(
+        &self,
+        input: &ModifyLoadBalancerAttributesInput,
+    ) -> Result<ModifyLoadBalancerAttributesOutput, ModifyLoadBalancerAttributesError>;
 
     #[doc="<p>Adds the specified instances to the specified load balancer.</p> <p>The instance must be a running instance in the same network as the load balancer (EC2-Classic or the same VPC). If you have EC2-Classic instances and a load balancer in a VPC with ClassicLink enabled, you can link the EC2-Classic instances to that VPC and then register the linked EC2-Classic instances with the load balancer in the VPC.</p> <p>Note that <code>RegisterInstanceWithLoadBalancer</code> completes when the request has been registered. Instance registration takes a little time to complete. To check the state of the registered instances, use <a>DescribeLoadBalancers</a> or <a>DescribeInstanceHealth</a>.</p> <p>After the instance is registered, it starts receiving traffic and requests from the load balancer. Any instance that is not in one of the Availability Zones registered for the load balancer is moved to the <code>OutOfService</code> state. If an Availability Zone is added to the load balancer later, any instances registered with the load balancer move to the <code>InService</code> state.</p> <p>To deregister instances from a load balancer, use <a>DeregisterInstancesFromLoadBalancer</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-deregister-register-instances.html\">Register or De-Register EC2 Instances</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
-    fn register_instances_with_load_balancer
-        (&self,
-         input: &RegisterEndPointsInput)
-         -> Result<RegisterEndPointsOutput, RegisterInstancesWithLoadBalancerError>;
+    fn register_instances_with_load_balancer(
+        &self,
+        input: &RegisterEndPointsInput,
+    ) -> Result<RegisterEndPointsOutput, RegisterInstancesWithLoadBalancerError>;
 
-
-    #[doc="<p>Removes one or more tags from the specified load balancer.</p>"]
+    #[doc = "<p>Removes one or more tags from the specified load balancer.</p>"]
     fn remove_tags(&self, input: &RemoveTagsInput) -> Result<RemoveTagsOutput, RemoveTagsError>;
 
-
     #[doc="<p>Sets the certificate that terminates the specified listener's SSL connections. The specified certificate replaces any prior certificate that was used on the same load balancer and port.</p> <p>For more information about updating your SSL certificate, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-update-ssl-cert.html\">Replace the SSL Certificate for Your Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
-    fn set_load_balancer_listener_ssl_certificate(&self, input: &SetLoadBalancerListenerSSLCertificateInput) -> Result<SetLoadBalancerListenerSSLCertificateOutput, SetLoadBalancerListenerSSLCertificateError>;
-
+    fn set_load_balancer_listener_ssl_certificate(
+        &self,
+        input: &SetLoadBalancerListenerSSLCertificateInput,
+    ) -> Result<
+        SetLoadBalancerListenerSSLCertificateOutput,
+        SetLoadBalancerListenerSSLCertificateError,
+    >;
 
     #[doc="<p>Replaces the set of policies associated with the specified port on which the EC2 instance is listening with a new set of policies. At this time, only the back-end server authentication policy type can be applied to the instance ports; this policy type is composed of multiple public key policies.</p> <p>Each time you use <code>SetLoadBalancerPoliciesForBackendServer</code> to enable the policies, use the <code>PolicyNames</code> parameter to list the policies that you want to enable.</p> <p>You can use <a>DescribeLoadBalancers</a> or <a>DescribeLoadBalancerPolicies</a> to verify that the policy is associated with the EC2 instance.</p> <p>For more information about enabling back-end instance authentication, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-create-https-ssl-load-balancer.html#configure_backendauth_clt\">Configure Back-end Instance Authentication</a> in the <i>Classic Load Balancer Guide</i>. For more information about Proxy Protocol, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-proxy-protocol.html\">Configure Proxy Protocol Support</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
-    fn set_load_balancer_policies_for_backend_server(&self, input: &SetLoadBalancerPoliciesForBackendServerInput) -> Result<SetLoadBalancerPoliciesForBackendServerOutput, SetLoadBalancerPoliciesForBackendServerError>;
-
+    fn set_load_balancer_policies_for_backend_server(
+        &self,
+        input: &SetLoadBalancerPoliciesForBackendServerInput,
+    ) -> Result<
+        SetLoadBalancerPoliciesForBackendServerOutput,
+        SetLoadBalancerPoliciesForBackendServerError,
+    >;
 
     #[doc="<p>Replaces the current set of policies for the specified load balancer port with the specified set of policies.</p> <p>To enable back-end server authentication, use <a>SetLoadBalancerPoliciesForBackendServer</a>.</p> <p>For more information about setting policies, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/ssl-config-update.html\">Update the SSL Negotiation Configuration</a>, <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-duration\">Duration-Based Session Stickiness</a>, and <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-application\">Application-Controlled Session Stickiness</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
-    fn set_load_balancer_policies_of_listener
-        (&self,
-         input: &SetLoadBalancerPoliciesOfListenerInput)
-         -> Result<SetLoadBalancerPoliciesOfListenerOutput, SetLoadBalancerPoliciesOfListenerError>;
+    fn set_load_balancer_policies_of_listener(
+        &self,
+        input: &SetLoadBalancerPoliciesOfListenerInput,
+    ) -> Result<SetLoadBalancerPoliciesOfListenerOutput, SetLoadBalancerPoliciesOfListenerError>;
 }
 /// A client for the Elastic Load Balancing API.
 pub struct ElbClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -7996,8 +8268,9 @@ pub struct ElbClient<P, D>
 }
 
 impl<P, D> ElbClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         ElbClient {
@@ -8009,8 +8282,9 @@ impl<P, D> ElbClient<P, D>
 }
 
 impl<P, D> Elb for ElbClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     #[doc="<p>Adds the specified tags to the specified load balancer. Each load balancer can have a maximum of 10 tags.</p> <p>Each tag consists of a key and an optional value. If a tag with the same key is already associated with the load balancer, <code>AddTags</code> updates its value.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/add-remove-tags.html\">Tag Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
     fn add_tags(&self, input: &AddTagsInput) -> Result<AddTagsOutput, AddTagsError> {
@@ -8026,7 +8300,6 @@ impl<P, D> Elb for ElbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8034,15 +8307,18 @@ impl<P, D> Elb for ElbClient<P, D>
                 if body.is_empty() {
                     result = AddTagsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(AddTagsOutputDeserializer::deserialize("AddTagsResult",
-                                                                         &mut stack));
+                    result = try!(AddTagsOutputDeserializer::deserialize(
+                        "AddTagsResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8051,17 +8327,19 @@ impl<P, D> Elb for ElbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AddTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AddTagsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Associates one or more security groups with your load balancer in a virtual private cloud (VPC). The specified security groups override the previously associated security groups.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-security-groups.html#elb-vpc-security-groups\">Security Groups for Load Balancers in a VPC</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
-    fn apply_security_groups_to_load_balancer
-        (&self,
-         input: &ApplySecurityGroupsToLoadBalancerInput)
-         -> Result<ApplySecurityGroupsToLoadBalancerOutput, ApplySecurityGroupsToLoadBalancerError> {
+    fn apply_security_groups_to_load_balancer(
+        &self,
+        input: &ApplySecurityGroupsToLoadBalancerInput,
+    ) -> Result<ApplySecurityGroupsToLoadBalancerOutput, ApplySecurityGroupsToLoadBalancerError>
+    {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -8074,7 +8352,6 @@ impl<P, D> Elb for ElbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8082,14 +8359,20 @@ impl<P, D> Elb for ElbClient<P, D>
                 if body.is_empty() {
                     result = ApplySecurityGroupsToLoadBalancerOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ApplySecurityGroupsToLoadBalancerOutputDeserializer::deserialize("ApplySecurityGroupsToLoadBalancerResult", &mut stack));
+                    result = try!(
+                        ApplySecurityGroupsToLoadBalancerOutputDeserializer::deserialize(
+                            "ApplySecurityGroupsToLoadBalancerResult",
+                            &mut stack
+                        )
+                    );
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8098,17 +8381,18 @@ impl<P, D> Elb for ElbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ApplySecurityGroupsToLoadBalancerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ApplySecurityGroupsToLoadBalancerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Adds one or more subnets to the set of configured subnets for the specified load balancer.</p> <p>The load balancer evenly distributes requests across all registered subnets. For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-manage-subnets.html\">Add or Remove Subnets for Your Load Balancer in a VPC</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
-    fn attach_load_balancer_to_subnets
-        (&self,
-         input: &AttachLoadBalancerToSubnetsInput)
-         -> Result<AttachLoadBalancerToSubnetsOutput, AttachLoadBalancerToSubnetsError> {
+    fn attach_load_balancer_to_subnets(
+        &self,
+        input: &AttachLoadBalancerToSubnetsInput,
+    ) -> Result<AttachLoadBalancerToSubnetsOutput, AttachLoadBalancerToSubnetsError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -8121,7 +8405,6 @@ impl<P, D> Elb for ElbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8129,14 +8412,18 @@ impl<P, D> Elb for ElbClient<P, D>
                 if body.is_empty() {
                     result = AttachLoadBalancerToSubnetsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(AttachLoadBalancerToSubnetsOutputDeserializer::deserialize("AttachLoadBalancerToSubnetsResult", &mut stack));
+                    result = try!(AttachLoadBalancerToSubnetsOutputDeserializer::deserialize(
+                        "AttachLoadBalancerToSubnetsResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8145,17 +8432,18 @@ impl<P, D> Elb for ElbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AttachLoadBalancerToSubnetsError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(AttachLoadBalancerToSubnetsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Specifies the health check settings to use when evaluating the health state of your EC2 instances.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-healthchecks.html\">Configure Health Checks for Your Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
-    fn configure_health_check(&self,
-                              input: &ConfigureHealthCheckInput)
-                              -> Result<ConfigureHealthCheckOutput, ConfigureHealthCheckError> {
+    fn configure_health_check(
+        &self,
+        input: &ConfigureHealthCheckInput,
+    ) -> Result<ConfigureHealthCheckOutput, ConfigureHealthCheckError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -8168,7 +8456,6 @@ impl<P, D> Elb for ElbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8176,15 +8463,18 @@ impl<P, D> Elb for ElbClient<P, D>
                 if body.is_empty() {
                     result = ConfigureHealthCheckOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ConfigureHealthCheckOutputDeserializer::deserialize("ConfigureHealthCheckResult",
-                                                                                      &mut stack));
+                    result = try!(ConfigureHealthCheckOutputDeserializer::deserialize(
+                        "ConfigureHealthCheckResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8193,17 +8483,18 @@ impl<P, D> Elb for ElbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ConfigureHealthCheckError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ConfigureHealthCheckError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Generates a stickiness policy with sticky session lifetimes that follow that of an application-generated cookie. This policy can be associated only with HTTP/HTTPS listeners.</p> <p>This policy is similar to the policy created by <a>CreateLBCookieStickinessPolicy</a>, except that the lifetime of the special Elastic Load Balancing cookie, <code>AWSELB</code>, follows the lifetime of the application-generated cookie specified in the policy configuration. The load balancer only inserts a new stickiness cookie when the application response includes a new application cookie.</p> <p>If the application cookie is explicitly removed or expires, the session stops being sticky until a new application cookie is issued.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-application\">Application-Controlled Session Stickiness</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
-    fn create_app_cookie_stickiness_policy
-        (&self,
-         input: &CreateAppCookieStickinessPolicyInput)
-         -> Result<CreateAppCookieStickinessPolicyOutput, CreateAppCookieStickinessPolicyError> {
+    fn create_app_cookie_stickiness_policy(
+        &self,
+        input: &CreateAppCookieStickinessPolicyInput,
+    ) -> Result<CreateAppCookieStickinessPolicyOutput, CreateAppCookieStickinessPolicyError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -8216,7 +8507,6 @@ impl<P, D> Elb for ElbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8224,14 +8514,20 @@ impl<P, D> Elb for ElbClient<P, D>
                 if body.is_empty() {
                     result = CreateAppCookieStickinessPolicyOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateAppCookieStickinessPolicyOutputDeserializer::deserialize("CreateAppCookieStickinessPolicyResult", &mut stack));
+                    result = try!(
+                        CreateAppCookieStickinessPolicyOutputDeserializer::deserialize(
+                            "CreateAppCookieStickinessPolicyResult",
+                            &mut stack
+                        )
+                    );
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8240,18 +8536,18 @@ impl<P, D> Elb for ElbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateAppCookieStickinessPolicyError::from_body(String::from_utf8_lossy(&body)
-                                                                        .as_ref()))
+                Err(CreateAppCookieStickinessPolicyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Generates a stickiness policy with sticky session lifetimes controlled by the lifetime of the browser (user-agent) or a specified expiration period. This policy can be associated only with HTTP/HTTPS listeners.</p> <p>When a load balancer implements this policy, the load balancer uses a special cookie to track the instance for each request. When the load balancer receives a request, it first checks to see if this cookie is present in the request. If so, the load balancer sends the request to the application server specified in the cookie. If not, the load balancer sends the request to a server that is chosen based on the existing load-balancing algorithm.</p> <p>A cookie is inserted into the response for binding subsequent requests from the same user to that server. The validity of the cookie is based on the cookie expiration time, which is specified in the policy configuration.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-duration\">Duration-Based Session Stickiness</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
-    fn create_lb_cookie_stickiness_policy
-        (&self,
-         input: &CreateLBCookieStickinessPolicyInput)
-         -> Result<CreateLBCookieStickinessPolicyOutput, CreateLBCookieStickinessPolicyError> {
+    fn create_lb_cookie_stickiness_policy(
+        &self,
+        input: &CreateLBCookieStickinessPolicyInput,
+    ) -> Result<CreateLBCookieStickinessPolicyOutput, CreateLBCookieStickinessPolicyError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -8264,7 +8560,6 @@ impl<P, D> Elb for ElbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8272,14 +8567,20 @@ impl<P, D> Elb for ElbClient<P, D>
                 if body.is_empty() {
                     result = CreateLBCookieStickinessPolicyOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateLBCookieStickinessPolicyOutputDeserializer::deserialize("CreateLBCookieStickinessPolicyResult", &mut stack));
+                    result = try!(
+                        CreateLBCookieStickinessPolicyOutputDeserializer::deserialize(
+                            "CreateLBCookieStickinessPolicyResult",
+                            &mut stack
+                        )
+                    );
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8288,17 +8589,18 @@ impl<P, D> Elb for ElbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateLBCookieStickinessPolicyError::from_body(String::from_utf8_lossy(&body)
-                                                                       .as_ref()))
+                Err(CreateLBCookieStickinessPolicyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a Classic Load Balancer.</p> <p>You can add listeners, security groups, subnets, and tags when you create your load balancer, or you can add them later using <a>CreateLoadBalancerListeners</a>, <a>ApplySecurityGroupsToLoadBalancer</a>, <a>AttachLoadBalancerToSubnets</a>, and <a>AddTags</a>.</p> <p>To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>You can create up to 20 load balancers per region per account. You can request an increase for the number of load balancers for your account. For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-limits.html\">Limits for Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
-    fn create_load_balancer(&self,
-                            input: &CreateAccessPointInput)
-                            -> Result<CreateAccessPointOutput, CreateLoadBalancerError> {
+    fn create_load_balancer(
+        &self,
+        input: &CreateAccessPointInput,
+    ) -> Result<CreateAccessPointOutput, CreateLoadBalancerError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -8311,7 +8613,6 @@ impl<P, D> Elb for ElbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8319,15 +8620,18 @@ impl<P, D> Elb for ElbClient<P, D>
                 if body.is_empty() {
                     result = CreateAccessPointOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateAccessPointOutputDeserializer::deserialize("CreateLoadBalancerResult",
-                                                                                   &mut stack));
+                    result = try!(CreateAccessPointOutputDeserializer::deserialize(
+                        "CreateLoadBalancerResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8336,17 +8640,18 @@ impl<P, D> Elb for ElbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateLoadBalancerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateLoadBalancerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates one or more listeners for the specified load balancer. If a listener with the specified port does not already exist, it is created; otherwise, the properties of the new listener must match the properties of the existing listener.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-listener-config.html\">Listeners for Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
-    fn create_load_balancer_listeners
-        (&self,
-         input: &CreateLoadBalancerListenerInput)
-         -> Result<CreateLoadBalancerListenerOutput, CreateLoadBalancerListenersError> {
+    fn create_load_balancer_listeners(
+        &self,
+        input: &CreateLoadBalancerListenerInput,
+    ) -> Result<CreateLoadBalancerListenerOutput, CreateLoadBalancerListenersError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -8359,7 +8664,6 @@ impl<P, D> Elb for ElbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8367,16 +8671,18 @@ impl<P, D> Elb for ElbClient<P, D>
                 if body.is_empty() {
                     result = CreateLoadBalancerListenerOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(CreateLoadBalancerListenerOutputDeserializer::deserialize("CreateLoadBalancerListenersResult",
-                                                                                       &mut stack));
+                    result = try!(CreateLoadBalancerListenerOutputDeserializer::deserialize(
+                        "CreateLoadBalancerListenersResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8385,18 +8691,18 @@ impl<P, D> Elb for ElbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateLoadBalancerListenersError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(CreateLoadBalancerListenersError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a policy with the specified attributes for the specified load balancer.</p> <p>Policies are settings that are saved for your load balancer and that can be applied to the listener or the application server, depending on the policy type.</p>"]
-    fn create_load_balancer_policy
-        (&self,
-         input: &CreateLoadBalancerPolicyInput)
-         -> Result<CreateLoadBalancerPolicyOutput, CreateLoadBalancerPolicyError> {
+    fn create_load_balancer_policy(
+        &self,
+        input: &CreateLoadBalancerPolicyInput,
+    ) -> Result<CreateLoadBalancerPolicyOutput, CreateLoadBalancerPolicyError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -8409,7 +8715,6 @@ impl<P, D> Elb for ElbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8417,16 +8722,18 @@ impl<P, D> Elb for ElbClient<P, D>
                 if body.is_empty() {
                     result = CreateLoadBalancerPolicyOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(CreateLoadBalancerPolicyOutputDeserializer::deserialize("CreateLoadBalancerPolicyResult",
-                                                                                     &mut stack));
+                    result = try!(CreateLoadBalancerPolicyOutputDeserializer::deserialize(
+                        "CreateLoadBalancerPolicyResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8435,17 +8742,18 @@ impl<P, D> Elb for ElbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateLoadBalancerPolicyError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(CreateLoadBalancerPolicyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes the specified load balancer.</p> <p>If you are attempting to recreate a load balancer, you must reconfigure all settings. The DNS name associated with a deleted load balancer are no longer usable. The name and associated DNS record of the deleted load balancer no longer exist and traffic sent to any of its IP addresses is no longer delivered to your instances.</p> <p>If the load balancer does not exist or has already been deleted, the call to <code>DeleteLoadBalancer</code> still succeeds.</p>"]
-    fn delete_load_balancer(&self,
-                            input: &DeleteAccessPointInput)
-                            -> Result<DeleteAccessPointOutput, DeleteLoadBalancerError> {
+    fn delete_load_balancer(
+        &self,
+        input: &DeleteAccessPointInput,
+    ) -> Result<DeleteAccessPointOutput, DeleteLoadBalancerError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -8458,7 +8766,6 @@ impl<P, D> Elb for ElbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8466,15 +8773,18 @@ impl<P, D> Elb for ElbClient<P, D>
                 if body.is_empty() {
                     result = DeleteAccessPointOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DeleteAccessPointOutputDeserializer::deserialize("DeleteLoadBalancerResult",
-                                                                                   &mut stack));
+                    result = try!(DeleteAccessPointOutputDeserializer::deserialize(
+                        "DeleteLoadBalancerResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8483,17 +8793,18 @@ impl<P, D> Elb for ElbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteLoadBalancerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteLoadBalancerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes the specified listeners from the specified load balancer.</p>"]
-    fn delete_load_balancer_listeners
-        (&self,
-         input: &DeleteLoadBalancerListenerInput)
-         -> Result<DeleteLoadBalancerListenerOutput, DeleteLoadBalancerListenersError> {
+    #[doc = "<p>Deletes the specified listeners from the specified load balancer.</p>"]
+    fn delete_load_balancer_listeners(
+        &self,
+        input: &DeleteLoadBalancerListenerInput,
+    ) -> Result<DeleteLoadBalancerListenerOutput, DeleteLoadBalancerListenersError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -8506,7 +8817,6 @@ impl<P, D> Elb for ElbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8514,16 +8824,18 @@ impl<P, D> Elb for ElbClient<P, D>
                 if body.is_empty() {
                     result = DeleteLoadBalancerListenerOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(DeleteLoadBalancerListenerOutputDeserializer::deserialize("DeleteLoadBalancerListenersResult",
-                                                                                       &mut stack));
+                    result = try!(DeleteLoadBalancerListenerOutputDeserializer::deserialize(
+                        "DeleteLoadBalancerListenersResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8532,18 +8844,18 @@ impl<P, D> Elb for ElbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteLoadBalancerListenersError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(DeleteLoadBalancerListenersError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes the specified policy from the specified load balancer. This policy must not be enabled for any listeners.</p>"]
-    fn delete_load_balancer_policy
-        (&self,
-         input: &DeleteLoadBalancerPolicyInput)
-         -> Result<DeleteLoadBalancerPolicyOutput, DeleteLoadBalancerPolicyError> {
+    fn delete_load_balancer_policy(
+        &self,
+        input: &DeleteLoadBalancerPolicyInput,
+    ) -> Result<DeleteLoadBalancerPolicyOutput, DeleteLoadBalancerPolicyError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -8556,7 +8868,6 @@ impl<P, D> Elb for ElbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8564,16 +8875,18 @@ impl<P, D> Elb for ElbClient<P, D>
                 if body.is_empty() {
                     result = DeleteLoadBalancerPolicyOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(DeleteLoadBalancerPolicyOutputDeserializer::deserialize("DeleteLoadBalancerPolicyResult",
-                                                                                     &mut stack));
+                    result = try!(DeleteLoadBalancerPolicyOutputDeserializer::deserialize(
+                        "DeleteLoadBalancerPolicyResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8582,18 +8895,18 @@ impl<P, D> Elb for ElbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteLoadBalancerPolicyError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(DeleteLoadBalancerPolicyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deregisters the specified instances from the specified load balancer. After the instance is deregistered, it no longer receives traffic from the load balancer.</p> <p>You can use <a>DescribeLoadBalancers</a> to verify that the instance is deregistered from the load balancer.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-deregister-register-instances.html\">Register or De-Register EC2 Instances</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
-    fn deregister_instances_from_load_balancer
-        (&self,
-         input: &DeregisterEndPointsInput)
-         -> Result<DeregisterEndPointsOutput, DeregisterInstancesFromLoadBalancerError> {
+    fn deregister_instances_from_load_balancer(
+        &self,
+        input: &DeregisterEndPointsInput,
+    ) -> Result<DeregisterEndPointsOutput, DeregisterInstancesFromLoadBalancerError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -8606,7 +8919,6 @@ impl<P, D> Elb for ElbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8614,15 +8926,18 @@ impl<P, D> Elb for ElbClient<P, D>
                 if body.is_empty() {
                     result = DeregisterEndPointsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DeregisterEndPointsOutputDeserializer::deserialize("DeregisterInstancesFromLoadBalancerResult",
-                                                                                     &mut stack));
+                    result = try!(DeregisterEndPointsOutputDeserializer::deserialize(
+                        "DeregisterInstancesFromLoadBalancerResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8631,17 +8946,18 @@ impl<P, D> Elb for ElbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeregisterInstancesFromLoadBalancerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeregisterInstancesFromLoadBalancerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Describes the current Elastic Load Balancing resource limits for your AWS account.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-limits.html\">Limits for Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
-    fn describe_account_limits
-        (&self,
-         input: &DescribeAccountLimitsInput)
-         -> Result<DescribeAccountLimitsOutput, DescribeAccountLimitsError> {
+    fn describe_account_limits(
+        &self,
+        input: &DescribeAccountLimitsInput,
+    ) -> Result<DescribeAccountLimitsOutput, DescribeAccountLimitsError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -8654,7 +8970,6 @@ impl<P, D> Elb for ElbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8662,15 +8977,18 @@ impl<P, D> Elb for ElbClient<P, D>
                 if body.is_empty() {
                     result = DescribeAccountLimitsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeAccountLimitsOutputDeserializer::deserialize("DescribeAccountLimitsResult",
-                                                                                       &mut stack));
+                    result = try!(DescribeAccountLimitsOutputDeserializer::deserialize(
+                        "DescribeAccountLimitsResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8679,17 +8997,18 @@ impl<P, D> Elb for ElbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeAccountLimitsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeAccountLimitsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Describes the state of the specified instances with respect to the specified load balancer. If no instances are specified, the call describes the state of all instances that are currently registered with the load balancer. If instances are specified, their state is returned even if they are no longer registered with the load balancer. The state of terminated instances is not returned.</p>"]
-    fn describe_instance_health
-        (&self,
-         input: &DescribeEndPointStateInput)
-         -> Result<DescribeEndPointStateOutput, DescribeInstanceHealthError> {
+    fn describe_instance_health(
+        &self,
+        input: &DescribeEndPointStateInput,
+    ) -> Result<DescribeEndPointStateOutput, DescribeInstanceHealthError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -8702,7 +9021,6 @@ impl<P, D> Elb for ElbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8710,15 +9028,18 @@ impl<P, D> Elb for ElbClient<P, D>
                 if body.is_empty() {
                     result = DescribeEndPointStateOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeEndPointStateOutputDeserializer::deserialize("DescribeInstanceHealthResult",
-                                                                                       &mut stack));
+                    result = try!(DescribeEndPointStateOutputDeserializer::deserialize(
+                        "DescribeInstanceHealthResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8727,17 +9048,18 @@ impl<P, D> Elb for ElbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeInstanceHealthError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeInstanceHealthError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Describes the attributes for the specified load balancer.</p>"]
-    fn describe_load_balancer_attributes
-        (&self,
-         input: &DescribeLoadBalancerAttributesInput)
-         -> Result<DescribeLoadBalancerAttributesOutput, DescribeLoadBalancerAttributesError> {
+    #[doc = "<p>Describes the attributes for the specified load balancer.</p>"]
+    fn describe_load_balancer_attributes(
+        &self,
+        input: &DescribeLoadBalancerAttributesInput,
+    ) -> Result<DescribeLoadBalancerAttributesOutput, DescribeLoadBalancerAttributesError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -8750,7 +9072,6 @@ impl<P, D> Elb for ElbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8758,14 +9079,20 @@ impl<P, D> Elb for ElbClient<P, D>
                 if body.is_empty() {
                     result = DescribeLoadBalancerAttributesOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeLoadBalancerAttributesOutputDeserializer::deserialize("DescribeLoadBalancerAttributesResult", &mut stack));
+                    result = try!(
+                        DescribeLoadBalancerAttributesOutputDeserializer::deserialize(
+                            "DescribeLoadBalancerAttributesResult",
+                            &mut stack
+                        )
+                    );
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8774,18 +9101,18 @@ impl<P, D> Elb for ElbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeLoadBalancerAttributesError::from_body(String::from_utf8_lossy(&body)
-                                                                       .as_ref()))
+                Err(DescribeLoadBalancerAttributesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Describes the specified policies.</p> <p>If you specify a load balancer name, the action returns the descriptions of all policies created for the load balancer. If you specify a policy name associated with your load balancer, the action returns the description of that policy. If you don't specify a load balancer name, the action returns descriptions of the specified sample policies, or descriptions of all sample policies. The names of the sample policies have the <code>ELBSample-</code> prefix.</p>"]
-    fn describe_load_balancer_policies
-        (&self,
-         input: &DescribeLoadBalancerPoliciesInput)
-         -> Result<DescribeLoadBalancerPoliciesOutput, DescribeLoadBalancerPoliciesError> {
+    fn describe_load_balancer_policies(
+        &self,
+        input: &DescribeLoadBalancerPoliciesInput,
+    ) -> Result<DescribeLoadBalancerPoliciesOutput, DescribeLoadBalancerPoliciesError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -8798,7 +9125,6 @@ impl<P, D> Elb for ElbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8806,14 +9132,20 @@ impl<P, D> Elb for ElbClient<P, D>
                 if body.is_empty() {
                     result = DescribeLoadBalancerPoliciesOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeLoadBalancerPoliciesOutputDeserializer::deserialize("DescribeLoadBalancerPoliciesResult", &mut stack));
+                    result = try!(
+                        DescribeLoadBalancerPoliciesOutputDeserializer::deserialize(
+                            "DescribeLoadBalancerPoliciesResult",
+                            &mut stack
+                        )
+                    );
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8822,18 +9154,18 @@ impl<P, D> Elb for ElbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeLoadBalancerPoliciesError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+                Err(DescribeLoadBalancerPoliciesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Describes the specified load balancer policy types or all load balancer policy types.</p> <p>The description of each type indicates how it can be used. For example, some policies can be used only with layer 7 listeners, some policies can be used only with layer 4 listeners, and some policies can be used only with your EC2 instances.</p> <p>You can use <a>CreateLoadBalancerPolicy</a> to create a policy configuration for any of these policy types. Then, depending on the policy type, use either <a>SetLoadBalancerPoliciesOfListener</a> or <a>SetLoadBalancerPoliciesForBackendServer</a> to set the policy.</p>"]
-    fn describe_load_balancer_policy_types
-        (&self,
-         input: &DescribeLoadBalancerPolicyTypesInput)
-         -> Result<DescribeLoadBalancerPolicyTypesOutput, DescribeLoadBalancerPolicyTypesError> {
+    fn describe_load_balancer_policy_types(
+        &self,
+        input: &DescribeLoadBalancerPolicyTypesInput,
+    ) -> Result<DescribeLoadBalancerPolicyTypesOutput, DescribeLoadBalancerPolicyTypesError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -8846,7 +9178,6 @@ impl<P, D> Elb for ElbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8854,14 +9185,20 @@ impl<P, D> Elb for ElbClient<P, D>
                 if body.is_empty() {
                     result = DescribeLoadBalancerPolicyTypesOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeLoadBalancerPolicyTypesOutputDeserializer::deserialize("DescribeLoadBalancerPolicyTypesResult", &mut stack));
+                    result = try!(
+                        DescribeLoadBalancerPolicyTypesOutputDeserializer::deserialize(
+                            "DescribeLoadBalancerPolicyTypesResult",
+                            &mut stack
+                        )
+                    );
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8870,18 +9207,18 @@ impl<P, D> Elb for ElbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeLoadBalancerPolicyTypesError::from_body(String::from_utf8_lossy(&body)
-                                                                        .as_ref()))
+                Err(DescribeLoadBalancerPolicyTypesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Describes the specified the load balancers. If no load balancers are specified, the call describes all of your load balancers.</p>"]
-    fn describe_load_balancers
-        (&self,
-         input: &DescribeAccessPointsInput)
-         -> Result<DescribeAccessPointsOutput, DescribeLoadBalancersError> {
+    fn describe_load_balancers(
+        &self,
+        input: &DescribeAccessPointsInput,
+    ) -> Result<DescribeAccessPointsOutput, DescribeLoadBalancersError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -8894,7 +9231,6 @@ impl<P, D> Elb for ElbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8902,15 +9238,18 @@ impl<P, D> Elb for ElbClient<P, D>
                 if body.is_empty() {
                     result = DescribeAccessPointsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeAccessPointsOutputDeserializer::deserialize("DescribeLoadBalancersResult",
-                                                                                      &mut stack));
+                    result = try!(DescribeAccessPointsOutputDeserializer::deserialize(
+                        "DescribeLoadBalancersResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8919,16 +9258,18 @@ impl<P, D> Elb for ElbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeLoadBalancersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeLoadBalancersError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Describes the tags associated with the specified load balancers.</p>"]
-    fn describe_tags(&self,
-                     input: &DescribeTagsInput)
-                     -> Result<DescribeTagsOutput, DescribeTagsError> {
+    #[doc = "<p>Describes the tags associated with the specified load balancers.</p>"]
+    fn describe_tags(
+        &self,
+        input: &DescribeTagsInput,
+    ) -> Result<DescribeTagsOutput, DescribeTagsError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -8941,7 +9282,6 @@ impl<P, D> Elb for ElbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8949,15 +9289,18 @@ impl<P, D> Elb for ElbClient<P, D>
                 if body.is_empty() {
                     result = DescribeTagsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeTagsOutputDeserializer::deserialize("DescribeTagsResult",
-                                                                              &mut stack));
+                    result = try!(DescribeTagsOutputDeserializer::deserialize(
+                        "DescribeTagsResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8966,17 +9309,18 @@ impl<P, D> Elb for ElbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeTagsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Removes the specified subnets from the set of configured subnets for the load balancer.</p> <p>After a subnet is removed, all EC2 instances registered with the load balancer in the removed subnet go into the <code>OutOfService</code> state. Then, the load balancer balances the traffic among the remaining routable subnets.</p>"]
-    fn detach_load_balancer_from_subnets
-        (&self,
-         input: &DetachLoadBalancerFromSubnetsInput)
-         -> Result<DetachLoadBalancerFromSubnetsOutput, DetachLoadBalancerFromSubnetsError> {
+    fn detach_load_balancer_from_subnets(
+        &self,
+        input: &DetachLoadBalancerFromSubnetsInput,
+    ) -> Result<DetachLoadBalancerFromSubnetsOutput, DetachLoadBalancerFromSubnetsError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -8989,7 +9333,6 @@ impl<P, D> Elb for ElbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8997,14 +9340,20 @@ impl<P, D> Elb for ElbClient<P, D>
                 if body.is_empty() {
                     result = DetachLoadBalancerFromSubnetsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DetachLoadBalancerFromSubnetsOutputDeserializer::deserialize("DetachLoadBalancerFromSubnetsResult", &mut stack));
+                    result = try!(
+                        DetachLoadBalancerFromSubnetsOutputDeserializer::deserialize(
+                            "DetachLoadBalancerFromSubnetsResult",
+                            &mut stack
+                        )
+                    );
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -9013,18 +9362,18 @@ impl<P, D> Elb for ElbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DetachLoadBalancerFromSubnetsError::from_body(String::from_utf8_lossy(&body)
-                                                                      .as_ref()))
+                Err(DetachLoadBalancerFromSubnetsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Removes the specified Availability Zones from the set of Availability Zones for the specified load balancer.</p> <p>There must be at least one Availability Zone registered with a load balancer at all times. After an Availability Zone is removed, all instances registered with the load balancer that are in the removed Availability Zone go into the <code>OutOfService</code> state. Then, the load balancer attempts to equally balance the traffic among its remaining Availability Zones.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-az.html\">Add or Remove Availability Zones</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
-    fn disable_availability_zones_for_load_balancer
-        (&self,
-         input: &RemoveAvailabilityZonesInput)
-         -> Result<RemoveAvailabilityZonesOutput, DisableAvailabilityZonesForLoadBalancerError> {
+    fn disable_availability_zones_for_load_balancer(
+        &self,
+        input: &RemoveAvailabilityZonesInput,
+    ) -> Result<RemoveAvailabilityZonesOutput, DisableAvailabilityZonesForLoadBalancerError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9037,7 +9386,6 @@ impl<P, D> Elb for ElbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9045,16 +9393,18 @@ impl<P, D> Elb for ElbClient<P, D>
                 if body.is_empty() {
                     result = RemoveAvailabilityZonesOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(RemoveAvailabilityZonesOutputDeserializer::deserialize("DisableAvailabilityZonesForLoadBalancerResult",
-                                                                                    &mut stack));
+                    result = try!(RemoveAvailabilityZonesOutputDeserializer::deserialize(
+                        "DisableAvailabilityZonesForLoadBalancerResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -9063,17 +9413,18 @@ impl<P, D> Elb for ElbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DisableAvailabilityZonesForLoadBalancerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DisableAvailabilityZonesForLoadBalancerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Adds the specified Availability Zones to the set of Availability Zones for the specified load balancer.</p> <p>The load balancer evenly distributes requests across all its registered Availability Zones that contain instances.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-az.html\">Add or Remove Availability Zones</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
-    fn enable_availability_zones_for_load_balancer
-        (&self,
-         input: &AddAvailabilityZonesInput)
-         -> Result<AddAvailabilityZonesOutput, EnableAvailabilityZonesForLoadBalancerError> {
+    fn enable_availability_zones_for_load_balancer(
+        &self,
+        input: &AddAvailabilityZonesInput,
+    ) -> Result<AddAvailabilityZonesOutput, EnableAvailabilityZonesForLoadBalancerError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9086,7 +9437,6 @@ impl<P, D> Elb for ElbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9094,15 +9444,18 @@ impl<P, D> Elb for ElbClient<P, D>
                 if body.is_empty() {
                     result = AddAvailabilityZonesOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(AddAvailabilityZonesOutputDeserializer::deserialize("EnableAvailabilityZonesForLoadBalancerResult",
-                                                                                      &mut stack));
+                    result = try!(AddAvailabilityZonesOutputDeserializer::deserialize(
+                        "EnableAvailabilityZonesForLoadBalancerResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -9111,17 +9464,18 @@ impl<P, D> Elb for ElbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(EnableAvailabilityZonesForLoadBalancerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(EnableAvailabilityZonesForLoadBalancerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Modifies the attributes of the specified load balancer.</p> <p>You can modify the load balancer attributes, such as <code>AccessLogs</code>, <code>ConnectionDraining</code>, and <code>CrossZoneLoadBalancing</code> by either enabling or disabling them. Or, you can modify the load balancer attribute <code>ConnectionSettings</code> by specifying an idle connection timeout value for your load balancer.</p> <p>For more information, see the following in the <i>Classic Load Balancer Guide</i>:</p> <ul> <li> <p> <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-crosszone-lb.html\">Cross-Zone Load Balancing</a> </p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/config-conn-drain.html\">Connection Draining</a> </p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/access-log-collection.html\">Access Logs</a> </p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/config-idle-timeout.html\">Idle Connection Timeout</a> </p> </li> </ul>"]
-    fn modify_load_balancer_attributes
-        (&self,
-         input: &ModifyLoadBalancerAttributesInput)
-         -> Result<ModifyLoadBalancerAttributesOutput, ModifyLoadBalancerAttributesError> {
+    fn modify_load_balancer_attributes(
+        &self,
+        input: &ModifyLoadBalancerAttributesInput,
+    ) -> Result<ModifyLoadBalancerAttributesOutput, ModifyLoadBalancerAttributesError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9134,7 +9488,6 @@ impl<P, D> Elb for ElbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9142,14 +9495,20 @@ impl<P, D> Elb for ElbClient<P, D>
                 if body.is_empty() {
                     result = ModifyLoadBalancerAttributesOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ModifyLoadBalancerAttributesOutputDeserializer::deserialize("ModifyLoadBalancerAttributesResult", &mut stack));
+                    result = try!(
+                        ModifyLoadBalancerAttributesOutputDeserializer::deserialize(
+                            "ModifyLoadBalancerAttributesResult",
+                            &mut stack
+                        )
+                    );
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -9158,18 +9517,18 @@ impl<P, D> Elb for ElbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ModifyLoadBalancerAttributesError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+                Err(ModifyLoadBalancerAttributesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Adds the specified instances to the specified load balancer.</p> <p>The instance must be a running instance in the same network as the load balancer (EC2-Classic or the same VPC). If you have EC2-Classic instances and a load balancer in a VPC with ClassicLink enabled, you can link the EC2-Classic instances to that VPC and then register the linked EC2-Classic instances with the load balancer in the VPC.</p> <p>Note that <code>RegisterInstanceWithLoadBalancer</code> completes when the request has been registered. Instance registration takes a little time to complete. To check the state of the registered instances, use <a>DescribeLoadBalancers</a> or <a>DescribeInstanceHealth</a>.</p> <p>After the instance is registered, it starts receiving traffic and requests from the load balancer. Any instance that is not in one of the Availability Zones registered for the load balancer is moved to the <code>OutOfService</code> state. If an Availability Zone is added to the load balancer later, any instances registered with the load balancer move to the <code>InService</code> state.</p> <p>To deregister instances from a load balancer, use <a>DeregisterInstancesFromLoadBalancer</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-deregister-register-instances.html\">Register or De-Register EC2 Instances</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
-    fn register_instances_with_load_balancer
-        (&self,
-         input: &RegisterEndPointsInput)
-         -> Result<RegisterEndPointsOutput, RegisterInstancesWithLoadBalancerError> {
+    fn register_instances_with_load_balancer(
+        &self,
+        input: &RegisterEndPointsInput,
+    ) -> Result<RegisterEndPointsOutput, RegisterInstancesWithLoadBalancerError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9182,7 +9541,6 @@ impl<P, D> Elb for ElbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9190,15 +9548,18 @@ impl<P, D> Elb for ElbClient<P, D>
                 if body.is_empty() {
                     result = RegisterEndPointsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(RegisterEndPointsOutputDeserializer::deserialize("RegisterInstancesWithLoadBalancerResult",
-                                                                                   &mut stack));
+                    result = try!(RegisterEndPointsOutputDeserializer::deserialize(
+                        "RegisterInstancesWithLoadBalancerResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -9207,13 +9568,14 @@ impl<P, D> Elb for ElbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(RegisterInstancesWithLoadBalancerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(RegisterInstancesWithLoadBalancerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Removes one or more tags from the specified load balancer.</p>"]
+    #[doc = "<p>Removes one or more tags from the specified load balancer.</p>"]
     fn remove_tags(&self, input: &RemoveTagsInput) -> Result<RemoveTagsOutput, RemoveTagsError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -9227,7 +9589,6 @@ impl<P, D> Elb for ElbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9235,15 +9596,18 @@ impl<P, D> Elb for ElbClient<P, D>
                 if body.is_empty() {
                     result = RemoveTagsOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(RemoveTagsOutputDeserializer::deserialize("RemoveTagsResult",
-                                                                            &mut stack));
+                    result = try!(RemoveTagsOutputDeserializer::deserialize(
+                        "RemoveTagsResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -9252,14 +9616,21 @@ impl<P, D> Elb for ElbClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(RemoveTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(RemoveTagsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Sets the certificate that terminates the specified listener's SSL connections. The specified certificate replaces any prior certificate that was used on the same load balancer and port.</p> <p>For more information about updating your SSL certificate, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-update-ssl-cert.html\">Replace the SSL Certificate for Your Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
-fn set_load_balancer_listener_ssl_certificate(&self, input: &SetLoadBalancerListenerSSLCertificateInput) -> Result<SetLoadBalancerListenerSSLCertificateOutput, SetLoadBalancerListenerSSLCertificateError>{
+    fn set_load_balancer_listener_ssl_certificate(
+        &self,
+        input: &SetLoadBalancerListenerSSLCertificateInput,
+    ) -> Result<
+        SetLoadBalancerListenerSSLCertificateOutput,
+        SetLoadBalancerListenerSSLCertificateError,
+    > {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9272,7 +9643,6 @@ fn set_load_balancer_listener_ssl_certificate(&self, input: &SetLoadBalancerList
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9280,14 +9650,20 @@ fn set_load_balancer_listener_ssl_certificate(&self, input: &SetLoadBalancerList
                 if body.is_empty() {
                     result = SetLoadBalancerListenerSSLCertificateOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(SetLoadBalancerListenerSSLCertificateOutputDeserializer::deserialize("SetLoadBalancerListenerSSLCertificateResult", &mut stack));
+                    result = try!(
+                        SetLoadBalancerListenerSSLCertificateOutputDeserializer::deserialize(
+                            "SetLoadBalancerListenerSSLCertificateResult",
+                            &mut stack
+                        )
+                    );
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -9296,14 +9672,21 @@ fn set_load_balancer_listener_ssl_certificate(&self, input: &SetLoadBalancerList
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(SetLoadBalancerListenerSSLCertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(SetLoadBalancerListenerSSLCertificateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Replaces the set of policies associated with the specified port on which the EC2 instance is listening with a new set of policies. At this time, only the back-end server authentication policy type can be applied to the instance ports; this policy type is composed of multiple public key policies.</p> <p>Each time you use <code>SetLoadBalancerPoliciesForBackendServer</code> to enable the policies, use the <code>PolicyNames</code> parameter to list the policies that you want to enable.</p> <p>You can use <a>DescribeLoadBalancers</a> or <a>DescribeLoadBalancerPolicies</a> to verify that the policy is associated with the EC2 instance.</p> <p>For more information about enabling back-end instance authentication, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-create-https-ssl-load-balancer.html#configure_backendauth_clt\">Configure Back-end Instance Authentication</a> in the <i>Classic Load Balancer Guide</i>. For more information about Proxy Protocol, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-proxy-protocol.html\">Configure Proxy Protocol Support</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
-fn set_load_balancer_policies_for_backend_server(&self, input: &SetLoadBalancerPoliciesForBackendServerInput) -> Result<SetLoadBalancerPoliciesForBackendServerOutput, SetLoadBalancerPoliciesForBackendServerError>{
+    fn set_load_balancer_policies_for_backend_server(
+        &self,
+        input: &SetLoadBalancerPoliciesForBackendServerInput,
+    ) -> Result<
+        SetLoadBalancerPoliciesForBackendServerOutput,
+        SetLoadBalancerPoliciesForBackendServerError,
+    > {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9316,7 +9699,6 @@ fn set_load_balancer_policies_for_backend_server(&self, input: &SetLoadBalancerP
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9324,14 +9706,20 @@ fn set_load_balancer_policies_for_backend_server(&self, input: &SetLoadBalancerP
                 if body.is_empty() {
                     result = SetLoadBalancerPoliciesForBackendServerOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(SetLoadBalancerPoliciesForBackendServerOutputDeserializer::deserialize("SetLoadBalancerPoliciesForBackendServerResult", &mut stack));
+                    result = try!(
+                        SetLoadBalancerPoliciesForBackendServerOutputDeserializer::deserialize(
+                            "SetLoadBalancerPoliciesForBackendServerResult",
+                            &mut stack
+                        )
+                    );
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -9340,17 +9728,19 @@ fn set_load_balancer_policies_for_backend_server(&self, input: &SetLoadBalancerP
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(SetLoadBalancerPoliciesForBackendServerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(SetLoadBalancerPoliciesForBackendServerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Replaces the current set of policies for the specified load balancer port with the specified set of policies.</p> <p>To enable back-end server authentication, use <a>SetLoadBalancerPoliciesForBackendServer</a>.</p> <p>For more information about setting policies, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/ssl-config-update.html\">Update the SSL Negotiation Configuration</a>, <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-duration\">Duration-Based Session Stickiness</a>, and <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-application\">Application-Controlled Session Stickiness</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
-    fn set_load_balancer_policies_of_listener
-        (&self,
-         input: &SetLoadBalancerPoliciesOfListenerInput)
-         -> Result<SetLoadBalancerPoliciesOfListenerOutput, SetLoadBalancerPoliciesOfListenerError> {
+    fn set_load_balancer_policies_of_listener(
+        &self,
+        input: &SetLoadBalancerPoliciesOfListenerInput,
+    ) -> Result<SetLoadBalancerPoliciesOfListenerOutput, SetLoadBalancerPoliciesOfListenerError>
+    {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9363,7 +9753,6 @@ fn set_load_balancer_policies_for_backend_server(&self, input: &SetLoadBalancerP
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9371,14 +9760,20 @@ fn set_load_balancer_policies_for_backend_server(&self, input: &SetLoadBalancerP
                 if body.is_empty() {
                     result = SetLoadBalancerPoliciesOfListenerOutput::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(SetLoadBalancerPoliciesOfListenerOutputDeserializer::deserialize("SetLoadBalancerPoliciesOfListenerResult", &mut stack));
+                    result = try!(
+                        SetLoadBalancerPoliciesOfListenerOutputDeserializer::deserialize(
+                            "SetLoadBalancerPoliciesOfListenerResult",
+                            &mut stack
+                        )
+                    );
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -9387,7 +9782,9 @@ fn set_load_balancer_policies_for_backend_server(&self, input: &SetLoadBalancerP
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(SetLoadBalancerPoliciesOfListenerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(SetLoadBalancerPoliciesOfListenerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
@@ -9402,11 +9799,12 @@ mod protocol_tests {
     use self::rusoto_mock::*;
     use rusoto_core::Region as rusoto_region;
 
-
     #[test]
     fn test_parse_error_elb_describe_load_balancers() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/error",
-                                                              "elb-describe-load-balancers.xml");
+        let mock_response = MockResponseReader::read_response(
+            "test_resources/generated/error",
+            "elb-describe-load-balancers.xml",
+        );
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
         let client = ElbClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeAccessPointsInput::default();
@@ -9416,8 +9814,10 @@ mod protocol_tests {
 
     #[test]
     fn test_parse_valid_elb_describe_load_balancer_policies() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "elb-describe-load-balancer-policies.xml");
+        let mock_response = MockResponseReader::read_response(
+            "test_resources/generated/valid",
+            "elb-describe-load-balancer-policies.xml",
+        );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = ElbClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeLoadBalancerPoliciesInput::default();
@@ -9425,11 +9825,12 @@ mod protocol_tests {
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-
     #[test]
     fn test_parse_valid_elb_describe_load_balancer_policy_types() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "elb-describe-load-balancer-policy-types.xml");
+        let mock_response = MockResponseReader::read_response(
+            "test_resources/generated/valid",
+            "elb-describe-load-balancer-policy-types.xml",
+        );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = ElbClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeLoadBalancerPolicyTypesInput::default();
@@ -9437,11 +9838,12 @@ mod protocol_tests {
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-
     #[test]
     fn test_parse_valid_elb_describe_load_balancers() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "elb-describe-load-balancers.xml");
+        let mock_response = MockResponseReader::read_response(
+            "test_resources/generated/valid",
+            "elb-describe-load-balancers.xml",
+        );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = ElbClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeAccessPointsInput::default();
