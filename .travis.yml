@@ -27,7 +27,7 @@ script:
   - |
       echo "Building integration tests" &&
       ( cd integration_tests && \
-        cargo test --features "all" --no-run && \
+        cargo check --tests --features "all" && \
         cd .. )
   - |
       echo "Running cargo docs on stable Rust on Linux" &&
