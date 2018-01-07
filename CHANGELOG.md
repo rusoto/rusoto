@@ -8,6 +8,8 @@
 
 - Switched crategen from rustfmt to rustfmt-nightly
 
+- Added IoT Data service
+
 ## [0.30.0] - 2017-12-02
 
 - Added CloudHSMv2
