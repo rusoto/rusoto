@@ -28,7 +28,7 @@ test_script:
   - cargo update
   - cargo test --all --lib -v
   - cd integration_tests
-  - cargo test --features "all" --no-run
+  - cargo check --tests --features "all"
   - cd ..
 
 branches:
