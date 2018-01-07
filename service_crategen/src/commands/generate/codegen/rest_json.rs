@@ -27,7 +27,7 @@ impl GenerateProtocol for RestJsonGenerator {
                 ",
                      documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
                      method_signature = generate_method_signature(operation, input_shape),
-                     error_type = error_type_name(operation_name),
+                     error_type = error_type_name(service, operation_name),
                      output_type = output_type)?
         }
         Ok(())
@@ -80,7 +80,7 @@ impl GenerateProtocol for RestJsonGenerator {
                 endpoint_prefix = service.signing_name(),
                 modify_endpoint_prefix = generate_endpoint_modification(service).unwrap_or_else(|| "".to_owned()),
                 http_method = operation.http.method,
-                error_type = error_type_name(operation_name),
+                error_type = error_type_name(service, operation_name),
                 status_code = http_code_to_status_code(operation.http.response_code),
                 parse_body = generate_body_parser(operation, service),
                 parse_status_code = generate_status_code_parser(operation, service),

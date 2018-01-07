@@ -50,19 +50,20 @@ pub fn generate_response_parser(service: &Service,
     let shape_name = &operation.output.as_ref().unwrap().shape;
     let result_wrapper = &operation.output.as_ref().unwrap().result_wrapper;
     let output_shape = service.get_shape(shape_name).unwrap();
+    let mutated_shape_name = mutate_type_name(service, shape_name);
 
     // if the 'payload' field on the output shape is a blob or string, it indicates that
     // the entire payload is set as one of the struct members, and not parsed
     match output_shape.payload {
-        None => xml_body_parser(shape_name, result_wrapper, mutable_result),
+        None => xml_body_parser(&mutated_shape_name, result_wrapper, mutable_result),
         Some(ref payload_member) => {
             let payload_shape = service.get_shape(payload_member).unwrap();
             match payload_shape.shape_type {
                 payload_type if payload_type == ShapeType::Blob ||
                                 payload_type == ShapeType::String => {
-                    payload_body_parser(payload_type, shape_name, payload_member, has_streaming_payload(output_shape))
+                    payload_body_parser(payload_type, &mutated_shape_name, payload_member, has_streaming_payload(output_shape))
                 }
-                _ => xml_body_parser(shape_name, result_wrapper, mutable_result),
+                _ => xml_body_parser(&mutated_shape_name, result_wrapper, mutable_result),
             }
         }
     }
@@ -158,6 +159,7 @@ fn generate_deserializer_body(name: &str, shape: &Shape, service: &Service) -> S
                     Some(format!("obj.{field_name} = {parse_expression};",
                                  field_name = generate_field_name(member_name),
                                  parse_expression = generate_struct_field_parse_expression(shape,
+                                                                                           service,
                                                                                            member_name,
                                                                                            member,
                                                                                            &member_name.to_string())))
@@ -173,18 +175,18 @@ fn generate_deserializer_body(name: &str, shape: &Shape, service: &Service) -> S
         _ => {},
     }
     match shape.shape_type {
-        ShapeType::List => generate_list_deserializer(shape),
+        ShapeType::List => generate_list_deserializer(shape, service),
         ShapeType::Map => generate_map_deserializer(shape),
         ShapeType::Structure => generate_struct_deserializer(name, service, shape),
         _ => generate_primitive_deserializer(shape),
     }
 }
 
-fn generate_list_deserializer(shape: &Shape) -> String {
+fn generate_list_deserializer(shape: &Shape, service: &Service) -> String {
     // flattened lists are just the list elements repeated without
     // an enclosing <FooList></FooList> tag
     if let Some(true) = shape.flattened {
-        return generate_flat_list_deserializer(shape);
+        return generate_flat_list_deserializer(shape, service);
     }
 
     let location_name = shape.member
@@ -222,10 +224,10 @@ fn generate_list_deserializer(shape: &Shape) -> String {
         Ok(obj)
         ",
             location_name = location_name,
-            member_name = mutate_type_name(&shape.member_type()[..]))
+            member_name = mutate_type_name(service, &shape.member_type()[..]))
 }
 
-fn generate_flat_list_deserializer(shape: &Shape) -> String {
+fn generate_flat_list_deserializer(shape: &Shape, service: &Service) -> String {
     format!("
         let mut obj = vec![];
 
@@ -246,7 +248,7 @@ fn generate_flat_list_deserializer(shape: &Shape) -> String {
 
         Ok(obj)
         ",
-            member_name = mutate_type_name(shape.member_type()))
+            member_name = mutate_type_name(service, shape.member_type()))
 }
 
 fn generate_map_deserializer(shape: &Shape) -> String {
@@ -401,7 +403,7 @@ fn generate_struct_field_deserializers(service: &Service, shape: &Shape) -> Stri
             }
 
             let parse_expression =
-                generate_struct_field_parse_expression(shape, member_name, member, location_name);
+                generate_struct_field_parse_expression(shape, service, member_name, member, location_name);
             Some(format!(
             "\"{location_name}\" => {{
                 obj.{field_name} = {parse_expression};
@@ -417,13 +419,14 @@ fn generate_struct_field_deserializers(service: &Service, shape: &Shape) -> Stri
 }
 
 fn generate_struct_field_parse_expression(shape: &Shape,
+                                          service: &Service,
                                           member_name: &str,
                                           member: &Member,
                                           location_name: &str)
                                           -> String {
     let expression = format!(
         "try!({name}Deserializer::deserialize(\"{location_name}\", stack))",
-        name = member.shape,
+        name = mutate_type_name(service, &member.shape),
         location_name = location_name,
     );
 

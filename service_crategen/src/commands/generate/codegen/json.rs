@@ -18,7 +18,7 @@ impl GenerateProtocol for JsonGenerator {
                 ",
                 documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
                 method_signature = generate_method_signature(service, operation),
-                error_type = error_type_name(operation_name),
+                error_type = error_type_name(service, operation_name),
                 output_type = output_type
             )?
         }
@@ -67,7 +67,7 @@ impl GenerateProtocol for JsonGenerator {
                      request_uri = operation.http.request_uri,
                      target_prefix = service.target_prefix().unwrap(),
                      json_version = service.json_version().unwrap(),
-                     error_type = error_type_name(operation_name),
+                     error_type = error_type_name(service, operation_name),
                      output_type = output_type)?;
         }
         Ok(())

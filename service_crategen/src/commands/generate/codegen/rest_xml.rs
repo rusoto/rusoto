@@ -18,7 +18,7 @@ impl GenerateProtocol for RestXmlGenerator {
                 {method_signature};
                 ",
                 documentation = generate_documentation(operation),
-                method_signature = generate_method_signature(operation_name, operation),
+                method_signature = generate_method_signature(operation_name, operation, service),
             )?
         }
         Ok(())
@@ -62,8 +62,8 @@ impl GenerateProtocol for RestXmlGenerator {
                      documentation = generate_documentation(operation),
                      http_method = &operation.http.method,
                      endpoint_prefix = service.endpoint_prefix(),
-                     method_signature = generate_method_signature(operation_name, operation),
-                     error_type = error_type_name(operation_name),
+                     method_signature = generate_method_signature(operation_name, operation, service),
+                     error_type = error_type_name(service, operation_name),
                      build_payload = generate_payload_serialization(service, operation)
                          .unwrap_or_else(|| "".to_string()),
                      modify_uri = rest_request_generator::generate_uri_formatter(&request_uri,
@@ -258,20 +258,20 @@ fn generate_payload_member_serialization(shape: &Shape) -> String {
 
 }
 
-fn generate_method_signature(operation_name: &str, operation: &Operation) -> String {
+fn generate_method_signature(operation_name: &str, operation: &Operation, service: &Service) -> String {
     if operation.input.is_some() {
         format!(
             "fn {operation_name}(&self, input: &{input_type}) -> Result<{output_type}, {error_type}>",
             input_type = operation.input.as_ref().unwrap().shape,
             operation_name = operation_name.to_snake_case(),
             output_type = &operation.output_shape_or("()"),
-            error_type = error_type_name(operation_name),
+            error_type = error_type_name(service,  operation_name),
         )
     } else {
         format!(
             "fn {operation_name}(&self) -> Result<{output_type}, {error_type}>",
             operation_name = operation_name.to_snake_case(),
-            error_type = error_type_name(operation_name),
+            error_type = error_type_name(service, operation_name),
             output_type = &operation.output_shape_or("()"),
         )
     }
@@ -279,7 +279,7 @@ fn generate_method_signature(operation_name: &str, operation: &Operation) -> Str
 
 fn generate_serializer_body(shape: &Shape, service: &Service) -> String {
     match shape.shape_type {
-        ShapeType::List => generate_list_serializer(shape),
+        ShapeType::List => generate_list_serializer(shape, service),
         ShapeType::Map => generate_map_serializer(shape),
         ShapeType::Structure => generate_struct_serializer(shape, service),
         _ => generate_primitive_serializer(shape),
@@ -305,7 +305,7 @@ fn generate_primitive_serializer(shape: &Shape) -> String {
         ", value_str = value_str)
 }
 
-fn generate_list_serializer(shape: &Shape) -> String {
+fn generate_list_serializer(shape: &Shape, service: &Service) -> String {
     // flattened lists don't have enclosing <FooList> tags
     // around the list elements
     let flattened = match shape.flattened {
@@ -314,7 +314,7 @@ fn generate_list_serializer(shape: &Shape) -> String {
     };
 
     let member = shape.member.as_ref().expect("Member shape undefined");
-    let element_type = &mutate_type_name(&member.shape);
+    let element_type = &mutate_type_name(service, &member.shape);
     let mut serializer = "".to_owned();
 
     if flattened {

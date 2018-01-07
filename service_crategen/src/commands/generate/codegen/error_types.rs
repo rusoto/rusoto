@@ -25,7 +25,7 @@ pub trait GenerateErrorTypes {
         }
 
         for (operation_name, operation) in service.operations().iter() {
-            self.generate_error_type(writer, operation_name, operation, &error_documentation)?;
+            self.generate_error_type(writer, operation_name, operation, service, &error_documentation)?;
         }
         Ok(())
     }
@@ -34,6 +34,7 @@ pub trait GenerateErrorTypes {
                            writer: &mut FileWriter,
                            operation_name: &str,
                            operation: &Operation,
+                           service: &Service,
                            error_documentation: &BTreeMap<&String, &String>)
                            -> IoResult {
         writeln!(writer,
@@ -73,14 +74,14 @@ pub trait GenerateErrorTypes {
                     }}
                  }}",
                  operation = operation_name,
-                 type_name = error_type_name(operation_name),
+                 type_name = error_type_name(service, operation_name),
                  error_from_body_impl =
-                     self.generate_error_from_body_impl(operation_name, operation),
-                 error_from_type_impl = self.generate_error_from_type_impl(operation_name),
+                     self.generate_error_from_body_impl(operation_name, operation, service),
+                 error_from_type_impl = self.generate_error_from_type_impl(operation_name, service),
                  error_types = self.generate_error_enum_types(operation, error_documentation)
                      .unwrap_or_else(|| String::from("")),
                  description_matchers =
-                     self.generate_error_description_matchers(operation_name, operation)
+                     self.generate_error_description_matchers(operation_name, operation, service)
                          .unwrap_or_else(|| String::from("")))
     }
 
@@ -114,10 +115,11 @@ pub trait GenerateErrorTypes {
     /// generate the matcher arms for an error type's implementation of Error.description()
     fn generate_error_description_matchers(&self,
                                            operation_name: &str,
-                                           operation: &Operation)
+                                           operation: &Operation,
+                                           service: &Service)
                                            -> Option<String> {
         let mut type_matchers: Vec<String> = Vec::new();
-        let error_type = error_type_name(operation_name);
+        let error_type = error_type_name(service, operation_name);
 
         if operation.errors.is_some() {
             // botocore has some dulicated errors
@@ -126,7 +128,7 @@ pub trait GenerateErrorTypes {
                 // skip it if it's listed, as we implement it for all error types below
                 if error.idiomatic_error_name() != "Validation" {
                     type_matchers.push(format!("{error_type}::{error_shape}(ref cause) => cause",
-                                               error_type = error_type_name(operation_name),
+                                               error_type = error_type_name(service, operation_name),
                                                error_shape = error.idiomatic_error_name()))
                 }
             }
@@ -142,15 +144,15 @@ pub trait GenerateErrorTypes {
         Some(type_matchers.join(",\n"))
     }
 
-    fn generate_error_from_body_impl(&self, operation_name: &str, operation: &Operation) -> String;
-    fn generate_error_from_type_impl(&self, operation_name: &str) -> String;
+    fn generate_error_from_body_impl(&self, operation_name: &str, operation: &Operation, service: &Service) -> String;
+    fn generate_error_from_type_impl(&self, operation_name: &str, service: &Service) -> String;
 }
 
 pub struct JsonErrorTypes;
 pub struct XmlErrorTypes;
 
 impl GenerateErrorTypes for XmlErrorTypes {
-    fn generate_error_from_body_impl(&self, operation_name: &str, operation: &Operation) -> String {
+    fn generate_error_from_body_impl(&self, operation_name: &str, operation: &Operation, service: &Service) -> String {
         format!("
                 impl {type_name} {{
                     pub fn from_body(body: &str) -> {type_name} {{
@@ -167,11 +169,11 @@ impl GenerateErrorTypes for XmlErrorTypes {
                        }}
                     }}
                 }}",
-                type_name = error_type_name(operation_name),
-                type_matchers = self.generate_error_type_matchers(operation_name, operation))
+                type_name = error_type_name(service, operation_name),
+                type_matchers = self.generate_error_type_matchers(operation_name, operation, service))
     }
 
-    fn generate_error_from_type_impl(&self, operation_name: &str) -> String {
+    fn generate_error_from_type_impl(&self, operation_name: &str, service: &Service) -> String {
         format!("
                 impl From<XmlParseError> for {type_name} {{
                     fn from(err: XmlParseError) -> {type_name} {{
@@ -179,16 +181,16 @@ impl GenerateErrorTypes for XmlErrorTypes {
                         {type_name}::Unknown(message.to_string())
                     }}
                 }}",
-                type_name = error_type_name(operation_name))
+                type_name = error_type_name(service, operation_name))
     }
 }
 
 impl XmlErrorTypes {
     /// generate the arms for a match expression that maps an error name string from the response XML
     /// to a concrete error type from this operation's errors enum
-    fn generate_error_type_matchers(&self, operation_name: &str, operation: &Operation) -> String {
+    fn generate_error_type_matchers(&self, operation_name: &str, operation: &Operation, service: &Service) -> String {
         let mut type_matchers: Vec<String> = Vec::new();
-        let error_type = error_type_name(operation_name);
+        let error_type = error_type_name(service, operation_name);
 
         if operation.errors.is_some() {
             for error in operation.errors() {
@@ -206,7 +208,7 @@ impl XmlErrorTypes {
 }
 
 impl GenerateErrorTypes for JsonErrorTypes {
-    fn generate_error_from_body_impl(&self, operation_name: &str, operation: &Operation) -> String {
+    fn generate_error_from_body_impl(&self, operation_name: &str, operation: &Operation, service: &Service) -> String {
         format!("
                 impl {type_name} {{
                     pub fn from_body(body: &str) -> {type_name} {{
@@ -226,27 +228,27 @@ impl GenerateErrorTypes for JsonErrorTypes {
                         }}
                     }}
                 }}",
-                type_name = error_type_name(operation_name),
-                type_matchers = self.generate_error_type_matchers(operation_name, operation))
+                type_name = error_type_name(service, operation_name),
+                type_matchers = self.generate_error_type_matchers(operation_name, operation, service))
     }
 
-    fn generate_error_from_type_impl(&self, operation_name: &str) -> String {
+    fn generate_error_from_type_impl(&self, operation_name: &str, service: &Service) -> String {
         format!("
                 impl From<serde_json::error::Error> for {type_name} {{
                     fn from(err: serde_json::error::Error) -> {type_name} {{
                         {type_name}::Unknown(err.description().to_string())
                     }}
                 }}",
-                type_name = error_type_name(operation_name))
+                type_name = error_type_name(service, operation_name))
     }
 }
 
 impl JsonErrorTypes {
     /// generate the arms for a match expression that maps an error name string from the response JSON
     /// to a concrete error type from this operation's errors enum
-    fn generate_error_type_matchers(&self, operation_name: &str, operation: &Operation) -> String {
+    fn generate_error_type_matchers(&self, operation_name: &str, operation: &Operation, service: &Service) -> String {
         let mut type_matchers: Vec<String> = Vec::new();
-        let error_type = error_type_name(operation_name);
+        let error_type = error_type_name(service, operation_name);
 
         if operation.errors.is_some() {
             for error in operation.errors() {
