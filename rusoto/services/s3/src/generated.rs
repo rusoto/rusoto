@@ -21277,7 +21277,7 @@ where
                 let mut values = ::std::collections::HashMap::new();
                 for (key, value) in response.headers.iter() {
                     if key.starts_with("x-amz-meta-") {
-                        values.insert(key.replace("x-amz-meta-", ""), value.to_owned());
+                        values.insert(key["x-amz-meta-".len()..].to_owned(), value.to_owned());
                     }
                 }
                 result.metadata = Some(values);
@@ -21682,7 +21682,7 @@ where
                 let mut values = ::std::collections::HashMap::new();
                 for (key, value) in response.headers.iter() {
                     if key.starts_with("x-amz-meta-") {
-                        values.insert(key.replace("x-amz-meta-", ""), value.to_owned());
+                        values.insert(key["x-amz-meta-".len()..].to_owned(), value.to_owned());
                     }
                 }
                 result.metadata = Some(values);
