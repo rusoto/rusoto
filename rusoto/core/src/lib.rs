@@ -59,6 +59,7 @@ extern crate serde;
 extern crate sha2;
 extern crate time;
 extern crate url;
+extern crate unicase;
 extern crate xml;
 
 pub mod param;

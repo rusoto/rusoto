@@ -80,13 +80,13 @@ fn parse_headers_map(member_name: &str, member: &Member, required: bool) -> Stri
         format!("result.{} = Some(values);", member_name.to_snake_case())
     };
 
-    format!("let mut values = ::std::collections::HashMap::new();
+    format!(r#"let mut values = ::std::collections::HashMap::new();
     for (key, value) in response.headers.iter() {{
-        if key.starts_with(\"{location_name}\") {{
-            values.insert(key.replace(\"{location_name}\",\"\"), value.to_owned());
+        if key.starts_with("{location_name}") {{
+            values.insert(key["{location_name}".len()..].to_owned(), value.to_owned());
         }}
     }}
-    {set_statement}",
+    {set_statement}"#,
             location_name = member.location_name.as_ref().unwrap(),
             set_statement = set_statement)
 }

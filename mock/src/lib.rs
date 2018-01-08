@@ -11,6 +11,7 @@ use std::collections::HashMap;
 
 use rusoto_core::{DispatchSignedRequest, HttpResponse, HttpDispatchError, SignedRequest};
 use rusoto_core::credential::{ProvideAwsCredentials, CredentialsError, AwsCredentials};
+use rusoto_core::request::Headers;
 use chrono::{Duration, Utc};
 use hyper::status::StatusCode;
 
@@ -69,7 +70,7 @@ impl DispatchSignedRequest for MockRequestDispatcher {
         Ok(HttpResponse {
             status: self.status,
             body: Box::new(Cursor::new(self.body.clone())),
-            headers: self.headers.clone(),
+            headers: Headers::new(self.headers.iter().map(|(k, v)| (k.as_ref(), v.to_owned()))),
         })
     }
 }

@@ -331,7 +331,7 @@ fn signed_headers(headers: &BTreeMap<String, Vec<Vec<u8>>>) -> String {
         if skipped_headers(key) {
             continue;
         }
-        signed.push_str(&key.to_ascii_lowercase());
+        signed.push_str(&key);
     }
     signed
 }
@@ -342,13 +342,13 @@ fn signed_headers(headers: &BTreeMap<String, Vec<Vec<u8>>>) -> String {
 fn canonical_headers(headers: &BTreeMap<String, Vec<Vec<u8>>>) -> String {
     let mut canonical = String::new();
 
-    for item in headers.iter() {
-        if skipped_headers(item.0) {
+    for (key, value) in headers.iter() {
+        if skipped_headers(key) {
             continue;
         }
         canonical.push_str(format!("{}:{}\n",
-                                   item.0.to_ascii_lowercase(),
-                                   canonical_values(item.1))
+                                   key,
+                                   canonical_values(value))
             .as_ref());
     }
     canonical

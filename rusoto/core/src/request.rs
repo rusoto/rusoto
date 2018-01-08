@@ -4,22 +4,25 @@
 
 //extern crate lazy_static;
 
+use std::borrow::Cow;
 use std::env;
 use std::io::Read;
 use std::io::Error as IoError;
 use std::error::Error;
 use std::fmt;
-use std::collections::HashMap;
+use std::collections::hash_map::{self, HashMap};
+use std::str::FromStr;
 
 use hyper::Client;
 use hyper::Error as HyperError;
-use hyper::header::{Headers, UserAgent};
+use hyper::header::{Headers as HyperHeaders, UserAgent};
 use hyper::status::StatusCode;
 use hyper::method::Method;
 use hyper::client::RedirectPolicy;
 use hyper::net::HttpsConnector;
 use hyper::client::pool::Pool;
 use hyper_native_tls::NativeTlsClient;
+use unicase::Ascii;
 
 use log::LogLevel::Debug;
 
@@ -35,6 +38,55 @@ lazy_static! {
             env!("CARGO_PKG_VERSION"), RUST_VERSION, env::consts::OS).as_bytes().to_vec()];
 }
 
+/// HTTP headers
+#[derive(Debug)]
+pub struct Headers(HashMap<Ascii<String>, String>);
+
+impl Headers {
+    /// Create Headers from iterator
+    pub fn new<'a, T>(headers: T) -> Self
+        where T: IntoIterator<Item = (&'a str, String)>
+    {
+        Headers (
+            headers.into_iter().map(|(k, v)| {
+                (Ascii::from_str(k).unwrap(), v)
+            }).collect()
+        )
+    }
+
+    /// Get value for HTTP header
+    pub fn get(&self, name: &str) -> Option<&str> {
+        self.0.get(&Ascii::from_str(name).unwrap()).map(|v| v.as_str())
+    }
+
+    /// Create iterator over HTTP headers
+    ///
+    /// Header names are normalized to lowercase.
+    pub fn iter(&self) -> HeaderIter {
+        HeaderIter(self.0.iter())
+    }
+}
+
+/// Iterator returned by `Headers::iter`
+pub struct HeaderIter<'a>(hash_map::Iter<'a, Ascii<String>, String>);
+
+impl<'a> Iterator for HeaderIter<'a> {
+    type Item = (Cow<'a, str>, &'a str);
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.0.next().map(|(k, v)| {
+            // TODO: Switch to str::is_ascii_lowercase() once it's stable.
+            //       https://github.com/rust-lang/rust/issues/39658
+            let cow = if k.chars().all(|c| c.is_lowercase()) {
+                Cow::from(k.as_ref())
+            } else {
+                Cow::from(k.to_ascii_lowercase())
+            };
+            (cow, v.as_str())
+        })
+    }
+}
+
 /// Stores the response from a HTTP request.
 pub struct HttpResponse {
     /// Status code of HTTP Request
@@ -42,7 +94,7 @@ pub struct HttpResponse {
     /// Contents of Response
     pub body: Box<Read>,
     /// Headers stored as <key(string):value(string)>
-    pub headers: HashMap<String, String>,
+    pub headers: Headers,
 }
 
 #[derive(Debug, PartialEq)]
@@ -93,7 +145,7 @@ impl DispatchSignedRequest for Client {
         };
 
         // translate the headers map to a format Hyper likes
-        let mut hyper_headers = Headers::new();
+        let mut hyper_headers = HyperHeaders::new();
         for h in request.headers().iter() {
             hyper_headers.set_raw(h.0.to_owned(), h.1.to_owned());
         }
@@ -137,12 +189,7 @@ impl DispatchSignedRequest for Client {
             }
         };
 
-        let mut headers: HashMap<String, String> = HashMap::new();
-
-        for header in hyper_response.headers.iter() {
-            headers.insert(header.name().to_string(), header.value_string());
-        }
-
+        let headers = Headers::new(hyper_response.headers.iter().map(|h| (h.name(), h.value_string())));
         Ok(HttpResponse {
             status: hyper_response.status,
             body: Box::new(hyper_response),
@@ -189,6 +236,7 @@ pub fn default_tls_client() -> Result<Client, TlsError> {
 
 #[cfg(test)]
 mod tests {
+    use super::*;
     use Region;
     use signature::SignedRequest;
 
@@ -234,5 +282,27 @@ mod tests {
         let request = SignedRequest::new("POST", "sqs", &a_region, "/");
         assert_eq!("https", request.scheme());
         assert_eq!("localhost", request.hostname());
+    }
+
+    #[test]
+    fn headers() {
+        let input = &[
+            ("amazon-style-header-name", "SomeRandomValue"),
+            ("Minio-Style-Header-Name", "AnotherValue"),
+            ("RaNDOm-styLe-HeAdEr-NAme", "yet again another value")
+        ];
+        let headers = Headers::new(input.iter().map(|&(k, v)| (k, v.to_string())));
+
+        assert_eq!(headers.get("Amazon-Style-Header-Name").unwrap(), "SomeRandomValue");
+        assert_eq!(headers.get("Minio-Style-Header-Name").unwrap(), "AnotherValue");
+        assert_eq!(headers.get("random-style-header-name").unwrap(), "yet again another value");
+        assert!(headers.get("No-Such-Header").is_none());
+
+        let mut output: Vec<_> = headers.iter().collect();
+        output.sort();
+        for (&(ref in_name, ref in_value), &(ref out_name, ref out_value)) in input.iter().zip(&output) {
+            assert_eq!(&in_name.to_lowercase(), out_name);
+            assert_eq!(in_value, out_value);
+        }
     }
 }
