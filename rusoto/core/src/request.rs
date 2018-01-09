@@ -4,14 +4,12 @@
 
 //extern crate lazy_static;
 
-use std::borrow::Cow;
 use std::env;
 use std::io::Read;
 use std::io::Error as IoError;
 use std::error::Error;
 use std::fmt;
 use std::collections::hash_map::{self, HashMap};
-use std::str::FromStr;
 
 use hyper::Client;
 use hyper::Error as HyperError;
@@ -22,7 +20,6 @@ use hyper::client::RedirectPolicy;
 use hyper::net::HttpsConnector;
 use hyper::client::pool::Pool;
 use hyper_native_tls::NativeTlsClient;
-use unicase::Ascii;
 
 use log::LogLevel::Debug;
 
@@ -40,7 +37,7 @@ lazy_static! {
 
 /// HTTP headers
 #[derive(Debug)]
-pub struct Headers(HashMap<Ascii<String>, String>);
+pub struct Headers(HashMap<String, String>);
 
 impl Headers {
     /// Create Headers from iterator
@@ -49,14 +46,14 @@ impl Headers {
     {
         Headers (
             headers.into_iter().map(|(k, v)| {
-                (Ascii::from_str(k).unwrap(), v)
+                (k.to_ascii_lowercase(), v)
             }).collect()
         )
     }
 
     /// Get value for HTTP header
     pub fn get(&self, name: &str) -> Option<&str> {
-        self.0.get(&Ascii::from_str(name).unwrap()).map(|v| v.as_str())
+        self.0.get(&name.to_lowercase()).map(|n| n.as_str())
     }
 
     /// Create iterator over HTTP headers
@@ -68,22 +65,13 @@ impl Headers {
 }
 
 /// Iterator returned by `Headers::iter`
-pub struct HeaderIter<'a>(hash_map::Iter<'a, Ascii<String>, String>);
+pub struct HeaderIter<'a>(hash_map::Iter<'a, String, String>);
 
 impl<'a> Iterator for HeaderIter<'a> {
-    type Item = (Cow<'a, str>, &'a str);
+    type Item = (&'a str, &'a str);
 
     fn next(&mut self) -> Option<Self::Item> {
-        self.0.next().map(|(k, v)| {
-            // TODO: Switch to str::is_ascii_lowercase() once it's stable.
-            //       https://github.com/rust-lang/rust/issues/39658
-            let cow = if k.chars().all(|c| c.is_lowercase()) {
-                Cow::from(k.as_ref())
-            } else {
-                Cow::from(k.to_ascii_lowercase())
-            };
-            (cow, v.as_str())
-        })
+        self.0.next().map(|(k, v)| (k.as_str(), v.as_str()))
     }
 }
 
@@ -300,9 +288,11 @@ mod tests {
 
         let mut output: Vec<_> = headers.iter().collect();
         output.sort();
-        for (&(ref in_name, ref in_value), &(ref out_name, ref out_value)) in input.iter().zip(&output) {
-            assert_eq!(&in_name.to_lowercase(), out_name);
-            assert_eq!(in_value, out_value);
-        }
+        assert_eq!(
+            output,
+            &[("amazon-style-header-name", "SomeRandomValue"),
+              ("minio-style-header-name", "AnotherValue"),
+              ("random-style-header-name", "yet again another value")]
+        );
     }
 }
