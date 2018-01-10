@@ -58,10 +58,7 @@ fn test_all_the_things() {
     list_items_in_bucket(&client, &test_bucket);
 
     // do a multipart upload
-    if cfg!(not(feature = "disable_minio_unsupported")) {
-        // FIXME: Minio support: test is broken, probably because the ETag isn't parsed properly
-        test_multipart_upload(&client, &test_bucket, &multipart_filename);
-    }
+    test_multipart_upload(&client, &test_bucket, &multipart_filename);
 
     // modify the bucket's CORS properties
     if cfg!(not(feature = "disable_minio_unsupported")) {
@@ -125,14 +122,8 @@ fn test_all_the_things() {
                                   &"tests/sample-data/no_credentials",
                                   &metadata);
 
-    if cfg!(not(feature = "disable_minio_unsupported")) {
-        // FIXME: Minio support: metadata retrieval is currently broken
-        test_head_object_with_metadata(&client, &test_bucket, &metadata_filename, &metadata);
-    }
-    if cfg!(not(feature = "disable_minio_unsupported")) {
-        // FIXME: Minio support: metadata retrieval currently broken
-        test_get_object_with_metadata(&client, &test_bucket, &metadata_filename, &metadata);
-    }
+    test_head_object_with_metadata(&client, &test_bucket, &metadata_filename, &metadata);
+    test_get_object_with_metadata(&client, &test_bucket, &metadata_filename, &metadata);
 
     // list items with paging
     if cfg!(not(feature = "disable_ceph_unsupported")) {
