@@ -13,7 +13,7 @@ use std::io::{Read, BufReader};
 use time::get_time;
 
 use rusoto_core::{DefaultCredentialsProvider, Region};
-use rusoto_s3::{S3, S3Client, HeadObjectRequest, CopyObjectRequest, GetObjectRequest,
+use rusoto_s3::{S3, S3Client, HeadObjectRequest, CopyObjectRequest, GetObjectError, GetObjectRequest,
                  PutObjectRequest, DeleteObjectRequest, PutBucketCorsRequest, CORSConfiguration,
                  CORSRule, CreateBucketRequest, DeleteBucketRequest, CreateMultipartUploadRequest,
                  UploadPartRequest, CompleteMultipartUploadRequest, CompletedMultipartUpload,
@@ -80,6 +80,9 @@ fn test_all_the_things() {
     test_copy_object_utf8(&client, &test_bucket, &utf8_filename);
 
     test_delete_object(&client, &test_bucket, &utf8_filename);
+
+    // test failure responses
+    test_get_object_no_such_object(&client, &test_bucket, &binary_filename);
 
     // Binary objects:
     test_put_object_with_filename(&client,
@@ -252,6 +255,19 @@ fn test_get_object(client: &TestClient, bucket: &str, filename: &str) {
     }
 
     assert!(body.len() > 0);
+}
+
+fn test_get_object_no_such_object(client: &TestClient, bucket: &str, filename: &str) {
+    let get_req = GetObjectRequest {
+        bucket: bucket.to_owned(),
+        key: filename.to_owned(),
+        ..Default::default()
+    };
+
+    match client.get_object(&get_req) {
+        Err(GetObjectError::NoSuchKey(_)) => (),
+        r => panic!("unexpected response {:?}", r)
+    };
 }
 
 fn test_get_object_bufreader(client: &TestClient, bucket: &str, filename: &str) {
