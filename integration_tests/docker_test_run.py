@@ -17,7 +17,7 @@ class Docker:
 
     def __enter__(self):
         print("starting container for {!r}".format(self.image))
-        self.container = subprocess.check_output(["docker", "run", "-d", "--network=host", "--rm" ] \
+        self.container = subprocess.check_output(["docker", "run", "-d", "--rm" ] \
             + self.run_opts + [self.image] + self.run_args, universal_newlines=True).strip()
         try:
             self._wait_for_s3()
