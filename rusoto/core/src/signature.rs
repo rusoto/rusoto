@@ -6,7 +6,6 @@
 //! If needed, the request will be re-issued to a temporary redirect endpoint.  This can happen with
 //! newly created S3 buckets not in us-standard/us-east-1.
 
-use std::ascii::AsciiExt;
 use std::collections::BTreeMap;
 use std::collections::btree_map::Entry;
 use std::str;
