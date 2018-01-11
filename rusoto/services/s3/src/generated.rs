@@ -1029,8 +1029,8 @@ impl AnalyticsS3ExportFileFormatSerializer {
 pub struct StreamingBody(Box<Read>);
 
 impl StreamingBody {
-    pub fn new(read: Box<Read>) -> StreamingBody {
-        StreamingBody(read)
+    pub fn new<R: Read + 'static>(read: R) -> StreamingBody {
+        StreamingBody(Box::new(read))
     }
 }
 
