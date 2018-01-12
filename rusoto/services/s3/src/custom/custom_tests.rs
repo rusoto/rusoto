@@ -4,6 +4,7 @@ use ::*;
 
 use rusoto_core::{Region, SignedRequest};
 use self::rusoto_mock::*;
+use std::fs::File;
 
 #[test]
 fn initiate_multipart_upload_happy_path() {
@@ -323,6 +324,15 @@ fn should_parse_location_constraint() {
             assert_eq!(sstr("EU"), result.location_constraint);
         }
     }
+}
+
+#[test]
+fn can_construct_streaming_body() {
+    let test_body = File::open("test_resources/custom/s3_simple_body.txt").expect("couldn't find test_resources/custom/s3_simple_body.txt");
+    let mut streaming_body = StreamingBody::new(test_body);
+    let mut read_string = String::new();
+    let _bytes = streaming_body.read_to_string(&mut read_string);
+    assert_eq!("Simple Body Test", read_string);
 }
 
 /// returns Some(String)

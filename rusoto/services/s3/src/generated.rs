@@ -1029,6 +1029,12 @@ impl AnalyticsS3ExportFileFormatSerializer {
 
 pub struct StreamingBody(Box<Read>);
 
+impl StreamingBody {
+    pub fn new<R: Read + 'static>(read: R) -> StreamingBody {
+        StreamingBody(Box::new(read))
+    }
+}
+
 impl fmt::Debug for StreamingBody {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "<Body: streaming content>")

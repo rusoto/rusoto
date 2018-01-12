@@ -313,6 +313,12 @@ fn generate_types<P>(writer: &mut FileWriter, service: &Service, protocol_genera
             writeln!(writer,
                      "pub struct {streaming_name}(Box<Read>);
 
+                     impl {streaming_name} {{
+                         pub fn new<R: Read + 'static>(read: R) -> {streaming_name} {{
+                             {streaming_name}(Box::new(read))
+                         }}
+                     }}
+
                      impl fmt::Debug for {streaming_name} {{
                          fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {{
                              write!(f, \"<{name}: streaming content>\")
