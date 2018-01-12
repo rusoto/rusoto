@@ -77,7 +77,7 @@ impl GenerateProtocol for QueryGenerator {
             use rusoto_core::signature::SignedRequest;
             use xml::reader::XmlEvent;
             use rusoto_core::xmlutil::{{Next, Peek, XmlParseError, XmlResponse}};
-            use rusoto_core::xmlutil::{{characters, end_element, start_element, skip_tree, peek_at_name}};
+            use rusoto_core::xmlutil::{{characters, end_element, find_start_element, start_element, skip_tree, peek_at_name}};
             use rusoto_core::xmlerror::*;
 
             enum DeserializerNext {{

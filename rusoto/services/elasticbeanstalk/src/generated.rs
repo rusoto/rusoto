@@ -30,7 +30,8 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use xml::reader::XmlEvent;
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
-use rusoto_core::xmlutil::{characters, end_element, peek_at_name, skip_tree, start_element};
+use rusoto_core::xmlutil::{characters, end_element, find_start_element, peek_at_name, skip_tree,
+                           start_element};
 use rusoto_core::xmlerror::*;
 
 enum DeserializerNext {
@@ -9903,8 +9904,7 @@ impl AbortEnvironmentUpdateError {
     pub fn from_body(body: &str) -> AbortEnvironmentUpdateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InsufficientPrivilegesException" => {
@@ -9979,8 +9979,7 @@ impl ApplyEnvironmentManagedActionError {
     pub fn from_body(body: &str) -> ApplyEnvironmentManagedActionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ElasticBeanstalkServiceException" => {
@@ -10057,8 +10056,7 @@ impl CheckDNSAvailabilityError {
     pub fn from_body(body: &str) -> CheckDNSAvailabilityError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CheckDNSAvailabilityError::Unknown(String::from(body)),
@@ -10127,8 +10125,7 @@ impl ComposeEnvironmentsError {
     pub fn from_body(body: &str) -> ComposeEnvironmentsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InsufficientPrivilegesException" => {
@@ -10205,8 +10202,7 @@ impl CreateApplicationError {
     pub fn from_body(body: &str) -> CreateApplicationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "TooManyApplicationsException" => {
@@ -10285,8 +10281,7 @@ impl CreateApplicationVersionError {
     pub fn from_body(body: &str) -> CreateApplicationVersionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "CodeBuildNotInServiceRegionException" => {
@@ -10387,8 +10382,7 @@ impl CreateConfigurationTemplateError {
     pub fn from_body(body: &str) -> CreateConfigurationTemplateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InsufficientPrivilegesException" => {
@@ -10473,8 +10467,7 @@ impl CreateEnvironmentError {
     pub fn from_body(body: &str) -> CreateEnvironmentError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InsufficientPrivilegesException" => {
@@ -10555,8 +10548,7 @@ impl CreatePlatformVersionError {
     pub fn from_body(body: &str) -> CreatePlatformVersionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ElasticBeanstalkServiceException" => {
@@ -10643,8 +10635,7 @@ impl CreateStorageLocationError {
     pub fn from_body(body: &str) -> CreateStorageLocationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InsufficientPrivilegesException" => {
@@ -10727,8 +10718,7 @@ impl DeleteApplicationError {
     pub fn from_body(body: &str) -> DeleteApplicationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "OperationInProgressException" => {
@@ -10805,8 +10795,7 @@ impl DeleteApplicationVersionError {
     pub fn from_body(body: &str) -> DeleteApplicationVersionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InsufficientPrivilegesException" => {
@@ -10897,8 +10886,7 @@ impl DeleteConfigurationTemplateError {
     pub fn from_body(body: &str) -> DeleteConfigurationTemplateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "OperationInProgressException" => {
@@ -10969,8 +10957,7 @@ impl DeleteEnvironmentConfigurationError {
     pub fn from_body(body: &str) -> DeleteEnvironmentConfigurationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteEnvironmentConfigurationError::Unknown(String::from(body)),
@@ -11043,8 +11030,7 @@ impl DeletePlatformVersionError {
     pub fn from_body(body: &str) -> DeletePlatformVersionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ElasticBeanstalkServiceException" => {
@@ -11131,8 +11117,7 @@ impl DescribeApplicationVersionsError {
     pub fn from_body(body: &str) -> DescribeApplicationVersionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeApplicationVersionsError::Unknown(String::from(body)),
@@ -11197,8 +11182,7 @@ impl DescribeApplicationsError {
     pub fn from_body(body: &str) -> DescribeApplicationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeApplicationsError::Unknown(String::from(body)),
@@ -11265,8 +11249,7 @@ impl DescribeConfigurationOptionsError {
     pub fn from_body(body: &str) -> DescribeConfigurationOptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "TooManyBucketsException" => DescribeConfigurationOptionsError::TooManyBuckets(
@@ -11337,8 +11320,7 @@ impl DescribeConfigurationSettingsError {
     pub fn from_body(body: &str) -> DescribeConfigurationSettingsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "TooManyBucketsException" => DescribeConfigurationSettingsError::TooManyBuckets(
@@ -11411,8 +11393,7 @@ impl DescribeEnvironmentHealthError {
     pub fn from_body(body: &str) -> DescribeEnvironmentHealthError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ElasticBeanstalkServiceException" => {
@@ -11489,8 +11470,7 @@ impl DescribeEnvironmentManagedActionHistoryError {
     pub fn from_body(body: &str) -> DescribeEnvironmentManagedActionHistoryError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ElasticBeanstalkServiceException" => {
@@ -11565,8 +11545,7 @@ impl DescribeEnvironmentManagedActionsError {
     pub fn from_body(body: &str) -> DescribeEnvironmentManagedActionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ElasticBeanstalkServiceException" => {
@@ -11639,8 +11618,7 @@ impl DescribeEnvironmentResourcesError {
     pub fn from_body(body: &str) -> DescribeEnvironmentResourcesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InsufficientPrivilegesException" => {
@@ -11711,8 +11689,7 @@ impl DescribeEnvironmentsError {
     pub fn from_body(body: &str) -> DescribeEnvironmentsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeEnvironmentsError::Unknown(String::from(body)),
@@ -11777,8 +11754,7 @@ impl DescribeEventsError {
     pub fn from_body(body: &str) -> DescribeEventsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeEventsError::Unknown(String::from(body)),
@@ -11845,8 +11821,7 @@ impl DescribeInstancesHealthError {
     pub fn from_body(body: &str) -> DescribeInstancesHealthError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ElasticBeanstalkServiceException" => {
@@ -11925,8 +11900,7 @@ impl DescribePlatformVersionError {
     pub fn from_body(body: &str) -> DescribePlatformVersionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ElasticBeanstalkServiceException" => {
@@ -12003,8 +11977,7 @@ impl ListAvailableSolutionStacksError {
     pub fn from_body(body: &str) -> ListAvailableSolutionStacksError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListAvailableSolutionStacksError::Unknown(String::from(body)),
@@ -12073,8 +12046,7 @@ impl ListPlatformVersionsError {
     pub fn from_body(body: &str) -> ListPlatformVersionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ElasticBeanstalkServiceException" => {
@@ -12153,8 +12125,7 @@ impl RebuildEnvironmentError {
     pub fn from_body(body: &str) -> RebuildEnvironmentError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InsufficientPrivilegesException" => {
@@ -12225,8 +12196,7 @@ impl RequestEnvironmentInfoError {
     pub fn from_body(body: &str) -> RequestEnvironmentInfoError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RequestEnvironmentInfoError::Unknown(String::from(body)),
@@ -12291,8 +12261,7 @@ impl RestartAppServerError {
     pub fn from_body(body: &str) -> RestartAppServerError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RestartAppServerError::Unknown(String::from(body)),
@@ -12355,8 +12324,7 @@ impl RetrieveEnvironmentInfoError {
     pub fn from_body(body: &str) -> RetrieveEnvironmentInfoError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RetrieveEnvironmentInfoError::Unknown(String::from(body)),
@@ -12421,8 +12389,7 @@ impl SwapEnvironmentCNAMEsError {
     pub fn from_body(body: &str) -> SwapEnvironmentCNAMEsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => SwapEnvironmentCNAMEsError::Unknown(String::from(body)),
@@ -12489,8 +12456,7 @@ impl TerminateEnvironmentError {
     pub fn from_body(body: &str) -> TerminateEnvironmentError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InsufficientPrivilegesException" => {
@@ -12561,8 +12527,7 @@ impl UpdateApplicationError {
     pub fn from_body(body: &str) -> UpdateApplicationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => UpdateApplicationError::Unknown(String::from(body)),
@@ -12629,8 +12594,7 @@ impl UpdateApplicationResourceLifecycleError {
     pub fn from_body(body: &str) -> UpdateApplicationResourceLifecycleError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InsufficientPrivilegesException" => {
@@ -12701,8 +12665,7 @@ impl UpdateApplicationVersionError {
     pub fn from_body(body: &str) -> UpdateApplicationVersionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => UpdateApplicationVersionError::Unknown(String::from(body)),
@@ -12771,8 +12734,7 @@ impl UpdateConfigurationTemplateError {
     pub fn from_body(body: &str) -> UpdateConfigurationTemplateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InsufficientPrivilegesException" => {
@@ -12851,8 +12813,7 @@ impl UpdateEnvironmentError {
     pub fn from_body(body: &str) -> UpdateEnvironmentError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InsufficientPrivilegesException" => {
@@ -12931,8 +12892,7 @@ impl ValidateConfigurationSettingsError {
     pub fn from_body(body: &str) -> ValidateConfigurationSettingsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InsufficientPrivilegesException" => {

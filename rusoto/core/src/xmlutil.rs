@@ -168,6 +168,23 @@ pub fn skip_tree<T: Peek + Next>(stack: &mut T) {
     }
 
 }
+
+/// skip all elements until a start element is encountered
+///
+/// Errors and end-of-stream are ignored.
+pub fn find_start_element<T: Peek + Next>(stack: &mut T) {
+    loop {
+        match stack.peek() {
+            Some(&Ok(XmlEvent::StartElement { .. })) => break,
+            Some(&Ok(_)) => {
+                stack.next().unwrap().unwrap();
+            },
+            Some(&Err(_)) => break,
+            None => break,
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -262,6 +279,22 @@ mod tests {
             Ok(_) => (),
             Err(_) => panic!("Couldn't find end element"),
         }
+    }
+
+    #[test]
+    fn test_find_start_element() {
+        let body = include_bytes!("../test_resources/list_queues_with_queue.xml");
+        let parser = EventReader::new(&body[..]);
+        let stack = parser.into_iter().peekable();
+        let mut reader = XmlResponse::new(stack);
+
+        // skip first two elements
+        find_start_element(&mut reader);
+        assert_eq!(peek_at_name(&mut reader).unwrap(), "ListQueuesResponse");
+
+        // already at start element
+        find_start_element(&mut reader);
+        assert_eq!(peek_at_name(&mut reader).unwrap(), "ListQueuesResponse");
     }
 
 }

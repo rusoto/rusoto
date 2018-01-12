@@ -3,6 +3,7 @@
 ## [Unreleased]
 (Please put an entry here in each PR)
 
+- Fix handling of error responses from Ceph (S3)
 - Convert metadata keys to lowercase (only affects third party services, Amazon already converts them)
 - Allow setting both, Region name and endpoint, via `Region::Custom`
 - Added China-northwest, US-Gov-West & Paris regions

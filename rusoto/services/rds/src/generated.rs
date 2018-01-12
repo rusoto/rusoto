@@ -30,7 +30,8 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use xml::reader::XmlEvent;
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
-use rusoto_core::xmlutil::{characters, end_element, peek_at_name, skip_tree, start_element};
+use rusoto_core::xmlutil::{characters, end_element, find_start_element, peek_at_name, skip_tree,
+                           start_element};
 use rusoto_core::xmlerror::*;
 
 enum DeserializerNext {
@@ -17039,8 +17040,7 @@ impl AddRoleToDBClusterError {
     pub fn from_body(body: &str) -> AddRoleToDBClusterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterNotFoundFault" => AddRoleToDBClusterError::DBClusterNotFoundFault(
@@ -17131,8 +17131,7 @@ impl AddSourceIdentifierToSubscriptionError {
     pub fn from_body(body: &str) -> AddSourceIdentifierToSubscriptionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "SourceNotFoundFault" => {
@@ -17215,8 +17214,7 @@ impl AddTagsToResourceError {
     pub fn from_body(body: &str) -> AddTagsToResourceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterNotFoundFault" => AddTagsToResourceError::DBClusterNotFoundFault(
@@ -17295,8 +17293,7 @@ impl ApplyPendingMaintenanceActionError {
     pub fn from_body(body: &str) -> ApplyPendingMaintenanceActionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceNotFoundFault" => {
@@ -17375,8 +17372,7 @@ impl AuthorizeDBSecurityGroupIngressError {
     pub fn from_body(body: &str) -> AuthorizeDBSecurityGroupIngressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AuthorizationAlreadyExistsFault" => {
@@ -17477,8 +17473,7 @@ impl CopyDBClusterParameterGroupError {
     pub fn from_body(body: &str) -> CopyDBClusterParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBParameterGroupAlreadyExistsFault" => {
@@ -17577,8 +17572,7 @@ impl CopyDBClusterSnapshotError {
     pub fn from_body(body: &str) -> CopyDBClusterSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterSnapshotAlreadyExistsFault" => {
@@ -17685,8 +17679,7 @@ impl CopyDBParameterGroupError {
     pub fn from_body(body: &str) -> CopyDBParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBParameterGroupAlreadyExistsFault" => {
@@ -17779,8 +17772,7 @@ impl CopyDBSnapshotError {
     pub fn from_body(body: &str) -> CopyDBSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBSnapshotAlreadyExistsFault" => {
@@ -17871,8 +17863,7 @@ impl CopyOptionGroupError {
     pub fn from_body(body: &str) -> CopyOptionGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "OptionGroupAlreadyExistsFault" => {
@@ -17981,8 +17972,7 @@ impl CreateDBClusterError {
     pub fn from_body(body: &str) -> CreateDBClusterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterAlreadyExistsFault" => {
@@ -18125,8 +18115,7 @@ impl CreateDBClusterParameterGroupError {
     pub fn from_body(body: &str) -> CreateDBClusterParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBParameterGroupAlreadyExistsFault" => {
@@ -18217,8 +18206,7 @@ impl CreateDBClusterSnapshotError {
     pub fn from_body(body: &str) -> CreateDBClusterSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterNotFoundFault" => CreateDBClusterSnapshotError::DBClusterNotFoundFault(
@@ -18347,8 +18335,7 @@ impl CreateDBInstanceError {
     pub fn from_body(body: &str) -> CreateDBInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AuthorizationNotFoundFault" => CreateDBInstanceError::AuthorizationNotFoundFault(
@@ -18535,8 +18522,7 @@ impl CreateDBInstanceReadReplicaError {
     pub fn from_body(body: &str) -> CreateDBInstanceReadReplicaError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBInstanceAlreadyExistsFault" => {
@@ -18717,8 +18703,7 @@ impl CreateDBParameterGroupError {
     pub fn from_body(body: &str) -> CreateDBParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBParameterGroupAlreadyExistsFault" => {
@@ -18801,8 +18786,7 @@ impl CreateDBSecurityGroupError {
     pub fn from_body(body: &str) -> CreateDBSecurityGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBSecurityGroupAlreadyExistsFault" => {
@@ -18893,8 +18877,7 @@ impl CreateDBSnapshotError {
     pub fn from_body(body: &str) -> CreateDBSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBInstanceNotFoundFault" => CreateDBSnapshotError::DBInstanceNotFoundFault(
@@ -18987,8 +18970,7 @@ impl CreateDBSubnetGroupError {
     pub fn from_body(body: &str) -> CreateDBSubnetGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBSubnetGroupAlreadyExistsFault" => {
@@ -19095,8 +19077,7 @@ impl CreateEventSubscriptionError {
     pub fn from_body(body: &str) -> CreateEventSubscriptionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "EventSubscriptionQuotaExceededFault" => {
@@ -19203,8 +19184,7 @@ impl CreateOptionGroupError {
     pub fn from_body(body: &str) -> CreateOptionGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "OptionGroupAlreadyExistsFault" => {
@@ -19291,8 +19271,7 @@ impl DeleteDBClusterError {
     pub fn from_body(body: &str) -> DeleteDBClusterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterNotFoundFault" => {
@@ -19383,8 +19362,7 @@ impl DeleteDBClusterParameterGroupError {
     pub fn from_body(body: &str) -> DeleteDBClusterParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBParameterGroupNotFoundFault" => {
@@ -19467,8 +19445,7 @@ impl DeleteDBClusterSnapshotError {
     pub fn from_body(body: &str) -> DeleteDBClusterSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterSnapshotNotFoundFault" => {
@@ -19555,8 +19532,7 @@ impl DeleteDBInstanceError {
     pub fn from_body(body: &str) -> DeleteDBInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBInstanceNotFoundFault" => DeleteDBInstanceError::DBInstanceNotFoundFault(
@@ -19647,8 +19623,7 @@ impl DeleteDBParameterGroupError {
     pub fn from_body(body: &str) -> DeleteDBParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBParameterGroupNotFoundFault" => {
@@ -19729,8 +19704,7 @@ impl DeleteDBSecurityGroupError {
     pub fn from_body(body: &str) -> DeleteDBSecurityGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBSecurityGroupNotFoundFault" => {
@@ -19811,8 +19785,7 @@ impl DeleteDBSnapshotError {
     pub fn from_body(body: &str) -> DeleteDBSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBSnapshotNotFoundFault" => DeleteDBSnapshotError::DBSnapshotNotFoundFault(
@@ -19891,8 +19864,7 @@ impl DeleteDBSubnetGroupError {
     pub fn from_body(body: &str) -> DeleteDBSubnetGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBSubnetGroupNotFoundFault" => {
@@ -19979,8 +19951,7 @@ impl DeleteEventSubscriptionError {
     pub fn from_body(body: &str) -> DeleteEventSubscriptionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidEventSubscriptionStateFault" => {
@@ -20061,8 +20032,7 @@ impl DeleteOptionGroupError {
     pub fn from_body(body: &str) -> DeleteOptionGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidOptionGroupStateFault" => {
@@ -20137,8 +20107,7 @@ impl DescribeAccountAttributesError {
     pub fn from_body(body: &str) -> DescribeAccountAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeAccountAttributesError::Unknown(String::from(body)),
@@ -20205,8 +20174,7 @@ impl DescribeCertificatesError {
     pub fn from_body(body: &str) -> DescribeCertificatesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "CertificateNotFoundFault" => DescribeCertificatesError::CertificateNotFoundFault(
@@ -20277,8 +20245,7 @@ impl DescribeDBClusterParameterGroupsError {
     pub fn from_body(body: &str) -> DescribeDBClusterParameterGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBParameterGroupNotFoundFault" => {
@@ -20353,8 +20320,7 @@ impl DescribeDBClusterParametersError {
     pub fn from_body(body: &str) -> DescribeDBClusterParametersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBParameterGroupNotFoundFault" => {
@@ -20427,8 +20393,7 @@ impl DescribeDBClusterSnapshotAttributesError {
     pub fn from_body(body: &str) -> DescribeDBClusterSnapshotAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterSnapshotNotFoundFault" => {
@@ -20503,8 +20468,7 @@ impl DescribeDBClusterSnapshotsError {
     pub fn from_body(body: &str) -> DescribeDBClusterSnapshotsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterSnapshotNotFoundFault" => {
@@ -20577,8 +20541,7 @@ impl DescribeDBClustersError {
     pub fn from_body(body: &str) -> DescribeDBClustersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterNotFoundFault" => DescribeDBClustersError::DBClusterNotFoundFault(
@@ -20647,8 +20610,7 @@ impl DescribeDBEngineVersionsError {
     pub fn from_body(body: &str) -> DescribeDBEngineVersionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeDBEngineVersionsError::Unknown(String::from(body)),
@@ -20715,8 +20677,7 @@ impl DescribeDBInstancesError {
     pub fn from_body(body: &str) -> DescribeDBInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBInstanceNotFoundFault" => DescribeDBInstancesError::DBInstanceNotFoundFault(
@@ -20787,8 +20748,7 @@ impl DescribeDBLogFilesError {
     pub fn from_body(body: &str) -> DescribeDBLogFilesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBInstanceNotFoundFault" => DescribeDBLogFilesError::DBInstanceNotFoundFault(
@@ -20859,8 +20819,7 @@ impl DescribeDBParameterGroupsError {
     pub fn from_body(body: &str) -> DescribeDBParameterGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBParameterGroupNotFoundFault" => {
@@ -20933,8 +20892,7 @@ impl DescribeDBParametersError {
     pub fn from_body(body: &str) -> DescribeDBParametersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBParameterGroupNotFoundFault" => {
@@ -21007,8 +20965,7 @@ impl DescribeDBSecurityGroupsError {
     pub fn from_body(body: &str) -> DescribeDBSecurityGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBSecurityGroupNotFoundFault" => {
@@ -21081,8 +21038,7 @@ impl DescribeDBSnapshotAttributesError {
     pub fn from_body(body: &str) -> DescribeDBSnapshotAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBSnapshotNotFoundFault" => {
@@ -21155,8 +21111,7 @@ impl DescribeDBSnapshotsError {
     pub fn from_body(body: &str) -> DescribeDBSnapshotsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBSnapshotNotFoundFault" => DescribeDBSnapshotsError::DBSnapshotNotFoundFault(
@@ -21227,8 +21182,7 @@ impl DescribeDBSubnetGroupsError {
     pub fn from_body(body: &str) -> DescribeDBSubnetGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBSubnetGroupNotFoundFault" => {
@@ -21299,8 +21253,7 @@ impl DescribeEngineDefaultClusterParametersError {
     pub fn from_body(body: &str) -> DescribeEngineDefaultClusterParametersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeEngineDefaultClusterParametersError::Unknown(String::from(body)),
@@ -21365,8 +21318,7 @@ impl DescribeEngineDefaultParametersError {
     pub fn from_body(body: &str) -> DescribeEngineDefaultParametersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeEngineDefaultParametersError::Unknown(String::from(body)),
@@ -21431,8 +21383,7 @@ impl DescribeEventCategoriesError {
     pub fn from_body(body: &str) -> DescribeEventCategoriesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeEventCategoriesError::Unknown(String::from(body)),
@@ -21499,8 +21450,7 @@ impl DescribeEventSubscriptionsError {
     pub fn from_body(body: &str) -> DescribeEventSubscriptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "SubscriptionNotFoundFault" => {
@@ -21571,8 +21521,7 @@ impl DescribeEventsError {
     pub fn from_body(body: &str) -> DescribeEventsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeEventsError::Unknown(String::from(body)),
@@ -21635,8 +21584,7 @@ impl DescribeOptionGroupOptionsError {
     pub fn from_body(body: &str) -> DescribeOptionGroupOptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeOptionGroupOptionsError::Unknown(String::from(body)),
@@ -21703,8 +21651,7 @@ impl DescribeOptionGroupsError {
     pub fn from_body(body: &str) -> DescribeOptionGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "OptionGroupNotFoundFault" => DescribeOptionGroupsError::OptionGroupNotFoundFault(
@@ -21773,8 +21720,7 @@ impl DescribeOrderableDBInstanceOptionsError {
     pub fn from_body(body: &str) -> DescribeOrderableDBInstanceOptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeOrderableDBInstanceOptionsError::Unknown(String::from(body)),
@@ -21841,8 +21787,7 @@ impl DescribePendingMaintenanceActionsError {
     pub fn from_body(body: &str) -> DescribePendingMaintenanceActionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceNotFoundFault" => {
@@ -21915,8 +21860,7 @@ impl DescribeReservedDBInstancesError {
     pub fn from_body(body: &str) -> DescribeReservedDBInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ReservedDBInstanceNotFoundFault" => {
@@ -21989,8 +21933,7 @@ impl DescribeReservedDBInstancesOfferingsError {
     pub fn from_body(body: &str) -> DescribeReservedDBInstancesOfferingsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
@@ -22056,8 +21999,7 @@ impl DescribeSourceRegionsError {
     pub fn from_body(body: &str) -> DescribeSourceRegionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSourceRegionsError::Unknown(String::from(body)),
@@ -22126,8 +22068,7 @@ impl DownloadDBLogFilePortionError {
     pub fn from_body(body: &str) -> DownloadDBLogFilePortionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBInstanceNotFoundFault" => {
@@ -22208,8 +22149,7 @@ impl FailoverDBClusterError {
     pub fn from_body(body: &str) -> FailoverDBClusterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterNotFoundFault" => FailoverDBClusterError::DBClusterNotFoundFault(
@@ -22296,8 +22236,7 @@ impl ListTagsForResourceError {
     pub fn from_body(body: &str) -> ListTagsForResourceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterNotFoundFault" => ListTagsForResourceError::DBClusterNotFoundFault(
@@ -22396,8 +22335,7 @@ impl ModifyDBClusterError {
     pub fn from_body(body: &str) -> ModifyDBClusterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterAlreadyExistsFault" => {
@@ -22520,8 +22458,7 @@ impl ModifyDBClusterParameterGroupError {
     pub fn from_body(body: &str) -> ModifyDBClusterParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBParameterGroupNotFoundFault" => {
@@ -22606,8 +22543,7 @@ impl ModifyDBClusterSnapshotAttributeError {
     pub fn from_body(body: &str) -> ModifyDBClusterSnapshotAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterSnapshotNotFoundFault" => {
@@ -22728,8 +22664,7 @@ impl ModifyDBInstanceError {
     pub fn from_body(body: &str) -> ModifyDBInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AuthorizationNotFoundFault" => ModifyDBInstanceError::AuthorizationNotFoundFault(
@@ -22880,8 +22815,7 @@ impl ModifyDBParameterGroupError {
     pub fn from_body(body: &str) -> ModifyDBParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBParameterGroupNotFoundFault" => {
@@ -22960,8 +22894,7 @@ impl ModifyDBSnapshotError {
     pub fn from_body(body: &str) -> ModifyDBSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBSnapshotNotFoundFault" => ModifyDBSnapshotError::DBSnapshotNotFoundFault(
@@ -23034,8 +22967,7 @@ impl ModifyDBSnapshotAttributeError {
     pub fn from_body(body: &str) -> ModifyDBSnapshotAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBSnapshotNotFoundFault" => {
@@ -23128,8 +23060,7 @@ impl ModifyDBSubnetGroupError {
     pub fn from_body(body: &str) -> ModifyDBSubnetGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBSubnetGroupDoesNotCoverEnoughAZs" => {
@@ -23232,8 +23163,7 @@ impl ModifyEventSubscriptionError {
     pub fn from_body(body: &str) -> ModifyEventSubscriptionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "EventSubscriptionQuotaExceededFault" => {
@@ -23336,8 +23266,7 @@ impl ModifyOptionGroupError {
     pub fn from_body(body: &str) -> ModifyOptionGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidOptionGroupStateFault" => {
@@ -23416,8 +23345,7 @@ impl PromoteReadReplicaError {
     pub fn from_body(body: &str) -> PromoteReadReplicaError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBInstanceNotFoundFault" => PromoteReadReplicaError::DBInstanceNotFoundFault(
@@ -23496,8 +23424,7 @@ impl PromoteReadReplicaDBClusterError {
     pub fn from_body(body: &str) -> PromoteReadReplicaDBClusterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterNotFoundFault" => {
@@ -23580,8 +23507,7 @@ impl PurchaseReservedDBInstancesOfferingError {
     pub fn from_body(body: &str) -> PurchaseReservedDBInstancesOfferingError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
@@ -23653,8 +23579,7 @@ impl RebootDBInstanceError {
     pub fn from_body(body: &str) -> RebootDBInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBInstanceNotFoundFault" => RebootDBInstanceError::DBInstanceNotFoundFault(
@@ -23733,8 +23658,7 @@ impl RemoveRoleFromDBClusterError {
     pub fn from_body(body: &str) -> RemoveRoleFromDBClusterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterNotFoundFault" => RemoveRoleFromDBClusterError::DBClusterNotFoundFault(
@@ -23819,8 +23743,7 @@ impl RemoveSourceIdentifierFromSubscriptionError {
     pub fn from_body(body: &str) -> RemoveSourceIdentifierFromSubscriptionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "SourceNotFoundFault" => {
@@ -23905,8 +23828,7 @@ impl RemoveTagsFromResourceError {
     pub fn from_body(body: &str) -> RemoveTagsFromResourceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterNotFoundFault" => RemoveTagsFromResourceError::DBClusterNotFoundFault(
@@ -23987,8 +23909,7 @@ impl ResetDBClusterParameterGroupError {
     pub fn from_body(body: &str) -> ResetDBClusterParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBParameterGroupNotFoundFault" => {
@@ -24071,8 +23992,7 @@ impl ResetDBParameterGroupError {
     pub fn from_body(body: &str) -> ResetDBParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBParameterGroupNotFoundFault" => {
@@ -24175,8 +24095,7 @@ impl RestoreDBClusterFromS3Error {
     pub fn from_body(body: &str) -> RestoreDBClusterFromS3Error {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterAlreadyExistsFault" => {
@@ -24345,8 +24264,7 @@ impl RestoreDBClusterFromSnapshotError {
     pub fn from_body(body: &str) -> RestoreDBClusterFromSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterAlreadyExistsFault" => {
@@ -24535,8 +24453,7 @@ impl RestoreDBClusterToPointInTimeError {
     pub fn from_body(body: &str) -> RestoreDBClusterToPointInTimeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterAlreadyExistsFault" => {
@@ -24735,8 +24652,7 @@ impl RestoreDBInstanceFromDBSnapshotError {
     pub fn from_body(body: &str) -> RestoreDBInstanceFromDBSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AuthorizationNotFoundFault" => {
@@ -24951,8 +24867,7 @@ impl RestoreDBInstanceToPointInTimeError {
     pub fn from_body(body: &str) -> RestoreDBInstanceToPointInTimeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AuthorizationNotFoundFault" => {
@@ -25139,8 +25054,7 @@ impl RevokeDBSecurityGroupIngressError {
     pub fn from_body(body: &str) -> RevokeDBSecurityGroupIngressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AuthorizationNotFoundFault" => {
@@ -25245,8 +25159,7 @@ impl StartDBInstanceError {
     pub fn from_body(body: &str) -> StartDBInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AuthorizationNotFoundFault" => StartDBInstanceError::AuthorizationNotFoundFault(
@@ -25371,8 +25284,7 @@ impl StopDBInstanceError {
     pub fn from_body(body: &str) -> StopDBInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBInstanceNotFoundFault" => {
