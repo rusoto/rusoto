@@ -502,7 +502,7 @@ fn build_hostname(service: &str, region: &Region) -> String {
                 Region::Custom { ref endpoint, .. } => {
                     remove_scheme_from_custom_hostname(endpoint).to_owned()
                 }
-                Region::CnNorth1 => format!("{}.{}.amazonaws.com.cn", service, region.name()),
+                Region::CnNorth1 | Region::CnNorthwest1 => format!("{}.{}.amazonaws.com.cn", service, region.name()),
                 _ => format!("{}.amazonaws.com", service),
             }
         }
@@ -512,7 +512,7 @@ fn build_hostname(service: &str, region: &Region) -> String {
                     remove_scheme_from_custom_hostname(endpoint).to_owned()
                 }
                 Region::UsEast1 => "s3.amazonaws.com".to_string(),
-                Region::CnNorth1 => format!("s3.{}.amazonaws.com.cn", region.name()),
+                Region::CnNorth1 | Region::CnNorthwest1 => format!("s3.{}.amazonaws.com.cn", region.name()),
                 _ => format!("s3-{}.amazonaws.com", region.name()),
             }
         }
@@ -529,7 +529,7 @@ fn build_hostname(service: &str, region: &Region) -> String {
                 Region::Custom { ref endpoint, .. } => {
                     remove_scheme_from_custom_hostname(endpoint).to_owned()
                 }
-                Region::CnNorth1 => format!("{}.{}.amazonaws.com.cn", service, region.name()),
+                Region::CnNorth1 | Region::CnNorthwest1 => format!("{}.{}.amazonaws.com.cn", service, region.name()),
                 _ => format!("{}.{}.amazonaws.com", service, region.name()),
             }
         }
