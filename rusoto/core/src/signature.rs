@@ -259,7 +259,7 @@ impl SignedRequest {
         let hashed_canonical_request = to_hexdigest(&canonical_request);
         let scope = format!("{}/{}/{}/aws4_request",
                             date.strftime("%Y%m%d").unwrap(),
-                            self.region,
+                            self.region.name(),
                             &self.service);
         let string_to_sign = string_to_sign(date, &hashed_canonical_request, &scope);
 
