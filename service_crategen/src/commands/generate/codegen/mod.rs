@@ -123,6 +123,7 @@ fn generate<P, E>(writer: &mut FileWriter,
         use std::error::Error;
         use std::io;
         use std::io::Read;
+        use std::default::Default;
         use rusoto_core::request::HttpDispatchError;
         use rusoto_core::credential::{{CredentialsError, ProvideAwsCredentials}};
     ")?;
@@ -388,16 +389,29 @@ fn generate_struct<P>(service: &Service,
             protocol_generator.generate_struct_attributes(serialized, deserialized);
         // Serde attributes are only needed if deriving the Serialize or Deserialize trait
         let need_serde_attrs = struct_attributes.contains("erialize");
-        format!(
+        let mut output = format!(
             "{attributes}
             pub struct {name} {{
                 {struct_fields}
-            }}
-            ",
+            }}",
             attributes = struct_attributes,
             name = name,
             struct_fields = generate_struct_fields(service, shape, name, need_serde_attrs, protocol_generator),
-        )
+        );
+
+        // if the field is serialized, then it is used somewhere as an input
+        // in this case we want to generate helpers
+        if serialized {
+            output.push_str(&format!(
+                "impl {name} {{
+                    {attr_helpers}
+                }}",
+                name = name,
+                attr_helpers = generate_attr_helpers(service, shape, name, protocol_generator)
+            ));
+        }
+
+        output
     }
 }
 
@@ -442,6 +456,7 @@ fn generate_struct_fields<P: GenerateProtocol>(service: &Service,
                                     member_shape,
                                     member.streaming() && !is_input_shape(service, shape_name),
                                     protocol_generator.timestamp_type());
+
         let name = generate_field_name(member_name);
 
         if shape.required(member_name) {
@@ -454,6 +469,87 @@ fn generate_struct_fields<P: GenerateProtocol>(service: &Service,
 
         Some(lines.join("\n"))
     }).collect::<Vec<String>>().join("\n")
+}
+
+fn generate_attr_helpers<P: GenerateProtocol>(service: &Service,
+                                               shape: &Shape,
+                                               shape_name: &str,
+                                               protocol_generator: &P)
+                                               -> String {
+
+    let mut functions: Vec<String> = Vec::new();
+    let mut constructor_types: Vec<String> = Vec::new();
+    let mut constructor_params: Vec<String> = Vec::new();
+    let mut constructor_body: Vec<String> = Vec::new();
+
+    for (member_name, member) in shape.members.as_ref().unwrap().iter() {
+        // skip deprecated properties
+        if member.deprecated == Some(true) {
+            continue;
+        }
+
+        let member_shape = service.shape_for_member(member).unwrap();
+        let rs_type = get_rust_type(service,
+                                    &member.shape,
+                                    &member_shape,
+                                    member.streaming() && !is_input_shape(service, shape_name),
+                                    protocol_generator.timestamp_type());
+        let name = generate_field_name(member_name);
+
+        let mut wrapped_value;
+        let mut wrapping_info;
+        if shape.required(member_name) {
+            wrapped_value = "value.into()";
+            wrapping_info = "";
+        } else {
+            wrapped_value = "Some(value.into())";
+            wrapping_info = "wrapping it with `Some()` and ";
+        }
+
+        functions.push(format!(
+            "/// Sets `{name}`, {wrapping}invoking `.into()` to convert to the required type.
+             ///
+             /// Equivalent to `{shape}.{name} = {value};`.
+            pub fn {name}<ValueType: Into<{type}>>(mut self, value: ValueType) -> Self {{
+                self.{name} = {value};
+                self
+            }}",
+            name = name,
+            shape = shape_name,
+            type = rs_type,
+            value = wrapped_value,
+            wrapping = wrapping_info
+        ));
+
+        if shape.required(member_name) {
+            constructor_types.push(format!("{}Type: Into<{}>", member_name, rs_type));
+            constructor_params.push(format!("{}: {}Type", name, member_name));
+            constructor_body.push(format!("{0}: {0}.into(),", name));
+        }
+    }
+
+    // shadow the vectors with their string equivelants
+    let constructor_types = constructor_types.join(", ");
+    let constructor_params = constructor_params.join(", ");
+    let constructor_body = constructor_body.join("\n");
+
+    // add the constructor function
+    functions.push(format!(
+        "/// Returns a new instance of {shape} with optional fields set to `None`.
+        pub fn new<{types}>({params}) -> {shape} {{
+            {shape} {{
+                {body}
+                ..Default::default()
+            }}
+        }}",
+        types = constructor_types,
+        params = constructor_params,
+        shape = shape_name,
+        body = constructor_body
+    ));
+
+    // return all the functions joined by a newline
+    functions.join("\n")
 }
 
 fn error_type_name(name: &str) -> String {
