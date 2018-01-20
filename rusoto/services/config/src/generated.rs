@@ -169,7 +169,7 @@ pub struct ConfigRule {
     #[serde(rename = "InputParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_parameters: Option<String>,
-    /// <p>The maximum frequency with which AWS Config runs evaluations for a rule. You can specify a value for <code>MaximumExecutionFrequency</code> when:</p> <ul> <li> <p>You are using an AWS managed rule that is triggered at a periodic frequency.</p> </li> <li> <p>Your custom rule is triggered when AWS Config delivers the configuration snapshot. For more information, see <a>ConfigSnapshotDeliveryProperties</a>.</p> </li> </ul> <note> <p>By default, rules with a periodic trigger are evaluated every 24 hours. To change the frequency, specify a valid value for the <code>MaximumExecutionFrequency</code> parameter.</p> </note>
+    /// <p><p>The maximum frequency with which AWS Config runs evaluations for a rule. You can specify a value for <code>MaximumExecutionFrequency</code> when:</p> <ul> <li> <p>You are using an AWS managed rule that is triggered at a periodic frequency.</p> </li> <li> <p>Your custom rule is triggered when AWS Config delivers the configuration snapshot. For more information, see <a>ConfigSnapshotDeliveryProperties</a>.</p> </li> </ul> <note> <p>By default, rules with a periodic trigger are evaluated every 24 hours. To change the frequency, specify a valid value for the <code>MaximumExecutionFrequency</code> parameter.</p> </note></p>
     #[serde(rename = "MaximumExecutionFrequency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_execution_frequency: Option<String>,
@@ -201,7 +201,7 @@ pub struct ConfigRuleEvaluationStatus {
     #[serde(rename = "FirstActivatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub first_activated_time: Option<f64>,
-    /// <p>Indicates whether AWS Config has evaluated your resources against the rule at least once.</p> <ul> <li> <p> <code>true</code> - AWS Config has evaluated your AWS resources against the rule at least once.</p> </li> <li> <p> <code>false</code> - AWS Config has not once finished evaluating your AWS resources against the rule.</p> </li> </ul>
+    /// <p><p>Indicates whether AWS Config has evaluated your resources against the rule at least once.</p> <ul> <li> <p> <code>true</code> - AWS Config has evaluated your AWS resources against the rule at least once.</p> </li> <li> <p> <code>false</code> - AWS Config has not once finished evaluating your AWS resources against the rule.</p> </li> </ul></p>
     #[serde(rename = "FirstEvaluationStarted")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub first_evaluation_started: Option<bool>,
@@ -392,7 +392,7 @@ pub struct ConfigurationRecorderStatus {
     pub recording: Option<bool>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteConfigRuleRequest {
     /// <p>The name of the AWS Config rule that you want to delete.</p>
@@ -416,7 +416,7 @@ pub struct DeleteDeliveryChannelRequest {
     pub delivery_channel_name: String,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteEvaluationResultsRequest {
     /// <p>The name of the Config rule for which you want to delete the evaluation results.</p>
@@ -491,7 +491,7 @@ pub struct DeliveryChannelStatus {
     pub name: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeComplianceByConfigRuleRequest {
     /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>INSUFFICIENT_DATA</code>.</p>
@@ -508,7 +508,7 @@ pub struct DescribeComplianceByConfigRuleRequest {
     pub next_token: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeComplianceByConfigRuleResponse {
     /// <p>Indicates whether each of the specified AWS Config rules is compliant.</p>
@@ -521,7 +521,7 @@ pub struct DescribeComplianceByConfigRuleResponse {
     pub next_token: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeComplianceByResourceRequest {
     /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>INSUFFICIENT_DATA</code>.</p>
@@ -546,7 +546,7 @@ pub struct DescribeComplianceByResourceRequest {
     pub resource_type: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeComplianceByResourceResponse {
     /// <p>Indicates whether the specified AWS resource complies with all of the AWS Config rules that evaluate it.</p>
@@ -559,7 +559,7 @@ pub struct DescribeComplianceByResourceResponse {
     pub next_token: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeConfigRuleEvaluationStatusRequest {
     /// <p>The name of the AWS managed Config rules for which you want status information. If you do not specify any names, AWS Config returns status information for all AWS managed Config rules that you use.</p>
@@ -576,7 +576,7 @@ pub struct DescribeConfigRuleEvaluationStatusRequest {
     pub next_token: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeConfigRuleEvaluationStatusResponse {
     /// <p>Status information about your AWS managed Config rules.</p>
@@ -589,7 +589,7 @@ pub struct DescribeConfigRuleEvaluationStatusResponse {
     pub next_token: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeConfigRulesRequest {
     /// <p>The names of the AWS Config rules for which you want details. If you do not specify any names, AWS Config returns details for all your rules.</p>
@@ -602,7 +602,7 @@ pub struct DescribeConfigRulesRequest {
     pub next_token: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeConfigRulesResponse {
     /// <p>The details about your AWS Config rules.</p>
@@ -767,7 +767,7 @@ pub struct EvaluationResultQualifier {
     pub resource_type: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetComplianceDetailsByConfigRuleRequest {
     /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>NOT_APPLICABLE</code>.</p>
@@ -787,7 +787,7 @@ pub struct GetComplianceDetailsByConfigRuleRequest {
     pub next_token: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetComplianceDetailsByConfigRuleResponse {
     /// <p>Indicates whether the AWS resource complies with the specified AWS Config rule.</p>
@@ -800,7 +800,7 @@ pub struct GetComplianceDetailsByConfigRuleResponse {
     pub next_token: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetComplianceDetailsByResourceRequest {
     /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>NOT_APPLICABLE</code>.</p>
@@ -819,7 +819,7 @@ pub struct GetComplianceDetailsByResourceRequest {
     pub resource_type: String,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetComplianceDetailsByResourceResponse {
     /// <p>Indicates whether the specified AWS resource complies each AWS Config rule.</p>
@@ -832,7 +832,7 @@ pub struct GetComplianceDetailsByResourceResponse {
     pub next_token: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetComplianceSummaryByConfigRuleResponse {
     /// <p>The number of AWS Config rules that are compliant and the number that are noncompliant, up to a maximum of 25 for each.</p>
@@ -841,7 +841,7 @@ pub struct GetComplianceSummaryByConfigRuleResponse {
     pub compliance_summary: Option<ComplianceSummary>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetComplianceSummaryByResourceTypeRequest {
     /// <p>Specify one or more resource types to get the number of resources that are compliant and the number that are noncompliant for each resource type.</p> <p>For this request, you can specify an AWS resource type such as <code>AWS::EC2::Instance</code>, and you can specify that the resource type is an AWS account by specifying <code>AWS::::Account</code>.</p>
@@ -850,7 +850,7 @@ pub struct GetComplianceSummaryByResourceTypeRequest {
     pub resource_types: Option<Vec<String>>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetComplianceSummaryByResourceTypeResponse {
     /// <p>The number of resources that are compliant and the number that are noncompliant. If one or more resource types were provided with the request, the numbers are returned for each resource type. The maximum number returned is 100.</p>
@@ -869,7 +869,7 @@ pub struct GetDiscoveredResourceCountsRequest {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The comma-separated list that specifies the resource types that you want the AWS Config to return. For example, (<code>"AWS::EC2::Instance"</code>, <code>"AWS::IAM::User"</code>).</p> <p>If a value for <code>resourceTypes</code> is not specified, AWS Config returns all resource types that AWS Config is recording in the region for your account.</p> <note> <p>If the configuration recorder is turned off, AWS Config returns an empty list of <a>ResourceCount</a> objects. If the configuration recorder is not recording a specific resource type (for example, S3 buckets), that resource type is not returned in the list of <a>ResourceCount</a> objects.</p> </note>
+    /// <p><p>The comma-separated list that specifies the resource types that you want the AWS Config to return. For example, (<code>&quot;AWS::EC2::Instance&quot;</code>, <code>&quot;AWS::IAM::User&quot;</code>).</p> <p>If a value for <code>resourceTypes</code> is not specified, AWS Config returns all resource types that AWS Config is recording in the region for your account.</p> <note> <p>If the configuration recorder is turned off, AWS Config returns an empty list of <a>ResourceCount</a> objects. If the configuration recorder is not recording a specific resource type (for example, S3 buckets), that resource type is not returned in the list of <a>ResourceCount</a> objects.</p> </note></p>
     #[serde(rename = "resourceTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_types: Option<Vec<String>>,
@@ -885,7 +885,7 @@ pub struct GetDiscoveredResourceCountsResponse {
     #[serde(rename = "resourceCounts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_counts: Option<Vec<ResourceCount>>,
-    /// <p>The total number of resources that AWS Config is recording in the region for your account. If you specify resource types in the request, AWS Config returns only the total number of resources for those resource types.</p> <p class="title"> <b>Example</b> </p> <ol> <li> <p>AWS Config is recording three resource types in the US East (Ohio) Region for your account: 25 EC2 instances, 20 IAM users, and 15 S3 buckets, for a total of 60 resources.</p> </li> <li> <p>You make a call to the <code>GetDiscoveredResourceCounts</code> action and specify the resource type, <code>"AWS::EC2::Instances"</code> in the request.</p> </li> <li> <p>AWS Config returns 25 for <code>totalDiscoveredResources</code>.</p> </li> </ol>
+    /// <p><p>The total number of resources that AWS Config is recording in the region for your account. If you specify resource types in the request, AWS Config returns only the total number of resources for those resource types.</p> <p class="title"> <b>Example</b> </p> <ol> <li> <p>AWS Config is recording three resource types in the US East (Ohio) Region for your account: 25 EC2 instances, 20 IAM users, and 15 S3 buckets, for a total of 60 resources.</p> </li> <li> <p>You make a call to the <code>GetDiscoveredResourceCounts</code> action and specify the resource type, <code>&quot;AWS::EC2::Instances&quot;</code> in the request.</p> </li> <li> <p>AWS Config returns 25 for <code>totalDiscoveredResources</code>.</p> </li> </ol></p>
     #[serde(rename = "totalDiscoveredResources")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub total_discovered_resources: Option<i64>,
@@ -935,7 +935,7 @@ pub struct GetResourceConfigHistoryResponse {
     pub next_token: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListDiscoveredResourcesRequest {
     /// <p>Specifies whether AWS Config includes deleted resources in the results. By default, deleted resources are not included.</p>
@@ -963,7 +963,7 @@ pub struct ListDiscoveredResourcesRequest {
     pub resource_type: String,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListDiscoveredResourcesResponse {
     /// <p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>
@@ -999,7 +999,7 @@ pub struct PutDeliveryChannelRequest {
     pub delivery_channel: DeliveryChannel,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct PutEvaluationsRequest {
     /// <p>The assessments that the AWS Lambda function performs. Each evaluation identifies an AWS resource and indicates whether it complies with the AWS Config rule that invokes the AWS Lambda function.</p>
@@ -1009,13 +1009,13 @@ pub struct PutEvaluationsRequest {
     /// <p>An encrypted token that associates an evaluation with an AWS Config rule. Identifies the rule and the event that triggered the evaluation</p>
     #[serde(rename = "ResultToken")]
     pub result_token: String,
-    /// <p>Use this parameter to specify a test run for <code>PutEvaluations</code>. You can verify whether your AWS Lambda function will deliver evaluation results to AWS Config. No updates occur to your existing evaluations, and evaluation results are not sent to AWS Config.</p> <note> <p>When <code>TestMode</code> is <code>true</code>, <code>PutEvaluations</code> doesn't require a valid value for the <code>ResultToken</code> parameter, but the value cannot be null.</p> </note>
+    /// <p><p>Use this parameter to specify a test run for <code>PutEvaluations</code>. You can verify whether your AWS Lambda function will deliver evaluation results to AWS Config. No updates occur to your existing evaluations, and evaluation results are not sent to AWS Config.</p> <note> <p>When <code>TestMode</code> is <code>true</code>, <code>PutEvaluations</code> doesn&#39;t require a valid value for the <code>ResultToken</code> parameter, but the value cannot be null.</p> </note></p>
     #[serde(rename = "TestMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub test_mode: Option<bool>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct PutEvaluationsResponse {
     /// <p>Requests that failed because of a client or server error.</p>
@@ -1139,7 +1139,7 @@ pub struct SourceDetail {
     #[serde(rename = "EventSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_source: Option<String>,
-    /// <p>The frequency that you want AWS Config to run evaluations for a custom rule with a periodic trigger. If you specify a value for <code>MaximumExecutionFrequency</code>, then <code>MessageType</code> must use the <code>ScheduledNotification</code> value.</p> <note> <p>By default, rules with a periodic trigger are evaluated every 24 hours. To change the frequency, specify a valid value for the <code>MaximumExecutionFrequency</code> parameter.</p> </note>
+    /// <p><p>The frequency that you want AWS Config to run evaluations for a custom rule with a periodic trigger. If you specify a value for <code>MaximumExecutionFrequency</code>, then <code>MessageType</code> must use the <code>ScheduledNotification</code> value.</p> <note> <p>By default, rules with a periodic trigger are evaluated every 24 hours. To change the frequency, specify a valid value for the <code>MaximumExecutionFrequency</code> parameter.</p> </note></p>
     #[serde(rename = "MaximumExecutionFrequency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_execution_frequency: Option<String>,
@@ -1149,7 +1149,7 @@ pub struct SourceDetail {
     pub message_type: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct StartConfigRulesEvaluationRequest {
     /// <p>The list of names of Config rules that you want to run evaluations for.</p>
@@ -1181,9 +1181,9 @@ pub struct StopConfigurationRecorderRequest {
 /// Errors returned by DeleteConfigRule
 #[derive(Debug, PartialEq)]
 pub enum DeleteConfigRuleError {
-    ///<p>One or more AWS Config rules in the request are invalid. Verify that the rule names are correct and try again.</p>
+    /// <p>One or more AWS Config rules in the request are invalid. Verify that the rule names are correct and try again.</p>
     NoSuchConfigRule(String),
-    ///<p>The rule is currently being deleted or the rule is deleting your evaluation results. Try your request again later.</p>
+    /// <p>The rule is currently being deleted or the rule is deleting your evaluation results. Try your request again later.</p>
     ResourceInUse(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1265,7 +1265,7 @@ impl Error for DeleteConfigRuleError {
 /// Errors returned by DeleteConfigurationRecorder
 #[derive(Debug, PartialEq)]
 pub enum DeleteConfigurationRecorderError {
-    ///<p>You have specified a configuration recorder that does not exist.</p>
+    /// <p>You have specified a configuration recorder that does not exist.</p>
     NoSuchConfigurationRecorder(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1347,9 +1347,9 @@ impl Error for DeleteConfigurationRecorderError {
 /// Errors returned by DeleteDeliveryChannel
 #[derive(Debug, PartialEq)]
 pub enum DeleteDeliveryChannelError {
-    ///<p>You cannot delete the delivery channel you specified because the configuration recorder is running.</p>
+    /// <p>You cannot delete the delivery channel you specified because the configuration recorder is running.</p>
     LastDeliveryChannelDeleteFailed(String),
-    ///<p>You have specified a delivery channel that does not exist.</p>
+    /// <p>You have specified a delivery channel that does not exist.</p>
     NoSuchDeliveryChannel(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1437,9 +1437,9 @@ impl Error for DeleteDeliveryChannelError {
 /// Errors returned by DeleteEvaluationResults
 #[derive(Debug, PartialEq)]
 pub enum DeleteEvaluationResultsError {
-    ///<p>One or more AWS Config rules in the request are invalid. Verify that the rule names are correct and try again.</p>
+    /// <p>One or more AWS Config rules in the request are invalid. Verify that the rule names are correct and try again.</p>
     NoSuchConfigRule(String),
-    ///<p>The rule is currently being deleted or the rule is deleting your evaluation results. Try your request again later.</p>
+    /// <p>The rule is currently being deleted or the rule is deleting your evaluation results. Try your request again later.</p>
     ResourceInUse(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1523,11 +1523,11 @@ impl Error for DeleteEvaluationResultsError {
 /// Errors returned by DeliverConfigSnapshot
 #[derive(Debug, PartialEq)]
 pub enum DeliverConfigSnapshotError {
-    ///<p>There are no configuration recorders available to provide the role needed to describe your resources. Create a configuration recorder.</p>
+    /// <p>There are no configuration recorders available to provide the role needed to describe your resources. Create a configuration recorder.</p>
     NoAvailableConfigurationRecorder(String),
-    ///<p>There is no configuration recorder running.</p>
+    /// <p>There is no configuration recorder running.</p>
     NoRunningConfigurationRecorder(String),
-    ///<p>You have specified a delivery channel that does not exist.</p>
+    /// <p>You have specified a delivery channel that does not exist.</p>
     NoSuchDeliveryChannel(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1621,11 +1621,11 @@ impl Error for DeliverConfigSnapshotError {
 /// Errors returned by DescribeComplianceByConfigRule
 #[derive(Debug, PartialEq)]
 pub enum DescribeComplianceByConfigRuleError {
-    ///<p>The specified next token is invalid. Specify the <code>NextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    /// <p>The specified next token is invalid. Specify the <code>NextToken</code> string that was returned in the previous response to get the next page of results.</p>
     InvalidNextToken(String),
-    ///<p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
+    /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
-    ///<p>One or more AWS Config rules in the request are invalid. Verify that the rule names are correct and try again.</p>
+    /// <p>One or more AWS Config rules in the request are invalid. Verify that the rule names are correct and try again.</p>
     NoSuchConfigRule(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1719,9 +1719,9 @@ impl Error for DescribeComplianceByConfigRuleError {
 /// Errors returned by DescribeComplianceByResource
 #[derive(Debug, PartialEq)]
 pub enum DescribeComplianceByResourceError {
-    ///<p>The specified next token is invalid. Specify the <code>NextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    /// <p>The specified next token is invalid. Specify the <code>NextToken</code> string that was returned in the previous response to get the next page of results.</p>
     InvalidNextToken(String),
-    ///<p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
+    /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1809,11 +1809,11 @@ impl Error for DescribeComplianceByResourceError {
 /// Errors returned by DescribeConfigRuleEvaluationStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigRuleEvaluationStatusError {
-    ///<p>The specified next token is invalid. Specify the <code>NextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    /// <p>The specified next token is invalid. Specify the <code>NextToken</code> string that was returned in the previous response to get the next page of results.</p>
     InvalidNextToken(String),
-    ///<p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
+    /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
-    ///<p>One or more AWS Config rules in the request are invalid. Verify that the rule names are correct and try again.</p>
+    /// <p>One or more AWS Config rules in the request are invalid. Verify that the rule names are correct and try again.</p>
     NoSuchConfigRule(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1907,9 +1907,9 @@ impl Error for DescribeConfigRuleEvaluationStatusError {
 /// Errors returned by DescribeConfigRules
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigRulesError {
-    ///<p>The specified next token is invalid. Specify the <code>NextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    /// <p>The specified next token is invalid. Specify the <code>NextToken</code> string that was returned in the previous response to get the next page of results.</p>
     InvalidNextToken(String),
-    ///<p>One or more AWS Config rules in the request are invalid. Verify that the rule names are correct and try again.</p>
+    /// <p>One or more AWS Config rules in the request are invalid. Verify that the rule names are correct and try again.</p>
     NoSuchConfigRule(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1993,7 +1993,7 @@ impl Error for DescribeConfigRulesError {
 /// Errors returned by DescribeConfigurationRecorderStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigurationRecorderStatusError {
-    ///<p>You have specified a configuration recorder that does not exist.</p>
+    /// <p>You have specified a configuration recorder that does not exist.</p>
     NoSuchConfigurationRecorder(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2077,7 +2077,7 @@ impl Error for DescribeConfigurationRecorderStatusError {
 /// Errors returned by DescribeConfigurationRecorders
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigurationRecordersError {
-    ///<p>You have specified a configuration recorder that does not exist.</p>
+    /// <p>You have specified a configuration recorder that does not exist.</p>
     NoSuchConfigurationRecorder(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2159,7 +2159,7 @@ impl Error for DescribeConfigurationRecordersError {
 /// Errors returned by DescribeDeliveryChannelStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeDeliveryChannelStatusError {
-    ///<p>You have specified a delivery channel that does not exist.</p>
+    /// <p>You have specified a delivery channel that does not exist.</p>
     NoSuchDeliveryChannel(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2241,7 +2241,7 @@ impl Error for DescribeDeliveryChannelStatusError {
 /// Errors returned by DescribeDeliveryChannels
 #[derive(Debug, PartialEq)]
 pub enum DescribeDeliveryChannelsError {
-    ///<p>You have specified a delivery channel that does not exist.</p>
+    /// <p>You have specified a delivery channel that does not exist.</p>
     NoSuchDeliveryChannel(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2323,11 +2323,11 @@ impl Error for DescribeDeliveryChannelsError {
 /// Errors returned by GetComplianceDetailsByConfigRule
 #[derive(Debug, PartialEq)]
 pub enum GetComplianceDetailsByConfigRuleError {
-    ///<p>The specified next token is invalid. Specify the <code>NextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    /// <p>The specified next token is invalid. Specify the <code>NextToken</code> string that was returned in the previous response to get the next page of results.</p>
     InvalidNextToken(String),
-    ///<p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
+    /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
-    ///<p>One or more AWS Config rules in the request are invalid. Verify that the rule names are correct and try again.</p>
+    /// <p>One or more AWS Config rules in the request are invalid. Verify that the rule names are correct and try again.</p>
     NoSuchConfigRule(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2421,7 +2421,7 @@ impl Error for GetComplianceDetailsByConfigRuleError {
 /// Errors returned by GetComplianceDetailsByResource
 #[derive(Debug, PartialEq)]
 pub enum GetComplianceDetailsByResourceError {
-    ///<p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
+    /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2577,7 +2577,7 @@ impl Error for GetComplianceSummaryByConfigRuleError {
 /// Errors returned by GetComplianceSummaryByResourceType
 #[derive(Debug, PartialEq)]
 pub enum GetComplianceSummaryByResourceTypeError {
-    ///<p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
+    /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2659,9 +2659,9 @@ impl Error for GetComplianceSummaryByResourceTypeError {
 /// Errors returned by GetDiscoveredResourceCounts
 #[derive(Debug, PartialEq)]
 pub enum GetDiscoveredResourceCountsError {
-    ///<p>The specified limit is outside the allowable range.</p>
+    /// <p>The specified limit is outside the allowable range.</p>
     InvalidLimit(String),
-    ///<p>The specified next token is invalid. Specify the <code>NextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    /// <p>The specified next token is invalid. Specify the <code>NextToken</code> string that was returned in the previous response to get the next page of results.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2747,15 +2747,15 @@ impl Error for GetDiscoveredResourceCountsError {
 /// Errors returned by GetResourceConfigHistory
 #[derive(Debug, PartialEq)]
 pub enum GetResourceConfigHistoryError {
-    ///<p>The specified limit is outside the allowable range.</p>
+    /// <p>The specified limit is outside the allowable range.</p>
     InvalidLimit(String),
-    ///<p>The specified next token is invalid. Specify the <code>NextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    /// <p>The specified next token is invalid. Specify the <code>NextToken</code> string that was returned in the previous response to get the next page of results.</p>
     InvalidNextToken(String),
-    ///<p>The specified time range is not valid. The earlier time is not chronologically before the later time.</p>
+    /// <p>The specified time range is not valid. The earlier time is not chronologically before the later time.</p>
     InvalidTimeRange(String),
-    ///<p>There are no configuration recorders available to provide the role needed to describe your resources. Create a configuration recorder.</p>
+    /// <p>There are no configuration recorders available to provide the role needed to describe your resources. Create a configuration recorder.</p>
     NoAvailableConfigurationRecorder(String),
-    ///<p>You have specified a resource that is either unknown or has not been discovered.</p>
+    /// <p>You have specified a resource that is either unknown or has not been discovered.</p>
     ResourceNotDiscovered(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2855,11 +2855,11 @@ impl Error for GetResourceConfigHistoryError {
 /// Errors returned by ListDiscoveredResources
 #[derive(Debug, PartialEq)]
 pub enum ListDiscoveredResourcesError {
-    ///<p>The specified limit is outside the allowable range.</p>
+    /// <p>The specified limit is outside the allowable range.</p>
     InvalidLimit(String),
-    ///<p>The specified next token is invalid. Specify the <code>NextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    /// <p>The specified next token is invalid. Specify the <code>NextToken</code> string that was returned in the previous response to get the next page of results.</p>
     InvalidNextToken(String),
-    ///<p>There are no configuration recorders available to provide the role needed to describe your resources. Create a configuration recorder.</p>
+    /// <p>There are no configuration recorders available to provide the role needed to describe your resources. Create a configuration recorder.</p>
     NoAvailableConfigurationRecorder(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2949,15 +2949,15 @@ impl Error for ListDiscoveredResourcesError {
 /// Errors returned by PutConfigRule
 #[derive(Debug, PartialEq)]
 pub enum PutConfigRuleError {
-    ///<p>Indicates one of the following errors:</p> <ul> <li> <p>The rule cannot be created because the IAM role assigned to AWS Config lacks permissions to perform the config:Put* action.</p> </li> <li> <p>The AWS Lambda function cannot be invoked. Check the function ARN, and check the function's permissions.</p> </li> </ul>
+    /// <p><p>Indicates one of the following errors:</p> <ul> <li> <p>The rule cannot be created because the IAM role assigned to AWS Config lacks permissions to perform the config:Put* action.</p> </li> <li> <p>The AWS Lambda function cannot be invoked. Check the function ARN, and check the function&#39;s permissions.</p> </li> </ul></p>
     InsufficientPermissions(String),
-    ///<p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
+    /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
-    ///<p>Failed to add the AWS Config rule because the account already contains the maximum number of 50 rules. Consider deleting any deactivated rules before adding new rules.</p>
+    /// <p>Failed to add the AWS Config rule because the account already contains the maximum number of 50 rules. Consider deleting any deactivated rules before adding new rules.</p>
     MaxNumberOfConfigRulesExceeded(String),
-    ///<p>There are no configuration recorders available to provide the role needed to describe your resources. Create a configuration recorder.</p>
+    /// <p>There are no configuration recorders available to provide the role needed to describe your resources. Create a configuration recorder.</p>
     NoAvailableConfigurationRecorder(String),
-    ///<p>The rule is currently being deleted or the rule is deleting your evaluation results. Try your request again later.</p>
+    /// <p>The rule is currently being deleted or the rule is deleting your evaluation results. Try your request again later.</p>
     ResourceInUse(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3055,13 +3055,13 @@ impl Error for PutConfigRuleError {
 /// Errors returned by PutConfigurationRecorder
 #[derive(Debug, PartialEq)]
 pub enum PutConfigurationRecorderError {
-    ///<p>You have provided a configuration recorder name that is not valid.</p>
+    /// <p>You have provided a configuration recorder name that is not valid.</p>
     InvalidConfigurationRecorderName(String),
-    ///<p>AWS Config throws an exception if the recording group does not contain a valid list of resource types. Invalid values could also be incorrectly formatted.</p>
+    /// <p>AWS Config throws an exception if the recording group does not contain a valid list of resource types. Invalid values could also be incorrectly formatted.</p>
     InvalidRecordingGroup(String),
-    ///<p>You have provided a null or empty role ARN.</p>
+    /// <p>You have provided a null or empty role ARN.</p>
     InvalidRole(String),
-    ///<p>You have reached the limit on the number of recorders you can create.</p>
+    /// <p>You have reached the limit on the number of recorders you can create.</p>
     MaxNumberOfConfigurationRecordersExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3161,19 +3161,19 @@ impl Error for PutConfigurationRecorderError {
 /// Errors returned by PutDeliveryChannel
 #[derive(Debug, PartialEq)]
 pub enum PutDeliveryChannelError {
-    ///<p>Your Amazon S3 bucket policy does not permit AWS Config to write to it.</p>
+    /// <p>Your Amazon S3 bucket policy does not permit AWS Config to write to it.</p>
     InsufficientDeliveryPolicy(String),
-    ///<p>The specified delivery channel name is not valid.</p>
+    /// <p>The specified delivery channel name is not valid.</p>
     InvalidDeliveryChannelName(String),
-    ///<p>The specified Amazon S3 key prefix is not valid.</p>
+    /// <p>The specified Amazon S3 key prefix is not valid.</p>
     InvalidS3KeyPrefix(String),
-    ///<p>The specified Amazon SNS topic does not exist.</p>
+    /// <p>The specified Amazon SNS topic does not exist.</p>
     InvalidSNSTopicARN(String),
-    ///<p>You have reached the limit on the number of delivery channels you can create.</p>
+    /// <p>You have reached the limit on the number of delivery channels you can create.</p>
     MaxNumberOfDeliveryChannelsExceeded(String),
-    ///<p>There are no configuration recorders available to provide the role needed to describe your resources. Create a configuration recorder.</p>
+    /// <p>There are no configuration recorders available to provide the role needed to describe your resources. Create a configuration recorder.</p>
     NoAvailableConfigurationRecorder(String),
-    ///<p>The specified Amazon S3 bucket does not exist.</p>
+    /// <p>The specified Amazon S3 bucket does not exist.</p>
     NoSuchBucket(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3285,11 +3285,11 @@ impl Error for PutDeliveryChannelError {
 /// Errors returned by PutEvaluations
 #[derive(Debug, PartialEq)]
 pub enum PutEvaluationsError {
-    ///<p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
+    /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
-    ///<p>The specified <code>ResultToken</code> is invalid.</p>
+    /// <p>The specified <code>ResultToken</code> is invalid.</p>
     InvalidResultToken(String),
-    ///<p>One or more AWS Config rules in the request are invalid. Verify that the rule names are correct and try again.</p>
+    /// <p>One or more AWS Config rules in the request are invalid. Verify that the rule names are correct and try again.</p>
     NoSuchConfigRule(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3375,13 +3375,13 @@ impl Error for PutEvaluationsError {
 /// Errors returned by StartConfigRulesEvaluation
 #[derive(Debug, PartialEq)]
 pub enum StartConfigRulesEvaluationError {
-    ///<p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
+    /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
-    ///<p>This exception is thrown if an evaluation is in progress or if you call the <a>StartConfigRulesEvaluation</a> API more than once per minute.</p>
+    /// <p>This exception is thrown if an evaluation is in progress or if you call the <a>StartConfigRulesEvaluation</a> API more than once per minute.</p>
     LimitExceeded(String),
-    ///<p>One or more AWS Config rules in the request are invalid. Verify that the rule names are correct and try again.</p>
+    /// <p>One or more AWS Config rules in the request are invalid. Verify that the rule names are correct and try again.</p>
     NoSuchConfigRule(String),
-    ///<p>The rule is currently being deleted or the rule is deleting your evaluation results. Try your request again later.</p>
+    /// <p>The rule is currently being deleted or the rule is deleting your evaluation results. Try your request again later.</p>
     ResourceInUse(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3477,9 +3477,9 @@ impl Error for StartConfigRulesEvaluationError {
 /// Errors returned by StartConfigurationRecorder
 #[derive(Debug, PartialEq)]
 pub enum StartConfigurationRecorderError {
-    ///<p>There is no delivery channel available to record configurations.</p>
+    /// <p>There is no delivery channel available to record configurations.</p>
     NoAvailableDeliveryChannel(String),
-    ///<p>You have specified a configuration recorder that does not exist.</p>
+    /// <p>You have specified a configuration recorder that does not exist.</p>
     NoSuchConfigurationRecorder(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3567,7 +3567,7 @@ impl Error for StartConfigurationRecorderError {
 /// Errors returned by StopConfigurationRecorder
 #[derive(Debug, PartialEq)]
 pub enum StopConfigurationRecorderError {
-    ///<p>You have specified a configuration recorder that does not exist.</p>
+    /// <p>You have specified a configuration recorder that does not exist.</p>
     NoSuchConfigurationRecorder(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3648,159 +3648,159 @@ impl Error for StopConfigurationRecorderError {
 }
 /// Trait representing the capabilities of the Config Service API. Config Service clients implement this trait.
 pub trait ConfigService {
-    #[doc="<p>Deletes the specified AWS Config rule and all of its evaluation results.</p> <p>AWS Config sets the state of a rule to <code>DELETING</code> until the deletion is complete. You cannot update a rule while it is in this state. If you make a <code>PutConfigRule</code> or <code>DeleteConfigRule</code> request for the rule, you will receive a <code>ResourceInUseException</code>.</p> <p>You can check the state of a rule by using the <code>DescribeConfigRules</code> request.</p>"]
+    /// <p>Deletes the specified AWS Config rule and all of its evaluation results.</p> <p>AWS Config sets the state of a rule to <code>DELETING</code> until the deletion is complete. You cannot update a rule while it is in this state. If you make a <code>PutConfigRule</code> or <code>DeleteConfigRule</code> request for the rule, you will receive a <code>ResourceInUseException</code>.</p> <p>You can check the state of a rule by using the <code>DescribeConfigRules</code> request.</p>
     fn delete_config_rule(
         &self,
         input: &DeleteConfigRuleRequest,
     ) -> Result<(), DeleteConfigRuleError>;
 
-    #[doc="<p>Deletes the configuration recorder.</p> <p>After the configuration recorder is deleted, AWS Config will not record resource configuration changes until you create a new configuration recorder.</p> <p>This action does not delete the configuration information that was previously recorded. You will be able to access the previously recorded information by using the <code>GetResourceConfigHistory</code> action, but you will not be able to access this information in the AWS Config console until you create a new configuration recorder.</p>"]
+    /// <p>Deletes the configuration recorder.</p> <p>After the configuration recorder is deleted, AWS Config will not record resource configuration changes until you create a new configuration recorder.</p> <p>This action does not delete the configuration information that was previously recorded. You will be able to access the previously recorded information by using the <code>GetResourceConfigHistory</code> action, but you will not be able to access this information in the AWS Config console until you create a new configuration recorder.</p>
     fn delete_configuration_recorder(
         &self,
         input: &DeleteConfigurationRecorderRequest,
     ) -> Result<(), DeleteConfigurationRecorderError>;
 
-    #[doc="<p>Deletes the delivery channel.</p> <p>Before you can delete the delivery channel, you must stop the configuration recorder by using the <a>StopConfigurationRecorder</a> action.</p>"]
+    /// <p>Deletes the delivery channel.</p> <p>Before you can delete the delivery channel, you must stop the configuration recorder by using the <a>StopConfigurationRecorder</a> action.</p>
     fn delete_delivery_channel(
         &self,
         input: &DeleteDeliveryChannelRequest,
     ) -> Result<(), DeleteDeliveryChannelError>;
 
-    #[doc="<p>Deletes the evaluation results for the specified Config rule. You can specify one Config rule per request. After you delete the evaluation results, you can call the <a>StartConfigRulesEvaluation</a> API to start evaluating your AWS resources against the rule.</p>"]
+    /// <p>Deletes the evaluation results for the specified Config rule. You can specify one Config rule per request. After you delete the evaluation results, you can call the <a>StartConfigRulesEvaluation</a> API to start evaluating your AWS resources against the rule.</p>
     fn delete_evaluation_results(
         &self,
         input: &DeleteEvaluationResultsRequest,
     ) -> Result<DeleteEvaluationResultsResponse, DeleteEvaluationResultsError>;
 
-    #[doc="<p>Schedules delivery of a configuration snapshot to the Amazon S3 bucket in the specified delivery channel. After the delivery has started, AWS Config sends following notifications using an Amazon SNS topic that you have specified.</p> <ul> <li> <p>Notification of starting the delivery.</p> </li> <li> <p>Notification of delivery completed, if the delivery was successfully completed.</p> </li> <li> <p>Notification of delivery failure, if the delivery failed to complete.</p> </li> </ul>"]
+    /// <p><p>Schedules delivery of a configuration snapshot to the Amazon S3 bucket in the specified delivery channel. After the delivery has started, AWS Config sends following notifications using an Amazon SNS topic that you have specified.</p> <ul> <li> <p>Notification of starting the delivery.</p> </li> <li> <p>Notification of delivery completed, if the delivery was successfully completed.</p> </li> <li> <p>Notification of delivery failure, if the delivery failed to complete.</p> </li> </ul></p>
     fn deliver_config_snapshot(
         &self,
         input: &DeliverConfigSnapshotRequest,
     ) -> Result<DeliverConfigSnapshotResponse, DeliverConfigSnapshotError>;
 
-    #[doc="<p>Indicates whether the specified AWS Config rules are compliant. If a rule is noncompliant, this action returns the number of AWS resources that do not comply with the rule.</p> <p>A rule is compliant if all of the evaluated resources comply with it, and it is noncompliant if any of these resources do not comply.</p> <p>If AWS Config has no current evaluation results for the rule, it returns <code>INSUFFICIENT_DATA</code>. This result might indicate one of the following conditions:</p> <ul> <li> <p>AWS Config has never invoked an evaluation for the rule. To check whether it has, use the <code>DescribeConfigRuleEvaluationStatus</code> action to get the <code>LastSuccessfulInvocationTime</code> and <code>LastFailedInvocationTime</code>.</p> </li> <li> <p>The rule's AWS Lambda function is failing to send evaluation results to AWS Config. Verify that the role that you assigned to your configuration recorder includes the <code>config:PutEvaluations</code> permission. If the rule is a custom rule, verify that the AWS Lambda execution role includes the <code>config:PutEvaluations</code> permission.</p> </li> <li> <p>The rule's AWS Lambda function has returned <code>NOT_APPLICABLE</code> for all evaluation results. This can occur if the resources were deleted or removed from the rule's scope.</p> </li> </ul>"]
+    /// <p><p>Indicates whether the specified AWS Config rules are compliant. If a rule is noncompliant, this action returns the number of AWS resources that do not comply with the rule.</p> <p>A rule is compliant if all of the evaluated resources comply with it, and it is noncompliant if any of these resources do not comply.</p> <p>If AWS Config has no current evaluation results for the rule, it returns <code>INSUFFICIENT<em>DATA</code>. This result might indicate one of the following conditions:</p> <ul> <li> <p>AWS Config has never invoked an evaluation for the rule. To check whether it has, use the <code>DescribeConfigRuleEvaluationStatus</code> action to get the <code>LastSuccessfulInvocationTime</code> and <code>LastFailedInvocationTime</code>.</p> </li> <li> <p>The rule&#39;s AWS Lambda function is failing to send evaluation results to AWS Config. Verify that the role that you assigned to your configuration recorder includes the <code>config:PutEvaluations</code> permission. If the rule is a custom rule, verify that the AWS Lambda execution role includes the <code>config:PutEvaluations</code> permission.</p> </li> <li> <p>The rule&#39;s AWS Lambda function has returned <code>NOT</em>APPLICABLE</code> for all evaluation results. This can occur if the resources were deleted or removed from the rule&#39;s scope.</p> </li> </ul></p>
     fn describe_compliance_by_config_rule(
         &self,
         input: &DescribeComplianceByConfigRuleRequest,
     ) -> Result<DescribeComplianceByConfigRuleResponse, DescribeComplianceByConfigRuleError>;
 
-    #[doc="<p>Indicates whether the specified AWS resources are compliant. If a resource is noncompliant, this action returns the number of AWS Config rules that the resource does not comply with.</p> <p>A resource is compliant if it complies with all the AWS Config rules that evaluate it. It is noncompliant if it does not comply with one or more of these rules.</p> <p>If AWS Config has no current evaluation results for the resource, it returns <code>INSUFFICIENT_DATA</code>. This result might indicate one of the following conditions about the rules that evaluate the resource:</p> <ul> <li> <p>AWS Config has never invoked an evaluation for the rule. To check whether it has, use the <code>DescribeConfigRuleEvaluationStatus</code> action to get the <code>LastSuccessfulInvocationTime</code> and <code>LastFailedInvocationTime</code>.</p> </li> <li> <p>The rule's AWS Lambda function is failing to send evaluation results to AWS Config. Verify that the role that you assigned to your configuration recorder includes the <code>config:PutEvaluations</code> permission. If the rule is a custom rule, verify that the AWS Lambda execution role includes the <code>config:PutEvaluations</code> permission.</p> </li> <li> <p>The rule's AWS Lambda function has returned <code>NOT_APPLICABLE</code> for all evaluation results. This can occur if the resources were deleted or removed from the rule's scope.</p> </li> </ul>"]
+    /// <p><p>Indicates whether the specified AWS resources are compliant. If a resource is noncompliant, this action returns the number of AWS Config rules that the resource does not comply with.</p> <p>A resource is compliant if it complies with all the AWS Config rules that evaluate it. It is noncompliant if it does not comply with one or more of these rules.</p> <p>If AWS Config has no current evaluation results for the resource, it returns <code>INSUFFICIENT<em>DATA</code>. This result might indicate one of the following conditions about the rules that evaluate the resource:</p> <ul> <li> <p>AWS Config has never invoked an evaluation for the rule. To check whether it has, use the <code>DescribeConfigRuleEvaluationStatus</code> action to get the <code>LastSuccessfulInvocationTime</code> and <code>LastFailedInvocationTime</code>.</p> </li> <li> <p>The rule&#39;s AWS Lambda function is failing to send evaluation results to AWS Config. Verify that the role that you assigned to your configuration recorder includes the <code>config:PutEvaluations</code> permission. If the rule is a custom rule, verify that the AWS Lambda execution role includes the <code>config:PutEvaluations</code> permission.</p> </li> <li> <p>The rule&#39;s AWS Lambda function has returned <code>NOT</em>APPLICABLE</code> for all evaluation results. This can occur if the resources were deleted or removed from the rule&#39;s scope.</p> </li> </ul></p>
     fn describe_compliance_by_resource(
         &self,
         input: &DescribeComplianceByResourceRequest,
     ) -> Result<DescribeComplianceByResourceResponse, DescribeComplianceByResourceError>;
 
-    #[doc="<p>Returns status information for each of your AWS managed Config rules. The status includes information such as the last time AWS Config invoked the rule, the last time AWS Config failed to invoke the rule, and the related error for the last failure.</p>"]
+    /// <p>Returns status information for each of your AWS managed Config rules. The status includes information such as the last time AWS Config invoked the rule, the last time AWS Config failed to invoke the rule, and the related error for the last failure.</p>
     fn describe_config_rule_evaluation_status(
         &self,
         input: &DescribeConfigRuleEvaluationStatusRequest,
     ) -> Result<DescribeConfigRuleEvaluationStatusResponse, DescribeConfigRuleEvaluationStatusError>;
 
-    #[doc = "<p>Returns details about your AWS Config rules.</p>"]
+    /// <p>Returns details about your AWS Config rules.</p>
     fn describe_config_rules(
         &self,
         input: &DescribeConfigRulesRequest,
     ) -> Result<DescribeConfigRulesResponse, DescribeConfigRulesError>;
 
-    #[doc="<p>Returns the current status of the specified configuration recorder. If a configuration recorder is not specified, this action returns the status of all configuration recorder associated with the account.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> </note>"]
+    /// <p><p>Returns the current status of the specified configuration recorder. If a configuration recorder is not specified, this action returns the status of all configuration recorder associated with the account.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> </note></p>
     fn describe_configuration_recorder_status(
         &self,
         input: &DescribeConfigurationRecorderStatusRequest,
     ) -> Result<DescribeConfigurationRecorderStatusResponse, DescribeConfigurationRecorderStatusError>;
 
-    #[doc="<p>Returns the details for the specified configuration recorders. If the configuration recorder is not specified, this action returns the details for all configuration recorders associated with the account.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> </note>"]
+    /// <p><p>Returns the details for the specified configuration recorders. If the configuration recorder is not specified, this action returns the details for all configuration recorders associated with the account.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> </note></p>
     fn describe_configuration_recorders(
         &self,
         input: &DescribeConfigurationRecordersRequest,
     ) -> Result<DescribeConfigurationRecordersResponse, DescribeConfigurationRecordersError>;
 
-    #[doc="<p>Returns the current status of the specified delivery channel. If a delivery channel is not specified, this action returns the current status of all delivery channels associated with the account.</p> <note> <p>Currently, you can specify only one delivery channel per region in your account.</p> </note>"]
+    /// <p><p>Returns the current status of the specified delivery channel. If a delivery channel is not specified, this action returns the current status of all delivery channels associated with the account.</p> <note> <p>Currently, you can specify only one delivery channel per region in your account.</p> </note></p>
     fn describe_delivery_channel_status(
         &self,
         input: &DescribeDeliveryChannelStatusRequest,
     ) -> Result<DescribeDeliveryChannelStatusResponse, DescribeDeliveryChannelStatusError>;
 
-    #[doc="<p>Returns details about the specified delivery channel. If a delivery channel is not specified, this action returns the details of all delivery channels associated with the account.</p> <note> <p>Currently, you can specify only one delivery channel per region in your account.</p> </note>"]
+    /// <p><p>Returns details about the specified delivery channel. If a delivery channel is not specified, this action returns the details of all delivery channels associated with the account.</p> <note> <p>Currently, you can specify only one delivery channel per region in your account.</p> </note></p>
     fn describe_delivery_channels(
         &self,
         input: &DescribeDeliveryChannelsRequest,
     ) -> Result<DescribeDeliveryChannelsResponse, DescribeDeliveryChannelsError>;
 
-    #[doc="<p>Returns the evaluation results for the specified AWS Config rule. The results indicate which AWS resources were evaluated by the rule, when each resource was last evaluated, and whether each resource complies with the rule.</p>"]
+    /// <p>Returns the evaluation results for the specified AWS Config rule. The results indicate which AWS resources were evaluated by the rule, when each resource was last evaluated, and whether each resource complies with the rule.</p>
     fn get_compliance_details_by_config_rule(
         &self,
         input: &GetComplianceDetailsByConfigRuleRequest,
     ) -> Result<GetComplianceDetailsByConfigRuleResponse, GetComplianceDetailsByConfigRuleError>;
 
-    #[doc="<p>Returns the evaluation results for the specified AWS resource. The results indicate which AWS Config rules were used to evaluate the resource, when each rule was last used, and whether the resource complies with each rule.</p>"]
+    /// <p>Returns the evaluation results for the specified AWS resource. The results indicate which AWS Config rules were used to evaluate the resource, when each rule was last used, and whether the resource complies with each rule.</p>
     fn get_compliance_details_by_resource(
         &self,
         input: &GetComplianceDetailsByResourceRequest,
     ) -> Result<GetComplianceDetailsByResourceResponse, GetComplianceDetailsByResourceError>;
 
-    #[doc="<p>Returns the number of AWS Config rules that are compliant and noncompliant, up to a maximum of 25 for each.</p>"]
+    /// <p>Returns the number of AWS Config rules that are compliant and noncompliant, up to a maximum of 25 for each.</p>
     fn get_compliance_summary_by_config_rule(
         &self,
     ) -> Result<GetComplianceSummaryByConfigRuleResponse, GetComplianceSummaryByConfigRuleError>;
 
-    #[doc="<p>Returns the number of resources that are compliant and the number that are noncompliant. You can specify one or more resource types to get these numbers for each resource type. The maximum number returned is 100.</p>"]
+    /// <p>Returns the number of resources that are compliant and the number that are noncompliant. You can specify one or more resource types to get these numbers for each resource type. The maximum number returned is 100.</p>
     fn get_compliance_summary_by_resource_type(
         &self,
         input: &GetComplianceSummaryByResourceTypeRequest,
     ) -> Result<GetComplianceSummaryByResourceTypeResponse, GetComplianceSummaryByResourceTypeError>;
 
-    #[doc="<p>Returns the resource types, the number of each resource type, and the total number of resources that AWS Config is recording in this region for your AWS account. </p> <p class=\"title\"> <b>Example</b> </p> <ol> <li> <p>AWS Config is recording three resource types in the US East (Ohio) Region for your account: 25 EC2 instances, 20 IAM users, and 15 S3 buckets.</p> </li> <li> <p>You make a call to the <code>GetDiscoveredResourceCounts</code> action and specify that you want all resource types. </p> </li> <li> <p>AWS Config returns the following:</p> <ul> <li> <p>The resource types (EC2 instances, IAM users, and S3 buckets)</p> </li> <li> <p>The number of each resource type (25, 20, and 15)</p> </li> <li> <p>The total number of all resources (60)</p> </li> </ul> </li> </ol> <p>The response is paginated. By default, AWS Config lists 100 <a>ResourceCount</a> objects on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>If you make a call to the <a>GetDiscoveredResourceCounts</a> action, you may not immediately receive resource counts in the following situations:</p> <ul> <li> <p>You are a new AWS Config customer</p> </li> <li> <p>You just enabled resource recording</p> </li> </ul> <p>It may take a few minutes for AWS Config to record and count your resources. Wait a few minutes and then retry the <a>GetDiscoveredResourceCounts</a> action. </p> </note>"]
+    /// <p><p>Returns the resource types, the number of each resource type, and the total number of resources that AWS Config is recording in this region for your AWS account. </p> <p class="title"> <b>Example</b> </p> <ol> <li> <p>AWS Config is recording three resource types in the US East (Ohio) Region for your account: 25 EC2 instances, 20 IAM users, and 15 S3 buckets.</p> </li> <li> <p>You make a call to the <code>GetDiscoveredResourceCounts</code> action and specify that you want all resource types. </p> </li> <li> <p>AWS Config returns the following:</p> <ul> <li> <p>The resource types (EC2 instances, IAM users, and S3 buckets)</p> </li> <li> <p>The number of each resource type (25, 20, and 15)</p> </li> <li> <p>The total number of all resources (60)</p> </li> </ul> </li> </ol> <p>The response is paginated. By default, AWS Config lists 100 <a>ResourceCount</a> objects on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>If you make a call to the <a>GetDiscoveredResourceCounts</a> action, you may not immediately receive resource counts in the following situations:</p> <ul> <li> <p>You are a new AWS Config customer</p> </li> <li> <p>You just enabled resource recording</p> </li> </ul> <p>It may take a few minutes for AWS Config to record and count your resources. Wait a few minutes and then retry the <a>GetDiscoveredResourceCounts</a> action. </p> </note></p>
     fn get_discovered_resource_counts(
         &self,
         input: &GetDiscoveredResourceCountsRequest,
     ) -> Result<GetDiscoveredResourceCountsResponse, GetDiscoveredResourceCountsError>;
 
-    #[doc="<p>Returns a list of configuration items for the specified resource. The list contains details about each state of the resource during the specified time interval.</p> <p>The response is paginated. By default, AWS Config returns a limit of 10 configuration items per page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>Each call to the API is limited to span a duration of seven days. It is likely that the number of records returned is smaller than the specified <code>limit</code>. In such cases, you can make another call, using the <code>nextToken</code>.</p> </note>"]
+    /// <p><p>Returns a list of configuration items for the specified resource. The list contains details about each state of the resource during the specified time interval.</p> <p>The response is paginated. By default, AWS Config returns a limit of 10 configuration items per page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>Each call to the API is limited to span a duration of seven days. It is likely that the number of records returned is smaller than the specified <code>limit</code>. In such cases, you can make another call, using the <code>nextToken</code>.</p> </note></p>
     fn get_resource_config_history(
         &self,
         input: &GetResourceConfigHistoryRequest,
     ) -> Result<GetResourceConfigHistoryResponse, GetResourceConfigHistoryError>;
 
-    #[doc="<p>Accepts a resource type and returns a list of resource identifiers for the resources of that type. A resource identifier includes the resource type, ID, and (if available) the custom resource name. The results consist of resources that AWS Config has discovered, including those that AWS Config is not currently recording. You can narrow the results to include only resources that have specific resource IDs or a resource name.</p> <note> <p>You can specify either resource IDs or a resource name but not both in the same request.</p> </note> <p>The response is paginated. By default, AWS Config lists 100 resource identifiers on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p>"]
+    /// <p>Accepts a resource type and returns a list of resource identifiers for the resources of that type. A resource identifier includes the resource type, ID, and (if available) the custom resource name. The results consist of resources that AWS Config has discovered, including those that AWS Config is not currently recording. You can narrow the results to include only resources that have specific resource IDs or a resource name.</p> <note> <p>You can specify either resource IDs or a resource name but not both in the same request.</p> </note> <p>The response is paginated. By default, AWS Config lists 100 resource identifiers on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p>
     fn list_discovered_resources(
         &self,
         input: &ListDiscoveredResourcesRequest,
     ) -> Result<ListDiscoveredResourcesResponse, ListDiscoveredResourcesError>;
 
-    #[doc="<p>Adds or updates an AWS Config rule for evaluating whether your AWS resources comply with your desired configurations.</p> <p>You can use this action for custom Config rules and AWS managed Config rules. A custom Config rule is a rule that you develop and maintain. An AWS managed Config rule is a customizable, predefined rule that AWS Config provides.</p> <p>If you are adding a new custom Config rule, you must first create the AWS Lambda function that the rule invokes to evaluate your resources. When you use the <code>PutConfigRule</code> action to add the rule to AWS Config, you must specify the Amazon Resource Name (ARN) that AWS Lambda assigns to the function. Specify the ARN for the <code>SourceIdentifier</code> key. This key is part of the <code>Source</code> object, which is part of the <code>ConfigRule</code> object. </p> <p>If you are adding an AWS managed Config rule, specify the rule's identifier for the <code>SourceIdentifier</code> key. To reference AWS managed Config rule identifiers, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html\">About AWS Managed Config Rules</a>.</p> <p>For any new rule that you add, specify the <code>ConfigRuleName</code> in the <code>ConfigRule</code> object. Do not specify the <code>ConfigRuleArn</code> or the <code>ConfigRuleId</code>. These values are generated by AWS Config for new rules.</p> <p>If you are updating a rule that you added previously, you can specify the rule by <code>ConfigRuleName</code>, <code>ConfigRuleId</code>, or <code>ConfigRuleArn</code> in the <code>ConfigRule</code> data type that you use in this request.</p> <p>The maximum number of rules that AWS Config supports is 50.</p> <p>For more information about requesting a rule limit increase, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_config\">AWS Config Limits</a> in the <i>AWS General Reference Guide</i>.</p> <p>For more information about developing and using AWS Config rules, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html\">Evaluating AWS Resource Configurations with AWS Config</a> in the <i>AWS Config Developer Guide</i>.</p>"]
+    /// <p>Adds or updates an AWS Config rule for evaluating whether your AWS resources comply with your desired configurations.</p> <p>You can use this action for custom Config rules and AWS managed Config rules. A custom Config rule is a rule that you develop and maintain. An AWS managed Config rule is a customizable, predefined rule that AWS Config provides.</p> <p>If you are adding a new custom Config rule, you must first create the AWS Lambda function that the rule invokes to evaluate your resources. When you use the <code>PutConfigRule</code> action to add the rule to AWS Config, you must specify the Amazon Resource Name (ARN) that AWS Lambda assigns to the function. Specify the ARN for the <code>SourceIdentifier</code> key. This key is part of the <code>Source</code> object, which is part of the <code>ConfigRule</code> object. </p> <p>If you are adding an AWS managed Config rule, specify the rule's identifier for the <code>SourceIdentifier</code> key. To reference AWS managed Config rule identifiers, see <a href="http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html">About AWS Managed Config Rules</a>.</p> <p>For any new rule that you add, specify the <code>ConfigRuleName</code> in the <code>ConfigRule</code> object. Do not specify the <code>ConfigRuleArn</code> or the <code>ConfigRuleId</code>. These values are generated by AWS Config for new rules.</p> <p>If you are updating a rule that you added previously, you can specify the rule by <code>ConfigRuleName</code>, <code>ConfigRuleId</code>, or <code>ConfigRuleArn</code> in the <code>ConfigRule</code> data type that you use in this request.</p> <p>The maximum number of rules that AWS Config supports is 50.</p> <p>For more information about requesting a rule limit increase, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_config">AWS Config Limits</a> in the <i>AWS General Reference Guide</i>.</p> <p>For more information about developing and using AWS Config rules, see <a href="http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html">Evaluating AWS Resource Configurations with AWS Config</a> in the <i>AWS Config Developer Guide</i>.</p>
     fn put_config_rule(&self, input: &PutConfigRuleRequest) -> Result<(), PutConfigRuleError>;
 
-    #[doc="<p>Creates a new configuration recorder to record the selected resource configurations.</p> <p>You can use this action to change the role <code>roleARN</code> and/or the <code>recordingGroup</code> of an existing recorder. To change the role, call the action on the existing configuration recorder and specify a role.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> <p>If <code>ConfigurationRecorder</code> does not have the <b>recordingGroup</b> parameter specified, the default is to record all supported resource types.</p> </note>"]
+    /// <p><p>Creates a new configuration recorder to record the selected resource configurations.</p> <p>You can use this action to change the role <code>roleARN</code> and/or the <code>recordingGroup</code> of an existing recorder. To change the role, call the action on the existing configuration recorder and specify a role.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> <p>If <code>ConfigurationRecorder</code> does not have the <b>recordingGroup</b> parameter specified, the default is to record all supported resource types.</p> </note></p>
     fn put_configuration_recorder(
         &self,
         input: &PutConfigurationRecorderRequest,
     ) -> Result<(), PutConfigurationRecorderError>;
 
-    #[doc="<p>Creates a delivery channel object to deliver configuration information to an Amazon S3 bucket and Amazon SNS topic.</p> <p>Before you can create a delivery channel, you must create a configuration recorder.</p> <p>You can use this action to change the Amazon S3 bucket or an Amazon SNS topic of the existing delivery channel. To change the Amazon S3 bucket or an Amazon SNS topic, call this action and specify the changed values for the S3 bucket and the SNS topic. If you specify a different value for either the S3 bucket or the SNS topic, this action will keep the existing value for the parameter that is not changed.</p> <note> <p>You can have only one delivery channel per region in your account.</p> </note>"]
+    /// <p><p>Creates a delivery channel object to deliver configuration information to an Amazon S3 bucket and Amazon SNS topic.</p> <p>Before you can create a delivery channel, you must create a configuration recorder.</p> <p>You can use this action to change the Amazon S3 bucket or an Amazon SNS topic of the existing delivery channel. To change the Amazon S3 bucket or an Amazon SNS topic, call this action and specify the changed values for the S3 bucket and the SNS topic. If you specify a different value for either the S3 bucket or the SNS topic, this action will keep the existing value for the parameter that is not changed.</p> <note> <p>You can have only one delivery channel per region in your account.</p> </note></p>
     fn put_delivery_channel(
         &self,
         input: &PutDeliveryChannelRequest,
     ) -> Result<(), PutDeliveryChannelError>;
 
-    #[doc="<p>Used by an AWS Lambda function to deliver evaluation results to AWS Config. This action is required in every AWS Lambda function that is invoked by an AWS Config rule.</p>"]
+    /// <p>Used by an AWS Lambda function to deliver evaluation results to AWS Config. This action is required in every AWS Lambda function that is invoked by an AWS Config rule.</p>
     fn put_evaluations(
         &self,
         input: &PutEvaluationsRequest,
     ) -> Result<PutEvaluationsResponse, PutEvaluationsError>;
 
-    #[doc="<p>Runs an on-demand evaluation for the specified Config rules against the last known configuration state of the resources. Use <code>StartConfigRulesEvaluation</code> when you want to test a rule that you updated is working as expected. <code>StartConfigRulesEvaluation</code> does not re-record the latest configuration state for your resources; it re-runs an evaluation against the last known state of your resources. </p> <p>You can specify up to 25 Config rules per request. </p> <p>An existing <code>StartConfigRulesEvaluation</code> call must complete for the specified rules before you can call the API again. If you chose to have AWS Config stream to an Amazon SNS topic, you will receive a <code>ConfigRuleEvaluationStarted</code> notification when the evaluation starts.</p> <note> <p>You don't need to call the <code>StartConfigRulesEvaluation</code> API to run an evaluation for a new rule. When you create a new rule, AWS Config automatically evaluates your resources against the rule. </p> </note> <p>The <code>StartConfigRulesEvaluation</code> API is useful if you want to run on-demand evaluations, such as the following example:</p> <ol> <li> <p>You have a custom rule that evaluates your IAM resources every 24 hours.</p> </li> <li> <p>You update your Lambda function to add additional conditions to your rule.</p> </li> <li> <p>Instead of waiting for the next periodic evaluation, you call the <code>StartConfigRulesEvaluation</code> API.</p> </li> <li> <p>AWS Config invokes your Lambda function and evaluates your IAM resources.</p> </li> <li> <p>Your custom rule will still run periodic evaluations every 24 hours.</p> </li> </ol>"]
+    /// <p><p>Runs an on-demand evaluation for the specified Config rules against the last known configuration state of the resources. Use <code>StartConfigRulesEvaluation</code> when you want to test a rule that you updated is working as expected. <code>StartConfigRulesEvaluation</code> does not re-record the latest configuration state for your resources; it re-runs an evaluation against the last known state of your resources. </p> <p>You can specify up to 25 Config rules per request. </p> <p>An existing <code>StartConfigRulesEvaluation</code> call must complete for the specified rules before you can call the API again. If you chose to have AWS Config stream to an Amazon SNS topic, you will receive a <code>ConfigRuleEvaluationStarted</code> notification when the evaluation starts.</p> <note> <p>You don&#39;t need to call the <code>StartConfigRulesEvaluation</code> API to run an evaluation for a new rule. When you create a new rule, AWS Config automatically evaluates your resources against the rule. </p> </note> <p>The <code>StartConfigRulesEvaluation</code> API is useful if you want to run on-demand evaluations, such as the following example:</p> <ol> <li> <p>You have a custom rule that evaluates your IAM resources every 24 hours.</p> </li> <li> <p>You update your Lambda function to add additional conditions to your rule.</p> </li> <li> <p>Instead of waiting for the next periodic evaluation, you call the <code>StartConfigRulesEvaluation</code> API.</p> </li> <li> <p>AWS Config invokes your Lambda function and evaluates your IAM resources.</p> </li> <li> <p>Your custom rule will still run periodic evaluations every 24 hours.</p> </li> </ol></p>
     fn start_config_rules_evaluation(
         &self,
         input: &StartConfigRulesEvaluationRequest,
     ) -> Result<StartConfigRulesEvaluationResponse, StartConfigRulesEvaluationError>;
 
-    #[doc="<p>Starts recording configurations of the AWS resources you have selected to record in your AWS account.</p> <p>You must have created at least one delivery channel to successfully start the configuration recorder.</p>"]
+    /// <p>Starts recording configurations of the AWS resources you have selected to record in your AWS account.</p> <p>You must have created at least one delivery channel to successfully start the configuration recorder.</p>
     fn start_configuration_recorder(
         &self,
         input: &StartConfigurationRecorderRequest,
     ) -> Result<(), StartConfigurationRecorderError>;
 
-    #[doc="<p>Stops recording configurations of the AWS resources you have selected to record in your AWS account.</p>"]
+    /// <p>Stops recording configurations of the AWS resources you have selected to record in your AWS account.</p>
     fn stop_configuration_recorder(
         &self,
         input: &StopConfigurationRecorderRequest,
@@ -3836,7 +3836,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Deletes the specified AWS Config rule and all of its evaluation results.</p> <p>AWS Config sets the state of a rule to <code>DELETING</code> until the deletion is complete. You cannot update a rule while it is in this state. If you make a <code>PutConfigRule</code> or <code>DeleteConfigRule</code> request for the rule, you will receive a <code>ResourceInUseException</code>.</p> <p>You can check the state of a rule by using the <code>DescribeConfigRules</code> request.</p>"]
+    /// <p>Deletes the specified AWS Config rule and all of its evaluation results.</p> <p>AWS Config sets the state of a rule to <code>DELETING</code> until the deletion is complete. You cannot update a rule while it is in this state. If you make a <code>PutConfigRule</code> or <code>DeleteConfigRule</code> request for the rule, you will receive a <code>ResourceInUseException</code>.</p> <p>You can check the state of a rule by using the <code>DescribeConfigRules</code> request.</p>
     fn delete_config_rule(
         &self,
         input: &DeleteConfigRuleRequest,
@@ -3864,7 +3864,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the configuration recorder.</p> <p>After the configuration recorder is deleted, AWS Config will not record resource configuration changes until you create a new configuration recorder.</p> <p>This action does not delete the configuration information that was previously recorded. You will be able to access the previously recorded information by using the <code>GetResourceConfigHistory</code> action, but you will not be able to access this information in the AWS Config console until you create a new configuration recorder.</p>"]
+    /// <p>Deletes the configuration recorder.</p> <p>After the configuration recorder is deleted, AWS Config will not record resource configuration changes until you create a new configuration recorder.</p> <p>This action does not delete the configuration information that was previously recorded. You will be able to access the previously recorded information by using the <code>GetResourceConfigHistory</code> action, but you will not be able to access this information in the AWS Config console until you create a new configuration recorder.</p>
     fn delete_configuration_recorder(
         &self,
         input: &DeleteConfigurationRecorderRequest,
@@ -3895,7 +3895,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the delivery channel.</p> <p>Before you can delete the delivery channel, you must stop the configuration recorder by using the <a>StopConfigurationRecorder</a> action.</p>"]
+    /// <p>Deletes the delivery channel.</p> <p>Before you can delete the delivery channel, you must stop the configuration recorder by using the <a>StopConfigurationRecorder</a> action.</p>
     fn delete_delivery_channel(
         &self,
         input: &DeleteDeliveryChannelRequest,
@@ -3923,7 +3923,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the evaluation results for the specified Config rule. You can specify one Config rule per request. After you delete the evaluation results, you can call the <a>StartConfigRulesEvaluation</a> API to start evaluating your AWS resources against the rule.</p>"]
+    /// <p>Deletes the evaluation results for the specified Config rule. You can specify one Config rule per request. After you delete the evaluation results, you can call the <a>StartConfigRulesEvaluation</a> API to start evaluating your AWS resources against the rule.</p>
     fn delete_evaluation_results(
         &self,
         input: &DeleteEvaluationResultsRequest,
@@ -3960,7 +3960,7 @@ where
         }
     }
 
-    #[doc="<p>Schedules delivery of a configuration snapshot to the Amazon S3 bucket in the specified delivery channel. After the delivery has started, AWS Config sends following notifications using an Amazon SNS topic that you have specified.</p> <ul> <li> <p>Notification of starting the delivery.</p> </li> <li> <p>Notification of delivery completed, if the delivery was successfully completed.</p> </li> <li> <p>Notification of delivery failure, if the delivery failed to complete.</p> </li> </ul>"]
+    /// <p><p>Schedules delivery of a configuration snapshot to the Amazon S3 bucket in the specified delivery channel. After the delivery has started, AWS Config sends following notifications using an Amazon SNS topic that you have specified.</p> <ul> <li> <p>Notification of starting the delivery.</p> </li> <li> <p>Notification of delivery completed, if the delivery was successfully completed.</p> </li> <li> <p>Notification of delivery failure, if the delivery failed to complete.</p> </li> </ul></p>
     fn deliver_config_snapshot(
         &self,
         input: &DeliverConfigSnapshotRequest,
@@ -3994,7 +3994,7 @@ where
         }
     }
 
-    #[doc="<p>Indicates whether the specified AWS Config rules are compliant. If a rule is noncompliant, this action returns the number of AWS resources that do not comply with the rule.</p> <p>A rule is compliant if all of the evaluated resources comply with it, and it is noncompliant if any of these resources do not comply.</p> <p>If AWS Config has no current evaluation results for the rule, it returns <code>INSUFFICIENT_DATA</code>. This result might indicate one of the following conditions:</p> <ul> <li> <p>AWS Config has never invoked an evaluation for the rule. To check whether it has, use the <code>DescribeConfigRuleEvaluationStatus</code> action to get the <code>LastSuccessfulInvocationTime</code> and <code>LastFailedInvocationTime</code>.</p> </li> <li> <p>The rule's AWS Lambda function is failing to send evaluation results to AWS Config. Verify that the role that you assigned to your configuration recorder includes the <code>config:PutEvaluations</code> permission. If the rule is a custom rule, verify that the AWS Lambda execution role includes the <code>config:PutEvaluations</code> permission.</p> </li> <li> <p>The rule's AWS Lambda function has returned <code>NOT_APPLICABLE</code> for all evaluation results. This can occur if the resources were deleted or removed from the rule's scope.</p> </li> </ul>"]
+    /// <p><p>Indicates whether the specified AWS Config rules are compliant. If a rule is noncompliant, this action returns the number of AWS resources that do not comply with the rule.</p> <p>A rule is compliant if all of the evaluated resources comply with it, and it is noncompliant if any of these resources do not comply.</p> <p>If AWS Config has no current evaluation results for the rule, it returns <code>INSUFFICIENT<em>DATA</code>. This result might indicate one of the following conditions:</p> <ul> <li> <p>AWS Config has never invoked an evaluation for the rule. To check whether it has, use the <code>DescribeConfigRuleEvaluationStatus</code> action to get the <code>LastSuccessfulInvocationTime</code> and <code>LastFailedInvocationTime</code>.</p> </li> <li> <p>The rule&#39;s AWS Lambda function is failing to send evaluation results to AWS Config. Verify that the role that you assigned to your configuration recorder includes the <code>config:PutEvaluations</code> permission. If the rule is a custom rule, verify that the AWS Lambda execution role includes the <code>config:PutEvaluations</code> permission.</p> </li> <li> <p>The rule&#39;s AWS Lambda function has returned <code>NOT</em>APPLICABLE</code> for all evaluation results. This can occur if the resources were deleted or removed from the rule&#39;s scope.</p> </li> </ul></p>
     fn describe_compliance_by_config_rule(
         &self,
         input: &DescribeComplianceByConfigRuleRequest,
@@ -4033,7 +4033,7 @@ where
         }
     }
 
-    #[doc="<p>Indicates whether the specified AWS resources are compliant. If a resource is noncompliant, this action returns the number of AWS Config rules that the resource does not comply with.</p> <p>A resource is compliant if it complies with all the AWS Config rules that evaluate it. It is noncompliant if it does not comply with one or more of these rules.</p> <p>If AWS Config has no current evaluation results for the resource, it returns <code>INSUFFICIENT_DATA</code>. This result might indicate one of the following conditions about the rules that evaluate the resource:</p> <ul> <li> <p>AWS Config has never invoked an evaluation for the rule. To check whether it has, use the <code>DescribeConfigRuleEvaluationStatus</code> action to get the <code>LastSuccessfulInvocationTime</code> and <code>LastFailedInvocationTime</code>.</p> </li> <li> <p>The rule's AWS Lambda function is failing to send evaluation results to AWS Config. Verify that the role that you assigned to your configuration recorder includes the <code>config:PutEvaluations</code> permission. If the rule is a custom rule, verify that the AWS Lambda execution role includes the <code>config:PutEvaluations</code> permission.</p> </li> <li> <p>The rule's AWS Lambda function has returned <code>NOT_APPLICABLE</code> for all evaluation results. This can occur if the resources were deleted or removed from the rule's scope.</p> </li> </ul>"]
+    /// <p><p>Indicates whether the specified AWS resources are compliant. If a resource is noncompliant, this action returns the number of AWS Config rules that the resource does not comply with.</p> <p>A resource is compliant if it complies with all the AWS Config rules that evaluate it. It is noncompliant if it does not comply with one or more of these rules.</p> <p>If AWS Config has no current evaluation results for the resource, it returns <code>INSUFFICIENT<em>DATA</code>. This result might indicate one of the following conditions about the rules that evaluate the resource:</p> <ul> <li> <p>AWS Config has never invoked an evaluation for the rule. To check whether it has, use the <code>DescribeConfigRuleEvaluationStatus</code> action to get the <code>LastSuccessfulInvocationTime</code> and <code>LastFailedInvocationTime</code>.</p> </li> <li> <p>The rule&#39;s AWS Lambda function is failing to send evaluation results to AWS Config. Verify that the role that you assigned to your configuration recorder includes the <code>config:PutEvaluations</code> permission. If the rule is a custom rule, verify that the AWS Lambda execution role includes the <code>config:PutEvaluations</code> permission.</p> </li> <li> <p>The rule&#39;s AWS Lambda function has returned <code>NOT</em>APPLICABLE</code> for all evaluation results. This can occur if the resources were deleted or removed from the rule&#39;s scope.</p> </li> </ul></p>
     fn describe_compliance_by_resource(
         &self,
         input: &DescribeComplianceByResourceRequest,
@@ -4072,7 +4072,7 @@ where
         }
     }
 
-    #[doc="<p>Returns status information for each of your AWS managed Config rules. The status includes information such as the last time AWS Config invoked the rule, the last time AWS Config failed to invoke the rule, and the related error for the last failure.</p>"]
+    /// <p>Returns status information for each of your AWS managed Config rules. The status includes information such as the last time AWS Config invoked the rule, the last time AWS Config failed to invoke the rule, and the related error for the last failure.</p>
     fn describe_config_rule_evaluation_status(
         &self,
         input: &DescribeConfigRuleEvaluationStatusRequest,
@@ -4112,7 +4112,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns details about your AWS Config rules.</p>"]
+    /// <p>Returns details about your AWS Config rules.</p>
     fn describe_config_rules(
         &self,
         input: &DescribeConfigRulesRequest,
@@ -4146,7 +4146,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the current status of the specified configuration recorder. If a configuration recorder is not specified, this action returns the status of all configuration recorder associated with the account.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> </note>"]
+    /// <p><p>Returns the current status of the specified configuration recorder. If a configuration recorder is not specified, this action returns the status of all configuration recorder associated with the account.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> </note></p>
     fn describe_configuration_recorder_status(
         &self,
         input: &DescribeConfigurationRecorderStatusRequest,
@@ -4186,7 +4186,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the details for the specified configuration recorders. If the configuration recorder is not specified, this action returns the details for all configuration recorders associated with the account.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> </note>"]
+    /// <p><p>Returns the details for the specified configuration recorders. If the configuration recorder is not specified, this action returns the details for all configuration recorders associated with the account.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> </note></p>
     fn describe_configuration_recorders(
         &self,
         input: &DescribeConfigurationRecordersRequest,
@@ -4225,7 +4225,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the current status of the specified delivery channel. If a delivery channel is not specified, this action returns the current status of all delivery channels associated with the account.</p> <note> <p>Currently, you can specify only one delivery channel per region in your account.</p> </note>"]
+    /// <p><p>Returns the current status of the specified delivery channel. If a delivery channel is not specified, this action returns the current status of all delivery channels associated with the account.</p> <note> <p>Currently, you can specify only one delivery channel per region in your account.</p> </note></p>
     fn describe_delivery_channel_status(
         &self,
         input: &DescribeDeliveryChannelStatusRequest,
@@ -4264,7 +4264,7 @@ where
         }
     }
 
-    #[doc="<p>Returns details about the specified delivery channel. If a delivery channel is not specified, this action returns the details of all delivery channels associated with the account.</p> <note> <p>Currently, you can specify only one delivery channel per region in your account.</p> </note>"]
+    /// <p><p>Returns details about the specified delivery channel. If a delivery channel is not specified, this action returns the details of all delivery channels associated with the account.</p> <note> <p>Currently, you can specify only one delivery channel per region in your account.</p> </note></p>
     fn describe_delivery_channels(
         &self,
         input: &DescribeDeliveryChannelsRequest,
@@ -4301,7 +4301,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the evaluation results for the specified AWS Config rule. The results indicate which AWS resources were evaluated by the rule, when each resource was last evaluated, and whether each resource complies with the rule.</p>"]
+    /// <p>Returns the evaluation results for the specified AWS Config rule. The results indicate which AWS resources were evaluated by the rule, when each resource was last evaluated, and whether each resource complies with the rule.</p>
     fn get_compliance_details_by_config_rule(
         &self,
         input: &GetComplianceDetailsByConfigRuleRequest,
@@ -4341,7 +4341,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the evaluation results for the specified AWS resource. The results indicate which AWS Config rules were used to evaluate the resource, when each rule was last used, and whether the resource complies with each rule.</p>"]
+    /// <p>Returns the evaluation results for the specified AWS resource. The results indicate which AWS Config rules were used to evaluate the resource, when each rule was last used, and whether the resource complies with each rule.</p>
     fn get_compliance_details_by_resource(
         &self,
         input: &GetComplianceDetailsByResourceRequest,
@@ -4380,7 +4380,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the number of AWS Config rules that are compliant and noncompliant, up to a maximum of 25 for each.</p>"]
+    /// <p>Returns the number of AWS Config rules that are compliant and noncompliant, up to a maximum of 25 for each.</p>
     fn get_compliance_summary_by_config_rule(
         &self,
     ) -> Result<GetComplianceSummaryByConfigRuleResponse, GetComplianceSummaryByConfigRuleError>
@@ -4418,7 +4418,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the number of resources that are compliant and the number that are noncompliant. You can specify one or more resource types to get these numbers for each resource type. The maximum number returned is 100.</p>"]
+    /// <p>Returns the number of resources that are compliant and the number that are noncompliant. You can specify one or more resource types to get these numbers for each resource type. The maximum number returned is 100.</p>
     fn get_compliance_summary_by_resource_type(
         &self,
         input: &GetComplianceSummaryByResourceTypeRequest,
@@ -4458,7 +4458,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the resource types, the number of each resource type, and the total number of resources that AWS Config is recording in this region for your AWS account. </p> <p class=\"title\"> <b>Example</b> </p> <ol> <li> <p>AWS Config is recording three resource types in the US East (Ohio) Region for your account: 25 EC2 instances, 20 IAM users, and 15 S3 buckets.</p> </li> <li> <p>You make a call to the <code>GetDiscoveredResourceCounts</code> action and specify that you want all resource types. </p> </li> <li> <p>AWS Config returns the following:</p> <ul> <li> <p>The resource types (EC2 instances, IAM users, and S3 buckets)</p> </li> <li> <p>The number of each resource type (25, 20, and 15)</p> </li> <li> <p>The total number of all resources (60)</p> </li> </ul> </li> </ol> <p>The response is paginated. By default, AWS Config lists 100 <a>ResourceCount</a> objects on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>If you make a call to the <a>GetDiscoveredResourceCounts</a> action, you may not immediately receive resource counts in the following situations:</p> <ul> <li> <p>You are a new AWS Config customer</p> </li> <li> <p>You just enabled resource recording</p> </li> </ul> <p>It may take a few minutes for AWS Config to record and count your resources. Wait a few minutes and then retry the <a>GetDiscoveredResourceCounts</a> action. </p> </note>"]
+    /// <p><p>Returns the resource types, the number of each resource type, and the total number of resources that AWS Config is recording in this region for your AWS account. </p> <p class="title"> <b>Example</b> </p> <ol> <li> <p>AWS Config is recording three resource types in the US East (Ohio) Region for your account: 25 EC2 instances, 20 IAM users, and 15 S3 buckets.</p> </li> <li> <p>You make a call to the <code>GetDiscoveredResourceCounts</code> action and specify that you want all resource types. </p> </li> <li> <p>AWS Config returns the following:</p> <ul> <li> <p>The resource types (EC2 instances, IAM users, and S3 buckets)</p> </li> <li> <p>The number of each resource type (25, 20, and 15)</p> </li> <li> <p>The total number of all resources (60)</p> </li> </ul> </li> </ol> <p>The response is paginated. By default, AWS Config lists 100 <a>ResourceCount</a> objects on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>If you make a call to the <a>GetDiscoveredResourceCounts</a> action, you may not immediately receive resource counts in the following situations:</p> <ul> <li> <p>You are a new AWS Config customer</p> </li> <li> <p>You just enabled resource recording</p> </li> </ul> <p>It may take a few minutes for AWS Config to record and count your resources. Wait a few minutes and then retry the <a>GetDiscoveredResourceCounts</a> action. </p> </note></p>
     fn get_discovered_resource_counts(
         &self,
         input: &GetDiscoveredResourceCountsRequest,
@@ -4495,7 +4495,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list of configuration items for the specified resource. The list contains details about each state of the resource during the specified time interval.</p> <p>The response is paginated. By default, AWS Config returns a limit of 10 configuration items per page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>Each call to the API is limited to span a duration of seven days. It is likely that the number of records returned is smaller than the specified <code>limit</code>. In such cases, you can make another call, using the <code>nextToken</code>.</p> </note>"]
+    /// <p><p>Returns a list of configuration items for the specified resource. The list contains details about each state of the resource during the specified time interval.</p> <p>The response is paginated. By default, AWS Config returns a limit of 10 configuration items per page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>Each call to the API is limited to span a duration of seven days. It is likely that the number of records returned is smaller than the specified <code>limit</code>. In such cases, you can make another call, using the <code>nextToken</code>.</p> </note></p>
     fn get_resource_config_history(
         &self,
         input: &GetResourceConfigHistoryRequest,
@@ -4532,7 +4532,7 @@ where
         }
     }
 
-    #[doc="<p>Accepts a resource type and returns a list of resource identifiers for the resources of that type. A resource identifier includes the resource type, ID, and (if available) the custom resource name. The results consist of resources that AWS Config has discovered, including those that AWS Config is not currently recording. You can narrow the results to include only resources that have specific resource IDs or a resource name.</p> <note> <p>You can specify either resource IDs or a resource name but not both in the same request.</p> </note> <p>The response is paginated. By default, AWS Config lists 100 resource identifiers on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p>"]
+    /// <p>Accepts a resource type and returns a list of resource identifiers for the resources of that type. A resource identifier includes the resource type, ID, and (if available) the custom resource name. The results consist of resources that AWS Config has discovered, including those that AWS Config is not currently recording. You can narrow the results to include only resources that have specific resource IDs or a resource name.</p> <note> <p>You can specify either resource IDs or a resource name but not both in the same request.</p> </note> <p>The response is paginated. By default, AWS Config lists 100 resource identifiers on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p>
     fn list_discovered_resources(
         &self,
         input: &ListDiscoveredResourcesRequest,
@@ -4569,7 +4569,7 @@ where
         }
     }
 
-    #[doc="<p>Adds or updates an AWS Config rule for evaluating whether your AWS resources comply with your desired configurations.</p> <p>You can use this action for custom Config rules and AWS managed Config rules. A custom Config rule is a rule that you develop and maintain. An AWS managed Config rule is a customizable, predefined rule that AWS Config provides.</p> <p>If you are adding a new custom Config rule, you must first create the AWS Lambda function that the rule invokes to evaluate your resources. When you use the <code>PutConfigRule</code> action to add the rule to AWS Config, you must specify the Amazon Resource Name (ARN) that AWS Lambda assigns to the function. Specify the ARN for the <code>SourceIdentifier</code> key. This key is part of the <code>Source</code> object, which is part of the <code>ConfigRule</code> object. </p> <p>If you are adding an AWS managed Config rule, specify the rule's identifier for the <code>SourceIdentifier</code> key. To reference AWS managed Config rule identifiers, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html\">About AWS Managed Config Rules</a>.</p> <p>For any new rule that you add, specify the <code>ConfigRuleName</code> in the <code>ConfigRule</code> object. Do not specify the <code>ConfigRuleArn</code> or the <code>ConfigRuleId</code>. These values are generated by AWS Config for new rules.</p> <p>If you are updating a rule that you added previously, you can specify the rule by <code>ConfigRuleName</code>, <code>ConfigRuleId</code>, or <code>ConfigRuleArn</code> in the <code>ConfigRule</code> data type that you use in this request.</p> <p>The maximum number of rules that AWS Config supports is 50.</p> <p>For more information about requesting a rule limit increase, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_config\">AWS Config Limits</a> in the <i>AWS General Reference Guide</i>.</p> <p>For more information about developing and using AWS Config rules, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html\">Evaluating AWS Resource Configurations with AWS Config</a> in the <i>AWS Config Developer Guide</i>.</p>"]
+    /// <p>Adds or updates an AWS Config rule for evaluating whether your AWS resources comply with your desired configurations.</p> <p>You can use this action for custom Config rules and AWS managed Config rules. A custom Config rule is a rule that you develop and maintain. An AWS managed Config rule is a customizable, predefined rule that AWS Config provides.</p> <p>If you are adding a new custom Config rule, you must first create the AWS Lambda function that the rule invokes to evaluate your resources. When you use the <code>PutConfigRule</code> action to add the rule to AWS Config, you must specify the Amazon Resource Name (ARN) that AWS Lambda assigns to the function. Specify the ARN for the <code>SourceIdentifier</code> key. This key is part of the <code>Source</code> object, which is part of the <code>ConfigRule</code> object. </p> <p>If you are adding an AWS managed Config rule, specify the rule's identifier for the <code>SourceIdentifier</code> key. To reference AWS managed Config rule identifiers, see <a href="http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html">About AWS Managed Config Rules</a>.</p> <p>For any new rule that you add, specify the <code>ConfigRuleName</code> in the <code>ConfigRule</code> object. Do not specify the <code>ConfigRuleArn</code> or the <code>ConfigRuleId</code>. These values are generated by AWS Config for new rules.</p> <p>If you are updating a rule that you added previously, you can specify the rule by <code>ConfigRuleName</code>, <code>ConfigRuleId</code>, or <code>ConfigRuleArn</code> in the <code>ConfigRule</code> data type that you use in this request.</p> <p>The maximum number of rules that AWS Config supports is 50.</p> <p>For more information about requesting a rule limit increase, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_config">AWS Config Limits</a> in the <i>AWS General Reference Guide</i>.</p> <p>For more information about developing and using AWS Config rules, see <a href="http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html">Evaluating AWS Resource Configurations with AWS Config</a> in the <i>AWS Config Developer Guide</i>.</p>
     fn put_config_rule(&self, input: &PutConfigRuleRequest) -> Result<(), PutConfigRuleError> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
@@ -4594,7 +4594,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new configuration recorder to record the selected resource configurations.</p> <p>You can use this action to change the role <code>roleARN</code> and/or the <code>recordingGroup</code> of an existing recorder. To change the role, call the action on the existing configuration recorder and specify a role.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> <p>If <code>ConfigurationRecorder</code> does not have the <b>recordingGroup</b> parameter specified, the default is to record all supported resource types.</p> </note>"]
+    /// <p><p>Creates a new configuration recorder to record the selected resource configurations.</p> <p>You can use this action to change the role <code>roleARN</code> and/or the <code>recordingGroup</code> of an existing recorder. To change the role, call the action on the existing configuration recorder and specify a role.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> <p>If <code>ConfigurationRecorder</code> does not have the <b>recordingGroup</b> parameter specified, the default is to record all supported resource types.</p> </note></p>
     fn put_configuration_recorder(
         &self,
         input: &PutConfigurationRecorderRequest,
@@ -4625,7 +4625,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a delivery channel object to deliver configuration information to an Amazon S3 bucket and Amazon SNS topic.</p> <p>Before you can create a delivery channel, you must create a configuration recorder.</p> <p>You can use this action to change the Amazon S3 bucket or an Amazon SNS topic of the existing delivery channel. To change the Amazon S3 bucket or an Amazon SNS topic, call this action and specify the changed values for the S3 bucket and the SNS topic. If you specify a different value for either the S3 bucket or the SNS topic, this action will keep the existing value for the parameter that is not changed.</p> <note> <p>You can have only one delivery channel per region in your account.</p> </note>"]
+    /// <p><p>Creates a delivery channel object to deliver configuration information to an Amazon S3 bucket and Amazon SNS topic.</p> <p>Before you can create a delivery channel, you must create a configuration recorder.</p> <p>You can use this action to change the Amazon S3 bucket or an Amazon SNS topic of the existing delivery channel. To change the Amazon S3 bucket or an Amazon SNS topic, call this action and specify the changed values for the S3 bucket and the SNS topic. If you specify a different value for either the S3 bucket or the SNS topic, this action will keep the existing value for the parameter that is not changed.</p> <note> <p>You can have only one delivery channel per region in your account.</p> </note></p>
     fn put_delivery_channel(
         &self,
         input: &PutDeliveryChannelRequest,
@@ -4653,7 +4653,7 @@ where
         }
     }
 
-    #[doc="<p>Used by an AWS Lambda function to deliver evaluation results to AWS Config. This action is required in every AWS Lambda function that is invoked by an AWS Config rule.</p>"]
+    /// <p>Used by an AWS Lambda function to deliver evaluation results to AWS Config. This action is required in every AWS Lambda function that is invoked by an AWS Config rule.</p>
     fn put_evaluations(
         &self,
         input: &PutEvaluationsRequest,
@@ -4687,7 +4687,7 @@ where
         }
     }
 
-    #[doc="<p>Runs an on-demand evaluation for the specified Config rules against the last known configuration state of the resources. Use <code>StartConfigRulesEvaluation</code> when you want to test a rule that you updated is working as expected. <code>StartConfigRulesEvaluation</code> does not re-record the latest configuration state for your resources; it re-runs an evaluation against the last known state of your resources. </p> <p>You can specify up to 25 Config rules per request. </p> <p>An existing <code>StartConfigRulesEvaluation</code> call must complete for the specified rules before you can call the API again. If you chose to have AWS Config stream to an Amazon SNS topic, you will receive a <code>ConfigRuleEvaluationStarted</code> notification when the evaluation starts.</p> <note> <p>You don't need to call the <code>StartConfigRulesEvaluation</code> API to run an evaluation for a new rule. When you create a new rule, AWS Config automatically evaluates your resources against the rule. </p> </note> <p>The <code>StartConfigRulesEvaluation</code> API is useful if you want to run on-demand evaluations, such as the following example:</p> <ol> <li> <p>You have a custom rule that evaluates your IAM resources every 24 hours.</p> </li> <li> <p>You update your Lambda function to add additional conditions to your rule.</p> </li> <li> <p>Instead of waiting for the next periodic evaluation, you call the <code>StartConfigRulesEvaluation</code> API.</p> </li> <li> <p>AWS Config invokes your Lambda function and evaluates your IAM resources.</p> </li> <li> <p>Your custom rule will still run periodic evaluations every 24 hours.</p> </li> </ol>"]
+    /// <p><p>Runs an on-demand evaluation for the specified Config rules against the last known configuration state of the resources. Use <code>StartConfigRulesEvaluation</code> when you want to test a rule that you updated is working as expected. <code>StartConfigRulesEvaluation</code> does not re-record the latest configuration state for your resources; it re-runs an evaluation against the last known state of your resources. </p> <p>You can specify up to 25 Config rules per request. </p> <p>An existing <code>StartConfigRulesEvaluation</code> call must complete for the specified rules before you can call the API again. If you chose to have AWS Config stream to an Amazon SNS topic, you will receive a <code>ConfigRuleEvaluationStarted</code> notification when the evaluation starts.</p> <note> <p>You don&#39;t need to call the <code>StartConfigRulesEvaluation</code> API to run an evaluation for a new rule. When you create a new rule, AWS Config automatically evaluates your resources against the rule. </p> </note> <p>The <code>StartConfigRulesEvaluation</code> API is useful if you want to run on-demand evaluations, such as the following example:</p> <ol> <li> <p>You have a custom rule that evaluates your IAM resources every 24 hours.</p> </li> <li> <p>You update your Lambda function to add additional conditions to your rule.</p> </li> <li> <p>Instead of waiting for the next periodic evaluation, you call the <code>StartConfigRulesEvaluation</code> API.</p> </li> <li> <p>AWS Config invokes your Lambda function and evaluates your IAM resources.</p> </li> <li> <p>Your custom rule will still run periodic evaluations every 24 hours.</p> </li> </ol></p>
     fn start_config_rules_evaluation(
         &self,
         input: &StartConfigRulesEvaluationRequest,
@@ -4724,7 +4724,7 @@ where
         }
     }
 
-    #[doc="<p>Starts recording configurations of the AWS resources you have selected to record in your AWS account.</p> <p>You must have created at least one delivery channel to successfully start the configuration recorder.</p>"]
+    /// <p>Starts recording configurations of the AWS resources you have selected to record in your AWS account.</p> <p>You must have created at least one delivery channel to successfully start the configuration recorder.</p>
     fn start_configuration_recorder(
         &self,
         input: &StartConfigurationRecorderRequest,
@@ -4755,7 +4755,7 @@ where
         }
     }
 
-    #[doc="<p>Stops recording configurations of the AWS resources you have selected to record in your AWS account.</p>"]
+    /// <p>Stops recording configurations of the AWS resources you have selected to record in your AWS account.</p>
     fn stop_configuration_recorder(
         &self,
         input: &StopConfigurationRecorderRequest,

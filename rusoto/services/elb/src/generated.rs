@@ -2875,7 +2875,7 @@ impl InstancePortDeserializer {
 /// <p>Information about the state of an EC2 instance.</p>
 #[derive(Default, Debug, Clone)]
 pub struct InstanceState {
-    /// <p>A description of the instance state. This string can contain one or more of the following messages.</p> <ul> <li> <p> <code>N/A</code> </p> </li> <li> <p> <code>A transient error occurred. Please try again later.</code> </p> </li> <li> <p> <code>Instance has failed at least the UnhealthyThreshold number of health checks consecutively.</code> </p> </li> <li> <p> <code>Instance has not passed the configured HealthyThreshold number of health checks consecutively.</code> </p> </li> <li> <p> <code>Instance registration is still in progress.</code> </p> </li> <li> <p> <code>Instance is in the EC2 Availability Zone for which LoadBalancer is not configured to route traffic to.</code> </p> </li> <li> <p> <code>Instance is not currently registered with the LoadBalancer.</code> </p> </li> <li> <p> <code>Instance deregistration currently in progress.</code> </p> </li> <li> <p> <code>Disable Availability Zone is currently in progress.</code> </p> </li> <li> <p> <code>Instance is in pending state.</code> </p> </li> <li> <p> <code>Instance is in stopped state.</code> </p> </li> <li> <p> <code>Instance is in terminated state.</code> </p> </li> </ul>
+    /// <p><p>A description of the instance state. This string can contain one or more of the following messages.</p> <ul> <li> <p> <code>N/A</code> </p> </li> <li> <p> <code>A transient error occurred. Please try again later.</code> </p> </li> <li> <p> <code>Instance has failed at least the UnhealthyThreshold number of health checks consecutively.</code> </p> </li> <li> <p> <code>Instance has not passed the configured HealthyThreshold number of health checks consecutively.</code> </p> </li> <li> <p> <code>Instance registration is still in progress.</code> </p> </li> <li> <p> <code>Instance is in the EC2 Availability Zone for which LoadBalancer is not configured to route traffic to.</code> </p> </li> <li> <p> <code>Instance is not currently registered with the LoadBalancer.</code> </p> </li> <li> <p> <code>Instance deregistration currently in progress.</code> </p> </li> <li> <p> <code>Disable Availability Zone is currently in progress.</code> </p> </li> <li> <p> <code>Instance is in pending state.</code> </p> </li> <li> <p> <code>Instance is in stopped state.</code> </p> </li> <li> <p> <code>Instance is in terminated state.</code> </p> </li> </ul></p>
     pub description: Option<String>,
     /// <p>The ID of the instance.</p>
     pub instance_id: Option<String>,
@@ -3143,7 +3143,7 @@ impl LBCookieStickinessPolicyDeserializer {
 pub struct Limit {
     /// <p>The maximum value of the limit.</p>
     pub max: Option<String>,
-    /// <p>The name of the limit. The possible values are:</p> <ul> <li> <p>classic-listeners</p> </li> <li> <p>classic-load-balancers</p> </li> </ul>
+    /// <p><p>The name of the limit. The possible values are:</p> <ul> <li> <p>classic-listeners</p> </li> <li> <p>classic-load-balancers</p> </li> </ul></p>
     pub name: Option<String>,
 }
 
@@ -4155,7 +4155,7 @@ pub struct PolicyAttributeTypeDescription {
     pub attribute_name: Option<String>,
     /// <p>The type of the attribute. For example, <code>Boolean</code> or <code>Integer</code>.</p>
     pub attribute_type: Option<String>,
-    /// <p>The cardinality of the attribute.</p> <p>Valid values:</p> <ul> <li> <p>ONE(1) : Single value required</p> </li> <li> <p>ZERO_OR_ONE(0..1) : Up to one value is allowed</p> </li> <li> <p>ZERO_OR_MORE(0..*) : Optional. Multiple values are allowed</p> </li> <li> <p>ONE_OR_MORE(1..*0) : Required. Multiple values are allowed</p> </li> </ul>
+    /// <p><p>The cardinality of the attribute.</p> <p>Valid values:</p> <ul> <li> <p>ONE(1) : Single value required</p> </li> <li> <p>ZERO<em>OR</em>ONE(0..1) : Up to one value is allowed</p> </li> <li> <p>ZERO<em>OR</em>MORE(0..<em>) : Optional. Multiple values are allowed</p> </li> <li> <p>ONE<em>OR</em>MORE(1..</em>0) : Required. Multiple values are allowed</p> </li> </ul></p>
     pub cardinality: Option<String>,
     /// <p>The default value of the attribute, if applicable.</p>
     pub default_value: Option<String>,
@@ -5590,11 +5590,11 @@ impl VPCIdDeserializer {
 /// Errors returned by AddTags
 #[derive(Debug, PartialEq)]
 pub enum AddTagsError {
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     AccessPointNotFound(String),
-    ///<p>A tag key was specified more than once.</p>
+    /// <p>A tag key was specified more than once.</p>
     DuplicateTagKeys(String),
-    ///<p>The quota for the number of tags that can be assigned to a load balancer has been reached.</p>
+    /// <p>The quota for the number of tags that can be assigned to a load balancer has been reached.</p>
     TooManyTags(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5671,11 +5671,11 @@ impl Error for AddTagsError {
 /// Errors returned by ApplySecurityGroupsToLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum ApplySecurityGroupsToLoadBalancerError {
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     AccessPointNotFound(String),
-    ///<p>The requested configuration change is not valid.</p>
+    /// <p>The requested configuration change is not valid.</p>
     InvalidConfigurationRequest(String),
-    ///<p>One or more of the specified security groups do not exist.</p>
+    /// <p>One or more of the specified security groups do not exist.</p>
     InvalidSecurityGroup(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5760,13 +5760,13 @@ impl Error for ApplySecurityGroupsToLoadBalancerError {
 /// Errors returned by AttachLoadBalancerToSubnets
 #[derive(Debug, PartialEq)]
 pub enum AttachLoadBalancerToSubnetsError {
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     AccessPointNotFound(String),
-    ///<p>The requested configuration change is not valid.</p>
+    /// <p>The requested configuration change is not valid.</p>
     InvalidConfigurationRequest(String),
-    ///<p>The specified VPC has no associated Internet gateway.</p>
+    /// <p>The specified VPC has no associated Internet gateway.</p>
     InvalidSubnet(String),
-    ///<p>One or more of the specified subnets do not exist.</p>
+    /// <p>One or more of the specified subnets do not exist.</p>
     SubnetNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5853,7 +5853,7 @@ impl Error for AttachLoadBalancerToSubnetsError {
 /// Errors returned by ConfigureHealthCheck
 #[derive(Debug, PartialEq)]
 pub enum ConfigureHealthCheckError {
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     AccessPointNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5924,13 +5924,13 @@ impl Error for ConfigureHealthCheckError {
 /// Errors returned by CreateAppCookieStickinessPolicy
 #[derive(Debug, PartialEq)]
 pub enum CreateAppCookieStickinessPolicyError {
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     AccessPointNotFound(String),
-    ///<p>A policy with the specified name already exists for this load balancer.</p>
+    /// <p>A policy with the specified name already exists for this load balancer.</p>
     DuplicatePolicyName(String),
-    ///<p>The requested configuration change is not valid.</p>
+    /// <p>The requested configuration change is not valid.</p>
     InvalidConfigurationRequest(String),
-    ///<p>The quota for the number of policies for this load balancer has been reached.</p>
+    /// <p>The quota for the number of policies for this load balancer has been reached.</p>
     TooManyPolicies(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6021,13 +6021,13 @@ impl Error for CreateAppCookieStickinessPolicyError {
 /// Errors returned by CreateLBCookieStickinessPolicy
 #[derive(Debug, PartialEq)]
 pub enum CreateLBCookieStickinessPolicyError {
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     AccessPointNotFound(String),
-    ///<p>A policy with the specified name already exists for this load balancer.</p>
+    /// <p>A policy with the specified name already exists for this load balancer.</p>
     DuplicatePolicyName(String),
-    ///<p>The requested configuration change is not valid.</p>
+    /// <p>The requested configuration change is not valid.</p>
     InvalidConfigurationRequest(String),
-    ///<p>The quota for the number of policies for this load balancer has been reached.</p>
+    /// <p>The quota for the number of policies for this load balancer has been reached.</p>
     TooManyPolicies(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6118,27 +6118,27 @@ impl Error for CreateLBCookieStickinessPolicyError {
 /// Errors returned by CreateLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum CreateLoadBalancerError {
-    ///<p>The specified ARN does not refer to a valid SSL certificate in AWS Identity and Access Management (IAM) or AWS Certificate Manager (ACM). Note that if you recently uploaded the certificate to IAM, this error might indicate that the certificate is not fully available yet.</p>
+    /// <p>The specified ARN does not refer to a valid SSL certificate in AWS Identity and Access Management (IAM) or AWS Certificate Manager (ACM). Note that if you recently uploaded the certificate to IAM, this error might indicate that the certificate is not fully available yet.</p>
     CertificateNotFound(String),
-    ///<p>The specified load balancer name already exists for this account.</p>
+    /// <p>The specified load balancer name already exists for this account.</p>
     DuplicateAccessPointName(String),
-    ///<p>A tag key was specified more than once.</p>
+    /// <p>A tag key was specified more than once.</p>
     DuplicateTagKeys(String),
-    ///<p>The requested configuration change is not valid.</p>
+    /// <p>The requested configuration change is not valid.</p>
     InvalidConfigurationRequest(String),
-    ///<p>The specified value for the schema is not valid. You can only specify a scheme for load balancers in a VPC.</p>
+    /// <p>The specified value for the schema is not valid. You can only specify a scheme for load balancers in a VPC.</p>
     InvalidScheme(String),
-    ///<p>One or more of the specified security groups do not exist.</p>
+    /// <p>One or more of the specified security groups do not exist.</p>
     InvalidSecurityGroup(String),
-    ///<p>The specified VPC has no associated Internet gateway.</p>
+    /// <p>The specified VPC has no associated Internet gateway.</p>
     InvalidSubnet(String),
-    ///<p>One or more of the specified subnets do not exist.</p>
+    /// <p>One or more of the specified subnets do not exist.</p>
     SubnetNotFound(String),
-    ///<p>The quota for the number of load balancers has been reached.</p>
+    /// <p>The quota for the number of load balancers has been reached.</p>
     TooManyAccessPoints(String),
-    ///<p>The quota for the number of tags that can be assigned to a load balancer has been reached.</p>
+    /// <p>The quota for the number of tags that can be assigned to a load balancer has been reached.</p>
     TooManyTags(String),
-    ///<p>The specified protocol or signature version is not supported.</p>
+    /// <p>The specified protocol or signature version is not supported.</p>
     UnsupportedProtocol(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6253,15 +6253,15 @@ impl Error for CreateLoadBalancerError {
 /// Errors returned by CreateLoadBalancerListeners
 #[derive(Debug, PartialEq)]
 pub enum CreateLoadBalancerListenersError {
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     AccessPointNotFound(String),
-    ///<p>The specified ARN does not refer to a valid SSL certificate in AWS Identity and Access Management (IAM) or AWS Certificate Manager (ACM). Note that if you recently uploaded the certificate to IAM, this error might indicate that the certificate is not fully available yet.</p>
+    /// <p>The specified ARN does not refer to a valid SSL certificate in AWS Identity and Access Management (IAM) or AWS Certificate Manager (ACM). Note that if you recently uploaded the certificate to IAM, this error might indicate that the certificate is not fully available yet.</p>
     CertificateNotFound(String),
-    ///<p>A listener already exists for the specified load balancer name and port, but with a different instance port, protocol, or SSL certificate.</p>
+    /// <p>A listener already exists for the specified load balancer name and port, but with a different instance port, protocol, or SSL certificate.</p>
     DuplicateListener(String),
-    ///<p>The requested configuration change is not valid.</p>
+    /// <p>The requested configuration change is not valid.</p>
     InvalidConfigurationRequest(String),
-    ///<p>The specified protocol or signature version is not supported.</p>
+    /// <p>The specified protocol or signature version is not supported.</p>
     UnsupportedProtocol(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6358,15 +6358,15 @@ impl Error for CreateLoadBalancerListenersError {
 /// Errors returned by CreateLoadBalancerPolicy
 #[derive(Debug, PartialEq)]
 pub enum CreateLoadBalancerPolicyError {
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     AccessPointNotFound(String),
-    ///<p>A policy with the specified name already exists for this load balancer.</p>
+    /// <p>A policy with the specified name already exists for this load balancer.</p>
     DuplicatePolicyName(String),
-    ///<p>The requested configuration change is not valid.</p>
+    /// <p>The requested configuration change is not valid.</p>
     InvalidConfigurationRequest(String),
-    ///<p>One or more of the specified policy types do not exist.</p>
+    /// <p>One or more of the specified policy types do not exist.</p>
     PolicyTypeNotFound(String),
-    ///<p>The quota for the number of policies for this load balancer has been reached.</p>
+    /// <p>The quota for the number of policies for this load balancer has been reached.</p>
     TooManyPolicies(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6526,7 +6526,7 @@ impl Error for DeleteLoadBalancerError {
 /// Errors returned by DeleteLoadBalancerListeners
 #[derive(Debug, PartialEq)]
 pub enum DeleteLoadBalancerListenersError {
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     AccessPointNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6599,9 +6599,9 @@ impl Error for DeleteLoadBalancerListenersError {
 /// Errors returned by DeleteLoadBalancerPolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteLoadBalancerPolicyError {
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     AccessPointNotFound(String),
-    ///<p>The requested configuration change is not valid.</p>
+    /// <p>The requested configuration change is not valid.</p>
     InvalidConfigurationRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6680,9 +6680,9 @@ impl Error for DeleteLoadBalancerPolicyError {
 /// Errors returned by DeregisterInstancesFromLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum DeregisterInstancesFromLoadBalancerError {
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     AccessPointNotFound(String),
-    ///<p>The specified endpoint is not valid.</p>
+    /// <p>The specified endpoint is not valid.</p>
     InvalidEndPoint(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6826,9 +6826,9 @@ impl Error for DescribeAccountLimitsError {
 /// Errors returned by DescribeInstanceHealth
 #[derive(Debug, PartialEq)]
 pub enum DescribeInstanceHealthError {
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     AccessPointNotFound(String),
-    ///<p>The specified endpoint is not valid.</p>
+    /// <p>The specified endpoint is not valid.</p>
     InvalidEndPoint(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6905,9 +6905,9 @@ impl Error for DescribeInstanceHealthError {
 /// Errors returned by DescribeLoadBalancerAttributes
 #[derive(Debug, PartialEq)]
 pub enum DescribeLoadBalancerAttributesError {
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     AccessPointNotFound(String),
-    ///<p>The specified load balancer attribute does not exist.</p>
+    /// <p>The specified load balancer attribute does not exist.</p>
     LoadBalancerAttributeNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6986,9 +6986,9 @@ impl Error for DescribeLoadBalancerAttributesError {
 /// Errors returned by DescribeLoadBalancerPolicies
 #[derive(Debug, PartialEq)]
 pub enum DescribeLoadBalancerPoliciesError {
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     AccessPointNotFound(String),
-    ///<p>One or more of the specified policies do not exist.</p>
+    /// <p>One or more of the specified policies do not exist.</p>
     PolicyNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7065,7 +7065,7 @@ impl Error for DescribeLoadBalancerPoliciesError {
 /// Errors returned by DescribeLoadBalancerPolicyTypes
 #[derive(Debug, PartialEq)]
 pub enum DescribeLoadBalancerPolicyTypesError {
-    ///<p>One or more of the specified policy types do not exist.</p>
+    /// <p>One or more of the specified policy types do not exist.</p>
     PolicyTypeNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7138,9 +7138,9 @@ impl Error for DescribeLoadBalancerPolicyTypesError {
 /// Errors returned by DescribeLoadBalancers
 #[derive(Debug, PartialEq)]
 pub enum DescribeLoadBalancersError {
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     AccessPointNotFound(String),
-    ///
+
     DependencyThrottle(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7215,7 +7215,7 @@ impl Error for DescribeLoadBalancersError {
 /// Errors returned by DescribeTags
 #[derive(Debug, PartialEq)]
 pub enum DescribeTagsError {
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     AccessPointNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7284,9 +7284,9 @@ impl Error for DescribeTagsError {
 /// Errors returned by DetachLoadBalancerFromSubnets
 #[derive(Debug, PartialEq)]
 pub enum DetachLoadBalancerFromSubnetsError {
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     AccessPointNotFound(String),
-    ///<p>The requested configuration change is not valid.</p>
+    /// <p>The requested configuration change is not valid.</p>
     InvalidConfigurationRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7365,9 +7365,9 @@ impl Error for DetachLoadBalancerFromSubnetsError {
 /// Errors returned by DisableAvailabilityZonesForLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum DisableAvailabilityZonesForLoadBalancerError {
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     AccessPointNotFound(String),
-    ///<p>The requested configuration change is not valid.</p>
+    /// <p>The requested configuration change is not valid.</p>
     InvalidConfigurationRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7448,7 +7448,7 @@ impl Error for DisableAvailabilityZonesForLoadBalancerError {
 /// Errors returned by EnableAvailabilityZonesForLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum EnableAvailabilityZonesForLoadBalancerError {
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     AccessPointNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7521,11 +7521,11 @@ impl Error for EnableAvailabilityZonesForLoadBalancerError {
 /// Errors returned by ModifyLoadBalancerAttributes
 #[derive(Debug, PartialEq)]
 pub enum ModifyLoadBalancerAttributesError {
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     AccessPointNotFound(String),
-    ///<p>The requested configuration change is not valid.</p>
+    /// <p>The requested configuration change is not valid.</p>
     InvalidConfigurationRequest(String),
-    ///<p>The specified load balancer attribute does not exist.</p>
+    /// <p>The specified load balancer attribute does not exist.</p>
     LoadBalancerAttributeNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7610,9 +7610,9 @@ impl Error for ModifyLoadBalancerAttributesError {
 /// Errors returned by RegisterInstancesWithLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum RegisterInstancesWithLoadBalancerError {
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     AccessPointNotFound(String),
-    ///<p>The specified endpoint is not valid.</p>
+    /// <p>The specified endpoint is not valid.</p>
     InvalidEndPoint(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7691,7 +7691,7 @@ impl Error for RegisterInstancesWithLoadBalancerError {
 /// Errors returned by RemoveTags
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsError {
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     AccessPointNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7760,15 +7760,15 @@ impl Error for RemoveTagsError {
 /// Errors returned by SetLoadBalancerListenerSSLCertificate
 #[derive(Debug, PartialEq)]
 pub enum SetLoadBalancerListenerSSLCertificateError {
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     AccessPointNotFound(String),
-    ///<p>The specified ARN does not refer to a valid SSL certificate in AWS Identity and Access Management (IAM) or AWS Certificate Manager (ACM). Note that if you recently uploaded the certificate to IAM, this error might indicate that the certificate is not fully available yet.</p>
+    /// <p>The specified ARN does not refer to a valid SSL certificate in AWS Identity and Access Management (IAM) or AWS Certificate Manager (ACM). Note that if you recently uploaded the certificate to IAM, this error might indicate that the certificate is not fully available yet.</p>
     CertificateNotFound(String),
-    ///<p>The requested configuration change is not valid.</p>
+    /// <p>The requested configuration change is not valid.</p>
     InvalidConfigurationRequest(String),
-    ///<p>The load balancer does not have a listener configured at the specified port.</p>
+    /// <p>The load balancer does not have a listener configured at the specified port.</p>
     ListenerNotFound(String),
-    ///<p>The specified protocol or signature version is not supported.</p>
+    /// <p>The specified protocol or signature version is not supported.</p>
     UnsupportedProtocol(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7867,11 +7867,11 @@ impl Error for SetLoadBalancerListenerSSLCertificateError {
 /// Errors returned by SetLoadBalancerPoliciesForBackendServer
 #[derive(Debug, PartialEq)]
 pub enum SetLoadBalancerPoliciesForBackendServerError {
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     AccessPointNotFound(String),
-    ///<p>The requested configuration change is not valid.</p>
+    /// <p>The requested configuration change is not valid.</p>
     InvalidConfigurationRequest(String),
-    ///<p>One or more of the specified policies do not exist.</p>
+    /// <p>One or more of the specified policies do not exist.</p>
     PolicyNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7958,13 +7958,13 @@ impl Error for SetLoadBalancerPoliciesForBackendServerError {
 /// Errors returned by SetLoadBalancerPoliciesOfListener
 #[derive(Debug, PartialEq)]
 pub enum SetLoadBalancerPoliciesOfListenerError {
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     AccessPointNotFound(String),
-    ///<p>The requested configuration change is not valid.</p>
+    /// <p>The requested configuration change is not valid.</p>
     InvalidConfigurationRequest(String),
-    ///<p>The load balancer does not have a listener configured at the specified port.</p>
+    /// <p>The load balancer does not have a listener configured at the specified port.</p>
     ListenerNotFound(String),
-    ///<p>One or more of the specified policies do not exist.</p>
+    /// <p>One or more of the specified policies do not exist.</p>
     PolicyNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8054,157 +8054,157 @@ impl Error for SetLoadBalancerPoliciesOfListenerError {
 }
 /// Trait representing the capabilities of the Elastic Load Balancing API. Elastic Load Balancing clients implement this trait.
 pub trait Elb {
-    #[doc="<p>Adds the specified tags to the specified load balancer. Each load balancer can have a maximum of 10 tags.</p> <p>Each tag consists of a key and an optional value. If a tag with the same key is already associated with the load balancer, <code>AddTags</code> updates its value.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/add-remove-tags.html\">Tag Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>Adds the specified tags to the specified load balancer. Each load balancer can have a maximum of 10 tags.</p> <p>Each tag consists of a key and an optional value. If a tag with the same key is already associated with the load balancer, <code>AddTags</code> updates its value.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/add-remove-tags.html">Tag Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn add_tags(&self, input: &AddTagsInput) -> Result<AddTagsOutput, AddTagsError>;
 
-    #[doc="<p>Associates one or more security groups with your load balancer in a virtual private cloud (VPC). The specified security groups override the previously associated security groups.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-security-groups.html#elb-vpc-security-groups\">Security Groups for Load Balancers in a VPC</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>Associates one or more security groups with your load balancer in a virtual private cloud (VPC). The specified security groups override the previously associated security groups.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-security-groups.html#elb-vpc-security-groups">Security Groups for Load Balancers in a VPC</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn apply_security_groups_to_load_balancer(
         &self,
         input: &ApplySecurityGroupsToLoadBalancerInput,
     ) -> Result<ApplySecurityGroupsToLoadBalancerOutput, ApplySecurityGroupsToLoadBalancerError>;
 
-    #[doc="<p>Adds one or more subnets to the set of configured subnets for the specified load balancer.</p> <p>The load balancer evenly distributes requests across all registered subnets. For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-manage-subnets.html\">Add or Remove Subnets for Your Load Balancer in a VPC</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>Adds one or more subnets to the set of configured subnets for the specified load balancer.</p> <p>The load balancer evenly distributes requests across all registered subnets. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-manage-subnets.html">Add or Remove Subnets for Your Load Balancer in a VPC</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn attach_load_balancer_to_subnets(
         &self,
         input: &AttachLoadBalancerToSubnetsInput,
     ) -> Result<AttachLoadBalancerToSubnetsOutput, AttachLoadBalancerToSubnetsError>;
 
-    #[doc="<p>Specifies the health check settings to use when evaluating the health state of your EC2 instances.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-healthchecks.html\">Configure Health Checks for Your Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>Specifies the health check settings to use when evaluating the health state of your EC2 instances.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-healthchecks.html">Configure Health Checks for Your Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn configure_health_check(
         &self,
         input: &ConfigureHealthCheckInput,
     ) -> Result<ConfigureHealthCheckOutput, ConfigureHealthCheckError>;
 
-    #[doc="<p>Generates a stickiness policy with sticky session lifetimes that follow that of an application-generated cookie. This policy can be associated only with HTTP/HTTPS listeners.</p> <p>This policy is similar to the policy created by <a>CreateLBCookieStickinessPolicy</a>, except that the lifetime of the special Elastic Load Balancing cookie, <code>AWSELB</code>, follows the lifetime of the application-generated cookie specified in the policy configuration. The load balancer only inserts a new stickiness cookie when the application response includes a new application cookie.</p> <p>If the application cookie is explicitly removed or expires, the session stops being sticky until a new application cookie is issued.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-application\">Application-Controlled Session Stickiness</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>Generates a stickiness policy with sticky session lifetimes that follow that of an application-generated cookie. This policy can be associated only with HTTP/HTTPS listeners.</p> <p>This policy is similar to the policy created by <a>CreateLBCookieStickinessPolicy</a>, except that the lifetime of the special Elastic Load Balancing cookie, <code>AWSELB</code>, follows the lifetime of the application-generated cookie specified in the policy configuration. The load balancer only inserts a new stickiness cookie when the application response includes a new application cookie.</p> <p>If the application cookie is explicitly removed or expires, the session stops being sticky until a new application cookie is issued.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-application">Application-Controlled Session Stickiness</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn create_app_cookie_stickiness_policy(
         &self,
         input: &CreateAppCookieStickinessPolicyInput,
     ) -> Result<CreateAppCookieStickinessPolicyOutput, CreateAppCookieStickinessPolicyError>;
 
-    #[doc="<p>Generates a stickiness policy with sticky session lifetimes controlled by the lifetime of the browser (user-agent) or a specified expiration period. This policy can be associated only with HTTP/HTTPS listeners.</p> <p>When a load balancer implements this policy, the load balancer uses a special cookie to track the instance for each request. When the load balancer receives a request, it first checks to see if this cookie is present in the request. If so, the load balancer sends the request to the application server specified in the cookie. If not, the load balancer sends the request to a server that is chosen based on the existing load-balancing algorithm.</p> <p>A cookie is inserted into the response for binding subsequent requests from the same user to that server. The validity of the cookie is based on the cookie expiration time, which is specified in the policy configuration.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-duration\">Duration-Based Session Stickiness</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>Generates a stickiness policy with sticky session lifetimes controlled by the lifetime of the browser (user-agent) or a specified expiration period. This policy can be associated only with HTTP/HTTPS listeners.</p> <p>When a load balancer implements this policy, the load balancer uses a special cookie to track the instance for each request. When the load balancer receives a request, it first checks to see if this cookie is present in the request. If so, the load balancer sends the request to the application server specified in the cookie. If not, the load balancer sends the request to a server that is chosen based on the existing load-balancing algorithm.</p> <p>A cookie is inserted into the response for binding subsequent requests from the same user to that server. The validity of the cookie is based on the cookie expiration time, which is specified in the policy configuration.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-duration">Duration-Based Session Stickiness</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn create_lb_cookie_stickiness_policy(
         &self,
         input: &CreateLBCookieStickinessPolicyInput,
     ) -> Result<CreateLBCookieStickinessPolicyOutput, CreateLBCookieStickinessPolicyError>;
 
-    #[doc="<p>Creates a Classic Load Balancer.</p> <p>You can add listeners, security groups, subnets, and tags when you create your load balancer, or you can add them later using <a>CreateLoadBalancerListeners</a>, <a>ApplySecurityGroupsToLoadBalancer</a>, <a>AttachLoadBalancerToSubnets</a>, and <a>AddTags</a>.</p> <p>To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>You can create up to 20 load balancers per region per account. You can request an increase for the number of load balancers for your account. For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-limits.html\">Limits for Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>Creates a Classic Load Balancer.</p> <p>You can add listeners, security groups, subnets, and tags when you create your load balancer, or you can add them later using <a>CreateLoadBalancerListeners</a>, <a>ApplySecurityGroupsToLoadBalancer</a>, <a>AttachLoadBalancerToSubnets</a>, and <a>AddTags</a>.</p> <p>To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>You can create up to 20 load balancers per region per account. You can request an increase for the number of load balancers for your account. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-limits.html">Limits for Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn create_load_balancer(
         &self,
         input: &CreateAccessPointInput,
     ) -> Result<CreateAccessPointOutput, CreateLoadBalancerError>;
 
-    #[doc="<p>Creates one or more listeners for the specified load balancer. If a listener with the specified port does not already exist, it is created; otherwise, the properties of the new listener must match the properties of the existing listener.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-listener-config.html\">Listeners for Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>Creates one or more listeners for the specified load balancer. If a listener with the specified port does not already exist, it is created; otherwise, the properties of the new listener must match the properties of the existing listener.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-listener-config.html">Listeners for Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn create_load_balancer_listeners(
         &self,
         input: &CreateLoadBalancerListenerInput,
     ) -> Result<CreateLoadBalancerListenerOutput, CreateLoadBalancerListenersError>;
 
-    #[doc="<p>Creates a policy with the specified attributes for the specified load balancer.</p> <p>Policies are settings that are saved for your load balancer and that can be applied to the listener or the application server, depending on the policy type.</p>"]
+    /// <p>Creates a policy with the specified attributes for the specified load balancer.</p> <p>Policies are settings that are saved for your load balancer and that can be applied to the listener or the application server, depending on the policy type.</p>
     fn create_load_balancer_policy(
         &self,
         input: &CreateLoadBalancerPolicyInput,
     ) -> Result<CreateLoadBalancerPolicyOutput, CreateLoadBalancerPolicyError>;
 
-    #[doc="<p>Deletes the specified load balancer.</p> <p>If you are attempting to recreate a load balancer, you must reconfigure all settings. The DNS name associated with a deleted load balancer are no longer usable. The name and associated DNS record of the deleted load balancer no longer exist and traffic sent to any of its IP addresses is no longer delivered to your instances.</p> <p>If the load balancer does not exist or has already been deleted, the call to <code>DeleteLoadBalancer</code> still succeeds.</p>"]
+    /// <p>Deletes the specified load balancer.</p> <p>If you are attempting to recreate a load balancer, you must reconfigure all settings. The DNS name associated with a deleted load balancer are no longer usable. The name and associated DNS record of the deleted load balancer no longer exist and traffic sent to any of its IP addresses is no longer delivered to your instances.</p> <p>If the load balancer does not exist or has already been deleted, the call to <code>DeleteLoadBalancer</code> still succeeds.</p>
     fn delete_load_balancer(
         &self,
         input: &DeleteAccessPointInput,
     ) -> Result<DeleteAccessPointOutput, DeleteLoadBalancerError>;
 
-    #[doc = "<p>Deletes the specified listeners from the specified load balancer.</p>"]
+    /// <p>Deletes the specified listeners from the specified load balancer.</p>
     fn delete_load_balancer_listeners(
         &self,
         input: &DeleteLoadBalancerListenerInput,
     ) -> Result<DeleteLoadBalancerListenerOutput, DeleteLoadBalancerListenersError>;
 
-    #[doc="<p>Deletes the specified policy from the specified load balancer. This policy must not be enabled for any listeners.</p>"]
+    /// <p>Deletes the specified policy from the specified load balancer. This policy must not be enabled for any listeners.</p>
     fn delete_load_balancer_policy(
         &self,
         input: &DeleteLoadBalancerPolicyInput,
     ) -> Result<DeleteLoadBalancerPolicyOutput, DeleteLoadBalancerPolicyError>;
 
-    #[doc="<p>Deregisters the specified instances from the specified load balancer. After the instance is deregistered, it no longer receives traffic from the load balancer.</p> <p>You can use <a>DescribeLoadBalancers</a> to verify that the instance is deregistered from the load balancer.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-deregister-register-instances.html\">Register or De-Register EC2 Instances</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>Deregisters the specified instances from the specified load balancer. After the instance is deregistered, it no longer receives traffic from the load balancer.</p> <p>You can use <a>DescribeLoadBalancers</a> to verify that the instance is deregistered from the load balancer.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-deregister-register-instances.html">Register or De-Register EC2 Instances</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn deregister_instances_from_load_balancer(
         &self,
         input: &DeregisterEndPointsInput,
     ) -> Result<DeregisterEndPointsOutput, DeregisterInstancesFromLoadBalancerError>;
 
-    #[doc="<p>Describes the current Elastic Load Balancing resource limits for your AWS account.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-limits.html\">Limits for Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>Describes the current Elastic Load Balancing resource limits for your AWS account.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-limits.html">Limits for Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn describe_account_limits(
         &self,
         input: &DescribeAccountLimitsInput,
     ) -> Result<DescribeAccountLimitsOutput, DescribeAccountLimitsError>;
 
-    #[doc="<p>Describes the state of the specified instances with respect to the specified load balancer. If no instances are specified, the call describes the state of all instances that are currently registered with the load balancer. If instances are specified, their state is returned even if they are no longer registered with the load balancer. The state of terminated instances is not returned.</p>"]
+    /// <p>Describes the state of the specified instances with respect to the specified load balancer. If no instances are specified, the call describes the state of all instances that are currently registered with the load balancer. If instances are specified, their state is returned even if they are no longer registered with the load balancer. The state of terminated instances is not returned.</p>
     fn describe_instance_health(
         &self,
         input: &DescribeEndPointStateInput,
     ) -> Result<DescribeEndPointStateOutput, DescribeInstanceHealthError>;
 
-    #[doc = "<p>Describes the attributes for the specified load balancer.</p>"]
+    /// <p>Describes the attributes for the specified load balancer.</p>
     fn describe_load_balancer_attributes(
         &self,
         input: &DescribeLoadBalancerAttributesInput,
     ) -> Result<DescribeLoadBalancerAttributesOutput, DescribeLoadBalancerAttributesError>;
 
-    #[doc="<p>Describes the specified policies.</p> <p>If you specify a load balancer name, the action returns the descriptions of all policies created for the load balancer. If you specify a policy name associated with your load balancer, the action returns the description of that policy. If you don't specify a load balancer name, the action returns descriptions of the specified sample policies, or descriptions of all sample policies. The names of the sample policies have the <code>ELBSample-</code> prefix.</p>"]
+    /// <p>Describes the specified policies.</p> <p>If you specify a load balancer name, the action returns the descriptions of all policies created for the load balancer. If you specify a policy name associated with your load balancer, the action returns the description of that policy. If you don't specify a load balancer name, the action returns descriptions of the specified sample policies, or descriptions of all sample policies. The names of the sample policies have the <code>ELBSample-</code> prefix.</p>
     fn describe_load_balancer_policies(
         &self,
         input: &DescribeLoadBalancerPoliciesInput,
     ) -> Result<DescribeLoadBalancerPoliciesOutput, DescribeLoadBalancerPoliciesError>;
 
-    #[doc="<p>Describes the specified load balancer policy types or all load balancer policy types.</p> <p>The description of each type indicates how it can be used. For example, some policies can be used only with layer 7 listeners, some policies can be used only with layer 4 listeners, and some policies can be used only with your EC2 instances.</p> <p>You can use <a>CreateLoadBalancerPolicy</a> to create a policy configuration for any of these policy types. Then, depending on the policy type, use either <a>SetLoadBalancerPoliciesOfListener</a> or <a>SetLoadBalancerPoliciesForBackendServer</a> to set the policy.</p>"]
+    /// <p>Describes the specified load balancer policy types or all load balancer policy types.</p> <p>The description of each type indicates how it can be used. For example, some policies can be used only with layer 7 listeners, some policies can be used only with layer 4 listeners, and some policies can be used only with your EC2 instances.</p> <p>You can use <a>CreateLoadBalancerPolicy</a> to create a policy configuration for any of these policy types. Then, depending on the policy type, use either <a>SetLoadBalancerPoliciesOfListener</a> or <a>SetLoadBalancerPoliciesForBackendServer</a> to set the policy.</p>
     fn describe_load_balancer_policy_types(
         &self,
         input: &DescribeLoadBalancerPolicyTypesInput,
     ) -> Result<DescribeLoadBalancerPolicyTypesOutput, DescribeLoadBalancerPolicyTypesError>;
 
-    #[doc="<p>Describes the specified the load balancers. If no load balancers are specified, the call describes all of your load balancers.</p>"]
+    /// <p>Describes the specified the load balancers. If no load balancers are specified, the call describes all of your load balancers.</p>
     fn describe_load_balancers(
         &self,
         input: &DescribeAccessPointsInput,
     ) -> Result<DescribeAccessPointsOutput, DescribeLoadBalancersError>;
 
-    #[doc = "<p>Describes the tags associated with the specified load balancers.</p>"]
+    /// <p>Describes the tags associated with the specified load balancers.</p>
     fn describe_tags(
         &self,
         input: &DescribeTagsInput,
     ) -> Result<DescribeTagsOutput, DescribeTagsError>;
 
-    #[doc="<p>Removes the specified subnets from the set of configured subnets for the load balancer.</p> <p>After a subnet is removed, all EC2 instances registered with the load balancer in the removed subnet go into the <code>OutOfService</code> state. Then, the load balancer balances the traffic among the remaining routable subnets.</p>"]
+    /// <p>Removes the specified subnets from the set of configured subnets for the load balancer.</p> <p>After a subnet is removed, all EC2 instances registered with the load balancer in the removed subnet go into the <code>OutOfService</code> state. Then, the load balancer balances the traffic among the remaining routable subnets.</p>
     fn detach_load_balancer_from_subnets(
         &self,
         input: &DetachLoadBalancerFromSubnetsInput,
     ) -> Result<DetachLoadBalancerFromSubnetsOutput, DetachLoadBalancerFromSubnetsError>;
 
-    #[doc="<p>Removes the specified Availability Zones from the set of Availability Zones for the specified load balancer.</p> <p>There must be at least one Availability Zone registered with a load balancer at all times. After an Availability Zone is removed, all instances registered with the load balancer that are in the removed Availability Zone go into the <code>OutOfService</code> state. Then, the load balancer attempts to equally balance the traffic among its remaining Availability Zones.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-az.html\">Add or Remove Availability Zones</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>Removes the specified Availability Zones from the set of Availability Zones for the specified load balancer.</p> <p>There must be at least one Availability Zone registered with a load balancer at all times. After an Availability Zone is removed, all instances registered with the load balancer that are in the removed Availability Zone go into the <code>OutOfService</code> state. Then, the load balancer attempts to equally balance the traffic among its remaining Availability Zones.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-az.html">Add or Remove Availability Zones</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn disable_availability_zones_for_load_balancer(
         &self,
         input: &RemoveAvailabilityZonesInput,
     ) -> Result<RemoveAvailabilityZonesOutput, DisableAvailabilityZonesForLoadBalancerError>;
 
-    #[doc="<p>Adds the specified Availability Zones to the set of Availability Zones for the specified load balancer.</p> <p>The load balancer evenly distributes requests across all its registered Availability Zones that contain instances.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-az.html\">Add or Remove Availability Zones</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>Adds the specified Availability Zones to the set of Availability Zones for the specified load balancer.</p> <p>The load balancer evenly distributes requests across all its registered Availability Zones that contain instances.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-az.html">Add or Remove Availability Zones</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn enable_availability_zones_for_load_balancer(
         &self,
         input: &AddAvailabilityZonesInput,
     ) -> Result<AddAvailabilityZonesOutput, EnableAvailabilityZonesForLoadBalancerError>;
 
-    #[doc="<p>Modifies the attributes of the specified load balancer.</p> <p>You can modify the load balancer attributes, such as <code>AccessLogs</code>, <code>ConnectionDraining</code>, and <code>CrossZoneLoadBalancing</code> by either enabling or disabling them. Or, you can modify the load balancer attribute <code>ConnectionSettings</code> by specifying an idle connection timeout value for your load balancer.</p> <p>For more information, see the following in the <i>Classic Load Balancer Guide</i>:</p> <ul> <li> <p> <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-crosszone-lb.html\">Cross-Zone Load Balancing</a> </p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/config-conn-drain.html\">Connection Draining</a> </p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/access-log-collection.html\">Access Logs</a> </p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/config-idle-timeout.html\">Idle Connection Timeout</a> </p> </li> </ul>"]
+    /// <p><p>Modifies the attributes of the specified load balancer.</p> <p>You can modify the load balancer attributes, such as <code>AccessLogs</code>, <code>ConnectionDraining</code>, and <code>CrossZoneLoadBalancing</code> by either enabling or disabling them. Or, you can modify the load balancer attribute <code>ConnectionSettings</code> by specifying an idle connection timeout value for your load balancer.</p> <p>For more information, see the following in the <i>Classic Load Balancer Guide</i>:</p> <ul> <li> <p> <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-crosszone-lb.html">Cross-Zone Load Balancing</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/config-conn-drain.html">Connection Draining</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/access-log-collection.html">Access Logs</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/config-idle-timeout.html">Idle Connection Timeout</a> </p> </li> </ul></p>
     fn modify_load_balancer_attributes(
         &self,
         input: &ModifyLoadBalancerAttributesInput,
     ) -> Result<ModifyLoadBalancerAttributesOutput, ModifyLoadBalancerAttributesError>;
 
-    #[doc="<p>Adds the specified instances to the specified load balancer.</p> <p>The instance must be a running instance in the same network as the load balancer (EC2-Classic or the same VPC). If you have EC2-Classic instances and a load balancer in a VPC with ClassicLink enabled, you can link the EC2-Classic instances to that VPC and then register the linked EC2-Classic instances with the load balancer in the VPC.</p> <p>Note that <code>RegisterInstanceWithLoadBalancer</code> completes when the request has been registered. Instance registration takes a little time to complete. To check the state of the registered instances, use <a>DescribeLoadBalancers</a> or <a>DescribeInstanceHealth</a>.</p> <p>After the instance is registered, it starts receiving traffic and requests from the load balancer. Any instance that is not in one of the Availability Zones registered for the load balancer is moved to the <code>OutOfService</code> state. If an Availability Zone is added to the load balancer later, any instances registered with the load balancer move to the <code>InService</code> state.</p> <p>To deregister instances from a load balancer, use <a>DeregisterInstancesFromLoadBalancer</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-deregister-register-instances.html\">Register or De-Register EC2 Instances</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>Adds the specified instances to the specified load balancer.</p> <p>The instance must be a running instance in the same network as the load balancer (EC2-Classic or the same VPC). If you have EC2-Classic instances and a load balancer in a VPC with ClassicLink enabled, you can link the EC2-Classic instances to that VPC and then register the linked EC2-Classic instances with the load balancer in the VPC.</p> <p>Note that <code>RegisterInstanceWithLoadBalancer</code> completes when the request has been registered. Instance registration takes a little time to complete. To check the state of the registered instances, use <a>DescribeLoadBalancers</a> or <a>DescribeInstanceHealth</a>.</p> <p>After the instance is registered, it starts receiving traffic and requests from the load balancer. Any instance that is not in one of the Availability Zones registered for the load balancer is moved to the <code>OutOfService</code> state. If an Availability Zone is added to the load balancer later, any instances registered with the load balancer move to the <code>InService</code> state.</p> <p>To deregister instances from a load balancer, use <a>DeregisterInstancesFromLoadBalancer</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-deregister-register-instances.html">Register or De-Register EC2 Instances</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn register_instances_with_load_balancer(
         &self,
         input: &RegisterEndPointsInput,
     ) -> Result<RegisterEndPointsOutput, RegisterInstancesWithLoadBalancerError>;
 
-    #[doc = "<p>Removes one or more tags from the specified load balancer.</p>"]
+    /// <p>Removes one or more tags from the specified load balancer.</p>
     fn remove_tags(&self, input: &RemoveTagsInput) -> Result<RemoveTagsOutput, RemoveTagsError>;
 
-    #[doc="<p>Sets the certificate that terminates the specified listener's SSL connections. The specified certificate replaces any prior certificate that was used on the same load balancer and port.</p> <p>For more information about updating your SSL certificate, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-update-ssl-cert.html\">Replace the SSL Certificate for Your Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>Sets the certificate that terminates the specified listener's SSL connections. The specified certificate replaces any prior certificate that was used on the same load balancer and port.</p> <p>For more information about updating your SSL certificate, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-update-ssl-cert.html">Replace the SSL Certificate for Your Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn set_load_balancer_listener_ssl_certificate(
         &self,
         input: &SetLoadBalancerListenerSSLCertificateInput,
@@ -8213,7 +8213,7 @@ pub trait Elb {
         SetLoadBalancerListenerSSLCertificateError,
     >;
 
-    #[doc="<p>Replaces the set of policies associated with the specified port on which the EC2 instance is listening with a new set of policies. At this time, only the back-end server authentication policy type can be applied to the instance ports; this policy type is composed of multiple public key policies.</p> <p>Each time you use <code>SetLoadBalancerPoliciesForBackendServer</code> to enable the policies, use the <code>PolicyNames</code> parameter to list the policies that you want to enable.</p> <p>You can use <a>DescribeLoadBalancers</a> or <a>DescribeLoadBalancerPolicies</a> to verify that the policy is associated with the EC2 instance.</p> <p>For more information about enabling back-end instance authentication, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-create-https-ssl-load-balancer.html#configure_backendauth_clt\">Configure Back-end Instance Authentication</a> in the <i>Classic Load Balancer Guide</i>. For more information about Proxy Protocol, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-proxy-protocol.html\">Configure Proxy Protocol Support</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>Replaces the set of policies associated with the specified port on which the EC2 instance is listening with a new set of policies. At this time, only the back-end server authentication policy type can be applied to the instance ports; this policy type is composed of multiple public key policies.</p> <p>Each time you use <code>SetLoadBalancerPoliciesForBackendServer</code> to enable the policies, use the <code>PolicyNames</code> parameter to list the policies that you want to enable.</p> <p>You can use <a>DescribeLoadBalancers</a> or <a>DescribeLoadBalancerPolicies</a> to verify that the policy is associated with the EC2 instance.</p> <p>For more information about enabling back-end instance authentication, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-create-https-ssl-load-balancer.html#configure_backendauth_clt">Configure Back-end Instance Authentication</a> in the <i>Classic Load Balancer Guide</i>. For more information about Proxy Protocol, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-proxy-protocol.html">Configure Proxy Protocol Support</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn set_load_balancer_policies_for_backend_server(
         &self,
         input: &SetLoadBalancerPoliciesForBackendServerInput,
@@ -8222,7 +8222,7 @@ pub trait Elb {
         SetLoadBalancerPoliciesForBackendServerError,
     >;
 
-    #[doc="<p>Replaces the current set of policies for the specified load balancer port with the specified set of policies.</p> <p>To enable back-end server authentication, use <a>SetLoadBalancerPoliciesForBackendServer</a>.</p> <p>For more information about setting policies, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/ssl-config-update.html\">Update the SSL Negotiation Configuration</a>, <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-duration\">Duration-Based Session Stickiness</a>, and <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-application\">Application-Controlled Session Stickiness</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>Replaces the current set of policies for the specified load balancer port with the specified set of policies.</p> <p>To enable back-end server authentication, use <a>SetLoadBalancerPoliciesForBackendServer</a>.</p> <p>For more information about setting policies, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/ssl-config-update.html">Update the SSL Negotiation Configuration</a>, <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-duration">Duration-Based Session Stickiness</a>, and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-application">Application-Controlled Session Stickiness</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn set_load_balancer_policies_of_listener(
         &self,
         input: &SetLoadBalancerPoliciesOfListenerInput,
@@ -8258,7 +8258,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Adds the specified tags to the specified load balancer. Each load balancer can have a maximum of 10 tags.</p> <p>Each tag consists of a key and an optional value. If a tag with the same key is already associated with the load balancer, <code>AddTags</code> updates its value.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/add-remove-tags.html\">Tag Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>Adds the specified tags to the specified load balancer. Each load balancer can have a maximum of 10 tags.</p> <p>Each tag consists of a key and an optional value. If a tag with the same key is already associated with the load balancer, <code>AddTags</code> updates its value.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/add-remove-tags.html">Tag Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn add_tags(&self, input: &AddTagsInput) -> Result<AddTagsOutput, AddTagsError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -8306,7 +8306,7 @@ where
         }
     }
 
-    #[doc="<p>Associates one or more security groups with your load balancer in a virtual private cloud (VPC). The specified security groups override the previously associated security groups.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-security-groups.html#elb-vpc-security-groups\">Security Groups for Load Balancers in a VPC</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>Associates one or more security groups with your load balancer in a virtual private cloud (VPC). The specified security groups override the previously associated security groups.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-security-groups.html#elb-vpc-security-groups">Security Groups for Load Balancers in a VPC</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn apply_security_groups_to_load_balancer(
         &self,
         input: &ApplySecurityGroupsToLoadBalancerInput,
@@ -8360,7 +8360,7 @@ where
         }
     }
 
-    #[doc="<p>Adds one or more subnets to the set of configured subnets for the specified load balancer.</p> <p>The load balancer evenly distributes requests across all registered subnets. For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-manage-subnets.html\">Add or Remove Subnets for Your Load Balancer in a VPC</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>Adds one or more subnets to the set of configured subnets for the specified load balancer.</p> <p>The load balancer evenly distributes requests across all registered subnets. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-manage-subnets.html">Add or Remove Subnets for Your Load Balancer in a VPC</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn attach_load_balancer_to_subnets(
         &self,
         input: &AttachLoadBalancerToSubnetsInput,
@@ -8411,7 +8411,7 @@ where
         }
     }
 
-    #[doc="<p>Specifies the health check settings to use when evaluating the health state of your EC2 instances.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-healthchecks.html\">Configure Health Checks for Your Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>Specifies the health check settings to use when evaluating the health state of your EC2 instances.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-healthchecks.html">Configure Health Checks for Your Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn configure_health_check(
         &self,
         input: &ConfigureHealthCheckInput,
@@ -8462,7 +8462,7 @@ where
         }
     }
 
-    #[doc="<p>Generates a stickiness policy with sticky session lifetimes that follow that of an application-generated cookie. This policy can be associated only with HTTP/HTTPS listeners.</p> <p>This policy is similar to the policy created by <a>CreateLBCookieStickinessPolicy</a>, except that the lifetime of the special Elastic Load Balancing cookie, <code>AWSELB</code>, follows the lifetime of the application-generated cookie specified in the policy configuration. The load balancer only inserts a new stickiness cookie when the application response includes a new application cookie.</p> <p>If the application cookie is explicitly removed or expires, the session stops being sticky until a new application cookie is issued.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-application\">Application-Controlled Session Stickiness</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>Generates a stickiness policy with sticky session lifetimes that follow that of an application-generated cookie. This policy can be associated only with HTTP/HTTPS listeners.</p> <p>This policy is similar to the policy created by <a>CreateLBCookieStickinessPolicy</a>, except that the lifetime of the special Elastic Load Balancing cookie, <code>AWSELB</code>, follows the lifetime of the application-generated cookie specified in the policy configuration. The load balancer only inserts a new stickiness cookie when the application response includes a new application cookie.</p> <p>If the application cookie is explicitly removed or expires, the session stops being sticky until a new application cookie is issued.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-application">Application-Controlled Session Stickiness</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn create_app_cookie_stickiness_policy(
         &self,
         input: &CreateAppCookieStickinessPolicyInput,
@@ -8515,7 +8515,7 @@ where
         }
     }
 
-    #[doc="<p>Generates a stickiness policy with sticky session lifetimes controlled by the lifetime of the browser (user-agent) or a specified expiration period. This policy can be associated only with HTTP/HTTPS listeners.</p> <p>When a load balancer implements this policy, the load balancer uses a special cookie to track the instance for each request. When the load balancer receives a request, it first checks to see if this cookie is present in the request. If so, the load balancer sends the request to the application server specified in the cookie. If not, the load balancer sends the request to a server that is chosen based on the existing load-balancing algorithm.</p> <p>A cookie is inserted into the response for binding subsequent requests from the same user to that server. The validity of the cookie is based on the cookie expiration time, which is specified in the policy configuration.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-duration\">Duration-Based Session Stickiness</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>Generates a stickiness policy with sticky session lifetimes controlled by the lifetime of the browser (user-agent) or a specified expiration period. This policy can be associated only with HTTP/HTTPS listeners.</p> <p>When a load balancer implements this policy, the load balancer uses a special cookie to track the instance for each request. When the load balancer receives a request, it first checks to see if this cookie is present in the request. If so, the load balancer sends the request to the application server specified in the cookie. If not, the load balancer sends the request to a server that is chosen based on the existing load-balancing algorithm.</p> <p>A cookie is inserted into the response for binding subsequent requests from the same user to that server. The validity of the cookie is based on the cookie expiration time, which is specified in the policy configuration.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-duration">Duration-Based Session Stickiness</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn create_lb_cookie_stickiness_policy(
         &self,
         input: &CreateLBCookieStickinessPolicyInput,
@@ -8568,7 +8568,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a Classic Load Balancer.</p> <p>You can add listeners, security groups, subnets, and tags when you create your load balancer, or you can add them later using <a>CreateLoadBalancerListeners</a>, <a>ApplySecurityGroupsToLoadBalancer</a>, <a>AttachLoadBalancerToSubnets</a>, and <a>AddTags</a>.</p> <p>To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>You can create up to 20 load balancers per region per account. You can request an increase for the number of load balancers for your account. For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-limits.html\">Limits for Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>Creates a Classic Load Balancer.</p> <p>You can add listeners, security groups, subnets, and tags when you create your load balancer, or you can add them later using <a>CreateLoadBalancerListeners</a>, <a>ApplySecurityGroupsToLoadBalancer</a>, <a>AttachLoadBalancerToSubnets</a>, and <a>AddTags</a>.</p> <p>To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>You can create up to 20 load balancers per region per account. You can request an increase for the number of load balancers for your account. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-limits.html">Limits for Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn create_load_balancer(
         &self,
         input: &CreateAccessPointInput,
@@ -8619,7 +8619,7 @@ where
         }
     }
 
-    #[doc="<p>Creates one or more listeners for the specified load balancer. If a listener with the specified port does not already exist, it is created; otherwise, the properties of the new listener must match the properties of the existing listener.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-listener-config.html\">Listeners for Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>Creates one or more listeners for the specified load balancer. If a listener with the specified port does not already exist, it is created; otherwise, the properties of the new listener must match the properties of the existing listener.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-listener-config.html">Listeners for Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn create_load_balancer_listeners(
         &self,
         input: &CreateLoadBalancerListenerInput,
@@ -8670,7 +8670,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a policy with the specified attributes for the specified load balancer.</p> <p>Policies are settings that are saved for your load balancer and that can be applied to the listener or the application server, depending on the policy type.</p>"]
+    /// <p>Creates a policy with the specified attributes for the specified load balancer.</p> <p>Policies are settings that are saved for your load balancer and that can be applied to the listener or the application server, depending on the policy type.</p>
     fn create_load_balancer_policy(
         &self,
         input: &CreateLoadBalancerPolicyInput,
@@ -8721,7 +8721,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified load balancer.</p> <p>If you are attempting to recreate a load balancer, you must reconfigure all settings. The DNS name associated with a deleted load balancer are no longer usable. The name and associated DNS record of the deleted load balancer no longer exist and traffic sent to any of its IP addresses is no longer delivered to your instances.</p> <p>If the load balancer does not exist or has already been deleted, the call to <code>DeleteLoadBalancer</code> still succeeds.</p>"]
+    /// <p>Deletes the specified load balancer.</p> <p>If you are attempting to recreate a load balancer, you must reconfigure all settings. The DNS name associated with a deleted load balancer are no longer usable. The name and associated DNS record of the deleted load balancer no longer exist and traffic sent to any of its IP addresses is no longer delivered to your instances.</p> <p>If the load balancer does not exist or has already been deleted, the call to <code>DeleteLoadBalancer</code> still succeeds.</p>
     fn delete_load_balancer(
         &self,
         input: &DeleteAccessPointInput,
@@ -8772,7 +8772,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the specified listeners from the specified load balancer.</p>"]
+    /// <p>Deletes the specified listeners from the specified load balancer.</p>
     fn delete_load_balancer_listeners(
         &self,
         input: &DeleteLoadBalancerListenerInput,
@@ -8823,7 +8823,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified policy from the specified load balancer. This policy must not be enabled for any listeners.</p>"]
+    /// <p>Deletes the specified policy from the specified load balancer. This policy must not be enabled for any listeners.</p>
     fn delete_load_balancer_policy(
         &self,
         input: &DeleteLoadBalancerPolicyInput,
@@ -8874,7 +8874,7 @@ where
         }
     }
 
-    #[doc="<p>Deregisters the specified instances from the specified load balancer. After the instance is deregistered, it no longer receives traffic from the load balancer.</p> <p>You can use <a>DescribeLoadBalancers</a> to verify that the instance is deregistered from the load balancer.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-deregister-register-instances.html\">Register or De-Register EC2 Instances</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>Deregisters the specified instances from the specified load balancer. After the instance is deregistered, it no longer receives traffic from the load balancer.</p> <p>You can use <a>DescribeLoadBalancers</a> to verify that the instance is deregistered from the load balancer.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-deregister-register-instances.html">Register or De-Register EC2 Instances</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn deregister_instances_from_load_balancer(
         &self,
         input: &DeregisterEndPointsInput,
@@ -8925,7 +8925,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the current Elastic Load Balancing resource limits for your AWS account.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-limits.html\">Limits for Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>Describes the current Elastic Load Balancing resource limits for your AWS account.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-limits.html">Limits for Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn describe_account_limits(
         &self,
         input: &DescribeAccountLimitsInput,
@@ -8976,7 +8976,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the state of the specified instances with respect to the specified load balancer. If no instances are specified, the call describes the state of all instances that are currently registered with the load balancer. If instances are specified, their state is returned even if they are no longer registered with the load balancer. The state of terminated instances is not returned.</p>"]
+    /// <p>Describes the state of the specified instances with respect to the specified load balancer. If no instances are specified, the call describes the state of all instances that are currently registered with the load balancer. If instances are specified, their state is returned even if they are no longer registered with the load balancer. The state of terminated instances is not returned.</p>
     fn describe_instance_health(
         &self,
         input: &DescribeEndPointStateInput,
@@ -9027,7 +9027,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes the attributes for the specified load balancer.</p>"]
+    /// <p>Describes the attributes for the specified load balancer.</p>
     fn describe_load_balancer_attributes(
         &self,
         input: &DescribeLoadBalancerAttributesInput,
@@ -9080,7 +9080,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the specified policies.</p> <p>If you specify a load balancer name, the action returns the descriptions of all policies created for the load balancer. If you specify a policy name associated with your load balancer, the action returns the description of that policy. If you don't specify a load balancer name, the action returns descriptions of the specified sample policies, or descriptions of all sample policies. The names of the sample policies have the <code>ELBSample-</code> prefix.</p>"]
+    /// <p>Describes the specified policies.</p> <p>If you specify a load balancer name, the action returns the descriptions of all policies created for the load balancer. If you specify a policy name associated with your load balancer, the action returns the description of that policy. If you don't specify a load balancer name, the action returns descriptions of the specified sample policies, or descriptions of all sample policies. The names of the sample policies have the <code>ELBSample-</code> prefix.</p>
     fn describe_load_balancer_policies(
         &self,
         input: &DescribeLoadBalancerPoliciesInput,
@@ -9133,7 +9133,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the specified load balancer policy types or all load balancer policy types.</p> <p>The description of each type indicates how it can be used. For example, some policies can be used only with layer 7 listeners, some policies can be used only with layer 4 listeners, and some policies can be used only with your EC2 instances.</p> <p>You can use <a>CreateLoadBalancerPolicy</a> to create a policy configuration for any of these policy types. Then, depending on the policy type, use either <a>SetLoadBalancerPoliciesOfListener</a> or <a>SetLoadBalancerPoliciesForBackendServer</a> to set the policy.</p>"]
+    /// <p>Describes the specified load balancer policy types or all load balancer policy types.</p> <p>The description of each type indicates how it can be used. For example, some policies can be used only with layer 7 listeners, some policies can be used only with layer 4 listeners, and some policies can be used only with your EC2 instances.</p> <p>You can use <a>CreateLoadBalancerPolicy</a> to create a policy configuration for any of these policy types. Then, depending on the policy type, use either <a>SetLoadBalancerPoliciesOfListener</a> or <a>SetLoadBalancerPoliciesForBackendServer</a> to set the policy.</p>
     fn describe_load_balancer_policy_types(
         &self,
         input: &DescribeLoadBalancerPolicyTypesInput,
@@ -9186,7 +9186,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the specified the load balancers. If no load balancers are specified, the call describes all of your load balancers.</p>"]
+    /// <p>Describes the specified the load balancers. If no load balancers are specified, the call describes all of your load balancers.</p>
     fn describe_load_balancers(
         &self,
         input: &DescribeAccessPointsInput,
@@ -9237,7 +9237,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes the tags associated with the specified load balancers.</p>"]
+    /// <p>Describes the tags associated with the specified load balancers.</p>
     fn describe_tags(
         &self,
         input: &DescribeTagsInput,
@@ -9288,7 +9288,7 @@ where
         }
     }
 
-    #[doc="<p>Removes the specified subnets from the set of configured subnets for the load balancer.</p> <p>After a subnet is removed, all EC2 instances registered with the load balancer in the removed subnet go into the <code>OutOfService</code> state. Then, the load balancer balances the traffic among the remaining routable subnets.</p>"]
+    /// <p>Removes the specified subnets from the set of configured subnets for the load balancer.</p> <p>After a subnet is removed, all EC2 instances registered with the load balancer in the removed subnet go into the <code>OutOfService</code> state. Then, the load balancer balances the traffic among the remaining routable subnets.</p>
     fn detach_load_balancer_from_subnets(
         &self,
         input: &DetachLoadBalancerFromSubnetsInput,
@@ -9341,7 +9341,7 @@ where
         }
     }
 
-    #[doc="<p>Removes the specified Availability Zones from the set of Availability Zones for the specified load balancer.</p> <p>There must be at least one Availability Zone registered with a load balancer at all times. After an Availability Zone is removed, all instances registered with the load balancer that are in the removed Availability Zone go into the <code>OutOfService</code> state. Then, the load balancer attempts to equally balance the traffic among its remaining Availability Zones.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-az.html\">Add or Remove Availability Zones</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>Removes the specified Availability Zones from the set of Availability Zones for the specified load balancer.</p> <p>There must be at least one Availability Zone registered with a load balancer at all times. After an Availability Zone is removed, all instances registered with the load balancer that are in the removed Availability Zone go into the <code>OutOfService</code> state. Then, the load balancer attempts to equally balance the traffic among its remaining Availability Zones.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-az.html">Add or Remove Availability Zones</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn disable_availability_zones_for_load_balancer(
         &self,
         input: &RemoveAvailabilityZonesInput,
@@ -9392,7 +9392,7 @@ where
         }
     }
 
-    #[doc="<p>Adds the specified Availability Zones to the set of Availability Zones for the specified load balancer.</p> <p>The load balancer evenly distributes requests across all its registered Availability Zones that contain instances.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-az.html\">Add or Remove Availability Zones</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>Adds the specified Availability Zones to the set of Availability Zones for the specified load balancer.</p> <p>The load balancer evenly distributes requests across all its registered Availability Zones that contain instances.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-az.html">Add or Remove Availability Zones</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn enable_availability_zones_for_load_balancer(
         &self,
         input: &AddAvailabilityZonesInput,
@@ -9443,7 +9443,7 @@ where
         }
     }
 
-    #[doc="<p>Modifies the attributes of the specified load balancer.</p> <p>You can modify the load balancer attributes, such as <code>AccessLogs</code>, <code>ConnectionDraining</code>, and <code>CrossZoneLoadBalancing</code> by either enabling or disabling them. Or, you can modify the load balancer attribute <code>ConnectionSettings</code> by specifying an idle connection timeout value for your load balancer.</p> <p>For more information, see the following in the <i>Classic Load Balancer Guide</i>:</p> <ul> <li> <p> <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-crosszone-lb.html\">Cross-Zone Load Balancing</a> </p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/config-conn-drain.html\">Connection Draining</a> </p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/access-log-collection.html\">Access Logs</a> </p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/config-idle-timeout.html\">Idle Connection Timeout</a> </p> </li> </ul>"]
+    /// <p><p>Modifies the attributes of the specified load balancer.</p> <p>You can modify the load balancer attributes, such as <code>AccessLogs</code>, <code>ConnectionDraining</code>, and <code>CrossZoneLoadBalancing</code> by either enabling or disabling them. Or, you can modify the load balancer attribute <code>ConnectionSettings</code> by specifying an idle connection timeout value for your load balancer.</p> <p>For more information, see the following in the <i>Classic Load Balancer Guide</i>:</p> <ul> <li> <p> <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-crosszone-lb.html">Cross-Zone Load Balancing</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/config-conn-drain.html">Connection Draining</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/access-log-collection.html">Access Logs</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/config-idle-timeout.html">Idle Connection Timeout</a> </p> </li> </ul></p>
     fn modify_load_balancer_attributes(
         &self,
         input: &ModifyLoadBalancerAttributesInput,
@@ -9496,7 +9496,7 @@ where
         }
     }
 
-    #[doc="<p>Adds the specified instances to the specified load balancer.</p> <p>The instance must be a running instance in the same network as the load balancer (EC2-Classic or the same VPC). If you have EC2-Classic instances and a load balancer in a VPC with ClassicLink enabled, you can link the EC2-Classic instances to that VPC and then register the linked EC2-Classic instances with the load balancer in the VPC.</p> <p>Note that <code>RegisterInstanceWithLoadBalancer</code> completes when the request has been registered. Instance registration takes a little time to complete. To check the state of the registered instances, use <a>DescribeLoadBalancers</a> or <a>DescribeInstanceHealth</a>.</p> <p>After the instance is registered, it starts receiving traffic and requests from the load balancer. Any instance that is not in one of the Availability Zones registered for the load balancer is moved to the <code>OutOfService</code> state. If an Availability Zone is added to the load balancer later, any instances registered with the load balancer move to the <code>InService</code> state.</p> <p>To deregister instances from a load balancer, use <a>DeregisterInstancesFromLoadBalancer</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-deregister-register-instances.html\">Register or De-Register EC2 Instances</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>Adds the specified instances to the specified load balancer.</p> <p>The instance must be a running instance in the same network as the load balancer (EC2-Classic or the same VPC). If you have EC2-Classic instances and a load balancer in a VPC with ClassicLink enabled, you can link the EC2-Classic instances to that VPC and then register the linked EC2-Classic instances with the load balancer in the VPC.</p> <p>Note that <code>RegisterInstanceWithLoadBalancer</code> completes when the request has been registered. Instance registration takes a little time to complete. To check the state of the registered instances, use <a>DescribeLoadBalancers</a> or <a>DescribeInstanceHealth</a>.</p> <p>After the instance is registered, it starts receiving traffic and requests from the load balancer. Any instance that is not in one of the Availability Zones registered for the load balancer is moved to the <code>OutOfService</code> state. If an Availability Zone is added to the load balancer later, any instances registered with the load balancer move to the <code>InService</code> state.</p> <p>To deregister instances from a load balancer, use <a>DeregisterInstancesFromLoadBalancer</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-deregister-register-instances.html">Register or De-Register EC2 Instances</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn register_instances_with_load_balancer(
         &self,
         input: &RegisterEndPointsInput,
@@ -9547,7 +9547,7 @@ where
         }
     }
 
-    #[doc = "<p>Removes one or more tags from the specified load balancer.</p>"]
+    /// <p>Removes one or more tags from the specified load balancer.</p>
     fn remove_tags(&self, input: &RemoveTagsInput) -> Result<RemoveTagsOutput, RemoveTagsError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -9595,7 +9595,7 @@ where
         }
     }
 
-    #[doc="<p>Sets the certificate that terminates the specified listener's SSL connections. The specified certificate replaces any prior certificate that was used on the same load balancer and port.</p> <p>For more information about updating your SSL certificate, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-update-ssl-cert.html\">Replace the SSL Certificate for Your Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>Sets the certificate that terminates the specified listener's SSL connections. The specified certificate replaces any prior certificate that was used on the same load balancer and port.</p> <p>For more information about updating your SSL certificate, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-update-ssl-cert.html">Replace the SSL Certificate for Your Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn set_load_balancer_listener_ssl_certificate(
         &self,
         input: &SetLoadBalancerListenerSSLCertificateInput,
@@ -9651,7 +9651,7 @@ where
         }
     }
 
-    #[doc="<p>Replaces the set of policies associated with the specified port on which the EC2 instance is listening with a new set of policies. At this time, only the back-end server authentication policy type can be applied to the instance ports; this policy type is composed of multiple public key policies.</p> <p>Each time you use <code>SetLoadBalancerPoliciesForBackendServer</code> to enable the policies, use the <code>PolicyNames</code> parameter to list the policies that you want to enable.</p> <p>You can use <a>DescribeLoadBalancers</a> or <a>DescribeLoadBalancerPolicies</a> to verify that the policy is associated with the EC2 instance.</p> <p>For more information about enabling back-end instance authentication, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-create-https-ssl-load-balancer.html#configure_backendauth_clt\">Configure Back-end Instance Authentication</a> in the <i>Classic Load Balancer Guide</i>. For more information about Proxy Protocol, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-proxy-protocol.html\">Configure Proxy Protocol Support</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>Replaces the set of policies associated with the specified port on which the EC2 instance is listening with a new set of policies. At this time, only the back-end server authentication policy type can be applied to the instance ports; this policy type is composed of multiple public key policies.</p> <p>Each time you use <code>SetLoadBalancerPoliciesForBackendServer</code> to enable the policies, use the <code>PolicyNames</code> parameter to list the policies that you want to enable.</p> <p>You can use <a>DescribeLoadBalancers</a> or <a>DescribeLoadBalancerPolicies</a> to verify that the policy is associated with the EC2 instance.</p> <p>For more information about enabling back-end instance authentication, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-create-https-ssl-load-balancer.html#configure_backendauth_clt">Configure Back-end Instance Authentication</a> in the <i>Classic Load Balancer Guide</i>. For more information about Proxy Protocol, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-proxy-protocol.html">Configure Proxy Protocol Support</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn set_load_balancer_policies_for_backend_server(
         &self,
         input: &SetLoadBalancerPoliciesForBackendServerInput,
@@ -9707,7 +9707,7 @@ where
         }
     }
 
-    #[doc="<p>Replaces the current set of policies for the specified load balancer port with the specified set of policies.</p> <p>To enable back-end server authentication, use <a>SetLoadBalancerPoliciesForBackendServer</a>.</p> <p>For more information about setting policies, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/ssl-config-update.html\">Update the SSL Negotiation Configuration</a>, <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-duration\">Duration-Based Session Stickiness</a>, and <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-application\">Application-Controlled Session Stickiness</a> in the <i>Classic Load Balancer Guide</i>.</p>"]
+    /// <p>Replaces the current set of policies for the specified load balancer port with the specified set of policies.</p> <p>To enable back-end server authentication, use <a>SetLoadBalancerPoliciesForBackendServer</a>.</p> <p>For more information about setting policies, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/ssl-config-update.html">Update the SSL Negotiation Configuration</a>, <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-duration">Duration-Based Session Stickiness</a>, and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-application">Application-Controlled Session Stickiness</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn set_load_balancer_policies_of_listener(
         &self,
         input: &SetLoadBalancerPoliciesOfListenerInput,

@@ -176,7 +176,7 @@ pub struct ClusterMetadata {
     #[serde(rename = "RoleARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
-    /// <p>The shipping speed for each node in this cluster. This speed doesn't dictate how soon you'll get each Snowball Edge appliance, rather it represents how quickly each appliance moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, appliances shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snowball Edges shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snowball Edges are delivered in one to seven days.</p> </li> <li> <p>In the US, you have access to one-day shipping and two-day shipping.</p> </li> </ul>
+    /// <p><p>The shipping speed for each node in this cluster. This speed doesn&#39;t dictate how soon you&#39;ll get each Snowball Edge appliance, rather it represents how quickly each appliance moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, appliances shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snowball Edges shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snowball Edges are delivered in one to seven days.</p> </li> <li> <p>In the US, you have access to one-day shipping and two-day shipping.</p> </li> </ul></p>
     #[serde(rename = "ShippingOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub shipping_option: Option<String>,
@@ -231,7 +231,7 @@ pub struct CreateClusterRequest {
     /// <p>The <code>RoleARN</code> that you want to associate with this cluster. <code>RoleArn</code> values are created by using the <a href="http://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateRole.html">CreateRole</a> API action in AWS Identity and Access Management (IAM).</p>
     #[serde(rename = "RoleARN")]
     pub role_arn: String,
-    /// <p>The shipping speed for each node in this cluster. This speed doesn't dictate how soon you'll get each Snowball Edge appliance, rather it represents how quickly each appliance moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, appliances shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snowball Edges shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snowball Edges are delivered in one to seven days.</p> </li> <li> <p>In the US, you have access to one-day shipping and two-day shipping.</p> </li> </ul>
+    /// <p><p>The shipping speed for each node in this cluster. This speed doesn&#39;t dictate how soon you&#39;ll get each Snowball Edge appliance, rather it represents how quickly each appliance moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, appliances shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snowball Edges shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snowball Edges are delivered in one to seven days.</p> </li> <li> <p>In the US, you have access to one-day shipping and two-day shipping.</p> </li> </ul></p>
     #[serde(rename = "ShippingOption")]
     pub shipping_option: String,
     /// <p>The type of AWS Snowball appliance to use for this cluster. Currently, the only supported appliance type for cluster jobs is <code>EDGE</code>.</p>
@@ -286,7 +286,7 @@ pub struct CreateJobRequest {
     #[serde(rename = "RoleARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
-    /// <p>The shipping speed for this job. This speed doesn't dictate how soon you'll get the Snowball, rather it represents how quickly the Snowball moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, Snowballs shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snowballs shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snowballs are delivered in one to seven days.</p> </li> <li> <p>In the US, you have access to one-day shipping and two-day shipping.</p> </li> </ul>
+    /// <p><p>The shipping speed for this job. This speed doesn&#39;t dictate how soon you&#39;ll get the Snowball, rather it represents how quickly the Snowball moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, Snowballs shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snowballs shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snowballs are delivered in one to seven days.</p> </li> <li> <p>In the US, you have access to one-day shipping and two-day shipping.</p> </li> </ul></p>
     #[serde(rename = "ShippingOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub shipping_option: Option<String>,
@@ -747,7 +747,7 @@ pub struct ShippingDetails {
     #[serde(rename = "OutboundShipment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub outbound_shipment: Option<Shipment>,
-    /// <p>The shipping speed for a particular job. This speed doesn't dictate how soon you'll get the Snowball from the job's creation date. This speed represents how quickly it moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, Snowballs shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snowballs shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snowballs are delivered in one to seven days.</p> </li> <li> <p>In the United States of America (US), you have access to one-day shipping and two-day shipping.</p> </li> </ul>
+    /// <p><p>The shipping speed for a particular job. This speed doesn&#39;t dictate how soon you&#39;ll get the Snowball from the job&#39;s creation date. This speed represents how quickly it moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, Snowballs shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snowballs shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snowballs are delivered in one to seven days.</p> </li> <li> <p>In the United States of America (US), you have access to one-day shipping and two-day shipping.</p> </li> </ul></p>
     #[serde(rename = "ShippingOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub shipping_option: Option<String>,
@@ -836,11 +836,11 @@ pub struct UpdateJobResult;
 /// Errors returned by CancelCluster
 #[derive(Debug, PartialEq)]
 pub enum CancelClusterError {
-    ///<p>The action can't be performed because the job's current state doesn't allow that action to be performed.</p>
+    /// <p>The action can't be performed because the job's current state doesn't allow that action to be performed.</p>
     InvalidJobState(String),
-    ///<p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
+    /// <p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
     InvalidResource(String),
-    ///<p>The provided AWS Key Management Service key lacks the permissions to perform the specified <a>CreateJob</a> or <a>UpdateJob</a> action.</p>
+    /// <p>The provided AWS Key Management Service key lacks the permissions to perform the specified <a>CreateJob</a> or <a>UpdateJob</a> action.</p>
     KMSRequestFailed(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -926,11 +926,11 @@ impl Error for CancelClusterError {
 /// Errors returned by CancelJob
 #[derive(Debug, PartialEq)]
 pub enum CancelJobError {
-    ///<p>The action can't be performed because the job's current state doesn't allow that action to be performed.</p>
+    /// <p>The action can't be performed because the job's current state doesn't allow that action to be performed.</p>
     InvalidJobState(String),
-    ///<p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
+    /// <p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
     InvalidResource(String),
-    ///<p>The provided AWS Key Management Service key lacks the permissions to perform the specified <a>CreateJob</a> or <a>UpdateJob</a> action.</p>
+    /// <p>The provided AWS Key Management Service key lacks the permissions to perform the specified <a>CreateJob</a> or <a>UpdateJob</a> action.</p>
     KMSRequestFailed(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1014,9 +1014,9 @@ impl Error for CancelJobError {
 /// Errors returned by CreateAddress
 #[derive(Debug, PartialEq)]
 pub enum CreateAddressError {
-    ///<p>The address provided was invalid. Check the address with your region's carrier, and try again.</p>
+    /// <p>The address provided was invalid. Check the address with your region's carrier, and try again.</p>
     InvalidAddress(String),
-    ///<p>The address is either outside the serviceable area for your region, or an error occurred. Check the address with your region's carrier and try again. If the issue persists, contact AWS Support.</p>
+    /// <p>The address is either outside the serviceable area for your region, or an error occurred. Check the address with your region's carrier and try again. If the issue persists, contact AWS Support.</p>
     UnsupportedAddress(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1098,11 +1098,11 @@ impl Error for CreateAddressError {
 /// Errors returned by CreateCluster
 #[derive(Debug, PartialEq)]
 pub enum CreateClusterError {
-    ///<p>Job or cluster creation failed. One ore more inputs were invalid. Confirm that the <a>CreateClusterRequest$SnowballType</a> value supports your <a>CreateJobRequest$JobType</a>, and try again.</p>
+    /// <p>Job or cluster creation failed. One ore more inputs were invalid. Confirm that the <a>CreateClusterRequest$SnowballType</a> value supports your <a>CreateJobRequest$JobType</a>, and try again.</p>
     InvalidInputCombination(String),
-    ///<p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
+    /// <p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
     InvalidResource(String),
-    ///<p>The provided AWS Key Management Service key lacks the permissions to perform the specified <a>CreateJob</a> or <a>UpdateJob</a> action.</p>
+    /// <p>The provided AWS Key Management Service key lacks the permissions to perform the specified <a>CreateJob</a> or <a>UpdateJob</a> action.</p>
     KMSRequestFailed(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1188,13 +1188,13 @@ impl Error for CreateClusterError {
 /// Errors returned by CreateJob
 #[derive(Debug, PartialEq)]
 pub enum CreateJobError {
-    ///<p>Job creation failed. Currently, clusters support five nodes. If you have less than five nodes for your cluster and you have more nodes to create for this cluster, try again and create jobs until your cluster has exactly five notes.</p>
+    /// <p>Job creation failed. Currently, clusters support five nodes. If you have less than five nodes for your cluster and you have more nodes to create for this cluster, try again and create jobs until your cluster has exactly five notes.</p>
     ClusterLimitExceeded(String),
-    ///<p>Job or cluster creation failed. One ore more inputs were invalid. Confirm that the <a>CreateClusterRequest$SnowballType</a> value supports your <a>CreateJobRequest$JobType</a>, and try again.</p>
+    /// <p>Job or cluster creation failed. One ore more inputs were invalid. Confirm that the <a>CreateClusterRequest$SnowballType</a> value supports your <a>CreateJobRequest$JobType</a>, and try again.</p>
     InvalidInputCombination(String),
-    ///<p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
+    /// <p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
     InvalidResource(String),
-    ///<p>The provided AWS Key Management Service key lacks the permissions to perform the specified <a>CreateJob</a> or <a>UpdateJob</a> action.</p>
+    /// <p>The provided AWS Key Management Service key lacks the permissions to perform the specified <a>CreateJob</a> or <a>UpdateJob</a> action.</p>
     KMSRequestFailed(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1282,7 +1282,7 @@ impl Error for CreateJobError {
 /// Errors returned by DescribeAddress
 #[derive(Debug, PartialEq)]
 pub enum DescribeAddressError {
-    ///<p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
+    /// <p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
     InvalidResource(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1360,9 +1360,9 @@ impl Error for DescribeAddressError {
 /// Errors returned by DescribeAddresses
 #[derive(Debug, PartialEq)]
 pub enum DescribeAddressesError {
-    ///<p>The <code>NextToken</code> string was altered unexpectedly, and the operation has stopped. Run the operation without changing the <code>NextToken</code> string, and try again.</p>
+    /// <p>The <code>NextToken</code> string was altered unexpectedly, and the operation has stopped. Run the operation without changing the <code>NextToken</code> string, and try again.</p>
     InvalidNextToken(String),
-    ///<p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
+    /// <p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
     InvalidResource(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1446,7 +1446,7 @@ impl Error for DescribeAddressesError {
 /// Errors returned by DescribeCluster
 #[derive(Debug, PartialEq)]
 pub enum DescribeClusterError {
-    ///<p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
+    /// <p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
     InvalidResource(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1524,7 +1524,7 @@ impl Error for DescribeClusterError {
 /// Errors returned by DescribeJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeJobError {
-    ///<p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
+    /// <p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
     InvalidResource(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1602,9 +1602,9 @@ impl Error for DescribeJobError {
 /// Errors returned by GetJobManifest
 #[derive(Debug, PartialEq)]
 pub enum GetJobManifestError {
-    ///<p>The action can't be performed because the job's current state doesn't allow that action to be performed.</p>
+    /// <p>The action can't be performed because the job's current state doesn't allow that action to be performed.</p>
     InvalidJobState(String),
-    ///<p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
+    /// <p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
     InvalidResource(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1686,9 +1686,9 @@ impl Error for GetJobManifestError {
 /// Errors returned by GetJobUnlockCode
 #[derive(Debug, PartialEq)]
 pub enum GetJobUnlockCodeError {
-    ///<p>The action can't be performed because the job's current state doesn't allow that action to be performed.</p>
+    /// <p>The action can't be performed because the job's current state doesn't allow that action to be performed.</p>
     InvalidJobState(String),
-    ///<p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
+    /// <p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
     InvalidResource(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1842,9 +1842,9 @@ impl Error for GetSnowballUsageError {
 /// Errors returned by ListClusterJobs
 #[derive(Debug, PartialEq)]
 pub enum ListClusterJobsError {
-    ///<p>The <code>NextToken</code> string was altered unexpectedly, and the operation has stopped. Run the operation without changing the <code>NextToken</code> string, and try again.</p>
+    /// <p>The <code>NextToken</code> string was altered unexpectedly, and the operation has stopped. Run the operation without changing the <code>NextToken</code> string, and try again.</p>
     InvalidNextToken(String),
-    ///<p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
+    /// <p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
     InvalidResource(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1926,7 +1926,7 @@ impl Error for ListClusterJobsError {
 /// Errors returned by ListClusters
 #[derive(Debug, PartialEq)]
 pub enum ListClustersError {
-    ///<p>The <code>NextToken</code> string was altered unexpectedly, and the operation has stopped. Run the operation without changing the <code>NextToken</code> string, and try again.</p>
+    /// <p>The <code>NextToken</code> string was altered unexpectedly, and the operation has stopped. Run the operation without changing the <code>NextToken</code> string, and try again.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2004,7 +2004,7 @@ impl Error for ListClustersError {
 /// Errors returned by ListJobs
 #[derive(Debug, PartialEq)]
 pub enum ListJobsError {
-    ///<p>The <code>NextToken</code> string was altered unexpectedly, and the operation has stopped. Run the operation without changing the <code>NextToken</code> string, and try again.</p>
+    /// <p>The <code>NextToken</code> string was altered unexpectedly, and the operation has stopped. Run the operation without changing the <code>NextToken</code> string, and try again.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2080,13 +2080,13 @@ impl Error for ListJobsError {
 /// Errors returned by UpdateCluster
 #[derive(Debug, PartialEq)]
 pub enum UpdateClusterError {
-    ///<p>Job or cluster creation failed. One ore more inputs were invalid. Confirm that the <a>CreateClusterRequest$SnowballType</a> value supports your <a>CreateJobRequest$JobType</a>, and try again.</p>
+    /// <p>Job or cluster creation failed. One ore more inputs were invalid. Confirm that the <a>CreateClusterRequest$SnowballType</a> value supports your <a>CreateJobRequest$JobType</a>, and try again.</p>
     InvalidInputCombination(String),
-    ///<p>The action can't be performed because the job's current state doesn't allow that action to be performed.</p>
+    /// <p>The action can't be performed because the job's current state doesn't allow that action to be performed.</p>
     InvalidJobState(String),
-    ///<p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
+    /// <p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
     InvalidResource(String),
-    ///<p>The provided AWS Key Management Service key lacks the permissions to perform the specified <a>CreateJob</a> or <a>UpdateJob</a> action.</p>
+    /// <p>The provided AWS Key Management Service key lacks the permissions to perform the specified <a>CreateJob</a> or <a>UpdateJob</a> action.</p>
     KMSRequestFailed(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2176,15 +2176,15 @@ impl Error for UpdateClusterError {
 /// Errors returned by UpdateJob
 #[derive(Debug, PartialEq)]
 pub enum UpdateJobError {
-    ///<p>Job creation failed. Currently, clusters support five nodes. If you have less than five nodes for your cluster and you have more nodes to create for this cluster, try again and create jobs until your cluster has exactly five notes.</p>
+    /// <p>Job creation failed. Currently, clusters support five nodes. If you have less than five nodes for your cluster and you have more nodes to create for this cluster, try again and create jobs until your cluster has exactly five notes.</p>
     ClusterLimitExceeded(String),
-    ///<p>Job or cluster creation failed. One ore more inputs were invalid. Confirm that the <a>CreateClusterRequest$SnowballType</a> value supports your <a>CreateJobRequest$JobType</a>, and try again.</p>
+    /// <p>Job or cluster creation failed. One ore more inputs were invalid. Confirm that the <a>CreateClusterRequest$SnowballType</a> value supports your <a>CreateJobRequest$JobType</a>, and try again.</p>
     InvalidInputCombination(String),
-    ///<p>The action can't be performed because the job's current state doesn't allow that action to be performed.</p>
+    /// <p>The action can't be performed because the job's current state doesn't allow that action to be performed.</p>
     InvalidJobState(String),
-    ///<p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
+    /// <p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
     InvalidResource(String),
-    ///<p>The provided AWS Key Management Service key lacks the permissions to perform the specified <a>CreateJob</a> or <a>UpdateJob</a> action.</p>
+    /// <p>The provided AWS Key Management Service key lacks the permissions to perform the specified <a>CreateJob</a> or <a>UpdateJob</a> action.</p>
     KMSRequestFailed(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2275,91 +2275,91 @@ impl Error for UpdateJobError {
 }
 /// Trait representing the capabilities of the Amazon Snowball API. Amazon Snowball clients implement this trait.
 pub trait Snowball {
-    #[doc="<p>Cancels a cluster job. You can only cancel a cluster job while it's in the <code>AwaitingQuorum</code> status. You'll have at least an hour after creating a cluster job to cancel it.</p>"]
+    /// <p>Cancels a cluster job. You can only cancel a cluster job while it's in the <code>AwaitingQuorum</code> status. You'll have at least an hour after creating a cluster job to cancel it.</p>
     fn cancel_cluster(
         &self,
         input: &CancelClusterRequest,
     ) -> Result<CancelClusterResult, CancelClusterError>;
 
-    #[doc="<p>Cancels the specified job. You can only cancel a job before its <code>JobState</code> value changes to <code>PreparingAppliance</code>. Requesting the <code>ListJobs</code> or <code>DescribeJob</code> action will return a job's <code>JobState</code> as part of the response element data returned.</p>"]
+    /// <p>Cancels the specified job. You can only cancel a job before its <code>JobState</code> value changes to <code>PreparingAppliance</code>. Requesting the <code>ListJobs</code> or <code>DescribeJob</code> action will return a job's <code>JobState</code> as part of the response element data returned.</p>
     fn cancel_job(&self, input: &CancelJobRequest) -> Result<CancelJobResult, CancelJobError>;
 
-    #[doc="<p>Creates an address for a Snowball to be shipped to. In most regions, addresses are validated at the time of creation. The address you provide must be located within the serviceable area of your region. If the address is invalid or unsupported, then an exception is thrown.</p>"]
+    /// <p>Creates an address for a Snowball to be shipped to. In most regions, addresses are validated at the time of creation. The address you provide must be located within the serviceable area of your region. If the address is invalid or unsupported, then an exception is thrown.</p>
     fn create_address(
         &self,
         input: &CreateAddressRequest,
     ) -> Result<CreateAddressResult, CreateAddressError>;
 
-    #[doc="<p>Creates an empty cluster. Each cluster supports five nodes. You use the <a>CreateJob</a> action separately to create the jobs for each of these nodes. The cluster does not ship until these five node jobs have been created.</p>"]
+    /// <p>Creates an empty cluster. Each cluster supports five nodes. You use the <a>CreateJob</a> action separately to create the jobs for each of these nodes. The cluster does not ship until these five node jobs have been created.</p>
     fn create_cluster(
         &self,
         input: &CreateClusterRequest,
     ) -> Result<CreateClusterResult, CreateClusterError>;
 
-    #[doc="<p>Creates a job to import or export data between Amazon S3 and your on-premises data center. Your AWS account must have the right trust policies and permissions in place to create a job for Snowball. If you're creating a job for a node in a cluster, you only need to provide the <code>clusterId</code> value; the other job attributes are inherited from the cluster. </p>"]
+    /// <p>Creates a job to import or export data between Amazon S3 and your on-premises data center. Your AWS account must have the right trust policies and permissions in place to create a job for Snowball. If you're creating a job for a node in a cluster, you only need to provide the <code>clusterId</code> value; the other job attributes are inherited from the cluster. </p>
     fn create_job(&self, input: &CreateJobRequest) -> Result<CreateJobResult, CreateJobError>;
 
-    #[doc="<p>Takes an <code>AddressId</code> and returns specific details about that address in the form of an <code>Address</code> object.</p>"]
+    /// <p>Takes an <code>AddressId</code> and returns specific details about that address in the form of an <code>Address</code> object.</p>
     fn describe_address(
         &self,
         input: &DescribeAddressRequest,
     ) -> Result<DescribeAddressResult, DescribeAddressError>;
 
-    #[doc="<p>Returns a specified number of <code>ADDRESS</code> objects. Calling this API in one of the US regions will return addresses from the list of all addresses associated with this account in all US regions.</p>"]
+    /// <p>Returns a specified number of <code>ADDRESS</code> objects. Calling this API in one of the US regions will return addresses from the list of all addresses associated with this account in all US regions.</p>
     fn describe_addresses(
         &self,
         input: &DescribeAddressesRequest,
     ) -> Result<DescribeAddressesResult, DescribeAddressesError>;
 
-    #[doc="<p>Returns information about a specific cluster including shipping information, cluster status, and other important metadata.</p>"]
+    /// <p>Returns information about a specific cluster including shipping information, cluster status, and other important metadata.</p>
     fn describe_cluster(
         &self,
         input: &DescribeClusterRequest,
     ) -> Result<DescribeClusterResult, DescribeClusterError>;
 
-    #[doc="<p>Returns information about a specific job including shipping information, job status, and other important metadata. </p>"]
+    /// <p>Returns information about a specific job including shipping information, job status, and other important metadata. </p>
     fn describe_job(
         &self,
         input: &DescribeJobRequest,
     ) -> Result<DescribeJobResult, DescribeJobError>;
 
-    #[doc="<p>Returns a link to an Amazon S3 presigned URL for the manifest file associated with the specified <code>JobId</code> value. You can access the manifest file for up to 60 minutes after this request has been made. To access the manifest file after 60 minutes have passed, you'll have to make another call to the <code>GetJobManifest</code> action.</p> <p>The manifest is an encrypted file that you can download after your job enters the <code>WithCustomer</code> status. The manifest is decrypted by using the <code>UnlockCode</code> code value, when you pass both values to the Snowball through the Snowball client when the client is started for the first time.</p> <p>As a best practice, we recommend that you don't save a copy of an <code>UnlockCode</code> value in the same location as the manifest file for that job. Saving these separately helps prevent unauthorized parties from gaining access to the Snowball associated with that job.</p> <p>The credentials of a given job, including its manifest file and unlock code, expire 90 days after the job is created.</p>"]
+    /// <p>Returns a link to an Amazon S3 presigned URL for the manifest file associated with the specified <code>JobId</code> value. You can access the manifest file for up to 60 minutes after this request has been made. To access the manifest file after 60 minutes have passed, you'll have to make another call to the <code>GetJobManifest</code> action.</p> <p>The manifest is an encrypted file that you can download after your job enters the <code>WithCustomer</code> status. The manifest is decrypted by using the <code>UnlockCode</code> code value, when you pass both values to the Snowball through the Snowball client when the client is started for the first time.</p> <p>As a best practice, we recommend that you don't save a copy of an <code>UnlockCode</code> value in the same location as the manifest file for that job. Saving these separately helps prevent unauthorized parties from gaining access to the Snowball associated with that job.</p> <p>The credentials of a given job, including its manifest file and unlock code, expire 90 days after the job is created.</p>
     fn get_job_manifest(
         &self,
         input: &GetJobManifestRequest,
     ) -> Result<GetJobManifestResult, GetJobManifestError>;
 
-    #[doc="<p>Returns the <code>UnlockCode</code> code value for the specified job. A particular <code>UnlockCode</code> value can be accessed for up to 90 days after the associated job has been created.</p> <p>The <code>UnlockCode</code> value is a 29-character code with 25 alphanumeric characters and 4 hyphens. This code is used to decrypt the manifest file when it is passed along with the manifest to the Snowball through the Snowball client when the client is started for the first time.</p> <p>As a best practice, we recommend that you don't save a copy of the <code>UnlockCode</code> in the same location as the manifest file for that job. Saving these separately helps prevent unauthorized parties from gaining access to the Snowball associated with that job.</p>"]
+    /// <p>Returns the <code>UnlockCode</code> code value for the specified job. A particular <code>UnlockCode</code> value can be accessed for up to 90 days after the associated job has been created.</p> <p>The <code>UnlockCode</code> value is a 29-character code with 25 alphanumeric characters and 4 hyphens. This code is used to decrypt the manifest file when it is passed along with the manifest to the Snowball through the Snowball client when the client is started for the first time.</p> <p>As a best practice, we recommend that you don't save a copy of the <code>UnlockCode</code> in the same location as the manifest file for that job. Saving these separately helps prevent unauthorized parties from gaining access to the Snowball associated with that job.</p>
     fn get_job_unlock_code(
         &self,
         input: &GetJobUnlockCodeRequest,
     ) -> Result<GetJobUnlockCodeResult, GetJobUnlockCodeError>;
 
-    #[doc="<p>Returns information about the Snowball service limit for your account, and also the number of Snowballs your account has in use.</p> <p>The default service limit for the number of Snowballs that you can have at one time is 1. If you want to increase your service limit, contact AWS Support.</p>"]
+    /// <p>Returns information about the Snowball service limit for your account, and also the number of Snowballs your account has in use.</p> <p>The default service limit for the number of Snowballs that you can have at one time is 1. If you want to increase your service limit, contact AWS Support.</p>
     fn get_snowball_usage(&self) -> Result<GetSnowballUsageResult, GetSnowballUsageError>;
 
-    #[doc="<p>Returns an array of <code>JobListEntry</code> objects of the specified length. Each <code>JobListEntry</code> object is for a job in the specified cluster and contains a job's state, a job's ID, and other information.</p>"]
+    /// <p>Returns an array of <code>JobListEntry</code> objects of the specified length. Each <code>JobListEntry</code> object is for a job in the specified cluster and contains a job's state, a job's ID, and other information.</p>
     fn list_cluster_jobs(
         &self,
         input: &ListClusterJobsRequest,
     ) -> Result<ListClusterJobsResult, ListClusterJobsError>;
 
-    #[doc="<p>Returns an array of <code>ClusterListEntry</code> objects of the specified length. Each <code>ClusterListEntry</code> object contains a cluster's state, a cluster's ID, and other important status information.</p>"]
+    /// <p>Returns an array of <code>ClusterListEntry</code> objects of the specified length. Each <code>ClusterListEntry</code> object contains a cluster's state, a cluster's ID, and other important status information.</p>
     fn list_clusters(
         &self,
         input: &ListClustersRequest,
     ) -> Result<ListClustersResult, ListClustersError>;
 
-    #[doc="<p>Returns an array of <code>JobListEntry</code> objects of the specified length. Each <code>JobListEntry</code> object contains a job's state, a job's ID, and a value that indicates whether the job is a job part, in the case of export jobs. Calling this API action in one of the US regions will return jobs from the list of all jobs associated with this account in all US regions.</p>"]
+    /// <p>Returns an array of <code>JobListEntry</code> objects of the specified length. Each <code>JobListEntry</code> object contains a job's state, a job's ID, and a value that indicates whether the job is a job part, in the case of export jobs. Calling this API action in one of the US regions will return jobs from the list of all jobs associated with this account in all US regions.</p>
     fn list_jobs(&self, input: &ListJobsRequest) -> Result<ListJobsResult, ListJobsError>;
 
-    #[doc="<p>While a cluster's <code>ClusterState</code> value is in the <code>AwaitingQuorum</code> state, you can update some of the information associated with a cluster. Once the cluster changes to a different job state, usually 60 minutes after the cluster being created, this action is no longer available.</p>"]
+    /// <p>While a cluster's <code>ClusterState</code> value is in the <code>AwaitingQuorum</code> state, you can update some of the information associated with a cluster. Once the cluster changes to a different job state, usually 60 minutes after the cluster being created, this action is no longer available.</p>
     fn update_cluster(
         &self,
         input: &UpdateClusterRequest,
     ) -> Result<UpdateClusterResult, UpdateClusterError>;
 
-    #[doc="<p>While a job's <code>JobState</code> value is <code>New</code>, you can update some of the information associated with a job. Once the job changes to a different job state, usually within 60 minutes of the job being created, this action is no longer available.</p>"]
+    /// <p>While a job's <code>JobState</code> value is <code>New</code>, you can update some of the information associated with a job. Once the job changes to a different job state, usually within 60 minutes of the job being created, this action is no longer available.</p>
     fn update_job(&self, input: &UpdateJobRequest) -> Result<UpdateJobResult, UpdateJobError>;
 }
 /// A client for the Amazon Snowball API.
@@ -2392,7 +2392,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Cancels a cluster job. You can only cancel a cluster job while it's in the <code>AwaitingQuorum</code> status. You'll have at least an hour after creating a cluster job to cancel it.</p>"]
+    /// <p>Cancels a cluster job. You can only cancel a cluster job while it's in the <code>AwaitingQuorum</code> status. You'll have at least an hour after creating a cluster job to cancel it.</p>
     fn cancel_cluster(
         &self,
         input: &CancelClusterRequest,
@@ -2429,7 +2429,7 @@ where
         }
     }
 
-    #[doc="<p>Cancels the specified job. You can only cancel a job before its <code>JobState</code> value changes to <code>PreparingAppliance</code>. Requesting the <code>ListJobs</code> or <code>DescribeJob</code> action will return a job's <code>JobState</code> as part of the response element data returned.</p>"]
+    /// <p>Cancels the specified job. You can only cancel a job before its <code>JobState</code> value changes to <code>PreparingAppliance</code>. Requesting the <code>ListJobs</code> or <code>DescribeJob</code> action will return a job's <code>JobState</code> as part of the response element data returned.</p>
     fn cancel_job(&self, input: &CancelJobRequest) -> Result<CancelJobResult, CancelJobError> {
         let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
 
@@ -2465,7 +2465,7 @@ where
         }
     }
 
-    #[doc="<p>Creates an address for a Snowball to be shipped to. In most regions, addresses are validated at the time of creation. The address you provide must be located within the serviceable area of your region. If the address is invalid or unsupported, then an exception is thrown.</p>"]
+    /// <p>Creates an address for a Snowball to be shipped to. In most regions, addresses are validated at the time of creation. The address you provide must be located within the serviceable area of your region. If the address is invalid or unsupported, then an exception is thrown.</p>
     fn create_address(
         &self,
         input: &CreateAddressRequest,
@@ -2502,7 +2502,7 @@ where
         }
     }
 
-    #[doc="<p>Creates an empty cluster. Each cluster supports five nodes. You use the <a>CreateJob</a> action separately to create the jobs for each of these nodes. The cluster does not ship until these five node jobs have been created.</p>"]
+    /// <p>Creates an empty cluster. Each cluster supports five nodes. You use the <a>CreateJob</a> action separately to create the jobs for each of these nodes. The cluster does not ship until these five node jobs have been created.</p>
     fn create_cluster(
         &self,
         input: &CreateClusterRequest,
@@ -2539,7 +2539,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a job to import or export data between Amazon S3 and your on-premises data center. Your AWS account must have the right trust policies and permissions in place to create a job for Snowball. If you're creating a job for a node in a cluster, you only need to provide the <code>clusterId</code> value; the other job attributes are inherited from the cluster. </p>"]
+    /// <p>Creates a job to import or export data between Amazon S3 and your on-premises data center. Your AWS account must have the right trust policies and permissions in place to create a job for Snowball. If you're creating a job for a node in a cluster, you only need to provide the <code>clusterId</code> value; the other job attributes are inherited from the cluster. </p>
     fn create_job(&self, input: &CreateJobRequest) -> Result<CreateJobResult, CreateJobError> {
         let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
 
@@ -2575,7 +2575,7 @@ where
         }
     }
 
-    #[doc="<p>Takes an <code>AddressId</code> and returns specific details about that address in the form of an <code>Address</code> object.</p>"]
+    /// <p>Takes an <code>AddressId</code> and returns specific details about that address in the form of an <code>Address</code> object.</p>
     fn describe_address(
         &self,
         input: &DescribeAddressRequest,
@@ -2612,7 +2612,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a specified number of <code>ADDRESS</code> objects. Calling this API in one of the US regions will return addresses from the list of all addresses associated with this account in all US regions.</p>"]
+    /// <p>Returns a specified number of <code>ADDRESS</code> objects. Calling this API in one of the US regions will return addresses from the list of all addresses associated with this account in all US regions.</p>
     fn describe_addresses(
         &self,
         input: &DescribeAddressesRequest,
@@ -2649,7 +2649,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about a specific cluster including shipping information, cluster status, and other important metadata.</p>"]
+    /// <p>Returns information about a specific cluster including shipping information, cluster status, and other important metadata.</p>
     fn describe_cluster(
         &self,
         input: &DescribeClusterRequest,
@@ -2686,7 +2686,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about a specific job including shipping information, job status, and other important metadata. </p>"]
+    /// <p>Returns information about a specific job including shipping information, job status, and other important metadata. </p>
     fn describe_job(
         &self,
         input: &DescribeJobRequest,
@@ -2723,7 +2723,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a link to an Amazon S3 presigned URL for the manifest file associated with the specified <code>JobId</code> value. You can access the manifest file for up to 60 minutes after this request has been made. To access the manifest file after 60 minutes have passed, you'll have to make another call to the <code>GetJobManifest</code> action.</p> <p>The manifest is an encrypted file that you can download after your job enters the <code>WithCustomer</code> status. The manifest is decrypted by using the <code>UnlockCode</code> code value, when you pass both values to the Snowball through the Snowball client when the client is started for the first time.</p> <p>As a best practice, we recommend that you don't save a copy of an <code>UnlockCode</code> value in the same location as the manifest file for that job. Saving these separately helps prevent unauthorized parties from gaining access to the Snowball associated with that job.</p> <p>The credentials of a given job, including its manifest file and unlock code, expire 90 days after the job is created.</p>"]
+    /// <p>Returns a link to an Amazon S3 presigned URL for the manifest file associated with the specified <code>JobId</code> value. You can access the manifest file for up to 60 minutes after this request has been made. To access the manifest file after 60 minutes have passed, you'll have to make another call to the <code>GetJobManifest</code> action.</p> <p>The manifest is an encrypted file that you can download after your job enters the <code>WithCustomer</code> status. The manifest is decrypted by using the <code>UnlockCode</code> code value, when you pass both values to the Snowball through the Snowball client when the client is started for the first time.</p> <p>As a best practice, we recommend that you don't save a copy of an <code>UnlockCode</code> value in the same location as the manifest file for that job. Saving these separately helps prevent unauthorized parties from gaining access to the Snowball associated with that job.</p> <p>The credentials of a given job, including its manifest file and unlock code, expire 90 days after the job is created.</p>
     fn get_job_manifest(
         &self,
         input: &GetJobManifestRequest,
@@ -2760,7 +2760,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the <code>UnlockCode</code> code value for the specified job. A particular <code>UnlockCode</code> value can be accessed for up to 90 days after the associated job has been created.</p> <p>The <code>UnlockCode</code> value is a 29-character code with 25 alphanumeric characters and 4 hyphens. This code is used to decrypt the manifest file when it is passed along with the manifest to the Snowball through the Snowball client when the client is started for the first time.</p> <p>As a best practice, we recommend that you don't save a copy of the <code>UnlockCode</code> in the same location as the manifest file for that job. Saving these separately helps prevent unauthorized parties from gaining access to the Snowball associated with that job.</p>"]
+    /// <p>Returns the <code>UnlockCode</code> code value for the specified job. A particular <code>UnlockCode</code> value can be accessed for up to 90 days after the associated job has been created.</p> <p>The <code>UnlockCode</code> value is a 29-character code with 25 alphanumeric characters and 4 hyphens. This code is used to decrypt the manifest file when it is passed along with the manifest to the Snowball through the Snowball client when the client is started for the first time.</p> <p>As a best practice, we recommend that you don't save a copy of the <code>UnlockCode</code> in the same location as the manifest file for that job. Saving these separately helps prevent unauthorized parties from gaining access to the Snowball associated with that job.</p>
     fn get_job_unlock_code(
         &self,
         input: &GetJobUnlockCodeRequest,
@@ -2797,7 +2797,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about the Snowball service limit for your account, and also the number of Snowballs your account has in use.</p> <p>The default service limit for the number of Snowballs that you can have at one time is 1. If you want to increase your service limit, contact AWS Support.</p>"]
+    /// <p>Returns information about the Snowball service limit for your account, and also the number of Snowballs your account has in use.</p> <p>The default service limit for the number of Snowballs that you can have at one time is 1. If you want to increase your service limit, contact AWS Support.</p>
     fn get_snowball_usage(&self) -> Result<GetSnowballUsageResult, GetSnowballUsageError> {
         let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
 
@@ -2830,7 +2830,7 @@ where
         }
     }
 
-    #[doc="<p>Returns an array of <code>JobListEntry</code> objects of the specified length. Each <code>JobListEntry</code> object is for a job in the specified cluster and contains a job's state, a job's ID, and other information.</p>"]
+    /// <p>Returns an array of <code>JobListEntry</code> objects of the specified length. Each <code>JobListEntry</code> object is for a job in the specified cluster and contains a job's state, a job's ID, and other information.</p>
     fn list_cluster_jobs(
         &self,
         input: &ListClusterJobsRequest,
@@ -2867,7 +2867,7 @@ where
         }
     }
 
-    #[doc="<p>Returns an array of <code>ClusterListEntry</code> objects of the specified length. Each <code>ClusterListEntry</code> object contains a cluster's state, a cluster's ID, and other important status information.</p>"]
+    /// <p>Returns an array of <code>ClusterListEntry</code> objects of the specified length. Each <code>ClusterListEntry</code> object contains a cluster's state, a cluster's ID, and other important status information.</p>
     fn list_clusters(
         &self,
         input: &ListClustersRequest,
@@ -2904,7 +2904,7 @@ where
         }
     }
 
-    #[doc="<p>Returns an array of <code>JobListEntry</code> objects of the specified length. Each <code>JobListEntry</code> object contains a job's state, a job's ID, and a value that indicates whether the job is a job part, in the case of export jobs. Calling this API action in one of the US regions will return jobs from the list of all jobs associated with this account in all US regions.</p>"]
+    /// <p>Returns an array of <code>JobListEntry</code> objects of the specified length. Each <code>JobListEntry</code> object contains a job's state, a job's ID, and a value that indicates whether the job is a job part, in the case of export jobs. Calling this API action in one of the US regions will return jobs from the list of all jobs associated with this account in all US regions.</p>
     fn list_jobs(&self, input: &ListJobsRequest) -> Result<ListJobsResult, ListJobsError> {
         let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
 
@@ -2936,7 +2936,7 @@ where
         }
     }
 
-    #[doc="<p>While a cluster's <code>ClusterState</code> value is in the <code>AwaitingQuorum</code> state, you can update some of the information associated with a cluster. Once the cluster changes to a different job state, usually 60 minutes after the cluster being created, this action is no longer available.</p>"]
+    /// <p>While a cluster's <code>ClusterState</code> value is in the <code>AwaitingQuorum</code> state, you can update some of the information associated with a cluster. Once the cluster changes to a different job state, usually 60 minutes after the cluster being created, this action is no longer available.</p>
     fn update_cluster(
         &self,
         input: &UpdateClusterRequest,
@@ -2973,7 +2973,7 @@ where
         }
     }
 
-    #[doc="<p>While a job's <code>JobState</code> value is <code>New</code>, you can update some of the information associated with a job. Once the job changes to a different job state, usually within 60 minutes of the job being created, this action is no longer available.</p>"]
+    /// <p>While a job's <code>JobState</code> value is <code>New</code>, you can update some of the information associated with a job. Once the job changes to a different job state, usually within 60 minutes of the job being created, this action is no longer available.</p>
     fn update_job(&self, input: &UpdateJobRequest) -> Result<UpdateJobResult, UpdateJobError> {
         let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
 

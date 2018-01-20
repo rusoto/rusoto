@@ -2998,17 +2998,17 @@ pub struct UserDefinedFunctionInput {
 /// Errors returned by BatchCreatePartition
 #[derive(Debug, PartialEq)]
 pub enum BatchCreatePartitionError {
-    ///<p>A resource to be created or added already exists.</p>
+    /// <p>A resource to be created or added already exists.</p>
     AlreadyExists(String),
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    ///<p>A resource numerical limit was exceeded.</p>
+    /// <p>A resource numerical limit was exceeded.</p>
     ResourceNumberLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3110,9 +3110,9 @@ impl Error for BatchCreatePartitionError {
 /// Errors returned by BatchDeleteConnection
 #[derive(Debug, PartialEq)]
 pub enum BatchDeleteConnectionError {
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3196,13 +3196,13 @@ impl Error for BatchDeleteConnectionError {
 /// Errors returned by BatchDeletePartition
 #[derive(Debug, PartialEq)]
 pub enum BatchDeletePartitionError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3294,13 +3294,13 @@ impl Error for BatchDeletePartitionError {
 /// Errors returned by BatchDeleteTable
 #[derive(Debug, PartialEq)]
 pub enum BatchDeleteTableError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3390,13 +3390,13 @@ impl Error for BatchDeleteTableError {
 /// Errors returned by BatchGetPartition
 #[derive(Debug, PartialEq)]
 pub enum BatchGetPartitionError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3488,11 +3488,11 @@ impl Error for BatchGetPartitionError {
 /// Errors returned by CreateClassifier
 #[derive(Debug, PartialEq)]
 pub enum CreateClassifierError {
-    ///<p>A resource to be created or added already exists.</p>
+    /// <p>A resource to be created or added already exists.</p>
     AlreadyExists(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3578,11 +3578,11 @@ impl Error for CreateClassifierError {
 /// Errors returned by CreateConnection
 #[derive(Debug, PartialEq)]
 pub enum CreateConnectionError {
-    ///<p>A resource to be created or added already exists.</p>
+    /// <p>A resource to be created or added already exists.</p>
     AlreadyExists(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3668,13 +3668,13 @@ impl Error for CreateConnectionError {
 /// Errors returned by CreateCrawler
 #[derive(Debug, PartialEq)]
 pub enum CreateCrawlerError {
-    ///<p>A resource to be created or added already exists.</p>
+    /// <p>A resource to be created or added already exists.</p>
     AlreadyExists(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    ///<p>A resource numerical limit was exceeded.</p>
+    /// <p>A resource numerical limit was exceeded.</p>
     ResourceNumberLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3764,15 +3764,15 @@ impl Error for CreateCrawlerError {
 /// Errors returned by CreateDatabase
 #[derive(Debug, PartialEq)]
 pub enum CreateDatabaseError {
-    ///<p>A resource to be created or added already exists.</p>
+    /// <p>A resource to be created or added already exists.</p>
     AlreadyExists(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    ///<p>A resource numerical limit was exceeded.</p>
+    /// <p>A resource numerical limit was exceeded.</p>
     ResourceNumberLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3868,19 +3868,19 @@ impl Error for CreateDatabaseError {
 /// Errors returned by CreateDevEndpoint
 #[derive(Debug, PartialEq)]
 pub enum CreateDevEndpointError {
-    ///<p>Access to a resource was denied.</p>
+    /// <p>Access to a resource was denied.</p>
     AccessDenied(String),
-    ///<p>A resource to be created or added already exists.</p>
+    /// <p>A resource to be created or added already exists.</p>
     AlreadyExists(String),
-    ///<p>The same unique identifier was associated with two different records.</p>
+    /// <p>The same unique identifier was associated with two different records.</p>
     IdempotentParameterMismatch(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    ///<p>A resource numerical limit was exceeded.</p>
+    /// <p>A resource numerical limit was exceeded.</p>
     ResourceNumberLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3988,17 +3988,17 @@ impl Error for CreateDevEndpointError {
 /// Errors returned by CreateJob
 #[derive(Debug, PartialEq)]
 pub enum CreateJobError {
-    ///<p>A resource to be created or added already exists.</p>
+    /// <p>A resource to be created or added already exists.</p>
     AlreadyExists(String),
-    ///<p>The same unique identifier was associated with two different records.</p>
+    /// <p>The same unique identifier was associated with two different records.</p>
     IdempotentParameterMismatch(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    ///<p>A resource numerical limit was exceeded.</p>
+    /// <p>A resource numerical limit was exceeded.</p>
     ResourceNumberLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4094,17 +4094,17 @@ impl Error for CreateJobError {
 /// Errors returned by CreatePartition
 #[derive(Debug, PartialEq)]
 pub enum CreatePartitionError {
-    ///<p>A resource to be created or added already exists.</p>
+    /// <p>A resource to be created or added already exists.</p>
     AlreadyExists(String),
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    ///<p>A resource numerical limit was exceeded.</p>
+    /// <p>A resource numerical limit was exceeded.</p>
     ResourceNumberLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4204,11 +4204,11 @@ impl Error for CreatePartitionError {
 /// Errors returned by CreateScript
 #[derive(Debug, PartialEq)]
 pub enum CreateScriptError {
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4294,17 +4294,17 @@ impl Error for CreateScriptError {
 /// Errors returned by CreateTable
 #[derive(Debug, PartialEq)]
 pub enum CreateTableError {
-    ///<p>A resource to be created or added already exists.</p>
+    /// <p>A resource to be created or added already exists.</p>
     AlreadyExists(String),
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    ///<p>A resource numerical limit was exceeded.</p>
+    /// <p>A resource numerical limit was exceeded.</p>
     ResourceNumberLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4402,15 +4402,15 @@ impl Error for CreateTableError {
 /// Errors returned by CreateTrigger
 #[derive(Debug, PartialEq)]
 pub enum CreateTriggerError {
-    ///<p>A resource to be created or added already exists.</p>
+    /// <p>A resource to be created or added already exists.</p>
     AlreadyExists(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    ///<p>A resource numerical limit was exceeded.</p>
+    /// <p>A resource numerical limit was exceeded.</p>
     ResourceNumberLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4504,15 +4504,15 @@ impl Error for CreateTriggerError {
 /// Errors returned by CreateUserDefinedFunction
 #[derive(Debug, PartialEq)]
 pub enum CreateUserDefinedFunctionError {
-    ///<p>A resource to be created or added already exists.</p>
+    /// <p>A resource to be created or added already exists.</p>
     AlreadyExists(String),
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4610,9 +4610,9 @@ impl Error for CreateUserDefinedFunctionError {
 /// Errors returned by DeleteClassifier
 #[derive(Debug, PartialEq)]
 pub enum DeleteClassifierError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4694,9 +4694,9 @@ impl Error for DeleteClassifierError {
 /// Errors returned by DeleteConnection
 #[derive(Debug, PartialEq)]
 pub enum DeleteConnectionError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4778,13 +4778,13 @@ impl Error for DeleteConnectionError {
 /// Errors returned by DeleteCrawler
 #[derive(Debug, PartialEq)]
 pub enum DeleteCrawlerError {
-    ///<p>The operation cannot be performed because the crawler is already running.</p>
+    /// <p>The operation cannot be performed because the crawler is already running.</p>
     CrawlerRunning(String),
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    ///<p>The specified scheduler is transitioning.</p>
+    /// <p>The specified scheduler is transitioning.</p>
     SchedulerTransitioning(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4874,13 +4874,13 @@ impl Error for DeleteCrawlerError {
 /// Errors returned by DeleteDatabase
 #[derive(Debug, PartialEq)]
 pub enum DeleteDatabaseError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4970,13 +4970,13 @@ impl Error for DeleteDatabaseError {
 /// Errors returned by DeleteDevEndpoint
 #[derive(Debug, PartialEq)]
 pub enum DeleteDevEndpointError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5068,11 +5068,11 @@ impl Error for DeleteDevEndpointError {
 /// Errors returned by DeleteJob
 #[derive(Debug, PartialEq)]
 pub enum DeleteJobError {
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5156,13 +5156,13 @@ impl Error for DeleteJobError {
 /// Errors returned by DeletePartition
 #[derive(Debug, PartialEq)]
 pub enum DeletePartitionError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5252,13 +5252,13 @@ impl Error for DeletePartitionError {
 /// Errors returned by DeleteTable
 #[derive(Debug, PartialEq)]
 pub enum DeleteTableError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5348,11 +5348,11 @@ impl Error for DeleteTableError {
 /// Errors returned by DeleteTrigger
 #[derive(Debug, PartialEq)]
 pub enum DeleteTriggerError {
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5438,13 +5438,13 @@ impl Error for DeleteTriggerError {
 /// Errors returned by DeleteUserDefinedFunction
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserDefinedFunctionError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5538,9 +5538,9 @@ impl Error for DeleteUserDefinedFunctionError {
 /// Errors returned by GetCatalogImportStatus
 #[derive(Debug, PartialEq)]
 pub enum GetCatalogImportStatusError {
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5624,9 +5624,9 @@ impl Error for GetCatalogImportStatusError {
 /// Errors returned by GetClassifier
 #[derive(Debug, PartialEq)]
 pub enum GetClassifierError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5708,7 +5708,7 @@ impl Error for GetClassifierError {
 /// Errors returned by GetClassifiers
 #[derive(Debug, PartialEq)]
 pub enum GetClassifiersError {
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5786,9 +5786,9 @@ impl Error for GetClassifiersError {
 /// Errors returned by GetConnection
 #[derive(Debug, PartialEq)]
 pub enum GetConnectionError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5870,9 +5870,9 @@ impl Error for GetConnectionError {
 /// Errors returned by GetConnections
 #[derive(Debug, PartialEq)]
 pub enum GetConnectionsError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5954,9 +5954,9 @@ impl Error for GetConnectionsError {
 /// Errors returned by GetCrawler
 #[derive(Debug, PartialEq)]
 pub enum GetCrawlerError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6036,7 +6036,7 @@ impl Error for GetCrawlerError {
 /// Errors returned by GetCrawlerMetrics
 #[derive(Debug, PartialEq)]
 pub enum GetCrawlerMetricsError {
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6116,7 +6116,7 @@ impl Error for GetCrawlerMetricsError {
 /// Errors returned by GetCrawlers
 #[derive(Debug, PartialEq)]
 pub enum GetCrawlersError {
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6194,13 +6194,13 @@ impl Error for GetCrawlersError {
 /// Errors returned by GetDatabase
 #[derive(Debug, PartialEq)]
 pub enum GetDatabaseError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6290,11 +6290,11 @@ impl Error for GetDatabaseError {
 /// Errors returned by GetDatabases
 #[derive(Debug, PartialEq)]
 pub enum GetDatabasesError {
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6380,11 +6380,11 @@ impl Error for GetDatabasesError {
 /// Errors returned by GetDataflowGraph
 #[derive(Debug, PartialEq)]
 pub enum GetDataflowGraphError {
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6470,13 +6470,13 @@ impl Error for GetDataflowGraphError {
 /// Errors returned by GetDevEndpoint
 #[derive(Debug, PartialEq)]
 pub enum GetDevEndpointError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6566,13 +6566,13 @@ impl Error for GetDevEndpointError {
 /// Errors returned by GetDevEndpoints
 #[derive(Debug, PartialEq)]
 pub enum GetDevEndpointsError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6662,13 +6662,13 @@ impl Error for GetDevEndpointsError {
 /// Errors returned by GetJob
 #[derive(Debug, PartialEq)]
 pub enum GetJobError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6756,13 +6756,13 @@ impl Error for GetJobError {
 /// Errors returned by GetJobRun
 #[derive(Debug, PartialEq)]
 pub enum GetJobRunError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6850,13 +6850,13 @@ impl Error for GetJobRunError {
 /// Errors returned by GetJobRuns
 #[derive(Debug, PartialEq)]
 pub enum GetJobRunsError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6944,13 +6944,13 @@ impl Error for GetJobRunsError {
 /// Errors returned by GetJobs
 #[derive(Debug, PartialEq)]
 pub enum GetJobsError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7038,11 +7038,11 @@ impl Error for GetJobsError {
 /// Errors returned by GetMapping
 #[derive(Debug, PartialEq)]
 pub enum GetMappingError {
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7126,13 +7126,13 @@ impl Error for GetMappingError {
 /// Errors returned by GetPartition
 #[derive(Debug, PartialEq)]
 pub enum GetPartitionError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7222,13 +7222,13 @@ impl Error for GetPartitionError {
 /// Errors returned by GetPartitions
 #[derive(Debug, PartialEq)]
 pub enum GetPartitionsError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7318,11 +7318,11 @@ impl Error for GetPartitionsError {
 /// Errors returned by GetPlan
 #[derive(Debug, PartialEq)]
 pub enum GetPlanError {
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7406,13 +7406,13 @@ impl Error for GetPlanError {
 /// Errors returned by GetTable
 #[derive(Debug, PartialEq)]
 pub enum GetTableError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7500,13 +7500,13 @@ impl Error for GetTableError {
 /// Errors returned by GetTableVersions
 #[derive(Debug, PartialEq)]
 pub enum GetTableVersionsError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7596,13 +7596,13 @@ impl Error for GetTableVersionsError {
 /// Errors returned by GetTables
 #[derive(Debug, PartialEq)]
 pub enum GetTablesError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7690,13 +7690,13 @@ impl Error for GetTablesError {
 /// Errors returned by GetTrigger
 #[derive(Debug, PartialEq)]
 pub enum GetTriggerError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7784,13 +7784,13 @@ impl Error for GetTriggerError {
 /// Errors returned by GetTriggers
 #[derive(Debug, PartialEq)]
 pub enum GetTriggersError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7880,13 +7880,13 @@ impl Error for GetTriggersError {
 /// Errors returned by GetUserDefinedFunction
 #[derive(Debug, PartialEq)]
 pub enum GetUserDefinedFunctionError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7978,13 +7978,13 @@ impl Error for GetUserDefinedFunctionError {
 /// Errors returned by GetUserDefinedFunctions
 #[derive(Debug, PartialEq)]
 pub enum GetUserDefinedFunctionsError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8076,9 +8076,9 @@ impl Error for GetUserDefinedFunctionsError {
 /// Errors returned by ImportCatalogToGlue
 #[derive(Debug, PartialEq)]
 pub enum ImportCatalogToGlueError {
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8162,13 +8162,13 @@ impl Error for ImportCatalogToGlueError {
 /// Errors returned by ResetJobBookmark
 #[derive(Debug, PartialEq)]
 pub enum ResetJobBookmarkError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8258,11 +8258,11 @@ impl Error for ResetJobBookmarkError {
 /// Errors returned by StartCrawler
 #[derive(Debug, PartialEq)]
 pub enum StartCrawlerError {
-    ///<p>The operation cannot be performed because the crawler is already running.</p>
+    /// <p>The operation cannot be performed because the crawler is already running.</p>
     CrawlerRunning(String),
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8348,15 +8348,15 @@ impl Error for StartCrawlerError {
 /// Errors returned by StartCrawlerSchedule
 #[derive(Debug, PartialEq)]
 pub enum StartCrawlerScheduleError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>There is no applicable schedule.</p>
+    /// <p>There is no applicable schedule.</p>
     NoSchedule(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    ///<p>The specified scheduler is already running.</p>
+    /// <p>The specified scheduler is already running.</p>
     SchedulerRunning(String),
-    ///<p>The specified scheduler is transitioning.</p>
+    /// <p>The specified scheduler is transitioning.</p>
     SchedulerTransitioning(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8454,17 +8454,17 @@ impl Error for StartCrawlerScheduleError {
 /// Errors returned by StartJobRun
 #[derive(Debug, PartialEq)]
 pub enum StartJobRunError {
-    ///<p>Too many jobs are being run concurrently.</p>
+    /// <p>Too many jobs are being run concurrently.</p>
     ConcurrentRunsExceeded(String),
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    ///<p>A resource numerical limit was exceeded.</p>
+    /// <p>A resource numerical limit was exceeded.</p>
     ResourceNumberLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8562,17 +8562,17 @@ impl Error for StartJobRunError {
 /// Errors returned by StartTrigger
 #[derive(Debug, PartialEq)]
 pub enum StartTriggerError {
-    ///<p>Too many jobs are being run concurrently.</p>
+    /// <p>Too many jobs are being run concurrently.</p>
     ConcurrentRunsExceeded(String),
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    ///<p>A resource numerical limit was exceeded.</p>
+    /// <p>A resource numerical limit was exceeded.</p>
     ResourceNumberLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8670,13 +8670,13 @@ impl Error for StartTriggerError {
 /// Errors returned by StopCrawler
 #[derive(Debug, PartialEq)]
 pub enum StopCrawlerError {
-    ///<p>The specified crawler is not running.</p>
+    /// <p>The specified crawler is not running.</p>
     CrawlerNotRunning(String),
-    ///<p>The specified crawler is stopping.</p>
+    /// <p>The specified crawler is stopping.</p>
     CrawlerStopping(String),
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8766,13 +8766,13 @@ impl Error for StopCrawlerError {
 /// Errors returned by StopCrawlerSchedule
 #[derive(Debug, PartialEq)]
 pub enum StopCrawlerScheduleError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    ///<p>The specified scheduler is not running.</p>
+    /// <p>The specified scheduler is not running.</p>
     SchedulerNotRunning(String),
-    ///<p>The specified scheduler is transitioning.</p>
+    /// <p>The specified scheduler is transitioning.</p>
     SchedulerTransitioning(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8866,13 +8866,13 @@ impl Error for StopCrawlerScheduleError {
 /// Errors returned by StopTrigger
 #[derive(Debug, PartialEq)]
 pub enum StopTriggerError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8962,13 +8962,13 @@ impl Error for StopTriggerError {
 /// Errors returned by UpdateClassifier
 #[derive(Debug, PartialEq)]
 pub enum UpdateClassifierError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    ///<p>There was a version conflict.</p>
+    /// <p>There was a version conflict.</p>
     VersionMismatch(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9058,11 +9058,11 @@ impl Error for UpdateClassifierError {
 /// Errors returned by UpdateConnection
 #[derive(Debug, PartialEq)]
 pub enum UpdateConnectionError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9148,15 +9148,15 @@ impl Error for UpdateConnectionError {
 /// Errors returned by UpdateCrawler
 #[derive(Debug, PartialEq)]
 pub enum UpdateCrawlerError {
-    ///<p>The operation cannot be performed because the crawler is already running.</p>
+    /// <p>The operation cannot be performed because the crawler is already running.</p>
     CrawlerRunning(String),
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    ///<p>There was a version conflict.</p>
+    /// <p>There was a version conflict.</p>
     VersionMismatch(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9250,15 +9250,15 @@ impl Error for UpdateCrawlerError {
 /// Errors returned by UpdateCrawlerSchedule
 #[derive(Debug, PartialEq)]
 pub enum UpdateCrawlerScheduleError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    ///<p>The specified scheduler is transitioning.</p>
+    /// <p>The specified scheduler is transitioning.</p>
     SchedulerTransitioning(String),
-    ///<p>There was a version conflict.</p>
+    /// <p>There was a version conflict.</p>
     VersionMismatch(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9356,13 +9356,13 @@ impl Error for UpdateCrawlerScheduleError {
 /// Errors returned by UpdateDatabase
 #[derive(Debug, PartialEq)]
 pub enum UpdateDatabaseError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9452,13 +9452,13 @@ impl Error for UpdateDatabaseError {
 /// Errors returned by UpdateDevEndpoint
 #[derive(Debug, PartialEq)]
 pub enum UpdateDevEndpointError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9550,13 +9550,13 @@ impl Error for UpdateDevEndpointError {
 /// Errors returned by UpdateJob
 #[derive(Debug, PartialEq)]
 pub enum UpdateJobError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9644,13 +9644,13 @@ impl Error for UpdateJobError {
 /// Errors returned by UpdatePartition
 #[derive(Debug, PartialEq)]
 pub enum UpdatePartitionError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9740,15 +9740,15 @@ impl Error for UpdatePartitionError {
 /// Errors returned by UpdateTable
 #[derive(Debug, PartialEq)]
 pub enum UpdateTableError {
-    ///<p>Two processes are trying to modify a resource simultaneously.</p>
+    /// <p>Two processes are trying to modify a resource simultaneously.</p>
     ConcurrentModification(String),
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9842,13 +9842,13 @@ impl Error for UpdateTableError {
 /// Errors returned by UpdateTrigger
 #[derive(Debug, PartialEq)]
 pub enum UpdateTriggerError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9938,13 +9938,13 @@ impl Error for UpdateTriggerError {
 /// Errors returned by UpdateUserDefinedFunction
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserDefinedFunctionError {
-    ///<p>A specified entity does not exist</p>
+    /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
-    ///<p>An internal service error occurred.</p>
+    /// <p>An internal service error occurred.</p>
     InternalService(String),
-    ///<p>The input provided was not valid.</p>
+    /// <p>The input provided was not valid.</p>
     InvalidInput(String),
-    ///<p>The operation timed out.</p>
+    /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10037,412 +10037,412 @@ impl Error for UpdateUserDefinedFunctionError {
 }
 /// Trait representing the capabilities of the AWS Glue API. AWS Glue clients implement this trait.
 pub trait Glue {
-    #[doc = "<p>Creates one or more partitions in a batch operation.</p>"]
+    /// <p>Creates one or more partitions in a batch operation.</p>
     fn batch_create_partition(
         &self,
         input: &BatchCreatePartitionRequest,
     ) -> Result<BatchCreatePartitionResponse, BatchCreatePartitionError>;
 
-    #[doc = "<p>Deletes a list of connection definitions from the Data Catalog.</p>"]
+    /// <p>Deletes a list of connection definitions from the Data Catalog.</p>
     fn batch_delete_connection(
         &self,
         input: &BatchDeleteConnectionRequest,
     ) -> Result<BatchDeleteConnectionResponse, BatchDeleteConnectionError>;
 
-    #[doc = "<p>Deletes one or more partitions in a batch operation.</p>"]
+    /// <p>Deletes one or more partitions in a batch operation.</p>
     fn batch_delete_partition(
         &self,
         input: &BatchDeletePartitionRequest,
     ) -> Result<BatchDeletePartitionResponse, BatchDeletePartitionError>;
 
-    #[doc = "<p>Deletes multiple tables at once.</p>"]
+    /// <p>Deletes multiple tables at once.</p>
     fn batch_delete_table(
         &self,
         input: &BatchDeleteTableRequest,
     ) -> Result<BatchDeleteTableResponse, BatchDeleteTableError>;
 
-    #[doc = "<p>Retrieves partitions in a batch request.</p>"]
+    /// <p>Retrieves partitions in a batch request.</p>
     fn batch_get_partition(
         &self,
         input: &BatchGetPartitionRequest,
     ) -> Result<BatchGetPartitionResponse, BatchGetPartitionError>;
 
-    #[doc = "<p>Creates a <code>Classifier</code> in the user's account.</p>"]
+    /// <p>Creates a <code>Classifier</code> in the user's account.</p>
     fn create_classifier(
         &self,
         input: &CreateClassifierRequest,
     ) -> Result<CreateClassifierResponse, CreateClassifierError>;
 
-    #[doc = "<p>Creates a connection definition in the Data Catalog.</p>"]
+    /// <p>Creates a connection definition in the Data Catalog.</p>
     fn create_connection(
         &self,
         input: &CreateConnectionRequest,
     ) -> Result<CreateConnectionResponse, CreateConnectionError>;
 
-    #[doc="<p>Creates a new <code>Crawler</code> with specified targets, role, configuration, and optional schedule. At least one crawl target must be specified, in either the <i>s3Targets</i> or the <i>jdbcTargets</i> field.</p>"]
+    /// <p>Creates a new <code>Crawler</code> with specified targets, role, configuration, and optional schedule. At least one crawl target must be specified, in either the <i>s3Targets</i> or the <i>jdbcTargets</i> field.</p>
     fn create_crawler(
         &self,
         input: &CreateCrawlerRequest,
     ) -> Result<CreateCrawlerResponse, CreateCrawlerError>;
 
-    #[doc = "<p>Creates a new database in a Data Catalog.</p>"]
+    /// <p>Creates a new database in a Data Catalog.</p>
     fn create_database(
         &self,
         input: &CreateDatabaseRequest,
     ) -> Result<CreateDatabaseResponse, CreateDatabaseError>;
 
-    #[doc = "<p>Creates a new DevEndpoint.</p>"]
+    /// <p>Creates a new DevEndpoint.</p>
     fn create_dev_endpoint(
         &self,
         input: &CreateDevEndpointRequest,
     ) -> Result<CreateDevEndpointResponse, CreateDevEndpointError>;
 
-    #[doc = "<p>Creates a new job.</p>"]
+    /// <p>Creates a new job.</p>
     fn create_job(&self, input: &CreateJobRequest) -> Result<CreateJobResponse, CreateJobError>;
 
-    #[doc = "<p>Creates a new partition.</p>"]
+    /// <p>Creates a new partition.</p>
     fn create_partition(
         &self,
         input: &CreatePartitionRequest,
     ) -> Result<CreatePartitionResponse, CreatePartitionError>;
 
-    #[doc = "<p>Transforms a directed acyclic graph (DAG) into a Python script.</p>"]
+    /// <p>Transforms a directed acyclic graph (DAG) into a Python script.</p>
     fn create_script(
         &self,
         input: &CreateScriptRequest,
     ) -> Result<CreateScriptResponse, CreateScriptError>;
 
-    #[doc = "<p>Creates a new table definition in the Data Catalog.</p>"]
+    /// <p>Creates a new table definition in the Data Catalog.</p>
     fn create_table(
         &self,
         input: &CreateTableRequest,
     ) -> Result<CreateTableResponse, CreateTableError>;
 
-    #[doc = "<p>Creates a new trigger.</p>"]
+    /// <p>Creates a new trigger.</p>
     fn create_trigger(
         &self,
         input: &CreateTriggerRequest,
     ) -> Result<CreateTriggerResponse, CreateTriggerError>;
 
-    #[doc = "<p>Creates a new function definition in the Data Catalog.</p>"]
+    /// <p>Creates a new function definition in the Data Catalog.</p>
     fn create_user_defined_function(
         &self,
         input: &CreateUserDefinedFunctionRequest,
     ) -> Result<CreateUserDefinedFunctionResponse, CreateUserDefinedFunctionError>;
 
-    #[doc = "<p>Removes a <code>Classifier</code> from the metadata store.</p>"]
+    /// <p>Removes a <code>Classifier</code> from the metadata store.</p>
     fn delete_classifier(
         &self,
         input: &DeleteClassifierRequest,
     ) -> Result<DeleteClassifierResponse, DeleteClassifierError>;
 
-    #[doc = "<p>Deletes a connection from the Data Catalog.</p>"]
+    /// <p>Deletes a connection from the Data Catalog.</p>
     fn delete_connection(
         &self,
         input: &DeleteConnectionRequest,
     ) -> Result<DeleteConnectionResponse, DeleteConnectionError>;
 
-    #[doc="<p>Removes a specified <code>Crawler</code> from the metadata store, unless the <code>Crawler</code> state is <code>RUNNING</code>.</p>"]
+    /// <p>Removes a specified <code>Crawler</code> from the metadata store, unless the <code>Crawler</code> state is <code>RUNNING</code>.</p>
     fn delete_crawler(
         &self,
         input: &DeleteCrawlerRequest,
     ) -> Result<DeleteCrawlerResponse, DeleteCrawlerError>;
 
-    #[doc = "<p>Removes a specified Database from a Data Catalog.</p>"]
+    /// <p>Removes a specified Database from a Data Catalog.</p>
     fn delete_database(
         &self,
         input: &DeleteDatabaseRequest,
     ) -> Result<DeleteDatabaseResponse, DeleteDatabaseError>;
 
-    #[doc = "<p>Deletes a specified DevEndpoint.</p>"]
+    /// <p>Deletes a specified DevEndpoint.</p>
     fn delete_dev_endpoint(
         &self,
         input: &DeleteDevEndpointRequest,
     ) -> Result<DeleteDevEndpointResponse, DeleteDevEndpointError>;
 
-    #[doc = "<p>Deletes a specified job.</p>"]
+    /// <p>Deletes a specified job.</p>
     fn delete_job(&self, input: &DeleteJobRequest) -> Result<DeleteJobResponse, DeleteJobError>;
 
-    #[doc = "<p>Deletes a specified partition.</p>"]
+    /// <p>Deletes a specified partition.</p>
     fn delete_partition(
         &self,
         input: &DeletePartitionRequest,
     ) -> Result<DeletePartitionResponse, DeletePartitionError>;
 
-    #[doc = "<p>Removes a table definition from the Data Catalog.</p>"]
+    /// <p>Removes a table definition from the Data Catalog.</p>
     fn delete_table(
         &self,
         input: &DeleteTableRequest,
     ) -> Result<DeleteTableResponse, DeleteTableError>;
 
-    #[doc = "<p>Deletes a specified trigger.</p>"]
+    /// <p>Deletes a specified trigger.</p>
     fn delete_trigger(
         &self,
         input: &DeleteTriggerRequest,
     ) -> Result<DeleteTriggerResponse, DeleteTriggerError>;
 
-    #[doc = "<p>Deletes an existing function definition from the Data Catalog.</p>"]
+    /// <p>Deletes an existing function definition from the Data Catalog.</p>
     fn delete_user_defined_function(
         &self,
         input: &DeleteUserDefinedFunctionRequest,
     ) -> Result<DeleteUserDefinedFunctionResponse, DeleteUserDefinedFunctionError>;
 
-    #[doc = "<p>Retrieves the status of a migration operation.</p>"]
+    /// <p>Retrieves the status of a migration operation.</p>
     fn get_catalog_import_status(
         &self,
         input: &GetCatalogImportStatusRequest,
     ) -> Result<GetCatalogImportStatusResponse, GetCatalogImportStatusError>;
 
-    #[doc = "<p>Retrieve a <code>Classifier</code> by name.</p>"]
+    /// <p>Retrieve a <code>Classifier</code> by name.</p>
     fn get_classifier(
         &self,
         input: &GetClassifierRequest,
     ) -> Result<GetClassifierResponse, GetClassifierError>;
 
-    #[doc = "<p>Lists all Classifier objects in the metadata store.</p>"]
+    /// <p>Lists all Classifier objects in the metadata store.</p>
     fn get_classifiers(
         &self,
         input: &GetClassifiersRequest,
     ) -> Result<GetClassifiersResponse, GetClassifiersError>;
 
-    #[doc = "<p>Retrieves a connection definition from the Data Catalog.</p>"]
+    /// <p>Retrieves a connection definition from the Data Catalog.</p>
     fn get_connection(
         &self,
         input: &GetConnectionRequest,
     ) -> Result<GetConnectionResponse, GetConnectionError>;
 
-    #[doc = "<p>Retrieves a list of connection definitions from the Data Catalog.</p>"]
+    /// <p>Retrieves a list of connection definitions from the Data Catalog.</p>
     fn get_connections(
         &self,
         input: &GetConnectionsRequest,
     ) -> Result<GetConnectionsResponse, GetConnectionsError>;
 
-    #[doc = "<p>Retrieves metadata for a specified <code>Crawler</code>.</p>"]
+    /// <p>Retrieves metadata for a specified <code>Crawler</code>.</p>
     fn get_crawler(&self, input: &GetCrawlerRequest)
         -> Result<GetCrawlerResponse, GetCrawlerError>;
 
-    #[doc = "<p>Retrieves metrics about specified crawlers.</p>"]
+    /// <p>Retrieves metrics about specified crawlers.</p>
     fn get_crawler_metrics(
         &self,
         input: &GetCrawlerMetricsRequest,
     ) -> Result<GetCrawlerMetricsResponse, GetCrawlerMetricsError>;
 
-    #[doc="<p>Retrieves metadata for all <code>Crawlers</code> defined in the customer account.</p>"]
+    /// <p>Retrieves metadata for all <code>Crawlers</code> defined in the customer account.</p>
     fn get_crawlers(
         &self,
         input: &GetCrawlersRequest,
     ) -> Result<GetCrawlersResponse, GetCrawlersError>;
 
-    #[doc = "<p>Retrieves the definition of a specified database.</p>"]
+    /// <p>Retrieves the definition of a specified database.</p>
     fn get_database(
         &self,
         input: &GetDatabaseRequest,
     ) -> Result<GetDatabaseResponse, GetDatabaseError>;
 
-    #[doc = "<p>Retrieves all Databases defined in a given Data Catalog.</p>"]
+    /// <p>Retrieves all Databases defined in a given Data Catalog.</p>
     fn get_databases(
         &self,
         input: &GetDatabasesRequest,
     ) -> Result<GetDatabasesResponse, GetDatabasesError>;
 
-    #[doc = "<p>Transforms a Python script into a directed acyclic graph (DAG). </p>"]
+    /// <p>Transforms a Python script into a directed acyclic graph (DAG). </p>
     fn get_dataflow_graph(
         &self,
         input: &GetDataflowGraphRequest,
     ) -> Result<GetDataflowGraphResponse, GetDataflowGraphError>;
 
-    #[doc = "<p>Retrieves information about a specified DevEndpoint.</p>"]
+    /// <p>Retrieves information about a specified DevEndpoint.</p>
     fn get_dev_endpoint(
         &self,
         input: &GetDevEndpointRequest,
     ) -> Result<GetDevEndpointResponse, GetDevEndpointError>;
 
-    #[doc = "<p>Retrieves all the DevEndpoints in this AWS account.</p>"]
+    /// <p>Retrieves all the DevEndpoints in this AWS account.</p>
     fn get_dev_endpoints(
         &self,
         input: &GetDevEndpointsRequest,
     ) -> Result<GetDevEndpointsResponse, GetDevEndpointsError>;
 
-    #[doc = "<p>Retrieves an existing job definition.</p>"]
+    /// <p>Retrieves an existing job definition.</p>
     fn get_job(&self, input: &GetJobRequest) -> Result<GetJobResponse, GetJobError>;
 
-    #[doc = "<p>Retrieves the metadata for a given job run.</p>"]
+    /// <p>Retrieves the metadata for a given job run.</p>
     fn get_job_run(&self, input: &GetJobRunRequest) -> Result<GetJobRunResponse, GetJobRunError>;
 
-    #[doc = "<p>Retrieves metadata for all runs of a given job.</p>"]
+    /// <p>Retrieves metadata for all runs of a given job.</p>
     fn get_job_runs(
         &self,
         input: &GetJobRunsRequest,
     ) -> Result<GetJobRunsResponse, GetJobRunsError>;
 
-    #[doc = "<p>Retrieves all current jobs.</p>"]
+    /// <p>Retrieves all current jobs.</p>
     fn get_jobs(&self, input: &GetJobsRequest) -> Result<GetJobsResponse, GetJobsError>;
 
-    #[doc = "<p>Creates mappings.</p>"]
+    /// <p>Creates mappings.</p>
     fn get_mapping(&self, input: &GetMappingRequest)
         -> Result<GetMappingResponse, GetMappingError>;
 
-    #[doc = "<p>Retrieves information about a specified partition.</p>"]
+    /// <p>Retrieves information about a specified partition.</p>
     fn get_partition(
         &self,
         input: &GetPartitionRequest,
     ) -> Result<GetPartitionResponse, GetPartitionError>;
 
-    #[doc = "<p>Retrieves information about the partitions in a table.</p>"]
+    /// <p>Retrieves information about the partitions in a table.</p>
     fn get_partitions(
         &self,
         input: &GetPartitionsRequest,
     ) -> Result<GetPartitionsResponse, GetPartitionsError>;
 
-    #[doc = "<p>Gets a Python script to perform a specified mapping.</p>"]
+    /// <p>Gets a Python script to perform a specified mapping.</p>
     fn get_plan(&self, input: &GetPlanRequest) -> Result<GetPlanResponse, GetPlanError>;
 
-    #[doc="<p>Retrieves the <code>Table</code> definition in a Data Catalog for a specified table.</p>"]
+    /// <p>Retrieves the <code>Table</code> definition in a Data Catalog for a specified table.</p>
     fn get_table(&self, input: &GetTableRequest) -> Result<GetTableResponse, GetTableError>;
 
-    #[doc="<p>Retrieves a list of strings that identify available versions of a specified table.</p>"]
+    /// <p>Retrieves a list of strings that identify available versions of a specified table.</p>
     fn get_table_versions(
         &self,
         input: &GetTableVersionsRequest,
     ) -> Result<GetTableVersionsResponse, GetTableVersionsError>;
 
-    #[doc="<p>Retrieves the definitions of some or all of the tables in a given <code>Database</code>.</p>"]
+    /// <p>Retrieves the definitions of some or all of the tables in a given <code>Database</code>.</p>
     fn get_tables(&self, input: &GetTablesRequest) -> Result<GetTablesResponse, GetTablesError>;
 
-    #[doc = "<p>Retrieves the definition of a trigger.</p>"]
+    /// <p>Retrieves the definition of a trigger.</p>
     fn get_trigger(&self, input: &GetTriggerRequest)
         -> Result<GetTriggerResponse, GetTriggerError>;
 
-    #[doc = "<p>Gets all the triggers associated with a job.</p>"]
+    /// <p>Gets all the triggers associated with a job.</p>
     fn get_triggers(
         &self,
         input: &GetTriggersRequest,
     ) -> Result<GetTriggersResponse, GetTriggersError>;
 
-    #[doc = "<p>Retrieves a specified function definition from the Data Catalog.</p>"]
+    /// <p>Retrieves a specified function definition from the Data Catalog.</p>
     fn get_user_defined_function(
         &self,
         input: &GetUserDefinedFunctionRequest,
     ) -> Result<GetUserDefinedFunctionResponse, GetUserDefinedFunctionError>;
 
-    #[doc = "<p>Retrieves a multiple function definitions from the Data Catalog.</p>"]
+    /// <p>Retrieves a multiple function definitions from the Data Catalog.</p>
     fn get_user_defined_functions(
         &self,
         input: &GetUserDefinedFunctionsRequest,
     ) -> Result<GetUserDefinedFunctionsResponse, GetUserDefinedFunctionsError>;
 
-    #[doc = "<p>Imports an existing Athena Data Catalog to AWS Glue</p>"]
+    /// <p>Imports an existing Athena Data Catalog to AWS Glue</p>
     fn import_catalog_to_glue(
         &self,
         input: &ImportCatalogToGlueRequest,
     ) -> Result<ImportCatalogToGlueResponse, ImportCatalogToGlueError>;
 
-    #[doc = "<p>Resets a bookmark entry.</p>"]
+    /// <p>Resets a bookmark entry.</p>
     fn reset_job_bookmark(
         &self,
         input: &ResetJobBookmarkRequest,
     ) -> Result<ResetJobBookmarkResponse, ResetJobBookmarkError>;
 
-    #[doc="<p>Starts a crawl using the specified <code>Crawler</code>, regardless of what is scheduled. If the <code>Crawler</code> is already running, does nothing.</p>"]
+    /// <p>Starts a crawl using the specified <code>Crawler</code>, regardless of what is scheduled. If the <code>Crawler</code> is already running, does nothing.</p>
     fn start_crawler(
         &self,
         input: &StartCrawlerRequest,
     ) -> Result<StartCrawlerResponse, StartCrawlerError>;
 
-    #[doc="<p>Changes the schedule state of the specified crawler to <code>SCHEDULED</code>, unless the crawler is already running or the schedule state is already <code>SCHEDULED</code>.</p>"]
+    /// <p>Changes the schedule state of the specified crawler to <code>SCHEDULED</code>, unless the crawler is already running or the schedule state is already <code>SCHEDULED</code>.</p>
     fn start_crawler_schedule(
         &self,
         input: &StartCrawlerScheduleRequest,
     ) -> Result<StartCrawlerScheduleResponse, StartCrawlerScheduleError>;
 
-    #[doc = "<p>Runs a job.</p>"]
+    /// <p>Runs a job.</p>
     fn start_job_run(
         &self,
         input: &StartJobRunRequest,
     ) -> Result<StartJobRunResponse, StartJobRunError>;
 
-    #[doc = "<p>Starts an existing trigger.</p>"]
+    /// <p>Starts an existing trigger.</p>
     fn start_trigger(
         &self,
         input: &StartTriggerRequest,
     ) -> Result<StartTriggerResponse, StartTriggerError>;
 
-    #[doc = "<p>If the specified <code>Crawler</code> is running, stops the crawl.</p>"]
+    /// <p>If the specified <code>Crawler</code> is running, stops the crawl.</p>
     fn stop_crawler(
         &self,
         input: &StopCrawlerRequest,
     ) -> Result<StopCrawlerResponse, StopCrawlerError>;
 
-    #[doc="<p>Sets the schedule state of the specified crawler to <code>NOT_SCHEDULED</code>, but does not stop the crawler if it is already running.</p>"]
+    /// <p>Sets the schedule state of the specified crawler to <code>NOT_SCHEDULED</code>, but does not stop the crawler if it is already running.</p>
     fn stop_crawler_schedule(
         &self,
         input: &StopCrawlerScheduleRequest,
     ) -> Result<StopCrawlerScheduleResponse, StopCrawlerScheduleError>;
 
-    #[doc = "<p>Stops a specified trigger.</p>"]
+    /// <p>Stops a specified trigger.</p>
     fn stop_trigger(
         &self,
         input: &StopTriggerRequest,
     ) -> Result<StopTriggerResponse, StopTriggerError>;
 
-    #[doc = "<p>Modifies an existing <code>Classifier</code>.</p>"]
+    /// <p>Modifies an existing <code>Classifier</code>.</p>
     fn update_classifier(
         &self,
         input: &UpdateClassifierRequest,
     ) -> Result<UpdateClassifierResponse, UpdateClassifierError>;
 
-    #[doc = "<p>Updates a connection definition in the Data Catalog.</p>"]
+    /// <p>Updates a connection definition in the Data Catalog.</p>
     fn update_connection(
         &self,
         input: &UpdateConnectionRequest,
     ) -> Result<UpdateConnectionResponse, UpdateConnectionError>;
 
-    #[doc="<p>Updates a <code>Crawler</code>. If a <code>Crawler</code> is running, you must stop it using <code>StopCrawler</code> before updating it.</p>"]
+    /// <p>Updates a <code>Crawler</code>. If a <code>Crawler</code> is running, you must stop it using <code>StopCrawler</code> before updating it.</p>
     fn update_crawler(
         &self,
         input: &UpdateCrawlerRequest,
     ) -> Result<UpdateCrawlerResponse, UpdateCrawlerError>;
 
-    #[doc = "<p>Updates the schedule of a crawler using a Cron expression. </p>"]
+    /// <p>Updates the schedule of a crawler using a Cron expression. </p>
     fn update_crawler_schedule(
         &self,
         input: &UpdateCrawlerScheduleRequest,
     ) -> Result<UpdateCrawlerScheduleResponse, UpdateCrawlerScheduleError>;
 
-    #[doc = "<p>Updates an existing database definition in a Data Catalog.</p>"]
+    /// <p>Updates an existing database definition in a Data Catalog.</p>
     fn update_database(
         &self,
         input: &UpdateDatabaseRequest,
     ) -> Result<UpdateDatabaseResponse, UpdateDatabaseError>;
 
-    #[doc = "<p>Updates a specified DevEndpoint.</p>"]
+    /// <p>Updates a specified DevEndpoint.</p>
     fn update_dev_endpoint(
         &self,
         input: &UpdateDevEndpointRequest,
     ) -> Result<UpdateDevEndpointResponse, UpdateDevEndpointError>;
 
-    #[doc = "<p>Updates an existing job definition.</p>"]
+    /// <p>Updates an existing job definition.</p>
     fn update_job(&self, input: &UpdateJobRequest) -> Result<UpdateJobResponse, UpdateJobError>;
 
-    #[doc = "<p>Updates a partition.</p>"]
+    /// <p>Updates a partition.</p>
     fn update_partition(
         &self,
         input: &UpdatePartitionRequest,
     ) -> Result<UpdatePartitionResponse, UpdatePartitionError>;
 
-    #[doc = "<p>Updates a metadata table in the Data Catalog.</p>"]
+    /// <p>Updates a metadata table in the Data Catalog.</p>
     fn update_table(
         &self,
         input: &UpdateTableRequest,
     ) -> Result<UpdateTableResponse, UpdateTableError>;
 
-    #[doc = "<p>Updates a trigger definition.</p>"]
+    /// <p>Updates a trigger definition.</p>
     fn update_trigger(
         &self,
         input: &UpdateTriggerRequest,
     ) -> Result<UpdateTriggerResponse, UpdateTriggerError>;
 
-    #[doc = "<p>Updates an existing function definition in the Data Catalog.</p>"]
+    /// <p>Updates an existing function definition in the Data Catalog.</p>
     fn update_user_defined_function(
         &self,
         input: &UpdateUserDefinedFunctionRequest,
@@ -10478,7 +10478,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc = "<p>Creates one or more partitions in a batch operation.</p>"]
+    /// <p>Creates one or more partitions in a batch operation.</p>
     fn batch_create_partition(
         &self,
         input: &BatchCreatePartitionRequest,
@@ -10512,7 +10512,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a list of connection definitions from the Data Catalog.</p>"]
+    /// <p>Deletes a list of connection definitions from the Data Catalog.</p>
     fn batch_delete_connection(
         &self,
         input: &BatchDeleteConnectionRequest,
@@ -10546,7 +10546,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes one or more partitions in a batch operation.</p>"]
+    /// <p>Deletes one or more partitions in a batch operation.</p>
     fn batch_delete_partition(
         &self,
         input: &BatchDeletePartitionRequest,
@@ -10580,7 +10580,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes multiple tables at once.</p>"]
+    /// <p>Deletes multiple tables at once.</p>
     fn batch_delete_table(
         &self,
         input: &BatchDeleteTableRequest,
@@ -10614,7 +10614,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves partitions in a batch request.</p>"]
+    /// <p>Retrieves partitions in a batch request.</p>
     fn batch_get_partition(
         &self,
         input: &BatchGetPartitionRequest,
@@ -10648,7 +10648,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a <code>Classifier</code> in the user's account.</p>"]
+    /// <p>Creates a <code>Classifier</code> in the user's account.</p>
     fn create_classifier(
         &self,
         input: &CreateClassifierRequest,
@@ -10682,7 +10682,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a connection definition in the Data Catalog.</p>"]
+    /// <p>Creates a connection definition in the Data Catalog.</p>
     fn create_connection(
         &self,
         input: &CreateConnectionRequest,
@@ -10716,7 +10716,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new <code>Crawler</code> with specified targets, role, configuration, and optional schedule. At least one crawl target must be specified, in either the <i>s3Targets</i> or the <i>jdbcTargets</i> field.</p>"]
+    /// <p>Creates a new <code>Crawler</code> with specified targets, role, configuration, and optional schedule. At least one crawl target must be specified, in either the <i>s3Targets</i> or the <i>jdbcTargets</i> field.</p>
     fn create_crawler(
         &self,
         input: &CreateCrawlerRequest,
@@ -10750,7 +10750,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a new database in a Data Catalog.</p>"]
+    /// <p>Creates a new database in a Data Catalog.</p>
     fn create_database(
         &self,
         input: &CreateDatabaseRequest,
@@ -10784,7 +10784,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a new DevEndpoint.</p>"]
+    /// <p>Creates a new DevEndpoint.</p>
     fn create_dev_endpoint(
         &self,
         input: &CreateDevEndpointRequest,
@@ -10818,7 +10818,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a new job.</p>"]
+    /// <p>Creates a new job.</p>
     fn create_job(&self, input: &CreateJobRequest) -> Result<CreateJobResponse, CreateJobError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
@@ -10849,7 +10849,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a new partition.</p>"]
+    /// <p>Creates a new partition.</p>
     fn create_partition(
         &self,
         input: &CreatePartitionRequest,
@@ -10883,7 +10883,7 @@ where
         }
     }
 
-    #[doc = "<p>Transforms a directed acyclic graph (DAG) into a Python script.</p>"]
+    /// <p>Transforms a directed acyclic graph (DAG) into a Python script.</p>
     fn create_script(
         &self,
         input: &CreateScriptRequest,
@@ -10917,7 +10917,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a new table definition in the Data Catalog.</p>"]
+    /// <p>Creates a new table definition in the Data Catalog.</p>
     fn create_table(
         &self,
         input: &CreateTableRequest,
@@ -10951,7 +10951,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a new trigger.</p>"]
+    /// <p>Creates a new trigger.</p>
     fn create_trigger(
         &self,
         input: &CreateTriggerRequest,
@@ -10985,7 +10985,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a new function definition in the Data Catalog.</p>"]
+    /// <p>Creates a new function definition in the Data Catalog.</p>
     fn create_user_defined_function(
         &self,
         input: &CreateUserDefinedFunctionRequest,
@@ -11019,7 +11019,7 @@ where
         }
     }
 
-    #[doc = "<p>Removes a <code>Classifier</code> from the metadata store.</p>"]
+    /// <p>Removes a <code>Classifier</code> from the metadata store.</p>
     fn delete_classifier(
         &self,
         input: &DeleteClassifierRequest,
@@ -11053,7 +11053,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a connection from the Data Catalog.</p>"]
+    /// <p>Deletes a connection from the Data Catalog.</p>
     fn delete_connection(
         &self,
         input: &DeleteConnectionRequest,
@@ -11087,7 +11087,7 @@ where
         }
     }
 
-    #[doc="<p>Removes a specified <code>Crawler</code> from the metadata store, unless the <code>Crawler</code> state is <code>RUNNING</code>.</p>"]
+    /// <p>Removes a specified <code>Crawler</code> from the metadata store, unless the <code>Crawler</code> state is <code>RUNNING</code>.</p>
     fn delete_crawler(
         &self,
         input: &DeleteCrawlerRequest,
@@ -11121,7 +11121,7 @@ where
         }
     }
 
-    #[doc = "<p>Removes a specified Database from a Data Catalog.</p>"]
+    /// <p>Removes a specified Database from a Data Catalog.</p>
     fn delete_database(
         &self,
         input: &DeleteDatabaseRequest,
@@ -11155,7 +11155,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a specified DevEndpoint.</p>"]
+    /// <p>Deletes a specified DevEndpoint.</p>
     fn delete_dev_endpoint(
         &self,
         input: &DeleteDevEndpointRequest,
@@ -11189,7 +11189,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a specified job.</p>"]
+    /// <p>Deletes a specified job.</p>
     fn delete_job(&self, input: &DeleteJobRequest) -> Result<DeleteJobResponse, DeleteJobError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
@@ -11220,7 +11220,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a specified partition.</p>"]
+    /// <p>Deletes a specified partition.</p>
     fn delete_partition(
         &self,
         input: &DeletePartitionRequest,
@@ -11254,7 +11254,7 @@ where
         }
     }
 
-    #[doc = "<p>Removes a table definition from the Data Catalog.</p>"]
+    /// <p>Removes a table definition from the Data Catalog.</p>
     fn delete_table(
         &self,
         input: &DeleteTableRequest,
@@ -11288,7 +11288,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a specified trigger.</p>"]
+    /// <p>Deletes a specified trigger.</p>
     fn delete_trigger(
         &self,
         input: &DeleteTriggerRequest,
@@ -11322,7 +11322,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes an existing function definition from the Data Catalog.</p>"]
+    /// <p>Deletes an existing function definition from the Data Catalog.</p>
     fn delete_user_defined_function(
         &self,
         input: &DeleteUserDefinedFunctionRequest,
@@ -11356,7 +11356,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves the status of a migration operation.</p>"]
+    /// <p>Retrieves the status of a migration operation.</p>
     fn get_catalog_import_status(
         &self,
         input: &GetCatalogImportStatusRequest,
@@ -11390,7 +11390,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieve a <code>Classifier</code> by name.</p>"]
+    /// <p>Retrieve a <code>Classifier</code> by name.</p>
     fn get_classifier(
         &self,
         input: &GetClassifierRequest,
@@ -11424,7 +11424,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists all Classifier objects in the metadata store.</p>"]
+    /// <p>Lists all Classifier objects in the metadata store.</p>
     fn get_classifiers(
         &self,
         input: &GetClassifiersRequest,
@@ -11458,7 +11458,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves a connection definition from the Data Catalog.</p>"]
+    /// <p>Retrieves a connection definition from the Data Catalog.</p>
     fn get_connection(
         &self,
         input: &GetConnectionRequest,
@@ -11492,7 +11492,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves a list of connection definitions from the Data Catalog.</p>"]
+    /// <p>Retrieves a list of connection definitions from the Data Catalog.</p>
     fn get_connections(
         &self,
         input: &GetConnectionsRequest,
@@ -11526,7 +11526,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves metadata for a specified <code>Crawler</code>.</p>"]
+    /// <p>Retrieves metadata for a specified <code>Crawler</code>.</p>
     fn get_crawler(
         &self,
         input: &GetCrawlerRequest,
@@ -11560,7 +11560,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves metrics about specified crawlers.</p>"]
+    /// <p>Retrieves metrics about specified crawlers.</p>
     fn get_crawler_metrics(
         &self,
         input: &GetCrawlerMetricsRequest,
@@ -11594,7 +11594,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves metadata for all <code>Crawlers</code> defined in the customer account.</p>"]
+    /// <p>Retrieves metadata for all <code>Crawlers</code> defined in the customer account.</p>
     fn get_crawlers(
         &self,
         input: &GetCrawlersRequest,
@@ -11628,7 +11628,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves the definition of a specified database.</p>"]
+    /// <p>Retrieves the definition of a specified database.</p>
     fn get_database(
         &self,
         input: &GetDatabaseRequest,
@@ -11662,7 +11662,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves all Databases defined in a given Data Catalog.</p>"]
+    /// <p>Retrieves all Databases defined in a given Data Catalog.</p>
     fn get_databases(
         &self,
         input: &GetDatabasesRequest,
@@ -11696,7 +11696,7 @@ where
         }
     }
 
-    #[doc = "<p>Transforms a Python script into a directed acyclic graph (DAG). </p>"]
+    /// <p>Transforms a Python script into a directed acyclic graph (DAG). </p>
     fn get_dataflow_graph(
         &self,
         input: &GetDataflowGraphRequest,
@@ -11730,7 +11730,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves information about a specified DevEndpoint.</p>"]
+    /// <p>Retrieves information about a specified DevEndpoint.</p>
     fn get_dev_endpoint(
         &self,
         input: &GetDevEndpointRequest,
@@ -11764,7 +11764,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves all the DevEndpoints in this AWS account.</p>"]
+    /// <p>Retrieves all the DevEndpoints in this AWS account.</p>
     fn get_dev_endpoints(
         &self,
         input: &GetDevEndpointsRequest,
@@ -11798,7 +11798,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves an existing job definition.</p>"]
+    /// <p>Retrieves an existing job definition.</p>
     fn get_job(&self, input: &GetJobRequest) -> Result<GetJobResponse, GetJobError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
@@ -11830,7 +11830,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves the metadata for a given job run.</p>"]
+    /// <p>Retrieves the metadata for a given job run.</p>
     fn get_job_run(&self, input: &GetJobRunRequest) -> Result<GetJobRunResponse, GetJobRunError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
@@ -11861,7 +11861,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves metadata for all runs of a given job.</p>"]
+    /// <p>Retrieves metadata for all runs of a given job.</p>
     fn get_job_runs(
         &self,
         input: &GetJobRunsRequest,
@@ -11895,7 +11895,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves all current jobs.</p>"]
+    /// <p>Retrieves all current jobs.</p>
     fn get_jobs(&self, input: &GetJobsRequest) -> Result<GetJobsResponse, GetJobsError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
@@ -11928,7 +11928,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates mappings.</p>"]
+    /// <p>Creates mappings.</p>
     fn get_mapping(
         &self,
         input: &GetMappingRequest,
@@ -11962,7 +11962,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves information about a specified partition.</p>"]
+    /// <p>Retrieves information about a specified partition.</p>
     fn get_partition(
         &self,
         input: &GetPartitionRequest,
@@ -11996,7 +11996,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves information about the partitions in a table.</p>"]
+    /// <p>Retrieves information about the partitions in a table.</p>
     fn get_partitions(
         &self,
         input: &GetPartitionsRequest,
@@ -12030,7 +12030,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets a Python script to perform a specified mapping.</p>"]
+    /// <p>Gets a Python script to perform a specified mapping.</p>
     fn get_plan(&self, input: &GetPlanRequest) -> Result<GetPlanResponse, GetPlanError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
@@ -12063,7 +12063,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves the <code>Table</code> definition in a Data Catalog for a specified table.</p>"]
+    /// <p>Retrieves the <code>Table</code> definition in a Data Catalog for a specified table.</p>
     fn get_table(&self, input: &GetTableRequest) -> Result<GetTableResponse, GetTableError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
@@ -12094,7 +12094,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves a list of strings that identify available versions of a specified table.</p>"]
+    /// <p>Retrieves a list of strings that identify available versions of a specified table.</p>
     fn get_table_versions(
         &self,
         input: &GetTableVersionsRequest,
@@ -12128,7 +12128,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves the definitions of some or all of the tables in a given <code>Database</code>.</p>"]
+    /// <p>Retrieves the definitions of some or all of the tables in a given <code>Database</code>.</p>
     fn get_tables(&self, input: &GetTablesRequest) -> Result<GetTablesResponse, GetTablesError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
@@ -12159,7 +12159,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves the definition of a trigger.</p>"]
+    /// <p>Retrieves the definition of a trigger.</p>
     fn get_trigger(
         &self,
         input: &GetTriggerRequest,
@@ -12193,7 +12193,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets all the triggers associated with a job.</p>"]
+    /// <p>Gets all the triggers associated with a job.</p>
     fn get_triggers(
         &self,
         input: &GetTriggersRequest,
@@ -12227,7 +12227,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves a specified function definition from the Data Catalog.</p>"]
+    /// <p>Retrieves a specified function definition from the Data Catalog.</p>
     fn get_user_defined_function(
         &self,
         input: &GetUserDefinedFunctionRequest,
@@ -12261,7 +12261,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves a multiple function definitions from the Data Catalog.</p>"]
+    /// <p>Retrieves a multiple function definitions from the Data Catalog.</p>
     fn get_user_defined_functions(
         &self,
         input: &GetUserDefinedFunctionsRequest,
@@ -12295,7 +12295,7 @@ where
         }
     }
 
-    #[doc = "<p>Imports an existing Athena Data Catalog to AWS Glue</p>"]
+    /// <p>Imports an existing Athena Data Catalog to AWS Glue</p>
     fn import_catalog_to_glue(
         &self,
         input: &ImportCatalogToGlueRequest,
@@ -12329,7 +12329,7 @@ where
         }
     }
 
-    #[doc = "<p>Resets a bookmark entry.</p>"]
+    /// <p>Resets a bookmark entry.</p>
     fn reset_job_bookmark(
         &self,
         input: &ResetJobBookmarkRequest,
@@ -12363,7 +12363,7 @@ where
         }
     }
 
-    #[doc="<p>Starts a crawl using the specified <code>Crawler</code>, regardless of what is scheduled. If the <code>Crawler</code> is already running, does nothing.</p>"]
+    /// <p>Starts a crawl using the specified <code>Crawler</code>, regardless of what is scheduled. If the <code>Crawler</code> is already running, does nothing.</p>
     fn start_crawler(
         &self,
         input: &StartCrawlerRequest,
@@ -12397,7 +12397,7 @@ where
         }
     }
 
-    #[doc="<p>Changes the schedule state of the specified crawler to <code>SCHEDULED</code>, unless the crawler is already running or the schedule state is already <code>SCHEDULED</code>.</p>"]
+    /// <p>Changes the schedule state of the specified crawler to <code>SCHEDULED</code>, unless the crawler is already running or the schedule state is already <code>SCHEDULED</code>.</p>
     fn start_crawler_schedule(
         &self,
         input: &StartCrawlerScheduleRequest,
@@ -12431,7 +12431,7 @@ where
         }
     }
 
-    #[doc = "<p>Runs a job.</p>"]
+    /// <p>Runs a job.</p>
     fn start_job_run(
         &self,
         input: &StartJobRunRequest,
@@ -12465,7 +12465,7 @@ where
         }
     }
 
-    #[doc = "<p>Starts an existing trigger.</p>"]
+    /// <p>Starts an existing trigger.</p>
     fn start_trigger(
         &self,
         input: &StartTriggerRequest,
@@ -12499,7 +12499,7 @@ where
         }
     }
 
-    #[doc = "<p>If the specified <code>Crawler</code> is running, stops the crawl.</p>"]
+    /// <p>If the specified <code>Crawler</code> is running, stops the crawl.</p>
     fn stop_crawler(
         &self,
         input: &StopCrawlerRequest,
@@ -12533,7 +12533,7 @@ where
         }
     }
 
-    #[doc="<p>Sets the schedule state of the specified crawler to <code>NOT_SCHEDULED</code>, but does not stop the crawler if it is already running.</p>"]
+    /// <p>Sets the schedule state of the specified crawler to <code>NOT_SCHEDULED</code>, but does not stop the crawler if it is already running.</p>
     fn stop_crawler_schedule(
         &self,
         input: &StopCrawlerScheduleRequest,
@@ -12567,7 +12567,7 @@ where
         }
     }
 
-    #[doc = "<p>Stops a specified trigger.</p>"]
+    /// <p>Stops a specified trigger.</p>
     fn stop_trigger(
         &self,
         input: &StopTriggerRequest,
@@ -12601,7 +12601,7 @@ where
         }
     }
 
-    #[doc = "<p>Modifies an existing <code>Classifier</code>.</p>"]
+    /// <p>Modifies an existing <code>Classifier</code>.</p>
     fn update_classifier(
         &self,
         input: &UpdateClassifierRequest,
@@ -12635,7 +12635,7 @@ where
         }
     }
 
-    #[doc = "<p>Updates a connection definition in the Data Catalog.</p>"]
+    /// <p>Updates a connection definition in the Data Catalog.</p>
     fn update_connection(
         &self,
         input: &UpdateConnectionRequest,
@@ -12669,7 +12669,7 @@ where
         }
     }
 
-    #[doc="<p>Updates a <code>Crawler</code>. If a <code>Crawler</code> is running, you must stop it using <code>StopCrawler</code> before updating it.</p>"]
+    /// <p>Updates a <code>Crawler</code>. If a <code>Crawler</code> is running, you must stop it using <code>StopCrawler</code> before updating it.</p>
     fn update_crawler(
         &self,
         input: &UpdateCrawlerRequest,
@@ -12703,7 +12703,7 @@ where
         }
     }
 
-    #[doc = "<p>Updates the schedule of a crawler using a Cron expression. </p>"]
+    /// <p>Updates the schedule of a crawler using a Cron expression. </p>
     fn update_crawler_schedule(
         &self,
         input: &UpdateCrawlerScheduleRequest,
@@ -12737,7 +12737,7 @@ where
         }
     }
 
-    #[doc = "<p>Updates an existing database definition in a Data Catalog.</p>"]
+    /// <p>Updates an existing database definition in a Data Catalog.</p>
     fn update_database(
         &self,
         input: &UpdateDatabaseRequest,
@@ -12771,7 +12771,7 @@ where
         }
     }
 
-    #[doc = "<p>Updates a specified DevEndpoint.</p>"]
+    /// <p>Updates a specified DevEndpoint.</p>
     fn update_dev_endpoint(
         &self,
         input: &UpdateDevEndpointRequest,
@@ -12805,7 +12805,7 @@ where
         }
     }
 
-    #[doc = "<p>Updates an existing job definition.</p>"]
+    /// <p>Updates an existing job definition.</p>
     fn update_job(&self, input: &UpdateJobRequest) -> Result<UpdateJobResponse, UpdateJobError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
@@ -12836,7 +12836,7 @@ where
         }
     }
 
-    #[doc = "<p>Updates a partition.</p>"]
+    /// <p>Updates a partition.</p>
     fn update_partition(
         &self,
         input: &UpdatePartitionRequest,
@@ -12870,7 +12870,7 @@ where
         }
     }
 
-    #[doc = "<p>Updates a metadata table in the Data Catalog.</p>"]
+    /// <p>Updates a metadata table in the Data Catalog.</p>
     fn update_table(
         &self,
         input: &UpdateTableRequest,
@@ -12904,7 +12904,7 @@ where
         }
     }
 
-    #[doc = "<p>Updates a trigger definition.</p>"]
+    /// <p>Updates a trigger definition.</p>
     fn update_trigger(
         &self,
         input: &UpdateTriggerRequest,
@@ -12938,7 +12938,7 @@ where
         }
     }
 
-    #[doc = "<p>Updates an existing function definition in the Data Catalog.</p>"]
+    /// <p>Updates an existing function definition in the Data Catalog.</p>
     fn update_user_defined_function(
         &self,
         input: &UpdateUserDefinedFunctionRequest,

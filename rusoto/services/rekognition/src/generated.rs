@@ -53,7 +53,7 @@ pub struct Beard {
     pub value: Option<bool>,
 }
 
-/// <p>Identifies the bounding box around the object or face. The <code>left</code> (x-coordinate) and <code>top</code> (y-coordinate) are coordinates representing the top and left sides of the bounding box. Note that the upper-left corner of the image is the origin (0,0). </p> <p>The <code>top</code> and <code>left</code> values returned are ratios of the overall image size. For example, if the input image is 700x200 pixels, and the top-left coordinate of the bounding box is 350x50 pixels, the API returns a <code>left</code> value of 0.5 (350/700) and a <code>top</code> value of 0.25 (50/200).</p> <p> The <code>width</code> and <code>height</code> values represent the dimensions of the bounding box as a ratio of the overall image dimension. For example, if the input image is 700x200 pixels, and the bounding box width is 70 pixels, the width returned is 0.1. </p> <note> <p> The bounding box coordinates can have negative values. For example, if Amazon Rekognition is able to detect a face that is at the image edge and is only partially visible, the service can return coordinates that are outside the image bounds and, depending on the image edge, you might get negative values or values greater than 1 for the <code>left</code> or <code>top</code> values. </p> </note>
+/// <p><p>Identifies the bounding box around the object or face. The <code>left</code> (x-coordinate) and <code>top</code> (y-coordinate) are coordinates representing the top and left sides of the bounding box. Note that the upper-left corner of the image is the origin (0,0). </p> <p>The <code>top</code> and <code>left</code> values returned are ratios of the overall image size. For example, if the input image is 700x200 pixels, and the top-left coordinate of the bounding box is 350x50 pixels, the API returns a <code>left</code> value of 0.5 (350/700) and a <code>top</code> value of 0.25 (50/200).</p> <p> The <code>width</code> and <code>height</code> values represent the dimensions of the bounding box as a ratio of the overall image dimension. For example, if the input image is 700x200 pixels, and the bounding box width is 70 pixels, the width returned is 0.1. </p> <note> <p> The bounding box coordinates can have negative values. For example, if Amazon Rekognition is able to detect a face that is at the image edge and is only partially visible, the service can return coordinates that are outside the image bounds and, depending on the image edge, you might get negative values or values greater than 1 for the <code>left</code> or <code>top</code> values. </p> </note></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct BoundingBox {
     /// <p>Height of the bounding box as a ratio of the overall image height.</p>
@@ -136,11 +136,11 @@ pub struct CompareFacesResponse {
     #[serde(rename = "SourceImageFace")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_image_face: Option<ComparedSourceImageFace>,
-    /// <p> The orientation of the source image (counterclockwise direction). If your application displays the source image, you can use this value to correct image orientation. The bounding box coordinates returned in <code>SourceImageFace</code> represent the location of the face before the image orientation is corrected. </p> <note> <p>If the source image is in .jpeg format, it might contain exchangeable image (Exif) metadata that includes the image's orientation. If the Exif metadata for the source image populates the orientation field, the value of <code>OrientationCorrection</code> is null and the <code>SourceImageFace</code> bounding box coordinates represent the location of the face after Exif metadata is used to correct the orientation. Images in .png format don't contain Exif metadata.</p> </note>
+    /// <p><p> The orientation of the source image (counterclockwise direction). If your application displays the source image, you can use this value to correct image orientation. The bounding box coordinates returned in <code>SourceImageFace</code> represent the location of the face before the image orientation is corrected. </p> <note> <p>If the source image is in .jpeg format, it might contain exchangeable image (Exif) metadata that includes the image&#39;s orientation. If the Exif metadata for the source image populates the orientation field, the value of <code>OrientationCorrection</code> is null and the <code>SourceImageFace</code> bounding box coordinates represent the location of the face after Exif metadata is used to correct the orientation. Images in .png format don&#39;t contain Exif metadata.</p> </note></p>
     #[serde(rename = "SourceImageOrientationCorrection")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_image_orientation_correction: Option<String>,
-    /// <p> The orientation of the target image (in counterclockwise direction). If your application displays the target image, you can use this value to correct the orientation of the image. The bounding box coordinates returned in <code>FaceMatches</code> and <code>UnmatchedFaces</code> represent face locations before the image orientation is corrected. </p> <note> <p>If the target image is in .jpg format, it might contain Exif metadata that includes the orientation of the image. If the Exif metadata for the target image populates the orientation field, the value of <code>OrientationCorrection</code> is null and the bounding box coordinates in <code>FaceMatches</code> and <code>UnmatchedFaces</code> represent the location of the face after Exif metadata is used to correct the orientation. Images in .png format don't contain Exif metadata.</p> </note>
+    /// <p><p> The orientation of the target image (in counterclockwise direction). If your application displays the target image, you can use this value to correct the orientation of the image. The bounding box coordinates returned in <code>FaceMatches</code> and <code>UnmatchedFaces</code> represent face locations before the image orientation is corrected. </p> <note> <p>If the target image is in .jpg format, it might contain Exif metadata that includes the orientation of the image. If the Exif metadata for the target image populates the orientation field, the value of <code>OrientationCorrection</code> is null and the bounding box coordinates in <code>FaceMatches</code> and <code>UnmatchedFaces</code> represent the location of the face after Exif metadata is used to correct the orientation. Images in .png format don&#39;t contain Exif metadata.</p> </note></p>
     #[serde(rename = "TargetImageOrientationCorrection")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_image_orientation_correction: Option<String>,
@@ -257,7 +257,7 @@ pub struct DetectFacesResponse {
     #[serde(rename = "FaceDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub face_details: Option<Vec<FaceDetail>>,
-    /// <p> The orientation of the input image (counter-clockwise direction). If your application displays the image, you can use this value to correct image orientation. The bounding box coordinates returned in <code>FaceDetails</code> represent face locations before the image orientation is corrected. </p> <note> <p>If the input image is in .jpeg format, it might contain exchangeable image (Exif) metadata that includes the image's orientation. If so, and the Exif metadata for the input image populates the orientation field, the value of <code>OrientationCorrection</code> is null and the <code>FaceDetails</code> bounding box coordinates represent face locations after Exif metadata is used to correct the image orientation. Images in .png format don't contain Exif metadata.</p> </note>
+    /// <p><p> The orientation of the input image (counter-clockwise direction). If your application displays the image, you can use this value to correct image orientation. The bounding box coordinates returned in <code>FaceDetails</code> represent face locations before the image orientation is corrected. </p> <note> <p>If the input image is in .jpeg format, it might contain exchangeable image (Exif) metadata that includes the image&#39;s orientation. If so, and the Exif metadata for the input image populates the orientation field, the value of <code>OrientationCorrection</code> is null and the <code>FaceDetails</code> bounding box coordinates represent face locations after Exif metadata is used to correct the image orientation. Images in .png format don&#39;t contain Exif metadata.</p> </note></p>
     #[serde(rename = "OrientationCorrection")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub orientation_correction: Option<String>,
@@ -284,7 +284,7 @@ pub struct DetectLabelsResponse {
     #[serde(rename = "Labels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub labels: Option<Vec<Label>>,
-    /// <p> The orientation of the input image (counter-clockwise direction). If your application displays the image, you can use this value to correct the orientation. If Amazon Rekognition detects that the input image was rotated (for example, by 90 degrees), it first corrects the orientation before detecting the labels. </p> <note> <p>If the input image Exif metadata populates the orientation field, Amazon Rekognition does not perform orientation correction and the value of OrientationCorrection will be null.</p> </note>
+    /// <p><p> The orientation of the input image (counter-clockwise direction). If your application displays the image, you can use this value to correct the orientation. If Amazon Rekognition detects that the input image was rotated (for example, by 90 degrees), it first corrects the orientation before detecting the labels. </p> <note> <p>If the input image Exif metadata populates the orientation field, Amazon Rekognition does not perform orientation correction and the value of OrientationCorrection will be null.</p> </note></p>
     #[serde(rename = "OrientationCorrection")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub orientation_correction: Option<String>,
@@ -547,7 +547,7 @@ pub struct IndexFacesResponse {
     #[serde(rename = "FaceRecords")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub face_records: Option<Vec<FaceRecord>>,
-    /// <p>The orientation of the input image (counterclockwise direction). If your application displays the image, you can use this value to correct image orientation. The bounding box coordinates returned in <code>FaceRecords</code> represent face locations before the image orientation is corrected. </p> <note> <p>If the input image is in jpeg format, it might contain exchangeable image (Exif) metadata. If so, and the Exif metadata populates the orientation field, the value of <code>OrientationCorrection</code> is null and the bounding box coordinates in <code>FaceRecords</code> represent face locations after Exif metadata is used to correct the image orientation. Images in .png format don't contain Exif metadata.</p> </note>
+    /// <p><p>The orientation of the input image (counterclockwise direction). If your application displays the image, you can use this value to correct image orientation. The bounding box coordinates returned in <code>FaceRecords</code> represent face locations before the image orientation is corrected. </p> <note> <p>If the input image is in jpeg format, it might contain exchangeable image (Exif) metadata. If so, and the Exif metadata populates the orientation field, the value of <code>OrientationCorrection</code> is null and the bounding box coordinates in <code>FaceRecords</code> represent face locations after Exif metadata is used to correct the image orientation. Images in .png format don&#39;t contain Exif metadata.</p> </note></p>
     #[serde(rename = "OrientationCorrection")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub orientation_correction: Option<String>,
@@ -707,7 +707,7 @@ pub struct RecognizeCelebritiesResponse {
     #[serde(rename = "CelebrityFaces")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub celebrity_faces: Option<Vec<Celebrity>>,
-    /// <p>The orientation of the input image (counterclockwise direction). If your application displays the image, you can use this value to correct the orientation. The bounding box coordinates returned in <code>CelebrityFaces</code> and <code>UnrecognizedFaces</code> represent face locations before the image orientation is corrected. </p> <note> <p>If the input image is in .jpeg format, it might contain exchangeable image (Exif) metadata that includes the image's orientation. If so, and the Exif metadata for the input image populates the orientation field, the value of <code>OrientationCorrection</code> is null and the <code>CelebrityFaces</code> and <code>UnrecognizedFaces</code> bounding box coordinates represent face locations after Exif metadata is used to correct the image orientation. Images in .png format don't contain Exif metadata. </p> </note>
+    /// <p><p>The orientation of the input image (counterclockwise direction). If your application displays the image, you can use this value to correct the orientation. The bounding box coordinates returned in <code>CelebrityFaces</code> and <code>UnrecognizedFaces</code> represent face locations before the image orientation is corrected. </p> <note> <p>If the input image is in .jpeg format, it might contain exchangeable image (Exif) metadata that includes the image&#39;s orientation. If so, and the Exif metadata for the input image populates the orientation field, the value of <code>OrientationCorrection</code> is null and the <code>CelebrityFaces</code> and <code>UnrecognizedFaces</code> bounding box coordinates represent face locations after Exif metadata is used to correct the image orientation. Images in .png format don&#39;t contain Exif metadata. </p> </note></p>
     #[serde(rename = "OrientationCorrection")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub orientation_correction: Option<String>,
@@ -827,21 +827,21 @@ pub struct Sunglasses {
 /// Errors returned by CompareFaces
 #[derive(Debug, PartialEq)]
 pub enum CompareFacesError {
-    ///<p>You are not authorized to perform the action.</p>
+    /// <p>You are not authorized to perform the action.</p>
     AccessDenied(String),
-    ///<p>The input image size exceeds the allowed limit. For more information, see <a>limits</a>. </p>
+    /// <p>The input image size exceeds the allowed limit. For more information, see <a>limits</a>. </p>
     ImageTooLarge(String),
-    ///<p>Amazon Rekognition experienced a service issue. Try your call again.</p>
+    /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
     InternalServerError(String),
-    ///<p>The provided image format is not supported. </p>
+    /// <p>The provided image format is not supported. </p>
     InvalidImageFormat(String),
-    ///<p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
+    /// <p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
     InvalidParameter(String),
-    ///<p>Amazon Rekognition is unable to access the S3 object specified in the request.</p>
+    /// <p>Amazon Rekognition is unable to access the S3 object specified in the request.</p>
     InvalidS3Object(String),
-    ///<p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
+    /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    ///<p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
+    /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -949,17 +949,17 @@ impl Error for CompareFacesError {
 /// Errors returned by CreateCollection
 #[derive(Debug, PartialEq)]
 pub enum CreateCollectionError {
-    ///<p>You are not authorized to perform the action.</p>
+    /// <p>You are not authorized to perform the action.</p>
     AccessDenied(String),
-    ///<p>Amazon Rekognition experienced a service issue. Try your call again.</p>
+    /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
     InternalServerError(String),
-    ///<p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
+    /// <p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
     InvalidParameter(String),
-    ///<p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
+    /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    ///<p>A collection with the specified ID already exists.</p>
+    /// <p>A collection with the specified ID already exists.</p>
     ResourceAlreadyExists(String),
-    ///<p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
+    /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1059,17 +1059,17 @@ impl Error for CreateCollectionError {
 /// Errors returned by DeleteCollection
 #[derive(Debug, PartialEq)]
 pub enum DeleteCollectionError {
-    ///<p>You are not authorized to perform the action.</p>
+    /// <p>You are not authorized to perform the action.</p>
     AccessDenied(String),
-    ///<p>Amazon Rekognition experienced a service issue. Try your call again.</p>
+    /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
     InternalServerError(String),
-    ///<p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
+    /// <p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
     InvalidParameter(String),
-    ///<p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
+    /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    ///<p>Collection specified in the request is not found.</p>
+    /// <p>Collection specified in the request is not found.</p>
     ResourceNotFound(String),
-    ///<p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
+    /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1169,17 +1169,17 @@ impl Error for DeleteCollectionError {
 /// Errors returned by DeleteFaces
 #[derive(Debug, PartialEq)]
 pub enum DeleteFacesError {
-    ///<p>You are not authorized to perform the action.</p>
+    /// <p>You are not authorized to perform the action.</p>
     AccessDenied(String),
-    ///<p>Amazon Rekognition experienced a service issue. Try your call again.</p>
+    /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
     InternalServerError(String),
-    ///<p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
+    /// <p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
     InvalidParameter(String),
-    ///<p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
+    /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    ///<p>Collection specified in the request is not found.</p>
+    /// <p>Collection specified in the request is not found.</p>
     ResourceNotFound(String),
-    ///<p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
+    /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1277,21 +1277,21 @@ impl Error for DeleteFacesError {
 /// Errors returned by DetectFaces
 #[derive(Debug, PartialEq)]
 pub enum DetectFacesError {
-    ///<p>You are not authorized to perform the action.</p>
+    /// <p>You are not authorized to perform the action.</p>
     AccessDenied(String),
-    ///<p>The input image size exceeds the allowed limit. For more information, see <a>limits</a>. </p>
+    /// <p>The input image size exceeds the allowed limit. For more information, see <a>limits</a>. </p>
     ImageTooLarge(String),
-    ///<p>Amazon Rekognition experienced a service issue. Try your call again.</p>
+    /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
     InternalServerError(String),
-    ///<p>The provided image format is not supported. </p>
+    /// <p>The provided image format is not supported. </p>
     InvalidImageFormat(String),
-    ///<p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
+    /// <p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
     InvalidParameter(String),
-    ///<p>Amazon Rekognition is unable to access the S3 object specified in the request.</p>
+    /// <p>Amazon Rekognition is unable to access the S3 object specified in the request.</p>
     InvalidS3Object(String),
-    ///<p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
+    /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    ///<p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
+    /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1397,21 +1397,21 @@ impl Error for DetectFacesError {
 /// Errors returned by DetectLabels
 #[derive(Debug, PartialEq)]
 pub enum DetectLabelsError {
-    ///<p>You are not authorized to perform the action.</p>
+    /// <p>You are not authorized to perform the action.</p>
     AccessDenied(String),
-    ///<p>The input image size exceeds the allowed limit. For more information, see <a>limits</a>. </p>
+    /// <p>The input image size exceeds the allowed limit. For more information, see <a>limits</a>. </p>
     ImageTooLarge(String),
-    ///<p>Amazon Rekognition experienced a service issue. Try your call again.</p>
+    /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
     InternalServerError(String),
-    ///<p>The provided image format is not supported. </p>
+    /// <p>The provided image format is not supported. </p>
     InvalidImageFormat(String),
-    ///<p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
+    /// <p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
     InvalidParameter(String),
-    ///<p>Amazon Rekognition is unable to access the S3 object specified in the request.</p>
+    /// <p>Amazon Rekognition is unable to access the S3 object specified in the request.</p>
     InvalidS3Object(String),
-    ///<p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
+    /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    ///<p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
+    /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1519,21 +1519,21 @@ impl Error for DetectLabelsError {
 /// Errors returned by DetectModerationLabels
 #[derive(Debug, PartialEq)]
 pub enum DetectModerationLabelsError {
-    ///<p>You are not authorized to perform the action.</p>
+    /// <p>You are not authorized to perform the action.</p>
     AccessDenied(String),
-    ///<p>The input image size exceeds the allowed limit. For more information, see <a>limits</a>. </p>
+    /// <p>The input image size exceeds the allowed limit. For more information, see <a>limits</a>. </p>
     ImageTooLarge(String),
-    ///<p>Amazon Rekognition experienced a service issue. Try your call again.</p>
+    /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
     InternalServerError(String),
-    ///<p>The provided image format is not supported. </p>
+    /// <p>The provided image format is not supported. </p>
     InvalidImageFormat(String),
-    ///<p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
+    /// <p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
     InvalidParameter(String),
-    ///<p>Amazon Rekognition is unable to access the S3 object specified in the request.</p>
+    /// <p>Amazon Rekognition is unable to access the S3 object specified in the request.</p>
     InvalidS3Object(String),
-    ///<p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
+    /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    ///<p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
+    /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1643,17 +1643,17 @@ impl Error for DetectModerationLabelsError {
 /// Errors returned by GetCelebrityInfo
 #[derive(Debug, PartialEq)]
 pub enum GetCelebrityInfoError {
-    ///<p>You are not authorized to perform the action.</p>
+    /// <p>You are not authorized to perform the action.</p>
     AccessDenied(String),
-    ///<p>Amazon Rekognition experienced a service issue. Try your call again.</p>
+    /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
     InternalServerError(String),
-    ///<p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
+    /// <p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
     InvalidParameter(String),
-    ///<p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
+    /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    ///<p>Collection specified in the request is not found.</p>
+    /// <p>Collection specified in the request is not found.</p>
     ResourceNotFound(String),
-    ///<p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
+    /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1753,23 +1753,23 @@ impl Error for GetCelebrityInfoError {
 /// Errors returned by IndexFaces
 #[derive(Debug, PartialEq)]
 pub enum IndexFacesError {
-    ///<p>You are not authorized to perform the action.</p>
+    /// <p>You are not authorized to perform the action.</p>
     AccessDenied(String),
-    ///<p>The input image size exceeds the allowed limit. For more information, see <a>limits</a>. </p>
+    /// <p>The input image size exceeds the allowed limit. For more information, see <a>limits</a>. </p>
     ImageTooLarge(String),
-    ///<p>Amazon Rekognition experienced a service issue. Try your call again.</p>
+    /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
     InternalServerError(String),
-    ///<p>The provided image format is not supported. </p>
+    /// <p>The provided image format is not supported. </p>
     InvalidImageFormat(String),
-    ///<p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
+    /// <p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
     InvalidParameter(String),
-    ///<p>Amazon Rekognition is unable to access the S3 object specified in the request.</p>
+    /// <p>Amazon Rekognition is unable to access the S3 object specified in the request.</p>
     InvalidS3Object(String),
-    ///<p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
+    /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    ///<p>Collection specified in the request is not found.</p>
+    /// <p>Collection specified in the request is not found.</p>
     ResourceNotFound(String),
-    ///<p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
+    /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1877,19 +1877,19 @@ impl Error for IndexFacesError {
 /// Errors returned by ListCollections
 #[derive(Debug, PartialEq)]
 pub enum ListCollectionsError {
-    ///<p>You are not authorized to perform the action.</p>
+    /// <p>You are not authorized to perform the action.</p>
     AccessDenied(String),
-    ///<p>Amazon Rekognition experienced a service issue. Try your call again.</p>
+    /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
     InternalServerError(String),
-    ///<p>Pagination token in the request is not valid.</p>
+    /// <p>Pagination token in the request is not valid.</p>
     InvalidPaginationToken(String),
-    ///<p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
+    /// <p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
     InvalidParameter(String),
-    ///<p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
+    /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    ///<p>Collection specified in the request is not found.</p>
+    /// <p>Collection specified in the request is not found.</p>
     ResourceNotFound(String),
-    ///<p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
+    /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1993,19 +1993,19 @@ impl Error for ListCollectionsError {
 /// Errors returned by ListFaces
 #[derive(Debug, PartialEq)]
 pub enum ListFacesError {
-    ///<p>You are not authorized to perform the action.</p>
+    /// <p>You are not authorized to perform the action.</p>
     AccessDenied(String),
-    ///<p>Amazon Rekognition experienced a service issue. Try your call again.</p>
+    /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
     InternalServerError(String),
-    ///<p>Pagination token in the request is not valid.</p>
+    /// <p>Pagination token in the request is not valid.</p>
     InvalidPaginationToken(String),
-    ///<p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
+    /// <p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
     InvalidParameter(String),
-    ///<p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
+    /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    ///<p>Collection specified in the request is not found.</p>
+    /// <p>Collection specified in the request is not found.</p>
     ResourceNotFound(String),
-    ///<p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
+    /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2105,21 +2105,21 @@ impl Error for ListFacesError {
 /// Errors returned by RecognizeCelebrities
 #[derive(Debug, PartialEq)]
 pub enum RecognizeCelebritiesError {
-    ///<p>You are not authorized to perform the action.</p>
+    /// <p>You are not authorized to perform the action.</p>
     AccessDenied(String),
-    ///<p>The input image size exceeds the allowed limit. For more information, see <a>limits</a>. </p>
+    /// <p>The input image size exceeds the allowed limit. For more information, see <a>limits</a>. </p>
     ImageTooLarge(String),
-    ///<p>Amazon Rekognition experienced a service issue. Try your call again.</p>
+    /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
     InternalServerError(String),
-    ///<p>The provided image format is not supported. </p>
+    /// <p>The provided image format is not supported. </p>
     InvalidImageFormat(String),
-    ///<p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
+    /// <p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
     InvalidParameter(String),
-    ///<p>Amazon Rekognition is unable to access the S3 object specified in the request.</p>
+    /// <p>Amazon Rekognition is unable to access the S3 object specified in the request.</p>
     InvalidS3Object(String),
-    ///<p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
+    /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    ///<p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
+    /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2229,17 +2229,17 @@ impl Error for RecognizeCelebritiesError {
 /// Errors returned by SearchFaces
 #[derive(Debug, PartialEq)]
 pub enum SearchFacesError {
-    ///<p>You are not authorized to perform the action.</p>
+    /// <p>You are not authorized to perform the action.</p>
     AccessDenied(String),
-    ///<p>Amazon Rekognition experienced a service issue. Try your call again.</p>
+    /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
     InternalServerError(String),
-    ///<p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
+    /// <p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
     InvalidParameter(String),
-    ///<p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
+    /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    ///<p>Collection specified in the request is not found.</p>
+    /// <p>Collection specified in the request is not found.</p>
     ResourceNotFound(String),
-    ///<p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
+    /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2337,23 +2337,23 @@ impl Error for SearchFacesError {
 /// Errors returned by SearchFacesByImage
 #[derive(Debug, PartialEq)]
 pub enum SearchFacesByImageError {
-    ///<p>You are not authorized to perform the action.</p>
+    /// <p>You are not authorized to perform the action.</p>
     AccessDenied(String),
-    ///<p>The input image size exceeds the allowed limit. For more information, see <a>limits</a>. </p>
+    /// <p>The input image size exceeds the allowed limit. For more information, see <a>limits</a>. </p>
     ImageTooLarge(String),
-    ///<p>Amazon Rekognition experienced a service issue. Try your call again.</p>
+    /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
     InternalServerError(String),
-    ///<p>The provided image format is not supported. </p>
+    /// <p>The provided image format is not supported. </p>
     InvalidImageFormat(String),
-    ///<p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
+    /// <p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
     InvalidParameter(String),
-    ///<p>Amazon Rekognition is unable to access the S3 object specified in the request.</p>
+    /// <p>Amazon Rekognition is unable to access the S3 object specified in the request.</p>
     InvalidS3Object(String),
-    ///<p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
+    /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    ///<p>Collection specified in the request is not found.</p>
+    /// <p>Collection specified in the request is not found.</p>
     ResourceNotFound(String),
-    ///<p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
+    /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2466,80 +2466,80 @@ impl Error for SearchFacesByImageError {
 }
 /// Trait representing the capabilities of the Amazon Rekognition API. Amazon Rekognition clients implement this trait.
 pub trait Rekognition {
-    #[doc="<p>Compares a face in the <i>source</i> input image with each face detected in the <i>target</i> input image. </p> <note> <p> If the source image contains multiple faces, the service detects the largest face and compares it with each face detected in the target image. </p> </note> <p>In response, the operation returns an array of face matches ordered by similarity score in descending order. For each face match, the response provides a bounding box of the face, facial landmarks, pose details (pitch, role, and yaw), quality (brightness and sharpness), and confidence value (indicating the level of confidence that the bounding box contains a face). The response also provides a similarity score, which indicates how closely the faces match. </p> <note> <p>By default, only faces with a similarity score of greater than or equal to 80% are returned in the response. You can change this value by specifying the <code>SimilarityThreshold</code> parameter.</p> </note> <p> <code>CompareFaces</code> also returns an array of faces that don't match the source image. For each face, it returns a bounding box, confidence value, landmarks, pose details, and quality. The response also returns information about the face in the source image, including the bounding box of the face and confidence value.</p> <p>If the image doesn't contain Exif metadata, <code>CompareFaces</code> returns orientation information for the source and target images. Use these values to display the images with the correct image orientation.</p> <note> <p> This is a stateless API operation. That is, data returned by this operation doesn't persist.</p> </note> <p>For an example, see <a>get-started-exercise-compare-faces</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:CompareFaces</code> action.</p>"]
+    /// <p>Compares a face in the <i>source</i> input image with each face detected in the <i>target</i> input image. </p> <note> <p> If the source image contains multiple faces, the service detects the largest face and compares it with each face detected in the target image. </p> </note> <p>In response, the operation returns an array of face matches ordered by similarity score in descending order. For each face match, the response provides a bounding box of the face, facial landmarks, pose details (pitch, role, and yaw), quality (brightness and sharpness), and confidence value (indicating the level of confidence that the bounding box contains a face). The response also provides a similarity score, which indicates how closely the faces match. </p> <note> <p>By default, only faces with a similarity score of greater than or equal to 80% are returned in the response. You can change this value by specifying the <code>SimilarityThreshold</code> parameter.</p> </note> <p> <code>CompareFaces</code> also returns an array of faces that don't match the source image. For each face, it returns a bounding box, confidence value, landmarks, pose details, and quality. The response also returns information about the face in the source image, including the bounding box of the face and confidence value.</p> <p>If the image doesn't contain Exif metadata, <code>CompareFaces</code> returns orientation information for the source and target images. Use these values to display the images with the correct image orientation.</p> <note> <p> This is a stateless API operation. That is, data returned by this operation doesn't persist.</p> </note> <p>For an example, see <a>get-started-exercise-compare-faces</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:CompareFaces</code> action.</p>
     fn compare_faces(
         &self,
         input: &CompareFacesRequest,
     ) -> Result<CompareFacesResponse, CompareFacesError>;
 
-    #[doc="<p>Creates a collection in an AWS Region. You can add faces to the collection using the operation. </p> <p>For example, you might create collections, one for each of your application users. A user can then index faces using the <code>IndexFaces</code> operation and persist results in a specific collection. Then, a user can search the collection for faces in the user-specific container. </p> <note> <p>Collection names are case-sensitive.</p> </note> <p>For an example, see <a>example1</a>. </p> <p>This operation requires permissions to perform the <code>rekognition:CreateCollection</code> action.</p>"]
+    /// <p>Creates a collection in an AWS Region. You can add faces to the collection using the operation. </p> <p>For example, you might create collections, one for each of your application users. A user can then index faces using the <code>IndexFaces</code> operation and persist results in a specific collection. Then, a user can search the collection for faces in the user-specific container. </p> <note> <p>Collection names are case-sensitive.</p> </note> <p>For an example, see <a>example1</a>. </p> <p>This operation requires permissions to perform the <code>rekognition:CreateCollection</code> action.</p>
     fn create_collection(
         &self,
         input: &CreateCollectionRequest,
     ) -> Result<CreateCollectionResponse, CreateCollectionError>;
 
-    #[doc="<p>Deletes the specified collection. Note that this operation removes all faces in the collection. For an example, see <a>example1</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:DeleteCollection</code> action.</p>"]
+    /// <p>Deletes the specified collection. Note that this operation removes all faces in the collection. For an example, see <a>example1</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:DeleteCollection</code> action.</p>
     fn delete_collection(
         &self,
         input: &DeleteCollectionRequest,
     ) -> Result<DeleteCollectionResponse, DeleteCollectionError>;
 
-    #[doc="<p>Deletes faces from a collection. You specify a collection ID and an array of face IDs to remove from the collection.</p> <p>This operation requires permissions to perform the <code>rekognition:DeleteFaces</code> action.</p>"]
+    /// <p>Deletes faces from a collection. You specify a collection ID and an array of face IDs to remove from the collection.</p> <p>This operation requires permissions to perform the <code>rekognition:DeleteFaces</code> action.</p>
     fn delete_faces(
         &self,
         input: &DeleteFacesRequest,
     ) -> Result<DeleteFacesResponse, DeleteFacesError>;
 
-    #[doc="<p>Detects faces within an image (JPEG or PNG) that is provided as input.</p> <p> For each face detected, the operation returns face details including a bounding box of the face, a confidence value (that the bounding box contains a face), and a fixed set of attributes such as facial landmarks (for example, coordinates of eye and mouth), gender, presence of beard, sunglasses, etc. </p> <p>The face-detection algorithm is most effective on frontal faces. For non-frontal or obscured faces, the algorithm may not detect the faces or might detect faces with lower confidence. </p> <note> <p>This is a stateless API operation. That is, the operation does not persist any data.</p> </note> <p>For an example, see <a>get-started-exercise-detect-faces</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:DetectFaces</code> action. </p>"]
+    /// <p>Detects faces within an image (JPEG or PNG) that is provided as input.</p> <p> For each face detected, the operation returns face details including a bounding box of the face, a confidence value (that the bounding box contains a face), and a fixed set of attributes such as facial landmarks (for example, coordinates of eye and mouth), gender, presence of beard, sunglasses, etc. </p> <p>The face-detection algorithm is most effective on frontal faces. For non-frontal or obscured faces, the algorithm may not detect the faces or might detect faces with lower confidence. </p> <note> <p>This is a stateless API operation. That is, the operation does not persist any data.</p> </note> <p>For an example, see <a>get-started-exercise-detect-faces</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:DetectFaces</code> action. </p>
     fn detect_faces(
         &self,
         input: &DetectFacesRequest,
     ) -> Result<DetectFacesResponse, DetectFacesError>;
 
-    #[doc="<p>Detects instances of real-world labels within an image (JPEG or PNG) provided as input. This includes objects like flower, tree, and table; events like wedding, graduation, and birthday party; and concepts like landscape, evening, and nature. For an example, see <a>get-started-exercise-detect-labels</a>.</p> <p> For each object, scene, and concept the API returns one or more labels. Each label provides the object name, and the level of confidence that the image contains the object. For example, suppose the input image has a lighthouse, the sea, and a rock. The response will include all three labels, one for each object. </p> <p> <code>{Name: lighthouse, Confidence: 98.4629}</code> </p> <p> <code>{Name: rock,Confidence: 79.2097}</code> </p> <p> <code> {Name: sea,Confidence: 75.061}</code> </p> <p> In the preceding example, the operation returns one label for each of the three objects. The operation can also return multiple labels for the same object in the image. For example, if the input image shows a flower (for example, a tulip), the operation might return the following three labels. </p> <p> <code>{Name: flower,Confidence: 99.0562}</code> </p> <p> <code>{Name: plant,Confidence: 99.0562}</code> </p> <p> <code>{Name: tulip,Confidence: 99.0562}</code> </p> <p>In this example, the detection algorithm more precisely identifies the flower as a tulip.</p> <p>You can provide the input image as an S3 object or as base64-encoded bytes. In response, the API returns an array of labels. In addition, the response also includes the orientation correction. Optionally, you can specify <code>MinConfidence</code> to control the confidence threshold for the labels returned. The default is 50%. You can also add the <code>MaxLabels</code> parameter to limit the number of labels returned. </p> <note> <p>If the object detected is a person, the operation doesn't provide the same facial details that the <a>DetectFaces</a> operation provides.</p> </note> <p>This is a stateless API operation. That is, the operation does not persist any data.</p> <p>This operation requires permissions to perform the <code>rekognition:DetectLabels</code> action. </p>"]
+    /// <p>Detects instances of real-world labels within an image (JPEG or PNG) provided as input. This includes objects like flower, tree, and table; events like wedding, graduation, and birthday party; and concepts like landscape, evening, and nature. For an example, see <a>get-started-exercise-detect-labels</a>.</p> <p> For each object, scene, and concept the API returns one or more labels. Each label provides the object name, and the level of confidence that the image contains the object. For example, suppose the input image has a lighthouse, the sea, and a rock. The response will include all three labels, one for each object. </p> <p> <code>{Name: lighthouse, Confidence: 98.4629}</code> </p> <p> <code>{Name: rock,Confidence: 79.2097}</code> </p> <p> <code> {Name: sea,Confidence: 75.061}</code> </p> <p> In the preceding example, the operation returns one label for each of the three objects. The operation can also return multiple labels for the same object in the image. For example, if the input image shows a flower (for example, a tulip), the operation might return the following three labels. </p> <p> <code>{Name: flower,Confidence: 99.0562}</code> </p> <p> <code>{Name: plant,Confidence: 99.0562}</code> </p> <p> <code>{Name: tulip,Confidence: 99.0562}</code> </p> <p>In this example, the detection algorithm more precisely identifies the flower as a tulip.</p> <p>You can provide the input image as an S3 object or as base64-encoded bytes. In response, the API returns an array of labels. In addition, the response also includes the orientation correction. Optionally, you can specify <code>MinConfidence</code> to control the confidence threshold for the labels returned. The default is 50%. You can also add the <code>MaxLabels</code> parameter to limit the number of labels returned. </p> <note> <p>If the object detected is a person, the operation doesn't provide the same facial details that the <a>DetectFaces</a> operation provides.</p> </note> <p>This is a stateless API operation. That is, the operation does not persist any data.</p> <p>This operation requires permissions to perform the <code>rekognition:DetectLabels</code> action. </p>
     fn detect_labels(
         &self,
         input: &DetectLabelsRequest,
     ) -> Result<DetectLabelsResponse, DetectLabelsError>;
 
-    #[doc="<p>Detects explicit or suggestive adult content in a specified JPEG or PNG format image. Use <code>DetectModerationLabels</code> to moderate images depending on your requirements. For example, you might want to filter images that contain nudity, but not images containing suggestive content.</p> <p>To filter images, use the labels returned by <code>DetectModerationLabels</code> to determine which types of content are appropriate. For information about moderation labels, see <a>image-moderation</a>.</p>"]
+    /// <p>Detects explicit or suggestive adult content in a specified JPEG or PNG format image. Use <code>DetectModerationLabels</code> to moderate images depending on your requirements. For example, you might want to filter images that contain nudity, but not images containing suggestive content.</p> <p>To filter images, use the labels returned by <code>DetectModerationLabels</code> to determine which types of content are appropriate. For information about moderation labels, see <a>image-moderation</a>.</p>
     fn detect_moderation_labels(
         &self,
         input: &DetectModerationLabelsRequest,
     ) -> Result<DetectModerationLabelsResponse, DetectModerationLabelsError>;
 
-    #[doc="<p>Gets the name and additional information about a celebrity based on his or her Rekognition ID. The additional information is returned as an array of URLs. If there is no additional information about the celebrity, this list is empty. For more information, see <a>celebrity-recognition</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:GetCelebrityInfo</code> action. </p>"]
+    /// <p>Gets the name and additional information about a celebrity based on his or her Rekognition ID. The additional information is returned as an array of URLs. If there is no additional information about the celebrity, this list is empty. For more information, see <a>celebrity-recognition</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:GetCelebrityInfo</code> action. </p>
     fn get_celebrity_info(
         &self,
         input: &GetCelebrityInfoRequest,
     ) -> Result<GetCelebrityInfoResponse, GetCelebrityInfoError>;
 
-    #[doc="<p>Detects faces in the input image and adds them to the specified collection. </p> <p> Amazon Rekognition does not save the actual faces detected. Instead, the underlying detection algorithm first detects the faces in the input image, and for each face extracts facial features into a feature vector, and stores it in the back-end database. Amazon Rekognition uses feature vectors when performing face match and search operations using the and operations. </p> <p>If you provide the optional <code>externalImageID</code> for the input image you provided, Amazon Rekognition associates this ID with all faces that it detects. When you call the operation, the response returns the external ID. You can use this external image ID to create a client-side index to associate the faces with each image. You can then use the index to find all faces in an image. </p> <p>In response, the operation returns an array of metadata for all detected faces. This includes, the bounding box of the detected face, confidence value (indicating the bounding box contains a face), a face ID assigned by the service for each face that is detected and stored, and an image ID assigned by the service for the input image. If you request all facial attributes (using the <code>detectionAttributes</code> parameter, Amazon Rekognition returns detailed facial attributes such as facial landmarks (for example, location of eye and mount) and other facial attributes such gender. If you provide the same image, specify the same collection, and use the same external ID in the <code>IndexFaces</code> operation, Amazon Rekognition doesn't save duplicate face metadata. </p> <p>For an example, see <a>example2</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:IndexFaces</code> action.</p>"]
+    /// <p>Detects faces in the input image and adds them to the specified collection. </p> <p> Amazon Rekognition does not save the actual faces detected. Instead, the underlying detection algorithm first detects the faces in the input image, and for each face extracts facial features into a feature vector, and stores it in the back-end database. Amazon Rekognition uses feature vectors when performing face match and search operations using the and operations. </p> <p>If you provide the optional <code>externalImageID</code> for the input image you provided, Amazon Rekognition associates this ID with all faces that it detects. When you call the operation, the response returns the external ID. You can use this external image ID to create a client-side index to associate the faces with each image. You can then use the index to find all faces in an image. </p> <p>In response, the operation returns an array of metadata for all detected faces. This includes, the bounding box of the detected face, confidence value (indicating the bounding box contains a face), a face ID assigned by the service for each face that is detected and stored, and an image ID assigned by the service for the input image. If you request all facial attributes (using the <code>detectionAttributes</code> parameter, Amazon Rekognition returns detailed facial attributes such as facial landmarks (for example, location of eye and mount) and other facial attributes such gender. If you provide the same image, specify the same collection, and use the same external ID in the <code>IndexFaces</code> operation, Amazon Rekognition doesn't save duplicate face metadata. </p> <p>For an example, see <a>example2</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:IndexFaces</code> action.</p>
     fn index_faces(&self, input: &IndexFacesRequest)
         -> Result<IndexFacesResponse, IndexFacesError>;
 
-    #[doc="<p>Returns list of collection IDs in your account. If the result is truncated, the response also provides a <code>NextToken</code> that you can use in the subsequent request to fetch the next set of collection IDs.</p> <p>For an example, see <a>example1</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:ListCollections</code> action.</p>"]
+    /// <p>Returns list of collection IDs in your account. If the result is truncated, the response also provides a <code>NextToken</code> that you can use in the subsequent request to fetch the next set of collection IDs.</p> <p>For an example, see <a>example1</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:ListCollections</code> action.</p>
     fn list_collections(
         &self,
         input: &ListCollectionsRequest,
     ) -> Result<ListCollectionsResponse, ListCollectionsError>;
 
-    #[doc="<p>Returns metadata for faces in the specified collection. This metadata includes information such as the bounding box coordinates, the confidence (that the bounding box contains a face), and face ID. For an example, see <a>example3</a>. </p> <p>This operation requires permissions to perform the <code>rekognition:ListFaces</code> action.</p>"]
+    /// <p>Returns metadata for faces in the specified collection. This metadata includes information such as the bounding box coordinates, the confidence (that the bounding box contains a face), and face ID. For an example, see <a>example3</a>. </p> <p>This operation requires permissions to perform the <code>rekognition:ListFaces</code> action.</p>
     fn list_faces(&self, input: &ListFacesRequest) -> Result<ListFacesResponse, ListFacesError>;
 
-    #[doc="<p>Returns an array of celebrities recognized in the input image. The image is passed either as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. The image must be either a PNG or JPEG formatted file. For more information, see <a>celebrity-recognition</a>. </p> <p> <code>RecognizeCelebrities</code> returns the 15 largest faces in the image. It lists recognized celebrities in the <code>CelebrityFaces</code> list and unrecognized faces in the <code>UnrecognizedFaces</code> list. The operation doesn't return celebrities whose face sizes are smaller than the largest 15 faces in the image.</p> <p>For each celebrity recognized, the API returns a <code>Celebrity</code> object. The <code>Celebrity</code> object contains the celebrity name, ID, URL links to additional information, match confidence, and a <code>ComparedFace</code> object that you can use to locate the celebrity's face on the image.</p> <p>Rekognition does not retain information about which images a celebrity has been recognized in. Your application must store this information and use the <code>Celebrity</code> ID property as a unique identifier for the celebrity. If you don't store the celebrity name or additional information URLs returned by <code>RecognizeCelebrities</code>, you will need the ID to identify the celebrity in a call to the operation.</p> <p>For an example, see <a>recognize-celebrities-tutorial</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:RecognizeCelebrities</code> operation.</p>"]
+    /// <p>Returns an array of celebrities recognized in the input image. The image is passed either as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. The image must be either a PNG or JPEG formatted file. For more information, see <a>celebrity-recognition</a>. </p> <p> <code>RecognizeCelebrities</code> returns the 15 largest faces in the image. It lists recognized celebrities in the <code>CelebrityFaces</code> list and unrecognized faces in the <code>UnrecognizedFaces</code> list. The operation doesn't return celebrities whose face sizes are smaller than the largest 15 faces in the image.</p> <p>For each celebrity recognized, the API returns a <code>Celebrity</code> object. The <code>Celebrity</code> object contains the celebrity name, ID, URL links to additional information, match confidence, and a <code>ComparedFace</code> object that you can use to locate the celebrity's face on the image.</p> <p>Rekognition does not retain information about which images a celebrity has been recognized in. Your application must store this information and use the <code>Celebrity</code> ID property as a unique identifier for the celebrity. If you don't store the celebrity name or additional information URLs returned by <code>RecognizeCelebrities</code>, you will need the ID to identify the celebrity in a call to the operation.</p> <p>For an example, see <a>recognize-celebrities-tutorial</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:RecognizeCelebrities</code> operation.</p>
     fn recognize_celebrities(
         &self,
         input: &RecognizeCelebritiesRequest,
     ) -> Result<RecognizeCelebritiesResponse, RecognizeCelebritiesError>;
 
-    #[doc="<p>For a given input face ID, searches for matching faces in the collection the face belongs to. You get a face ID when you add a face to the collection using the <a>IndexFaces</a> operation. The operation compares the features of the input face with faces in the specified collection. </p> <note> <p>You can also search faces without indexing faces by using the <code>SearchFacesByImage</code> operation.</p> </note> <p> The operation response returns an array of faces that match, ordered by similarity score with the highest similarity first. More specifically, it is an array of metadata for each face match that is found. Along with the metadata, the response also includes a <code>confidence</code> value for each face match, indicating the confidence that the specific face matches the input face. </p> <p>For an example, see <a>example3</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:SearchFaces</code> action.</p>"]
+    /// <p>For a given input face ID, searches for matching faces in the collection the face belongs to. You get a face ID when you add a face to the collection using the <a>IndexFaces</a> operation. The operation compares the features of the input face with faces in the specified collection. </p> <note> <p>You can also search faces without indexing faces by using the <code>SearchFacesByImage</code> operation.</p> </note> <p> The operation response returns an array of faces that match, ordered by similarity score with the highest similarity first. More specifically, it is an array of metadata for each face match that is found. Along with the metadata, the response also includes a <code>confidence</code> value for each face match, indicating the confidence that the specific face matches the input face. </p> <p>For an example, see <a>example3</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:SearchFaces</code> action.</p>
     fn search_faces(
         &self,
         input: &SearchFacesRequest,
     ) -> Result<SearchFacesResponse, SearchFacesError>;
 
-    #[doc="<p>For a given input image, first detects the largest face in the image, and then searches the specified collection for matching faces. The operation compares the features of the input face with faces in the specified collection. </p> <note> <p> To search for all faces in an input image, you might first call the operation, and then use the face IDs returned in subsequent calls to the operation. </p> <p> You can also call the <code>DetectFaces</code> operation and use the bounding boxes in the response to make face crops, which then you can pass in to the <code>SearchFacesByImage</code> operation. </p> </note> <p> The response returns an array of faces that match, ordered by similarity score with the highest similarity first. More specifically, it is an array of metadata for each face match found. Along with the metadata, the response also includes a <code>similarity</code> indicating how similar the face is to the input face. In the response, the operation also returns the bounding box (and a confidence level that the bounding box contains a face) of the face that Amazon Rekognition used for the input image. </p> <p>For an example, see <a>example3</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:SearchFacesByImage</code> action.</p>"]
+    /// <p>For a given input image, first detects the largest face in the image, and then searches the specified collection for matching faces. The operation compares the features of the input face with faces in the specified collection. </p> <note> <p> To search for all faces in an input image, you might first call the operation, and then use the face IDs returned in subsequent calls to the operation. </p> <p> You can also call the <code>DetectFaces</code> operation and use the bounding boxes in the response to make face crops, which then you can pass in to the <code>SearchFacesByImage</code> operation. </p> </note> <p> The response returns an array of faces that match, ordered by similarity score with the highest similarity first. More specifically, it is an array of metadata for each face match found. Along with the metadata, the response also includes a <code>similarity</code> indicating how similar the face is to the input face. In the response, the operation also returns the bounding box (and a confidence level that the bounding box contains a face) of the face that Amazon Rekognition used for the input image. </p> <p>For an example, see <a>example3</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:SearchFacesByImage</code> action.</p>
     fn search_faces_by_image(
         &self,
         input: &SearchFacesByImageRequest,
@@ -2575,7 +2575,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Compares a face in the <i>source</i> input image with each face detected in the <i>target</i> input image. </p> <note> <p> If the source image contains multiple faces, the service detects the largest face and compares it with each face detected in the target image. </p> </note> <p>In response, the operation returns an array of face matches ordered by similarity score in descending order. For each face match, the response provides a bounding box of the face, facial landmarks, pose details (pitch, role, and yaw), quality (brightness and sharpness), and confidence value (indicating the level of confidence that the bounding box contains a face). The response also provides a similarity score, which indicates how closely the faces match. </p> <note> <p>By default, only faces with a similarity score of greater than or equal to 80% are returned in the response. You can change this value by specifying the <code>SimilarityThreshold</code> parameter.</p> </note> <p> <code>CompareFaces</code> also returns an array of faces that don't match the source image. For each face, it returns a bounding box, confidence value, landmarks, pose details, and quality. The response also returns information about the face in the source image, including the bounding box of the face and confidence value.</p> <p>If the image doesn't contain Exif metadata, <code>CompareFaces</code> returns orientation information for the source and target images. Use these values to display the images with the correct image orientation.</p> <note> <p> This is a stateless API operation. That is, data returned by this operation doesn't persist.</p> </note> <p>For an example, see <a>get-started-exercise-compare-faces</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:CompareFaces</code> action.</p>"]
+    /// <p>Compares a face in the <i>source</i> input image with each face detected in the <i>target</i> input image. </p> <note> <p> If the source image contains multiple faces, the service detects the largest face and compares it with each face detected in the target image. </p> </note> <p>In response, the operation returns an array of face matches ordered by similarity score in descending order. For each face match, the response provides a bounding box of the face, facial landmarks, pose details (pitch, role, and yaw), quality (brightness and sharpness), and confidence value (indicating the level of confidence that the bounding box contains a face). The response also provides a similarity score, which indicates how closely the faces match. </p> <note> <p>By default, only faces with a similarity score of greater than or equal to 80% are returned in the response. You can change this value by specifying the <code>SimilarityThreshold</code> parameter.</p> </note> <p> <code>CompareFaces</code> also returns an array of faces that don't match the source image. For each face, it returns a bounding box, confidence value, landmarks, pose details, and quality. The response also returns information about the face in the source image, including the bounding box of the face and confidence value.</p> <p>If the image doesn't contain Exif metadata, <code>CompareFaces</code> returns orientation information for the source and target images. Use these values to display the images with the correct image orientation.</p> <note> <p> This is a stateless API operation. That is, data returned by this operation doesn't persist.</p> </note> <p>For an example, see <a>get-started-exercise-compare-faces</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:CompareFaces</code> action.</p>
     fn compare_faces(
         &self,
         input: &CompareFacesRequest,
@@ -2609,7 +2609,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a collection in an AWS Region. You can add faces to the collection using the operation. </p> <p>For example, you might create collections, one for each of your application users. A user can then index faces using the <code>IndexFaces</code> operation and persist results in a specific collection. Then, a user can search the collection for faces in the user-specific container. </p> <note> <p>Collection names are case-sensitive.</p> </note> <p>For an example, see <a>example1</a>. </p> <p>This operation requires permissions to perform the <code>rekognition:CreateCollection</code> action.</p>"]
+    /// <p>Creates a collection in an AWS Region. You can add faces to the collection using the operation. </p> <p>For example, you might create collections, one for each of your application users. A user can then index faces using the <code>IndexFaces</code> operation and persist results in a specific collection. Then, a user can search the collection for faces in the user-specific container. </p> <note> <p>Collection names are case-sensitive.</p> </note> <p>For an example, see <a>example1</a>. </p> <p>This operation requires permissions to perform the <code>rekognition:CreateCollection</code> action.</p>
     fn create_collection(
         &self,
         input: &CreateCollectionRequest,
@@ -2643,7 +2643,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified collection. Note that this operation removes all faces in the collection. For an example, see <a>example1</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:DeleteCollection</code> action.</p>"]
+    /// <p>Deletes the specified collection. Note that this operation removes all faces in the collection. For an example, see <a>example1</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:DeleteCollection</code> action.</p>
     fn delete_collection(
         &self,
         input: &DeleteCollectionRequest,
@@ -2677,7 +2677,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes faces from a collection. You specify a collection ID and an array of face IDs to remove from the collection.</p> <p>This operation requires permissions to perform the <code>rekognition:DeleteFaces</code> action.</p>"]
+    /// <p>Deletes faces from a collection. You specify a collection ID and an array of face IDs to remove from the collection.</p> <p>This operation requires permissions to perform the <code>rekognition:DeleteFaces</code> action.</p>
     fn delete_faces(
         &self,
         input: &DeleteFacesRequest,
@@ -2711,7 +2711,7 @@ where
         }
     }
 
-    #[doc="<p>Detects faces within an image (JPEG or PNG) that is provided as input.</p> <p> For each face detected, the operation returns face details including a bounding box of the face, a confidence value (that the bounding box contains a face), and a fixed set of attributes such as facial landmarks (for example, coordinates of eye and mouth), gender, presence of beard, sunglasses, etc. </p> <p>The face-detection algorithm is most effective on frontal faces. For non-frontal or obscured faces, the algorithm may not detect the faces or might detect faces with lower confidence. </p> <note> <p>This is a stateless API operation. That is, the operation does not persist any data.</p> </note> <p>For an example, see <a>get-started-exercise-detect-faces</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:DetectFaces</code> action. </p>"]
+    /// <p>Detects faces within an image (JPEG or PNG) that is provided as input.</p> <p> For each face detected, the operation returns face details including a bounding box of the face, a confidence value (that the bounding box contains a face), and a fixed set of attributes such as facial landmarks (for example, coordinates of eye and mouth), gender, presence of beard, sunglasses, etc. </p> <p>The face-detection algorithm is most effective on frontal faces. For non-frontal or obscured faces, the algorithm may not detect the faces or might detect faces with lower confidence. </p> <note> <p>This is a stateless API operation. That is, the operation does not persist any data.</p> </note> <p>For an example, see <a>get-started-exercise-detect-faces</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:DetectFaces</code> action. </p>
     fn detect_faces(
         &self,
         input: &DetectFacesRequest,
@@ -2745,7 +2745,7 @@ where
         }
     }
 
-    #[doc="<p>Detects instances of real-world labels within an image (JPEG or PNG) provided as input. This includes objects like flower, tree, and table; events like wedding, graduation, and birthday party; and concepts like landscape, evening, and nature. For an example, see <a>get-started-exercise-detect-labels</a>.</p> <p> For each object, scene, and concept the API returns one or more labels. Each label provides the object name, and the level of confidence that the image contains the object. For example, suppose the input image has a lighthouse, the sea, and a rock. The response will include all three labels, one for each object. </p> <p> <code>{Name: lighthouse, Confidence: 98.4629}</code> </p> <p> <code>{Name: rock,Confidence: 79.2097}</code> </p> <p> <code> {Name: sea,Confidence: 75.061}</code> </p> <p> In the preceding example, the operation returns one label for each of the three objects. The operation can also return multiple labels for the same object in the image. For example, if the input image shows a flower (for example, a tulip), the operation might return the following three labels. </p> <p> <code>{Name: flower,Confidence: 99.0562}</code> </p> <p> <code>{Name: plant,Confidence: 99.0562}</code> </p> <p> <code>{Name: tulip,Confidence: 99.0562}</code> </p> <p>In this example, the detection algorithm more precisely identifies the flower as a tulip.</p> <p>You can provide the input image as an S3 object or as base64-encoded bytes. In response, the API returns an array of labels. In addition, the response also includes the orientation correction. Optionally, you can specify <code>MinConfidence</code> to control the confidence threshold for the labels returned. The default is 50%. You can also add the <code>MaxLabels</code> parameter to limit the number of labels returned. </p> <note> <p>If the object detected is a person, the operation doesn't provide the same facial details that the <a>DetectFaces</a> operation provides.</p> </note> <p>This is a stateless API operation. That is, the operation does not persist any data.</p> <p>This operation requires permissions to perform the <code>rekognition:DetectLabels</code> action. </p>"]
+    /// <p>Detects instances of real-world labels within an image (JPEG or PNG) provided as input. This includes objects like flower, tree, and table; events like wedding, graduation, and birthday party; and concepts like landscape, evening, and nature. For an example, see <a>get-started-exercise-detect-labels</a>.</p> <p> For each object, scene, and concept the API returns one or more labels. Each label provides the object name, and the level of confidence that the image contains the object. For example, suppose the input image has a lighthouse, the sea, and a rock. The response will include all three labels, one for each object. </p> <p> <code>{Name: lighthouse, Confidence: 98.4629}</code> </p> <p> <code>{Name: rock,Confidence: 79.2097}</code> </p> <p> <code> {Name: sea,Confidence: 75.061}</code> </p> <p> In the preceding example, the operation returns one label for each of the three objects. The operation can also return multiple labels for the same object in the image. For example, if the input image shows a flower (for example, a tulip), the operation might return the following three labels. </p> <p> <code>{Name: flower,Confidence: 99.0562}</code> </p> <p> <code>{Name: plant,Confidence: 99.0562}</code> </p> <p> <code>{Name: tulip,Confidence: 99.0562}</code> </p> <p>In this example, the detection algorithm more precisely identifies the flower as a tulip.</p> <p>You can provide the input image as an S3 object or as base64-encoded bytes. In response, the API returns an array of labels. In addition, the response also includes the orientation correction. Optionally, you can specify <code>MinConfidence</code> to control the confidence threshold for the labels returned. The default is 50%. You can also add the <code>MaxLabels</code> parameter to limit the number of labels returned. </p> <note> <p>If the object detected is a person, the operation doesn't provide the same facial details that the <a>DetectFaces</a> operation provides.</p> </note> <p>This is a stateless API operation. That is, the operation does not persist any data.</p> <p>This operation requires permissions to perform the <code>rekognition:DetectLabels</code> action. </p>
     fn detect_labels(
         &self,
         input: &DetectLabelsRequest,
@@ -2779,7 +2779,7 @@ where
         }
     }
 
-    #[doc="<p>Detects explicit or suggestive adult content in a specified JPEG or PNG format image. Use <code>DetectModerationLabels</code> to moderate images depending on your requirements. For example, you might want to filter images that contain nudity, but not images containing suggestive content.</p> <p>To filter images, use the labels returned by <code>DetectModerationLabels</code> to determine which types of content are appropriate. For information about moderation labels, see <a>image-moderation</a>.</p>"]
+    /// <p>Detects explicit or suggestive adult content in a specified JPEG or PNG format image. Use <code>DetectModerationLabels</code> to moderate images depending on your requirements. For example, you might want to filter images that contain nudity, but not images containing suggestive content.</p> <p>To filter images, use the labels returned by <code>DetectModerationLabels</code> to determine which types of content are appropriate. For information about moderation labels, see <a>image-moderation</a>.</p>
     fn detect_moderation_labels(
         &self,
         input: &DetectModerationLabelsRequest,
@@ -2813,7 +2813,7 @@ where
         }
     }
 
-    #[doc="<p>Gets the name and additional information about a celebrity based on his or her Rekognition ID. The additional information is returned as an array of URLs. If there is no additional information about the celebrity, this list is empty. For more information, see <a>celebrity-recognition</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:GetCelebrityInfo</code> action. </p>"]
+    /// <p>Gets the name and additional information about a celebrity based on his or her Rekognition ID. The additional information is returned as an array of URLs. If there is no additional information about the celebrity, this list is empty. For more information, see <a>celebrity-recognition</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:GetCelebrityInfo</code> action. </p>
     fn get_celebrity_info(
         &self,
         input: &GetCelebrityInfoRequest,
@@ -2847,7 +2847,7 @@ where
         }
     }
 
-    #[doc="<p>Detects faces in the input image and adds them to the specified collection. </p> <p> Amazon Rekognition does not save the actual faces detected. Instead, the underlying detection algorithm first detects the faces in the input image, and for each face extracts facial features into a feature vector, and stores it in the back-end database. Amazon Rekognition uses feature vectors when performing face match and search operations using the and operations. </p> <p>If you provide the optional <code>externalImageID</code> for the input image you provided, Amazon Rekognition associates this ID with all faces that it detects. When you call the operation, the response returns the external ID. You can use this external image ID to create a client-side index to associate the faces with each image. You can then use the index to find all faces in an image. </p> <p>In response, the operation returns an array of metadata for all detected faces. This includes, the bounding box of the detected face, confidence value (indicating the bounding box contains a face), a face ID assigned by the service for each face that is detected and stored, and an image ID assigned by the service for the input image. If you request all facial attributes (using the <code>detectionAttributes</code> parameter, Amazon Rekognition returns detailed facial attributes such as facial landmarks (for example, location of eye and mount) and other facial attributes such gender. If you provide the same image, specify the same collection, and use the same external ID in the <code>IndexFaces</code> operation, Amazon Rekognition doesn't save duplicate face metadata. </p> <p>For an example, see <a>example2</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:IndexFaces</code> action.</p>"]
+    /// <p>Detects faces in the input image and adds them to the specified collection. </p> <p> Amazon Rekognition does not save the actual faces detected. Instead, the underlying detection algorithm first detects the faces in the input image, and for each face extracts facial features into a feature vector, and stores it in the back-end database. Amazon Rekognition uses feature vectors when performing face match and search operations using the and operations. </p> <p>If you provide the optional <code>externalImageID</code> for the input image you provided, Amazon Rekognition associates this ID with all faces that it detects. When you call the operation, the response returns the external ID. You can use this external image ID to create a client-side index to associate the faces with each image. You can then use the index to find all faces in an image. </p> <p>In response, the operation returns an array of metadata for all detected faces. This includes, the bounding box of the detected face, confidence value (indicating the bounding box contains a face), a face ID assigned by the service for each face that is detected and stored, and an image ID assigned by the service for the input image. If you request all facial attributes (using the <code>detectionAttributes</code> parameter, Amazon Rekognition returns detailed facial attributes such as facial landmarks (for example, location of eye and mount) and other facial attributes such gender. If you provide the same image, specify the same collection, and use the same external ID in the <code>IndexFaces</code> operation, Amazon Rekognition doesn't save duplicate face metadata. </p> <p>For an example, see <a>example2</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:IndexFaces</code> action.</p>
     fn index_faces(
         &self,
         input: &IndexFacesRequest,
@@ -2881,7 +2881,7 @@ where
         }
     }
 
-    #[doc="<p>Returns list of collection IDs in your account. If the result is truncated, the response also provides a <code>NextToken</code> that you can use in the subsequent request to fetch the next set of collection IDs.</p> <p>For an example, see <a>example1</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:ListCollections</code> action.</p>"]
+    /// <p>Returns list of collection IDs in your account. If the result is truncated, the response also provides a <code>NextToken</code> that you can use in the subsequent request to fetch the next set of collection IDs.</p> <p>For an example, see <a>example1</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:ListCollections</code> action.</p>
     fn list_collections(
         &self,
         input: &ListCollectionsRequest,
@@ -2915,7 +2915,7 @@ where
         }
     }
 
-    #[doc="<p>Returns metadata for faces in the specified collection. This metadata includes information such as the bounding box coordinates, the confidence (that the bounding box contains a face), and face ID. For an example, see <a>example3</a>. </p> <p>This operation requires permissions to perform the <code>rekognition:ListFaces</code> action.</p>"]
+    /// <p>Returns metadata for faces in the specified collection. This metadata includes information such as the bounding box coordinates, the confidence (that the bounding box contains a face), and face ID. For an example, see <a>example3</a>. </p> <p>This operation requires permissions to perform the <code>rekognition:ListFaces</code> action.</p>
     fn list_faces(&self, input: &ListFacesRequest) -> Result<ListFacesResponse, ListFacesError> {
         let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
 
@@ -2946,7 +2946,7 @@ where
         }
     }
 
-    #[doc="<p>Returns an array of celebrities recognized in the input image. The image is passed either as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. The image must be either a PNG or JPEG formatted file. For more information, see <a>celebrity-recognition</a>. </p> <p> <code>RecognizeCelebrities</code> returns the 15 largest faces in the image. It lists recognized celebrities in the <code>CelebrityFaces</code> list and unrecognized faces in the <code>UnrecognizedFaces</code> list. The operation doesn't return celebrities whose face sizes are smaller than the largest 15 faces in the image.</p> <p>For each celebrity recognized, the API returns a <code>Celebrity</code> object. The <code>Celebrity</code> object contains the celebrity name, ID, URL links to additional information, match confidence, and a <code>ComparedFace</code> object that you can use to locate the celebrity's face on the image.</p> <p>Rekognition does not retain information about which images a celebrity has been recognized in. Your application must store this information and use the <code>Celebrity</code> ID property as a unique identifier for the celebrity. If you don't store the celebrity name or additional information URLs returned by <code>RecognizeCelebrities</code>, you will need the ID to identify the celebrity in a call to the operation.</p> <p>For an example, see <a>recognize-celebrities-tutorial</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:RecognizeCelebrities</code> operation.</p>"]
+    /// <p>Returns an array of celebrities recognized in the input image. The image is passed either as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. The image must be either a PNG or JPEG formatted file. For more information, see <a>celebrity-recognition</a>. </p> <p> <code>RecognizeCelebrities</code> returns the 15 largest faces in the image. It lists recognized celebrities in the <code>CelebrityFaces</code> list and unrecognized faces in the <code>UnrecognizedFaces</code> list. The operation doesn't return celebrities whose face sizes are smaller than the largest 15 faces in the image.</p> <p>For each celebrity recognized, the API returns a <code>Celebrity</code> object. The <code>Celebrity</code> object contains the celebrity name, ID, URL links to additional information, match confidence, and a <code>ComparedFace</code> object that you can use to locate the celebrity's face on the image.</p> <p>Rekognition does not retain information about which images a celebrity has been recognized in. Your application must store this information and use the <code>Celebrity</code> ID property as a unique identifier for the celebrity. If you don't store the celebrity name or additional information URLs returned by <code>RecognizeCelebrities</code>, you will need the ID to identify the celebrity in a call to the operation.</p> <p>For an example, see <a>recognize-celebrities-tutorial</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:RecognizeCelebrities</code> operation.</p>
     fn recognize_celebrities(
         &self,
         input: &RecognizeCelebritiesRequest,
@@ -2980,7 +2980,7 @@ where
         }
     }
 
-    #[doc="<p>For a given input face ID, searches for matching faces in the collection the face belongs to. You get a face ID when you add a face to the collection using the <a>IndexFaces</a> operation. The operation compares the features of the input face with faces in the specified collection. </p> <note> <p>You can also search faces without indexing faces by using the <code>SearchFacesByImage</code> operation.</p> </note> <p> The operation response returns an array of faces that match, ordered by similarity score with the highest similarity first. More specifically, it is an array of metadata for each face match that is found. Along with the metadata, the response also includes a <code>confidence</code> value for each face match, indicating the confidence that the specific face matches the input face. </p> <p>For an example, see <a>example3</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:SearchFaces</code> action.</p>"]
+    /// <p>For a given input face ID, searches for matching faces in the collection the face belongs to. You get a face ID when you add a face to the collection using the <a>IndexFaces</a> operation. The operation compares the features of the input face with faces in the specified collection. </p> <note> <p>You can also search faces without indexing faces by using the <code>SearchFacesByImage</code> operation.</p> </note> <p> The operation response returns an array of faces that match, ordered by similarity score with the highest similarity first. More specifically, it is an array of metadata for each face match that is found. Along with the metadata, the response also includes a <code>confidence</code> value for each face match, indicating the confidence that the specific face matches the input face. </p> <p>For an example, see <a>example3</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:SearchFaces</code> action.</p>
     fn search_faces(
         &self,
         input: &SearchFacesRequest,
@@ -3014,7 +3014,7 @@ where
         }
     }
 
-    #[doc="<p>For a given input image, first detects the largest face in the image, and then searches the specified collection for matching faces. The operation compares the features of the input face with faces in the specified collection. </p> <note> <p> To search for all faces in an input image, you might first call the operation, and then use the face IDs returned in subsequent calls to the operation. </p> <p> You can also call the <code>DetectFaces</code> operation and use the bounding boxes in the response to make face crops, which then you can pass in to the <code>SearchFacesByImage</code> operation. </p> </note> <p> The response returns an array of faces that match, ordered by similarity score with the highest similarity first. More specifically, it is an array of metadata for each face match found. Along with the metadata, the response also includes a <code>similarity</code> indicating how similar the face is to the input face. In the response, the operation also returns the bounding box (and a confidence level that the bounding box contains a face) of the face that Amazon Rekognition used for the input image. </p> <p>For an example, see <a>example3</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:SearchFacesByImage</code> action.</p>"]
+    /// <p>For a given input image, first detects the largest face in the image, and then searches the specified collection for matching faces. The operation compares the features of the input face with faces in the specified collection. </p> <note> <p> To search for all faces in an input image, you might first call the operation, and then use the face IDs returned in subsequent calls to the operation. </p> <p> You can also call the <code>DetectFaces</code> operation and use the bounding boxes in the response to make face crops, which then you can pass in to the <code>SearchFacesByImage</code> operation. </p> </note> <p> The response returns an array of faces that match, ordered by similarity score with the highest similarity first. More specifically, it is an array of metadata for each face match found. Along with the metadata, the response also includes a <code>similarity</code> indicating how similar the face is to the input face. In the response, the operation also returns the bounding box (and a confidence level that the bounding box contains a face) of the face that Amazon Rekognition used for the input image. </p> <p>For an example, see <a>example3</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:SearchFacesByImage</code> action.</p>
     fn search_faces_by_image(
         &self,
         input: &SearchFacesByImageRequest,

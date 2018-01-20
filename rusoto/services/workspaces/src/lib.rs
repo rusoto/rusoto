@@ -11,7 +11,7 @@
 //
 // =================================================================
 
-//! <fullname>Amazon WorkSpaces Service</fullname> <p>This reference provides detailed information about the Amazon WorkSpaces operations.</p>
+//! <p><fullname>Amazon WorkSpaces Service</fullname> <p>This reference provides detailed information about the Amazon WorkSpaces operations.</p></p>
 //!
 //! If you're using the service, you're probably looking for [WorkspacesClient](struct.WorkspacesClient.html) and [Workspaces](trait.Workspaces.html).
 

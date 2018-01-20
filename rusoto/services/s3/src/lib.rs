@@ -11,7 +11,7 @@
 //
 // =================================================================
 
-//! Amazon Simple Storage Service
+//! <p>Amazon Simple Storage Service</p>
 //!
 //! If you're using the service, you're probably looking for [S3Client](struct.S3Client.html) and [S3](trait.S3.html).
 

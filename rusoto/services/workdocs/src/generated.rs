@@ -1586,17 +1586,17 @@ pub struct UserStorageMetadata {
 /// Errors returned by AbortDocumentVersionUpload
 #[derive(Debug, PartialEq)]
 pub enum AbortDocumentVersionUploadError {
-    ///<p>The resource does not exist.</p>
+    /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>The specified document version is not in the INITIALIZED state.</p>
+    /// <p>The specified document version is not in the INITIALIZED state.</p>
     ProhibitedState(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1708,15 +1708,15 @@ impl Error for AbortDocumentVersionUploadError {
 /// Errors returned by ActivateUser
 #[derive(Debug, PartialEq)]
 pub enum ActivateUserError {
-    ///<p>The resource does not exist.</p>
+    /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1810,13 +1810,13 @@ impl Error for ActivateUserError {
 /// Errors returned by AddResourcePermissions
 #[derive(Debug, PartialEq)]
 pub enum AddResourcePermissionsError {
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1912,19 +1912,19 @@ impl Error for AddResourcePermissionsError {
 /// Errors returned by CreateComment
 #[derive(Debug, PartialEq)]
 pub enum CreateCommentError {
-    ///<p>This exception is thrown when the document is locked for comments and user tries to create or delete a comment on that document.</p>
+    /// <p>This exception is thrown when the document is locked for comments and user tries to create or delete a comment on that document.</p>
     DocumentLockedForComments(String),
-    ///<p>The resource does not exist.</p>
+    /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>The specified document version is not in the INITIALIZED state.</p>
+    /// <p>The specified document version is not in the INITIALIZED state.</p>
     ProhibitedState(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2026,19 +2026,19 @@ impl Error for CreateCommentError {
 /// Errors returned by CreateCustomMetadata
 #[derive(Debug, PartialEq)]
 pub enum CreateCustomMetadataError {
-    ///<p>The limit has been reached on the number of custom properties for the specified resource.</p>
+    /// <p>The limit has been reached on the number of custom properties for the specified resource.</p>
     CustomMetadataLimitExceeded(String),
-    ///<p>The resource does not exist.</p>
+    /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>The specified document version is not in the INITIALIZED state.</p>
+    /// <p>The specified document version is not in the INITIALIZED state.</p>
     ProhibitedState(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2148,21 +2148,21 @@ impl Error for CreateCustomMetadataError {
 /// Errors returned by CreateFolder
 #[derive(Debug, PartialEq)]
 pub enum CreateFolderError {
-    ///<p>The resource already exists.</p>
+    /// <p>The resource already exists.</p>
     EntityAlreadyExists(String),
-    ///<p>The resource does not exist.</p>
+    /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>The maximum of 100,000 folders under the parent folder has been exceeded.</p>
+    /// <p>The maximum of 100,000 folders under the parent folder has been exceeded.</p>
     LimitExceeded(String),
-    ///<p>The specified document version is not in the INITIALIZED state.</p>
+    /// <p>The specified document version is not in the INITIALIZED state.</p>
     ProhibitedState(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2268,17 +2268,17 @@ impl Error for CreateFolderError {
 /// Errors returned by CreateLabels
 #[derive(Debug, PartialEq)]
 pub enum CreateLabelsError {
-    ///<p>The resource does not exist.</p>
+    /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The limit has been reached on the number of labels for the specified resource.</p>
+    /// <p>The limit has been reached on the number of labels for the specified resource.</p>
     TooManyLabels(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2376,11 +2376,11 @@ impl Error for CreateLabelsError {
 /// Errors returned by CreateNotificationSubscription
 #[derive(Debug, PartialEq)]
 pub enum CreateNotificationSubscriptionError {
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>You've reached the limit on the number of subscriptions for the WorkDocs instance.</p>
+    /// <p>You've reached the limit on the number of subscriptions for the WorkDocs instance.</p>
     TooManySubscriptions(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2474,15 +2474,15 @@ impl Error for CreateNotificationSubscriptionError {
 /// Errors returned by CreateUser
 #[derive(Debug, PartialEq)]
 pub enum CreateUserError {
-    ///<p>The resource already exists.</p>
+    /// <p>The resource already exists.</p>
     EntityAlreadyExists(String),
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2574,15 +2574,15 @@ impl Error for CreateUserError {
 /// Errors returned by DeactivateUser
 #[derive(Debug, PartialEq)]
 pub enum DeactivateUserError {
-    ///<p>The resource does not exist.</p>
+    /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2676,19 +2676,19 @@ impl Error for DeactivateUserError {
 /// Errors returned by DeleteComment
 #[derive(Debug, PartialEq)]
 pub enum DeleteCommentError {
-    ///<p>This exception is thrown when the document is locked for comments and user tries to create or delete a comment on that document.</p>
+    /// <p>This exception is thrown when the document is locked for comments and user tries to create or delete a comment on that document.</p>
     DocumentLockedForComments(String),
-    ///<p>The resource does not exist.</p>
+    /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>The specified document version is not in the INITIALIZED state.</p>
+    /// <p>The specified document version is not in the INITIALIZED state.</p>
     ProhibitedState(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2790,17 +2790,17 @@ impl Error for DeleteCommentError {
 /// Errors returned by DeleteCustomMetadata
 #[derive(Debug, PartialEq)]
 pub enum DeleteCustomMetadataError {
-    ///<p>The resource does not exist.</p>
+    /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>The specified document version is not in the INITIALIZED state.</p>
+    /// <p>The specified document version is not in the INITIALIZED state.</p>
     ProhibitedState(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2904,19 +2904,19 @@ impl Error for DeleteCustomMetadataError {
 /// Errors returned by DeleteDocument
 #[derive(Debug, PartialEq)]
 pub enum DeleteDocumentError {
-    ///<p>The resource hierarchy is changing.</p>
+    /// <p>The resource hierarchy is changing.</p>
     ConcurrentModification(String),
-    ///<p>The resource does not exist.</p>
+    /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>The specified document version is not in the INITIALIZED state.</p>
+    /// <p>The specified document version is not in the INITIALIZED state.</p>
     ProhibitedState(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3018,19 +3018,19 @@ impl Error for DeleteDocumentError {
 /// Errors returned by DeleteFolder
 #[derive(Debug, PartialEq)]
 pub enum DeleteFolderError {
-    ///<p>The resource hierarchy is changing.</p>
+    /// <p>The resource hierarchy is changing.</p>
     ConcurrentModification(String),
-    ///<p>The resource does not exist.</p>
+    /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>The specified document version is not in the INITIALIZED state.</p>
+    /// <p>The specified document version is not in the INITIALIZED state.</p>
     ProhibitedState(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3132,15 +3132,15 @@ impl Error for DeleteFolderError {
 /// Errors returned by DeleteFolderContents
 #[derive(Debug, PartialEq)]
 pub enum DeleteFolderContentsError {
-    ///<p>The resource does not exist.</p>
+    /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3240,15 +3240,15 @@ impl Error for DeleteFolderContentsError {
 /// Errors returned by DeleteLabels
 #[derive(Debug, PartialEq)]
 pub enum DeleteLabelsError {
-    ///<p>The resource does not exist.</p>
+    /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3342,13 +3342,13 @@ impl Error for DeleteLabelsError {
 /// Errors returned by DeleteNotificationSubscription
 #[derive(Debug, PartialEq)]
 pub enum DeleteNotificationSubscriptionError {
-    ///<p>The resource does not exist.</p>
+    /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    ///<p>The specified document version is not in the INITIALIZED state.</p>
+    /// <p>The specified document version is not in the INITIALIZED state.</p>
     ProhibitedState(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3448,15 +3448,15 @@ impl Error for DeleteNotificationSubscriptionError {
 /// Errors returned by DeleteUser
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserError {
-    ///<p>The resource does not exist.</p>
+    /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3548,15 +3548,15 @@ impl Error for DeleteUserError {
 /// Errors returned by DescribeActivities
 #[derive(Debug, PartialEq)]
 pub enum DescribeActivitiesError {
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>The pagination marker and/or limit fields are not valid.</p>
+    /// <p>The pagination marker and/or limit fields are not valid.</p>
     InvalidArgument(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3654,17 +3654,17 @@ impl Error for DescribeActivitiesError {
 /// Errors returned by DescribeComments
 #[derive(Debug, PartialEq)]
 pub enum DescribeCommentsError {
-    ///<p>The resource does not exist.</p>
+    /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>The specified document version is not in the INITIALIZED state.</p>
+    /// <p>The specified document version is not in the INITIALIZED state.</p>
     ProhibitedState(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3764,19 +3764,19 @@ impl Error for DescribeCommentsError {
 /// Errors returned by DescribeDocumentVersions
 #[derive(Debug, PartialEq)]
 pub enum DescribeDocumentVersionsError {
-    ///<p>The resource does not exist.</p>
+    /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>The pagination marker and/or limit fields are not valid.</p>
+    /// <p>The pagination marker and/or limit fields are not valid.</p>
     InvalidArgument(String),
-    ///<p>The specified document version is not in the INITIALIZED state.</p>
+    /// <p>The specified document version is not in the INITIALIZED state.</p>
     ProhibitedState(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3886,17 +3886,17 @@ impl Error for DescribeDocumentVersionsError {
 /// Errors returned by DescribeFolderContents
 #[derive(Debug, PartialEq)]
 pub enum DescribeFolderContentsError {
-    ///<p>The resource does not exist.</p>
+    /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>The pagination marker and/or limit fields are not valid.</p>
+    /// <p>The pagination marker and/or limit fields are not valid.</p>
     InvalidArgument(String),
-    ///<p>The specified document version is not in the INITIALIZED state.</p>
+    /// <p>The specified document version is not in the INITIALIZED state.</p>
     ProhibitedState(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3998,11 +3998,11 @@ impl Error for DescribeFolderContentsError {
 /// Errors returned by DescribeNotificationSubscriptions
 #[derive(Debug, PartialEq)]
 pub enum DescribeNotificationSubscriptionsError {
-    ///<p>The resource does not exist.</p>
+    /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4096,13 +4096,13 @@ impl Error for DescribeNotificationSubscriptionsError {
 /// Errors returned by DescribeResourcePermissions
 #[derive(Debug, PartialEq)]
 pub enum DescribeResourcePermissionsError {
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4202,15 +4202,15 @@ impl Error for DescribeResourcePermissionsError {
 /// Errors returned by DescribeRootFolders
 #[derive(Debug, PartialEq)]
 pub enum DescribeRootFoldersError {
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>The pagination marker and/or limit fields are not valid.</p>
+    /// <p>The pagination marker and/or limit fields are not valid.</p>
     InvalidArgument(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4308,15 +4308,15 @@ impl Error for DescribeRootFoldersError {
 /// Errors returned by DescribeUsers
 #[derive(Debug, PartialEq)]
 pub enum DescribeUsersError {
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>The pagination marker and/or limit fields are not valid.</p>
+    /// <p>The pagination marker and/or limit fields are not valid.</p>
     InvalidArgument(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4410,15 +4410,15 @@ impl Error for DescribeUsersError {
 /// Errors returned by GetCurrentUser
 #[derive(Debug, PartialEq)]
 pub enum GetCurrentUserError {
-    ///<p>The resource does not exist.</p>
+    /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4512,17 +4512,17 @@ impl Error for GetCurrentUserError {
 /// Errors returned by GetDocument
 #[derive(Debug, PartialEq)]
 pub enum GetDocumentError {
-    ///<p>The resource does not exist.</p>
+    /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>The pagination marker and/or limit fields are not valid.</p>
+    /// <p>The pagination marker and/or limit fields are not valid.</p>
     InvalidArgument(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4620,15 +4620,15 @@ impl Error for GetDocumentError {
 /// Errors returned by GetDocumentPath
 #[derive(Debug, PartialEq)]
 pub enum GetDocumentPathError {
-    ///<p>The resource does not exist.</p>
+    /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4724,17 +4724,17 @@ impl Error for GetDocumentPathError {
 /// Errors returned by GetDocumentVersion
 #[derive(Debug, PartialEq)]
 pub enum GetDocumentVersionError {
-    ///<p>The resource does not exist.</p>
+    /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>The specified document version is not in the INITIALIZED state.</p>
+    /// <p>The specified document version is not in the INITIALIZED state.</p>
     ProhibitedState(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4836,19 +4836,19 @@ impl Error for GetDocumentVersionError {
 /// Errors returned by GetFolder
 #[derive(Debug, PartialEq)]
 pub enum GetFolderError {
-    ///<p>The resource does not exist.</p>
+    /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>The pagination marker and/or limit fields are not valid.</p>
+    /// <p>The pagination marker and/or limit fields are not valid.</p>
     InvalidArgument(String),
-    ///<p>The specified document version is not in the INITIALIZED state.</p>
+    /// <p>The specified document version is not in the INITIALIZED state.</p>
     ProhibitedState(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4948,15 +4948,15 @@ impl Error for GetFolderError {
 /// Errors returned by GetFolderPath
 #[derive(Debug, PartialEq)]
 pub enum GetFolderPathError {
-    ///<p>The resource does not exist.</p>
+    /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5050,27 +5050,27 @@ impl Error for GetFolderPathError {
 /// Errors returned by InitiateDocumentVersionUpload
 #[derive(Debug, PartialEq)]
 pub enum InitiateDocumentVersionUploadError {
-    ///<p>This exception is thrown when a valid checkout ID is not presented on document version upload calls for a document that has been checked out from Web client.</p>
+    /// <p>This exception is thrown when a valid checkout ID is not presented on document version upload calls for a document that has been checked out from Web client.</p>
     DraftUploadOutOfSync(String),
-    ///<p>The resource already exists.</p>
+    /// <p>The resource already exists.</p>
     EntityAlreadyExists(String),
-    ///<p>The resource does not exist.</p>
+    /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>The specified document version is not in the INITIALIZED state.</p>
+    /// <p>The specified document version is not in the INITIALIZED state.</p>
     ProhibitedState(String),
-    ///<p>The resource is already checked out.</p>
+    /// <p>The resource is already checked out.</p>
     ResourceAlreadyCheckedOut(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The storage limit has been exceeded.</p>
+    /// <p>The storage limit has been exceeded.</p>
     StorageLimitExceeded(String),
-    ///<p>The storage limit will be exceeded.</p>
+    /// <p>The storage limit will be exceeded.</p>
     StorageLimitWillExceed(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5212,13 +5212,13 @@ impl Error for InitiateDocumentVersionUploadError {
 /// Errors returned by RemoveAllResourcePermissions
 #[derive(Debug, PartialEq)]
 pub enum RemoveAllResourcePermissionsError {
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5318,13 +5318,13 @@ impl Error for RemoveAllResourcePermissionsError {
 /// Errors returned by RemoveResourcePermission
 #[derive(Debug, PartialEq)]
 pub enum RemoveResourcePermissionError {
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5422,23 +5422,23 @@ impl Error for RemoveResourcePermissionError {
 /// Errors returned by UpdateDocument
 #[derive(Debug, PartialEq)]
 pub enum UpdateDocumentError {
-    ///<p>The resource hierarchy is changing.</p>
+    /// <p>The resource hierarchy is changing.</p>
     ConcurrentModification(String),
-    ///<p>The resource already exists.</p>
+    /// <p>The resource already exists.</p>
     EntityAlreadyExists(String),
-    ///<p>The resource does not exist.</p>
+    /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>The maximum of 100,000 folders under the parent folder has been exceeded.</p>
+    /// <p>The maximum of 100,000 folders under the parent folder has been exceeded.</p>
     LimitExceeded(String),
-    ///<p>The specified document version is not in the INITIALIZED state.</p>
+    /// <p>The specified document version is not in the INITIALIZED state.</p>
     ProhibitedState(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5548,21 +5548,21 @@ impl Error for UpdateDocumentError {
 /// Errors returned by UpdateDocumentVersion
 #[derive(Debug, PartialEq)]
 pub enum UpdateDocumentVersionError {
-    ///<p>The resource hierarchy is changing.</p>
+    /// <p>The resource hierarchy is changing.</p>
     ConcurrentModification(String),
-    ///<p>The resource does not exist.</p>
+    /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>The operation is invalid.</p>
+    /// <p>The operation is invalid.</p>
     InvalidOperation(String),
-    ///<p>The specified document version is not in the INITIALIZED state.</p>
+    /// <p>The specified document version is not in the INITIALIZED state.</p>
     ProhibitedState(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5676,23 +5676,23 @@ impl Error for UpdateDocumentVersionError {
 /// Errors returned by UpdateFolder
 #[derive(Debug, PartialEq)]
 pub enum UpdateFolderError {
-    ///<p>The resource hierarchy is changing.</p>
+    /// <p>The resource hierarchy is changing.</p>
     ConcurrentModification(String),
-    ///<p>The resource already exists.</p>
+    /// <p>The resource already exists.</p>
     EntityAlreadyExists(String),
-    ///<p>The resource does not exist.</p>
+    /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>The maximum of 100,000 folders under the parent folder has been exceeded.</p>
+    /// <p>The maximum of 100,000 folders under the parent folder has been exceeded.</p>
     LimitExceeded(String),
-    ///<p>The specified document version is not in the INITIALIZED state.</p>
+    /// <p>The specified document version is not in the INITIALIZED state.</p>
     ProhibitedState(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5802,19 +5802,19 @@ impl Error for UpdateFolderError {
 /// Errors returned by UpdateUser
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserError {
-    ///<p>The last user in the organization is being deactivated.</p>
+    /// <p>The last user in the organization is being deactivated.</p>
     DeactivatingLastSystemUser(String),
-    ///<p>The resource does not exist.</p>
+    /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    ///<p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
     FailedDependency(String),
-    ///<p>The user is undergoing transfer of ownership.</p>
+    /// <p>The user is undergoing transfer of ownership.</p>
     IllegalUserState(String),
-    ///<p>One or more of the dependencies is unavailable.</p>
+    /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The operation is not permitted.</p>
+    /// <p>The operation is not permitted.</p>
     UnauthorizedOperation(String),
-    ///<p>The caller does not have access to perform the action on the resource.</p>
+    /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5913,209 +5913,209 @@ impl Error for UpdateUserError {
 }
 /// Trait representing the capabilities of the Amazon WorkDocs API. Amazon WorkDocs clients implement this trait.
 pub trait Workdocs {
-    #[doc="<p>Aborts the upload of the specified document version that was previously initiated by <a>InitiateDocumentVersionUpload</a>. The client should make this call only when it no longer intends to upload the document version, or fails to do so.</p>"]
+    /// <p>Aborts the upload of the specified document version that was previously initiated by <a>InitiateDocumentVersionUpload</a>. The client should make this call only when it no longer intends to upload the document version, or fails to do so.</p>
     fn abort_document_version_upload(
         &self,
         input: &AbortDocumentVersionUploadRequest,
     ) -> Result<(), AbortDocumentVersionUploadError>;
 
-    #[doc = "<p>Activates the specified user. Only active users can access Amazon WorkDocs.</p>"]
+    /// <p>Activates the specified user. Only active users can access Amazon WorkDocs.</p>
     fn activate_user(
         &self,
         input: &ActivateUserRequest,
     ) -> Result<ActivateUserResponse, ActivateUserError>;
 
-    #[doc="<p>Creates a set of permissions for the specified folder or document. The resource permissions are overwritten if the principals already have different permissions.</p>"]
+    /// <p>Creates a set of permissions for the specified folder or document. The resource permissions are overwritten if the principals already have different permissions.</p>
     fn add_resource_permissions(
         &self,
         input: &AddResourcePermissionsRequest,
     ) -> Result<AddResourcePermissionsResponse, AddResourcePermissionsError>;
 
-    #[doc = "<p>Adds a new comment to the specified document version.</p>"]
+    /// <p>Adds a new comment to the specified document version.</p>
     fn create_comment(
         &self,
         input: &CreateCommentRequest,
     ) -> Result<CreateCommentResponse, CreateCommentError>;
 
-    #[doc="<p>Adds one or more custom properties to the specified resource (a folder, document, or version).</p>"]
+    /// <p>Adds one or more custom properties to the specified resource (a folder, document, or version).</p>
     fn create_custom_metadata(
         &self,
         input: &CreateCustomMetadataRequest,
     ) -> Result<CreateCustomMetadataResponse, CreateCustomMetadataError>;
 
-    #[doc = "<p>Creates a folder with the specified name and parent folder.</p>"]
+    /// <p>Creates a folder with the specified name and parent folder.</p>
     fn create_folder(
         &self,
         input: &CreateFolderRequest,
     ) -> Result<CreateFolderResponse, CreateFolderError>;
 
-    #[doc = "<p>Adds the specified list of labels to the given resource (a document or folder)</p>"]
+    /// <p>Adds the specified list of labels to the given resource (a document or folder)</p>
     fn create_labels(
         &self,
         input: &CreateLabelsRequest,
     ) -> Result<CreateLabelsResponse, CreateLabelsError>;
 
-    #[doc="<p>Configure WorkDocs to use Amazon SNS notifications.</p> <p>The endpoint receives a confirmation message, and must confirm the subscription. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SendMessageToHttp.html#SendMessageToHttp.confirm\">Confirm the Subscription</a> in the <i>Amazon Simple Notification Service Developer Guide</i>.</p>"]
+    /// <p>Configure WorkDocs to use Amazon SNS notifications.</p> <p>The endpoint receives a confirmation message, and must confirm the subscription. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SendMessageToHttp.html#SendMessageToHttp.confirm">Confirm the Subscription</a> in the <i>Amazon Simple Notification Service Developer Guide</i>.</p>
     fn create_notification_subscription(
         &self,
         input: &CreateNotificationSubscriptionRequest,
     ) -> Result<CreateNotificationSubscriptionResponse, CreateNotificationSubscriptionError>;
 
-    #[doc="<p>Creates a user in a Simple AD or Microsoft AD directory. The status of a newly created user is \"ACTIVE\". New users can access Amazon WorkDocs.</p>"]
+    /// <p>Creates a user in a Simple AD or Microsoft AD directory. The status of a newly created user is "ACTIVE". New users can access Amazon WorkDocs.</p>
     fn create_user(&self, input: &CreateUserRequest)
         -> Result<CreateUserResponse, CreateUserError>;
 
-    #[doc="<p>Deactivates the specified user, which revokes the user's access to Amazon WorkDocs.</p>"]
+    /// <p>Deactivates the specified user, which revokes the user's access to Amazon WorkDocs.</p>
     fn deactivate_user(&self, input: &DeactivateUserRequest) -> Result<(), DeactivateUserError>;
 
-    #[doc = "<p>Deletes the specified comment from the document version.</p>"]
+    /// <p>Deletes the specified comment from the document version.</p>
     fn delete_comment(&self, input: &DeleteCommentRequest) -> Result<(), DeleteCommentError>;
 
-    #[doc = "<p>Deletes custom metadata from the specified resource.</p>"]
+    /// <p>Deletes custom metadata from the specified resource.</p>
     fn delete_custom_metadata(
         &self,
         input: &DeleteCustomMetadataRequest,
     ) -> Result<DeleteCustomMetadataResponse, DeleteCustomMetadataError>;
 
-    #[doc = "<p>Permanently deletes the specified document and its associated metadata.</p>"]
+    /// <p>Permanently deletes the specified document and its associated metadata.</p>
     fn delete_document(&self, input: &DeleteDocumentRequest) -> Result<(), DeleteDocumentError>;
 
-    #[doc = "<p>Permanently deletes the specified folder and its contents.</p>"]
+    /// <p>Permanently deletes the specified folder and its contents.</p>
     fn delete_folder(&self, input: &DeleteFolderRequest) -> Result<(), DeleteFolderError>;
 
-    #[doc = "<p>Deletes the contents of the specified folder.</p>"]
+    /// <p>Deletes the contents of the specified folder.</p>
     fn delete_folder_contents(
         &self,
         input: &DeleteFolderContentsRequest,
     ) -> Result<(), DeleteFolderContentsError>;
 
-    #[doc = "<p>Deletes the specified list of labels from a resource.</p>"]
+    /// <p>Deletes the specified list of labels from a resource.</p>
     fn delete_labels(
         &self,
         input: &DeleteLabelsRequest,
     ) -> Result<DeleteLabelsResponse, DeleteLabelsError>;
 
-    #[doc = "<p>Deletes the specified subscription from the specified organization.</p>"]
+    /// <p>Deletes the specified subscription from the specified organization.</p>
     fn delete_notification_subscription(
         &self,
         input: &DeleteNotificationSubscriptionRequest,
     ) -> Result<(), DeleteNotificationSubscriptionError>;
 
-    #[doc = "<p>Deletes the specified user from a Simple AD or Microsoft AD directory.</p>"]
+    /// <p>Deletes the specified user from a Simple AD or Microsoft AD directory.</p>
     fn delete_user(&self, input: &DeleteUserRequest) -> Result<(), DeleteUserError>;
 
-    #[doc = "<p>Describes the user activities in a specified time period.</p>"]
+    /// <p>Describes the user activities in a specified time period.</p>
     fn describe_activities(
         &self,
         input: &DescribeActivitiesRequest,
     ) -> Result<DescribeActivitiesResponse, DescribeActivitiesError>;
 
-    #[doc = "<p>List all the comments for the specified document version.</p>"]
+    /// <p>List all the comments for the specified document version.</p>
     fn describe_comments(
         &self,
         input: &DescribeCommentsRequest,
     ) -> Result<DescribeCommentsResponse, DescribeCommentsError>;
 
-    #[doc="<p>Retrieves the document versions for the specified document.</p> <p>By default, only active versions are returned.</p>"]
+    /// <p>Retrieves the document versions for the specified document.</p> <p>By default, only active versions are returned.</p>
     fn describe_document_versions(
         &self,
         input: &DescribeDocumentVersionsRequest,
     ) -> Result<DescribeDocumentVersionsResponse, DescribeDocumentVersionsError>;
 
-    #[doc="<p>Describes the contents of the specified folder, including its documents and subfolders.</p> <p>By default, Amazon WorkDocs returns the first 100 active document and folder metadata items. If there are more results, the response includes a marker that you can use to request the next set of results. You can also request initialized documents.</p>"]
+    /// <p>Describes the contents of the specified folder, including its documents and subfolders.</p> <p>By default, Amazon WorkDocs returns the first 100 active document and folder metadata items. If there are more results, the response includes a marker that you can use to request the next set of results. You can also request initialized documents.</p>
     fn describe_folder_contents(
         &self,
         input: &DescribeFolderContentsRequest,
     ) -> Result<DescribeFolderContentsResponse, DescribeFolderContentsError>;
 
-    #[doc = "<p>Lists the specified notification subscriptions.</p>"]
+    /// <p>Lists the specified notification subscriptions.</p>
     fn describe_notification_subscriptions(
         &self,
         input: &DescribeNotificationSubscriptionsRequest,
     ) -> Result<DescribeNotificationSubscriptionsResponse, DescribeNotificationSubscriptionsError>;
 
-    #[doc = "<p>Describes the permissions of a specified resource.</p>"]
+    /// <p>Describes the permissions of a specified resource.</p>
     fn describe_resource_permissions(
         &self,
         input: &DescribeResourcePermissionsRequest,
     ) -> Result<DescribeResourcePermissionsResponse, DescribeResourcePermissionsError>;
 
-    #[doc="<p>Describes the current user's special folders; the <code>RootFolder</code> and the <code>RecyleBin</code>. <code>RootFolder</code> is the root of user's files and folders and <code>RecyleBin</code> is the root of recycled items. This is not a valid action for SigV4 (administrative API) clients.</p>"]
+    /// <p>Describes the current user's special folders; the <code>RootFolder</code> and the <code>RecyleBin</code>. <code>RootFolder</code> is the root of user's files and folders and <code>RecyleBin</code> is the root of recycled items. This is not a valid action for SigV4 (administrative API) clients.</p>
     fn describe_root_folders(
         &self,
         input: &DescribeRootFoldersRequest,
     ) -> Result<DescribeRootFoldersResponse, DescribeRootFoldersError>;
 
-    #[doc="<p>Describes the specified users. You can describe all users or filter the results (for example, by status or organization).</p> <p>By default, Amazon WorkDocs returns the first 24 active or pending users. If there are more results, the response includes a marker that you can use to request the next set of results.</p>"]
+    /// <p>Describes the specified users. You can describe all users or filter the results (for example, by status or organization).</p> <p>By default, Amazon WorkDocs returns the first 24 active or pending users. If there are more results, the response includes a marker that you can use to request the next set of results.</p>
     fn describe_users(
         &self,
         input: &DescribeUsersRequest,
     ) -> Result<DescribeUsersResponse, DescribeUsersError>;
 
-    #[doc="<p>Retrieves details of the current user for whom the authentication token was generated. This is not a valid action for SigV4 (administrative API) clients.</p>"]
+    /// <p>Retrieves details of the current user for whom the authentication token was generated. This is not a valid action for SigV4 (administrative API) clients.</p>
     fn get_current_user(
         &self,
         input: &GetCurrentUserRequest,
     ) -> Result<GetCurrentUserResponse, GetCurrentUserError>;
 
-    #[doc = "<p>Retrieves details of a document.</p>"]
+    /// <p>Retrieves details of a document.</p>
     fn get_document(
         &self,
         input: &GetDocumentRequest,
     ) -> Result<GetDocumentResponse, GetDocumentError>;
 
-    #[doc="<p>Retrieves the path information (the hierarchy from the root folder) for the requested document.</p> <p>By default, Amazon WorkDocs returns a maximum of 100 levels upwards from the requested document and only includes the IDs of the parent folders in the path. You can limit the maximum number of levels. You can also request the names of the parent folders.</p>"]
+    /// <p>Retrieves the path information (the hierarchy from the root folder) for the requested document.</p> <p>By default, Amazon WorkDocs returns a maximum of 100 levels upwards from the requested document and only includes the IDs of the parent folders in the path. You can limit the maximum number of levels. You can also request the names of the parent folders.</p>
     fn get_document_path(
         &self,
         input: &GetDocumentPathRequest,
     ) -> Result<GetDocumentPathResponse, GetDocumentPathError>;
 
-    #[doc = "<p>Retrieves version metadata for the specified document.</p>"]
+    /// <p>Retrieves version metadata for the specified document.</p>
     fn get_document_version(
         &self,
         input: &GetDocumentVersionRequest,
     ) -> Result<GetDocumentVersionResponse, GetDocumentVersionError>;
 
-    #[doc = "<p>Retrieves the metadata of the specified folder.</p>"]
+    /// <p>Retrieves the metadata of the specified folder.</p>
     fn get_folder(&self, input: &GetFolderRequest) -> Result<GetFolderResponse, GetFolderError>;
 
-    #[doc="<p>Retrieves the path information (the hierarchy from the root folder) for the specified folder.</p> <p>By default, Amazon WorkDocs returns a maximum of 100 levels upwards from the requested folder and only includes the IDs of the parent folders in the path. You can limit the maximum number of levels. You can also request the parent folder names.</p>"]
+    /// <p>Retrieves the path information (the hierarchy from the root folder) for the specified folder.</p> <p>By default, Amazon WorkDocs returns a maximum of 100 levels upwards from the requested folder and only includes the IDs of the parent folders in the path. You can limit the maximum number of levels. You can also request the parent folder names.</p>
     fn get_folder_path(
         &self,
         input: &GetFolderPathRequest,
     ) -> Result<GetFolderPathResponse, GetFolderPathError>;
 
-    #[doc="<p>Creates a new document object and version object.</p> <p>The client specifies the parent folder ID and name of the document to upload. The ID is optionally specified when creating a new version of an existing document. This is the first step to upload a document. Next, upload the document to the URL returned from the call, and then call <a>UpdateDocumentVersion</a>.</p> <p>To cancel the document upload, call <a>AbortDocumentVersionUpload</a>.</p>"]
+    /// <p>Creates a new document object and version object.</p> <p>The client specifies the parent folder ID and name of the document to upload. The ID is optionally specified when creating a new version of an existing document. This is the first step to upload a document. Next, upload the document to the URL returned from the call, and then call <a>UpdateDocumentVersion</a>.</p> <p>To cancel the document upload, call <a>AbortDocumentVersionUpload</a>.</p>
     fn initiate_document_version_upload(
         &self,
         input: &InitiateDocumentVersionUploadRequest,
     ) -> Result<InitiateDocumentVersionUploadResponse, InitiateDocumentVersionUploadError>;
 
-    #[doc = "<p>Removes all the permissions from the specified resource.</p>"]
+    /// <p>Removes all the permissions from the specified resource.</p>
     fn remove_all_resource_permissions(
         &self,
         input: &RemoveAllResourcePermissionsRequest,
     ) -> Result<(), RemoveAllResourcePermissionsError>;
 
-    #[doc = "<p>Removes the permission for the specified principal from the specified resource.</p>"]
+    /// <p>Removes the permission for the specified principal from the specified resource.</p>
     fn remove_resource_permission(
         &self,
         input: &RemoveResourcePermissionRequest,
     ) -> Result<(), RemoveResourcePermissionError>;
 
-    #[doc="<p>Updates the specified attributes of a document. The user must have access to both the document and its parent folder, if applicable.</p>"]
+    /// <p>Updates the specified attributes of a document. The user must have access to both the document and its parent folder, if applicable.</p>
     fn update_document(&self, input: &UpdateDocumentRequest) -> Result<(), UpdateDocumentError>;
 
-    #[doc="<p>Changes the status of the document version to ACTIVE. </p> <p>Amazon WorkDocs also sets its document container to ACTIVE. This is the last step in a document upload, after the client uploads the document to an S3-presigned URL returned by <a>InitiateDocumentVersionUpload</a>. </p>"]
+    /// <p>Changes the status of the document version to ACTIVE. </p> <p>Amazon WorkDocs also sets its document container to ACTIVE. This is the last step in a document upload, after the client uploads the document to an S3-presigned URL returned by <a>InitiateDocumentVersionUpload</a>. </p>
     fn update_document_version(
         &self,
         input: &UpdateDocumentVersionRequest,
     ) -> Result<(), UpdateDocumentVersionError>;
 
-    #[doc="<p>Updates the specified attributes of the specified folder. The user must have access to both the folder and its parent folder, if applicable.</p>"]
+    /// <p>Updates the specified attributes of the specified folder. The user must have access to both the folder and its parent folder, if applicable.</p>
     fn update_folder(&self, input: &UpdateFolderRequest) -> Result<(), UpdateFolderError>;
 
-    #[doc="<p>Updates the specified attributes of the specified user, and grants or revokes administrative privileges to the Amazon WorkDocs site.</p>"]
+    /// <p>Updates the specified attributes of the specified user, and grants or revokes administrative privileges to the Amazon WorkDocs site.</p>
     fn update_user(&self, input: &UpdateUserRequest)
         -> Result<UpdateUserResponse, UpdateUserError>;
 }
@@ -6149,7 +6149,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Aborts the upload of the specified document version that was previously initiated by <a>InitiateDocumentVersionUpload</a>. The client should make this call only when it no longer intends to upload the document version, or fails to do so.</p>"]
+    /// <p>Aborts the upload of the specified document version that was previously initiated by <a>InitiateDocumentVersionUpload</a>. The client should make this call only when it no longer intends to upload the document version, or fails to do so.</p>
     fn abort_document_version_upload(
         &self,
         input: &AbortDocumentVersionUploadRequest,
@@ -6186,7 +6186,7 @@ where
         }
     }
 
-    #[doc = "<p>Activates the specified user. Only active users can access Amazon WorkDocs.</p>"]
+    /// <p>Activates the specified user. Only active users can access Amazon WorkDocs.</p>
     fn activate_user(
         &self,
         input: &ActivateUserRequest,
@@ -6231,7 +6231,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a set of permissions for the specified folder or document. The resource permissions are overwritten if the principals already have different permissions.</p>"]
+    /// <p>Creates a set of permissions for the specified folder or document. The resource permissions are overwritten if the principals already have different permissions.</p>
     fn add_resource_permissions(
         &self,
         input: &AddResourcePermissionsRequest,
@@ -6280,7 +6280,7 @@ where
         }
     }
 
-    #[doc = "<p>Adds a new comment to the specified document version.</p>"]
+    /// <p>Adds a new comment to the specified document version.</p>
     fn create_comment(
         &self,
         input: &CreateCommentRequest,
@@ -6329,7 +6329,7 @@ where
         }
     }
 
-    #[doc="<p>Adds one or more custom properties to the specified resource (a folder, document, or version).</p>"]
+    /// <p>Adds one or more custom properties to the specified resource (a folder, document, or version).</p>
     fn create_custom_metadata(
         &self,
         input: &CreateCustomMetadataRequest,
@@ -6382,7 +6382,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a folder with the specified name and parent folder.</p>"]
+    /// <p>Creates a folder with the specified name and parent folder.</p>
     fn create_folder(
         &self,
         input: &CreateFolderRequest,
@@ -6427,7 +6427,7 @@ where
         }
     }
 
-    #[doc = "<p>Adds the specified list of labels to the given resource (a document or folder)</p>"]
+    /// <p>Adds the specified list of labels to the given resource (a document or folder)</p>
     fn create_labels(
         &self,
         input: &CreateLabelsRequest,
@@ -6475,7 +6475,7 @@ where
         }
     }
 
-    #[doc="<p>Configure WorkDocs to use Amazon SNS notifications.</p> <p>The endpoint receives a confirmation message, and must confirm the subscription. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SendMessageToHttp.html#SendMessageToHttp.confirm\">Confirm the Subscription</a> in the <i>Amazon Simple Notification Service Developer Guide</i>.</p>"]
+    /// <p>Configure WorkDocs to use Amazon SNS notifications.</p> <p>The endpoint receives a confirmation message, and must confirm the subscription. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SendMessageToHttp.html#SendMessageToHttp.confirm">Confirm the Subscription</a> in the <i>Amazon Simple Notification Service Developer Guide</i>.</p>
     fn create_notification_subscription(
         &self,
         input: &CreateNotificationSubscriptionRequest,
@@ -6521,7 +6521,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a user in a Simple AD or Microsoft AD directory. The status of a newly created user is \"ACTIVE\". New users can access Amazon WorkDocs.</p>"]
+    /// <p>Creates a user in a Simple AD or Microsoft AD directory. The status of a newly created user is "ACTIVE". New users can access Amazon WorkDocs.</p>
     fn create_user(
         &self,
         input: &CreateUserRequest,
@@ -6566,7 +6566,7 @@ where
         }
     }
 
-    #[doc="<p>Deactivates the specified user, which revokes the user's access to Amazon WorkDocs.</p>"]
+    /// <p>Deactivates the specified user, which revokes the user's access to Amazon WorkDocs.</p>
     fn deactivate_user(&self, input: &DeactivateUserRequest) -> Result<(), DeactivateUserError> {
         let request_uri = format!(
             "/api/v1/users/{user_id}/activation",
@@ -6599,7 +6599,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the specified comment from the document version.</p>"]
+    /// <p>Deletes the specified comment from the document version.</p>
     fn delete_comment(&self, input: &DeleteCommentRequest) -> Result<(), DeleteCommentError> {
         let request_uri = format!(
             "/api/v1/documents/{document_id}/versions/{version_id}/comment/{comment_id}",
@@ -6634,7 +6634,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes custom metadata from the specified resource.</p>"]
+    /// <p>Deletes custom metadata from the specified resource.</p>
     fn delete_custom_metadata(
         &self,
         input: &DeleteCustomMetadataRequest,
@@ -6692,7 +6692,7 @@ where
         }
     }
 
-    #[doc = "<p>Permanently deletes the specified document and its associated metadata.</p>"]
+    /// <p>Permanently deletes the specified document and its associated metadata.</p>
     fn delete_document(&self, input: &DeleteDocumentRequest) -> Result<(), DeleteDocumentError> {
         let request_uri = format!(
             "/api/v1/documents/{document_id}",
@@ -6725,7 +6725,7 @@ where
         }
     }
 
-    #[doc = "<p>Permanently deletes the specified folder and its contents.</p>"]
+    /// <p>Permanently deletes the specified folder and its contents.</p>
     fn delete_folder(&self, input: &DeleteFolderRequest) -> Result<(), DeleteFolderError> {
         let request_uri = format!("/api/v1/folders/{folder_id}", folder_id = input.folder_id);
 
@@ -6755,7 +6755,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the contents of the specified folder.</p>"]
+    /// <p>Deletes the contents of the specified folder.</p>
     fn delete_folder_contents(
         &self,
         input: &DeleteFolderContentsRequest,
@@ -6791,7 +6791,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the specified list of labels from a resource.</p>"]
+    /// <p>Deletes the specified list of labels from a resource.</p>
     fn delete_labels(
         &self,
         input: &DeleteLabelsRequest,
@@ -6846,7 +6846,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the specified subscription from the specified organization.</p>"]
+    /// <p>Deletes the specified subscription from the specified organization.</p>
     fn delete_notification_subscription(
         &self,
         input: &DeleteNotificationSubscriptionRequest,
@@ -6879,7 +6879,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the specified user from a Simple AD or Microsoft AD directory.</p>"]
+    /// <p>Deletes the specified user from a Simple AD or Microsoft AD directory.</p>
     fn delete_user(&self, input: &DeleteUserRequest) -> Result<(), DeleteUserError> {
         let request_uri = format!("/api/v1/users/{user_id}", user_id = input.user_id);
 
@@ -6909,7 +6909,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes the user activities in a specified time period.</p>"]
+    /// <p>Describes the user activities in a specified time period.</p>
     fn describe_activities(
         &self,
         input: &DescribeActivitiesRequest,
@@ -6971,7 +6971,7 @@ where
         }
     }
 
-    #[doc = "<p>List all the comments for the specified document version.</p>"]
+    /// <p>List all the comments for the specified document version.</p>
     fn describe_comments(
         &self,
         input: &DescribeCommentsRequest,
@@ -7025,7 +7025,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves the document versions for the specified document.</p> <p>By default, only active versions are returned.</p>"]
+    /// <p>Retrieves the document versions for the specified document.</p> <p>By default, only active versions are returned.</p>
     fn describe_document_versions(
         &self,
         input: &DescribeDocumentVersionsRequest,
@@ -7085,7 +7085,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the contents of the specified folder, including its documents and subfolders.</p> <p>By default, Amazon WorkDocs returns the first 100 active document and folder metadata items. If there are more results, the response includes a marker that you can use to request the next set of results. You can also request initialized documents.</p>"]
+    /// <p>Describes the contents of the specified folder, including its documents and subfolders.</p> <p>By default, Amazon WorkDocs returns the first 100 active document and folder metadata items. If there are more results, the response includes a marker that you can use to request the next set of results. You can also request initialized documents.</p>
     fn describe_folder_contents(
         &self,
         input: &DescribeFolderContentsRequest,
@@ -7151,7 +7151,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists the specified notification subscriptions.</p>"]
+    /// <p>Lists the specified notification subscriptions.</p>
     fn describe_notification_subscriptions(
         &self,
         input: &DescribeNotificationSubscriptionsRequest,
@@ -7204,7 +7204,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes the permissions of a specified resource.</p>"]
+    /// <p>Describes the permissions of a specified resource.</p>
     fn describe_resource_permissions(
         &self,
         input: &DescribeResourcePermissionsRequest,
@@ -7258,7 +7258,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the current user's special folders; the <code>RootFolder</code> and the <code>RecyleBin</code>. <code>RootFolder</code> is the root of user's files and folders and <code>RecyleBin</code> is the root of recycled items. This is not a valid action for SigV4 (administrative API) clients.</p>"]
+    /// <p>Describes the current user's special folders; the <code>RootFolder</code> and the <code>RecyleBin</code>. <code>RootFolder</code> is the root of user's files and folders and <code>RecyleBin</code> is the root of recycled items. This is not a valid action for SigV4 (administrative API) clients.</p>
     fn describe_root_folders(
         &self,
         input: &DescribeRootFoldersRequest,
@@ -7306,7 +7306,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the specified users. You can describe all users or filter the results (for example, by status or organization).</p> <p>By default, Amazon WorkDocs returns the first 24 active or pending users. If there are more results, the response includes a marker that you can use to request the next set of results.</p>"]
+    /// <p>Describes the specified users. You can describe all users or filter the results (for example, by status or organization).</p> <p>By default, Amazon WorkDocs returns the first 24 active or pending users. If there are more results, the response includes a marker that you can use to request the next set of results.</p>
     fn describe_users(
         &self,
         input: &DescribeUsersRequest,
@@ -7377,7 +7377,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves details of the current user for whom the authentication token was generated. This is not a valid action for SigV4 (administrative API) clients.</p>"]
+    /// <p>Retrieves details of the current user for whom the authentication token was generated. This is not a valid action for SigV4 (administrative API) clients.</p>
     fn get_current_user(
         &self,
         input: &GetCurrentUserRequest,
@@ -7417,7 +7417,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves details of a document.</p>"]
+    /// <p>Retrieves details of a document.</p>
     fn get_document(
         &self,
         input: &GetDocumentRequest,
@@ -7467,7 +7467,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves the path information (the hierarchy from the root folder) for the requested document.</p> <p>By default, Amazon WorkDocs returns a maximum of 100 levels upwards from the requested document and only includes the IDs of the parent folders in the path. You can limit the maximum number of levels. You can also request the names of the parent folders.</p>"]
+    /// <p>Retrieves the path information (the hierarchy from the root folder) for the requested document.</p> <p>By default, Amazon WorkDocs returns a maximum of 100 levels upwards from the requested document and only includes the IDs of the parent folders in the path. You can limit the maximum number of levels. You can also request the names of the parent folders.</p>
     fn get_document_path(
         &self,
         input: &GetDocumentPathRequest,
@@ -7523,7 +7523,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves version metadata for the specified document.</p>"]
+    /// <p>Retrieves version metadata for the specified document.</p>
     fn get_document_version(
         &self,
         input: &GetDocumentVersionRequest,
@@ -7577,7 +7577,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves the metadata of the specified folder.</p>"]
+    /// <p>Retrieves the metadata of the specified folder.</p>
     fn get_folder(&self, input: &GetFolderRequest) -> Result<GetFolderResponse, GetFolderError> {
         let request_uri = format!("/api/v1/folders/{folder_id}", folder_id = input.folder_id);
 
@@ -7621,7 +7621,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves the path information (the hierarchy from the root folder) for the specified folder.</p> <p>By default, Amazon WorkDocs returns a maximum of 100 levels upwards from the requested folder and only includes the IDs of the parent folders in the path. You can limit the maximum number of levels. You can also request the parent folder names.</p>"]
+    /// <p>Retrieves the path information (the hierarchy from the root folder) for the specified folder.</p> <p>By default, Amazon WorkDocs returns a maximum of 100 levels upwards from the requested folder and only includes the IDs of the parent folders in the path. You can limit the maximum number of levels. You can also request the parent folder names.</p>
     fn get_folder_path(
         &self,
         input: &GetFolderPathRequest,
@@ -7677,7 +7677,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new document object and version object.</p> <p>The client specifies the parent folder ID and name of the document to upload. The ID is optionally specified when creating a new version of an existing document. This is the first step to upload a document. Next, upload the document to the URL returned from the call, and then call <a>UpdateDocumentVersion</a>.</p> <p>To cancel the document upload, call <a>AbortDocumentVersionUpload</a>.</p>"]
+    /// <p>Creates a new document object and version object.</p> <p>The client specifies the parent folder ID and name of the document to upload. The ID is optionally specified when creating a new version of an existing document. This is the first step to upload a document. Next, upload the document to the URL returned from the call, and then call <a>UpdateDocumentVersion</a>.</p> <p>To cancel the document upload, call <a>AbortDocumentVersionUpload</a>.</p>
     fn initiate_document_version_upload(
         &self,
         input: &InitiateDocumentVersionUploadRequest,
@@ -7723,7 +7723,7 @@ where
         }
     }
 
-    #[doc = "<p>Removes all the permissions from the specified resource.</p>"]
+    /// <p>Removes all the permissions from the specified resource.</p>
     fn remove_all_resource_permissions(
         &self,
         input: &RemoveAllResourcePermissionsRequest,
@@ -7759,7 +7759,7 @@ where
         }
     }
 
-    #[doc = "<p>Removes the permission for the specified principal from the specified resource.</p>"]
+    /// <p>Removes the permission for the specified principal from the specified resource.</p>
     fn remove_resource_permission(
         &self,
         input: &RemoveResourcePermissionRequest,
@@ -7801,7 +7801,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the specified attributes of a document. The user must have access to both the document and its parent folder, if applicable.</p>"]
+    /// <p>Updates the specified attributes of a document. The user must have access to both the document and its parent folder, if applicable.</p>
     fn update_document(&self, input: &UpdateDocumentRequest) -> Result<(), UpdateDocumentError> {
         let request_uri = format!(
             "/api/v1/documents/{document_id}",
@@ -7837,7 +7837,7 @@ where
         }
     }
 
-    #[doc="<p>Changes the status of the document version to ACTIVE. </p> <p>Amazon WorkDocs also sets its document container to ACTIVE. This is the last step in a document upload, after the client uploads the document to an S3-presigned URL returned by <a>InitiateDocumentVersionUpload</a>. </p>"]
+    /// <p>Changes the status of the document version to ACTIVE. </p> <p>Amazon WorkDocs also sets its document container to ACTIVE. This is the last step in a document upload, after the client uploads the document to an S3-presigned URL returned by <a>InitiateDocumentVersionUpload</a>. </p>
     fn update_document_version(
         &self,
         input: &UpdateDocumentVersionRequest,
@@ -7877,7 +7877,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the specified attributes of the specified folder. The user must have access to both the folder and its parent folder, if applicable.</p>"]
+    /// <p>Updates the specified attributes of the specified folder. The user must have access to both the folder and its parent folder, if applicable.</p>
     fn update_folder(&self, input: &UpdateFolderRequest) -> Result<(), UpdateFolderError> {
         let request_uri = format!("/api/v1/folders/{folder_id}", folder_id = input.folder_id);
 
@@ -7910,7 +7910,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the specified attributes of the specified user, and grants or revokes administrative privileges to the Amazon WorkDocs site.</p>"]
+    /// <p>Updates the specified attributes of the specified user, and grants or revokes administrative privileges to the Amazon WorkDocs site.</p>
     fn update_user(
         &self,
         input: &UpdateUserRequest,

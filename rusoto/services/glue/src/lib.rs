@@ -11,7 +11,7 @@
 //
 // =================================================================
 
-//! Defines service operations used by the GlueFrontendService
+//! <p>Defines service operations used by the GlueFrontendService</p>
 //!
 //! If you're using the service, you're probably looking for [GlueClient](struct.GlueClient.html) and [Glue](trait.Glue.html).
 

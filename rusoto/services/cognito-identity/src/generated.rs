@@ -176,7 +176,7 @@ pub struct GetIdInput {
     /// <p>An identity pool ID in the format REGION:GUID.</p>
     #[serde(rename = "IdentityPoolId")]
     pub identity_pool_id: String,
-    /// <p>A set of optional name-value pairs that map provider names to provider tokens. The available provider names for <code>Logins</code> are as follows:</p> <ul> <li> <p>Facebook: <code>graph.facebook.com</code> </p> </li> <li> <p>Amazon Cognito Identity Provider: <code>cognito-idp.us-east-1.amazonaws.com/us-east-1_123456789</code> </p> </li> <li> <p>Google: <code>accounts.google.com</code> </p> </li> <li> <p>Amazon: <code>www.amazon.com</code> </p> </li> <li> <p>Twitter: <code>api.twitter.com</code> </p> </li> <li> <p>Digits: <code>www.digits.com</code> </p> </li> </ul>
+    /// <p><p>A set of optional name-value pairs that map provider names to provider tokens. The available provider names for <code>Logins</code> are as follows:</p> <ul> <li> <p>Facebook: <code>graph.facebook.com</code> </p> </li> <li> <p>Amazon Cognito Identity Provider: <code>cognito-idp.us-east-1.amazonaws.com/us-east-1_123456789</code> </p> </li> <li> <p>Google: <code>accounts.google.com</code> </p> </li> <li> <p>Amazon: <code>www.amazon.com</code> </p> </li> <li> <p>Twitter: <code>api.twitter.com</code> </p> </li> <li> <p>Digits: <code>www.digits.com</code> </p> </li> </ul></p>
     #[serde(rename = "Logins")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logins: Option<::std::collections::HashMap<String, String>>,
@@ -572,17 +572,17 @@ pub struct UnprocessedIdentityId {
 /// Errors returned by CreateIdentityPool
 #[derive(Debug, PartialEq)]
 pub enum CreateIdentityPoolError {
-    ///<p>Thrown when the service encounters an error during processing the request.</p>
+    /// <p>Thrown when the service encounters an error during processing the request.</p>
     InternalError(String),
-    ///<p>Thrown for missing or bad input parameter(s).</p>
+    /// <p>Thrown for missing or bad input parameter(s).</p>
     InvalidParameter(String),
-    ///<p>Thrown when the total number of user pools has exceeded a preset limit.</p>
+    /// <p>Thrown when the total number of user pools has exceeded a preset limit.</p>
     LimitExceeded(String),
-    ///<p>Thrown when a user is not authorized to access the requested resource.</p>
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
-    ///<p>Thrown when a user tries to use a login which is already linked to another account.</p>
+    /// <p>Thrown when a user tries to use a login which is already linked to another account.</p>
     ResourceConflict(String),
-    ///<p>Thrown when a request is throttled.</p>
+    /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -682,11 +682,11 @@ impl Error for CreateIdentityPoolError {
 /// Errors returned by DeleteIdentities
 #[derive(Debug, PartialEq)]
 pub enum DeleteIdentitiesError {
-    ///<p>Thrown when the service encounters an error during processing the request.</p>
+    /// <p>Thrown when the service encounters an error during processing the request.</p>
     InternalError(String),
-    ///<p>Thrown for missing or bad input parameter(s).</p>
+    /// <p>Thrown for missing or bad input parameter(s).</p>
     InvalidParameter(String),
-    ///<p>Thrown when a request is throttled.</p>
+    /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -772,15 +772,15 @@ impl Error for DeleteIdentitiesError {
 /// Errors returned by DeleteIdentityPool
 #[derive(Debug, PartialEq)]
 pub enum DeleteIdentityPoolError {
-    ///<p>Thrown when the service encounters an error during processing the request.</p>
+    /// <p>Thrown when the service encounters an error during processing the request.</p>
     InternalError(String),
-    ///<p>Thrown for missing or bad input parameter(s).</p>
+    /// <p>Thrown for missing or bad input parameter(s).</p>
     InvalidParameter(String),
-    ///<p>Thrown when a user is not authorized to access the requested resource.</p>
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
-    ///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
+    /// <p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
     ResourceNotFound(String),
-    ///<p>Thrown when a request is throttled.</p>
+    /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -876,15 +876,15 @@ impl Error for DeleteIdentityPoolError {
 /// Errors returned by DescribeIdentity
 #[derive(Debug, PartialEq)]
 pub enum DescribeIdentityError {
-    ///<p>Thrown when the service encounters an error during processing the request.</p>
+    /// <p>Thrown when the service encounters an error during processing the request.</p>
     InternalError(String),
-    ///<p>Thrown for missing or bad input parameter(s).</p>
+    /// <p>Thrown for missing or bad input parameter(s).</p>
     InvalidParameter(String),
-    ///<p>Thrown when a user is not authorized to access the requested resource.</p>
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
-    ///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
+    /// <p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
     ResourceNotFound(String),
-    ///<p>Thrown when a request is throttled.</p>
+    /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -978,15 +978,15 @@ impl Error for DescribeIdentityError {
 /// Errors returned by DescribeIdentityPool
 #[derive(Debug, PartialEq)]
 pub enum DescribeIdentityPoolError {
-    ///<p>Thrown when the service encounters an error during processing the request.</p>
+    /// <p>Thrown when the service encounters an error during processing the request.</p>
     InternalError(String),
-    ///<p>Thrown for missing or bad input parameter(s).</p>
+    /// <p>Thrown for missing or bad input parameter(s).</p>
     InvalidParameter(String),
-    ///<p>Thrown when a user is not authorized to access the requested resource.</p>
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
-    ///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
+    /// <p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
     ResourceNotFound(String),
-    ///<p>Thrown when a request is throttled.</p>
+    /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1082,21 +1082,21 @@ impl Error for DescribeIdentityPoolError {
 /// Errors returned by GetCredentialsForIdentity
 #[derive(Debug, PartialEq)]
 pub enum GetCredentialsForIdentityError {
-    ///<p>An exception thrown when a dependent service such as Facebook or Twitter is not responding</p>
+    /// <p>An exception thrown when a dependent service such as Facebook or Twitter is not responding</p>
     ExternalService(String),
-    ///<p>Thrown when the service encounters an error during processing the request.</p>
+    /// <p>Thrown when the service encounters an error during processing the request.</p>
     InternalError(String),
-    ///<p>Thrown if the identity pool has no role associated for the given auth type (auth/unauth) or if the AssumeRole fails.</p>
+    /// <p>Thrown if the identity pool has no role associated for the given auth type (auth/unauth) or if the AssumeRole fails.</p>
     InvalidIdentityPoolConfiguration(String),
-    ///<p>Thrown for missing or bad input parameter(s).</p>
+    /// <p>Thrown for missing or bad input parameter(s).</p>
     InvalidParameter(String),
-    ///<p>Thrown when a user is not authorized to access the requested resource.</p>
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
-    ///<p>Thrown when a user tries to use a login which is already linked to another account.</p>
+    /// <p>Thrown when a user tries to use a login which is already linked to another account.</p>
     ResourceConflict(String),
-    ///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
+    /// <p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
     ResourceNotFound(String),
-    ///<p>Thrown when a request is throttled.</p>
+    /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1212,21 +1212,21 @@ impl Error for GetCredentialsForIdentityError {
 /// Errors returned by GetId
 #[derive(Debug, PartialEq)]
 pub enum GetIdError {
-    ///<p>An exception thrown when a dependent service such as Facebook or Twitter is not responding</p>
+    /// <p>An exception thrown when a dependent service such as Facebook or Twitter is not responding</p>
     ExternalService(String),
-    ///<p>Thrown when the service encounters an error during processing the request.</p>
+    /// <p>Thrown when the service encounters an error during processing the request.</p>
     InternalError(String),
-    ///<p>Thrown for missing or bad input parameter(s).</p>
+    /// <p>Thrown for missing or bad input parameter(s).</p>
     InvalidParameter(String),
-    ///<p>Thrown when the total number of user pools has exceeded a preset limit.</p>
+    /// <p>Thrown when the total number of user pools has exceeded a preset limit.</p>
     LimitExceeded(String),
-    ///<p>Thrown when a user is not authorized to access the requested resource.</p>
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
-    ///<p>Thrown when a user tries to use a login which is already linked to another account.</p>
+    /// <p>Thrown when a user tries to use a login which is already linked to another account.</p>
     ResourceConflict(String),
-    ///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
+    /// <p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
     ResourceNotFound(String),
-    ///<p>Thrown when a request is throttled.</p>
+    /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1330,17 +1330,17 @@ impl Error for GetIdError {
 /// Errors returned by GetIdentityPoolRoles
 #[derive(Debug, PartialEq)]
 pub enum GetIdentityPoolRolesError {
-    ///<p>Thrown when the service encounters an error during processing the request.</p>
+    /// <p>Thrown when the service encounters an error during processing the request.</p>
     InternalError(String),
-    ///<p>Thrown for missing or bad input parameter(s).</p>
+    /// <p>Thrown for missing or bad input parameter(s).</p>
     InvalidParameter(String),
-    ///<p>Thrown when a user is not authorized to access the requested resource.</p>
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
-    ///<p>Thrown when a user tries to use a login which is already linked to another account.</p>
+    /// <p>Thrown when a user tries to use a login which is already linked to another account.</p>
     ResourceConflict(String),
-    ///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
+    /// <p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
     ResourceNotFound(String),
-    ///<p>Thrown when a request is throttled.</p>
+    /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1440,19 +1440,19 @@ impl Error for GetIdentityPoolRolesError {
 /// Errors returned by GetOpenIdToken
 #[derive(Debug, PartialEq)]
 pub enum GetOpenIdTokenError {
-    ///<p>An exception thrown when a dependent service such as Facebook or Twitter is not responding</p>
+    /// <p>An exception thrown when a dependent service such as Facebook or Twitter is not responding</p>
     ExternalService(String),
-    ///<p>Thrown when the service encounters an error during processing the request.</p>
+    /// <p>Thrown when the service encounters an error during processing the request.</p>
     InternalError(String),
-    ///<p>Thrown for missing or bad input parameter(s).</p>
+    /// <p>Thrown for missing or bad input parameter(s).</p>
     InvalidParameter(String),
-    ///<p>Thrown when a user is not authorized to access the requested resource.</p>
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
-    ///<p>Thrown when a user tries to use a login which is already linked to another account.</p>
+    /// <p>Thrown when a user tries to use a login which is already linked to another account.</p>
     ResourceConflict(String),
-    ///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
+    /// <p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
     ResourceNotFound(String),
-    ///<p>Thrown when a request is throttled.</p>
+    /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1554,19 +1554,19 @@ impl Error for GetOpenIdTokenError {
 /// Errors returned by GetOpenIdTokenForDeveloperIdentity
 #[derive(Debug, PartialEq)]
 pub enum GetOpenIdTokenForDeveloperIdentityError {
-    ///<p>The provided developer user identifier is already registered with Cognito under a different identity ID.</p>
+    /// <p>The provided developer user identifier is already registered with Cognito under a different identity ID.</p>
     DeveloperUserAlreadyRegistered(String),
-    ///<p>Thrown when the service encounters an error during processing the request.</p>
+    /// <p>Thrown when the service encounters an error during processing the request.</p>
     InternalError(String),
-    ///<p>Thrown for missing or bad input parameter(s).</p>
+    /// <p>Thrown for missing or bad input parameter(s).</p>
     InvalidParameter(String),
-    ///<p>Thrown when a user is not authorized to access the requested resource.</p>
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
-    ///<p>Thrown when a user tries to use a login which is already linked to another account.</p>
+    /// <p>Thrown when a user tries to use a login which is already linked to another account.</p>
     ResourceConflict(String),
-    ///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
+    /// <p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
     ResourceNotFound(String),
-    ///<p>Thrown when a request is throttled.</p>
+    /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1686,15 +1686,15 @@ impl Error for GetOpenIdTokenForDeveloperIdentityError {
 /// Errors returned by ListIdentities
 #[derive(Debug, PartialEq)]
 pub enum ListIdentitiesError {
-    ///<p>Thrown when the service encounters an error during processing the request.</p>
+    /// <p>Thrown when the service encounters an error during processing the request.</p>
     InternalError(String),
-    ///<p>Thrown for missing or bad input parameter(s).</p>
+    /// <p>Thrown for missing or bad input parameter(s).</p>
     InvalidParameter(String),
-    ///<p>Thrown when a user is not authorized to access the requested resource.</p>
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
-    ///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
+    /// <p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
     ResourceNotFound(String),
-    ///<p>Thrown when a request is throttled.</p>
+    /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1788,13 +1788,13 @@ impl Error for ListIdentitiesError {
 /// Errors returned by ListIdentityPools
 #[derive(Debug, PartialEq)]
 pub enum ListIdentityPoolsError {
-    ///<p>Thrown when the service encounters an error during processing the request.</p>
+    /// <p>Thrown when the service encounters an error during processing the request.</p>
     InternalError(String),
-    ///<p>Thrown for missing or bad input parameter(s).</p>
+    /// <p>Thrown for missing or bad input parameter(s).</p>
     InvalidParameter(String),
-    ///<p>Thrown when a user is not authorized to access the requested resource.</p>
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
-    ///<p>Thrown when a request is throttled.</p>
+    /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1886,17 +1886,17 @@ impl Error for ListIdentityPoolsError {
 /// Errors returned by LookupDeveloperIdentity
 #[derive(Debug, PartialEq)]
 pub enum LookupDeveloperIdentityError {
-    ///<p>Thrown when the service encounters an error during processing the request.</p>
+    /// <p>Thrown when the service encounters an error during processing the request.</p>
     InternalError(String),
-    ///<p>Thrown for missing or bad input parameter(s).</p>
+    /// <p>Thrown for missing or bad input parameter(s).</p>
     InvalidParameter(String),
-    ///<p>Thrown when a user is not authorized to access the requested resource.</p>
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
-    ///<p>Thrown when a user tries to use a login which is already linked to another account.</p>
+    /// <p>Thrown when a user tries to use a login which is already linked to another account.</p>
     ResourceConflict(String),
-    ///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
+    /// <p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
     ResourceNotFound(String),
-    ///<p>Thrown when a request is throttled.</p>
+    /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1996,17 +1996,17 @@ impl Error for LookupDeveloperIdentityError {
 /// Errors returned by MergeDeveloperIdentities
 #[derive(Debug, PartialEq)]
 pub enum MergeDeveloperIdentitiesError {
-    ///<p>Thrown when the service encounters an error during processing the request.</p>
+    /// <p>Thrown when the service encounters an error during processing the request.</p>
     InternalError(String),
-    ///<p>Thrown for missing or bad input parameter(s).</p>
+    /// <p>Thrown for missing or bad input parameter(s).</p>
     InvalidParameter(String),
-    ///<p>Thrown when a user is not authorized to access the requested resource.</p>
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
-    ///<p>Thrown when a user tries to use a login which is already linked to another account.</p>
+    /// <p>Thrown when a user tries to use a login which is already linked to another account.</p>
     ResourceConflict(String),
-    ///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
+    /// <p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
     ResourceNotFound(String),
-    ///<p>Thrown when a request is throttled.</p>
+    /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2106,19 +2106,19 @@ impl Error for MergeDeveloperIdentitiesError {
 /// Errors returned by SetIdentityPoolRoles
 #[derive(Debug, PartialEq)]
 pub enum SetIdentityPoolRolesError {
-    ///<p>Thrown if there are parallel requests to modify a resource.</p>
+    /// <p>Thrown if there are parallel requests to modify a resource.</p>
     ConcurrentModification(String),
-    ///<p>Thrown when the service encounters an error during processing the request.</p>
+    /// <p>Thrown when the service encounters an error during processing the request.</p>
     InternalError(String),
-    ///<p>Thrown for missing or bad input parameter(s).</p>
+    /// <p>Thrown for missing or bad input parameter(s).</p>
     InvalidParameter(String),
-    ///<p>Thrown when a user is not authorized to access the requested resource.</p>
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
-    ///<p>Thrown when a user tries to use a login which is already linked to another account.</p>
+    /// <p>Thrown when a user tries to use a login which is already linked to another account.</p>
     ResourceConflict(String),
-    ///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
+    /// <p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
     ResourceNotFound(String),
-    ///<p>Thrown when a request is throttled.</p>
+    /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2224,17 +2224,17 @@ impl Error for SetIdentityPoolRolesError {
 /// Errors returned by UnlinkDeveloperIdentity
 #[derive(Debug, PartialEq)]
 pub enum UnlinkDeveloperIdentityError {
-    ///<p>Thrown when the service encounters an error during processing the request.</p>
+    /// <p>Thrown when the service encounters an error during processing the request.</p>
     InternalError(String),
-    ///<p>Thrown for missing or bad input parameter(s).</p>
+    /// <p>Thrown for missing or bad input parameter(s).</p>
     InvalidParameter(String),
-    ///<p>Thrown when a user is not authorized to access the requested resource.</p>
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
-    ///<p>Thrown when a user tries to use a login which is already linked to another account.</p>
+    /// <p>Thrown when a user tries to use a login which is already linked to another account.</p>
     ResourceConflict(String),
-    ///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
+    /// <p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
     ResourceNotFound(String),
-    ///<p>Thrown when a request is throttled.</p>
+    /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2334,19 +2334,19 @@ impl Error for UnlinkDeveloperIdentityError {
 /// Errors returned by UnlinkIdentity
 #[derive(Debug, PartialEq)]
 pub enum UnlinkIdentityError {
-    ///<p>An exception thrown when a dependent service such as Facebook or Twitter is not responding</p>
+    /// <p>An exception thrown when a dependent service such as Facebook or Twitter is not responding</p>
     ExternalService(String),
-    ///<p>Thrown when the service encounters an error during processing the request.</p>
+    /// <p>Thrown when the service encounters an error during processing the request.</p>
     InternalError(String),
-    ///<p>Thrown for missing or bad input parameter(s).</p>
+    /// <p>Thrown for missing or bad input parameter(s).</p>
     InvalidParameter(String),
-    ///<p>Thrown when a user is not authorized to access the requested resource.</p>
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
-    ///<p>Thrown when a user tries to use a login which is already linked to another account.</p>
+    /// <p>Thrown when a user tries to use a login which is already linked to another account.</p>
     ResourceConflict(String),
-    ///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
+    /// <p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
     ResourceNotFound(String),
-    ///<p>Thrown when a request is throttled.</p>
+    /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2448,21 +2448,21 @@ impl Error for UnlinkIdentityError {
 /// Errors returned by UpdateIdentityPool
 #[derive(Debug, PartialEq)]
 pub enum UpdateIdentityPoolError {
-    ///<p>Thrown if there are parallel requests to modify a resource.</p>
+    /// <p>Thrown if there are parallel requests to modify a resource.</p>
     ConcurrentModification(String),
-    ///<p>Thrown when the service encounters an error during processing the request.</p>
+    /// <p>Thrown when the service encounters an error during processing the request.</p>
     InternalError(String),
-    ///<p>Thrown for missing or bad input parameter(s).</p>
+    /// <p>Thrown for missing or bad input parameter(s).</p>
     InvalidParameter(String),
-    ///<p>Thrown when the total number of user pools has exceeded a preset limit.</p>
+    /// <p>Thrown when the total number of user pools has exceeded a preset limit.</p>
     LimitExceeded(String),
-    ///<p>Thrown when a user is not authorized to access the requested resource.</p>
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
-    ///<p>Thrown when a user tries to use a login which is already linked to another account.</p>
+    /// <p>Thrown when a user tries to use a login which is already linked to another account.</p>
     ResourceConflict(String),
-    ///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
+    /// <p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
     ResourceNotFound(String),
-    ///<p>Thrown when a request is throttled.</p>
+    /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2569,103 +2569,103 @@ impl Error for UpdateIdentityPoolError {
 }
 /// Trait representing the capabilities of the Amazon Cognito Identity API. Amazon Cognito Identity clients implement this trait.
 pub trait CognitoIdentity {
-    #[doc="<p>Creates a new identity pool. The identity pool is a store of user identity information that is specific to your AWS account. The limit on identity pools is 60 per account. The keys for <code>SupportedLoginProviders</code> are as follows:</p> <ul> <li> <p>Facebook: <code>graph.facebook.com</code> </p> </li> <li> <p>Google: <code>accounts.google.com</code> </p> </li> <li> <p>Amazon: <code>www.amazon.com</code> </p> </li> <li> <p>Twitter: <code>api.twitter.com</code> </p> </li> <li> <p>Digits: <code>www.digits.com</code> </p> </li> </ul> <p>You must use AWS Developer credentials to call this API.</p>"]
+    /// <p>Creates a new identity pool. The identity pool is a store of user identity information that is specific to your AWS account. The limit on identity pools is 60 per account. The keys for <code>SupportedLoginProviders</code> are as follows:</p> <ul> <li> <p>Facebook: <code>graph.facebook.com</code> </p> </li> <li> <p>Google: <code>accounts.google.com</code> </p> </li> <li> <p>Amazon: <code>www.amazon.com</code> </p> </li> <li> <p>Twitter: <code>api.twitter.com</code> </p> </li> <li> <p>Digits: <code>www.digits.com</code> </p> </li> </ul> <p>You must use AWS Developer credentials to call this API.</p>
     fn create_identity_pool(
         &self,
         input: &CreateIdentityPoolInput,
     ) -> Result<IdentityPool, CreateIdentityPoolError>;
 
-    #[doc="<p>Deletes identities from an identity pool. You can specify a list of 1-60 identities that you want to delete.</p> <p>You must use AWS Developer credentials to call this API.</p>"]
+    /// <p>Deletes identities from an identity pool. You can specify a list of 1-60 identities that you want to delete.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn delete_identities(
         &self,
         input: &DeleteIdentitiesInput,
     ) -> Result<DeleteIdentitiesResponse, DeleteIdentitiesError>;
 
-    #[doc="<p>Deletes a user pool. Once a pool is deleted, users will not be able to authenticate with the pool.</p> <p>You must use AWS Developer credentials to call this API.</p>"]
+    /// <p>Deletes a user pool. Once a pool is deleted, users will not be able to authenticate with the pool.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn delete_identity_pool(
         &self,
         input: &DeleteIdentityPoolInput,
     ) -> Result<(), DeleteIdentityPoolError>;
 
-    #[doc="<p>Returns metadata related to the given identity, including when the identity was created and any associated linked logins.</p> <p>You must use AWS Developer credentials to call this API.</p>"]
+    /// <p>Returns metadata related to the given identity, including when the identity was created and any associated linked logins.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn describe_identity(
         &self,
         input: &DescribeIdentityInput,
     ) -> Result<IdentityDescription, DescribeIdentityError>;
 
-    #[doc="<p>Gets details about a particular identity pool, including the pool name, ID description, creation date, and current number of users.</p> <p>You must use AWS Developer credentials to call this API.</p>"]
+    /// <p>Gets details about a particular identity pool, including the pool name, ID description, creation date, and current number of users.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn describe_identity_pool(
         &self,
         input: &DescribeIdentityPoolInput,
     ) -> Result<IdentityPool, DescribeIdentityPoolError>;
 
-    #[doc="<p>Returns credentials for the provided identity ID. Any provided logins will be validated against supported login providers. If the token is for cognito-identity.amazonaws.com, it will be passed through to AWS Security Token Service with the appropriate role for the token.</p> <p>This is a public API. You do not need any credentials to call this API.</p>"]
+    /// <p>Returns credentials for the provided identity ID. Any provided logins will be validated against supported login providers. If the token is for cognito-identity.amazonaws.com, it will be passed through to AWS Security Token Service with the appropriate role for the token.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
     fn get_credentials_for_identity(
         &self,
         input: &GetCredentialsForIdentityInput,
     ) -> Result<GetCredentialsForIdentityResponse, GetCredentialsForIdentityError>;
 
-    #[doc="<p>Generates (or retrieves) a Cognito ID. Supplying multiple logins will create an implicit linked account.</p> <p>This is a public API. You do not need any credentials to call this API.</p>"]
+    /// <p>Generates (or retrieves) a Cognito ID. Supplying multiple logins will create an implicit linked account.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
     fn get_id(&self, input: &GetIdInput) -> Result<GetIdResponse, GetIdError>;
 
-    #[doc="<p>Gets the roles for an identity pool.</p> <p>You must use AWS Developer credentials to call this API.</p>"]
+    /// <p>Gets the roles for an identity pool.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn get_identity_pool_roles(
         &self,
         input: &GetIdentityPoolRolesInput,
     ) -> Result<GetIdentityPoolRolesResponse, GetIdentityPoolRolesError>;
 
-    #[doc="<p>Gets an OpenID token, using a known Cognito ID. This known Cognito ID is returned by <a>GetId</a>. You can optionally add additional logins for the identity. Supplying multiple logins creates an implicit link.</p> <p>The OpenId token is valid for 15 minutes.</p> <p>This is a public API. You do not need any credentials to call this API.</p>"]
+    /// <p>Gets an OpenID token, using a known Cognito ID. This known Cognito ID is returned by <a>GetId</a>. You can optionally add additional logins for the identity. Supplying multiple logins creates an implicit link.</p> <p>The OpenId token is valid for 15 minutes.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
     fn get_open_id_token(
         &self,
         input: &GetOpenIdTokenInput,
     ) -> Result<GetOpenIdTokenResponse, GetOpenIdTokenError>;
 
-    #[doc="<p>Registers (or retrieves) a Cognito <code>IdentityId</code> and an OpenID Connect token for a user authenticated by your backend authentication process. Supplying multiple logins will create an implicit linked account. You can only specify one developer provider as part of the <code>Logins</code> map, which is linked to the identity pool. The developer provider is the \"domain\" by which Cognito will refer to your users.</p> <p>You can use <code>GetOpenIdTokenForDeveloperIdentity</code> to create a new identity and to link new logins (that is, user credentials issued by a public provider or developer provider) to an existing identity. When you want to create a new identity, the <code>IdentityId</code> should be null. When you want to associate a new login with an existing authenticated/unauthenticated identity, you can do so by providing the existing <code>IdentityId</code>. This API will create the identity in the specified <code>IdentityPoolId</code>.</p> <p>You must use AWS Developer credentials to call this API.</p>"]
+    /// <p>Registers (or retrieves) a Cognito <code>IdentityId</code> and an OpenID Connect token for a user authenticated by your backend authentication process. Supplying multiple logins will create an implicit linked account. You can only specify one developer provider as part of the <code>Logins</code> map, which is linked to the identity pool. The developer provider is the "domain" by which Cognito will refer to your users.</p> <p>You can use <code>GetOpenIdTokenForDeveloperIdentity</code> to create a new identity and to link new logins (that is, user credentials issued by a public provider or developer provider) to an existing identity. When you want to create a new identity, the <code>IdentityId</code> should be null. When you want to associate a new login with an existing authenticated/unauthenticated identity, you can do so by providing the existing <code>IdentityId</code>. This API will create the identity in the specified <code>IdentityPoolId</code>.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn get_open_id_token_for_developer_identity(
         &self,
         input: &GetOpenIdTokenForDeveloperIdentityInput,
     ) -> Result<GetOpenIdTokenForDeveloperIdentityResponse, GetOpenIdTokenForDeveloperIdentityError>;
 
-    #[doc="<p>Lists the identities in a pool.</p> <p>You must use AWS Developer credentials to call this API.</p>"]
+    /// <p>Lists the identities in a pool.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn list_identities(
         &self,
         input: &ListIdentitiesInput,
     ) -> Result<ListIdentitiesResponse, ListIdentitiesError>;
 
-    #[doc="<p>Lists all of the Cognito identity pools registered for your account.</p> <p>You must use AWS Developer credentials to call this API.</p>"]
+    /// <p>Lists all of the Cognito identity pools registered for your account.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn list_identity_pools(
         &self,
         input: &ListIdentityPoolsInput,
     ) -> Result<ListIdentityPoolsResponse, ListIdentityPoolsError>;
 
-    #[doc="<p>Retrieves the <code>IdentityID</code> associated with a <code>DeveloperUserIdentifier</code> or the list of <code>DeveloperUserIdentifier</code>s associated with an <code>IdentityId</code> for an existing identity. Either <code>IdentityID</code> or <code>DeveloperUserIdentifier</code> must not be null. If you supply only one of these values, the other value will be searched in the database and returned as a part of the response. If you supply both, <code>DeveloperUserIdentifier</code> will be matched against <code>IdentityID</code>. If the values are verified against the database, the response returns both values and is the same as the request. Otherwise a <code>ResourceConflictException</code> is thrown.</p> <p>You must use AWS Developer credentials to call this API.</p>"]
+    /// <p>Retrieves the <code>IdentityID</code> associated with a <code>DeveloperUserIdentifier</code> or the list of <code>DeveloperUserIdentifier</code>s associated with an <code>IdentityId</code> for an existing identity. Either <code>IdentityID</code> or <code>DeveloperUserIdentifier</code> must not be null. If you supply only one of these values, the other value will be searched in the database and returned as a part of the response. If you supply both, <code>DeveloperUserIdentifier</code> will be matched against <code>IdentityID</code>. If the values are verified against the database, the response returns both values and is the same as the request. Otherwise a <code>ResourceConflictException</code> is thrown.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn lookup_developer_identity(
         &self,
         input: &LookupDeveloperIdentityInput,
     ) -> Result<LookupDeveloperIdentityResponse, LookupDeveloperIdentityError>;
 
-    #[doc="<p>Merges two users having different <code>IdentityId</code>s, existing in the same identity pool, and identified by the same developer provider. You can use this action to request that discrete users be merged and identified as a single user in the Cognito environment. Cognito associates the given source user (<code>SourceUserIdentifier</code>) with the <code>IdentityId</code> of the <code>DestinationUserIdentifier</code>. Only developer-authenticated users can be merged. If the users to be merged are associated with the same public provider, but as two different users, an exception will be thrown.</p> <p>You must use AWS Developer credentials to call this API.</p>"]
+    /// <p>Merges two users having different <code>IdentityId</code>s, existing in the same identity pool, and identified by the same developer provider. You can use this action to request that discrete users be merged and identified as a single user in the Cognito environment. Cognito associates the given source user (<code>SourceUserIdentifier</code>) with the <code>IdentityId</code> of the <code>DestinationUserIdentifier</code>. Only developer-authenticated users can be merged. If the users to be merged are associated with the same public provider, but as two different users, an exception will be thrown.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn merge_developer_identities(
         &self,
         input: &MergeDeveloperIdentitiesInput,
     ) -> Result<MergeDeveloperIdentitiesResponse, MergeDeveloperIdentitiesError>;
 
-    #[doc="<p>Sets the roles for an identity pool. These roles are used when making calls to <a>GetCredentialsForIdentity</a> action.</p> <p>You must use AWS Developer credentials to call this API.</p>"]
+    /// <p>Sets the roles for an identity pool. These roles are used when making calls to <a>GetCredentialsForIdentity</a> action.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn set_identity_pool_roles(
         &self,
         input: &SetIdentityPoolRolesInput,
     ) -> Result<(), SetIdentityPoolRolesError>;
 
-    #[doc="<p>Unlinks a <code>DeveloperUserIdentifier</code> from an existing identity. Unlinked developer users will be considered new identities next time they are seen. If, for a given Cognito identity, you remove all federated identities as well as the developer user identifier, the Cognito identity becomes inaccessible.</p> <p>You must use AWS Developer credentials to call this API.</p>"]
+    /// <p>Unlinks a <code>DeveloperUserIdentifier</code> from an existing identity. Unlinked developer users will be considered new identities next time they are seen. If, for a given Cognito identity, you remove all federated identities as well as the developer user identifier, the Cognito identity becomes inaccessible.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn unlink_developer_identity(
         &self,
         input: &UnlinkDeveloperIdentityInput,
     ) -> Result<(), UnlinkDeveloperIdentityError>;
 
-    #[doc="<p>Unlinks a federated identity from an existing account. Unlinked logins will be considered new identities next time they are seen. Removing the last linked login will make this identity inaccessible.</p> <p>This is a public API. You do not need any credentials to call this API.</p>"]
+    /// <p>Unlinks a federated identity from an existing account. Unlinked logins will be considered new identities next time they are seen. Removing the last linked login will make this identity inaccessible.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
     fn unlink_identity(&self, input: &UnlinkIdentityInput) -> Result<(), UnlinkIdentityError>;
 
-    #[doc="<p>Updates a user pool.</p> <p>You must use AWS Developer credentials to call this API.</p>"]
+    /// <p>Updates a user pool.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn update_identity_pool(
         &self,
         input: &IdentityPool,
@@ -2701,7 +2701,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Creates a new identity pool. The identity pool is a store of user identity information that is specific to your AWS account. The limit on identity pools is 60 per account. The keys for <code>SupportedLoginProviders</code> are as follows:</p> <ul> <li> <p>Facebook: <code>graph.facebook.com</code> </p> </li> <li> <p>Google: <code>accounts.google.com</code> </p> </li> <li> <p>Amazon: <code>www.amazon.com</code> </p> </li> <li> <p>Twitter: <code>api.twitter.com</code> </p> </li> <li> <p>Digits: <code>www.digits.com</code> </p> </li> </ul> <p>You must use AWS Developer credentials to call this API.</p>"]
+    /// <p>Creates a new identity pool. The identity pool is a store of user identity information that is specific to your AWS account. The limit on identity pools is 60 per account. The keys for <code>SupportedLoginProviders</code> are as follows:</p> <ul> <li> <p>Facebook: <code>graph.facebook.com</code> </p> </li> <li> <p>Google: <code>accounts.google.com</code> </p> </li> <li> <p>Amazon: <code>www.amazon.com</code> </p> </li> <li> <p>Twitter: <code>api.twitter.com</code> </p> </li> <li> <p>Digits: <code>www.digits.com</code> </p> </li> </ul> <p>You must use AWS Developer credentials to call this API.</p>
     fn create_identity_pool(
         &self,
         input: &CreateIdentityPoolInput,
@@ -2739,7 +2739,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes identities from an identity pool. You can specify a list of 1-60 identities that you want to delete.</p> <p>You must use AWS Developer credentials to call this API.</p>"]
+    /// <p>Deletes identities from an identity pool. You can specify a list of 1-60 identities that you want to delete.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn delete_identities(
         &self,
         input: &DeleteIdentitiesInput,
@@ -2773,7 +2773,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a user pool. Once a pool is deleted, users will not be able to authenticate with the pool.</p> <p>You must use AWS Developer credentials to call this API.</p>"]
+    /// <p>Deletes a user pool. Once a pool is deleted, users will not be able to authenticate with the pool.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn delete_identity_pool(
         &self,
         input: &DeleteIdentityPoolInput,
@@ -2804,7 +2804,7 @@ where
         }
     }
 
-    #[doc="<p>Returns metadata related to the given identity, including when the identity was created and any associated linked logins.</p> <p>You must use AWS Developer credentials to call this API.</p>"]
+    /// <p>Returns metadata related to the given identity, including when the identity was created and any associated linked logins.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn describe_identity(
         &self,
         input: &DescribeIdentityInput,
@@ -2838,7 +2838,7 @@ where
         }
     }
 
-    #[doc="<p>Gets details about a particular identity pool, including the pool name, ID description, creation date, and current number of users.</p> <p>You must use AWS Developer credentials to call this API.</p>"]
+    /// <p>Gets details about a particular identity pool, including the pool name, ID description, creation date, and current number of users.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn describe_identity_pool(
         &self,
         input: &DescribeIdentityPoolInput,
@@ -2876,7 +2876,7 @@ where
         }
     }
 
-    #[doc="<p>Returns credentials for the provided identity ID. Any provided logins will be validated against supported login providers. If the token is for cognito-identity.amazonaws.com, it will be passed through to AWS Security Token Service with the appropriate role for the token.</p> <p>This is a public API. You do not need any credentials to call this API.</p>"]
+    /// <p>Returns credentials for the provided identity ID. Any provided logins will be validated against supported login providers. If the token is for cognito-identity.amazonaws.com, it will be passed through to AWS Security Token Service with the appropriate role for the token.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
     fn get_credentials_for_identity(
         &self,
         input: &GetCredentialsForIdentityInput,
@@ -2913,7 +2913,7 @@ where
         }
     }
 
-    #[doc="<p>Generates (or retrieves) a Cognito ID. Supplying multiple logins will create an implicit linked account.</p> <p>This is a public API. You do not need any credentials to call this API.</p>"]
+    /// <p>Generates (or retrieves) a Cognito ID. Supplying multiple logins will create an implicit linked account.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
     fn get_id(&self, input: &GetIdInput) -> Result<GetIdResponse, GetIdError> {
         let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
 
@@ -2945,7 +2945,7 @@ where
         }
     }
 
-    #[doc="<p>Gets the roles for an identity pool.</p> <p>You must use AWS Developer credentials to call this API.</p>"]
+    /// <p>Gets the roles for an identity pool.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn get_identity_pool_roles(
         &self,
         input: &GetIdentityPoolRolesInput,
@@ -2982,7 +2982,7 @@ where
         }
     }
 
-    #[doc="<p>Gets an OpenID token, using a known Cognito ID. This known Cognito ID is returned by <a>GetId</a>. You can optionally add additional logins for the identity. Supplying multiple logins creates an implicit link.</p> <p>The OpenId token is valid for 15 minutes.</p> <p>This is a public API. You do not need any credentials to call this API.</p>"]
+    /// <p>Gets an OpenID token, using a known Cognito ID. This known Cognito ID is returned by <a>GetId</a>. You can optionally add additional logins for the identity. Supplying multiple logins creates an implicit link.</p> <p>The OpenId token is valid for 15 minutes.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
     fn get_open_id_token(
         &self,
         input: &GetOpenIdTokenInput,
@@ -3016,7 +3016,7 @@ where
         }
     }
 
-    #[doc="<p>Registers (or retrieves) a Cognito <code>IdentityId</code> and an OpenID Connect token for a user authenticated by your backend authentication process. Supplying multiple logins will create an implicit linked account. You can only specify one developer provider as part of the <code>Logins</code> map, which is linked to the identity pool. The developer provider is the \"domain\" by which Cognito will refer to your users.</p> <p>You can use <code>GetOpenIdTokenForDeveloperIdentity</code> to create a new identity and to link new logins (that is, user credentials issued by a public provider or developer provider) to an existing identity. When you want to create a new identity, the <code>IdentityId</code> should be null. When you want to associate a new login with an existing authenticated/unauthenticated identity, you can do so by providing the existing <code>IdentityId</code>. This API will create the identity in the specified <code>IdentityPoolId</code>.</p> <p>You must use AWS Developer credentials to call this API.</p>"]
+    /// <p>Registers (or retrieves) a Cognito <code>IdentityId</code> and an OpenID Connect token for a user authenticated by your backend authentication process. Supplying multiple logins will create an implicit linked account. You can only specify one developer provider as part of the <code>Logins</code> map, which is linked to the identity pool. The developer provider is the "domain" by which Cognito will refer to your users.</p> <p>You can use <code>GetOpenIdTokenForDeveloperIdentity</code> to create a new identity and to link new logins (that is, user credentials issued by a public provider or developer provider) to an existing identity. When you want to create a new identity, the <code>IdentityId</code> should be null. When you want to associate a new login with an existing authenticated/unauthenticated identity, you can do so by providing the existing <code>IdentityId</code>. This API will create the identity in the specified <code>IdentityPoolId</code>.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn get_open_id_token_for_developer_identity(
         &self,
         input: &GetOpenIdTokenForDeveloperIdentityInput,
@@ -3056,7 +3056,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the identities in a pool.</p> <p>You must use AWS Developer credentials to call this API.</p>"]
+    /// <p>Lists the identities in a pool.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn list_identities(
         &self,
         input: &ListIdentitiesInput,
@@ -3090,7 +3090,7 @@ where
         }
     }
 
-    #[doc="<p>Lists all of the Cognito identity pools registered for your account.</p> <p>You must use AWS Developer credentials to call this API.</p>"]
+    /// <p>Lists all of the Cognito identity pools registered for your account.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn list_identity_pools(
         &self,
         input: &ListIdentityPoolsInput,
@@ -3127,7 +3127,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves the <code>IdentityID</code> associated with a <code>DeveloperUserIdentifier</code> or the list of <code>DeveloperUserIdentifier</code>s associated with an <code>IdentityId</code> for an existing identity. Either <code>IdentityID</code> or <code>DeveloperUserIdentifier</code> must not be null. If you supply only one of these values, the other value will be searched in the database and returned as a part of the response. If you supply both, <code>DeveloperUserIdentifier</code> will be matched against <code>IdentityID</code>. If the values are verified against the database, the response returns both values and is the same as the request. Otherwise a <code>ResourceConflictException</code> is thrown.</p> <p>You must use AWS Developer credentials to call this API.</p>"]
+    /// <p>Retrieves the <code>IdentityID</code> associated with a <code>DeveloperUserIdentifier</code> or the list of <code>DeveloperUserIdentifier</code>s associated with an <code>IdentityId</code> for an existing identity. Either <code>IdentityID</code> or <code>DeveloperUserIdentifier</code> must not be null. If you supply only one of these values, the other value will be searched in the database and returned as a part of the response. If you supply both, <code>DeveloperUserIdentifier</code> will be matched against <code>IdentityID</code>. If the values are verified against the database, the response returns both values and is the same as the request. Otherwise a <code>ResourceConflictException</code> is thrown.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn lookup_developer_identity(
         &self,
         input: &LookupDeveloperIdentityInput,
@@ -3164,7 +3164,7 @@ where
         }
     }
 
-    #[doc="<p>Merges two users having different <code>IdentityId</code>s, existing in the same identity pool, and identified by the same developer provider. You can use this action to request that discrete users be merged and identified as a single user in the Cognito environment. Cognito associates the given source user (<code>SourceUserIdentifier</code>) with the <code>IdentityId</code> of the <code>DestinationUserIdentifier</code>. Only developer-authenticated users can be merged. If the users to be merged are associated with the same public provider, but as two different users, an exception will be thrown.</p> <p>You must use AWS Developer credentials to call this API.</p>"]
+    /// <p>Merges two users having different <code>IdentityId</code>s, existing in the same identity pool, and identified by the same developer provider. You can use this action to request that discrete users be merged and identified as a single user in the Cognito environment. Cognito associates the given source user (<code>SourceUserIdentifier</code>) with the <code>IdentityId</code> of the <code>DestinationUserIdentifier</code>. Only developer-authenticated users can be merged. If the users to be merged are associated with the same public provider, but as two different users, an exception will be thrown.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn merge_developer_identities(
         &self,
         input: &MergeDeveloperIdentitiesInput,
@@ -3201,7 +3201,7 @@ where
         }
     }
 
-    #[doc="<p>Sets the roles for an identity pool. These roles are used when making calls to <a>GetCredentialsForIdentity</a> action.</p> <p>You must use AWS Developer credentials to call this API.</p>"]
+    /// <p>Sets the roles for an identity pool. These roles are used when making calls to <a>GetCredentialsForIdentity</a> action.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn set_identity_pool_roles(
         &self,
         input: &SetIdentityPoolRolesInput,
@@ -3232,7 +3232,7 @@ where
         }
     }
 
-    #[doc="<p>Unlinks a <code>DeveloperUserIdentifier</code> from an existing identity. Unlinked developer users will be considered new identities next time they are seen. If, for a given Cognito identity, you remove all federated identities as well as the developer user identifier, the Cognito identity becomes inaccessible.</p> <p>You must use AWS Developer credentials to call this API.</p>"]
+    /// <p>Unlinks a <code>DeveloperUserIdentifier</code> from an existing identity. Unlinked developer users will be considered new identities next time they are seen. If, for a given Cognito identity, you remove all federated identities as well as the developer user identifier, the Cognito identity becomes inaccessible.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn unlink_developer_identity(
         &self,
         input: &UnlinkDeveloperIdentityInput,
@@ -3263,7 +3263,7 @@ where
         }
     }
 
-    #[doc="<p>Unlinks a federated identity from an existing account. Unlinked logins will be considered new identities next time they are seen. Removing the last linked login will make this identity inaccessible.</p> <p>This is a public API. You do not need any credentials to call this API.</p>"]
+    /// <p>Unlinks a federated identity from an existing account. Unlinked logins will be considered new identities next time they are seen. Removing the last linked login will make this identity inaccessible.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
     fn unlink_identity(&self, input: &UnlinkIdentityInput) -> Result<(), UnlinkIdentityError> {
         let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
 
@@ -3288,7 +3288,7 @@ where
         }
     }
 
-    #[doc="<p>Updates a user pool.</p> <p>You must use AWS Developer credentials to call this API.</p>"]
+    /// <p>Updates a user pool.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn update_identity_pool(
         &self,
         input: &IdentityPool,

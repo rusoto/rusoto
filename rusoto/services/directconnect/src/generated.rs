@@ -591,7 +591,7 @@ pub struct Interconnects {
 /// <p>Describes a link aggregation group (LAG). A LAG is a connection that uses the Link Aggregation Control Protocol (LACP) to logically aggregate a bundle of physical connections. Like an interconnect, it can host other connections. All connections in a LAG must terminate on the same physical AWS Direct Connect endpoint, and must be the same bandwidth.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Lag {
-    /// <p>Indicates whether the LAG can host other connections.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>
+    /// <p><p>Indicates whether the LAG can host other connections.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
     #[serde(rename = "allowsHostedConnections")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allows_hosted_connections: Option<bool>,
@@ -957,9 +957,9 @@ pub struct VirtualInterfaces {
 /// Errors returned by AllocateConnectionOnInterconnect
 #[derive(Debug, PartialEq)]
 pub enum AllocateConnectionOnInterconnectError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1047,9 +1047,9 @@ impl Error for AllocateConnectionOnInterconnectError {
 /// Errors returned by AllocateHostedConnection
 #[derive(Debug, PartialEq)]
 pub enum AllocateHostedConnectionError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1137,9 +1137,9 @@ impl Error for AllocateHostedConnectionError {
 /// Errors returned by AllocatePrivateVirtualInterface
 #[derive(Debug, PartialEq)]
 pub enum AllocatePrivateVirtualInterfaceError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1227,9 +1227,9 @@ impl Error for AllocatePrivateVirtualInterfaceError {
 /// Errors returned by AllocatePublicVirtualInterface
 #[derive(Debug, PartialEq)]
 pub enum AllocatePublicVirtualInterfaceError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1317,9 +1317,9 @@ impl Error for AllocatePublicVirtualInterfaceError {
 /// Errors returned by AssociateConnectionWithLag
 #[derive(Debug, PartialEq)]
 pub enum AssociateConnectionWithLagError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1407,9 +1407,9 @@ impl Error for AssociateConnectionWithLagError {
 /// Errors returned by AssociateHostedConnection
 #[derive(Debug, PartialEq)]
 pub enum AssociateHostedConnectionError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1497,9 +1497,9 @@ impl Error for AssociateHostedConnectionError {
 /// Errors returned by AssociateVirtualInterface
 #[derive(Debug, PartialEq)]
 pub enum AssociateVirtualInterfaceError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1587,9 +1587,9 @@ impl Error for AssociateVirtualInterfaceError {
 /// Errors returned by ConfirmConnection
 #[derive(Debug, PartialEq)]
 pub enum ConfirmConnectionError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1673,9 +1673,9 @@ impl Error for ConfirmConnectionError {
 /// Errors returned by ConfirmPrivateVirtualInterface
 #[derive(Debug, PartialEq)]
 pub enum ConfirmPrivateVirtualInterfaceError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1763,9 +1763,9 @@ impl Error for ConfirmPrivateVirtualInterfaceError {
 /// Errors returned by ConfirmPublicVirtualInterface
 #[derive(Debug, PartialEq)]
 pub enum ConfirmPublicVirtualInterfaceError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1853,9 +1853,9 @@ impl Error for ConfirmPublicVirtualInterfaceError {
 /// Errors returned by CreateBGPPeer
 #[derive(Debug, PartialEq)]
 pub enum CreateBGPPeerError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1937,9 +1937,9 @@ impl Error for CreateBGPPeerError {
 /// Errors returned by CreateConnection
 #[derive(Debug, PartialEq)]
 pub enum CreateConnectionError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2021,9 +2021,9 @@ impl Error for CreateConnectionError {
 /// Errors returned by CreateInterconnect
 #[derive(Debug, PartialEq)]
 pub enum CreateInterconnectError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2107,9 +2107,9 @@ impl Error for CreateInterconnectError {
 /// Errors returned by CreateLag
 #[derive(Debug, PartialEq)]
 pub enum CreateLagError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2189,9 +2189,9 @@ impl Error for CreateLagError {
 /// Errors returned by CreatePrivateVirtualInterface
 #[derive(Debug, PartialEq)]
 pub enum CreatePrivateVirtualInterfaceError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2279,9 +2279,9 @@ impl Error for CreatePrivateVirtualInterfaceError {
 /// Errors returned by CreatePublicVirtualInterface
 #[derive(Debug, PartialEq)]
 pub enum CreatePublicVirtualInterfaceError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2369,9 +2369,9 @@ impl Error for CreatePublicVirtualInterfaceError {
 /// Errors returned by DeleteBGPPeer
 #[derive(Debug, PartialEq)]
 pub enum DeleteBGPPeerError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2453,9 +2453,9 @@ impl Error for DeleteBGPPeerError {
 /// Errors returned by DeleteConnection
 #[derive(Debug, PartialEq)]
 pub enum DeleteConnectionError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2537,9 +2537,9 @@ impl Error for DeleteConnectionError {
 /// Errors returned by DeleteInterconnect
 #[derive(Debug, PartialEq)]
 pub enum DeleteInterconnectError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2623,9 +2623,9 @@ impl Error for DeleteInterconnectError {
 /// Errors returned by DeleteLag
 #[derive(Debug, PartialEq)]
 pub enum DeleteLagError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2705,9 +2705,9 @@ impl Error for DeleteLagError {
 /// Errors returned by DeleteVirtualInterface
 #[derive(Debug, PartialEq)]
 pub enum DeleteVirtualInterfaceError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2795,9 +2795,9 @@ impl Error for DeleteVirtualInterfaceError {
 /// Errors returned by DescribeConnectionLoa
 #[derive(Debug, PartialEq)]
 pub enum DescribeConnectionLoaError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2881,9 +2881,9 @@ impl Error for DescribeConnectionLoaError {
 /// Errors returned by DescribeConnections
 #[derive(Debug, PartialEq)]
 pub enum DescribeConnectionsError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2967,9 +2967,9 @@ impl Error for DescribeConnectionsError {
 /// Errors returned by DescribeConnectionsOnInterconnect
 #[derive(Debug, PartialEq)]
 pub enum DescribeConnectionsOnInterconnectError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3057,9 +3057,9 @@ impl Error for DescribeConnectionsOnInterconnectError {
 /// Errors returned by DescribeHostedConnections
 #[derive(Debug, PartialEq)]
 pub enum DescribeHostedConnectionsError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3147,9 +3147,9 @@ impl Error for DescribeHostedConnectionsError {
 /// Errors returned by DescribeInterconnectLoa
 #[derive(Debug, PartialEq)]
 pub enum DescribeInterconnectLoaError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3237,9 +3237,9 @@ impl Error for DescribeInterconnectLoaError {
 /// Errors returned by DescribeInterconnects
 #[derive(Debug, PartialEq)]
 pub enum DescribeInterconnectsError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3323,9 +3323,9 @@ impl Error for DescribeInterconnectsError {
 /// Errors returned by DescribeLags
 #[derive(Debug, PartialEq)]
 pub enum DescribeLagsError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3407,9 +3407,9 @@ impl Error for DescribeLagsError {
 /// Errors returned by DescribeLoa
 #[derive(Debug, PartialEq)]
 pub enum DescribeLoaError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3491,9 +3491,9 @@ impl Error for DescribeLoaError {
 /// Errors returned by DescribeLocations
 #[derive(Debug, PartialEq)]
 pub enum DescribeLocationsError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3577,9 +3577,9 @@ impl Error for DescribeLocationsError {
 /// Errors returned by DescribeTags
 #[derive(Debug, PartialEq)]
 pub enum DescribeTagsError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3661,9 +3661,9 @@ impl Error for DescribeTagsError {
 /// Errors returned by DescribeVirtualGateways
 #[derive(Debug, PartialEq)]
 pub enum DescribeVirtualGatewaysError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3751,9 +3751,9 @@ impl Error for DescribeVirtualGatewaysError {
 /// Errors returned by DescribeVirtualInterfaces
 #[derive(Debug, PartialEq)]
 pub enum DescribeVirtualInterfacesError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3841,9 +3841,9 @@ impl Error for DescribeVirtualInterfacesError {
 /// Errors returned by DisassociateConnectionFromLag
 #[derive(Debug, PartialEq)]
 pub enum DisassociateConnectionFromLagError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3931,13 +3931,13 @@ impl Error for DisassociateConnectionFromLagError {
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
-    ///<p>A tag key was specified more than once.</p>
+    /// <p>A tag key was specified more than once.</p>
     DuplicateTagKeys(String),
-    ///<p>You have reached the limit on the number of tags that can be assigned to a Direct Connect resource.</p>
+    /// <p>You have reached the limit on the number of tags that can be assigned to a Direct Connect resource.</p>
     TooManyTags(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4027,9 +4027,9 @@ impl Error for TagResourceError {
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4111,9 +4111,9 @@ impl Error for UntagResourceError {
 /// Errors returned by UpdateLag
 #[derive(Debug, PartialEq)]
 pub enum UpdateLagError {
-    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
     DirectConnectClient(String),
-    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4192,205 +4192,205 @@ impl Error for UpdateLagError {
 }
 /// Trait representing the capabilities of the AWS Direct Connect API. AWS Direct Connect clients implement this trait.
 pub trait DirectConnect {
-    #[doc="<p>Deprecated in favor of <a>AllocateHostedConnection</a>.</p> <p>Creates a hosted connection on an interconnect.</p> <p>Allocates a VLAN number and a specified amount of bandwidth for use by a hosted connection on the given interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
+    /// <p><p>Deprecated in favor of <a>AllocateHostedConnection</a>.</p> <p>Creates a hosted connection on an interconnect.</p> <p>Allocates a VLAN number and a specified amount of bandwidth for use by a hosted connection on the given interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
     fn allocate_connection_on_interconnect(
         &self,
         input: &AllocateConnectionOnInterconnectRequest,
     ) -> Result<Connection, AllocateConnectionOnInterconnectError>;
 
-    #[doc="<p>Creates a hosted connection on an interconnect or a link aggregation group (LAG).</p> <p>Allocates a VLAN number and a specified amount of bandwidth for use by a hosted connection on the given interconnect or LAG.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
+    /// <p><p>Creates a hosted connection on an interconnect or a link aggregation group (LAG).</p> <p>Allocates a VLAN number and a specified amount of bandwidth for use by a hosted connection on the given interconnect or LAG.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
     fn allocate_hosted_connection(
         &self,
         input: &AllocateHostedConnectionRequest,
     ) -> Result<Connection, AllocateHostedConnectionError>;
 
-    #[doc="<p>Provisions a private virtual interface to be owned by another AWS customer.</p> <p>Virtual interfaces created using this action must be confirmed by the virtual interface owner by using the <a>ConfirmPrivateVirtualInterface</a> action. Until then, the virtual interface will be in 'Confirming' state, and will not be available for handling traffic.</p>"]
+    /// <p>Provisions a private virtual interface to be owned by another AWS customer.</p> <p>Virtual interfaces created using this action must be confirmed by the virtual interface owner by using the <a>ConfirmPrivateVirtualInterface</a> action. Until then, the virtual interface will be in 'Confirming' state, and will not be available for handling traffic.</p>
     fn allocate_private_virtual_interface(
         &self,
         input: &AllocatePrivateVirtualInterfaceRequest,
     ) -> Result<VirtualInterface, AllocatePrivateVirtualInterfaceError>;
 
-    #[doc="<p>Provisions a public virtual interface to be owned by a different customer.</p> <p>The owner of a connection calls this function to provision a public virtual interface which will be owned by another AWS customer.</p> <p>Virtual interfaces created using this function must be confirmed by the virtual interface owner by calling ConfirmPublicVirtualInterface. Until this step has been completed, the virtual interface will be in 'Confirming' state, and will not be available for handling traffic.</p> <p>When creating an IPv6 public virtual interface (addressFamily is 'ipv6'), the customer and amazon address fields should be left blank to use auto-assigned IPv6 space. Custom IPv6 Addresses are currently not supported.</p>"]
+    /// <p>Provisions a public virtual interface to be owned by a different customer.</p> <p>The owner of a connection calls this function to provision a public virtual interface which will be owned by another AWS customer.</p> <p>Virtual interfaces created using this function must be confirmed by the virtual interface owner by calling ConfirmPublicVirtualInterface. Until this step has been completed, the virtual interface will be in 'Confirming' state, and will not be available for handling traffic.</p> <p>When creating an IPv6 public virtual interface (addressFamily is 'ipv6'), the customer and amazon address fields should be left blank to use auto-assigned IPv6 space. Custom IPv6 Addresses are currently not supported.</p>
     fn allocate_public_virtual_interface(
         &self,
         input: &AllocatePublicVirtualInterfaceRequest,
     ) -> Result<VirtualInterface, AllocatePublicVirtualInterfaceError>;
 
-    #[doc="<p>Associates an existing connection with a link aggregation group (LAG). The connection is interrupted and re-established as a member of the LAG (connectivity to AWS will be interrupted). The connection must be hosted on the same AWS Direct Connect endpoint as the LAG, and its bandwidth must match the bandwidth for the LAG. You can reassociate a connection that's currently associated with a different LAG; however, if removing the connection will cause the original LAG to fall below its setting for minimum number of operational connections, the request fails.</p> <p>Any virtual interfaces that are directly associated with the connection are automatically re-associated with the LAG. If the connection was originally associated with a different LAG, the virtual interfaces remain associated with the original LAG.</p> <p>For interconnects, any hosted connections are automatically re-associated with the LAG. If the interconnect was originally associated with a different LAG, the hosted connections remain associated with the original LAG.</p>"]
+    /// <p>Associates an existing connection with a link aggregation group (LAG). The connection is interrupted and re-established as a member of the LAG (connectivity to AWS will be interrupted). The connection must be hosted on the same AWS Direct Connect endpoint as the LAG, and its bandwidth must match the bandwidth for the LAG. You can reassociate a connection that's currently associated with a different LAG; however, if removing the connection will cause the original LAG to fall below its setting for minimum number of operational connections, the request fails.</p> <p>Any virtual interfaces that are directly associated with the connection are automatically re-associated with the LAG. If the connection was originally associated with a different LAG, the virtual interfaces remain associated with the original LAG.</p> <p>For interconnects, any hosted connections are automatically re-associated with the LAG. If the interconnect was originally associated with a different LAG, the hosted connections remain associated with the original LAG.</p>
     fn associate_connection_with_lag(
         &self,
         input: &AssociateConnectionWithLagRequest,
     ) -> Result<Connection, AssociateConnectionWithLagError>;
 
-    #[doc="<p>Associates a hosted connection and its virtual interfaces with a link aggregation group (LAG) or interconnect. If the target interconnect or LAG has an existing hosted connection with a conflicting VLAN number or IP address, the operation fails. This action temporarily interrupts the hosted connection's connectivity to AWS as it is being migrated.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
+    /// <p><p>Associates a hosted connection and its virtual interfaces with a link aggregation group (LAG) or interconnect. If the target interconnect or LAG has an existing hosted connection with a conflicting VLAN number or IP address, the operation fails. This action temporarily interrupts the hosted connection&#39;s connectivity to AWS as it is being migrated.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
     fn associate_hosted_connection(
         &self,
         input: &AssociateHostedConnectionRequest,
     ) -> Result<Connection, AssociateHostedConnectionError>;
 
-    #[doc="<p>Associates a virtual interface with a specified link aggregation group (LAG) or connection. Connectivity to AWS is temporarily interrupted as the virtual interface is being migrated. If the target connection or LAG has an associated virtual interface with a conflicting VLAN number or a conflicting IP address, the operation fails. </p> <p>Virtual interfaces associated with a hosted connection cannot be associated with a LAG; hosted connections must be migrated along with their virtual interfaces using <a>AssociateHostedConnection</a>.</p> <p>Hosted virtual interfaces (an interface for which the owner of the connection is not the owner of physical connection) can only be reassociated by the owner of the physical connection.</p>"]
+    /// <p>Associates a virtual interface with a specified link aggregation group (LAG) or connection. Connectivity to AWS is temporarily interrupted as the virtual interface is being migrated. If the target connection or LAG has an associated virtual interface with a conflicting VLAN number or a conflicting IP address, the operation fails. </p> <p>Virtual interfaces associated with a hosted connection cannot be associated with a LAG; hosted connections must be migrated along with their virtual interfaces using <a>AssociateHostedConnection</a>.</p> <p>Hosted virtual interfaces (an interface for which the owner of the connection is not the owner of physical connection) can only be reassociated by the owner of the physical connection.</p>
     fn associate_virtual_interface(
         &self,
         input: &AssociateVirtualInterfaceRequest,
     ) -> Result<VirtualInterface, AssociateVirtualInterfaceError>;
 
-    #[doc="<p>Confirm the creation of a hosted connection on an interconnect.</p> <p>Upon creation, the hosted connection is initially in the 'Ordering' state, and will remain in this state until the owner calls ConfirmConnection to confirm creation of the hosted connection.</p>"]
+    /// <p>Confirm the creation of a hosted connection on an interconnect.</p> <p>Upon creation, the hosted connection is initially in the 'Ordering' state, and will remain in this state until the owner calls ConfirmConnection to confirm creation of the hosted connection.</p>
     fn confirm_connection(
         &self,
         input: &ConfirmConnectionRequest,
     ) -> Result<ConfirmConnectionResponse, ConfirmConnectionError>;
 
-    #[doc="<p>Accept ownership of a private virtual interface created by another customer.</p> <p>After the virtual interface owner calls this function, the virtual interface will be created and attached to the given virtual private gateway, and will be available for handling traffic.</p>"]
+    /// <p>Accept ownership of a private virtual interface created by another customer.</p> <p>After the virtual interface owner calls this function, the virtual interface will be created and attached to the given virtual private gateway, and will be available for handling traffic.</p>
     fn confirm_private_virtual_interface(
         &self,
         input: &ConfirmPrivateVirtualInterfaceRequest,
     ) -> Result<ConfirmPrivateVirtualInterfaceResponse, ConfirmPrivateVirtualInterfaceError>;
 
-    #[doc="<p>Accept ownership of a public virtual interface created by another customer.</p> <p>After the virtual interface owner calls this function, the specified virtual interface will be created and made available for handling traffic.</p>"]
+    /// <p>Accept ownership of a public virtual interface created by another customer.</p> <p>After the virtual interface owner calls this function, the specified virtual interface will be created and made available for handling traffic.</p>
     fn confirm_public_virtual_interface(
         &self,
         input: &ConfirmPublicVirtualInterfaceRequest,
     ) -> Result<ConfirmPublicVirtualInterfaceResponse, ConfirmPublicVirtualInterfaceError>;
 
-    #[doc="<p>Creates a new BGP peer on a specified virtual interface. The BGP peer cannot be in the same address family (IPv4/IPv6) of an existing BGP peer on the virtual interface.</p> <p>You must create a BGP peer for the corresponding address family in order to access AWS resources that also use that address family.</p> <p>When creating a IPv6 BGP peer, the Amazon address and customer address fields must be left blank. IPv6 addresses are automatically assigned from Amazon's pool of IPv6 addresses; you cannot specify custom IPv6 addresses.</p> <p>For a public virtual interface, the Autonomous System Number (ASN) must be private or already whitelisted for the virtual interface.</p>"]
+    /// <p>Creates a new BGP peer on a specified virtual interface. The BGP peer cannot be in the same address family (IPv4/IPv6) of an existing BGP peer on the virtual interface.</p> <p>You must create a BGP peer for the corresponding address family in order to access AWS resources that also use that address family.</p> <p>When creating a IPv6 BGP peer, the Amazon address and customer address fields must be left blank. IPv6 addresses are automatically assigned from Amazon's pool of IPv6 addresses; you cannot specify custom IPv6 addresses.</p> <p>For a public virtual interface, the Autonomous System Number (ASN) must be private or already whitelisted for the virtual interface.</p>
     fn create_bgp_peer(
         &self,
         input: &CreateBGPPeerRequest,
     ) -> Result<CreateBGPPeerResponse, CreateBGPPeerError>;
 
-    #[doc="<p>Creates a new connection between the customer network and a specific AWS Direct Connect location.</p> <p>A connection links your internal network to an AWS Direct Connect location over a standard 1 gigabit or 10 gigabit Ethernet fiber-optic cable. One end of the cable is connected to your router, the other to an AWS Direct Connect router. An AWS Direct Connect location provides access to Amazon Web Services in the region it is associated with. You can establish connections with AWS Direct Connect locations in multiple regions, but a connection in one region does not provide connectivity to other regions.</p> <p>You can automatically add the new connection to a link aggregation group (LAG) by specifying a LAG ID in the request. This ensures that the new connection is allocated on the same AWS Direct Connect endpoint that hosts the specified LAG. If there are no available ports on the endpoint, the request fails and no connection will be created.</p>"]
+    /// <p>Creates a new connection between the customer network and a specific AWS Direct Connect location.</p> <p>A connection links your internal network to an AWS Direct Connect location over a standard 1 gigabit or 10 gigabit Ethernet fiber-optic cable. One end of the cable is connected to your router, the other to an AWS Direct Connect router. An AWS Direct Connect location provides access to Amazon Web Services in the region it is associated with. You can establish connections with AWS Direct Connect locations in multiple regions, but a connection in one region does not provide connectivity to other regions.</p> <p>You can automatically add the new connection to a link aggregation group (LAG) by specifying a LAG ID in the request. This ensures that the new connection is allocated on the same AWS Direct Connect endpoint that hosts the specified LAG. If there are no available ports on the endpoint, the request fails and no connection will be created.</p>
     fn create_connection(
         &self,
         input: &CreateConnectionRequest,
     ) -> Result<Connection, CreateConnectionError>;
 
-    #[doc="<p>Creates a new interconnect between a AWS Direct Connect partner's network and a specific AWS Direct Connect location.</p> <p>An interconnect is a connection which is capable of hosting other connections. The AWS Direct Connect partner can use an interconnect to provide sub-1Gbps AWS Direct Connect service to tier 2 customers who do not have their own connections. Like a standard connection, an interconnect links the AWS Direct Connect partner's network to an AWS Direct Connect location over a standard 1 Gbps or 10 Gbps Ethernet fiber-optic cable. One end is connected to the partner's router, the other to an AWS Direct Connect router.</p> <p>You can automatically add the new interconnect to a link aggregation group (LAG) by specifying a LAG ID in the request. This ensures that the new interconnect is allocated on the same AWS Direct Connect endpoint that hosts the specified LAG. If there are no available ports on the endpoint, the request fails and no interconnect will be created.</p> <p>For each end customer, the AWS Direct Connect partner provisions a connection on their interconnect by calling AllocateConnectionOnInterconnect. The end customer can then connect to AWS resources by creating a virtual interface on their connection, using the VLAN assigned to them by the AWS Direct Connect partner.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
+    /// <p><p>Creates a new interconnect between a AWS Direct Connect partner&#39;s network and a specific AWS Direct Connect location.</p> <p>An interconnect is a connection which is capable of hosting other connections. The AWS Direct Connect partner can use an interconnect to provide sub-1Gbps AWS Direct Connect service to tier 2 customers who do not have their own connections. Like a standard connection, an interconnect links the AWS Direct Connect partner&#39;s network to an AWS Direct Connect location over a standard 1 Gbps or 10 Gbps Ethernet fiber-optic cable. One end is connected to the partner&#39;s router, the other to an AWS Direct Connect router.</p> <p>You can automatically add the new interconnect to a link aggregation group (LAG) by specifying a LAG ID in the request. This ensures that the new interconnect is allocated on the same AWS Direct Connect endpoint that hosts the specified LAG. If there are no available ports on the endpoint, the request fails and no interconnect will be created.</p> <p>For each end customer, the AWS Direct Connect partner provisions a connection on their interconnect by calling AllocateConnectionOnInterconnect. The end customer can then connect to AWS resources by creating a virtual interface on their connection, using the VLAN assigned to them by the AWS Direct Connect partner.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
     fn create_interconnect(
         &self,
         input: &CreateInterconnectRequest,
     ) -> Result<Interconnect, CreateInterconnectError>;
 
-    #[doc="<p>Creates a new link aggregation group (LAG) with the specified number of bundled physical connections between the customer network and a specific AWS Direct Connect location. A LAG is a logical interface that uses the Link Aggregation Control Protocol (LACP) to aggregate multiple 1 gigabit or 10 gigabit interfaces, allowing you to treat them as a single interface.</p> <p>All connections in a LAG must use the same bandwidth (for example, 10 Gbps), and must terminate at the same AWS Direct Connect endpoint.</p> <p>You can have up to 10 connections per LAG. Regardless of this limit, if you request more connections for the LAG than AWS Direct Connect can allocate on a single endpoint, no LAG is created.</p> <p>You can specify an existing physical connection or interconnect to include in the LAG (which counts towards the total number of connections). Doing so interrupts the current physical connection or hosted connections, and re-establishes them as a member of the LAG. The LAG will be created on the same AWS Direct Connect endpoint to which the connection terminates. Any virtual interfaces associated with the connection are automatically disassociated and re-associated with the LAG. The connection ID does not change.</p> <p>If the AWS account used to create a LAG is a registered AWS Direct Connect partner, the LAG is automatically enabled to host sub-connections. For a LAG owned by a partner, any associated virtual interfaces cannot be directly configured.</p>"]
+    /// <p>Creates a new link aggregation group (LAG) with the specified number of bundled physical connections between the customer network and a specific AWS Direct Connect location. A LAG is a logical interface that uses the Link Aggregation Control Protocol (LACP) to aggregate multiple 1 gigabit or 10 gigabit interfaces, allowing you to treat them as a single interface.</p> <p>All connections in a LAG must use the same bandwidth (for example, 10 Gbps), and must terminate at the same AWS Direct Connect endpoint.</p> <p>You can have up to 10 connections per LAG. Regardless of this limit, if you request more connections for the LAG than AWS Direct Connect can allocate on a single endpoint, no LAG is created.</p> <p>You can specify an existing physical connection or interconnect to include in the LAG (which counts towards the total number of connections). Doing so interrupts the current physical connection or hosted connections, and re-establishes them as a member of the LAG. The LAG will be created on the same AWS Direct Connect endpoint to which the connection terminates. Any virtual interfaces associated with the connection are automatically disassociated and re-associated with the LAG. The connection ID does not change.</p> <p>If the AWS account used to create a LAG is a registered AWS Direct Connect partner, the LAG is automatically enabled to host sub-connections. For a LAG owned by a partner, any associated virtual interfaces cannot be directly configured.</p>
     fn create_lag(&self, input: &CreateLagRequest) -> Result<Lag, CreateLagError>;
 
-    #[doc="<p>Creates a new private virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A private virtual interface supports sending traffic to a single virtual private cloud (VPC).</p>"]
+    /// <p>Creates a new private virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A private virtual interface supports sending traffic to a single virtual private cloud (VPC).</p>
     fn create_private_virtual_interface(
         &self,
         input: &CreatePrivateVirtualInterfaceRequest,
     ) -> Result<VirtualInterface, CreatePrivateVirtualInterfaceError>;
 
-    #[doc="<p>Creates a new public virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A public virtual interface supports sending traffic to public services of AWS such as Amazon Simple Storage Service (Amazon S3).</p> <p>When creating an IPv6 public virtual interface (addressFamily is 'ipv6'), the customer and amazon address fields should be left blank to use auto-assigned IPv6 space. Custom IPv6 Addresses are currently not supported.</p>"]
+    /// <p>Creates a new public virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A public virtual interface supports sending traffic to public services of AWS such as Amazon Simple Storage Service (Amazon S3).</p> <p>When creating an IPv6 public virtual interface (addressFamily is 'ipv6'), the customer and amazon address fields should be left blank to use auto-assigned IPv6 space. Custom IPv6 Addresses are currently not supported.</p>
     fn create_public_virtual_interface(
         &self,
         input: &CreatePublicVirtualInterfaceRequest,
     ) -> Result<VirtualInterface, CreatePublicVirtualInterfaceError>;
 
-    #[doc="<p>Deletes a BGP peer on the specified virtual interface that matches the specified customer address and ASN. You cannot delete the last BGP peer from a virtual interface.</p>"]
+    /// <p>Deletes a BGP peer on the specified virtual interface that matches the specified customer address and ASN. You cannot delete the last BGP peer from a virtual interface.</p>
     fn delete_bgp_peer(
         &self,
         input: &DeleteBGPPeerRequest,
     ) -> Result<DeleteBGPPeerResponse, DeleteBGPPeerError>;
 
-    #[doc="<p>Deletes the connection.</p> <p>Deleting a connection only stops the AWS Direct Connect port hour and data transfer charges. You need to cancel separately with the providers any services or charges for cross-connects or network circuits that connect you to the AWS Direct Connect location.</p>"]
+    /// <p>Deletes the connection.</p> <p>Deleting a connection only stops the AWS Direct Connect port hour and data transfer charges. You need to cancel separately with the providers any services or charges for cross-connects or network circuits that connect you to the AWS Direct Connect location.</p>
     fn delete_connection(
         &self,
         input: &DeleteConnectionRequest,
     ) -> Result<Connection, DeleteConnectionError>;
 
-    #[doc="<p>Deletes the specified interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
+    /// <p><p>Deletes the specified interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
     fn delete_interconnect(
         &self,
         input: &DeleteInterconnectRequest,
     ) -> Result<DeleteInterconnectResponse, DeleteInterconnectError>;
 
-    #[doc="<p>Deletes a link aggregation group (LAG). You cannot delete a LAG if it has active virtual interfaces or hosted connections.</p>"]
+    /// <p>Deletes a link aggregation group (LAG). You cannot delete a LAG if it has active virtual interfaces or hosted connections.</p>
     fn delete_lag(&self, input: &DeleteLagRequest) -> Result<Lag, DeleteLagError>;
 
-    #[doc = "<p>Deletes a virtual interface.</p>"]
+    /// <p>Deletes a virtual interface.</p>
     fn delete_virtual_interface(
         &self,
         input: &DeleteVirtualInterfaceRequest,
     ) -> Result<DeleteVirtualInterfaceResponse, DeleteVirtualInterfaceError>;
 
-    #[doc="<p>Deprecated in favor of <a>DescribeLoa</a>.</p> <p>Returns the LOA-CFA for a Connection.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that your APN partner or service provider uses when establishing your cross connect to AWS at the colocation facility. For more information, see <a href=\"http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html\">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>"]
+    /// <p>Deprecated in favor of <a>DescribeLoa</a>.</p> <p>Returns the LOA-CFA for a Connection.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that your APN partner or service provider uses when establishing your cross connect to AWS at the colocation facility. For more information, see <a href="http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>
     fn describe_connection_loa(
         &self,
         input: &DescribeConnectionLoaRequest,
     ) -> Result<DescribeConnectionLoaResponse, DescribeConnectionLoaError>;
 
-    #[doc="<p>Displays all connections in this region.</p> <p>If a connection ID is provided, the call returns only that particular connection.</p>"]
+    /// <p>Displays all connections in this region.</p> <p>If a connection ID is provided, the call returns only that particular connection.</p>
     fn describe_connections(
         &self,
         input: &DescribeConnectionsRequest,
     ) -> Result<Connections, DescribeConnectionsError>;
 
-    #[doc="<p>Deprecated in favor of <a>DescribeHostedConnections</a>.</p> <p>Returns a list of connections that have been provisioned on the given interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
+    /// <p><p>Deprecated in favor of <a>DescribeHostedConnections</a>.</p> <p>Returns a list of connections that have been provisioned on the given interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
     fn describe_connections_on_interconnect(
         &self,
         input: &DescribeConnectionsOnInterconnectRequest,
     ) -> Result<Connections, DescribeConnectionsOnInterconnectError>;
 
-    #[doc="<p>Returns a list of hosted connections that have been provisioned on the given interconnect or link aggregation group (LAG).</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
+    /// <p><p>Returns a list of hosted connections that have been provisioned on the given interconnect or link aggregation group (LAG).</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
     fn describe_hosted_connections(
         &self,
         input: &DescribeHostedConnectionsRequest,
     ) -> Result<Connections, DescribeHostedConnectionsError>;
 
-    #[doc="<p>Deprecated in favor of <a>DescribeLoa</a>.</p> <p>Returns the LOA-CFA for an Interconnect.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href=\"http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html\">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>"]
+    /// <p>Deprecated in favor of <a>DescribeLoa</a>.</p> <p>Returns the LOA-CFA for an Interconnect.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href="http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>
     fn describe_interconnect_loa(
         &self,
         input: &DescribeInterconnectLoaRequest,
     ) -> Result<DescribeInterconnectLoaResponse, DescribeInterconnectLoaError>;
 
-    #[doc="<p>Returns a list of interconnects owned by the AWS account.</p> <p>If an interconnect ID is provided, it will only return this particular interconnect.</p>"]
+    /// <p>Returns a list of interconnects owned by the AWS account.</p> <p>If an interconnect ID is provided, it will only return this particular interconnect.</p>
     fn describe_interconnects(
         &self,
         input: &DescribeInterconnectsRequest,
     ) -> Result<Interconnects, DescribeInterconnectsError>;
 
-    #[doc="<p>Describes the link aggregation groups (LAGs) in your account. </p> <p>If a LAG ID is provided, only information about the specified LAG is returned.</p>"]
+    /// <p>Describes the link aggregation groups (LAGs) in your account. </p> <p>If a LAG ID is provided, only information about the specified LAG is returned.</p>
     fn describe_lags(&self, input: &DescribeLagsRequest) -> Result<Lags, DescribeLagsError>;
 
-    #[doc="<p>Returns the LOA-CFA for a connection, interconnect, or link aggregation group (LAG).</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href=\"http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html\">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>"]
+    /// <p>Returns the LOA-CFA for a connection, interconnect, or link aggregation group (LAG).</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href="http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>
     fn describe_loa(&self, input: &DescribeLoaRequest) -> Result<Loa, DescribeLoaError>;
 
-    #[doc="<p>Returns the list of AWS Direct Connect locations in the current AWS region. These are the locations that may be selected when calling CreateConnection or CreateInterconnect.</p>"]
+    /// <p>Returns the list of AWS Direct Connect locations in the current AWS region. These are the locations that may be selected when calling CreateConnection or CreateInterconnect.</p>
     fn describe_locations(&self) -> Result<Locations, DescribeLocationsError>;
 
-    #[doc = "<p>Describes the tags associated with the specified Direct Connect resources.</p>"]
+    /// <p>Describes the tags associated with the specified Direct Connect resources.</p>
     fn describe_tags(
         &self,
         input: &DescribeTagsRequest,
     ) -> Result<DescribeTagsResponse, DescribeTagsError>;
 
-    #[doc="<p>Returns a list of virtual private gateways owned by the AWS account.</p> <p>You can create one or more AWS Direct Connect private virtual interfaces linking to a virtual private gateway. A virtual private gateway can be managed via Amazon Virtual Private Cloud (VPC) console or the <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-CreateVpnGateway.html\">EC2 CreateVpnGateway</a> action.</p>"]
+    /// <p>Returns a list of virtual private gateways owned by the AWS account.</p> <p>You can create one or more AWS Direct Connect private virtual interfaces linking to a virtual private gateway. A virtual private gateway can be managed via Amazon Virtual Private Cloud (VPC) console or the <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-CreateVpnGateway.html">EC2 CreateVpnGateway</a> action.</p>
     fn describe_virtual_gateways(&self) -> Result<VirtualGateways, DescribeVirtualGatewaysError>;
 
-    #[doc="<p>Displays all virtual interfaces for an AWS account. Virtual interfaces deleted fewer than 15 minutes before you make the request are also returned. If you specify a connection ID, only the virtual interfaces associated with the connection are returned. If you specify a virtual interface ID, then only a single virtual interface is returned.</p> <p>A virtual interface (VLAN) transmits the traffic between the AWS Direct Connect location and the customer.</p>"]
+    /// <p>Displays all virtual interfaces for an AWS account. Virtual interfaces deleted fewer than 15 minutes before you make the request are also returned. If you specify a connection ID, only the virtual interfaces associated with the connection are returned. If you specify a virtual interface ID, then only a single virtual interface is returned.</p> <p>A virtual interface (VLAN) transmits the traffic between the AWS Direct Connect location and the customer.</p>
     fn describe_virtual_interfaces(
         &self,
         input: &DescribeVirtualInterfacesRequest,
     ) -> Result<VirtualInterfaces, DescribeVirtualInterfacesError>;
 
-    #[doc="<p>Disassociates a connection from a link aggregation group (LAG). The connection is interrupted and re-established as a standalone connection (the connection is not deleted; to delete the connection, use the <a>DeleteConnection</a> request). If the LAG has associated virtual interfaces or hosted connections, they remain associated with the LAG. A disassociated connection owned by an AWS Direct Connect partner is automatically converted to an interconnect.</p> <p>If disassociating the connection will cause the LAG to fall below its setting for minimum number of operational connections, the request fails, except when it's the last member of the LAG. If all connections are disassociated, the LAG continues to exist as an empty LAG with no physical connections. </p>"]
+    /// <p>Disassociates a connection from a link aggregation group (LAG). The connection is interrupted and re-established as a standalone connection (the connection is not deleted; to delete the connection, use the <a>DeleteConnection</a> request). If the LAG has associated virtual interfaces or hosted connections, they remain associated with the LAG. A disassociated connection owned by an AWS Direct Connect partner is automatically converted to an interconnect.</p> <p>If disassociating the connection will cause the LAG to fall below its setting for minimum number of operational connections, the request fails, except when it's the last member of the LAG. If all connections are disassociated, the LAG continues to exist as an empty LAG with no physical connections. </p>
     fn disassociate_connection_from_lag(
         &self,
         input: &DisassociateConnectionFromLagRequest,
     ) -> Result<Connection, DisassociateConnectionFromLagError>;
 
-    #[doc="<p>Adds the specified tags to the specified Direct Connect resource. Each Direct Connect resource can have a maximum of 50 tags.</p> <p>Each tag consists of a key and an optional value. If a tag with the same key is already associated with the Direct Connect resource, this action updates its value.</p>"]
+    /// <p>Adds the specified tags to the specified Direct Connect resource. Each Direct Connect resource can have a maximum of 50 tags.</p> <p>Each tag consists of a key and an optional value. If a tag with the same key is already associated with the Direct Connect resource, this action updates its value.</p>
     fn tag_resource(
         &self,
         input: &TagResourceRequest,
     ) -> Result<TagResourceResponse, TagResourceError>;
 
-    #[doc = "<p>Removes one or more tags from the specified Direct Connect resource.</p>"]
+    /// <p>Removes one or more tags from the specified Direct Connect resource.</p>
     fn untag_resource(
         &self,
         input: &UntagResourceRequest,
     ) -> Result<UntagResourceResponse, UntagResourceError>;
 
-    #[doc="<p>Updates the attributes of a link aggregation group (LAG). </p> <p>You can update the following attributes: </p> <ul> <li> <p>The name of the LAG.</p> </li> <li> <p>The value for the minimum number of connections that must be operational for the LAG itself to be operational. </p> </li> </ul> <p>When you create a LAG, the default value for the minimum number of operational connections is zero (0). If you update this value, and the number of operational connections falls below the specified value, the LAG will automatically go down to avoid overutilization of the remaining connections. Adjusting this value should be done with care as it could force the LAG down if the value is set higher than the current number of operational connections.</p>"]
+    /// <p>Updates the attributes of a link aggregation group (LAG). </p> <p>You can update the following attributes: </p> <ul> <li> <p>The name of the LAG.</p> </li> <li> <p>The value for the minimum number of connections that must be operational for the LAG itself to be operational. </p> </li> </ul> <p>When you create a LAG, the default value for the minimum number of operational connections is zero (0). If you update this value, and the number of operational connections falls below the specified value, the LAG will automatically go down to avoid overutilization of the remaining connections. Adjusting this value should be done with care as it could force the LAG down if the value is set higher than the current number of operational connections.</p>
     fn update_lag(&self, input: &UpdateLagRequest) -> Result<Lag, UpdateLagError>;
 }
 /// A client for the AWS Direct Connect API.
@@ -4423,7 +4423,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Deprecated in favor of <a>AllocateHostedConnection</a>.</p> <p>Creates a hosted connection on an interconnect.</p> <p>Allocates a VLAN number and a specified amount of bandwidth for use by a hosted connection on the given interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
+    /// <p><p>Deprecated in favor of <a>AllocateHostedConnection</a>.</p> <p>Creates a hosted connection on an interconnect.</p> <p>Allocates a VLAN number and a specified amount of bandwidth for use by a hosted connection on the given interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
     fn allocate_connection_on_interconnect(
         &self,
         input: &AllocateConnectionOnInterconnectRequest,
@@ -4461,7 +4461,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a hosted connection on an interconnect or a link aggregation group (LAG).</p> <p>Allocates a VLAN number and a specified amount of bandwidth for use by a hosted connection on the given interconnect or LAG.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
+    /// <p><p>Creates a hosted connection on an interconnect or a link aggregation group (LAG).</p> <p>Allocates a VLAN number and a specified amount of bandwidth for use by a hosted connection on the given interconnect or LAG.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
     fn allocate_hosted_connection(
         &self,
         input: &AllocateHostedConnectionRequest,
@@ -4496,7 +4496,7 @@ where
         }
     }
 
-    #[doc="<p>Provisions a private virtual interface to be owned by another AWS customer.</p> <p>Virtual interfaces created using this action must be confirmed by the virtual interface owner by using the <a>ConfirmPrivateVirtualInterface</a> action. Until then, the virtual interface will be in 'Confirming' state, and will not be available for handling traffic.</p>"]
+    /// <p>Provisions a private virtual interface to be owned by another AWS customer.</p> <p>Virtual interfaces created using this action must be confirmed by the virtual interface owner by using the <a>ConfirmPrivateVirtualInterface</a> action. Until then, the virtual interface will be in 'Confirming' state, and will not be available for handling traffic.</p>
     fn allocate_private_virtual_interface(
         &self,
         input: &AllocatePrivateVirtualInterfaceRequest,
@@ -4533,7 +4533,7 @@ where
         }
     }
 
-    #[doc="<p>Provisions a public virtual interface to be owned by a different customer.</p> <p>The owner of a connection calls this function to provision a public virtual interface which will be owned by another AWS customer.</p> <p>Virtual interfaces created using this function must be confirmed by the virtual interface owner by calling ConfirmPublicVirtualInterface. Until this step has been completed, the virtual interface will be in 'Confirming' state, and will not be available for handling traffic.</p> <p>When creating an IPv6 public virtual interface (addressFamily is 'ipv6'), the customer and amazon address fields should be left blank to use auto-assigned IPv6 space. Custom IPv6 Addresses are currently not supported.</p>"]
+    /// <p>Provisions a public virtual interface to be owned by a different customer.</p> <p>The owner of a connection calls this function to provision a public virtual interface which will be owned by another AWS customer.</p> <p>Virtual interfaces created using this function must be confirmed by the virtual interface owner by calling ConfirmPublicVirtualInterface. Until this step has been completed, the virtual interface will be in 'Confirming' state, and will not be available for handling traffic.</p> <p>When creating an IPv6 public virtual interface (addressFamily is 'ipv6'), the customer and amazon address fields should be left blank to use auto-assigned IPv6 space. Custom IPv6 Addresses are currently not supported.</p>
     fn allocate_public_virtual_interface(
         &self,
         input: &AllocatePublicVirtualInterfaceRequest,
@@ -4570,7 +4570,7 @@ where
         }
     }
 
-    #[doc="<p>Associates an existing connection with a link aggregation group (LAG). The connection is interrupted and re-established as a member of the LAG (connectivity to AWS will be interrupted). The connection must be hosted on the same AWS Direct Connect endpoint as the LAG, and its bandwidth must match the bandwidth for the LAG. You can reassociate a connection that's currently associated with a different LAG; however, if removing the connection will cause the original LAG to fall below its setting for minimum number of operational connections, the request fails.</p> <p>Any virtual interfaces that are directly associated with the connection are automatically re-associated with the LAG. If the connection was originally associated with a different LAG, the virtual interfaces remain associated with the original LAG.</p> <p>For interconnects, any hosted connections are automatically re-associated with the LAG. If the interconnect was originally associated with a different LAG, the hosted connections remain associated with the original LAG.</p>"]
+    /// <p>Associates an existing connection with a link aggregation group (LAG). The connection is interrupted and re-established as a member of the LAG (connectivity to AWS will be interrupted). The connection must be hosted on the same AWS Direct Connect endpoint as the LAG, and its bandwidth must match the bandwidth for the LAG. You can reassociate a connection that's currently associated with a different LAG; however, if removing the connection will cause the original LAG to fall below its setting for minimum number of operational connections, the request fails.</p> <p>Any virtual interfaces that are directly associated with the connection are automatically re-associated with the LAG. If the connection was originally associated with a different LAG, the virtual interfaces remain associated with the original LAG.</p> <p>For interconnects, any hosted connections are automatically re-associated with the LAG. If the interconnect was originally associated with a different LAG, the hosted connections remain associated with the original LAG.</p>
     fn associate_connection_with_lag(
         &self,
         input: &AssociateConnectionWithLagRequest,
@@ -4605,7 +4605,7 @@ where
         }
     }
 
-    #[doc="<p>Associates a hosted connection and its virtual interfaces with a link aggregation group (LAG) or interconnect. If the target interconnect or LAG has an existing hosted connection with a conflicting VLAN number or IP address, the operation fails. This action temporarily interrupts the hosted connection's connectivity to AWS as it is being migrated.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
+    /// <p><p>Associates a hosted connection and its virtual interfaces with a link aggregation group (LAG) or interconnect. If the target interconnect or LAG has an existing hosted connection with a conflicting VLAN number or IP address, the operation fails. This action temporarily interrupts the hosted connection&#39;s connectivity to AWS as it is being migrated.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
     fn associate_hosted_connection(
         &self,
         input: &AssociateHostedConnectionRequest,
@@ -4640,7 +4640,7 @@ where
         }
     }
 
-    #[doc="<p>Associates a virtual interface with a specified link aggregation group (LAG) or connection. Connectivity to AWS is temporarily interrupted as the virtual interface is being migrated. If the target connection or LAG has an associated virtual interface with a conflicting VLAN number or a conflicting IP address, the operation fails. </p> <p>Virtual interfaces associated with a hosted connection cannot be associated with a LAG; hosted connections must be migrated along with their virtual interfaces using <a>AssociateHostedConnection</a>.</p> <p>Hosted virtual interfaces (an interface for which the owner of the connection is not the owner of physical connection) can only be reassociated by the owner of the physical connection.</p>"]
+    /// <p>Associates a virtual interface with a specified link aggregation group (LAG) or connection. Connectivity to AWS is temporarily interrupted as the virtual interface is being migrated. If the target connection or LAG has an associated virtual interface with a conflicting VLAN number or a conflicting IP address, the operation fails. </p> <p>Virtual interfaces associated with a hosted connection cannot be associated with a LAG; hosted connections must be migrated along with their virtual interfaces using <a>AssociateHostedConnection</a>.</p> <p>Hosted virtual interfaces (an interface for which the owner of the connection is not the owner of physical connection) can only be reassociated by the owner of the physical connection.</p>
     fn associate_virtual_interface(
         &self,
         input: &AssociateVirtualInterfaceRequest,
@@ -4674,7 +4674,7 @@ where
         }
     }
 
-    #[doc="<p>Confirm the creation of a hosted connection on an interconnect.</p> <p>Upon creation, the hosted connection is initially in the 'Ordering' state, and will remain in this state until the owner calls ConfirmConnection to confirm creation of the hosted connection.</p>"]
+    /// <p>Confirm the creation of a hosted connection on an interconnect.</p> <p>Upon creation, the hosted connection is initially in the 'Ordering' state, and will remain in this state until the owner calls ConfirmConnection to confirm creation of the hosted connection.</p>
     fn confirm_connection(
         &self,
         input: &ConfirmConnectionRequest,
@@ -4708,7 +4708,7 @@ where
         }
     }
 
-    #[doc="<p>Accept ownership of a private virtual interface created by another customer.</p> <p>After the virtual interface owner calls this function, the virtual interface will be created and attached to the given virtual private gateway, and will be available for handling traffic.</p>"]
+    /// <p>Accept ownership of a private virtual interface created by another customer.</p> <p>After the virtual interface owner calls this function, the virtual interface will be created and attached to the given virtual private gateway, and will be available for handling traffic.</p>
     fn confirm_private_virtual_interface(
         &self,
         input: &ConfirmPrivateVirtualInterfaceRequest,
@@ -4747,7 +4747,7 @@ where
         }
     }
 
-    #[doc="<p>Accept ownership of a public virtual interface created by another customer.</p> <p>After the virtual interface owner calls this function, the specified virtual interface will be created and made available for handling traffic.</p>"]
+    /// <p>Accept ownership of a public virtual interface created by another customer.</p> <p>After the virtual interface owner calls this function, the specified virtual interface will be created and made available for handling traffic.</p>
     fn confirm_public_virtual_interface(
         &self,
         input: &ConfirmPublicVirtualInterfaceRequest,
@@ -4786,7 +4786,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new BGP peer on a specified virtual interface. The BGP peer cannot be in the same address family (IPv4/IPv6) of an existing BGP peer on the virtual interface.</p> <p>You must create a BGP peer for the corresponding address family in order to access AWS resources that also use that address family.</p> <p>When creating a IPv6 BGP peer, the Amazon address and customer address fields must be left blank. IPv6 addresses are automatically assigned from Amazon's pool of IPv6 addresses; you cannot specify custom IPv6 addresses.</p> <p>For a public virtual interface, the Autonomous System Number (ASN) must be private or already whitelisted for the virtual interface.</p>"]
+    /// <p>Creates a new BGP peer on a specified virtual interface. The BGP peer cannot be in the same address family (IPv4/IPv6) of an existing BGP peer on the virtual interface.</p> <p>You must create a BGP peer for the corresponding address family in order to access AWS resources that also use that address family.</p> <p>When creating a IPv6 BGP peer, the Amazon address and customer address fields must be left blank. IPv6 addresses are automatically assigned from Amazon's pool of IPv6 addresses; you cannot specify custom IPv6 addresses.</p> <p>For a public virtual interface, the Autonomous System Number (ASN) must be private or already whitelisted for the virtual interface.</p>
     fn create_bgp_peer(
         &self,
         input: &CreateBGPPeerRequest,
@@ -4820,7 +4820,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new connection between the customer network and a specific AWS Direct Connect location.</p> <p>A connection links your internal network to an AWS Direct Connect location over a standard 1 gigabit or 10 gigabit Ethernet fiber-optic cable. One end of the cable is connected to your router, the other to an AWS Direct Connect router. An AWS Direct Connect location provides access to Amazon Web Services in the region it is associated with. You can establish connections with AWS Direct Connect locations in multiple regions, but a connection in one region does not provide connectivity to other regions.</p> <p>You can automatically add the new connection to a link aggregation group (LAG) by specifying a LAG ID in the request. This ensures that the new connection is allocated on the same AWS Direct Connect endpoint that hosts the specified LAG. If there are no available ports on the endpoint, the request fails and no connection will be created.</p>"]
+    /// <p>Creates a new connection between the customer network and a specific AWS Direct Connect location.</p> <p>A connection links your internal network to an AWS Direct Connect location over a standard 1 gigabit or 10 gigabit Ethernet fiber-optic cable. One end of the cable is connected to your router, the other to an AWS Direct Connect router. An AWS Direct Connect location provides access to Amazon Web Services in the region it is associated with. You can establish connections with AWS Direct Connect locations in multiple regions, but a connection in one region does not provide connectivity to other regions.</p> <p>You can automatically add the new connection to a link aggregation group (LAG) by specifying a LAG ID in the request. This ensures that the new connection is allocated on the same AWS Direct Connect endpoint that hosts the specified LAG. If there are no available ports on the endpoint, the request fails and no connection will be created.</p>
     fn create_connection(
         &self,
         input: &CreateConnectionRequest,
@@ -4855,7 +4855,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new interconnect between a AWS Direct Connect partner's network and a specific AWS Direct Connect location.</p> <p>An interconnect is a connection which is capable of hosting other connections. The AWS Direct Connect partner can use an interconnect to provide sub-1Gbps AWS Direct Connect service to tier 2 customers who do not have their own connections. Like a standard connection, an interconnect links the AWS Direct Connect partner's network to an AWS Direct Connect location over a standard 1 Gbps or 10 Gbps Ethernet fiber-optic cable. One end is connected to the partner's router, the other to an AWS Direct Connect router.</p> <p>You can automatically add the new interconnect to a link aggregation group (LAG) by specifying a LAG ID in the request. This ensures that the new interconnect is allocated on the same AWS Direct Connect endpoint that hosts the specified LAG. If there are no available ports on the endpoint, the request fails and no interconnect will be created.</p> <p>For each end customer, the AWS Direct Connect partner provisions a connection on their interconnect by calling AllocateConnectionOnInterconnect. The end customer can then connect to AWS resources by creating a virtual interface on their connection, using the VLAN assigned to them by the AWS Direct Connect partner.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
+    /// <p><p>Creates a new interconnect between a AWS Direct Connect partner&#39;s network and a specific AWS Direct Connect location.</p> <p>An interconnect is a connection which is capable of hosting other connections. The AWS Direct Connect partner can use an interconnect to provide sub-1Gbps AWS Direct Connect service to tier 2 customers who do not have their own connections. Like a standard connection, an interconnect links the AWS Direct Connect partner&#39;s network to an AWS Direct Connect location over a standard 1 Gbps or 10 Gbps Ethernet fiber-optic cable. One end is connected to the partner&#39;s router, the other to an AWS Direct Connect router.</p> <p>You can automatically add the new interconnect to a link aggregation group (LAG) by specifying a LAG ID in the request. This ensures that the new interconnect is allocated on the same AWS Direct Connect endpoint that hosts the specified LAG. If there are no available ports on the endpoint, the request fails and no interconnect will be created.</p> <p>For each end customer, the AWS Direct Connect partner provisions a connection on their interconnect by calling AllocateConnectionOnInterconnect. The end customer can then connect to AWS resources by creating a virtual interface on their connection, using the VLAN assigned to them by the AWS Direct Connect partner.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
     fn create_interconnect(
         &self,
         input: &CreateInterconnectRequest,
@@ -4890,7 +4890,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new link aggregation group (LAG) with the specified number of bundled physical connections between the customer network and a specific AWS Direct Connect location. A LAG is a logical interface that uses the Link Aggregation Control Protocol (LACP) to aggregate multiple 1 gigabit or 10 gigabit interfaces, allowing you to treat them as a single interface.</p> <p>All connections in a LAG must use the same bandwidth (for example, 10 Gbps), and must terminate at the same AWS Direct Connect endpoint.</p> <p>You can have up to 10 connections per LAG. Regardless of this limit, if you request more connections for the LAG than AWS Direct Connect can allocate on a single endpoint, no LAG is created.</p> <p>You can specify an existing physical connection or interconnect to include in the LAG (which counts towards the total number of connections). Doing so interrupts the current physical connection or hosted connections, and re-establishes them as a member of the LAG. The LAG will be created on the same AWS Direct Connect endpoint to which the connection terminates. Any virtual interfaces associated with the connection are automatically disassociated and re-associated with the LAG. The connection ID does not change.</p> <p>If the AWS account used to create a LAG is a registered AWS Direct Connect partner, the LAG is automatically enabled to host sub-connections. For a LAG owned by a partner, any associated virtual interfaces cannot be directly configured.</p>"]
+    /// <p>Creates a new link aggregation group (LAG) with the specified number of bundled physical connections between the customer network and a specific AWS Direct Connect location. A LAG is a logical interface that uses the Link Aggregation Control Protocol (LACP) to aggregate multiple 1 gigabit or 10 gigabit interfaces, allowing you to treat them as a single interface.</p> <p>All connections in a LAG must use the same bandwidth (for example, 10 Gbps), and must terminate at the same AWS Direct Connect endpoint.</p> <p>You can have up to 10 connections per LAG. Regardless of this limit, if you request more connections for the LAG than AWS Direct Connect can allocate on a single endpoint, no LAG is created.</p> <p>You can specify an existing physical connection or interconnect to include in the LAG (which counts towards the total number of connections). Doing so interrupts the current physical connection or hosted connections, and re-establishes them as a member of the LAG. The LAG will be created on the same AWS Direct Connect endpoint to which the connection terminates. Any virtual interfaces associated with the connection are automatically disassociated and re-associated with the LAG. The connection ID does not change.</p> <p>If the AWS account used to create a LAG is a registered AWS Direct Connect partner, the LAG is automatically enabled to host sub-connections. For a LAG owned by a partner, any associated virtual interfaces cannot be directly configured.</p>
     fn create_lag(&self, input: &CreateLagRequest) -> Result<Lag, CreateLagError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
@@ -4919,7 +4919,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new private virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A private virtual interface supports sending traffic to a single virtual private cloud (VPC).</p>"]
+    /// <p>Creates a new private virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A private virtual interface supports sending traffic to a single virtual private cloud (VPC).</p>
     fn create_private_virtual_interface(
         &self,
         input: &CreatePrivateVirtualInterfaceRequest,
@@ -4956,7 +4956,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new public virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A public virtual interface supports sending traffic to public services of AWS such as Amazon Simple Storage Service (Amazon S3).</p> <p>When creating an IPv6 public virtual interface (addressFamily is 'ipv6'), the customer and amazon address fields should be left blank to use auto-assigned IPv6 space. Custom IPv6 Addresses are currently not supported.</p>"]
+    /// <p>Creates a new public virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A public virtual interface supports sending traffic to public services of AWS such as Amazon Simple Storage Service (Amazon S3).</p> <p>When creating an IPv6 public virtual interface (addressFamily is 'ipv6'), the customer and amazon address fields should be left blank to use auto-assigned IPv6 space. Custom IPv6 Addresses are currently not supported.</p>
     fn create_public_virtual_interface(
         &self,
         input: &CreatePublicVirtualInterfaceRequest,
@@ -4993,7 +4993,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a BGP peer on the specified virtual interface that matches the specified customer address and ASN. You cannot delete the last BGP peer from a virtual interface.</p>"]
+    /// <p>Deletes a BGP peer on the specified virtual interface that matches the specified customer address and ASN. You cannot delete the last BGP peer from a virtual interface.</p>
     fn delete_bgp_peer(
         &self,
         input: &DeleteBGPPeerRequest,
@@ -5027,7 +5027,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the connection.</p> <p>Deleting a connection only stops the AWS Direct Connect port hour and data transfer charges. You need to cancel separately with the providers any services or charges for cross-connects or network circuits that connect you to the AWS Direct Connect location.</p>"]
+    /// <p>Deletes the connection.</p> <p>Deleting a connection only stops the AWS Direct Connect port hour and data transfer charges. You need to cancel separately with the providers any services or charges for cross-connects or network circuits that connect you to the AWS Direct Connect location.</p>
     fn delete_connection(
         &self,
         input: &DeleteConnectionRequest,
@@ -5062,7 +5062,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
+    /// <p><p>Deletes the specified interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
     fn delete_interconnect(
         &self,
         input: &DeleteInterconnectRequest,
@@ -5096,7 +5096,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a link aggregation group (LAG). You cannot delete a LAG if it has active virtual interfaces or hosted connections.</p>"]
+    /// <p>Deletes a link aggregation group (LAG). You cannot delete a LAG if it has active virtual interfaces or hosted connections.</p>
     fn delete_lag(&self, input: &DeleteLagRequest) -> Result<Lag, DeleteLagError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
@@ -5125,7 +5125,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a virtual interface.</p>"]
+    /// <p>Deletes a virtual interface.</p>
     fn delete_virtual_interface(
         &self,
         input: &DeleteVirtualInterfaceRequest,
@@ -5159,7 +5159,7 @@ where
         }
     }
 
-    #[doc="<p>Deprecated in favor of <a>DescribeLoa</a>.</p> <p>Returns the LOA-CFA for a Connection.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that your APN partner or service provider uses when establishing your cross connect to AWS at the colocation facility. For more information, see <a href=\"http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html\">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>"]
+    /// <p>Deprecated in favor of <a>DescribeLoa</a>.</p> <p>Returns the LOA-CFA for a Connection.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that your APN partner or service provider uses when establishing your cross connect to AWS at the colocation facility. For more information, see <a href="http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>
     fn describe_connection_loa(
         &self,
         input: &DescribeConnectionLoaRequest,
@@ -5193,7 +5193,7 @@ where
         }
     }
 
-    #[doc="<p>Displays all connections in this region.</p> <p>If a connection ID is provided, the call returns only that particular connection.</p>"]
+    /// <p>Displays all connections in this region.</p> <p>If a connection ID is provided, the call returns only that particular connection.</p>
     fn describe_connections(
         &self,
         input: &DescribeConnectionsRequest,
@@ -5228,7 +5228,7 @@ where
         }
     }
 
-    #[doc="<p>Deprecated in favor of <a>DescribeHostedConnections</a>.</p> <p>Returns a list of connections that have been provisioned on the given interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
+    /// <p><p>Deprecated in favor of <a>DescribeHostedConnections</a>.</p> <p>Returns a list of connections that have been provisioned on the given interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
     fn describe_connections_on_interconnect(
         &self,
         input: &DescribeConnectionsOnInterconnectRequest,
@@ -5266,7 +5266,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list of hosted connections that have been provisioned on the given interconnect or link aggregation group (LAG).</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
+    /// <p><p>Returns a list of hosted connections that have been provisioned on the given interconnect or link aggregation group (LAG).</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
     fn describe_hosted_connections(
         &self,
         input: &DescribeHostedConnectionsRequest,
@@ -5301,7 +5301,7 @@ where
         }
     }
 
-    #[doc="<p>Deprecated in favor of <a>DescribeLoa</a>.</p> <p>Returns the LOA-CFA for an Interconnect.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href=\"http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html\">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>"]
+    /// <p>Deprecated in favor of <a>DescribeLoa</a>.</p> <p>Returns the LOA-CFA for an Interconnect.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href="http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>
     fn describe_interconnect_loa(
         &self,
         input: &DescribeInterconnectLoaRequest,
@@ -5335,7 +5335,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list of interconnects owned by the AWS account.</p> <p>If an interconnect ID is provided, it will only return this particular interconnect.</p>"]
+    /// <p>Returns a list of interconnects owned by the AWS account.</p> <p>If an interconnect ID is provided, it will only return this particular interconnect.</p>
     fn describe_interconnects(
         &self,
         input: &DescribeInterconnectsRequest,
@@ -5370,7 +5370,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the link aggregation groups (LAGs) in your account. </p> <p>If a LAG ID is provided, only information about the specified LAG is returned.</p>"]
+    /// <p>Describes the link aggregation groups (LAGs) in your account. </p> <p>If a LAG ID is provided, only information about the specified LAG is returned.</p>
     fn describe_lags(&self, input: &DescribeLagsRequest) -> Result<Lags, DescribeLagsError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
@@ -5399,7 +5399,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the LOA-CFA for a connection, interconnect, or link aggregation group (LAG).</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href=\"http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html\">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>"]
+    /// <p>Returns the LOA-CFA for a connection, interconnect, or link aggregation group (LAG).</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href="http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>
     fn describe_loa(&self, input: &DescribeLoaRequest) -> Result<Loa, DescribeLoaError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
@@ -5428,7 +5428,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the list of AWS Direct Connect locations in the current AWS region. These are the locations that may be selected when calling CreateConnection or CreateInterconnect.</p>"]
+    /// <p>Returns the list of AWS Direct Connect locations in the current AWS region. These are the locations that may be selected when calling CreateConnection or CreateInterconnect.</p>
     fn describe_locations(&self) -> Result<Locations, DescribeLocationsError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
@@ -5459,7 +5459,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes the tags associated with the specified Direct Connect resources.</p>"]
+    /// <p>Describes the tags associated with the specified Direct Connect resources.</p>
     fn describe_tags(
         &self,
         input: &DescribeTagsRequest,
@@ -5493,7 +5493,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list of virtual private gateways owned by the AWS account.</p> <p>You can create one or more AWS Direct Connect private virtual interfaces linking to a virtual private gateway. A virtual private gateway can be managed via Amazon Virtual Private Cloud (VPC) console or the <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-CreateVpnGateway.html\">EC2 CreateVpnGateway</a> action.</p>"]
+    /// <p>Returns a list of virtual private gateways owned by the AWS account.</p> <p>You can create one or more AWS Direct Connect private virtual interfaces linking to a virtual private gateway. A virtual private gateway can be managed via Amazon Virtual Private Cloud (VPC) console or the <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-CreateVpnGateway.html">EC2 CreateVpnGateway</a> action.</p>
     fn describe_virtual_gateways(&self) -> Result<VirtualGateways, DescribeVirtualGatewaysError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
@@ -5525,7 +5525,7 @@ where
         }
     }
 
-    #[doc="<p>Displays all virtual interfaces for an AWS account. Virtual interfaces deleted fewer than 15 minutes before you make the request are also returned. If you specify a connection ID, only the virtual interfaces associated with the connection are returned. If you specify a virtual interface ID, then only a single virtual interface is returned.</p> <p>A virtual interface (VLAN) transmits the traffic between the AWS Direct Connect location and the customer.</p>"]
+    /// <p>Displays all virtual interfaces for an AWS account. Virtual interfaces deleted fewer than 15 minutes before you make the request are also returned. If you specify a connection ID, only the virtual interfaces associated with the connection are returned. If you specify a virtual interface ID, then only a single virtual interface is returned.</p> <p>A virtual interface (VLAN) transmits the traffic between the AWS Direct Connect location and the customer.</p>
     fn describe_virtual_interfaces(
         &self,
         input: &DescribeVirtualInterfacesRequest,
@@ -5559,7 +5559,7 @@ where
         }
     }
 
-    #[doc="<p>Disassociates a connection from a link aggregation group (LAG). The connection is interrupted and re-established as a standalone connection (the connection is not deleted; to delete the connection, use the <a>DeleteConnection</a> request). If the LAG has associated virtual interfaces or hosted connections, they remain associated with the LAG. A disassociated connection owned by an AWS Direct Connect partner is automatically converted to an interconnect.</p> <p>If disassociating the connection will cause the LAG to fall below its setting for minimum number of operational connections, the request fails, except when it's the last member of the LAG. If all connections are disassociated, the LAG continues to exist as an empty LAG with no physical connections. </p>"]
+    /// <p>Disassociates a connection from a link aggregation group (LAG). The connection is interrupted and re-established as a standalone connection (the connection is not deleted; to delete the connection, use the <a>DeleteConnection</a> request). If the LAG has associated virtual interfaces or hosted connections, they remain associated with the LAG. A disassociated connection owned by an AWS Direct Connect partner is automatically converted to an interconnect.</p> <p>If disassociating the connection will cause the LAG to fall below its setting for minimum number of operational connections, the request fails, except when it's the last member of the LAG. If all connections are disassociated, the LAG continues to exist as an empty LAG with no physical connections. </p>
     fn disassociate_connection_from_lag(
         &self,
         input: &DisassociateConnectionFromLagRequest,
@@ -5597,7 +5597,7 @@ where
         }
     }
 
-    #[doc="<p>Adds the specified tags to the specified Direct Connect resource. Each Direct Connect resource can have a maximum of 50 tags.</p> <p>Each tag consists of a key and an optional value. If a tag with the same key is already associated with the Direct Connect resource, this action updates its value.</p>"]
+    /// <p>Adds the specified tags to the specified Direct Connect resource. Each Direct Connect resource can have a maximum of 50 tags.</p> <p>Each tag consists of a key and an optional value. If a tag with the same key is already associated with the Direct Connect resource, this action updates its value.</p>
     fn tag_resource(
         &self,
         input: &TagResourceRequest,
@@ -5631,7 +5631,7 @@ where
         }
     }
 
-    #[doc = "<p>Removes one or more tags from the specified Direct Connect resource.</p>"]
+    /// <p>Removes one or more tags from the specified Direct Connect resource.</p>
     fn untag_resource(
         &self,
         input: &UntagResourceRequest,
@@ -5665,7 +5665,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the attributes of a link aggregation group (LAG). </p> <p>You can update the following attributes: </p> <ul> <li> <p>The name of the LAG.</p> </li> <li> <p>The value for the minimum number of connections that must be operational for the LAG itself to be operational. </p> </li> </ul> <p>When you create a LAG, the default value for the minimum number of operational connections is zero (0). If you update this value, and the number of operational connections falls below the specified value, the LAG will automatically go down to avoid overutilization of the remaining connections. Adjusting this value should be done with care as it could force the LAG down if the value is set higher than the current number of operational connections.</p>"]
+    /// <p>Updates the attributes of a link aggregation group (LAG). </p> <p>You can update the following attributes: </p> <ul> <li> <p>The name of the LAG.</p> </li> <li> <p>The value for the minimum number of connections that must be operational for the LAG itself to be operational. </p> </li> </ul> <p>When you create a LAG, the default value for the minimum number of operational connections is zero (0). If you update this value, and the number of operational connections falls below the specified value, the LAG will automatically go down to avoid overutilization of the remaining connections. Adjusting this value should be done with care as it could force the LAG down if the value is set higher than the current number of operational connections.</p>
     fn update_lag(&self, input: &UpdateLagRequest) -> Result<Lag, UpdateLagError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 

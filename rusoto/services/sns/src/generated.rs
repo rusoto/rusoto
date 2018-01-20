@@ -175,7 +175,7 @@ impl CheckIfPhoneNumberIsOptedOutInputSerializer {
 /// <p>The response from the <code>CheckIfPhoneNumberIsOptedOut</code> action.</p>
 #[derive(Default, Debug, Clone)]
 pub struct CheckIfPhoneNumberIsOptedOutResponse {
-    /// <p>Indicates whether the phone number is opted out:</p> <ul> <li> <p> <code>true</code> – The phone number is opted out, meaning you cannot publish SMS messages to it.</p> </li> <li> <p> <code>false</code> – The phone number is opted in, meaning you can publish SMS messages to it.</p> </li> </ul>
+    /// <p><p>Indicates whether the phone number is opted out:</p> <ul> <li> <p> <code>true</code> – The phone number is opted out, meaning you cannot publish SMS messages to it.</p> </li> <li> <p> <code>false</code> – The phone number is opted in, meaning you can publish SMS messages to it.</p> </li> </ul></p>
     pub is_opted_out: Option<bool>,
 }
 
@@ -671,7 +671,7 @@ impl GetEndpointAttributesInputSerializer {
 /// <p>Response from GetEndpointAttributes of the EndpointArn.</p>
 #[derive(Default, Debug, Clone)]
 pub struct GetEndpointAttributesResponse {
-    /// <p>Attributes include the following:</p> <ul> <li> <p> <code>CustomUserData</code> -- arbitrary user data to associate with the endpoint. Amazon SNS does not use this data. The data must be in UTF-8 format and less than 2KB.</p> </li> <li> <p> <code>Enabled</code> -- flag that enables/disables delivery to the endpoint. Amazon SNS will set this to false when a notification service indicates to Amazon SNS that the endpoint is invalid. Users can set it back to true, typically after updating Token.</p> </li> <li> <p> <code>Token</code> -- device token, also referred to as a registration id, for an app and mobile device. This is returned from the notification service when an app and mobile device are registered with the notification service.</p> </li> </ul>
+    /// <p><p>Attributes include the following:</p> <ul> <li> <p> <code>CustomUserData</code> -- arbitrary user data to associate with the endpoint. Amazon SNS does not use this data. The data must be in UTF-8 format and less than 2KB.</p> </li> <li> <p> <code>Enabled</code> -- flag that enables/disables delivery to the endpoint. Amazon SNS will set this to false when a notification service indicates to Amazon SNS that the endpoint is invalid. Users can set it back to true, typically after updating Token.</p> </li> <li> <p> <code>Token</code> -- device token, also referred to as a registration id, for an app and mobile device. This is returned from the notification service when an app and mobile device are registered with the notification service.</p> </li> </ul></p>
     pub attributes: Option<::std::collections::HashMap<String, String>>,
 }
 
@@ -743,7 +743,7 @@ impl GetPlatformApplicationAttributesInputSerializer {
 /// <p>Response for GetPlatformApplicationAttributes action.</p>
 #[derive(Default, Debug, Clone)]
 pub struct GetPlatformApplicationAttributesResponse {
-    /// <p>Attributes include the following:</p> <ul> <li> <p> <code>EventEndpointCreated</code> -- Topic ARN to which EndpointCreated event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointDeleted</code> -- Topic ARN to which EndpointDeleted event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointUpdated</code> -- Topic ARN to which EndpointUpdate event notifications should be sent.</p> </li> <li> <p> <code>EventDeliveryFailure</code> -- Topic ARN to which DeliveryFailure event notifications should be sent upon Direct Publish delivery failure (permanent) to one of the application's endpoints.</p> </li> </ul>
+    /// <p><p>Attributes include the following:</p> <ul> <li> <p> <code>EventEndpointCreated</code> -- Topic ARN to which EndpointCreated event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointDeleted</code> -- Topic ARN to which EndpointDeleted event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointUpdated</code> -- Topic ARN to which EndpointUpdate event notifications should be sent.</p> </li> <li> <p> <code>EventDeliveryFailure</code> -- Topic ARN to which DeliveryFailure event notifications should be sent upon Direct Publish delivery failure (permanent) to one of the application&#39;s endpoints.</p> </li> </ul></p>
     pub attributes: Option<::std::collections::HashMap<String, String>>,
 }
 
@@ -890,7 +890,7 @@ impl GetSubscriptionAttributesInputSerializer {
 /// <p>Response for GetSubscriptionAttributes action.</p>
 #[derive(Default, Debug, Clone)]
 pub struct GetSubscriptionAttributesResponse {
-    /// <p>A map of the subscription's attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>SubscriptionArn</code> -- the subscription's ARN</p> </li> <li> <p> <code>TopicArn</code> -- the topic ARN that the subscription is associated with</p> </li> <li> <p> <code>Owner</code> -- the AWS account ID of the subscription's owner</p> </li> <li> <p> <code>ConfirmationWasAuthenticated</code> -- true if the subscription confirmation request was authenticated</p> </li> <li> <p> <code>DeliveryPolicy</code> -- the JSON serialization of the subscription's delivery policy</p> </li> <li> <p> <code>EffectiveDeliveryPolicy</code> -- the JSON serialization of the effective delivery policy that takes into account the topic delivery policy and account system defaults</p> </li> </ul>
+    /// <p><p>A map of the subscription&#39;s attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>SubscriptionArn</code> -- the subscription&#39;s ARN</p> </li> <li> <p> <code>TopicArn</code> -- the topic ARN that the subscription is associated with</p> </li> <li> <p> <code>Owner</code> -- the AWS account ID of the subscription&#39;s owner</p> </li> <li> <p> <code>ConfirmationWasAuthenticated</code> -- true if the subscription confirmation request was authenticated</p> </li> <li> <p> <code>DeliveryPolicy</code> -- the JSON serialization of the subscription&#39;s delivery policy</p> </li> <li> <p> <code>EffectiveDeliveryPolicy</code> -- the JSON serialization of the effective delivery policy that takes into account the topic delivery policy and account system defaults</p> </li> </ul></p>
     pub attributes: Option<::std::collections::HashMap<String, String>>,
 }
 
@@ -961,7 +961,7 @@ impl GetTopicAttributesInputSerializer {
 /// <p>Response for GetTopicAttributes action.</p>
 #[derive(Default, Debug, Clone)]
 pub struct GetTopicAttributesResponse {
-    /// <p>A map of the topic's attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>TopicArn</code> -- the topic's ARN</p> </li> <li> <p> <code>Owner</code> -- the AWS account ID of the topic's owner</p> </li> <li> <p> <code>Policy</code> -- the JSON serialization of the topic's access control policy</p> </li> <li> <p> <code>DisplayName</code> -- the human-readable name used in the "From" field for notifications to email and email-json endpoints</p> </li> <li> <p> <code>SubscriptionsPending</code> -- the number of subscriptions pending confirmation on this topic</p> </li> <li> <p> <code>SubscriptionsConfirmed</code> -- the number of confirmed subscriptions on this topic</p> </li> <li> <p> <code>SubscriptionsDeleted</code> -- the number of deleted subscriptions on this topic</p> </li> <li> <p> <code>DeliveryPolicy</code> -- the JSON serialization of the topic's delivery policy</p> </li> <li> <p> <code>EffectiveDeliveryPolicy</code> -- the JSON serialization of the effective delivery policy that takes into account system defaults</p> </li> </ul>
+    /// <p><p>A map of the topic&#39;s attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>TopicArn</code> -- the topic&#39;s ARN</p> </li> <li> <p> <code>Owner</code> -- the AWS account ID of the topic&#39;s owner</p> </li> <li> <p> <code>Policy</code> -- the JSON serialization of the topic&#39;s access control policy</p> </li> <li> <p> <code>DisplayName</code> -- the human-readable name used in the &quot;From&quot; field for notifications to email and email-json endpoints</p> </li> <li> <p> <code>SubscriptionsPending</code> -- the number of subscriptions pending confirmation on this topic</p> </li> <li> <p> <code>SubscriptionsConfirmed</code> -- the number of confirmed subscriptions on this topic</p> </li> <li> <p> <code>SubscriptionsDeleted</code> -- the number of deleted subscriptions on this topic</p> </li> <li> <p> <code>DeliveryPolicy</code> -- the JSON serialization of the topic&#39;s delivery policy</p> </li> <li> <p> <code>EffectiveDeliveryPolicy</code> -- the JSON serialization of the effective delivery policy that takes into account system defaults</p> </li> </ul></p>
     pub attributes: Option<::std::collections::HashMap<String, String>>,
 }
 
@@ -1889,7 +1889,7 @@ impl ProtocolDeserializer {
 /// <p>Input for Publish action.</p>
 #[derive(Default, Debug, Clone)]
 pub struct PublishInput {
-    /// <p>The message you want to send to the topic.</p> <p>If you want to send the same message to all transport protocols, include the text of the message as a String value.</p> <p>If you want to send different messages for each transport protocol, set the value of the <code>MessageStructure</code> parameter to <code>json</code> and use a JSON object for the <code>Message</code> parameter. </p> <p>Constraints: Messages must be UTF-8 encoded strings at most 256 KB in size (262144 bytes, not 262144 characters).</p> <p>JSON-specific constraints:</p> <ul> <li> <p>Keys in the JSON object that correspond to supported transport protocols must have simple JSON string values.</p> </li> <li> <p>The values will be parsed (unescaped) before they are used in outgoing messages.</p> </li> <li> <p>Outbound notifications are JSON encoded (meaning that the characters will be reescaped for sending).</p> </li> <li> <p>Values have a minimum length of 0 (the empty string, "", is allowed).</p> </li> <li> <p>Values have a maximum length bounded by the overall message size (so, including multiple protocols may limit message sizes).</p> </li> <li> <p>Non-string values will cause the key to be ignored.</p> </li> <li> <p>Keys that do not correspond to supported transport protocols are ignored.</p> </li> <li> <p>Duplicate keys are not allowed.</p> </li> <li> <p>Failure to parse or validate any key or value in the message will cause the <code>Publish</code> call to return an error (no partial delivery).</p> </li> </ul>
+    /// <p><p>The message you want to send to the topic.</p> <p>If you want to send the same message to all transport protocols, include the text of the message as a String value.</p> <p>If you want to send different messages for each transport protocol, set the value of the <code>MessageStructure</code> parameter to <code>json</code> and use a JSON object for the <code>Message</code> parameter. </p> <p>Constraints: Messages must be UTF-8 encoded strings at most 256 KB in size (262144 bytes, not 262144 characters).</p> <p>JSON-specific constraints:</p> <ul> <li> <p>Keys in the JSON object that correspond to supported transport protocols must have simple JSON string values.</p> </li> <li> <p>The values will be parsed (unescaped) before they are used in outgoing messages.</p> </li> <li> <p>Outbound notifications are JSON encoded (meaning that the characters will be reescaped for sending).</p> </li> <li> <p>Values have a minimum length of 0 (the empty string, &quot;&quot;, is allowed).</p> </li> <li> <p>Values have a maximum length bounded by the overall message size (so, including multiple protocols may limit message sizes).</p> </li> <li> <p>Non-string values will cause the key to be ignored.</p> </li> <li> <p>Keys that do not correspond to supported transport protocols are ignored.</p> </li> <li> <p>Duplicate keys are not allowed.</p> </li> <li> <p>Failure to parse or validate any key or value in the message will cause the <code>Publish</code> call to return an error (no partial delivery).</p> </li> </ul></p>
     pub message: String,
     /// <p>Message attributes for Publish action.</p>
     pub message_attributes: Option<::std::collections::HashMap<String, MessageAttributeValue>>,
@@ -2037,7 +2037,7 @@ impl RemovePermissionInputSerializer {
 /// <p>Input for SetEndpointAttributes action.</p>
 #[derive(Default, Debug, Clone)]
 pub struct SetEndpointAttributesInput {
-    /// <p>A map of the endpoint attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>CustomUserData</code> -- arbitrary user data to associate with the endpoint. Amazon SNS does not use this data. The data must be in UTF-8 format and less than 2KB.</p> </li> <li> <p> <code>Enabled</code> -- flag that enables/disables delivery to the endpoint. Amazon SNS will set this to false when a notification service indicates to Amazon SNS that the endpoint is invalid. Users can set it back to true, typically after updating Token.</p> </li> <li> <p> <code>Token</code> -- device token, also referred to as a registration id, for an app and mobile device. This is returned from the notification service when an app and mobile device are registered with the notification service.</p> </li> </ul>
+    /// <p><p>A map of the endpoint attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>CustomUserData</code> -- arbitrary user data to associate with the endpoint. Amazon SNS does not use this data. The data must be in UTF-8 format and less than 2KB.</p> </li> <li> <p> <code>Enabled</code> -- flag that enables/disables delivery to the endpoint. Amazon SNS will set this to false when a notification service indicates to Amazon SNS that the endpoint is invalid. Users can set it back to true, typically after updating Token.</p> </li> <li> <p> <code>Token</code> -- device token, also referred to as a registration id, for an app and mobile device. This is returned from the notification service when an app and mobile device are registered with the notification service.</p> </li> </ul></p>
     pub attributes: ::std::collections::HashMap<String, String>,
     /// <p>EndpointArn used for SetEndpointAttributes action.</p>
     pub endpoint_arn: String,
@@ -2067,7 +2067,7 @@ impl SetEndpointAttributesInputSerializer {
 /// <p>Input for SetPlatformApplicationAttributes action.</p>
 #[derive(Default, Debug, Clone)]
 pub struct SetPlatformApplicationAttributesInput {
-    /// <p>A map of the platform application attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>PlatformCredential</code> -- The credential received from the notification service. For APNS/APNS_SANDBOX, PlatformCredential is private key. For GCM, PlatformCredential is "API key". For ADM, PlatformCredential is "client secret".</p> </li> <li> <p> <code>PlatformPrincipal</code> -- The principal received from the notification service. For APNS/APNS_SANDBOX, PlatformPrincipal is SSL certificate. For GCM, PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is "client id".</p> </li> <li> <p> <code>EventEndpointCreated</code> -- Topic ARN to which EndpointCreated event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointDeleted</code> -- Topic ARN to which EndpointDeleted event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointUpdated</code> -- Topic ARN to which EndpointUpdate event notifications should be sent.</p> </li> <li> <p> <code>EventDeliveryFailure</code> -- Topic ARN to which DeliveryFailure event notifications should be sent upon Direct Publish delivery failure (permanent) to one of the application's endpoints.</p> </li> <li> <p> <code>SuccessFeedbackRoleArn</code> -- IAM role ARN used to give Amazon SNS write access to use CloudWatch Logs on your behalf.</p> </li> <li> <p> <code>FailureFeedbackRoleArn</code> -- IAM role ARN used to give Amazon SNS write access to use CloudWatch Logs on your behalf.</p> </li> <li> <p> <code>SuccessFeedbackSampleRate</code> -- Sample rate percentage (0-100) of successfully delivered messages.</p> </li> </ul>
+    /// <p><p>A map of the platform application attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>PlatformCredential</code> -- The credential received from the notification service. For APNS/APNS<em>SANDBOX, PlatformCredential is private key. For GCM, PlatformCredential is &quot;API key&quot;. For ADM, PlatformCredential is &quot;client secret&quot;.</p> </li> <li> <p> <code>PlatformPrincipal</code> -- The principal received from the notification service. For APNS/APNS</em>SANDBOX, PlatformPrincipal is SSL certificate. For GCM, PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is &quot;client id&quot;.</p> </li> <li> <p> <code>EventEndpointCreated</code> -- Topic ARN to which EndpointCreated event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointDeleted</code> -- Topic ARN to which EndpointDeleted event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointUpdated</code> -- Topic ARN to which EndpointUpdate event notifications should be sent.</p> </li> <li> <p> <code>EventDeliveryFailure</code> -- Topic ARN to which DeliveryFailure event notifications should be sent upon Direct Publish delivery failure (permanent) to one of the application&#39;s endpoints.</p> </li> <li> <p> <code>SuccessFeedbackRoleArn</code> -- IAM role ARN used to give Amazon SNS write access to use CloudWatch Logs on your behalf.</p> </li> <li> <p> <code>FailureFeedbackRoleArn</code> -- IAM role ARN used to give Amazon SNS write access to use CloudWatch Logs on your behalf.</p> </li> <li> <p> <code>SuccessFeedbackSampleRate</code> -- Sample rate percentage (0-100) of successfully delivered messages.</p> </li> </ul></p>
     pub attributes: ::std::collections::HashMap<String, String>,
     /// <p>PlatformApplicationArn for SetPlatformApplicationAttributes action.</p>
     pub platform_application_arn: String,
@@ -2229,9 +2229,9 @@ impl StringDeserializer {
 /// <p>Input for Subscribe action.</p>
 #[derive(Default, Debug, Clone)]
 pub struct SubscribeInput {
-    /// <p>The endpoint that you want to receive notifications. Endpoints vary by protocol:</p> <ul> <li> <p>For the <code>http</code> protocol, the endpoint is an URL beginning with "http://"</p> </li> <li> <p>For the <code>https</code> protocol, the endpoint is a URL beginning with "https://"</p> </li> <li> <p>For the <code>email</code> protocol, the endpoint is an email address</p> </li> <li> <p>For the <code>email-json</code> protocol, the endpoint is an email address</p> </li> <li> <p>For the <code>sms</code> protocol, the endpoint is a phone number of an SMS-enabled device</p> </li> <li> <p>For the <code>sqs</code> protocol, the endpoint is the ARN of an Amazon SQS queue</p> </li> <li> <p>For the <code>application</code> protocol, the endpoint is the EndpointArn of a mobile app and device.</p> </li> <li> <p>For the <code>lambda</code> protocol, the endpoint is the ARN of an AWS Lambda function.</p> </li> </ul>
+    /// <p><p>The endpoint that you want to receive notifications. Endpoints vary by protocol:</p> <ul> <li> <p>For the <code>http</code> protocol, the endpoint is an URL beginning with &quot;http://&quot;</p> </li> <li> <p>For the <code>https</code> protocol, the endpoint is a URL beginning with &quot;https://&quot;</p> </li> <li> <p>For the <code>email</code> protocol, the endpoint is an email address</p> </li> <li> <p>For the <code>email-json</code> protocol, the endpoint is an email address</p> </li> <li> <p>For the <code>sms</code> protocol, the endpoint is a phone number of an SMS-enabled device</p> </li> <li> <p>For the <code>sqs</code> protocol, the endpoint is the ARN of an Amazon SQS queue</p> </li> <li> <p>For the <code>application</code> protocol, the endpoint is the EndpointArn of a mobile app and device.</p> </li> <li> <p>For the <code>lambda</code> protocol, the endpoint is the ARN of an AWS Lambda function.</p> </li> </ul></p>
     pub endpoint: Option<String>,
-    /// <p>The protocol you want to use. Supported protocols include:</p> <ul> <li> <p> <code>http</code> -- delivery of JSON-encoded message via HTTP POST</p> </li> <li> <p> <code>https</code> -- delivery of JSON-encoded message via HTTPS POST</p> </li> <li> <p> <code>email</code> -- delivery of message via SMTP</p> </li> <li> <p> <code>email-json</code> -- delivery of JSON-encoded message via SMTP</p> </li> <li> <p> <code>sms</code> -- delivery of message via SMS</p> </li> <li> <p> <code>sqs</code> -- delivery of JSON-encoded message to an Amazon SQS queue</p> </li> <li> <p> <code>application</code> -- delivery of JSON-encoded message to an EndpointArn for a mobile app and device.</p> </li> <li> <p> <code>lambda</code> -- delivery of JSON-encoded message to an AWS Lambda function.</p> </li> </ul>
+    /// <p><p>The protocol you want to use. Supported protocols include:</p> <ul> <li> <p> <code>http</code> -- delivery of JSON-encoded message via HTTP POST</p> </li> <li> <p> <code>https</code> -- delivery of JSON-encoded message via HTTPS POST</p> </li> <li> <p> <code>email</code> -- delivery of message via SMTP</p> </li> <li> <p> <code>email-json</code> -- delivery of JSON-encoded message via SMTP</p> </li> <li> <p> <code>sms</code> -- delivery of message via SMS</p> </li> <li> <p> <code>sqs</code> -- delivery of JSON-encoded message to an Amazon SQS queue</p> </li> <li> <p> <code>application</code> -- delivery of JSON-encoded message to an EndpointArn for a mobile app and device.</p> </li> <li> <p> <code>lambda</code> -- delivery of JSON-encoded message to an AWS Lambda function.</p> </li> </ul></p>
     pub protocol: String,
     /// <p>The ARN of the topic you want to subscribe to.</p>
     pub topic_arn: String,
@@ -2609,13 +2609,13 @@ impl UnsubscribeInputSerializer {
 /// Errors returned by AddPermission
 #[derive(Debug, PartialEq)]
 pub enum AddPermissionError {
-    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
     AuthorizationError(String),
-    ///<p>Indicates an internal service error.</p>
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///<p>Indicates that the requested resource does not exist.</p>
+    /// <p>Indicates that the requested resource does not exist.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2696,13 +2696,13 @@ impl Error for AddPermissionError {
 /// Errors returned by CheckIfPhoneNumberIsOptedOut
 #[derive(Debug, PartialEq)]
 pub enum CheckIfPhoneNumberIsOptedOutError {
-    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
     AuthorizationError(String),
-    ///<p>Indicates an internal service error.</p>
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///<p>Indicates that the rate at which requests have been submitted for this action exceeds the limit for your account.</p>
+    /// <p>Indicates that the rate at which requests have been submitted for this action exceeds the limit for your account.</p>
     Throttled(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2789,15 +2789,15 @@ impl Error for CheckIfPhoneNumberIsOptedOutError {
 /// Errors returned by ConfirmSubscription
 #[derive(Debug, PartialEq)]
 pub enum ConfirmSubscriptionError {
-    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
     AuthorizationError(String),
-    ///<p>Indicates an internal service error.</p>
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///<p>Indicates that the requested resource does not exist.</p>
+    /// <p>Indicates that the requested resource does not exist.</p>
     NotFound(String),
-    ///<p>Indicates that the customer already owns the maximum allowed number of subscriptions.</p>
+    /// <p>Indicates that the customer already owns the maximum allowed number of subscriptions.</p>
     SubscriptionLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2886,11 +2886,11 @@ impl Error for ConfirmSubscriptionError {
 /// Errors returned by CreatePlatformApplication
 #[derive(Debug, PartialEq)]
 pub enum CreatePlatformApplicationError {
-    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
     AuthorizationError(String),
-    ///<p>Indicates an internal service error.</p>
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2971,13 +2971,13 @@ impl Error for CreatePlatformApplicationError {
 /// Errors returned by CreatePlatformEndpoint
 #[derive(Debug, PartialEq)]
 pub enum CreatePlatformEndpointError {
-    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
     AuthorizationError(String),
-    ///<p>Indicates an internal service error.</p>
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///<p>Indicates that the requested resource does not exist.</p>
+    /// <p>Indicates that the requested resource does not exist.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3060,13 +3060,13 @@ impl Error for CreatePlatformEndpointError {
 /// Errors returned by CreateTopic
 #[derive(Debug, PartialEq)]
 pub enum CreateTopicError {
-    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
     AuthorizationError(String),
-    ///<p>Indicates an internal service error.</p>
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///<p>Indicates that the customer already owns the maximum allowed number of topics.</p>
+    /// <p>Indicates that the customer already owns the maximum allowed number of topics.</p>
     TopicLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3147,11 +3147,11 @@ impl Error for CreateTopicError {
 /// Errors returned by DeleteEndpoint
 #[derive(Debug, PartialEq)]
 pub enum DeleteEndpointError {
-    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
     AuthorizationError(String),
-    ///<p>Indicates an internal service error.</p>
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3228,11 +3228,11 @@ impl Error for DeleteEndpointError {
 /// Errors returned by DeletePlatformApplication
 #[derive(Debug, PartialEq)]
 pub enum DeletePlatformApplicationError {
-    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
     AuthorizationError(String),
-    ///<p>Indicates an internal service error.</p>
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3313,13 +3313,13 @@ impl Error for DeletePlatformApplicationError {
 /// Errors returned by DeleteTopic
 #[derive(Debug, PartialEq)]
 pub enum DeleteTopicError {
-    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
     AuthorizationError(String),
-    ///<p>Indicates an internal service error.</p>
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///<p>Indicates that the requested resource does not exist.</p>
+    /// <p>Indicates that the requested resource does not exist.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3400,13 +3400,13 @@ impl Error for DeleteTopicError {
 /// Errors returned by GetEndpointAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetEndpointAttributesError {
-    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
     AuthorizationError(String),
-    ///<p>Indicates an internal service error.</p>
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///<p>Indicates that the requested resource does not exist.</p>
+    /// <p>Indicates that the requested resource does not exist.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3489,13 +3489,13 @@ impl Error for GetEndpointAttributesError {
 /// Errors returned by GetPlatformApplicationAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetPlatformApplicationAttributesError {
-    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
     AuthorizationError(String),
-    ///<p>Indicates an internal service error.</p>
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///<p>Indicates that the requested resource does not exist.</p>
+    /// <p>Indicates that the requested resource does not exist.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3582,13 +3582,13 @@ impl Error for GetPlatformApplicationAttributesError {
 /// Errors returned by GetSMSAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetSMSAttributesError {
-    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
     AuthorizationError(String),
-    ///<p>Indicates an internal service error.</p>
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///<p>Indicates that the rate at which requests have been submitted for this action exceeds the limit for your account.</p>
+    /// <p>Indicates that the rate at which requests have been submitted for this action exceeds the limit for your account.</p>
     Throttled(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3669,13 +3669,13 @@ impl Error for GetSMSAttributesError {
 /// Errors returned by GetSubscriptionAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetSubscriptionAttributesError {
-    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
     AuthorizationError(String),
-    ///<p>Indicates an internal service error.</p>
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///<p>Indicates that the requested resource does not exist.</p>
+    /// <p>Indicates that the requested resource does not exist.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3760,13 +3760,13 @@ impl Error for GetSubscriptionAttributesError {
 /// Errors returned by GetTopicAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetTopicAttributesError {
-    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
     AuthorizationError(String),
-    ///<p>Indicates an internal service error.</p>
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///<p>Indicates that the requested resource does not exist.</p>
+    /// <p>Indicates that the requested resource does not exist.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3849,13 +3849,13 @@ impl Error for GetTopicAttributesError {
 /// Errors returned by ListEndpointsByPlatformApplication
 #[derive(Debug, PartialEq)]
 pub enum ListEndpointsByPlatformApplicationError {
-    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
     AuthorizationError(String),
-    ///<p>Indicates an internal service error.</p>
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///<p>Indicates that the requested resource does not exist.</p>
+    /// <p>Indicates that the requested resource does not exist.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3944,13 +3944,13 @@ impl Error for ListEndpointsByPlatformApplicationError {
 /// Errors returned by ListPhoneNumbersOptedOut
 #[derive(Debug, PartialEq)]
 pub enum ListPhoneNumbersOptedOutError {
-    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
     AuthorizationError(String),
-    ///<p>Indicates an internal service error.</p>
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///<p>Indicates that the rate at which requests have been submitted for this action exceeds the limit for your account.</p>
+    /// <p>Indicates that the rate at which requests have been submitted for this action exceeds the limit for your account.</p>
     Throttled(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4035,11 +4035,11 @@ impl Error for ListPhoneNumbersOptedOutError {
 /// Errors returned by ListPlatformApplications
 #[derive(Debug, PartialEq)]
 pub enum ListPlatformApplicationsError {
-    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
     AuthorizationError(String),
-    ///<p>Indicates an internal service error.</p>
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4120,11 +4120,11 @@ impl Error for ListPlatformApplicationsError {
 /// Errors returned by ListSubscriptions
 #[derive(Debug, PartialEq)]
 pub enum ListSubscriptionsError {
-    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
     AuthorizationError(String),
-    ///<p>Indicates an internal service error.</p>
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4203,13 +4203,13 @@ impl Error for ListSubscriptionsError {
 /// Errors returned by ListSubscriptionsByTopic
 #[derive(Debug, PartialEq)]
 pub enum ListSubscriptionsByTopicError {
-    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
     AuthorizationError(String),
-    ///<p>Indicates an internal service error.</p>
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///<p>Indicates that the requested resource does not exist.</p>
+    /// <p>Indicates that the requested resource does not exist.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4294,11 +4294,11 @@ impl Error for ListSubscriptionsByTopicError {
 /// Errors returned by ListTopics
 #[derive(Debug, PartialEq)]
 pub enum ListTopicsError {
-    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
     AuthorizationError(String),
-    ///<p>Indicates an internal service error.</p>
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4375,13 +4375,13 @@ impl Error for ListTopicsError {
 /// Errors returned by OptInPhoneNumber
 #[derive(Debug, PartialEq)]
 pub enum OptInPhoneNumberError {
-    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
     AuthorizationError(String),
-    ///<p>Indicates an internal service error.</p>
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///<p>Indicates that the rate at which requests have been submitted for this action exceeds the limit for your account.</p>
+    /// <p>Indicates that the rate at which requests have been submitted for this action exceeds the limit for your account.</p>
     Throttled(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4462,19 +4462,19 @@ impl Error for OptInPhoneNumberError {
 /// Errors returned by Publish
 #[derive(Debug, PartialEq)]
 pub enum PublishError {
-    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
     AuthorizationError(String),
-    ///<p>Exception error indicating endpoint disabled.</p>
+    /// <p>Exception error indicating endpoint disabled.</p>
     EndpointDisabled(String),
-    ///<p>Indicates an internal service error.</p>
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameterValue(String),
-    ///<p>Indicates that the requested resource does not exist.</p>
+    /// <p>Indicates that the requested resource does not exist.</p>
     NotFound(String),
-    ///<p>Exception error indicating platform application disabled.</p>
+    /// <p>Exception error indicating platform application disabled.</p>
     PlatformApplicationDisabled(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4565,13 +4565,13 @@ impl Error for PublishError {
 /// Errors returned by RemovePermission
 #[derive(Debug, PartialEq)]
 pub enum RemovePermissionError {
-    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
     AuthorizationError(String),
-    ///<p>Indicates an internal service error.</p>
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///<p>Indicates that the requested resource does not exist.</p>
+    /// <p>Indicates that the requested resource does not exist.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4652,13 +4652,13 @@ impl Error for RemovePermissionError {
 /// Errors returned by SetEndpointAttributes
 #[derive(Debug, PartialEq)]
 pub enum SetEndpointAttributesError {
-    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
     AuthorizationError(String),
-    ///<p>Indicates an internal service error.</p>
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///<p>Indicates that the requested resource does not exist.</p>
+    /// <p>Indicates that the requested resource does not exist.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4741,13 +4741,13 @@ impl Error for SetEndpointAttributesError {
 /// Errors returned by SetPlatformApplicationAttributes
 #[derive(Debug, PartialEq)]
 pub enum SetPlatformApplicationAttributesError {
-    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
     AuthorizationError(String),
-    ///<p>Indicates an internal service error.</p>
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///<p>Indicates that the requested resource does not exist.</p>
+    /// <p>Indicates that the requested resource does not exist.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4834,13 +4834,13 @@ impl Error for SetPlatformApplicationAttributesError {
 /// Errors returned by SetSMSAttributes
 #[derive(Debug, PartialEq)]
 pub enum SetSMSAttributesError {
-    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
     AuthorizationError(String),
-    ///<p>Indicates an internal service error.</p>
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///<p>Indicates that the rate at which requests have been submitted for this action exceeds the limit for your account.</p>
+    /// <p>Indicates that the rate at which requests have been submitted for this action exceeds the limit for your account.</p>
     Throttled(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4921,13 +4921,13 @@ impl Error for SetSMSAttributesError {
 /// Errors returned by SetSubscriptionAttributes
 #[derive(Debug, PartialEq)]
 pub enum SetSubscriptionAttributesError {
-    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
     AuthorizationError(String),
-    ///<p>Indicates an internal service error.</p>
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///<p>Indicates that the requested resource does not exist.</p>
+    /// <p>Indicates that the requested resource does not exist.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5012,13 +5012,13 @@ impl Error for SetSubscriptionAttributesError {
 /// Errors returned by SetTopicAttributes
 #[derive(Debug, PartialEq)]
 pub enum SetTopicAttributesError {
-    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
     AuthorizationError(String),
-    ///<p>Indicates an internal service error.</p>
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///<p>Indicates that the requested resource does not exist.</p>
+    /// <p>Indicates that the requested resource does not exist.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5101,15 +5101,15 @@ impl Error for SetTopicAttributesError {
 /// Errors returned by Subscribe
 #[derive(Debug, PartialEq)]
 pub enum SubscribeError {
-    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
     AuthorizationError(String),
-    ///<p>Indicates an internal service error.</p>
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///<p>Indicates that the requested resource does not exist.</p>
+    /// <p>Indicates that the requested resource does not exist.</p>
     NotFound(String),
-    ///<p>Indicates that the customer already owns the maximum allowed number of subscriptions.</p>
+    /// <p>Indicates that the customer already owns the maximum allowed number of subscriptions.</p>
     SubscriptionLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5192,13 +5192,13 @@ impl Error for SubscribeError {
 /// Errors returned by Unsubscribe
 #[derive(Debug, PartialEq)]
 pub enum UnsubscribeError {
-    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
     AuthorizationError(String),
-    ///<p>Indicates an internal service error.</p>
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///<p>Indicates that the requested resource does not exist.</p>
+    /// <p>Indicates that the requested resource does not exist.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5278,161 +5278,161 @@ impl Error for UnsubscribeError {
 }
 /// Trait representing the capabilities of the Amazon SNS API. Amazon SNS clients implement this trait.
 pub trait Sns {
-    #[doc="<p>Adds a statement to a topic's access control policy, granting access for the specified AWS accounts to the specified actions.</p>"]
+    /// <p>Adds a statement to a topic's access control policy, granting access for the specified AWS accounts to the specified actions.</p>
     fn add_permission(&self, input: &AddPermissionInput) -> Result<(), AddPermissionError>;
 
-    #[doc="<p>Accepts a phone number and indicates whether the phone holder has opted out of receiving SMS messages from your account. You cannot send SMS messages to a number that is opted out.</p> <p>To resume sending messages, you can opt in the number by using the <code>OptInPhoneNumber</code> action.</p>"]
+    /// <p>Accepts a phone number and indicates whether the phone holder has opted out of receiving SMS messages from your account. You cannot send SMS messages to a number that is opted out.</p> <p>To resume sending messages, you can opt in the number by using the <code>OptInPhoneNumber</code> action.</p>
     fn check_if_phone_number_is_opted_out(
         &self,
         input: &CheckIfPhoneNumberIsOptedOutInput,
     ) -> Result<CheckIfPhoneNumberIsOptedOutResponse, CheckIfPhoneNumberIsOptedOutError>;
 
-    #[doc="<p>Verifies an endpoint owner's intent to receive messages by validating the token sent to the endpoint by an earlier <code>Subscribe</code> action. If the token is valid, the action creates a new subscription and returns its Amazon Resource Name (ARN). This call requires an AWS signature only when the <code>AuthenticateOnUnsubscribe</code> flag is set to \"true\".</p>"]
+    /// <p>Verifies an endpoint owner's intent to receive messages by validating the token sent to the endpoint by an earlier <code>Subscribe</code> action. If the token is valid, the action creates a new subscription and returns its Amazon Resource Name (ARN). This call requires an AWS signature only when the <code>AuthenticateOnUnsubscribe</code> flag is set to "true".</p>
     fn confirm_subscription(
         &self,
         input: &ConfirmSubscriptionInput,
     ) -> Result<ConfirmSubscriptionResponse, ConfirmSubscriptionError>;
 
-    #[doc="<p>Creates a platform application object for one of the supported push notification services, such as APNS and GCM, to which devices and mobile apps may register. You must specify PlatformPrincipal and PlatformCredential attributes when using the <code>CreatePlatformApplication</code> action. The PlatformPrincipal is received from the notification service. For APNS/APNS_SANDBOX, PlatformPrincipal is \"SSL certificate\". For GCM, PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is \"client id\". The PlatformCredential is also received from the notification service. For WNS, PlatformPrincipal is \"Package Security Identifier\". For MPNS, PlatformPrincipal is \"TLS certificate\". For Baidu, PlatformPrincipal is \"API key\".</p> <p>For APNS/APNS_SANDBOX, PlatformCredential is \"private key\". For GCM, PlatformCredential is \"API key\". For ADM, PlatformCredential is \"client secret\". For WNS, PlatformCredential is \"secret key\". For MPNS, PlatformCredential is \"private key\". For Baidu, PlatformCredential is \"secret key\". The PlatformApplicationArn that is returned when using <code>CreatePlatformApplication</code> is then used as an attribute for the <code>CreatePlatformEndpoint</code> action. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. For more information about obtaining the PlatformPrincipal and PlatformCredential for each of the supported push notification services, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-apns.html\">Getting Started with Apple Push Notification Service</a>, <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-adm.html\">Getting Started with Amazon Device Messaging</a>, <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-baidu.html\">Getting Started with Baidu Cloud Push</a>, <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-gcm.html\">Getting Started with Google Cloud Messaging for Android</a>, <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-mpns.html\">Getting Started with MPNS</a>, or <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-wns.html\">Getting Started with WNS</a>. </p>"]
+    /// <p>Creates a platform application object for one of the supported push notification services, such as APNS and GCM, to which devices and mobile apps may register. You must specify PlatformPrincipal and PlatformCredential attributes when using the <code>CreatePlatformApplication</code> action. The PlatformPrincipal is received from the notification service. For APNS/APNS_SANDBOX, PlatformPrincipal is "SSL certificate". For GCM, PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is "client id". The PlatformCredential is also received from the notification service. For WNS, PlatformPrincipal is "Package Security Identifier". For MPNS, PlatformPrincipal is "TLS certificate". For Baidu, PlatformPrincipal is "API key".</p> <p>For APNS/APNS_SANDBOX, PlatformCredential is "private key". For GCM, PlatformCredential is "API key". For ADM, PlatformCredential is "client secret". For WNS, PlatformCredential is "secret key". For MPNS, PlatformCredential is "private key". For Baidu, PlatformCredential is "secret key". The PlatformApplicationArn that is returned when using <code>CreatePlatformApplication</code> is then used as an attribute for the <code>CreatePlatformEndpoint</code> action. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. For more information about obtaining the PlatformPrincipal and PlatformCredential for each of the supported push notification services, see <a href="http://docs.aws.amazon.com/sns/latest/dg/mobile-push-apns.html">Getting Started with Apple Push Notification Service</a>, <a href="http://docs.aws.amazon.com/sns/latest/dg/mobile-push-adm.html">Getting Started with Amazon Device Messaging</a>, <a href="http://docs.aws.amazon.com/sns/latest/dg/mobile-push-baidu.html">Getting Started with Baidu Cloud Push</a>, <a href="http://docs.aws.amazon.com/sns/latest/dg/mobile-push-gcm.html">Getting Started with Google Cloud Messaging for Android</a>, <a href="http://docs.aws.amazon.com/sns/latest/dg/mobile-push-mpns.html">Getting Started with MPNS</a>, or <a href="http://docs.aws.amazon.com/sns/latest/dg/mobile-push-wns.html">Getting Started with WNS</a>. </p>
     fn create_platform_application(
         &self,
         input: &CreatePlatformApplicationInput,
     ) -> Result<CreatePlatformApplicationResponse, CreatePlatformApplicationError>;
 
-    #[doc="<p>Creates an endpoint for a device and mobile app on one of the supported push notification services, such as GCM and APNS. <code>CreatePlatformEndpoint</code> requires the PlatformApplicationArn that is returned from <code>CreatePlatformApplication</code>. The EndpointArn that is returned when using <code>CreatePlatformEndpoint</code> can then be used by the <code>Publish</code> action to send a message to a mobile app or by the <code>Subscribe</code> action for subscription to a topic. The <code>CreatePlatformEndpoint</code> action is idempotent, so if the requester already owns an endpoint with the same device token and attributes, that endpoint's ARN is returned without creating a new endpoint. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When using <code>CreatePlatformEndpoint</code> with Baidu, two attributes must be provided: ChannelId and UserId. The token field must also contain the ChannelId. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePushBaiduEndpoint.html\">Creating an Amazon SNS Endpoint for Baidu</a>. </p>"]
+    /// <p>Creates an endpoint for a device and mobile app on one of the supported push notification services, such as GCM and APNS. <code>CreatePlatformEndpoint</code> requires the PlatformApplicationArn that is returned from <code>CreatePlatformApplication</code>. The EndpointArn that is returned when using <code>CreatePlatformEndpoint</code> can then be used by the <code>Publish</code> action to send a message to a mobile app or by the <code>Subscribe</code> action for subscription to a topic. The <code>CreatePlatformEndpoint</code> action is idempotent, so if the requester already owns an endpoint with the same device token and attributes, that endpoint's ARN is returned without creating a new endpoint. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When using <code>CreatePlatformEndpoint</code> with Baidu, two attributes must be provided: ChannelId and UserId. The token field must also contain the ChannelId. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePushBaiduEndpoint.html">Creating an Amazon SNS Endpoint for Baidu</a>. </p>
     fn create_platform_endpoint(
         &self,
         input: &CreatePlatformEndpointInput,
     ) -> Result<CreateEndpointResponse, CreatePlatformEndpointError>;
 
-    #[doc="<p>Creates a topic to which notifications can be published. Users can create at most 100,000 topics. For more information, see <a href=\"http://aws.amazon.com/sns/\">http://aws.amazon.com/sns</a>. This action is idempotent, so if the requester already owns a topic with the specified name, that topic's ARN is returned without creating a new topic.</p>"]
+    /// <p>Creates a topic to which notifications can be published. Users can create at most 100,000 topics. For more information, see <a href="http://aws.amazon.com/sns/">http://aws.amazon.com/sns</a>. This action is idempotent, so if the requester already owns a topic with the specified name, that topic's ARN is returned without creating a new topic.</p>
     fn create_topic(
         &self,
         input: &CreateTopicInput,
     ) -> Result<CreateTopicResponse, CreateTopicError>;
 
-    #[doc="<p>Deletes the endpoint for a device and mobile app from Amazon SNS. This action is idempotent. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When you delete an endpoint that is also subscribed to a topic, then you must also unsubscribe the endpoint from the topic.</p>"]
+    /// <p>Deletes the endpoint for a device and mobile app from Amazon SNS. This action is idempotent. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When you delete an endpoint that is also subscribed to a topic, then you must also unsubscribe the endpoint from the topic.</p>
     fn delete_endpoint(&self, input: &DeleteEndpointInput) -> Result<(), DeleteEndpointError>;
 
-    #[doc="<p>Deletes a platform application object for one of the supported push notification services, such as APNS and GCM. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
+    /// <p>Deletes a platform application object for one of the supported push notification services, such as APNS and GCM. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn delete_platform_application(
         &self,
         input: &DeletePlatformApplicationInput,
     ) -> Result<(), DeletePlatformApplicationError>;
 
-    #[doc="<p>Deletes a topic and all its subscriptions. Deleting a topic might prevent some messages previously sent to the topic from being delivered to subscribers. This action is idempotent, so deleting a topic that does not exist does not result in an error.</p>"]
+    /// <p>Deletes a topic and all its subscriptions. Deleting a topic might prevent some messages previously sent to the topic from being delivered to subscribers. This action is idempotent, so deleting a topic that does not exist does not result in an error.</p>
     fn delete_topic(&self, input: &DeleteTopicInput) -> Result<(), DeleteTopicError>;
 
-    #[doc="<p>Retrieves the endpoint attributes for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
+    /// <p>Retrieves the endpoint attributes for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn get_endpoint_attributes(
         &self,
         input: &GetEndpointAttributesInput,
     ) -> Result<GetEndpointAttributesResponse, GetEndpointAttributesError>;
 
-    #[doc="<p>Retrieves the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
+    /// <p>Retrieves the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn get_platform_application_attributes(
         &self,
         input: &GetPlatformApplicationAttributesInput,
     ) -> Result<GetPlatformApplicationAttributesResponse, GetPlatformApplicationAttributesError>;
 
-    #[doc="<p>Returns the settings for sending SMS messages from your account.</p> <p>These settings are set with the <code>SetSMSAttributes</code> action.</p>"]
+    /// <p>Returns the settings for sending SMS messages from your account.</p> <p>These settings are set with the <code>SetSMSAttributes</code> action.</p>
     fn get_sms_attributes(
         &self,
         input: &GetSMSAttributesInput,
     ) -> Result<GetSMSAttributesResponse, GetSMSAttributesError>;
 
-    #[doc = "<p>Returns all of the properties of a subscription.</p>"]
+    /// <p>Returns all of the properties of a subscription.</p>
     fn get_subscription_attributes(
         &self,
         input: &GetSubscriptionAttributesInput,
     ) -> Result<GetSubscriptionAttributesResponse, GetSubscriptionAttributesError>;
 
-    #[doc="<p>Returns all of the properties of a topic. Topic properties returned might differ based on the authorization of the user.</p>"]
+    /// <p>Returns all of the properties of a topic. Topic properties returned might differ based on the authorization of the user.</p>
     fn get_topic_attributes(
         &self,
         input: &GetTopicAttributesInput,
     ) -> Result<GetTopicAttributesResponse, GetTopicAttributesError>;
 
-    #[doc="<p>Lists the endpoints and endpoint attributes for devices in a supported push notification service, such as GCM and APNS. The results for <code>ListEndpointsByPlatformApplication</code> are paginated and return a limited list of endpoints, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListEndpointsByPlatformApplication</code> again using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
+    /// <p>Lists the endpoints and endpoint attributes for devices in a supported push notification service, such as GCM and APNS. The results for <code>ListEndpointsByPlatformApplication</code> are paginated and return a limited list of endpoints, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListEndpointsByPlatformApplication</code> again using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn list_endpoints_by_platform_application(
         &self,
         input: &ListEndpointsByPlatformApplicationInput,
     ) -> Result<ListEndpointsByPlatformApplicationResponse, ListEndpointsByPlatformApplicationError>;
 
-    #[doc="<p>Returns a list of phone numbers that are opted out, meaning you cannot send SMS messages to them.</p> <p>The results for <code>ListPhoneNumbersOptedOut</code> are paginated, and each page returns up to 100 phone numbers. If additional phone numbers are available after the first page of results, then a <code>NextToken</code> string will be returned. To receive the next page, you call <code>ListPhoneNumbersOptedOut</code> again using the <code>NextToken</code> string received from the previous call. When there are no more records to return, <code>NextToken</code> will be null.</p>"]
+    /// <p>Returns a list of phone numbers that are opted out, meaning you cannot send SMS messages to them.</p> <p>The results for <code>ListPhoneNumbersOptedOut</code> are paginated, and each page returns up to 100 phone numbers. If additional phone numbers are available after the first page of results, then a <code>NextToken</code> string will be returned. To receive the next page, you call <code>ListPhoneNumbersOptedOut</code> again using the <code>NextToken</code> string received from the previous call. When there are no more records to return, <code>NextToken</code> will be null.</p>
     fn list_phone_numbers_opted_out(
         &self,
         input: &ListPhoneNumbersOptedOutInput,
     ) -> Result<ListPhoneNumbersOptedOutResponse, ListPhoneNumbersOptedOutError>;
 
-    #[doc="<p>Lists the platform application objects for the supported push notification services, such as APNS and GCM. The results for <code>ListPlatformApplications</code> are paginated and return a limited list of applications, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListPlatformApplications</code> using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
+    /// <p>Lists the platform application objects for the supported push notification services, such as APNS and GCM. The results for <code>ListPlatformApplications</code> are paginated and return a limited list of applications, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListPlatformApplications</code> using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn list_platform_applications(
         &self,
         input: &ListPlatformApplicationsInput,
     ) -> Result<ListPlatformApplicationsResponse, ListPlatformApplicationsError>;
 
-    #[doc="<p>Returns a list of the requester's subscriptions. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptions</code> call to get further results.</p>"]
+    /// <p>Returns a list of the requester's subscriptions. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptions</code> call to get further results.</p>
     fn list_subscriptions(
         &self,
         input: &ListSubscriptionsInput,
     ) -> Result<ListSubscriptionsResponse, ListSubscriptionsError>;
 
-    #[doc="<p>Returns a list of the subscriptions to a specific topic. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptionsByTopic</code> call to get further results.</p>"]
+    /// <p>Returns a list of the subscriptions to a specific topic. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptionsByTopic</code> call to get further results.</p>
     fn list_subscriptions_by_topic(
         &self,
         input: &ListSubscriptionsByTopicInput,
     ) -> Result<ListSubscriptionsByTopicResponse, ListSubscriptionsByTopicError>;
 
-    #[doc="<p>Returns a list of the requester's topics. Each call returns a limited list of topics, up to 100. If there are more topics, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListTopics</code> call to get further results.</p>"]
+    /// <p>Returns a list of the requester's topics. Each call returns a limited list of topics, up to 100. If there are more topics, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListTopics</code> call to get further results.</p>
     fn list_topics(&self, input: &ListTopicsInput) -> Result<ListTopicsResponse, ListTopicsError>;
 
-    #[doc="<p>Use this request to opt in a phone number that is opted out, which enables you to resume sending SMS messages to the number.</p> <p>You can opt in a phone number only once every 30 days.</p>"]
+    /// <p>Use this request to opt in a phone number that is opted out, which enables you to resume sending SMS messages to the number.</p> <p>You can opt in a phone number only once every 30 days.</p>
     fn opt_in_phone_number(
         &self,
         input: &OptInPhoneNumberInput,
     ) -> Result<OptInPhoneNumberResponse, OptInPhoneNumberError>;
 
-    #[doc="<p>Sends a message to all of a topic's subscribed endpoints. When a <code>messageId</code> is returned, the message has been saved and Amazon SNS will attempt to deliver it to the topic's subscribers shortly. The format of the outgoing message to each subscribed endpoint depends on the notification protocol.</p> <p>To use the <code>Publish</code> action for sending a message to a mobile endpoint, such as an app on a Kindle device or mobile phone, you must specify the EndpointArn for the TargetArn parameter. The EndpointArn is returned when making a call with the <code>CreatePlatformEndpoint</code> action. </p> <p>For more information about formatting messages, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-send-custommessage.html\">Send Custom Platform-Specific Payloads in Messages to Mobile Devices</a>. </p>"]
+    /// <p>Sends a message to all of a topic's subscribed endpoints. When a <code>messageId</code> is returned, the message has been saved and Amazon SNS will attempt to deliver it to the topic's subscribers shortly. The format of the outgoing message to each subscribed endpoint depends on the notification protocol.</p> <p>To use the <code>Publish</code> action for sending a message to a mobile endpoint, such as an app on a Kindle device or mobile phone, you must specify the EndpointArn for the TargetArn parameter. The EndpointArn is returned when making a call with the <code>CreatePlatformEndpoint</code> action. </p> <p>For more information about formatting messages, see <a href="http://docs.aws.amazon.com/sns/latest/dg/mobile-push-send-custommessage.html">Send Custom Platform-Specific Payloads in Messages to Mobile Devices</a>. </p>
     fn publish(&self, input: &PublishInput) -> Result<PublishResponse, PublishError>;
 
-    #[doc = "<p>Removes a statement from a topic's access control policy.</p>"]
+    /// <p>Removes a statement from a topic's access control policy.</p>
     fn remove_permission(&self, input: &RemovePermissionInput)
         -> Result<(), RemovePermissionError>;
 
-    #[doc="<p>Sets the attributes for an endpoint for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
+    /// <p>Sets the attributes for an endpoint for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn set_endpoint_attributes(
         &self,
         input: &SetEndpointAttributesInput,
     ) -> Result<(), SetEndpointAttributesError>;
 
-    #[doc="<p>Sets the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. For information on configuring attributes for message delivery status, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/sns-msg-status.html\">Using Amazon SNS Application Attributes for Message Delivery Status</a>. </p>"]
+    /// <p>Sets the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. For information on configuring attributes for message delivery status, see <a href="http://docs.aws.amazon.com/sns/latest/dg/sns-msg-status.html">Using Amazon SNS Application Attributes for Message Delivery Status</a>. </p>
     fn set_platform_application_attributes(
         &self,
         input: &SetPlatformApplicationAttributesInput,
     ) -> Result<(), SetPlatformApplicationAttributesError>;
 
-    #[doc="<p>Use this request to set the default settings for sending SMS messages and receiving daily SMS usage reports.</p> <p>You can override some of these settings for a single message when you use the <code>Publish</code> action with the <code>MessageAttributes.entry.N</code> parameter. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/sms_publish-to-phone.html\">Sending an SMS Message</a> in the <i>Amazon SNS Developer Guide</i>.</p>"]
+    /// <p>Use this request to set the default settings for sending SMS messages and receiving daily SMS usage reports.</p> <p>You can override some of these settings for a single message when you use the <code>Publish</code> action with the <code>MessageAttributes.entry.N</code> parameter. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/sms_publish-to-phone.html">Sending an SMS Message</a> in the <i>Amazon SNS Developer Guide</i>.</p>
     fn set_sms_attributes(
         &self,
         input: &SetSMSAttributesInput,
     ) -> Result<SetSMSAttributesResponse, SetSMSAttributesError>;
 
-    #[doc = "<p>Allows a subscription owner to set an attribute of the topic to a new value.</p>"]
+    /// <p>Allows a subscription owner to set an attribute of the topic to a new value.</p>
     fn set_subscription_attributes(
         &self,
         input: &SetSubscriptionAttributesInput,
     ) -> Result<(), SetSubscriptionAttributesError>;
 
-    #[doc = "<p>Allows a topic owner to set an attribute of the topic to a new value.</p>"]
+    /// <p>Allows a topic owner to set an attribute of the topic to a new value.</p>
     fn set_topic_attributes(
         &self,
         input: &SetTopicAttributesInput,
     ) -> Result<(), SetTopicAttributesError>;
 
-    #[doc="<p>Prepares to subscribe an endpoint by sending the endpoint a confirmation message. To actually create a subscription, the endpoint owner must call the <code>ConfirmSubscription</code> action with the token from the confirmation message. Confirmation tokens are valid for three days.</p>"]
+    /// <p>Prepares to subscribe an endpoint by sending the endpoint a confirmation message. To actually create a subscription, the endpoint owner must call the <code>ConfirmSubscription</code> action with the token from the confirmation message. Confirmation tokens are valid for three days.</p>
     fn subscribe(&self, input: &SubscribeInput) -> Result<SubscribeResponse, SubscribeError>;
 
-    #[doc="<p>Deletes a subscription. If the subscription requires authentication for deletion, only the owner of the subscription or the topic's owner can unsubscribe, and an AWS signature is required. If the <code>Unsubscribe</code> call does not require authentication and the requester is not the subscription owner, a final cancellation message is delivered to the endpoint, so that the endpoint owner can easily resubscribe to the topic if the <code>Unsubscribe</code> request was unintended.</p>"]
+    /// <p>Deletes a subscription. If the subscription requires authentication for deletion, only the owner of the subscription or the topic's owner can unsubscribe, and an AWS signature is required. If the <code>Unsubscribe</code> call does not require authentication and the requester is not the subscription owner, a final cancellation message is delivered to the endpoint, so that the endpoint owner can easily resubscribe to the topic if the <code>Unsubscribe</code> request was unintended.</p>
     fn unsubscribe(&self, input: &UnsubscribeInput) -> Result<(), UnsubscribeError>;
 }
 /// A client for the Amazon SNS API.
@@ -5465,7 +5465,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Adds a statement to a topic's access control policy, granting access for the specified AWS accounts to the specified actions.</p>"]
+    /// <p>Adds a statement to a topic's access control policy, granting access for the specified AWS accounts to the specified actions.</p>
     fn add_permission(&self, input: &AddPermissionInput) -> Result<(), AddPermissionError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
@@ -5492,7 +5492,7 @@ where
         }
     }
 
-    #[doc="<p>Accepts a phone number and indicates whether the phone holder has opted out of receiving SMS messages from your account. You cannot send SMS messages to a number that is opted out.</p> <p>To resume sending messages, you can opt in the number by using the <code>OptInPhoneNumber</code> action.</p>"]
+    /// <p>Accepts a phone number and indicates whether the phone holder has opted out of receiving SMS messages from your account. You cannot send SMS messages to a number that is opted out.</p> <p>To resume sending messages, you can opt in the number by using the <code>OptInPhoneNumber</code> action.</p>
     fn check_if_phone_number_is_opted_out(
         &self,
         input: &CheckIfPhoneNumberIsOptedOutInput,
@@ -5545,7 +5545,7 @@ where
         }
     }
 
-    #[doc="<p>Verifies an endpoint owner's intent to receive messages by validating the token sent to the endpoint by an earlier <code>Subscribe</code> action. If the token is valid, the action creates a new subscription and returns its Amazon Resource Name (ARN). This call requires an AWS signature only when the <code>AuthenticateOnUnsubscribe</code> flag is set to \"true\".</p>"]
+    /// <p>Verifies an endpoint owner's intent to receive messages by validating the token sent to the endpoint by an earlier <code>Subscribe</code> action. If the token is valid, the action creates a new subscription and returns its Amazon Resource Name (ARN). This call requires an AWS signature only when the <code>AuthenticateOnUnsubscribe</code> flag is set to "true".</p>
     fn confirm_subscription(
         &self,
         input: &ConfirmSubscriptionInput,
@@ -5596,7 +5596,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a platform application object for one of the supported push notification services, such as APNS and GCM, to which devices and mobile apps may register. You must specify PlatformPrincipal and PlatformCredential attributes when using the <code>CreatePlatformApplication</code> action. The PlatformPrincipal is received from the notification service. For APNS/APNS_SANDBOX, PlatformPrincipal is \"SSL certificate\". For GCM, PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is \"client id\". The PlatformCredential is also received from the notification service. For WNS, PlatformPrincipal is \"Package Security Identifier\". For MPNS, PlatformPrincipal is \"TLS certificate\". For Baidu, PlatformPrincipal is \"API key\".</p> <p>For APNS/APNS_SANDBOX, PlatformCredential is \"private key\". For GCM, PlatformCredential is \"API key\". For ADM, PlatformCredential is \"client secret\". For WNS, PlatformCredential is \"secret key\". For MPNS, PlatformCredential is \"private key\". For Baidu, PlatformCredential is \"secret key\". The PlatformApplicationArn that is returned when using <code>CreatePlatformApplication</code> is then used as an attribute for the <code>CreatePlatformEndpoint</code> action. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. For more information about obtaining the PlatformPrincipal and PlatformCredential for each of the supported push notification services, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-apns.html\">Getting Started with Apple Push Notification Service</a>, <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-adm.html\">Getting Started with Amazon Device Messaging</a>, <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-baidu.html\">Getting Started with Baidu Cloud Push</a>, <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-gcm.html\">Getting Started with Google Cloud Messaging for Android</a>, <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-mpns.html\">Getting Started with MPNS</a>, or <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-wns.html\">Getting Started with WNS</a>. </p>"]
+    /// <p>Creates a platform application object for one of the supported push notification services, such as APNS and GCM, to which devices and mobile apps may register. You must specify PlatformPrincipal and PlatformCredential attributes when using the <code>CreatePlatformApplication</code> action. The PlatformPrincipal is received from the notification service. For APNS/APNS_SANDBOX, PlatformPrincipal is "SSL certificate". For GCM, PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is "client id". The PlatformCredential is also received from the notification service. For WNS, PlatformPrincipal is "Package Security Identifier". For MPNS, PlatformPrincipal is "TLS certificate". For Baidu, PlatformPrincipal is "API key".</p> <p>For APNS/APNS_SANDBOX, PlatformCredential is "private key". For GCM, PlatformCredential is "API key". For ADM, PlatformCredential is "client secret". For WNS, PlatformCredential is "secret key". For MPNS, PlatformCredential is "private key". For Baidu, PlatformCredential is "secret key". The PlatformApplicationArn that is returned when using <code>CreatePlatformApplication</code> is then used as an attribute for the <code>CreatePlatformEndpoint</code> action. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. For more information about obtaining the PlatformPrincipal and PlatformCredential for each of the supported push notification services, see <a href="http://docs.aws.amazon.com/sns/latest/dg/mobile-push-apns.html">Getting Started with Apple Push Notification Service</a>, <a href="http://docs.aws.amazon.com/sns/latest/dg/mobile-push-adm.html">Getting Started with Amazon Device Messaging</a>, <a href="http://docs.aws.amazon.com/sns/latest/dg/mobile-push-baidu.html">Getting Started with Baidu Cloud Push</a>, <a href="http://docs.aws.amazon.com/sns/latest/dg/mobile-push-gcm.html">Getting Started with Google Cloud Messaging for Android</a>, <a href="http://docs.aws.amazon.com/sns/latest/dg/mobile-push-mpns.html">Getting Started with MPNS</a>, or <a href="http://docs.aws.amazon.com/sns/latest/dg/mobile-push-wns.html">Getting Started with WNS</a>. </p>
     fn create_platform_application(
         &self,
         input: &CreatePlatformApplicationInput,
@@ -5647,7 +5647,7 @@ where
         }
     }
 
-    #[doc="<p>Creates an endpoint for a device and mobile app on one of the supported push notification services, such as GCM and APNS. <code>CreatePlatformEndpoint</code> requires the PlatformApplicationArn that is returned from <code>CreatePlatformApplication</code>. The EndpointArn that is returned when using <code>CreatePlatformEndpoint</code> can then be used by the <code>Publish</code> action to send a message to a mobile app or by the <code>Subscribe</code> action for subscription to a topic. The <code>CreatePlatformEndpoint</code> action is idempotent, so if the requester already owns an endpoint with the same device token and attributes, that endpoint's ARN is returned without creating a new endpoint. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When using <code>CreatePlatformEndpoint</code> with Baidu, two attributes must be provided: ChannelId and UserId. The token field must also contain the ChannelId. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePushBaiduEndpoint.html\">Creating an Amazon SNS Endpoint for Baidu</a>. </p>"]
+    /// <p>Creates an endpoint for a device and mobile app on one of the supported push notification services, such as GCM and APNS. <code>CreatePlatformEndpoint</code> requires the PlatformApplicationArn that is returned from <code>CreatePlatformApplication</code>. The EndpointArn that is returned when using <code>CreatePlatformEndpoint</code> can then be used by the <code>Publish</code> action to send a message to a mobile app or by the <code>Subscribe</code> action for subscription to a topic. The <code>CreatePlatformEndpoint</code> action is idempotent, so if the requester already owns an endpoint with the same device token and attributes, that endpoint's ARN is returned without creating a new endpoint. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When using <code>CreatePlatformEndpoint</code> with Baidu, two attributes must be provided: ChannelId and UserId. The token field must also contain the ChannelId. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePushBaiduEndpoint.html">Creating an Amazon SNS Endpoint for Baidu</a>. </p>
     fn create_platform_endpoint(
         &self,
         input: &CreatePlatformEndpointInput,
@@ -5698,7 +5698,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a topic to which notifications can be published. Users can create at most 100,000 topics. For more information, see <a href=\"http://aws.amazon.com/sns/\">http://aws.amazon.com/sns</a>. This action is idempotent, so if the requester already owns a topic with the specified name, that topic's ARN is returned without creating a new topic.</p>"]
+    /// <p>Creates a topic to which notifications can be published. Users can create at most 100,000 topics. For more information, see <a href="http://aws.amazon.com/sns/">http://aws.amazon.com/sns</a>. This action is idempotent, so if the requester already owns a topic with the specified name, that topic's ARN is returned without creating a new topic.</p>
     fn create_topic(
         &self,
         input: &CreateTopicInput,
@@ -5749,7 +5749,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the endpoint for a device and mobile app from Amazon SNS. This action is idempotent. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When you delete an endpoint that is also subscribed to a topic, then you must also unsubscribe the endpoint from the topic.</p>"]
+    /// <p>Deletes the endpoint for a device and mobile app from Amazon SNS. This action is idempotent. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When you delete an endpoint that is also subscribed to a topic, then you must also unsubscribe the endpoint from the topic.</p>
     fn delete_endpoint(&self, input: &DeleteEndpointInput) -> Result<(), DeleteEndpointError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
@@ -5776,7 +5776,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a platform application object for one of the supported push notification services, such as APNS and GCM. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
+    /// <p>Deletes a platform application object for one of the supported push notification services, such as APNS and GCM. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn delete_platform_application(
         &self,
         input: &DeletePlatformApplicationInput,
@@ -5806,7 +5806,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a topic and all its subscriptions. Deleting a topic might prevent some messages previously sent to the topic from being delivered to subscribers. This action is idempotent, so deleting a topic that does not exist does not result in an error.</p>"]
+    /// <p>Deletes a topic and all its subscriptions. Deleting a topic might prevent some messages previously sent to the topic from being delivered to subscribers. This action is idempotent, so deleting a topic that does not exist does not result in an error.</p>
     fn delete_topic(&self, input: &DeleteTopicInput) -> Result<(), DeleteTopicError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
@@ -5833,7 +5833,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves the endpoint attributes for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
+    /// <p>Retrieves the endpoint attributes for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn get_endpoint_attributes(
         &self,
         input: &GetEndpointAttributesInput,
@@ -5884,7 +5884,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
+    /// <p>Retrieves the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn get_platform_application_attributes(
         &self,
         input: &GetPlatformApplicationAttributesInput,
@@ -5938,7 +5938,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the settings for sending SMS messages from your account.</p> <p>These settings are set with the <code>SetSMSAttributes</code> action.</p>"]
+    /// <p>Returns the settings for sending SMS messages from your account.</p> <p>These settings are set with the <code>SetSMSAttributes</code> action.</p>
     fn get_sms_attributes(
         &self,
         input: &GetSMSAttributesInput,
@@ -5989,7 +5989,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns all of the properties of a subscription.</p>"]
+    /// <p>Returns all of the properties of a subscription.</p>
     fn get_subscription_attributes(
         &self,
         input: &GetSubscriptionAttributesInput,
@@ -6040,7 +6040,7 @@ where
         }
     }
 
-    #[doc="<p>Returns all of the properties of a topic. Topic properties returned might differ based on the authorization of the user.</p>"]
+    /// <p>Returns all of the properties of a topic. Topic properties returned might differ based on the authorization of the user.</p>
     fn get_topic_attributes(
         &self,
         input: &GetTopicAttributesInput,
@@ -6091,7 +6091,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the endpoints and endpoint attributes for devices in a supported push notification service, such as GCM and APNS. The results for <code>ListEndpointsByPlatformApplication</code> are paginated and return a limited list of endpoints, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListEndpointsByPlatformApplication</code> again using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
+    /// <p>Lists the endpoints and endpoint attributes for devices in a supported push notification service, such as GCM and APNS. The results for <code>ListEndpointsByPlatformApplication</code> are paginated and return a limited list of endpoints, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListEndpointsByPlatformApplication</code> again using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn list_endpoints_by_platform_application(
         &self,
         input: &ListEndpointsByPlatformApplicationInput,
@@ -6145,7 +6145,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list of phone numbers that are opted out, meaning you cannot send SMS messages to them.</p> <p>The results for <code>ListPhoneNumbersOptedOut</code> are paginated, and each page returns up to 100 phone numbers. If additional phone numbers are available after the first page of results, then a <code>NextToken</code> string will be returned. To receive the next page, you call <code>ListPhoneNumbersOptedOut</code> again using the <code>NextToken</code> string received from the previous call. When there are no more records to return, <code>NextToken</code> will be null.</p>"]
+    /// <p>Returns a list of phone numbers that are opted out, meaning you cannot send SMS messages to them.</p> <p>The results for <code>ListPhoneNumbersOptedOut</code> are paginated, and each page returns up to 100 phone numbers. If additional phone numbers are available after the first page of results, then a <code>NextToken</code> string will be returned. To receive the next page, you call <code>ListPhoneNumbersOptedOut</code> again using the <code>NextToken</code> string received from the previous call. When there are no more records to return, <code>NextToken</code> will be null.</p>
     fn list_phone_numbers_opted_out(
         &self,
         input: &ListPhoneNumbersOptedOutInput,
@@ -6196,7 +6196,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the platform application objects for the supported push notification services, such as APNS and GCM. The results for <code>ListPlatformApplications</code> are paginated and return a limited list of applications, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListPlatformApplications</code> using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
+    /// <p>Lists the platform application objects for the supported push notification services, such as APNS and GCM. The results for <code>ListPlatformApplications</code> are paginated and return a limited list of applications, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListPlatformApplications</code> using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn list_platform_applications(
         &self,
         input: &ListPlatformApplicationsInput,
@@ -6247,7 +6247,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list of the requester's subscriptions. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptions</code> call to get further results.</p>"]
+    /// <p>Returns a list of the requester's subscriptions. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptions</code> call to get further results.</p>
     fn list_subscriptions(
         &self,
         input: &ListSubscriptionsInput,
@@ -6298,7 +6298,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list of the subscriptions to a specific topic. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptionsByTopic</code> call to get further results.</p>"]
+    /// <p>Returns a list of the subscriptions to a specific topic. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptionsByTopic</code> call to get further results.</p>
     fn list_subscriptions_by_topic(
         &self,
         input: &ListSubscriptionsByTopicInput,
@@ -6349,7 +6349,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list of the requester's topics. Each call returns a limited list of topics, up to 100. If there are more topics, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListTopics</code> call to get further results.</p>"]
+    /// <p>Returns a list of the requester's topics. Each call returns a limited list of topics, up to 100. If there are more topics, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListTopics</code> call to get further results.</p>
     fn list_topics(&self, input: &ListTopicsInput) -> Result<ListTopicsResponse, ListTopicsError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
@@ -6397,7 +6397,7 @@ where
         }
     }
 
-    #[doc="<p>Use this request to opt in a phone number that is opted out, which enables you to resume sending SMS messages to the number.</p> <p>You can opt in a phone number only once every 30 days.</p>"]
+    /// <p>Use this request to opt in a phone number that is opted out, which enables you to resume sending SMS messages to the number.</p> <p>You can opt in a phone number only once every 30 days.</p>
     fn opt_in_phone_number(
         &self,
         input: &OptInPhoneNumberInput,
@@ -6448,7 +6448,7 @@ where
         }
     }
 
-    #[doc="<p>Sends a message to all of a topic's subscribed endpoints. When a <code>messageId</code> is returned, the message has been saved and Amazon SNS will attempt to deliver it to the topic's subscribers shortly. The format of the outgoing message to each subscribed endpoint depends on the notification protocol.</p> <p>To use the <code>Publish</code> action for sending a message to a mobile endpoint, such as an app on a Kindle device or mobile phone, you must specify the EndpointArn for the TargetArn parameter. The EndpointArn is returned when making a call with the <code>CreatePlatformEndpoint</code> action. </p> <p>For more information about formatting messages, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-send-custommessage.html\">Send Custom Platform-Specific Payloads in Messages to Mobile Devices</a>. </p>"]
+    /// <p>Sends a message to all of a topic's subscribed endpoints. When a <code>messageId</code> is returned, the message has been saved and Amazon SNS will attempt to deliver it to the topic's subscribers shortly. The format of the outgoing message to each subscribed endpoint depends on the notification protocol.</p> <p>To use the <code>Publish</code> action for sending a message to a mobile endpoint, such as an app on a Kindle device or mobile phone, you must specify the EndpointArn for the TargetArn parameter. The EndpointArn is returned when making a call with the <code>CreatePlatformEndpoint</code> action. </p> <p>For more information about formatting messages, see <a href="http://docs.aws.amazon.com/sns/latest/dg/mobile-push-send-custommessage.html">Send Custom Platform-Specific Payloads in Messages to Mobile Devices</a>. </p>
     fn publish(&self, input: &PublishInput) -> Result<PublishResponse, PublishError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
@@ -6496,7 +6496,7 @@ where
         }
     }
 
-    #[doc = "<p>Removes a statement from a topic's access control policy.</p>"]
+    /// <p>Removes a statement from a topic's access control policy.</p>
     fn remove_permission(
         &self,
         input: &RemovePermissionInput,
@@ -6526,7 +6526,7 @@ where
         }
     }
 
-    #[doc="<p>Sets the attributes for an endpoint for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
+    /// <p>Sets the attributes for an endpoint for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn set_endpoint_attributes(
         &self,
         input: &SetEndpointAttributesInput,
@@ -6556,7 +6556,7 @@ where
         }
     }
 
-    #[doc="<p>Sets the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. For information on configuring attributes for message delivery status, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/sns-msg-status.html\">Using Amazon SNS Application Attributes for Message Delivery Status</a>. </p>"]
+    /// <p>Sets the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. For information on configuring attributes for message delivery status, see <a href="http://docs.aws.amazon.com/sns/latest/dg/sns-msg-status.html">Using Amazon SNS Application Attributes for Message Delivery Status</a>. </p>
     fn set_platform_application_attributes(
         &self,
         input: &SetPlatformApplicationAttributesInput,
@@ -6586,7 +6586,7 @@ where
         }
     }
 
-    #[doc="<p>Use this request to set the default settings for sending SMS messages and receiving daily SMS usage reports.</p> <p>You can override some of these settings for a single message when you use the <code>Publish</code> action with the <code>MessageAttributes.entry.N</code> parameter. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/sms_publish-to-phone.html\">Sending an SMS Message</a> in the <i>Amazon SNS Developer Guide</i>.</p>"]
+    /// <p>Use this request to set the default settings for sending SMS messages and receiving daily SMS usage reports.</p> <p>You can override some of these settings for a single message when you use the <code>Publish</code> action with the <code>MessageAttributes.entry.N</code> parameter. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/sms_publish-to-phone.html">Sending an SMS Message</a> in the <i>Amazon SNS Developer Guide</i>.</p>
     fn set_sms_attributes(
         &self,
         input: &SetSMSAttributesInput,
@@ -6637,7 +6637,7 @@ where
         }
     }
 
-    #[doc = "<p>Allows a subscription owner to set an attribute of the topic to a new value.</p>"]
+    /// <p>Allows a subscription owner to set an attribute of the topic to a new value.</p>
     fn set_subscription_attributes(
         &self,
         input: &SetSubscriptionAttributesInput,
@@ -6667,7 +6667,7 @@ where
         }
     }
 
-    #[doc = "<p>Allows a topic owner to set an attribute of the topic to a new value.</p>"]
+    /// <p>Allows a topic owner to set an attribute of the topic to a new value.</p>
     fn set_topic_attributes(
         &self,
         input: &SetTopicAttributesInput,
@@ -6697,7 +6697,7 @@ where
         }
     }
 
-    #[doc="<p>Prepares to subscribe an endpoint by sending the endpoint a confirmation message. To actually create a subscription, the endpoint owner must call the <code>ConfirmSubscription</code> action with the token from the confirmation message. Confirmation tokens are valid for three days.</p>"]
+    /// <p>Prepares to subscribe an endpoint by sending the endpoint a confirmation message. To actually create a subscription, the endpoint owner must call the <code>ConfirmSubscription</code> action with the token from the confirmation message. Confirmation tokens are valid for three days.</p>
     fn subscribe(&self, input: &SubscribeInput) -> Result<SubscribeResponse, SubscribeError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
@@ -6745,7 +6745,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a subscription. If the subscription requires authentication for deletion, only the owner of the subscription or the topic's owner can unsubscribe, and an AWS signature is required. If the <code>Unsubscribe</code> call does not require authentication and the requester is not the subscription owner, a final cancellation message is delivered to the endpoint, so that the endpoint owner can easily resubscribe to the topic if the <code>Unsubscribe</code> request was unintended.</p>"]
+    /// <p>Deletes a subscription. If the subscription requires authentication for deletion, only the owner of the subscription or the topic's owner can unsubscribe, and an AWS signature is required. If the <code>Unsubscribe</code> call does not require authentication and the requester is not the subscription owner, a final cancellation message is delivered to the endpoint, so that the endpoint owner can easily resubscribe to the topic if the <code>Unsubscribe</code> request was unintended.</p>
     fn unsubscribe(&self, input: &UnsubscribeInput) -> Result<(), UnsubscribeError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();

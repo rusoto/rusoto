@@ -11,7 +11,7 @@
 //
 // =================================================================
 
-//! All public APIs for AWS Cost and Usage Report service
+//! <p>All public APIs for AWS Cost and Usage Report service</p>
 //!
 //! If you're using the service, you're probably looking for [CostAndUsageReportClient](struct.CostAndUsageReportClient.html) and [CostAndUsageReport](trait.CostAndUsageReport.html).
 

@@ -205,7 +205,7 @@ pub struct CreateDomainEntryResult {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateDomainRequest {
-    /// <p>The domain name to manage (e.g., <code>example.com</code>).</p> <note> <p>You cannot register a new domain name using Lightsail. You must register a domain name using Amazon Route 53 or another domain name registrar. If you have already registered your domain, you can enter its name in this parameter to manage the DNS records for that domain.</p> </note>
+    /// <p><p>The domain name to manage (e.g., <code>example.com</code>).</p> <note> <p>You cannot register a new domain name using Lightsail. You must register a domain name using Amazon Route 53 or another domain name registrar. If you have already registered your domain, you can enter its name in this parameter to manage the DNS records for that domain.</p> </note></p>
     #[serde(rename = "domainName")]
     pub domain_name: String,
 }
@@ -254,7 +254,7 @@ pub struct CreateInstancesFromSnapshotRequest {
     #[serde(rename = "keyPairName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_pair_name: Option<String>,
-    /// <p>You can create a launch script that configures a server with additional user data. For example, <code>apt-get –y update</code>.</p> <note> <p>Depending on the machine image you choose, the command to get software on your instance varies. Amazon Linux and CentOS use <code>yum</code>, Debian and Ubuntu use <code>apt-get</code>, and FreeBSD uses <code>pkg</code>. For a complete list, see the <a href="http://lightsail.aws.amazon.com/ls/docs/getting-started/articles/pre-installed-apps">Dev Guide</a>.</p> </note>
+    /// <p><p>You can create a launch script that configures a server with additional user data. For example, <code>apt-get –y update</code>.</p> <note> <p>Depending on the machine image you choose, the command to get software on your instance varies. Amazon Linux and CentOS use <code>yum</code>, Debian and Ubuntu use <code>apt-get</code>, and FreeBSD uses <code>pkg</code>. For a complete list, see the <a href="http://lightsail.aws.amazon.com/ls/docs/getting-started/articles/pre-installed-apps">Dev Guide</a>.</p> </note></p>
     #[serde(rename = "userData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_data: Option<String>,
@@ -286,7 +286,7 @@ pub struct CreateInstancesRequest {
     #[serde(rename = "keyPairName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_pair_name: Option<String>,
-    /// <p>A launch script you can create that configures a server with additional user data. For example, you might want to run <code>apt-get –y update</code>.</p> <note> <p>Depending on the machine image you choose, the command to get software on your instance varies. Amazon Linux and CentOS use <code>yum</code>, Debian and Ubuntu use <code>apt-get</code>, and FreeBSD uses <code>pkg</code>. For a complete list, see the <a href="http://lightsail.aws.amazon.com/ls/docs/getting-started/articles/pre-installed-apps">Dev Guide</a>.</p> </note>
+    /// <p><p>A launch script you can create that configures a server with additional user data. For example, you might want to run <code>apt-get –y update</code>.</p> <note> <p>Depending on the machine image you choose, the command to get software on your instance varies. Amazon Linux and CentOS use <code>yum</code>, Debian and Ubuntu use <code>apt-get</code>, and FreeBSD uses <code>pkg</code>. For a complete list, see the <a href="http://lightsail.aws.amazon.com/ls/docs/getting-started/articles/pre-installed-apps">Dev Guide</a>.</p> </note></p>
     #[serde(rename = "userData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_data: Option<String>,
@@ -1142,7 +1142,7 @@ pub struct InstancePortInfo {
     #[serde(rename = "fromPort")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub from_port: Option<i64>,
-    /// <p>The protocol being used. Can be one of the following.</p> <ul> <li> <p> <code>tcp</code> - Transmission Control Protocol (TCP) provides reliable, ordered, and error-checked delivery of streamed data between applications running on hosts communicating by an IP network. If you have an application that doesn't require reliable data stream service, use UDP instead.</p> </li> <li> <p> <code>all</code> - All transport layer protocol types. For more general information, see <a href="https://en.wikipedia.org/wiki/Transport_layer">Transport layer</a> on Wikipedia.</p> </li> <li> <p> <code>udp</code> - With User Datagram Protocol (UDP), computer applications can send messages (or datagrams) to other hosts on an Internet Protocol (IP) network. Prior communications are not required to set up transmission channels or data paths. Applications that don't require reliable data stream service can use UDP, which provides a connectionless datagram service that emphasizes reduced latency over reliability. If you do require reliable data stream service, use TCP instead.</p> </li> </ul>
+    /// <p><p>The protocol being used. Can be one of the following.</p> <ul> <li> <p> <code>tcp</code> - Transmission Control Protocol (TCP) provides reliable, ordered, and error-checked delivery of streamed data between applications running on hosts communicating by an IP network. If you have an application that doesn&#39;t require reliable data stream service, use UDP instead.</p> </li> <li> <p> <code>all</code> - All transport layer protocol types. For more general information, see <a href="https://en.wikipedia.org/wiki/Transport_layer">Transport layer</a> on Wikipedia.</p> </li> <li> <p> <code>udp</code> - With User Datagram Protocol (UDP), computer applications can send messages (or datagrams) to other hosts on an Internet Protocol (IP) network. Prior communications are not required to set up transmission channels or data paths. Applications that don&#39;t require reliable data stream service can use UDP, which provides a connectionless datagram service that emphasizes reduced latency over reliability. If you do require reliable data stream service, use TCP instead.</p> </li> </ul></p>
     #[serde(rename = "protocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub protocol: Option<String>,
@@ -1159,7 +1159,7 @@ pub struct InstancePortState {
     #[serde(rename = "fromPort")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub from_port: Option<i64>,
-    /// <p>The protocol being used. Can be one of the following.</p> <ul> <li> <p> <code>tcp</code> - Transmission Control Protocol (TCP) provides reliable, ordered, and error-checked delivery of streamed data between applications running on hosts communicating by an IP network. If you have an application that doesn't require reliable data stream service, use UDP instead.</p> </li> <li> <p> <code>all</code> - All transport layer protocol types. For more general information, see <a href="https://en.wikipedia.org/wiki/Transport_layer">Transport layer</a> on Wikipedia.</p> </li> <li> <p> <code>udp</code> - With User Datagram Protocol (UDP), computer applications can send messages (or datagrams) to other hosts on an Internet Protocol (IP) network. Prior communications are not required to set up transmission channels or data paths. Applications that don't require reliable data stream service can use UDP, which provides a connectionless datagram service that emphasizes reduced latency over reliability. If you do require reliable data stream service, use TCP instead.</p> </li> </ul>
+    /// <p><p>The protocol being used. Can be one of the following.</p> <ul> <li> <p> <code>tcp</code> - Transmission Control Protocol (TCP) provides reliable, ordered, and error-checked delivery of streamed data between applications running on hosts communicating by an IP network. If you have an application that doesn&#39;t require reliable data stream service, use UDP instead.</p> </li> <li> <p> <code>all</code> - All transport layer protocol types. For more general information, see <a href="https://en.wikipedia.org/wiki/Transport_layer">Transport layer</a> on Wikipedia.</p> </li> <li> <p> <code>udp</code> - With User Datagram Protocol (UDP), computer applications can send messages (or datagrams) to other hosts on an Internet Protocol (IP) network. Prior communications are not required to set up transmission channels or data paths. Applications that don&#39;t require reliable data stream service can use UDP, which provides a connectionless datagram service that emphasizes reduced latency over reliability. If you do require reliable data stream service, use TCP instead.</p> </li> </ul></p>
     #[serde(rename = "protocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub protocol: Option<String>,
@@ -1617,19 +1617,19 @@ pub struct UpdateDomainEntryResult {
 /// Errors returned by AllocateStaticIp
 #[derive(Debug, PartialEq)]
 pub enum AllocateStaticIpError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1731,19 +1731,19 @@ impl Error for AllocateStaticIpError {
 /// Errors returned by AttachStaticIp
 #[derive(Debug, PartialEq)]
 pub enum AttachStaticIpError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1843,19 +1843,19 @@ impl Error for AttachStaticIpError {
 /// Errors returned by CloseInstancePublicPorts
 #[derive(Debug, PartialEq)]
 pub enum CloseInstancePublicPortsError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1961,19 +1961,19 @@ impl Error for CloseInstancePublicPortsError {
 /// Errors returned by CreateDomain
 #[derive(Debug, PartialEq)]
 pub enum CreateDomainError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2071,19 +2071,19 @@ impl Error for CreateDomainError {
 /// Errors returned by CreateDomainEntry
 #[derive(Debug, PartialEq)]
 pub enum CreateDomainEntryError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2187,19 +2187,19 @@ impl Error for CreateDomainEntryError {
 /// Errors returned by CreateInstanceSnapshot
 #[derive(Debug, PartialEq)]
 pub enum CreateInstanceSnapshotError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2305,19 +2305,19 @@ impl Error for CreateInstanceSnapshotError {
 /// Errors returned by CreateInstances
 #[derive(Debug, PartialEq)]
 pub enum CreateInstancesError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2419,19 +2419,19 @@ impl Error for CreateInstancesError {
 /// Errors returned by CreateInstancesFromSnapshot
 #[derive(Debug, PartialEq)]
 pub enum CreateInstancesFromSnapshotError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2541,19 +2541,19 @@ impl Error for CreateInstancesFromSnapshotError {
 /// Errors returned by CreateKeyPair
 #[derive(Debug, PartialEq)]
 pub enum CreateKeyPairError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2653,19 +2653,19 @@ impl Error for CreateKeyPairError {
 /// Errors returned by DeleteDomain
 #[derive(Debug, PartialEq)]
 pub enum DeleteDomainError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2763,19 +2763,19 @@ impl Error for DeleteDomainError {
 /// Errors returned by DeleteDomainEntry
 #[derive(Debug, PartialEq)]
 pub enum DeleteDomainEntryError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2879,19 +2879,19 @@ impl Error for DeleteDomainEntryError {
 /// Errors returned by DeleteInstance
 #[derive(Debug, PartialEq)]
 pub enum DeleteInstanceError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2991,19 +2991,19 @@ impl Error for DeleteInstanceError {
 /// Errors returned by DeleteInstanceSnapshot
 #[derive(Debug, PartialEq)]
 pub enum DeleteInstanceSnapshotError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3109,19 +3109,19 @@ impl Error for DeleteInstanceSnapshotError {
 /// Errors returned by DeleteKeyPair
 #[derive(Debug, PartialEq)]
 pub enum DeleteKeyPairError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3221,19 +3221,19 @@ impl Error for DeleteKeyPairError {
 /// Errors returned by DetachStaticIp
 #[derive(Debug, PartialEq)]
 pub enum DetachStaticIpError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3333,19 +3333,19 @@ impl Error for DetachStaticIpError {
 /// Errors returned by DownloadDefaultKeyPair
 #[derive(Debug, PartialEq)]
 pub enum DownloadDefaultKeyPairError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3451,19 +3451,19 @@ impl Error for DownloadDefaultKeyPairError {
 /// Errors returned by GetActiveNames
 #[derive(Debug, PartialEq)]
 pub enum GetActiveNamesError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3563,19 +3563,19 @@ impl Error for GetActiveNamesError {
 /// Errors returned by GetBlueprints
 #[derive(Debug, PartialEq)]
 pub enum GetBlueprintsError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3675,19 +3675,19 @@ impl Error for GetBlueprintsError {
 /// Errors returned by GetBundles
 #[derive(Debug, PartialEq)]
 pub enum GetBundlesError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3783,19 +3783,19 @@ impl Error for GetBundlesError {
 /// Errors returned by GetDomain
 #[derive(Debug, PartialEq)]
 pub enum GetDomainError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3891,19 +3891,19 @@ impl Error for GetDomainError {
 /// Errors returned by GetDomains
 #[derive(Debug, PartialEq)]
 pub enum GetDomainsError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3999,19 +3999,19 @@ impl Error for GetDomainsError {
 /// Errors returned by GetInstance
 #[derive(Debug, PartialEq)]
 pub enum GetInstanceError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4109,19 +4109,19 @@ impl Error for GetInstanceError {
 /// Errors returned by GetInstanceAccessDetails
 #[derive(Debug, PartialEq)]
 pub enum GetInstanceAccessDetailsError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4227,19 +4227,19 @@ impl Error for GetInstanceAccessDetailsError {
 /// Errors returned by GetInstanceMetricData
 #[derive(Debug, PartialEq)]
 pub enum GetInstanceMetricDataError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4345,19 +4345,19 @@ impl Error for GetInstanceMetricDataError {
 /// Errors returned by GetInstancePortStates
 #[derive(Debug, PartialEq)]
 pub enum GetInstancePortStatesError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4463,19 +4463,19 @@ impl Error for GetInstancePortStatesError {
 /// Errors returned by GetInstanceSnapshot
 #[derive(Debug, PartialEq)]
 pub enum GetInstanceSnapshotError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4581,19 +4581,19 @@ impl Error for GetInstanceSnapshotError {
 /// Errors returned by GetInstanceSnapshots
 #[derive(Debug, PartialEq)]
 pub enum GetInstanceSnapshotsError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4699,19 +4699,19 @@ impl Error for GetInstanceSnapshotsError {
 /// Errors returned by GetInstanceState
 #[derive(Debug, PartialEq)]
 pub enum GetInstanceStateError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4813,19 +4813,19 @@ impl Error for GetInstanceStateError {
 /// Errors returned by GetInstances
 #[derive(Debug, PartialEq)]
 pub enum GetInstancesError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4923,19 +4923,19 @@ impl Error for GetInstancesError {
 /// Errors returned by GetKeyPair
 #[derive(Debug, PartialEq)]
 pub enum GetKeyPairError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5031,19 +5031,19 @@ impl Error for GetKeyPairError {
 /// Errors returned by GetKeyPairs
 #[derive(Debug, PartialEq)]
 pub enum GetKeyPairsError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5141,19 +5141,19 @@ impl Error for GetKeyPairsError {
 /// Errors returned by GetOperation
 #[derive(Debug, PartialEq)]
 pub enum GetOperationError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5251,19 +5251,19 @@ impl Error for GetOperationError {
 /// Errors returned by GetOperations
 #[derive(Debug, PartialEq)]
 pub enum GetOperationsError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5363,19 +5363,19 @@ impl Error for GetOperationsError {
 /// Errors returned by GetOperationsForResource
 #[derive(Debug, PartialEq)]
 pub enum GetOperationsForResourceError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5481,19 +5481,19 @@ impl Error for GetOperationsForResourceError {
 /// Errors returned by GetRegions
 #[derive(Debug, PartialEq)]
 pub enum GetRegionsError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5589,19 +5589,19 @@ impl Error for GetRegionsError {
 /// Errors returned by GetStaticIp
 #[derive(Debug, PartialEq)]
 pub enum GetStaticIpError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5699,19 +5699,19 @@ impl Error for GetStaticIpError {
 /// Errors returned by GetStaticIps
 #[derive(Debug, PartialEq)]
 pub enum GetStaticIpsError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5809,19 +5809,19 @@ impl Error for GetStaticIpsError {
 /// Errors returned by ImportKeyPair
 #[derive(Debug, PartialEq)]
 pub enum ImportKeyPairError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5921,19 +5921,19 @@ impl Error for ImportKeyPairError {
 /// Errors returned by IsVpcPeered
 #[derive(Debug, PartialEq)]
 pub enum IsVpcPeeredError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6031,19 +6031,19 @@ impl Error for IsVpcPeeredError {
 /// Errors returned by OpenInstancePublicPorts
 #[derive(Debug, PartialEq)]
 pub enum OpenInstancePublicPortsError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6149,19 +6149,19 @@ impl Error for OpenInstancePublicPortsError {
 /// Errors returned by PeerVpc
 #[derive(Debug, PartialEq)]
 pub enum PeerVpcError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6257,19 +6257,19 @@ impl Error for PeerVpcError {
 /// Errors returned by PutInstancePublicPorts
 #[derive(Debug, PartialEq)]
 pub enum PutInstancePublicPortsError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6375,19 +6375,19 @@ impl Error for PutInstancePublicPortsError {
 /// Errors returned by RebootInstance
 #[derive(Debug, PartialEq)]
 pub enum RebootInstanceError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6487,19 +6487,19 @@ impl Error for RebootInstanceError {
 /// Errors returned by ReleaseStaticIp
 #[derive(Debug, PartialEq)]
 pub enum ReleaseStaticIpError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6601,19 +6601,19 @@ impl Error for ReleaseStaticIpError {
 /// Errors returned by StartInstance
 #[derive(Debug, PartialEq)]
 pub enum StartInstanceError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6713,19 +6713,19 @@ impl Error for StartInstanceError {
 /// Errors returned by StopInstance
 #[derive(Debug, PartialEq)]
 pub enum StopInstanceError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6823,19 +6823,19 @@ impl Error for StopInstanceError {
 /// Errors returned by UnpeerVpc
 #[derive(Debug, PartialEq)]
 pub enum UnpeerVpcError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6931,19 +6931,19 @@ impl Error for UnpeerVpcError {
 /// Errors returned by UpdateDomainEntry
 #[derive(Debug, PartialEq)]
 pub enum UpdateDomainEntryError {
-    ///<p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
     AccessDenied(String),
-    ///<p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    ///<p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
-    ///<p>Lightsail throws this exception when it cannot find a resource.</p>
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
-    ///<p>Lightsail throws this exception when an operation fails to execute.</p>
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
     OperationFailure(String),
-    ///<p>A general service exception.</p>
+    /// <p>A general service exception.</p>
     Service(String),
-    ///<p>Lightsail throws this exception when the user has not been authenticated.</p>
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7046,264 +7046,264 @@ impl Error for UpdateDomainEntryError {
 }
 /// Trait representing the capabilities of the Amazon Lightsail API. Amazon Lightsail clients implement this trait.
 pub trait Lightsail {
-    #[doc = "<p>Allocates a static IP address.</p>"]
+    /// <p>Allocates a static IP address.</p>
     fn allocate_static_ip(
         &self,
         input: &AllocateStaticIpRequest,
     ) -> Result<AllocateStaticIpResult, AllocateStaticIpError>;
 
-    #[doc = "<p>Attaches a static IP address to a specific Amazon Lightsail instance.</p>"]
+    /// <p>Attaches a static IP address to a specific Amazon Lightsail instance.</p>
     fn attach_static_ip(
         &self,
         input: &AttachStaticIpRequest,
     ) -> Result<AttachStaticIpResult, AttachStaticIpError>;
 
-    #[doc = "<p>Closes the public ports on a specific Amazon Lightsail instance.</p>"]
+    /// <p>Closes the public ports on a specific Amazon Lightsail instance.</p>
     fn close_instance_public_ports(
         &self,
         input: &CloseInstancePublicPortsRequest,
     ) -> Result<CloseInstancePublicPortsResult, CloseInstancePublicPortsError>;
 
-    #[doc = "<p>Creates a domain resource for the specified domain (e.g., example.com).</p>"]
+    /// <p>Creates a domain resource for the specified domain (e.g., example.com).</p>
     fn create_domain(
         &self,
         input: &CreateDomainRequest,
     ) -> Result<CreateDomainResult, CreateDomainError>;
 
-    #[doc="<p>Creates one of the following entry records associated with the domain: A record, CNAME record, TXT record, or MX record.</p>"]
+    /// <p>Creates one of the following entry records associated with the domain: A record, CNAME record, TXT record, or MX record.</p>
     fn create_domain_entry(
         &self,
         input: &CreateDomainEntryRequest,
     ) -> Result<CreateDomainEntryResult, CreateDomainEntryError>;
 
-    #[doc="<p>Creates a snapshot of a specific virtual private server, or <i>instance</i>. You can use a snapshot to create a new instance that is based on that snapshot.</p>"]
+    /// <p>Creates a snapshot of a specific virtual private server, or <i>instance</i>. You can use a snapshot to create a new instance that is based on that snapshot.</p>
     fn create_instance_snapshot(
         &self,
         input: &CreateInstanceSnapshotRequest,
     ) -> Result<CreateInstanceSnapshotResult, CreateInstanceSnapshotError>;
 
-    #[doc="<p>Creates one or more Amazon Lightsail virtual private servers, or <i>instances</i>.</p>"]
+    /// <p>Creates one or more Amazon Lightsail virtual private servers, or <i>instances</i>.</p>
     fn create_instances(
         &self,
         input: &CreateInstancesRequest,
     ) -> Result<CreateInstancesResult, CreateInstancesError>;
 
-    #[doc="<p>Uses a specific snapshot as a blueprint for creating one or more new instances that are based on that identical configuration.</p>"]
+    /// <p>Uses a specific snapshot as a blueprint for creating one or more new instances that are based on that identical configuration.</p>
     fn create_instances_from_snapshot(
         &self,
         input: &CreateInstancesFromSnapshotRequest,
     ) -> Result<CreateInstancesFromSnapshotResult, CreateInstancesFromSnapshotError>;
 
-    #[doc = "<p>Creates sn SSH key pair.</p>"]
+    /// <p>Creates sn SSH key pair.</p>
     fn create_key_pair(
         &self,
         input: &CreateKeyPairRequest,
     ) -> Result<CreateKeyPairResult, CreateKeyPairError>;
 
-    #[doc = "<p>Deletes the specified domain recordset and all of its domain records.</p>"]
+    /// <p>Deletes the specified domain recordset and all of its domain records.</p>
     fn delete_domain(
         &self,
         input: &DeleteDomainRequest,
     ) -> Result<DeleteDomainResult, DeleteDomainError>;
 
-    #[doc = "<p>Deletes a specific domain entry.</p>"]
+    /// <p>Deletes a specific domain entry.</p>
     fn delete_domain_entry(
         &self,
         input: &DeleteDomainEntryRequest,
     ) -> Result<DeleteDomainEntryResult, DeleteDomainEntryError>;
 
-    #[doc = "<p>Deletes a specific Amazon Lightsail virtual private server, or <i>instance</i>.</p>"]
+    /// <p>Deletes a specific Amazon Lightsail virtual private server, or <i>instance</i>.</p>
     fn delete_instance(
         &self,
         input: &DeleteInstanceRequest,
     ) -> Result<DeleteInstanceResult, DeleteInstanceError>;
 
-    #[doc = "<p>Deletes a specific snapshot of a virtual private server (or <i>instance</i>).</p>"]
+    /// <p>Deletes a specific snapshot of a virtual private server (or <i>instance</i>).</p>
     fn delete_instance_snapshot(
         &self,
         input: &DeleteInstanceSnapshotRequest,
     ) -> Result<DeleteInstanceSnapshotResult, DeleteInstanceSnapshotError>;
 
-    #[doc = "<p>Deletes a specific SSH key pair.</p>"]
+    /// <p>Deletes a specific SSH key pair.</p>
     fn delete_key_pair(
         &self,
         input: &DeleteKeyPairRequest,
     ) -> Result<DeleteKeyPairResult, DeleteKeyPairError>;
 
-    #[doc="<p>Detaches a static IP from the Amazon Lightsail instance to which it is attached.</p>"]
+    /// <p>Detaches a static IP from the Amazon Lightsail instance to which it is attached.</p>
     fn detach_static_ip(
         &self,
         input: &DetachStaticIpRequest,
     ) -> Result<DetachStaticIpResult, DetachStaticIpError>;
 
-    #[doc = "<p>Downloads the default SSH key pair from the user's account.</p>"]
+    /// <p>Downloads the default SSH key pair from the user's account.</p>
     fn download_default_key_pair(
         &self,
     ) -> Result<DownloadDefaultKeyPairResult, DownloadDefaultKeyPairError>;
 
-    #[doc = "<p>Returns the names of all active (not deleted) resources.</p>"]
+    /// <p>Returns the names of all active (not deleted) resources.</p>
     fn get_active_names(
         &self,
         input: &GetActiveNamesRequest,
     ) -> Result<GetActiveNamesResult, GetActiveNamesError>;
 
-    #[doc="<p>Returns the list of available instance images, or <i>blueprints</i>. You can use a blueprint to create a new virtual private server already running a specific operating system, as well as a preinstalled app or development stack. The software each instance is running depends on the blueprint image you choose.</p>"]
+    /// <p>Returns the list of available instance images, or <i>blueprints</i>. You can use a blueprint to create a new virtual private server already running a specific operating system, as well as a preinstalled app or development stack. The software each instance is running depends on the blueprint image you choose.</p>
     fn get_blueprints(
         &self,
         input: &GetBlueprintsRequest,
     ) -> Result<GetBlueprintsResult, GetBlueprintsError>;
 
-    #[doc="<p>Returns the list of bundles that are available for purchase. A bundle describes the specs for your virtual private server (or <i>instance</i>).</p>"]
+    /// <p>Returns the list of bundles that are available for purchase. A bundle describes the specs for your virtual private server (or <i>instance</i>).</p>
     fn get_bundles(&self, input: &GetBundlesRequest) -> Result<GetBundlesResult, GetBundlesError>;
 
-    #[doc = "<p>Returns information about a specific domain recordset.</p>"]
+    /// <p>Returns information about a specific domain recordset.</p>
     fn get_domain(&self, input: &GetDomainRequest) -> Result<GetDomainResult, GetDomainError>;
 
-    #[doc = "<p>Returns a list of all domains in the user's account.</p>"]
+    /// <p>Returns a list of all domains in the user's account.</p>
     fn get_domains(&self, input: &GetDomainsRequest) -> Result<GetDomainsResult, GetDomainsError>;
 
-    #[doc="<p>Returns information about a specific Amazon Lightsail instance, which is a virtual private server.</p>"]
+    /// <p>Returns information about a specific Amazon Lightsail instance, which is a virtual private server.</p>
     fn get_instance(
         &self,
         input: &GetInstanceRequest,
     ) -> Result<GetInstanceResult, GetInstanceError>;
 
-    #[doc="<p>Returns temporary SSH keys you can use to connect to a specific virtual private server, or <i>instance</i>.</p>"]
+    /// <p>Returns temporary SSH keys you can use to connect to a specific virtual private server, or <i>instance</i>.</p>
     fn get_instance_access_details(
         &self,
         input: &GetInstanceAccessDetailsRequest,
     ) -> Result<GetInstanceAccessDetailsResult, GetInstanceAccessDetailsError>;
 
-    #[doc="<p>Returns the data points for the specified Amazon Lightsail instance metric, given an instance name.</p>"]
+    /// <p>Returns the data points for the specified Amazon Lightsail instance metric, given an instance name.</p>
     fn get_instance_metric_data(
         &self,
         input: &GetInstanceMetricDataRequest,
     ) -> Result<GetInstanceMetricDataResult, GetInstanceMetricDataError>;
 
-    #[doc="<p>Returns the port states for a specific virtual private server, or <i>instance</i>.</p>"]
+    /// <p>Returns the port states for a specific virtual private server, or <i>instance</i>.</p>
     fn get_instance_port_states(
         &self,
         input: &GetInstancePortStatesRequest,
     ) -> Result<GetInstancePortStatesResult, GetInstancePortStatesError>;
 
-    #[doc = "<p>Returns information about a specific instance snapshot.</p>"]
+    /// <p>Returns information about a specific instance snapshot.</p>
     fn get_instance_snapshot(
         &self,
         input: &GetInstanceSnapshotRequest,
     ) -> Result<GetInstanceSnapshotResult, GetInstanceSnapshotError>;
 
-    #[doc = "<p>Returns all instance snapshots for the user's account.</p>"]
+    /// <p>Returns all instance snapshots for the user's account.</p>
     fn get_instance_snapshots(
         &self,
         input: &GetInstanceSnapshotsRequest,
     ) -> Result<GetInstanceSnapshotsResult, GetInstanceSnapshotsError>;
 
-    #[doc = "<p>Returns the state of a specific instance. Works on one instance at a time.</p>"]
+    /// <p>Returns the state of a specific instance. Works on one instance at a time.</p>
     fn get_instance_state(
         &self,
         input: &GetInstanceStateRequest,
     ) -> Result<GetInstanceStateResult, GetInstanceStateError>;
 
-    #[doc="<p>Returns information about all Amazon Lightsail virtual private servers, or <i>instances</i>.</p>"]
+    /// <p>Returns information about all Amazon Lightsail virtual private servers, or <i>instances</i>.</p>
     fn get_instances(
         &self,
         input: &GetInstancesRequest,
     ) -> Result<GetInstancesResult, GetInstancesError>;
 
-    #[doc = "<p>Returns information about a specific key pair.</p>"]
+    /// <p>Returns information about a specific key pair.</p>
     fn get_key_pair(&self, input: &GetKeyPairRequest) -> Result<GetKeyPairResult, GetKeyPairError>;
 
-    #[doc = "<p>Returns information about all key pairs in the user's account.</p>"]
+    /// <p>Returns information about all key pairs in the user's account.</p>
     fn get_key_pairs(
         &self,
         input: &GetKeyPairsRequest,
     ) -> Result<GetKeyPairsResult, GetKeyPairsError>;
 
-    #[doc="<p>Returns information about a specific operation. Operations include events such as when you create an instance, allocate a static IP, attach a static IP, and so on.</p>"]
+    /// <p>Returns information about a specific operation. Operations include events such as when you create an instance, allocate a static IP, attach a static IP, and so on.</p>
     fn get_operation(
         &self,
         input: &GetOperationRequest,
     ) -> Result<GetOperationResult, GetOperationError>;
 
-    #[doc="<p>Returns information about all operations.</p> <p>Results are returned from oldest to newest, up to a maximum of 200. Results can be paged by making each subsequent call to <code>GetOperations</code> use the maximum (last) <code>statusChangedAt</code> value from the previous request.</p>"]
+    /// <p>Returns information about all operations.</p> <p>Results are returned from oldest to newest, up to a maximum of 200. Results can be paged by making each subsequent call to <code>GetOperations</code> use the maximum (last) <code>statusChangedAt</code> value from the previous request.</p>
     fn get_operations(
         &self,
         input: &GetOperationsRequest,
     ) -> Result<GetOperationsResult, GetOperationsError>;
 
-    #[doc = "<p>Gets operations for a specific resource (e.g., an instance or a static IP).</p>"]
+    /// <p>Gets operations for a specific resource (e.g., an instance or a static IP).</p>
     fn get_operations_for_resource(
         &self,
         input: &GetOperationsForResourceRequest,
     ) -> Result<GetOperationsForResourceResult, GetOperationsForResourceError>;
 
-    #[doc="<p>Returns a list of all valid regions for Amazon Lightsail. Use the <code>include availability zones</code> parameter to also return the availability zones in a region.</p>"]
+    /// <p>Returns a list of all valid regions for Amazon Lightsail. Use the <code>include availability zones</code> parameter to also return the availability zones in a region.</p>
     fn get_regions(&self, input: &GetRegionsRequest) -> Result<GetRegionsResult, GetRegionsError>;
 
-    #[doc = "<p>Returns information about a specific static IP.</p>"]
+    /// <p>Returns information about a specific static IP.</p>
     fn get_static_ip(
         &self,
         input: &GetStaticIpRequest,
     ) -> Result<GetStaticIpResult, GetStaticIpError>;
 
-    #[doc = "<p>Returns information about all static IPs in the user's account.</p>"]
+    /// <p>Returns information about all static IPs in the user's account.</p>
     fn get_static_ips(
         &self,
         input: &GetStaticIpsRequest,
     ) -> Result<GetStaticIpsResult, GetStaticIpsError>;
 
-    #[doc = "<p>Imports a public SSH key from a specific key pair.</p>"]
+    /// <p>Imports a public SSH key from a specific key pair.</p>
     fn import_key_pair(
         &self,
         input: &ImportKeyPairRequest,
     ) -> Result<ImportKeyPairResult, ImportKeyPairError>;
 
-    #[doc = "<p>Returns a Boolean value indicating whether your Lightsail VPC is peered.</p>"]
+    /// <p>Returns a Boolean value indicating whether your Lightsail VPC is peered.</p>
     fn is_vpc_peered(&self) -> Result<IsVpcPeeredResult, IsVpcPeeredError>;
 
-    #[doc = "<p>Adds public ports to an Amazon Lightsail instance.</p>"]
+    /// <p>Adds public ports to an Amazon Lightsail instance.</p>
     fn open_instance_public_ports(
         &self,
         input: &OpenInstancePublicPortsRequest,
     ) -> Result<OpenInstancePublicPortsResult, OpenInstancePublicPortsError>;
 
-    #[doc = "<p>Tries to peer the Lightsail VPC with the user's default VPC.</p>"]
+    /// <p>Tries to peer the Lightsail VPC with the user's default VPC.</p>
     fn peer_vpc(&self) -> Result<PeerVpcResult, PeerVpcError>;
 
-    #[doc="<p>Sets the specified open ports for an Amazon Lightsail instance, and closes all ports for every protocol not included in the current request.</p>"]
+    /// <p>Sets the specified open ports for an Amazon Lightsail instance, and closes all ports for every protocol not included in the current request.</p>
     fn put_instance_public_ports(
         &self,
         input: &PutInstancePublicPortsRequest,
     ) -> Result<PutInstancePublicPortsResult, PutInstancePublicPortsError>;
 
-    #[doc="<p>Restarts a specific instance. When your Amazon Lightsail instance is finished rebooting, Lightsail assigns a new public IP address. To use the same IP address after restarting, create a static IP address and attach it to the instance.</p>"]
+    /// <p>Restarts a specific instance. When your Amazon Lightsail instance is finished rebooting, Lightsail assigns a new public IP address. To use the same IP address after restarting, create a static IP address and attach it to the instance.</p>
     fn reboot_instance(
         &self,
         input: &RebootInstanceRequest,
     ) -> Result<RebootInstanceResult, RebootInstanceError>;
 
-    #[doc = "<p>Deletes a specific static IP from your account.</p>"]
+    /// <p>Deletes a specific static IP from your account.</p>
     fn release_static_ip(
         &self,
         input: &ReleaseStaticIpRequest,
     ) -> Result<ReleaseStaticIpResult, ReleaseStaticIpError>;
 
-    #[doc="<p>Starts a specific Amazon Lightsail instance from a stopped state. To restart an instance, use the reboot instance operation.</p>"]
+    /// <p>Starts a specific Amazon Lightsail instance from a stopped state. To restart an instance, use the reboot instance operation.</p>
     fn start_instance(
         &self,
         input: &StartInstanceRequest,
     ) -> Result<StartInstanceResult, StartInstanceError>;
 
-    #[doc = "<p>Stops a specific Amazon Lightsail instance that is currently running.</p>"]
+    /// <p>Stops a specific Amazon Lightsail instance that is currently running.</p>
     fn stop_instance(
         &self,
         input: &StopInstanceRequest,
     ) -> Result<StopInstanceResult, StopInstanceError>;
 
-    #[doc = "<p>Attempts to unpeer the Lightsail VPC from the user's default VPC.</p>"]
+    /// <p>Attempts to unpeer the Lightsail VPC from the user's default VPC.</p>
     fn unpeer_vpc(&self) -> Result<UnpeerVpcResult, UnpeerVpcError>;
 
-    #[doc = "<p>Updates a domain recordset after it is created.</p>"]
+    /// <p>Updates a domain recordset after it is created.</p>
     fn update_domain_entry(
         &self,
         input: &UpdateDomainEntryRequest,
@@ -7339,7 +7339,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc = "<p>Allocates a static IP address.</p>"]
+    /// <p>Allocates a static IP address.</p>
     fn allocate_static_ip(
         &self,
         input: &AllocateStaticIpRequest,
@@ -7373,7 +7373,7 @@ where
         }
     }
 
-    #[doc = "<p>Attaches a static IP address to a specific Amazon Lightsail instance.</p>"]
+    /// <p>Attaches a static IP address to a specific Amazon Lightsail instance.</p>
     fn attach_static_ip(
         &self,
         input: &AttachStaticIpRequest,
@@ -7407,7 +7407,7 @@ where
         }
     }
 
-    #[doc = "<p>Closes the public ports on a specific Amazon Lightsail instance.</p>"]
+    /// <p>Closes the public ports on a specific Amazon Lightsail instance.</p>
     fn close_instance_public_ports(
         &self,
         input: &CloseInstancePublicPortsRequest,
@@ -7444,7 +7444,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a domain resource for the specified domain (e.g., example.com).</p>"]
+    /// <p>Creates a domain resource for the specified domain (e.g., example.com).</p>
     fn create_domain(
         &self,
         input: &CreateDomainRequest,
@@ -7478,7 +7478,7 @@ where
         }
     }
 
-    #[doc="<p>Creates one of the following entry records associated with the domain: A record, CNAME record, TXT record, or MX record.</p>"]
+    /// <p>Creates one of the following entry records associated with the domain: A record, CNAME record, TXT record, or MX record.</p>
     fn create_domain_entry(
         &self,
         input: &CreateDomainEntryRequest,
@@ -7512,7 +7512,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a snapshot of a specific virtual private server, or <i>instance</i>. You can use a snapshot to create a new instance that is based on that snapshot.</p>"]
+    /// <p>Creates a snapshot of a specific virtual private server, or <i>instance</i>. You can use a snapshot to create a new instance that is based on that snapshot.</p>
     fn create_instance_snapshot(
         &self,
         input: &CreateInstanceSnapshotRequest,
@@ -7546,7 +7546,7 @@ where
         }
     }
 
-    #[doc="<p>Creates one or more Amazon Lightsail virtual private servers, or <i>instances</i>.</p>"]
+    /// <p>Creates one or more Amazon Lightsail virtual private servers, or <i>instances</i>.</p>
     fn create_instances(
         &self,
         input: &CreateInstancesRequest,
@@ -7580,7 +7580,7 @@ where
         }
     }
 
-    #[doc="<p>Uses a specific snapshot as a blueprint for creating one or more new instances that are based on that identical configuration.</p>"]
+    /// <p>Uses a specific snapshot as a blueprint for creating one or more new instances that are based on that identical configuration.</p>
     fn create_instances_from_snapshot(
         &self,
         input: &CreateInstancesFromSnapshotRequest,
@@ -7617,7 +7617,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates sn SSH key pair.</p>"]
+    /// <p>Creates sn SSH key pair.</p>
     fn create_key_pair(
         &self,
         input: &CreateKeyPairRequest,
@@ -7651,7 +7651,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the specified domain recordset and all of its domain records.</p>"]
+    /// <p>Deletes the specified domain recordset and all of its domain records.</p>
     fn delete_domain(
         &self,
         input: &DeleteDomainRequest,
@@ -7685,7 +7685,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a specific domain entry.</p>"]
+    /// <p>Deletes a specific domain entry.</p>
     fn delete_domain_entry(
         &self,
         input: &DeleteDomainEntryRequest,
@@ -7719,7 +7719,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a specific Amazon Lightsail virtual private server, or <i>instance</i>.</p>"]
+    /// <p>Deletes a specific Amazon Lightsail virtual private server, or <i>instance</i>.</p>
     fn delete_instance(
         &self,
         input: &DeleteInstanceRequest,
@@ -7753,7 +7753,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a specific snapshot of a virtual private server (or <i>instance</i>).</p>"]
+    /// <p>Deletes a specific snapshot of a virtual private server (or <i>instance</i>).</p>
     fn delete_instance_snapshot(
         &self,
         input: &DeleteInstanceSnapshotRequest,
@@ -7787,7 +7787,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a specific SSH key pair.</p>"]
+    /// <p>Deletes a specific SSH key pair.</p>
     fn delete_key_pair(
         &self,
         input: &DeleteKeyPairRequest,
@@ -7821,7 +7821,7 @@ where
         }
     }
 
-    #[doc="<p>Detaches a static IP from the Amazon Lightsail instance to which it is attached.</p>"]
+    /// <p>Detaches a static IP from the Amazon Lightsail instance to which it is attached.</p>
     fn detach_static_ip(
         &self,
         input: &DetachStaticIpRequest,
@@ -7855,7 +7855,7 @@ where
         }
     }
 
-    #[doc = "<p>Downloads the default SSH key pair from the user's account.</p>"]
+    /// <p>Downloads the default SSH key pair from the user's account.</p>
     fn download_default_key_pair(
         &self,
     ) -> Result<DownloadDefaultKeyPairResult, DownloadDefaultKeyPairError> {
@@ -7887,7 +7887,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns the names of all active (not deleted) resources.</p>"]
+    /// <p>Returns the names of all active (not deleted) resources.</p>
     fn get_active_names(
         &self,
         input: &GetActiveNamesRequest,
@@ -7921,7 +7921,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the list of available instance images, or <i>blueprints</i>. You can use a blueprint to create a new virtual private server already running a specific operating system, as well as a preinstalled app or development stack. The software each instance is running depends on the blueprint image you choose.</p>"]
+    /// <p>Returns the list of available instance images, or <i>blueprints</i>. You can use a blueprint to create a new virtual private server already running a specific operating system, as well as a preinstalled app or development stack. The software each instance is running depends on the blueprint image you choose.</p>
     fn get_blueprints(
         &self,
         input: &GetBlueprintsRequest,
@@ -7955,7 +7955,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the list of bundles that are available for purchase. A bundle describes the specs for your virtual private server (or <i>instance</i>).</p>"]
+    /// <p>Returns the list of bundles that are available for purchase. A bundle describes the specs for your virtual private server (or <i>instance</i>).</p>
     fn get_bundles(&self, input: &GetBundlesRequest) -> Result<GetBundlesResult, GetBundlesError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
@@ -7986,7 +7986,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns information about a specific domain recordset.</p>"]
+    /// <p>Returns information about a specific domain recordset.</p>
     fn get_domain(&self, input: &GetDomainRequest) -> Result<GetDomainResult, GetDomainError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
@@ -8019,7 +8019,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns a list of all domains in the user's account.</p>"]
+    /// <p>Returns a list of all domains in the user's account.</p>
     fn get_domains(&self, input: &GetDomainsRequest) -> Result<GetDomainsResult, GetDomainsError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
@@ -8050,7 +8050,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about a specific Amazon Lightsail instance, which is a virtual private server.</p>"]
+    /// <p>Returns information about a specific Amazon Lightsail instance, which is a virtual private server.</p>
     fn get_instance(
         &self,
         input: &GetInstanceRequest,
@@ -8084,7 +8084,7 @@ where
         }
     }
 
-    #[doc="<p>Returns temporary SSH keys you can use to connect to a specific virtual private server, or <i>instance</i>.</p>"]
+    /// <p>Returns temporary SSH keys you can use to connect to a specific virtual private server, or <i>instance</i>.</p>
     fn get_instance_access_details(
         &self,
         input: &GetInstanceAccessDetailsRequest,
@@ -8121,7 +8121,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the data points for the specified Amazon Lightsail instance metric, given an instance name.</p>"]
+    /// <p>Returns the data points for the specified Amazon Lightsail instance metric, given an instance name.</p>
     fn get_instance_metric_data(
         &self,
         input: &GetInstanceMetricDataRequest,
@@ -8155,7 +8155,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the port states for a specific virtual private server, or <i>instance</i>.</p>"]
+    /// <p>Returns the port states for a specific virtual private server, or <i>instance</i>.</p>
     fn get_instance_port_states(
         &self,
         input: &GetInstancePortStatesRequest,
@@ -8189,7 +8189,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns information about a specific instance snapshot.</p>"]
+    /// <p>Returns information about a specific instance snapshot.</p>
     fn get_instance_snapshot(
         &self,
         input: &GetInstanceSnapshotRequest,
@@ -8223,7 +8223,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns all instance snapshots for the user's account.</p>"]
+    /// <p>Returns all instance snapshots for the user's account.</p>
     fn get_instance_snapshots(
         &self,
         input: &GetInstanceSnapshotsRequest,
@@ -8257,7 +8257,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns the state of a specific instance. Works on one instance at a time.</p>"]
+    /// <p>Returns the state of a specific instance. Works on one instance at a time.</p>
     fn get_instance_state(
         &self,
         input: &GetInstanceStateRequest,
@@ -8291,7 +8291,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about all Amazon Lightsail virtual private servers, or <i>instances</i>.</p>"]
+    /// <p>Returns information about all Amazon Lightsail virtual private servers, or <i>instances</i>.</p>
     fn get_instances(
         &self,
         input: &GetInstancesRequest,
@@ -8325,7 +8325,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns information about a specific key pair.</p>"]
+    /// <p>Returns information about a specific key pair.</p>
     fn get_key_pair(&self, input: &GetKeyPairRequest) -> Result<GetKeyPairResult, GetKeyPairError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
@@ -8356,7 +8356,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns information about all key pairs in the user's account.</p>"]
+    /// <p>Returns information about all key pairs in the user's account.</p>
     fn get_key_pairs(
         &self,
         input: &GetKeyPairsRequest,
@@ -8390,7 +8390,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about a specific operation. Operations include events such as when you create an instance, allocate a static IP, attach a static IP, and so on.</p>"]
+    /// <p>Returns information about a specific operation. Operations include events such as when you create an instance, allocate a static IP, attach a static IP, and so on.</p>
     fn get_operation(
         &self,
         input: &GetOperationRequest,
@@ -8424,7 +8424,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about all operations.</p> <p>Results are returned from oldest to newest, up to a maximum of 200. Results can be paged by making each subsequent call to <code>GetOperations</code> use the maximum (last) <code>statusChangedAt</code> value from the previous request.</p>"]
+    /// <p>Returns information about all operations.</p> <p>Results are returned from oldest to newest, up to a maximum of 200. Results can be paged by making each subsequent call to <code>GetOperations</code> use the maximum (last) <code>statusChangedAt</code> value from the previous request.</p>
     fn get_operations(
         &self,
         input: &GetOperationsRequest,
@@ -8458,7 +8458,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets operations for a specific resource (e.g., an instance or a static IP).</p>"]
+    /// <p>Gets operations for a specific resource (e.g., an instance or a static IP).</p>
     fn get_operations_for_resource(
         &self,
         input: &GetOperationsForResourceRequest,
@@ -8495,7 +8495,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list of all valid regions for Amazon Lightsail. Use the <code>include availability zones</code> parameter to also return the availability zones in a region.</p>"]
+    /// <p>Returns a list of all valid regions for Amazon Lightsail. Use the <code>include availability zones</code> parameter to also return the availability zones in a region.</p>
     fn get_regions(&self, input: &GetRegionsRequest) -> Result<GetRegionsResult, GetRegionsError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
@@ -8526,7 +8526,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns information about a specific static IP.</p>"]
+    /// <p>Returns information about a specific static IP.</p>
     fn get_static_ip(
         &self,
         input: &GetStaticIpRequest,
@@ -8560,7 +8560,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns information about all static IPs in the user's account.</p>"]
+    /// <p>Returns information about all static IPs in the user's account.</p>
     fn get_static_ips(
         &self,
         input: &GetStaticIpsRequest,
@@ -8594,7 +8594,7 @@ where
         }
     }
 
-    #[doc = "<p>Imports a public SSH key from a specific key pair.</p>"]
+    /// <p>Imports a public SSH key from a specific key pair.</p>
     fn import_key_pair(
         &self,
         input: &ImportKeyPairRequest,
@@ -8628,7 +8628,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns a Boolean value indicating whether your Lightsail VPC is peered.</p>"]
+    /// <p>Returns a Boolean value indicating whether your Lightsail VPC is peered.</p>
     fn is_vpc_peered(&self) -> Result<IsVpcPeeredResult, IsVpcPeeredError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
@@ -8658,7 +8658,7 @@ where
         }
     }
 
-    #[doc = "<p>Adds public ports to an Amazon Lightsail instance.</p>"]
+    /// <p>Adds public ports to an Amazon Lightsail instance.</p>
     fn open_instance_public_ports(
         &self,
         input: &OpenInstancePublicPortsRequest,
@@ -8692,7 +8692,7 @@ where
         }
     }
 
-    #[doc = "<p>Tries to peer the Lightsail VPC with the user's default VPC.</p>"]
+    /// <p>Tries to peer the Lightsail VPC with the user's default VPC.</p>
     fn peer_vpc(&self) -> Result<PeerVpcResult, PeerVpcError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
@@ -8723,7 +8723,7 @@ where
         }
     }
 
-    #[doc="<p>Sets the specified open ports for an Amazon Lightsail instance, and closes all ports for every protocol not included in the current request.</p>"]
+    /// <p>Sets the specified open ports for an Amazon Lightsail instance, and closes all ports for every protocol not included in the current request.</p>
     fn put_instance_public_ports(
         &self,
         input: &PutInstancePublicPortsRequest,
@@ -8757,7 +8757,7 @@ where
         }
     }
 
-    #[doc="<p>Restarts a specific instance. When your Amazon Lightsail instance is finished rebooting, Lightsail assigns a new public IP address. To use the same IP address after restarting, create a static IP address and attach it to the instance.</p>"]
+    /// <p>Restarts a specific instance. When your Amazon Lightsail instance is finished rebooting, Lightsail assigns a new public IP address. To use the same IP address after restarting, create a static IP address and attach it to the instance.</p>
     fn reboot_instance(
         &self,
         input: &RebootInstanceRequest,
@@ -8791,7 +8791,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a specific static IP from your account.</p>"]
+    /// <p>Deletes a specific static IP from your account.</p>
     fn release_static_ip(
         &self,
         input: &ReleaseStaticIpRequest,
@@ -8825,7 +8825,7 @@ where
         }
     }
 
-    #[doc="<p>Starts a specific Amazon Lightsail instance from a stopped state. To restart an instance, use the reboot instance operation.</p>"]
+    /// <p>Starts a specific Amazon Lightsail instance from a stopped state. To restart an instance, use the reboot instance operation.</p>
     fn start_instance(
         &self,
         input: &StartInstanceRequest,
@@ -8859,7 +8859,7 @@ where
         }
     }
 
-    #[doc = "<p>Stops a specific Amazon Lightsail instance that is currently running.</p>"]
+    /// <p>Stops a specific Amazon Lightsail instance that is currently running.</p>
     fn stop_instance(
         &self,
         input: &StopInstanceRequest,
@@ -8893,7 +8893,7 @@ where
         }
     }
 
-    #[doc = "<p>Attempts to unpeer the Lightsail VPC from the user's default VPC.</p>"]
+    /// <p>Attempts to unpeer the Lightsail VPC from the user's default VPC.</p>
     fn unpeer_vpc(&self) -> Result<UnpeerVpcResult, UnpeerVpcError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
@@ -8925,7 +8925,7 @@ where
         }
     }
 
-    #[doc = "<p>Updates a domain recordset after it is created.</p>"]
+    /// <p>Updates a domain recordset after it is created.</p>
     fn update_domain_entry(
         &self,
         input: &UpdateDomainEntryRequest,

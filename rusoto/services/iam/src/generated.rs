@@ -39,7 +39,7 @@ enum DeserializerNext {
     Skip,
     Element(String),
 }
-/// <p>Contains information about an AWS access key.</p> <p> This data type is used as a response element in the <a>CreateAccessKey</a> and <a>ListAccessKeys</a> actions. </p> <note> <p>The <code>SecretAccessKey</code> value is returned only in response to <a>CreateAccessKey</a>. You can get a secret access key only when you first create an access key; you cannot recover the secret access key later. If you lose a secret access key, you must create a new access key.</p> </note>
+/// <p><p>Contains information about an AWS access key.</p> <p> This data type is used as a response element in the <a>CreateAccessKey</a> and <a>ListAccessKeys</a> actions. </p> <note> <p>The <code>SecretAccessKey</code> value is returned only in response to <a>CreateAccessKey</a>. You can get a secret access key only when you first create an access key; you cannot recover the secret access key later. If you lose a secret access key, you must create a new access key.</p> </note></p>
 #[derive(Default, Debug, Clone)]
 pub struct AccessKey {
     /// <p>The ID for this access key.</p>
@@ -129,11 +129,11 @@ impl AccessKeyIdTypeDeserializer {
 /// <p>Contains information about the last time an AWS access key was used.</p> <p>This data type is used as a response element in the <a>GetAccessKeyLastUsed</a> action.</p>
 #[derive(Default, Debug, Clone)]
 pub struct AccessKeyLastUsed {
-    /// <p>The date and time, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a>, when the access key was most recently used. This field is null when:</p> <ul> <li> <p>The user does not have an access key.</p> </li> <li> <p>An access key exists but has never been used, at least not since IAM started tracking this information on April 22nd, 2015.</p> </li> <li> <p>There is no sign-in data associated with the user</p> </li> </ul>
+    /// <p><p>The date and time, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a>, when the access key was most recently used. This field is null when:</p> <ul> <li> <p>The user does not have an access key.</p> </li> <li> <p>An access key exists but has never been used, at least not since IAM started tracking this information on April 22nd, 2015.</p> </li> <li> <p>There is no sign-in data associated with the user</p> </li> </ul></p>
     pub last_used_date: String,
     /// <p>The AWS region where this access key was most recently used. This field is displays "N/A" when:</p> <ul> <li> <p>The user does not have an access key.</p> </li> <li> <p>An access key exists but has never been used, at least not since IAM started tracking this information on April 22nd, 2015.</p> </li> <li> <p>There is no sign-in data associated with the user</p> </li> </ul> <p>For more information about AWS regions, see <a href="http://docs.aws.amazon.com/general/latest/gr/rande.html">Regions and Endpoints</a> in the Amazon Web Services General Reference.</p>
     pub region: String,
-    /// <p>The name of the AWS service with which this access key was most recently used. This field displays "N/A" when:</p> <ul> <li> <p>The user does not have an access key.</p> </li> <li> <p>An access key exists but has never been used, at least not since IAM started tracking this information on April 22nd, 2015.</p> </li> <li> <p>There is no sign-in data associated with the user</p> </li> </ul>
+    /// <p><p>The name of the AWS service with which this access key was most recently used. This field displays &quot;N/A&quot; when:</p> <ul> <li> <p>The user does not have an access key.</p> </li> <li> <p>An access key exists but has never been used, at least not since IAM started tracking this information on April 22nd, 2015.</p> </li> <li> <p>There is no sign-in data associated with the user</p> </li> </ul></p>
     pub service_name: String,
 }
 
@@ -1915,7 +1915,7 @@ impl CreateServiceSpecificCredentialRequestSerializer {
 
 #[derive(Default, Debug, Clone)]
 pub struct CreateServiceSpecificCredentialResponse {
-    /// <p>A structure that contains information about the newly created service-specific credential.</p> <important> <p>This is the only time that the password for this credential set is available. It cannot be recovered later. Instead, you will have to reset the password with <a>ResetServiceSpecificCredential</a>.</p> </important>
+    /// <p><p>A structure that contains information about the newly created service-specific credential.</p> <important> <p>This is the only time that the password for this credential set is available. It cannot be recovered later. Instead, you will have to reset the password with <a>ResetServiceSpecificCredential</a>.</p> </important></p>
     pub service_specific_credential: Option<ServiceSpecificCredential>,
 }
 
@@ -2717,9 +2717,9 @@ impl DetachUserPolicyRequestSerializer {
 
 #[derive(Default, Debug, Clone)]
 pub struct EnableMFADeviceRequest {
-    /// <p>An authentication code emitted by the device. </p> <p>The format for this parameter is a string of 6 digits.</p> <important> <p>Submit your request immediately after generating the authentication codes. If you generate the codes and then wait too long to submit the request, the MFA device successfully associates with the user but the MFA device becomes out of sync. This happens because time-based one-time passwords (TOTP) expire after a short period of time. If this happens, you can <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_sync.html">resync the device</a>.</p> </important>
+    /// <p><p>An authentication code emitted by the device. </p> <p>The format for this parameter is a string of 6 digits.</p> <important> <p>Submit your request immediately after generating the authentication codes. If you generate the codes and then wait too long to submit the request, the MFA device successfully associates with the user but the MFA device becomes out of sync. This happens because time-based one-time passwords (TOTP) expire after a short period of time. If this happens, you can <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_sync.html">resync the device</a>.</p> </important></p>
     pub authentication_code_1: String,
-    /// <p>A subsequent authentication code emitted by the device.</p> <p>The format for this parameter is a string of 6 digits.</p> <important> <p>Submit your request immediately after generating the authentication codes. If you generate the codes and then wait too long to submit the request, the MFA device successfully associates with the user but the MFA device becomes out of sync. This happens because time-based one-time passwords (TOTP) expire after a short period of time. If this happens, you can <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_sync.html">resync the device</a>.</p> </important>
+    /// <p><p>A subsequent authentication code emitted by the device.</p> <p>The format for this parameter is a string of 6 digits.</p> <important> <p>Submit your request immediately after generating the authentication codes. If you generate the codes and then wait too long to submit the request, the MFA device successfully associates with the user but the MFA device becomes out of sync. This happens because time-based one-time passwords (TOTP) expire after a short period of time. If this happens, you can <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_sync.html">resync the device</a>.</p> </important></p>
     pub authentication_code_2: String,
     /// <p>The serial number that uniquely identifies the MFA device. For virtual MFA devices, the serial number is the device ARN.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@:/-</p>
     pub serial_number: String,
@@ -3061,7 +3061,7 @@ impl GetAccessKeyLastUsedRequestSerializer {
 pub struct GetAccessKeyLastUsedResponse {
     /// <p>Contains information about the last time the access key was used.</p>
     pub access_key_last_used: Option<AccessKeyLastUsed>,
-    /// <p>The name of the AWS IAM user that owns this access key.</p> <p/>
+    /// <p><p>The name of the AWS IAM user that owns this access key.</p> <p/></p>
     pub user_name: Option<String>,
 }
 
@@ -4627,7 +4627,7 @@ impl GetUserResponseDeserializer {
         Ok(obj)
     }
 }
-/// <p>Contains information about an IAM group entity.</p> <p>This data type is used as a response element in the following actions:</p> <ul> <li> <p> <a>CreateGroup</a> </p> </li> <li> <p> <a>GetGroup</a> </p> </li> <li> <p> <a>ListGroups</a> </p> </li> </ul>
+/// <p><p>Contains information about an IAM group entity.</p> <p>This data type is used as a response element in the following actions:</p> <ul> <li> <p> <a>CreateGroup</a> </p> </li> <li> <p> <a>GetGroup</a> </p> </li> <li> <p> <a>ListGroups</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone)]
 pub struct Group {
     /// <p> The Amazon Resource Name (ARN) specifying the group. For more information about ARNs and how to use them in policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>
@@ -4932,7 +4932,7 @@ impl IdTypeDeserializer {
         Ok(obj)
     }
 }
-/// <p>Contains information about an instance profile.</p> <p>This data type is used as a response element in the following actions:</p> <ul> <li> <p> <a>CreateInstanceProfile</a> </p> </li> <li> <p> <a>GetInstanceProfile</a> </p> </li> <li> <p> <a>ListInstanceProfiles</a> </p> </li> <li> <p> <a>ListInstanceProfilesForRole</a> </p> </li> </ul>
+/// <p><p>Contains information about an instance profile.</p> <p>This data type is used as a response element in the following actions:</p> <ul> <li> <p> <a>CreateInstanceProfile</a> </p> </li> <li> <p> <a>GetInstanceProfile</a> </p> </li> <li> <p> <a>ListInstanceProfiles</a> </p> </li> <li> <p> <a>ListInstanceProfilesForRole</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone)]
 pub struct InstanceProfile {
     /// <p> The Amazon Resource Name (ARN) specifying the instance profile. For more information about ARNs and how to use them in policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>
@@ -9427,7 +9427,7 @@ impl ResetServiceSpecificCredentialRequestSerializer {
 
 #[derive(Default, Debug, Clone)]
 pub struct ResetServiceSpecificCredentialResponse {
-    /// <p>A structure with details about the updated service-specific credential, including the new password.</p> <important> <p>This is the <b>only</b> time that you can access the password. You cannot recover the password later, but you can reset it again.</p> </important>
+    /// <p><p>A structure with details about the updated service-specific credential, including the new password.</p> <important> <p>This is the <b>only</b> time that you can access the password. You cannot recover the password later, but you can reset it again.</p> </important></p>
     pub service_specific_credential: Option<ServiceSpecificCredential>,
 }
 
@@ -10876,7 +10876,7 @@ pub struct SimulateCustomPolicyRequest {
     pub policy_input_list: Vec<String>,
     /// <p>A list of ARNs of AWS resources to include in the simulation. If this parameter is not provided then the value defaults to <code>*</code> (all resources). Each API in the <code>ActionNames</code> parameter is evaluated for each resource in this list. The simulation determines the access result (allowed or denied) of each combination and reports it in the response.</p> <p>The simulation does not automatically retrieve policies for the specified resources. If you want to include a resource policy in the simulation, then you must include the policy as a string in the <code>ResourcePolicy</code> parameter.</p> <p>If you include a <code>ResourcePolicy</code>, then it must be applicable to all of the resources included in the simulation or you receive an invalid input error.</p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub resource_arns: Option<Vec<String>>,
-    /// <p>Specifies the type of simulation to run. Different APIs that support resource-based policies require different combinations of resources. By specifying the type of simulation to run, you enable the policy simulator to enforce the presence of the required resources to ensure reliable simulation results. If your simulation does not match one of the following scenarios, then you can omit this parameter. The following list shows each of the supported scenario values and the resources that you must define to run the simulation.</p> <p>Each of the EC2 scenarios requires that you specify instance, image, and security-group resources. If your scenario includes an EBS volume, then you must specify that volume as a resource. If the EC2 scenario includes VPC, then you must supply the network-interface resource. If it includes an IP subnet, then you must specify the subnet resource. For more information on the EC2 scenario options, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-supported-platforms.html">Supported Platforms</a> in the <i>AWS EC2 User Guide</i>.</p> <ul> <li> <p> <b>EC2-Classic-InstanceStore</b> </p> <p>instance, image, security-group</p> </li> <li> <p> <b>EC2-Classic-EBS</b> </p> <p>instance, image, security-group, volume</p> </li> <li> <p> <b>EC2-VPC-InstanceStore</b> </p> <p>instance, image, security-group, network-interface</p> </li> <li> <p> <b>EC2-VPC-InstanceStore-Subnet</b> </p> <p>instance, image, security-group, network-interface, subnet</p> </li> <li> <p> <b>EC2-VPC-EBS</b> </p> <p>instance, image, security-group, network-interface, volume</p> </li> <li> <p> <b>EC2-VPC-EBS-Subnet</b> </p> <p>instance, image, security-group, network-interface, subnet, volume</p> </li> </ul>
+    /// <p><p>Specifies the type of simulation to run. Different APIs that support resource-based policies require different combinations of resources. By specifying the type of simulation to run, you enable the policy simulator to enforce the presence of the required resources to ensure reliable simulation results. If your simulation does not match one of the following scenarios, then you can omit this parameter. The following list shows each of the supported scenario values and the resources that you must define to run the simulation.</p> <p>Each of the EC2 scenarios requires that you specify instance, image, and security-group resources. If your scenario includes an EBS volume, then you must specify that volume as a resource. If the EC2 scenario includes VPC, then you must supply the network-interface resource. If it includes an IP subnet, then you must specify the subnet resource. For more information on the EC2 scenario options, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-supported-platforms.html">Supported Platforms</a> in the <i>AWS EC2 User Guide</i>.</p> <ul> <li> <p> <b>EC2-Classic-InstanceStore</b> </p> <p>instance, image, security-group</p> </li> <li> <p> <b>EC2-Classic-EBS</b> </p> <p>instance, image, security-group, volume</p> </li> <li> <p> <b>EC2-VPC-InstanceStore</b> </p> <p>instance, image, security-group, network-interface</p> </li> <li> <p> <b>EC2-VPC-InstanceStore-Subnet</b> </p> <p>instance, image, security-group, network-interface, subnet</p> </li> <li> <p> <b>EC2-VPC-EBS</b> </p> <p>instance, image, security-group, network-interface, volume</p> </li> <li> <p> <b>EC2-VPC-EBS-Subnet</b> </p> <p>instance, image, security-group, network-interface, subnet, volume</p> </li> </ul></p>
     pub resource_handling_option: Option<String>,
     /// <p>An AWS account ID that specifies the owner of any simulated resource that does not identify its owner in the resource ARN, such as an S3 bucket or object. If <code>ResourceOwner</code> is specified, it is also used as the account owner of any <code>ResourcePolicy</code> included in the simulation. If the <code>ResourceOwner</code> parameter is not specified, then the owner of the resources and the resource policy defaults to the account of the identity provided in <code>CallerArn</code>. This parameter is required only if you specify a resource-based policy and account that owns the resource is different from the account that owns the simulated calling user <code>CallerArn</code>.</p>
     pub resource_owner: Option<String>,
@@ -11038,7 +11038,7 @@ pub struct SimulatePrincipalPolicyRequest {
     pub policy_source_arn: String,
     /// <p>A list of ARNs of AWS resources to include in the simulation. If this parameter is not provided then the value defaults to <code>*</code> (all resources). Each API in the <code>ActionNames</code> parameter is evaluated for each resource in this list. The simulation determines the access result (allowed or denied) of each combination and reports it in the response.</p> <p>The simulation does not automatically retrieve policies for the specified resources. If you want to include a resource policy in the simulation, then you must include the policy as a string in the <code>ResourcePolicy</code> parameter.</p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub resource_arns: Option<Vec<String>>,
-    /// <p>Specifies the type of simulation to run. Different APIs that support resource-based policies require different combinations of resources. By specifying the type of simulation to run, you enable the policy simulator to enforce the presence of the required resources to ensure reliable simulation results. If your simulation does not match one of the following scenarios, then you can omit this parameter. The following list shows each of the supported scenario values and the resources that you must define to run the simulation.</p> <p>Each of the EC2 scenarios requires that you specify instance, image, and security-group resources. If your scenario includes an EBS volume, then you must specify that volume as a resource. If the EC2 scenario includes VPC, then you must supply the network-interface resource. If it includes an IP subnet, then you must specify the subnet resource. For more information on the EC2 scenario options, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-supported-platforms.html">Supported Platforms</a> in the <i>AWS EC2 User Guide</i>.</p> <ul> <li> <p> <b>EC2-Classic-InstanceStore</b> </p> <p>instance, image, security-group</p> </li> <li> <p> <b>EC2-Classic-EBS</b> </p> <p>instance, image, security-group, volume</p> </li> <li> <p> <b>EC2-VPC-InstanceStore</b> </p> <p>instance, image, security-group, network-interface</p> </li> <li> <p> <b>EC2-VPC-InstanceStore-Subnet</b> </p> <p>instance, image, security-group, network-interface, subnet</p> </li> <li> <p> <b>EC2-VPC-EBS</b> </p> <p>instance, image, security-group, network-interface, volume</p> </li> <li> <p> <b>EC2-VPC-EBS-Subnet</b> </p> <p>instance, image, security-group, network-interface, subnet, volume</p> </li> </ul>
+    /// <p><p>Specifies the type of simulation to run. Different APIs that support resource-based policies require different combinations of resources. By specifying the type of simulation to run, you enable the policy simulator to enforce the presence of the required resources to ensure reliable simulation results. If your simulation does not match one of the following scenarios, then you can omit this parameter. The following list shows each of the supported scenario values and the resources that you must define to run the simulation.</p> <p>Each of the EC2 scenarios requires that you specify instance, image, and security-group resources. If your scenario includes an EBS volume, then you must specify that volume as a resource. If the EC2 scenario includes VPC, then you must supply the network-interface resource. If it includes an IP subnet, then you must specify the subnet resource. For more information on the EC2 scenario options, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-supported-platforms.html">Supported Platforms</a> in the <i>AWS EC2 User Guide</i>.</p> <ul> <li> <p> <b>EC2-Classic-InstanceStore</b> </p> <p>instance, image, security-group</p> </li> <li> <p> <b>EC2-Classic-EBS</b> </p> <p>instance, image, security-group, volume</p> </li> <li> <p> <b>EC2-VPC-InstanceStore</b> </p> <p>instance, image, security-group, network-interface</p> </li> <li> <p> <b>EC2-VPC-InstanceStore-Subnet</b> </p> <p>instance, image, security-group, network-interface, subnet</p> </li> <li> <p> <b>EC2-VPC-EBS</b> </p> <p>instance, image, security-group, network-interface, volume</p> </li> <li> <p> <b>EC2-VPC-EBS-Subnet</b> </p> <p>instance, image, security-group, network-interface, subnet, volume</p> </li> </ul></p>
     pub resource_handling_option: Option<String>,
     /// <p>An AWS account ID that specifies the owner of any simulated resource that does not identify its owner in the resource ARN, such as an S3 bucket or object. If <code>ResourceOwner</code> is specified, it is also used as the account owner of any <code>ResourcePolicy</code> included in the simulation. If the <code>ResourceOwner</code> parameter is not specified, then the owner of the resources and the resource policy defaults to the account of the identity provided in <code>CallerArn</code>. This parameter is required only if you specify a resource-based policy and account that owns the resource is different from the account that owns the simulated calling user <code>CallerArn</code>.</p>
     pub resource_owner: Option<String>,
@@ -12070,7 +12070,7 @@ pub struct UploadServerCertificateRequest {
     pub certificate_body: String,
     /// <p>The contents of the certificate chain. This is typically a concatenation of the PEM-encoded public key certificates of the chain.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF). It also includes the special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D).</p>
     pub certificate_chain: Option<String>,
-    /// <p>The path for the server certificate. For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/). This paramater allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\u0021) thru the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p> <note> <p> If you are uploading a server certificate specifically for use with Amazon CloudFront distributions, you must specify a path using the <code>--path</code> option. The path must begin with <code>/cloudfront</code> and must include a trailing slash (for example, <code>/cloudfront/test/</code>).</p> </note>
+    /// <p><p>The path for the server certificate. For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/). This paramater allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\u0021) thru the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p> <note> <p> If you are uploading a server certificate specifically for use with Amazon CloudFront distributions, you must specify a path using the <code>--path</code> option. The path must begin with <code>/cloudfront</code> and must include a trailing slash (for example, <code>/cloudfront/test/</code>).</p> </note></p>
     pub path: Option<String>,
     /// <p>The contents of the private key in PEM-encoded format.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF). It also includes the special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D).</p>
     pub private_key: String,
@@ -12243,7 +12243,7 @@ impl UploadSigningCertificateResponseDeserializer {
         Ok(obj)
     }
 }
-/// <p>Contains information about an IAM user entity.</p> <p>This data type is used as a response element in the following actions:</p> <ul> <li> <p> <a>CreateUser</a> </p> </li> <li> <p> <a>GetUser</a> </p> </li> <li> <p> <a>ListUsers</a> </p> </li> </ul>
+/// <p><p>Contains information about an IAM user entity.</p> <p>This data type is used as a response element in the following actions:</p> <ul> <li> <p> <a>CreateUser</a> </p> </li> <li> <p> <a>GetUser</a> </p> </li> <li> <p> <a>ListUsers</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone)]
 pub struct User {
     /// <p>The Amazon Resource Name (ARN) that identifies the user. For more information about ARNs and how to use ARNs in policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>
@@ -12627,13 +12627,13 @@ impl VirtualMFADeviceListTypeDeserializer {
 /// Errors returned by AddClientIDToOpenIDConnectProvider
 #[derive(Debug, PartialEq)]
 pub enum AddClientIDToOpenIDConnectProviderError {
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12720,15 +12720,15 @@ impl Error for AddClientIDToOpenIDConnectProviderError {
 /// Errors returned by AddRoleToInstanceProfile
 #[derive(Debug, PartialEq)]
 pub enum AddRoleToInstanceProfileError {
-    ///<p>The request was rejected because it attempted to create a resource that already exists.</p>
+    /// <p>The request was rejected because it attempted to create a resource that already exists.</p>
     EntityAlreadyExists(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    ///<p>The request was rejected because only the service that depends on the service-linked role can modify or delete the role on your behalf. The error message includes the name of the service that depends on this service-linked role. You must request the change through that service.</p>
+    /// <p>The request was rejected because only the service that depends on the service-linked role can modify or delete the role on your behalf. The error message includes the name of the service that depends on this service-linked role. You must request the change through that service.</p>
     UnmodifiableEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12819,11 +12819,11 @@ impl Error for AddRoleToInstanceProfileError {
 /// Errors returned by AddUserToGroup
 #[derive(Debug, PartialEq)]
 pub enum AddUserToGroupError {
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12900,13 +12900,13 @@ impl Error for AddUserToGroupError {
 /// Errors returned by AttachGroupPolicy
 #[derive(Debug, PartialEq)]
 pub enum AttachGroupPolicyError {
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12989,15 +12989,15 @@ impl Error for AttachGroupPolicyError {
 /// Errors returned by AttachRolePolicy
 #[derive(Debug, PartialEq)]
 pub enum AttachRolePolicyError {
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    ///<p>The request was rejected because only the service that depends on the service-linked role can modify or delete the role on your behalf. The error message includes the name of the service that depends on this service-linked role. You must request the change through that service.</p>
+    /// <p>The request was rejected because only the service that depends on the service-linked role can modify or delete the role on your behalf. The error message includes the name of the service that depends on this service-linked role. You must request the change through that service.</p>
     UnmodifiableEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13082,13 +13082,13 @@ impl Error for AttachRolePolicyError {
 /// Errors returned by AttachUserPolicy
 #[derive(Debug, PartialEq)]
 pub enum AttachUserPolicyError {
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13169,17 +13169,17 @@ impl Error for AttachUserPolicyError {
 /// Errors returned by ChangePassword
 #[derive(Debug, PartialEq)]
 pub enum ChangePasswordError {
-    ///<p>The request was rejected because it referenced an entity that is temporarily unmodifiable, such as a user name that was deleted and then recreated. The error indicates that the request is likely to succeed if you try again after waiting several minutes. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that is temporarily unmodifiable, such as a user name that was deleted and then recreated. The error indicates that the request is likely to succeed if you try again after waiting several minutes. The error message describes the entity.</p>
     EntityTemporarilyUnmodifiable(String),
-    ///<p>The request was rejected because the type of user for the transaction was incorrect.</p>
+    /// <p>The request was rejected because the type of user for the transaction was incorrect.</p>
     InvalidUserType(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request was rejected because the provided password did not meet the requirements imposed by the account password policy.</p>
+    /// <p>The request was rejected because the provided password did not meet the requirements imposed by the account password policy.</p>
     PasswordPolicyViolation(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13270,11 +13270,11 @@ impl Error for ChangePasswordError {
 /// Errors returned by CreateAccessKey
 #[derive(Debug, PartialEq)]
 pub enum CreateAccessKeyError {
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13351,11 +13351,11 @@ impl Error for CreateAccessKeyError {
 /// Errors returned by CreateAccountAlias
 #[derive(Debug, PartialEq)]
 pub enum CreateAccountAliasError {
-    ///<p>The request was rejected because it attempted to create a resource that already exists.</p>
+    /// <p>The request was rejected because it attempted to create a resource that already exists.</p>
     EntityAlreadyExists(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13434,13 +13434,13 @@ impl Error for CreateAccountAliasError {
 /// Errors returned by CreateGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateGroupError {
-    ///<p>The request was rejected because it attempted to create a resource that already exists.</p>
+    /// <p>The request was rejected because it attempted to create a resource that already exists.</p>
     EntityAlreadyExists(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13521,11 +13521,11 @@ impl Error for CreateGroupError {
 /// Errors returned by CreateInstanceProfile
 #[derive(Debug, PartialEq)]
 pub enum CreateInstanceProfileError {
-    ///<p>The request was rejected because it attempted to create a resource that already exists.</p>
+    /// <p>The request was rejected because it attempted to create a resource that already exists.</p>
     EntityAlreadyExists(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13604,15 +13604,15 @@ impl Error for CreateInstanceProfileError {
 /// Errors returned by CreateLoginProfile
 #[derive(Debug, PartialEq)]
 pub enum CreateLoginProfileError {
-    ///<p>The request was rejected because it attempted to create a resource that already exists.</p>
+    /// <p>The request was rejected because it attempted to create a resource that already exists.</p>
     EntityAlreadyExists(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request was rejected because the provided password did not meet the requirements imposed by the account password policy.</p>
+    /// <p>The request was rejected because the provided password did not meet the requirements imposed by the account password policy.</p>
     PasswordPolicyViolation(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13701,13 +13701,13 @@ impl Error for CreateLoginProfileError {
 /// Errors returned by CreateOpenIDConnectProvider
 #[derive(Debug, PartialEq)]
 pub enum CreateOpenIDConnectProviderError {
-    ///<p>The request was rejected because it attempted to create a resource that already exists.</p>
+    /// <p>The request was rejected because it attempted to create a resource that already exists.</p>
     EntityAlreadyExists(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13792,15 +13792,15 @@ impl Error for CreateOpenIDConnectProviderError {
 /// Errors returned by CreatePolicy
 #[derive(Debug, PartialEq)]
 pub enum CreatePolicyError {
-    ///<p>The request was rejected because it attempted to create a resource that already exists.</p>
+    /// <p>The request was rejected because it attempted to create a resource that already exists.</p>
     EntityAlreadyExists(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
+    /// <p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
     MalformedPolicyDocument(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13885,15 +13885,15 @@ impl Error for CreatePolicyError {
 /// Errors returned by CreatePolicyVersion
 #[derive(Debug, PartialEq)]
 pub enum CreatePolicyVersionError {
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
+    /// <p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
     MalformedPolicyDocument(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13982,15 +13982,15 @@ impl Error for CreatePolicyVersionError {
 /// Errors returned by CreateRole
 #[derive(Debug, PartialEq)]
 pub enum CreateRoleError {
-    ///<p>The request was rejected because it attempted to create a resource that already exists.</p>
+    /// <p>The request was rejected because it attempted to create a resource that already exists.</p>
     EntityAlreadyExists(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
+    /// <p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
     MalformedPolicyDocument(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -14075,13 +14075,13 @@ impl Error for CreateRoleError {
 /// Errors returned by CreateSAMLProvider
 #[derive(Debug, PartialEq)]
 pub enum CreateSAMLProviderError {
-    ///<p>The request was rejected because it attempted to create a resource that already exists.</p>
+    /// <p>The request was rejected because it attempted to create a resource that already exists.</p>
     EntityAlreadyExists(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -14164,13 +14164,13 @@ impl Error for CreateSAMLProviderError {
 /// Errors returned by CreateServiceLinkedRole
 #[derive(Debug, PartialEq)]
 pub enum CreateServiceLinkedRoleError {
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -14253,11 +14253,11 @@ impl Error for CreateServiceLinkedRoleError {
 /// Errors returned by CreateServiceSpecificCredential
 #[derive(Debug, PartialEq)]
 pub enum CreateServiceSpecificCredentialError {
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The specified service does not support service-specific credentials.</p>
+    /// <p>The specified service does not support service-specific credentials.</p>
     ServiceNotSupported(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -14338,13 +14338,13 @@ impl Error for CreateServiceSpecificCredentialError {
 /// Errors returned by CreateUser
 #[derive(Debug, PartialEq)]
 pub enum CreateUserError {
-    ///<p>The request was rejected because it attempted to create a resource that already exists.</p>
+    /// <p>The request was rejected because it attempted to create a resource that already exists.</p>
     EntityAlreadyExists(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -14425,11 +14425,11 @@ impl Error for CreateUserError {
 /// Errors returned by CreateVirtualMFADevice
 #[derive(Debug, PartialEq)]
 pub enum CreateVirtualMFADeviceError {
-    ///<p>The request was rejected because it attempted to create a resource that already exists.</p>
+    /// <p>The request was rejected because it attempted to create a resource that already exists.</p>
     EntityAlreadyExists(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -14510,13 +14510,13 @@ impl Error for CreateVirtualMFADeviceError {
 /// Errors returned by DeactivateMFADevice
 #[derive(Debug, PartialEq)]
 pub enum DeactivateMFADeviceError {
-    ///<p>The request was rejected because it referenced an entity that is temporarily unmodifiable, such as a user name that was deleted and then recreated. The error indicates that the request is likely to succeed if you try again after waiting several minutes. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that is temporarily unmodifiable, such as a user name that was deleted and then recreated. The error indicates that the request is likely to succeed if you try again after waiting several minutes. The error message describes the entity.</p>
     EntityTemporarilyUnmodifiable(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -14601,11 +14601,11 @@ impl Error for DeactivateMFADeviceError {
 /// Errors returned by DeleteAccessKey
 #[derive(Debug, PartialEq)]
 pub enum DeleteAccessKeyError {
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -14682,11 +14682,11 @@ impl Error for DeleteAccessKeyError {
 /// Errors returned by DeleteAccountAlias
 #[derive(Debug, PartialEq)]
 pub enum DeleteAccountAliasError {
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -14765,11 +14765,11 @@ impl Error for DeleteAccountAliasError {
 /// Errors returned by DeleteAccountPasswordPolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteAccountPasswordPolicyError {
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -14848,13 +14848,13 @@ impl Error for DeleteAccountPasswordPolicyError {
 /// Errors returned by DeleteGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteGroupError {
-    ///<p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
+    /// <p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
     DeleteConflict(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -14935,11 +14935,11 @@ impl Error for DeleteGroupError {
 /// Errors returned by DeleteGroupPolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteGroupPolicyError {
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -15018,13 +15018,13 @@ impl Error for DeleteGroupPolicyError {
 /// Errors returned by DeleteInstanceProfile
 #[derive(Debug, PartialEq)]
 pub enum DeleteInstanceProfileError {
-    ///<p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
+    /// <p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
     DeleteConflict(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -15107,13 +15107,13 @@ impl Error for DeleteInstanceProfileError {
 /// Errors returned by DeleteLoginProfile
 #[derive(Debug, PartialEq)]
 pub enum DeleteLoginProfileError {
-    ///<p>The request was rejected because it referenced an entity that is temporarily unmodifiable, such as a user name that was deleted and then recreated. The error indicates that the request is likely to succeed if you try again after waiting several minutes. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that is temporarily unmodifiable, such as a user name that was deleted and then recreated. The error indicates that the request is likely to succeed if you try again after waiting several minutes. The error message describes the entity.</p>
     EntityTemporarilyUnmodifiable(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -15198,11 +15198,11 @@ impl Error for DeleteLoginProfileError {
 /// Errors returned by DeleteOpenIDConnectProvider
 #[derive(Debug, PartialEq)]
 pub enum DeleteOpenIDConnectProviderError {
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -15281,15 +15281,15 @@ impl Error for DeleteOpenIDConnectProviderError {
 /// Errors returned by DeletePolicy
 #[derive(Debug, PartialEq)]
 pub enum DeletePolicyError {
-    ///<p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
+    /// <p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
     DeleteConflict(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -15374,15 +15374,15 @@ impl Error for DeletePolicyError {
 /// Errors returned by DeletePolicyVersion
 #[derive(Debug, PartialEq)]
 pub enum DeletePolicyVersionError {
-    ///<p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
+    /// <p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
     DeleteConflict(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -15469,15 +15469,15 @@ impl Error for DeletePolicyVersionError {
 /// Errors returned by DeleteRole
 #[derive(Debug, PartialEq)]
 pub enum DeleteRoleError {
-    ///<p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
+    /// <p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
     DeleteConflict(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    ///<p>The request was rejected because only the service that depends on the service-linked role can modify or delete the role on your behalf. The error message includes the name of the service that depends on this service-linked role. You must request the change through that service.</p>
+    /// <p>The request was rejected because only the service that depends on the service-linked role can modify or delete the role on your behalf. The error message includes the name of the service that depends on this service-linked role. You must request the change through that service.</p>
     UnmodifiableEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -15562,13 +15562,13 @@ impl Error for DeleteRoleError {
 /// Errors returned by DeleteRolePolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteRolePolicyError {
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    ///<p>The request was rejected because only the service that depends on the service-linked role can modify or delete the role on your behalf. The error message includes the name of the service that depends on this service-linked role. You must request the change through that service.</p>
+    /// <p>The request was rejected because only the service that depends on the service-linked role can modify or delete the role on your behalf. The error message includes the name of the service that depends on this service-linked role. You must request the change through that service.</p>
     UnmodifiableEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -15649,13 +15649,13 @@ impl Error for DeleteRolePolicyError {
 /// Errors returned by DeleteSAMLProvider
 #[derive(Debug, PartialEq)]
 pub enum DeleteSAMLProviderError {
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -15738,7 +15738,7 @@ impl Error for DeleteSAMLProviderError {
 /// Errors returned by DeleteSSHPublicKey
 #[derive(Debug, PartialEq)]
 pub enum DeleteSSHPublicKeyError {
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -15809,13 +15809,13 @@ impl Error for DeleteSSHPublicKeyError {
 /// Errors returned by DeleteServerCertificate
 #[derive(Debug, PartialEq)]
 pub enum DeleteServerCertificateError {
-    ///<p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
+    /// <p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
     DeleteConflict(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -15898,7 +15898,7 @@ impl Error for DeleteServerCertificateError {
 /// Errors returned by DeleteServiceSpecificCredential
 #[derive(Debug, PartialEq)]
 pub enum DeleteServiceSpecificCredentialError {
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -15969,11 +15969,11 @@ impl Error for DeleteServiceSpecificCredentialError {
 /// Errors returned by DeleteSigningCertificate
 #[derive(Debug, PartialEq)]
 pub enum DeleteSigningCertificateError {
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -16052,13 +16052,13 @@ impl Error for DeleteSigningCertificateError {
 /// Errors returned by DeleteUser
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserError {
-    ///<p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
+    /// <p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
     DeleteConflict(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -16139,11 +16139,11 @@ impl Error for DeleteUserError {
 /// Errors returned by DeleteUserPolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserPolicyError {
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -16220,13 +16220,13 @@ impl Error for DeleteUserPolicyError {
 /// Errors returned by DeleteVirtualMFADevice
 #[derive(Debug, PartialEq)]
 pub enum DeleteVirtualMFADeviceError {
-    ///<p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
+    /// <p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
     DeleteConflict(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -16309,13 +16309,13 @@ impl Error for DeleteVirtualMFADeviceError {
 /// Errors returned by DetachGroupPolicy
 #[derive(Debug, PartialEq)]
 pub enum DetachGroupPolicyError {
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -16398,15 +16398,15 @@ impl Error for DetachGroupPolicyError {
 /// Errors returned by DetachRolePolicy
 #[derive(Debug, PartialEq)]
 pub enum DetachRolePolicyError {
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    ///<p>The request was rejected because only the service that depends on the service-linked role can modify or delete the role on your behalf. The error message includes the name of the service that depends on this service-linked role. You must request the change through that service.</p>
+    /// <p>The request was rejected because only the service that depends on the service-linked role can modify or delete the role on your behalf. The error message includes the name of the service that depends on this service-linked role. You must request the change through that service.</p>
     UnmodifiableEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -16491,13 +16491,13 @@ impl Error for DetachRolePolicyError {
 /// Errors returned by DetachUserPolicy
 #[derive(Debug, PartialEq)]
 pub enum DetachUserPolicyError {
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -16578,17 +16578,17 @@ impl Error for DetachUserPolicyError {
 /// Errors returned by EnableMFADevice
 #[derive(Debug, PartialEq)]
 pub enum EnableMFADeviceError {
-    ///<p>The request was rejected because it attempted to create a resource that already exists.</p>
+    /// <p>The request was rejected because it attempted to create a resource that already exists.</p>
     EntityAlreadyExists(String),
-    ///<p>The request was rejected because it referenced an entity that is temporarily unmodifiable, such as a user name that was deleted and then recreated. The error indicates that the request is likely to succeed if you try again after waiting several minutes. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that is temporarily unmodifiable, such as a user name that was deleted and then recreated. The error indicates that the request is likely to succeed if you try again after waiting several minutes. The error message describes the entity.</p>
     EntityTemporarilyUnmodifiable(String),
-    ///<p>The request was rejected because the authentication code was not recognized. The error message describes the specific error.</p>
+    /// <p>The request was rejected because the authentication code was not recognized. The error message describes the specific error.</p>
     InvalidAuthenticationCode(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -16681,9 +16681,9 @@ impl Error for EnableMFADeviceError {
 /// Errors returned by GenerateCredentialReport
 #[derive(Debug, PartialEq)]
 pub enum GenerateCredentialReportError {
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -16758,7 +16758,7 @@ impl Error for GenerateCredentialReportError {
 /// Errors returned by GetAccessKeyLastUsed
 #[derive(Debug, PartialEq)]
 pub enum GetAccessKeyLastUsedError {
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -16829,7 +16829,7 @@ impl Error for GetAccessKeyLastUsedError {
 /// Errors returned by GetAccountAuthorizationDetails
 #[derive(Debug, PartialEq)]
 pub enum GetAccountAuthorizationDetailsError {
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -16900,9 +16900,9 @@ impl Error for GetAccountAuthorizationDetailsError {
 /// Errors returned by GetAccountPasswordPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetAccountPasswordPolicyError {
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -16977,7 +16977,7 @@ impl Error for GetAccountPasswordPolicyError {
 /// Errors returned by GetAccountSummary
 #[derive(Debug, PartialEq)]
 pub enum GetAccountSummaryError {
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -17048,7 +17048,7 @@ impl Error for GetAccountSummaryError {
 /// Errors returned by GetContextKeysForCustomPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetContextKeysForCustomPolicyError {
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -17119,9 +17119,9 @@ impl Error for GetContextKeysForCustomPolicyError {
 /// Errors returned by GetContextKeysForPrincipalPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetContextKeysForPrincipalPolicyError {
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -17196,13 +17196,13 @@ impl Error for GetContextKeysForPrincipalPolicyError {
 /// Errors returned by GetCredentialReport
 #[derive(Debug, PartialEq)]
 pub enum GetCredentialReportError {
-    ///<p>The request was rejected because the most recent credential report has expired. To generate a new credential report, use <a>GenerateCredentialReport</a>. For more information about credential report expiration, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/credential-reports.html">Getting Credential Reports</a> in the <i>IAM User Guide</i>.</p>
+    /// <p>The request was rejected because the most recent credential report has expired. To generate a new credential report, use <a>GenerateCredentialReport</a>. For more information about credential report expiration, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/credential-reports.html">Getting Credential Reports</a> in the <i>IAM User Guide</i>.</p>
     CredentialReportExpired(String),
-    ///<p>The request was rejected because the credential report does not exist. To generate a credential report, use <a>GenerateCredentialReport</a>.</p>
+    /// <p>The request was rejected because the credential report does not exist. To generate a credential report, use <a>GenerateCredentialReport</a>.</p>
     CredentialReportNotPresent(String),
-    ///<p>The request was rejected because the credential report is still being generated.</p>
+    /// <p>The request was rejected because the credential report is still being generated.</p>
     CredentialReportNotReady(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -17291,9 +17291,9 @@ impl Error for GetCredentialReportError {
 /// Errors returned by GetGroup
 #[derive(Debug, PartialEq)]
 pub enum GetGroupError {
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -17366,9 +17366,9 @@ impl Error for GetGroupError {
 /// Errors returned by GetGroupPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetGroupPolicyError {
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -17441,9 +17441,9 @@ impl Error for GetGroupPolicyError {
 /// Errors returned by GetInstanceProfile
 #[derive(Debug, PartialEq)]
 pub enum GetInstanceProfileError {
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -17518,9 +17518,9 @@ impl Error for GetInstanceProfileError {
 /// Errors returned by GetLoginProfile
 #[derive(Debug, PartialEq)]
 pub enum GetLoginProfileError {
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -17593,11 +17593,11 @@ impl Error for GetLoginProfileError {
 /// Errors returned by GetOpenIDConnectProvider
 #[derive(Debug, PartialEq)]
 pub enum GetOpenIDConnectProviderError {
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -17676,11 +17676,11 @@ impl Error for GetOpenIDConnectProviderError {
 /// Errors returned by GetPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetPolicyError {
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -17757,11 +17757,11 @@ impl Error for GetPolicyError {
 /// Errors returned by GetPolicyVersion
 #[derive(Debug, PartialEq)]
 pub enum GetPolicyVersionError {
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -17838,9 +17838,9 @@ impl Error for GetPolicyVersionError {
 /// Errors returned by GetRole
 #[derive(Debug, PartialEq)]
 pub enum GetRoleError {
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -17913,9 +17913,9 @@ impl Error for GetRoleError {
 /// Errors returned by GetRolePolicy
 #[derive(Debug, PartialEq)]
 pub enum GetRolePolicyError {
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -17988,11 +17988,11 @@ impl Error for GetRolePolicyError {
 /// Errors returned by GetSAMLProvider
 #[derive(Debug, PartialEq)]
 pub enum GetSAMLProviderError {
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -18069,9 +18069,9 @@ impl Error for GetSAMLProviderError {
 /// Errors returned by GetSSHPublicKey
 #[derive(Debug, PartialEq)]
 pub enum GetSSHPublicKeyError {
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request was rejected because the public key encoding format is unsupported or unrecognized.</p>
+    /// <p>The request was rejected because the public key encoding format is unsupported or unrecognized.</p>
     UnrecognizedPublicKeyEncoding(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -18146,9 +18146,9 @@ impl Error for GetSSHPublicKeyError {
 /// Errors returned by GetServerCertificate
 #[derive(Debug, PartialEq)]
 pub enum GetServerCertificateError {
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -18223,9 +18223,9 @@ impl Error for GetServerCertificateError {
 /// Errors returned by GetUser
 #[derive(Debug, PartialEq)]
 pub enum GetUserError {
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -18298,9 +18298,9 @@ impl Error for GetUserError {
 /// Errors returned by GetUserPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetUserPolicyError {
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -18373,9 +18373,9 @@ impl Error for GetUserPolicyError {
 /// Errors returned by ListAccessKeys
 #[derive(Debug, PartialEq)]
 pub enum ListAccessKeysError {
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -18448,7 +18448,7 @@ impl Error for ListAccessKeysError {
 /// Errors returned by ListAccountAliases
 #[derive(Debug, PartialEq)]
 pub enum ListAccountAliasesError {
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -18519,11 +18519,11 @@ impl Error for ListAccountAliasesError {
 /// Errors returned by ListAttachedGroupPolicies
 #[derive(Debug, PartialEq)]
 pub enum ListAttachedGroupPoliciesError {
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -18602,11 +18602,11 @@ impl Error for ListAttachedGroupPoliciesError {
 /// Errors returned by ListAttachedRolePolicies
 #[derive(Debug, PartialEq)]
 pub enum ListAttachedRolePoliciesError {
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -18685,11 +18685,11 @@ impl Error for ListAttachedRolePoliciesError {
 /// Errors returned by ListAttachedUserPolicies
 #[derive(Debug, PartialEq)]
 pub enum ListAttachedUserPoliciesError {
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -18768,11 +18768,11 @@ impl Error for ListAttachedUserPoliciesError {
 /// Errors returned by ListEntitiesForPolicy
 #[derive(Debug, PartialEq)]
 pub enum ListEntitiesForPolicyError {
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -18851,9 +18851,9 @@ impl Error for ListEntitiesForPolicyError {
 /// Errors returned by ListGroupPolicies
 #[derive(Debug, PartialEq)]
 pub enum ListGroupPoliciesError {
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -18928,7 +18928,7 @@ impl Error for ListGroupPoliciesError {
 /// Errors returned by ListGroups
 #[derive(Debug, PartialEq)]
 pub enum ListGroupsError {
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -18997,9 +18997,9 @@ impl Error for ListGroupsError {
 /// Errors returned by ListGroupsForUser
 #[derive(Debug, PartialEq)]
 pub enum ListGroupsForUserError {
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -19074,7 +19074,7 @@ impl Error for ListGroupsForUserError {
 /// Errors returned by ListInstanceProfiles
 #[derive(Debug, PartialEq)]
 pub enum ListInstanceProfilesError {
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -19145,9 +19145,9 @@ impl Error for ListInstanceProfilesError {
 /// Errors returned by ListInstanceProfilesForRole
 #[derive(Debug, PartialEq)]
 pub enum ListInstanceProfilesForRoleError {
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -19222,9 +19222,9 @@ impl Error for ListInstanceProfilesForRoleError {
 /// Errors returned by ListMFADevices
 #[derive(Debug, PartialEq)]
 pub enum ListMFADevicesError {
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -19297,7 +19297,7 @@ impl Error for ListMFADevicesError {
 /// Errors returned by ListOpenIDConnectProviders
 #[derive(Debug, PartialEq)]
 pub enum ListOpenIDConnectProvidersError {
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -19368,7 +19368,7 @@ impl Error for ListOpenIDConnectProvidersError {
 /// Errors returned by ListPolicies
 #[derive(Debug, PartialEq)]
 pub enum ListPoliciesError {
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -19437,11 +19437,11 @@ impl Error for ListPoliciesError {
 /// Errors returned by ListPolicyVersions
 #[derive(Debug, PartialEq)]
 pub enum ListPolicyVersionsError {
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -19520,9 +19520,9 @@ impl Error for ListPolicyVersionsError {
 /// Errors returned by ListRolePolicies
 #[derive(Debug, PartialEq)]
 pub enum ListRolePoliciesError {
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -19595,7 +19595,7 @@ impl Error for ListRolePoliciesError {
 /// Errors returned by ListRoles
 #[derive(Debug, PartialEq)]
 pub enum ListRolesError {
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -19664,7 +19664,7 @@ impl Error for ListRolesError {
 /// Errors returned by ListSAMLProviders
 #[derive(Debug, PartialEq)]
 pub enum ListSAMLProvidersError {
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -19735,7 +19735,7 @@ impl Error for ListSAMLProvidersError {
 /// Errors returned by ListSSHPublicKeys
 #[derive(Debug, PartialEq)]
 pub enum ListSSHPublicKeysError {
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -19806,7 +19806,7 @@ impl Error for ListSSHPublicKeysError {
 /// Errors returned by ListServerCertificates
 #[derive(Debug, PartialEq)]
 pub enum ListServerCertificatesError {
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -19877,9 +19877,9 @@ impl Error for ListServerCertificatesError {
 /// Errors returned by ListServiceSpecificCredentials
 #[derive(Debug, PartialEq)]
 pub enum ListServiceSpecificCredentialsError {
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The specified service does not support service-specific credentials.</p>
+    /// <p>The specified service does not support service-specific credentials.</p>
     ServiceNotSupported(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -19956,9 +19956,9 @@ impl Error for ListServiceSpecificCredentialsError {
 /// Errors returned by ListSigningCertificates
 #[derive(Debug, PartialEq)]
 pub enum ListSigningCertificatesError {
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -20033,9 +20033,9 @@ impl Error for ListSigningCertificatesError {
 /// Errors returned by ListUserPolicies
 #[derive(Debug, PartialEq)]
 pub enum ListUserPoliciesError {
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -20108,7 +20108,7 @@ impl Error for ListUserPoliciesError {
 /// Errors returned by ListUsers
 #[derive(Debug, PartialEq)]
 pub enum ListUsersError {
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -20242,13 +20242,13 @@ impl Error for ListVirtualMFADevicesError {
 /// Errors returned by PutGroupPolicy
 #[derive(Debug, PartialEq)]
 pub enum PutGroupPolicyError {
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
+    /// <p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
     MalformedPolicyDocument(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -20329,15 +20329,15 @@ impl Error for PutGroupPolicyError {
 /// Errors returned by PutRolePolicy
 #[derive(Debug, PartialEq)]
 pub enum PutRolePolicyError {
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
+    /// <p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
     MalformedPolicyDocument(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    ///<p>The request was rejected because only the service that depends on the service-linked role can modify or delete the role on your behalf. The error message includes the name of the service that depends on this service-linked role. You must request the change through that service.</p>
+    /// <p>The request was rejected because only the service that depends on the service-linked role can modify or delete the role on your behalf. The error message includes the name of the service that depends on this service-linked role. You must request the change through that service.</p>
     UnmodifiableEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -20422,13 +20422,13 @@ impl Error for PutRolePolicyError {
 /// Errors returned by PutUserPolicy
 #[derive(Debug, PartialEq)]
 pub enum PutUserPolicyError {
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
+    /// <p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
     MalformedPolicyDocument(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -20509,11 +20509,11 @@ impl Error for PutUserPolicyError {
 /// Errors returned by RemoveClientIDFromOpenIDConnectProvider
 #[derive(Debug, PartialEq)]
 pub enum RemoveClientIDFromOpenIDConnectProviderError {
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -20598,13 +20598,13 @@ impl Error for RemoveClientIDFromOpenIDConnectProviderError {
 /// Errors returned by RemoveRoleFromInstanceProfile
 #[derive(Debug, PartialEq)]
 pub enum RemoveRoleFromInstanceProfileError {
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    ///<p>The request was rejected because only the service that depends on the service-linked role can modify or delete the role on your behalf. The error message includes the name of the service that depends on this service-linked role. You must request the change through that service.</p>
+    /// <p>The request was rejected because only the service that depends on the service-linked role can modify or delete the role on your behalf. The error message includes the name of the service that depends on this service-linked role. You must request the change through that service.</p>
     UnmodifiableEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -20689,11 +20689,11 @@ impl Error for RemoveRoleFromInstanceProfileError {
 /// Errors returned by RemoveUserFromGroup
 #[derive(Debug, PartialEq)]
 pub enum RemoveUserFromGroupError {
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -20772,7 +20772,7 @@ impl Error for RemoveUserFromGroupError {
 /// Errors returned by ResetServiceSpecificCredential
 #[derive(Debug, PartialEq)]
 pub enum ResetServiceSpecificCredentialError {
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -20843,13 +20843,13 @@ impl Error for ResetServiceSpecificCredentialError {
 /// Errors returned by ResyncMFADevice
 #[derive(Debug, PartialEq)]
 pub enum ResyncMFADeviceError {
-    ///<p>The request was rejected because the authentication code was not recognized. The error message describes the specific error.</p>
+    /// <p>The request was rejected because the authentication code was not recognized. The error message describes the specific error.</p>
     InvalidAuthenticationCode(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -20932,13 +20932,13 @@ impl Error for ResyncMFADeviceError {
 /// Errors returned by SetDefaultPolicyVersion
 #[derive(Debug, PartialEq)]
 pub enum SetDefaultPolicyVersionError {
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -21021,9 +21021,9 @@ impl Error for SetDefaultPolicyVersionError {
 /// Errors returned by SimulateCustomPolicy
 #[derive(Debug, PartialEq)]
 pub enum SimulateCustomPolicyError {
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request failed because a provided policy could not be successfully evaluated. An additional detail message indicates the source of the failure.</p>
+    /// <p>The request failed because a provided policy could not be successfully evaluated. An additional detail message indicates the source of the failure.</p>
     PolicyEvaluation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -21098,11 +21098,11 @@ impl Error for SimulateCustomPolicyError {
 /// Errors returned by SimulatePrincipalPolicy
 #[derive(Debug, PartialEq)]
 pub enum SimulatePrincipalPolicyError {
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request failed because a provided policy could not be successfully evaluated. An additional detail message indicates the source of the failure.</p>
+    /// <p>The request failed because a provided policy could not be successfully evaluated. An additional detail message indicates the source of the failure.</p>
     PolicyEvaluation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -21181,11 +21181,11 @@ impl Error for SimulatePrincipalPolicyError {
 /// Errors returned by UpdateAccessKey
 #[derive(Debug, PartialEq)]
 pub enum UpdateAccessKeyError {
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -21262,13 +21262,13 @@ impl Error for UpdateAccessKeyError {
 /// Errors returned by UpdateAccountPasswordPolicy
 #[derive(Debug, PartialEq)]
 pub enum UpdateAccountPasswordPolicyError {
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
+    /// <p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
     MalformedPolicyDocument(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -21353,15 +21353,15 @@ impl Error for UpdateAccountPasswordPolicyError {
 /// Errors returned by UpdateAssumeRolePolicy
 #[derive(Debug, PartialEq)]
 pub enum UpdateAssumeRolePolicyError {
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
+    /// <p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
     MalformedPolicyDocument(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    ///<p>The request was rejected because only the service that depends on the service-linked role can modify or delete the role on your behalf. The error message includes the name of the service that depends on this service-linked role. You must request the change through that service.</p>
+    /// <p>The request was rejected because only the service that depends on the service-linked role can modify or delete the role on your behalf. The error message includes the name of the service that depends on this service-linked role. You must request the change through that service.</p>
     UnmodifiableEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -21450,13 +21450,13 @@ impl Error for UpdateAssumeRolePolicyError {
 /// Errors returned by UpdateGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateGroupError {
-    ///<p>The request was rejected because it attempted to create a resource that already exists.</p>
+    /// <p>The request was rejected because it attempted to create a resource that already exists.</p>
     EntityAlreadyExists(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -21537,15 +21537,15 @@ impl Error for UpdateGroupError {
 /// Errors returned by UpdateLoginProfile
 #[derive(Debug, PartialEq)]
 pub enum UpdateLoginProfileError {
-    ///<p>The request was rejected because it referenced an entity that is temporarily unmodifiable, such as a user name that was deleted and then recreated. The error indicates that the request is likely to succeed if you try again after waiting several minutes. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that is temporarily unmodifiable, such as a user name that was deleted and then recreated. The error indicates that the request is likely to succeed if you try again after waiting several minutes. The error message describes the entity.</p>
     EntityTemporarilyUnmodifiable(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request was rejected because the provided password did not meet the requirements imposed by the account password policy.</p>
+    /// <p>The request was rejected because the provided password did not meet the requirements imposed by the account password policy.</p>
     PasswordPolicyViolation(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -21636,11 +21636,11 @@ impl Error for UpdateLoginProfileError {
 /// Errors returned by UpdateOpenIDConnectProviderThumbprint
 #[derive(Debug, PartialEq)]
 pub enum UpdateOpenIDConnectProviderThumbprintError {
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -21725,11 +21725,11 @@ impl Error for UpdateOpenIDConnectProviderThumbprintError {
 /// Errors returned by UpdateRoleDescription
 #[derive(Debug, PartialEq)]
 pub enum UpdateRoleDescriptionError {
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    ///<p>The request was rejected because only the service that depends on the service-linked role can modify or delete the role on your behalf. The error message includes the name of the service that depends on this service-linked role. You must request the change through that service.</p>
+    /// <p>The request was rejected because only the service that depends on the service-linked role can modify or delete the role on your behalf. The error message includes the name of the service that depends on this service-linked role. You must request the change through that service.</p>
     UnmodifiableEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -21808,13 +21808,13 @@ impl Error for UpdateRoleDescriptionError {
 /// Errors returned by UpdateSAMLProvider
 #[derive(Debug, PartialEq)]
 pub enum UpdateSAMLProviderError {
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -21897,7 +21897,7 @@ impl Error for UpdateSAMLProviderError {
 /// Errors returned by UpdateSSHPublicKey
 #[derive(Debug, PartialEq)]
 pub enum UpdateSSHPublicKeyError {
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -21968,13 +21968,13 @@ impl Error for UpdateSSHPublicKeyError {
 /// Errors returned by UpdateServerCertificate
 #[derive(Debug, PartialEq)]
 pub enum UpdateServerCertificateError {
-    ///<p>The request was rejected because it attempted to create a resource that already exists.</p>
+    /// <p>The request was rejected because it attempted to create a resource that already exists.</p>
     EntityAlreadyExists(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -22059,7 +22059,7 @@ impl Error for UpdateServerCertificateError {
 /// Errors returned by UpdateServiceSpecificCredential
 #[derive(Debug, PartialEq)]
 pub enum UpdateServiceSpecificCredentialError {
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -22130,11 +22130,11 @@ impl Error for UpdateServiceSpecificCredentialError {
 /// Errors returned by UpdateSigningCertificate
 #[derive(Debug, PartialEq)]
 pub enum UpdateSigningCertificateError {
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -22213,15 +22213,15 @@ impl Error for UpdateSigningCertificateError {
 /// Errors returned by UpdateUser
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserError {
-    ///<p>The request was rejected because it attempted to create a resource that already exists.</p>
+    /// <p>The request was rejected because it attempted to create a resource that already exists.</p>
     EntityAlreadyExists(String),
-    ///<p>The request was rejected because it referenced an entity that is temporarily unmodifiable, such as a user name that was deleted and then recreated. The error indicates that the request is likely to succeed if you try again after waiting several minutes. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that is temporarily unmodifiable, such as a user name that was deleted and then recreated. The error indicates that the request is likely to succeed if you try again after waiting several minutes. The error message describes the entity.</p>
     EntityTemporarilyUnmodifiable(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -22308,15 +22308,15 @@ impl Error for UpdateUserError {
 /// Errors returned by UploadSSHPublicKey
 #[derive(Debug, PartialEq)]
 pub enum UploadSSHPublicKeyError {
-    ///<p>The request was rejected because the SSH public key is already associated with the specified IAM user.</p>
+    /// <p>The request was rejected because the SSH public key is already associated with the specified IAM user.</p>
     DuplicateSSHPublicKey(String),
-    ///<p>The request was rejected because the public key is malformed or otherwise invalid.</p>
+    /// <p>The request was rejected because the public key is malformed or otherwise invalid.</p>
     InvalidPublicKey(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request was rejected because the public key encoding format is unsupported or unrecognized.</p>
+    /// <p>The request was rejected because the public key encoding format is unsupported or unrecognized.</p>
     UnrecognizedPublicKeyEncoding(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -22407,15 +22407,15 @@ impl Error for UploadSSHPublicKeyError {
 /// Errors returned by UploadServerCertificate
 #[derive(Debug, PartialEq)]
 pub enum UploadServerCertificateError {
-    ///<p>The request was rejected because it attempted to create a resource that already exists.</p>
+    /// <p>The request was rejected because it attempted to create a resource that already exists.</p>
     EntityAlreadyExists(String),
-    ///<p>The request was rejected because the public key certificate and the private key do not match.</p>
+    /// <p>The request was rejected because the public key certificate and the private key do not match.</p>
     KeyPairMismatch(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because the certificate was malformed or expired. The error message describes the specific error.</p>
+    /// <p>The request was rejected because the certificate was malformed or expired. The error message describes the specific error.</p>
     MalformedCertificate(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -22506,19 +22506,19 @@ impl Error for UploadServerCertificateError {
 /// Errors returned by UploadSigningCertificate
 #[derive(Debug, PartialEq)]
 pub enum UploadSigningCertificateError {
-    ///<p>The request was rejected because the same certificate is associated with an IAM user in the account.</p>
+    /// <p>The request was rejected because the same certificate is associated with an IAM user in the account.</p>
     DuplicateCertificate(String),
-    ///<p>The request was rejected because it attempted to create a resource that already exists.</p>
+    /// <p>The request was rejected because it attempted to create a resource that already exists.</p>
     EntityAlreadyExists(String),
-    ///<p>The request was rejected because the certificate is invalid.</p>
+    /// <p>The request was rejected because the certificate is invalid.</p>
     InvalidCertificate(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because the certificate was malformed or expired. The error message describes the specific error.</p>
+    /// <p>The request was rejected because the certificate was malformed or expired. The error message describes the specific error.</p>
     MalformedCertificate(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -22620,647 +22620,647 @@ impl Error for UploadSigningCertificateError {
 }
 /// Trait representing the capabilities of the IAM API. IAM clients implement this trait.
 pub trait Iam {
-    #[doc="<p>Adds a new client ID (also known as audience) to the list of client IDs already registered for the specified IAM OpenID Connect (OIDC) provider resource.</p> <p>This action is idempotent; it does not fail or return an error if you add an existing client ID to the provider.</p>"]
+    /// <p>Adds a new client ID (also known as audience) to the list of client IDs already registered for the specified IAM OpenID Connect (OIDC) provider resource.</p> <p>This action is idempotent; it does not fail or return an error if you add an existing client ID to the provider.</p>
     fn add_client_id_to_open_id_connect_provider(
         &self,
         input: &AddClientIDToOpenIDConnectProviderRequest,
     ) -> Result<(), AddClientIDToOpenIDConnectProviderError>;
 
-    #[doc="<p>Adds the specified IAM role to the specified instance profile. An instance profile can contain only one role, and this limit cannot be increased.</p> <note> <p>The caller of this API must be granted the <code>PassRole</code> permission on the IAM role by a permission policy.</p> </note> <p>For more information about roles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html\">Working with Roles</a>. For more information about instance profiles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html\">About Instance Profiles</a>.</p>"]
+    /// <p>Adds the specified IAM role to the specified instance profile. An instance profile can contain only one role, and this limit cannot be increased.</p> <note> <p>The caller of this API must be granted the <code>PassRole</code> permission on the IAM role by a permission policy.</p> </note> <p>For more information about roles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>. For more information about instance profiles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p>
     fn add_role_to_instance_profile(
         &self,
         input: &AddRoleToInstanceProfileRequest,
     ) -> Result<(), AddRoleToInstanceProfileError>;
 
-    #[doc = "<p>Adds the specified user to the specified group.</p>"]
+    /// <p>Adds the specified user to the specified group.</p>
     fn add_user_to_group(&self, input: &AddUserToGroupRequest) -> Result<(), AddUserToGroupError>;
 
-    #[doc="<p>Attaches the specified managed policy to the specified IAM group.</p> <p>You use this API to attach a managed policy to a group. To embed an inline policy in a group, use <a>PutGroupPolicy</a>.</p> <p>For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Attaches the specified managed policy to the specified IAM group.</p> <p>You use this API to attach a managed policy to a group. To embed an inline policy in a group, use <a>PutGroupPolicy</a>.</p> <p>For more information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn attach_group_policy(
         &self,
         input: &AttachGroupPolicyRequest,
     ) -> Result<(), AttachGroupPolicyError>;
 
-    #[doc="<p>Attaches the specified managed policy to the specified IAM role. When you attach a managed policy to a role, the managed policy becomes part of the role's permission (access) policy.</p> <note> <p>You cannot use a managed policy as the role's trust policy. The role's trust policy is created at the same time as the role, using <a>CreateRole</a>. You can update a role's trust policy using <a>UpdateAssumeRolePolicy</a>.</p> </note> <p>Use this API to attach a <i>managed</i> policy to a role. To embed an inline policy in a role, use <a>PutRolePolicy</a>. For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Attaches the specified managed policy to the specified IAM role. When you attach a managed policy to a role, the managed policy becomes part of the role's permission (access) policy.</p> <note> <p>You cannot use a managed policy as the role's trust policy. The role's trust policy is created at the same time as the role, using <a>CreateRole</a>. You can update a role's trust policy using <a>UpdateAssumeRolePolicy</a>.</p> </note> <p>Use this API to attach a <i>managed</i> policy to a role. To embed an inline policy in a role, use <a>PutRolePolicy</a>. For more information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn attach_role_policy(
         &self,
         input: &AttachRolePolicyRequest,
     ) -> Result<(), AttachRolePolicyError>;
 
-    #[doc="<p>Attaches the specified managed policy to the specified user.</p> <p>You use this API to attach a <i>managed</i> policy to a user. To embed an inline policy in a user, use <a>PutUserPolicy</a>.</p> <p>For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Attaches the specified managed policy to the specified user.</p> <p>You use this API to attach a <i>managed</i> policy to a user. To embed an inline policy in a user, use <a>PutUserPolicy</a>.</p> <p>For more information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn attach_user_policy(
         &self,
         input: &AttachUserPolicyRequest,
     ) -> Result<(), AttachUserPolicyError>;
 
-    #[doc="<p>Changes the password of the IAM user who is calling this action. The root account password is not affected by this action.</p> <p>To change the password for a different user, see <a>UpdateLoginProfile</a>. For more information about modifying passwords, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html\">Managing Passwords</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Changes the password of the IAM user who is calling this action. The root account password is not affected by this action.</p> <p>To change the password for a different user, see <a>UpdateLoginProfile</a>. For more information about modifying passwords, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html">Managing Passwords</a> in the <i>IAM User Guide</i>.</p>
     fn change_password(&self, input: &ChangePasswordRequest) -> Result<(), ChangePasswordError>;
 
-    #[doc="<p> Creates a new AWS secret access key and corresponding AWS access key ID for the specified user. The default status for new keys is <code>Active</code>.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p> <p> For information about limits on the number of keys you can create, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <important> <p>To ensure the security of your AWS account, the secret access key is accessible only during key and user creation. You must save the key (for example, in a text file) if you want to be able to access it again. If a secret key is lost, you can delete the access keys for the associated user and then create new keys.</p> </important>"]
+    /// <p><p> Creates a new AWS secret access key and corresponding AWS access key ID for the specified user. The default status for new keys is <code>Active</code>.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p> <p> For information about limits on the number of keys you can create, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <important> <p>To ensure the security of your AWS account, the secret access key is accessible only during key and user creation. You must save the key (for example, in a text file) if you want to be able to access it again. If a secret key is lost, you can delete the access keys for the associated user and then create new keys.</p> </important></p>
     fn create_access_key(
         &self,
         input: &CreateAccessKeyRequest,
     ) -> Result<CreateAccessKeyResponse, CreateAccessKeyError>;
 
-    #[doc="<p>Creates an alias for your AWS account. For information about using an AWS account alias, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AccountAlias.html\">Using an Alias for Your AWS Account ID</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Creates an alias for your AWS account. For information about using an AWS account alias, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/AccountAlias.html">Using an Alias for Your AWS Account ID</a> in the <i>IAM User Guide</i>.</p>
     fn create_account_alias(
         &self,
         input: &CreateAccountAliasRequest,
     ) -> Result<(), CreateAccountAliasError>;
 
-    #[doc="<p>Creates a new group.</p> <p> For information about the number of groups you can create, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Creates a new group.</p> <p> For information about the number of groups you can create, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
     fn create_group(
         &self,
         input: &CreateGroupRequest,
     ) -> Result<CreateGroupResponse, CreateGroupError>;
 
-    #[doc="<p> Creates a new instance profile. For information about instance profiles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html\">About Instance Profiles</a>.</p> <p> For information about the number of instance profiles you can create, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p> Creates a new instance profile. For information about instance profiles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p> <p> For information about the number of instance profiles you can create, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
     fn create_instance_profile(
         &self,
         input: &CreateInstanceProfileRequest,
     ) -> Result<CreateInstanceProfileResponse, CreateInstanceProfileError>;
 
-    #[doc="<p> Creates a password for the specified user, giving the user the ability to access AWS services through the AWS Management Console. For more information about managing passwords, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html\">Managing Passwords</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p> Creates a password for the specified user, giving the user the ability to access AWS services through the AWS Management Console. For more information about managing passwords, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html">Managing Passwords</a> in the <i>IAM User Guide</i>.</p>
     fn create_login_profile(
         &self,
         input: &CreateLoginProfileRequest,
     ) -> Result<CreateLoginProfileResponse, CreateLoginProfileError>;
 
-    #[doc="<p>Creates an IAM entity to describe an identity provider (IdP) that supports <a href=\"http://openid.net/connect/\">OpenID Connect (OIDC)</a>.</p> <p>The OIDC provider that you create with this operation can be used as a principal in a role's trust policy to establish a trust relationship between AWS and the OIDC provider.</p> <p>When you create the IAM OIDC provider, you specify the URL of the OIDC identity provider (IdP) to trust, a list of client IDs (also known as audiences) that identify the application or applications that are allowed to authenticate using the OIDC provider, and a list of thumbprints of the server certificate(s) that the IdP uses. You get all of this information from the OIDC IdP that you want to use for access to AWS.</p> <note> <p>Because trust for the OIDC provider is ultimately derived from the IAM provider that this action creates, it is a best practice to limit access to the <a>CreateOpenIDConnectProvider</a> action to highly-privileged users.</p> </note>"]
+    /// <p><p>Creates an IAM entity to describe an identity provider (IdP) that supports <a href="http://openid.net/connect/">OpenID Connect (OIDC)</a>.</p> <p>The OIDC provider that you create with this operation can be used as a principal in a role&#39;s trust policy to establish a trust relationship between AWS and the OIDC provider.</p> <p>When you create the IAM OIDC provider, you specify the URL of the OIDC identity provider (IdP) to trust, a list of client IDs (also known as audiences) that identify the application or applications that are allowed to authenticate using the OIDC provider, and a list of thumbprints of the server certificate(s) that the IdP uses. You get all of this information from the OIDC IdP that you want to use for access to AWS.</p> <note> <p>Because trust for the OIDC provider is ultimately derived from the IAM provider that this action creates, it is a best practice to limit access to the <a>CreateOpenIDConnectProvider</a> action to highly-privileged users.</p> </note></p>
     fn create_open_id_connect_provider(
         &self,
         input: &CreateOpenIDConnectProviderRequest,
     ) -> Result<CreateOpenIDConnectProviderResponse, CreateOpenIDConnectProviderError>;
 
-    #[doc="<p>Creates a new managed policy for your AWS account.</p> <p>This operation creates a policy version with a version identifier of <code>v1</code> and sets v1 as the policy's default version. For more information about policy versions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html\">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p> <p>For more information about managed policies in general, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Creates a new managed policy for your AWS account.</p> <p>This operation creates a policy version with a version identifier of <code>v1</code> and sets v1 as the policy's default version. For more information about policy versions, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p> <p>For more information about managed policies in general, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn create_policy(
         &self,
         input: &CreatePolicyRequest,
     ) -> Result<CreatePolicyResponse, CreatePolicyError>;
 
-    #[doc="<p>Creates a new version of the specified managed policy. To update a managed policy, you create a new policy version. A managed policy can have up to five versions. If the policy has five versions, you must delete an existing version using <a>DeletePolicyVersion</a> before you create a new version.</p> <p>Optionally, you can set the new version as the policy's default version. The default version is the version that is in effect for the IAM users, groups, and roles to which the policy is attached.</p> <p>For more information about managed policy versions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html\">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Creates a new version of the specified managed policy. To update a managed policy, you create a new policy version. A managed policy can have up to five versions. If the policy has five versions, you must delete an existing version using <a>DeletePolicyVersion</a> before you create a new version.</p> <p>Optionally, you can set the new version as the policy's default version. The default version is the version that is in effect for the IAM users, groups, and roles to which the policy is attached.</p> <p>For more information about managed policy versions, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>
     fn create_policy_version(
         &self,
         input: &CreatePolicyVersionRequest,
     ) -> Result<CreatePolicyVersionResponse, CreatePolicyVersionError>;
 
-    #[doc="<p>Creates a new role for your AWS account. For more information about roles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html\">Working with Roles</a>. For information about limitations on role names and the number of roles you can create, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Creates a new role for your AWS account. For more information about roles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>. For information about limitations on role names and the number of roles you can create, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
     fn create_role(&self, input: &CreateRoleRequest)
         -> Result<CreateRoleResponse, CreateRoleError>;
 
-    #[doc="<p>Creates an IAM resource that describes an identity provider (IdP) that supports SAML 2.0.</p> <p>The SAML provider resource that you create with this operation can be used as a principal in an IAM role's trust policy to enable federated users who sign-in using the SAML IdP to assume the role. You can create an IAM role that supports Web-based single sign-on (SSO) to the AWS Management Console or one that supports API access to AWS.</p> <p>When you create the SAML provider resource, you upload an a SAML metadata document that you get from your IdP and that includes the issuer's name, expiration information, and keys that can be used to validate the SAML authentication response (assertions) that the IdP sends. You must generate the metadata document using the identity management software that is used as your organization's IdP.</p> <note> <p> This operation requires <a href=\"http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html\">Signature Version 4</a>.</p> </note> <p> For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-saml.html\">Enabling SAML 2.0 Federated Users to Access the AWS Management Console</a> and <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_saml.html\">About SAML 2.0-based Federation</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Creates an IAM resource that describes an identity provider (IdP) that supports SAML 2.0.</p> <p>The SAML provider resource that you create with this operation can be used as a principal in an IAM role's trust policy to enable federated users who sign-in using the SAML IdP to assume the role. You can create an IAM role that supports Web-based single sign-on (SSO) to the AWS Management Console or one that supports API access to AWS.</p> <p>When you create the SAML provider resource, you upload an a SAML metadata document that you get from your IdP and that includes the issuer's name, expiration information, and keys that can be used to validate the SAML authentication response (assertions) that the IdP sends. You must generate the metadata document using the identity management software that is used as your organization's IdP.</p> <note> <p> This operation requires <a href="http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4</a>.</p> </note> <p> For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-saml.html">Enabling SAML 2.0 Federated Users to Access the AWS Management Console</a> and <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_saml.html">About SAML 2.0-based Federation</a> in the <i>IAM User Guide</i>.</p>
     fn create_saml_provider(
         &self,
         input: &CreateSAMLProviderRequest,
     ) -> Result<CreateSAMLProviderResponse, CreateSAMLProviderError>;
 
-    #[doc="<p>Creates an IAM role that is linked to a specific AWS service. The service controls the attached policies and when the role can be deleted. This helps ensure that the service is not broken by an unexpectedly changed or deleted role, which could put your AWS resources into an unknown state. Allowing the service to control the role helps improve service stability and proper cleanup when a service and its role are no longer needed.</p> <p>The name of the role is autogenerated by combining the string that you specify for the <code>AWSServiceName</code> parameter with the string that you specify for the <code>CustomSuffix</code> parameter. The resulting name must be unique in your account or the request fails.</p> <p>To attach a policy to this service-linked role, you must make the request using the AWS service that depends on this role.</p>"]
+    /// <p>Creates an IAM role that is linked to a specific AWS service. The service controls the attached policies and when the role can be deleted. This helps ensure that the service is not broken by an unexpectedly changed or deleted role, which could put your AWS resources into an unknown state. Allowing the service to control the role helps improve service stability and proper cleanup when a service and its role are no longer needed.</p> <p>The name of the role is autogenerated by combining the string that you specify for the <code>AWSServiceName</code> parameter with the string that you specify for the <code>CustomSuffix</code> parameter. The resulting name must be unique in your account or the request fails.</p> <p>To attach a policy to this service-linked role, you must make the request using the AWS service that depends on this role.</p>
     fn create_service_linked_role(
         &self,
         input: &CreateServiceLinkedRoleRequest,
     ) -> Result<CreateServiceLinkedRoleResponse, CreateServiceLinkedRoleError>;
 
-    #[doc="<p>Generates a set of credentials consisting of a user name and password that can be used to access the service specified in the request. These credentials are generated by IAM, and can be used only for the specified service. </p> <p>You can have a maximum of two sets of service-specific credentials for each supported service per user.</p> <p>The only supported service at this time is AWS CodeCommit.</p> <p>You can reset the password to a new service-generated value by calling <a>ResetServiceSpecificCredential</a>.</p> <p>For more information about service-specific credentials, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_ssh-keys.html\">Using IAM with AWS CodeCommit: Git Credentials, SSH Keys, and AWS Access Keys</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Generates a set of credentials consisting of a user name and password that can be used to access the service specified in the request. These credentials are generated by IAM, and can be used only for the specified service. </p> <p>You can have a maximum of two sets of service-specific credentials for each supported service per user.</p> <p>The only supported service at this time is AWS CodeCommit.</p> <p>You can reset the password to a new service-generated value by calling <a>ResetServiceSpecificCredential</a>.</p> <p>For more information about service-specific credentials, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_ssh-keys.html">Using IAM with AWS CodeCommit: Git Credentials, SSH Keys, and AWS Access Keys</a> in the <i>IAM User Guide</i>.</p>
     fn create_service_specific_credential(
         &self,
         input: &CreateServiceSpecificCredentialRequest,
     ) -> Result<CreateServiceSpecificCredentialResponse, CreateServiceSpecificCredentialError>;
 
-    #[doc="<p>Creates a new IAM user for your AWS account.</p> <p> For information about limitations on the number of IAM users you can create, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Creates a new IAM user for your AWS account.</p> <p> For information about limitations on the number of IAM users you can create, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
     fn create_user(&self, input: &CreateUserRequest)
         -> Result<CreateUserResponse, CreateUserError>;
 
-    #[doc="<p>Creates a new virtual MFA device for the AWS account. After creating the virtual MFA, use <a>EnableMFADevice</a> to attach the MFA device to an IAM user. For more information about creating and working with virtual MFA devices, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html\">Using a Virtual MFA Device</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of MFA devices you can create, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on Entities</a> in the <i>IAM User Guide</i>.</p> <important> <p>The seed information contained in the QR code and the Base32 string should be treated like any other secret access information, such as your AWS access keys or your passwords. After you provision your virtual device, you should ensure that the information is destroyed following secure procedures.</p> </important>"]
+    /// <p><p>Creates a new virtual MFA device for the AWS account. After creating the virtual MFA, use <a>EnableMFADevice</a> to attach the MFA device to an IAM user. For more information about creating and working with virtual MFA devices, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html">Using a Virtual MFA Device</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of MFA devices you can create, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on Entities</a> in the <i>IAM User Guide</i>.</p> <important> <p>The seed information contained in the QR code and the Base32 string should be treated like any other secret access information, such as your AWS access keys or your passwords. After you provision your virtual device, you should ensure that the information is destroyed following secure procedures.</p> </important></p>
     fn create_virtual_mfa_device(
         &self,
         input: &CreateVirtualMFADeviceRequest,
     ) -> Result<CreateVirtualMFADeviceResponse, CreateVirtualMFADeviceError>;
 
-    #[doc="<p>Deactivates the specified MFA device and removes it from association with the user name for which it was originally enabled.</p> <p>For more information about creating and working with virtual MFA devices, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html\">Using a Virtual MFA Device</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Deactivates the specified MFA device and removes it from association with the user name for which it was originally enabled.</p> <p>For more information about creating and working with virtual MFA devices, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html">Using a Virtual MFA Device</a> in the <i>IAM User Guide</i>.</p>
     fn deactivate_mfa_device(
         &self,
         input: &DeactivateMFADeviceRequest,
     ) -> Result<(), DeactivateMFADeviceError>;
 
-    #[doc="<p>Deletes the access key pair associated with the specified IAM user.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p>"]
+    /// <p>Deletes the access key pair associated with the specified IAM user.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p>
     fn delete_access_key(&self, input: &DeleteAccessKeyRequest)
         -> Result<(), DeleteAccessKeyError>;
 
-    #[doc="<p> Deletes the specified AWS account alias. For information about using an AWS account alias, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AccountAlias.html\">Using an Alias for Your AWS Account ID</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p> Deletes the specified AWS account alias. For information about using an AWS account alias, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/AccountAlias.html">Using an Alias for Your AWS Account ID</a> in the <i>IAM User Guide</i>.</p>
     fn delete_account_alias(
         &self,
         input: &DeleteAccountAliasRequest,
     ) -> Result<(), DeleteAccountAliasError>;
 
-    #[doc = "<p>Deletes the password policy for the AWS account. There are no parameters.</p>"]
+    /// <p>Deletes the password policy for the AWS account. There are no parameters.</p>
     fn delete_account_password_policy(&self) -> Result<(), DeleteAccountPasswordPolicyError>;
 
-    #[doc="<p>Deletes the specified IAM group. The group must not contain any users or have any attached policies.</p>"]
+    /// <p>Deletes the specified IAM group. The group must not contain any users or have any attached policies.</p>
     fn delete_group(&self, input: &DeleteGroupRequest) -> Result<(), DeleteGroupError>;
 
-    #[doc="<p>Deletes the specified inline policy that is embedded in the specified IAM group.</p> <p>A group can also have managed policies attached to it. To detach a managed policy from a group, use <a>DetachGroupPolicy</a>. For more information about policies, refer to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Deletes the specified inline policy that is embedded in the specified IAM group.</p> <p>A group can also have managed policies attached to it. To detach a managed policy from a group, use <a>DetachGroupPolicy</a>. For more information about policies, refer to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn delete_group_policy(
         &self,
         input: &DeleteGroupPolicyRequest,
     ) -> Result<(), DeleteGroupPolicyError>;
 
-    #[doc="<p>Deletes the specified instance profile. The instance profile must not have an associated role.</p> <important> <p>Make sure you do not have any Amazon EC2 instances running with the instance profile you are about to delete. Deleting a role or instance profile that is associated with a running instance will break any applications running on the instance.</p> </important> <p>For more information about instance profiles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html\">About Instance Profiles</a>.</p>"]
+    /// <p>Deletes the specified instance profile. The instance profile must not have an associated role.</p> <important> <p>Make sure you do not have any Amazon EC2 instances running with the instance profile you are about to delete. Deleting a role or instance profile that is associated with a running instance will break any applications running on the instance.</p> </important> <p>For more information about instance profiles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p>
     fn delete_instance_profile(
         &self,
         input: &DeleteInstanceProfileRequest,
     ) -> Result<(), DeleteInstanceProfileError>;
 
-    #[doc="<p>Deletes the password for the specified IAM user, which terminates the user's ability to access AWS services through the AWS Management Console.</p> <important> <p> Deleting a user's password does not prevent a user from accessing AWS through the command line interface or the API. To prevent all user access you must also either make any access keys inactive or delete them. For more information about making keys inactive or deleting them, see <a>UpdateAccessKey</a> and <a>DeleteAccessKey</a>. </p> </important>"]
+    /// <p><p>Deletes the password for the specified IAM user, which terminates the user&#39;s ability to access AWS services through the AWS Management Console.</p> <important> <p> Deleting a user&#39;s password does not prevent a user from accessing AWS through the command line interface or the API. To prevent all user access you must also either make any access keys inactive or delete them. For more information about making keys inactive or deleting them, see <a>UpdateAccessKey</a> and <a>DeleteAccessKey</a>. </p> </important></p>
     fn delete_login_profile(
         &self,
         input: &DeleteLoginProfileRequest,
     ) -> Result<(), DeleteLoginProfileError>;
 
-    #[doc="<p>Deletes an OpenID Connect identity provider (IdP) resource object in IAM.</p> <p>Deleting an IAM OIDC provider resource does not update any roles that reference the provider as a principal in their trust policies. Any attempt to assume a role that references a deleted provider fails.</p> <p>This action is idempotent; it does not fail or return an error if you call the action for a provider that does not exist.</p>"]
+    /// <p>Deletes an OpenID Connect identity provider (IdP) resource object in IAM.</p> <p>Deleting an IAM OIDC provider resource does not update any roles that reference the provider as a principal in their trust policies. Any attempt to assume a role that references a deleted provider fails.</p> <p>This action is idempotent; it does not fail or return an error if you call the action for a provider that does not exist.</p>
     fn delete_open_id_connect_provider(
         &self,
         input: &DeleteOpenIDConnectProviderRequest,
     ) -> Result<(), DeleteOpenIDConnectProviderError>;
 
-    #[doc="<p>Deletes the specified managed policy.</p> <p>Before you can delete a managed policy, you must first detach the policy from all users, groups, and roles that it is attached to, and you must delete all of the policy's versions. The following steps describe the process for deleting a managed policy:</p> <ul> <li> <p>Detach the policy from all users, groups, and roles that the policy is attached to, using the <a>DetachUserPolicy</a>, <a>DetachGroupPolicy</a>, or <a>DetachRolePolicy</a> APIs. To list all the users, groups, and roles that a policy is attached to, use <a>ListEntitiesForPolicy</a>.</p> </li> <li> <p>Delete all versions of the policy using <a>DeletePolicyVersion</a>. To list the policy's versions, use <a>ListPolicyVersions</a>. You cannot use <a>DeletePolicyVersion</a> to delete the version that is marked as the default version. You delete the policy's default version in the next step of the process.</p> </li> <li> <p>Delete the policy (this automatically deletes the policy's default version) using this API.</p> </li> </ul> <p>For information about managed policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Deletes the specified managed policy.</p> <p>Before you can delete a managed policy, you must first detach the policy from all users, groups, and roles that it is attached to, and you must delete all of the policy's versions. The following steps describe the process for deleting a managed policy:</p> <ul> <li> <p>Detach the policy from all users, groups, and roles that the policy is attached to, using the <a>DetachUserPolicy</a>, <a>DetachGroupPolicy</a>, or <a>DetachRolePolicy</a> APIs. To list all the users, groups, and roles that a policy is attached to, use <a>ListEntitiesForPolicy</a>.</p> </li> <li> <p>Delete all versions of the policy using <a>DeletePolicyVersion</a>. To list the policy's versions, use <a>ListPolicyVersions</a>. You cannot use <a>DeletePolicyVersion</a> to delete the version that is marked as the default version. You delete the policy's default version in the next step of the process.</p> </li> <li> <p>Delete the policy (this automatically deletes the policy's default version) using this API.</p> </li> </ul> <p>For information about managed policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn delete_policy(&self, input: &DeletePolicyRequest) -> Result<(), DeletePolicyError>;
 
-    #[doc="<p>Deletes the specified version from the specified managed policy.</p> <p>You cannot delete the default version from a policy using this API. To delete the default version from a policy, use <a>DeletePolicy</a>. To find out which version of a policy is marked as the default version, use <a>ListPolicyVersions</a>.</p> <p>For information about versions for managed policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html\">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Deletes the specified version from the specified managed policy.</p> <p>You cannot delete the default version from a policy using this API. To delete the default version from a policy, use <a>DeletePolicy</a>. To find out which version of a policy is marked as the default version, use <a>ListPolicyVersions</a>.</p> <p>For information about versions for managed policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>
     fn delete_policy_version(
         &self,
         input: &DeletePolicyVersionRequest,
     ) -> Result<(), DeletePolicyVersionError>;
 
-    #[doc="<p>Deletes the specified role. The role must not have any policies attached. For more information about roles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html\">Working with Roles</a>.</p> <important> <p>Make sure you do not have any Amazon EC2 instances running with the role you are about to delete. Deleting a role or instance profile that is associated with a running instance will break any applications running on the instance.</p> </important>"]
+    /// <p><p>Deletes the specified role. The role must not have any policies attached. For more information about roles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>.</p> <important> <p>Make sure you do not have any Amazon EC2 instances running with the role you are about to delete. Deleting a role or instance profile that is associated with a running instance will break any applications running on the instance.</p> </important></p>
     fn delete_role(&self, input: &DeleteRoleRequest) -> Result<(), DeleteRoleError>;
 
-    #[doc="<p>Deletes the specified inline policy that is embedded in the specified IAM role.</p> <p>A role can also have managed policies attached to it. To detach a managed policy from a role, use <a>DetachRolePolicy</a>. For more information about policies, refer to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Deletes the specified inline policy that is embedded in the specified IAM role.</p> <p>A role can also have managed policies attached to it. To detach a managed policy from a role, use <a>DetachRolePolicy</a>. For more information about policies, refer to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn delete_role_policy(
         &self,
         input: &DeleteRolePolicyRequest,
     ) -> Result<(), DeleteRolePolicyError>;
 
-    #[doc="<p>Deletes a SAML provider resource in IAM.</p> <p>Deleting the provider resource from IAM does not update any roles that reference the SAML provider resource's ARN as a principal in their trust policies. Any attempt to assume a role that references a non-existent provider resource ARN fails.</p> <note> <p> This operation requires <a href=\"http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html\">Signature Version 4</a>.</p> </note>"]
+    /// <p><p>Deletes a SAML provider resource in IAM.</p> <p>Deleting the provider resource from IAM does not update any roles that reference the SAML provider resource&#39;s ARN as a principal in their trust policies. Any attempt to assume a role that references a non-existent provider resource ARN fails.</p> <note> <p> This operation requires <a href="http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4</a>.</p> </note></p>
     fn delete_saml_provider(
         &self,
         input: &DeleteSAMLProviderRequest,
     ) -> Result<(), DeleteSAMLProviderError>;
 
-    #[doc="<p>Deletes the specified SSH public key.</p> <p>The SSH public key deleted by this action is used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href=\"http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html\">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>"]
+    /// <p>Deletes the specified SSH public key.</p> <p>The SSH public key deleted by this action is used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>
     fn delete_ssh_public_key(
         &self,
         input: &DeleteSSHPublicKeyRequest,
     ) -> Result<(), DeleteSSHPublicKeyError>;
 
-    #[doc="<p>Deletes the specified server certificate.</p> <p>For more information about working with server certificates, including a list of AWS services that can use the server certificates that you manage with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html\">Working with Server Certificates</a> in the <i>IAM User Guide</i>.</p> <important> <p> If you are using a server certificate with Elastic Load Balancing, deleting the certificate could have implications for your application. If Elastic Load Balancing doesn't detect the deletion of bound certificates, it may continue to use the certificates. This could cause Elastic Load Balancing to stop accepting traffic. We recommend that you remove the reference to the certificate from Elastic Load Balancing before using this command to delete the certificate. For more information, go to <a href=\"http://docs.aws.amazon.com/ElasticLoadBalancing/latest/APIReference/API_DeleteLoadBalancerListeners.html\">DeleteLoadBalancerListeners</a> in the <i>Elastic Load Balancing API Reference</i>.</p> </important>"]
+    /// <p><p>Deletes the specified server certificate.</p> <p>For more information about working with server certificates, including a list of AWS services that can use the server certificates that you manage with IAM, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">Working with Server Certificates</a> in the <i>IAM User Guide</i>.</p> <important> <p> If you are using a server certificate with Elastic Load Balancing, deleting the certificate could have implications for your application. If Elastic Load Balancing doesn&#39;t detect the deletion of bound certificates, it may continue to use the certificates. This could cause Elastic Load Balancing to stop accepting traffic. We recommend that you remove the reference to the certificate from Elastic Load Balancing before using this command to delete the certificate. For more information, go to <a href="http://docs.aws.amazon.com/ElasticLoadBalancing/latest/APIReference/API_DeleteLoadBalancerListeners.html">DeleteLoadBalancerListeners</a> in the <i>Elastic Load Balancing API Reference</i>.</p> </important></p>
     fn delete_server_certificate(
         &self,
         input: &DeleteServerCertificateRequest,
     ) -> Result<(), DeleteServerCertificateError>;
 
-    #[doc = "<p>Deletes the specified service-specific credential.</p>"]
+    /// <p>Deletes the specified service-specific credential.</p>
     fn delete_service_specific_credential(
         &self,
         input: &DeleteServiceSpecificCredentialRequest,
     ) -> Result<(), DeleteServiceSpecificCredentialError>;
 
-    #[doc="<p>Deletes a signing certificate associated with the specified IAM user.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated IAM users.</p>"]
+    /// <p>Deletes a signing certificate associated with the specified IAM user.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated IAM users.</p>
     fn delete_signing_certificate(
         &self,
         input: &DeleteSigningCertificateRequest,
     ) -> Result<(), DeleteSigningCertificateError>;
 
-    #[doc="<p>Deletes the specified IAM user. The user must not belong to any groups or have any access keys, signing certificates, or attached policies.</p>"]
+    /// <p>Deletes the specified IAM user. The user must not belong to any groups or have any access keys, signing certificates, or attached policies.</p>
     fn delete_user(&self, input: &DeleteUserRequest) -> Result<(), DeleteUserError>;
 
-    #[doc="<p>Deletes the specified inline policy that is embedded in the specified IAM user.</p> <p>A user can also have managed policies attached to it. To detach a managed policy from a user, use <a>DetachUserPolicy</a>. For more information about policies, refer to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Deletes the specified inline policy that is embedded in the specified IAM user.</p> <p>A user can also have managed policies attached to it. To detach a managed policy from a user, use <a>DetachUserPolicy</a>. For more information about policies, refer to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn delete_user_policy(
         &self,
         input: &DeleteUserPolicyRequest,
     ) -> Result<(), DeleteUserPolicyError>;
 
-    #[doc="<p>Deletes a virtual MFA device.</p> <note> <p> You must deactivate a user's virtual MFA device before you can delete it. For information about deactivating MFA devices, see <a>DeactivateMFADevice</a>. </p> </note>"]
+    /// <p><p>Deletes a virtual MFA device.</p> <note> <p> You must deactivate a user&#39;s virtual MFA device before you can delete it. For information about deactivating MFA devices, see <a>DeactivateMFADevice</a>. </p> </note></p>
     fn delete_virtual_mfa_device(
         &self,
         input: &DeleteVirtualMFADeviceRequest,
     ) -> Result<(), DeleteVirtualMFADeviceError>;
 
-    #[doc="<p>Removes the specified managed policy from the specified IAM group.</p> <p>A group can also have inline policies embedded with it. To delete an inline policy, use the <a>DeleteGroupPolicy</a> API. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Removes the specified managed policy from the specified IAM group.</p> <p>A group can also have inline policies embedded with it. To delete an inline policy, use the <a>DeleteGroupPolicy</a> API. For information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn detach_group_policy(
         &self,
         input: &DetachGroupPolicyRequest,
     ) -> Result<(), DetachGroupPolicyError>;
 
-    #[doc="<p>Removes the specified managed policy from the specified role.</p> <p>A role can also have inline policies embedded with it. To delete an inline policy, use the <a>DeleteRolePolicy</a> API. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Removes the specified managed policy from the specified role.</p> <p>A role can also have inline policies embedded with it. To delete an inline policy, use the <a>DeleteRolePolicy</a> API. For information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn detach_role_policy(
         &self,
         input: &DetachRolePolicyRequest,
     ) -> Result<(), DetachRolePolicyError>;
 
-    #[doc="<p>Removes the specified managed policy from the specified user.</p> <p>A user can also have inline policies embedded with it. To delete an inline policy, use the <a>DeleteUserPolicy</a> API. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Removes the specified managed policy from the specified user.</p> <p>A user can also have inline policies embedded with it. To delete an inline policy, use the <a>DeleteUserPolicy</a> API. For information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn detach_user_policy(
         &self,
         input: &DetachUserPolicyRequest,
     ) -> Result<(), DetachUserPolicyError>;
 
-    #[doc="<p>Enables the specified MFA device and associates it with the specified IAM user. When enabled, the MFA device is required for every subsequent login by the IAM user associated with the device.</p>"]
+    /// <p>Enables the specified MFA device and associates it with the specified IAM user. When enabled, the MFA device is required for every subsequent login by the IAM user associated with the device.</p>
     fn enable_mfa_device(&self, input: &EnableMFADeviceRequest)
         -> Result<(), EnableMFADeviceError>;
 
-    #[doc="<p> Generates a credential report for the AWS account. For more information about the credential report, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/credential-reports.html\">Getting Credential Reports</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p> Generates a credential report for the AWS account. For more information about the credential report, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/credential-reports.html">Getting Credential Reports</a> in the <i>IAM User Guide</i>.</p>
     fn generate_credential_report(
         &self,
     ) -> Result<GenerateCredentialReportResponse, GenerateCredentialReportError>;
 
-    #[doc="<p>Retrieves information about when the specified access key was last used. The information includes the date and time of last use, along with the AWS service and region that were specified in the last request made with that key.</p>"]
+    /// <p>Retrieves information about when the specified access key was last used. The information includes the date and time of last use, along with the AWS service and region that were specified in the last request made with that key.</p>
     fn get_access_key_last_used(
         &self,
         input: &GetAccessKeyLastUsedRequest,
     ) -> Result<GetAccessKeyLastUsedResponse, GetAccessKeyLastUsedError>;
 
-    #[doc="<p>Retrieves information about all IAM users, groups, roles, and policies in your AWS account, including their relationships to one another. Use this API to obtain a snapshot of the configuration of IAM permissions (users, groups, roles, and policies) in your account.</p> <p>You can optionally filter the results using the <code>Filter</code> parameter. You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
+    /// <p>Retrieves information about all IAM users, groups, roles, and policies in your AWS account, including their relationships to one another. Use this API to obtain a snapshot of the configuration of IAM permissions (users, groups, roles, and policies) in your account.</p> <p>You can optionally filter the results using the <code>Filter</code> parameter. You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn get_account_authorization_details(
         &self,
         input: &GetAccountAuthorizationDetailsRequest,
     ) -> Result<GetAccountAuthorizationDetailsResponse, GetAccountAuthorizationDetailsError>;
 
-    #[doc="<p>Retrieves the password policy for the AWS account. For more information about using a password policy, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingPasswordPolicies.html\">Managing an IAM Password Policy</a>.</p>"]
+    /// <p>Retrieves the password policy for the AWS account. For more information about using a password policy, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingPasswordPolicies.html">Managing an IAM Password Policy</a>.</p>
     fn get_account_password_policy(
         &self,
     ) -> Result<GetAccountPasswordPolicyResponse, GetAccountPasswordPolicyError>;
 
-    #[doc="<p>Retrieves information about IAM entity usage and IAM quotas in the AWS account.</p> <p> For information about limitations on IAM entities, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Retrieves information about IAM entity usage and IAM quotas in the AWS account.</p> <p> For information about limitations on IAM entities, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
     fn get_account_summary(&self) -> Result<GetAccountSummaryResponse, GetAccountSummaryError>;
 
-    #[doc="<p>Gets a list of all of the context keys referenced in the input policies. The policies are supplied as a list of one or more strings. To get the context keys from policies associated with an IAM user, group, or role, use <a>GetContextKeysForPrincipalPolicy</a>.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request, and can be evaluated by testing against a value specified in an IAM policy. Use GetContextKeysForCustomPolicy to understand what key names and values you must supply when you call <a>SimulateCustomPolicy</a>. Note that all parameters are shown in unencoded form here for clarity, but must be URL encoded to be included as a part of a real HTML request.</p>"]
+    /// <p>Gets a list of all of the context keys referenced in the input policies. The policies are supplied as a list of one or more strings. To get the context keys from policies associated with an IAM user, group, or role, use <a>GetContextKeysForPrincipalPolicy</a>.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request, and can be evaluated by testing against a value specified in an IAM policy. Use GetContextKeysForCustomPolicy to understand what key names and values you must supply when you call <a>SimulateCustomPolicy</a>. Note that all parameters are shown in unencoded form here for clarity, but must be URL encoded to be included as a part of a real HTML request.</p>
     fn get_context_keys_for_custom_policy(
         &self,
         input: &GetContextKeysForCustomPolicyRequest,
     ) -> Result<GetContextKeysForPolicyResponse, GetContextKeysForCustomPolicyError>;
 
-    #[doc="<p>Gets a list of all of the context keys referenced in all of the IAM policies attached to the specified IAM entity. The entity can be an IAM user, group, or role. If you specify a user, then the request also includes all of the policies attached to groups that the user is a member of.</p> <p>You can optionally include a list of one or more additional policies, specified as strings. If you want to include <i>only</i> a list of policies by string, use <a>GetContextKeysForCustomPolicy</a> instead.</p> <p> <b>Note:</b> This API discloses information about the permissions granted to other users. If you do not want users to see other user's permissions, then consider allowing them to use <a>GetContextKeysForCustomPolicy</a> instead.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request, and can be evaluated by testing against a value in an IAM policy. Use <a>GetContextKeysForPrincipalPolicy</a> to understand what key names and values you must supply when you call <a>SimulatePrincipalPolicy</a>.</p>"]
+    /// <p>Gets a list of all of the context keys referenced in all of the IAM policies attached to the specified IAM entity. The entity can be an IAM user, group, or role. If you specify a user, then the request also includes all of the policies attached to groups that the user is a member of.</p> <p>You can optionally include a list of one or more additional policies, specified as strings. If you want to include <i>only</i> a list of policies by string, use <a>GetContextKeysForCustomPolicy</a> instead.</p> <p> <b>Note:</b> This API discloses information about the permissions granted to other users. If you do not want users to see other user's permissions, then consider allowing them to use <a>GetContextKeysForCustomPolicy</a> instead.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request, and can be evaluated by testing against a value in an IAM policy. Use <a>GetContextKeysForPrincipalPolicy</a> to understand what key names and values you must supply when you call <a>SimulatePrincipalPolicy</a>.</p>
     fn get_context_keys_for_principal_policy(
         &self,
         input: &GetContextKeysForPrincipalPolicyRequest,
     ) -> Result<GetContextKeysForPolicyResponse, GetContextKeysForPrincipalPolicyError>;
 
-    #[doc="<p> Retrieves a credential report for the AWS account. For more information about the credential report, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/credential-reports.html\">Getting Credential Reports</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p> Retrieves a credential report for the AWS account. For more information about the credential report, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/credential-reports.html">Getting Credential Reports</a> in the <i>IAM User Guide</i>.</p>
     fn get_credential_report(
         &self,
     ) -> Result<GetCredentialReportResponse, GetCredentialReportError>;
 
-    #[doc="<p> Returns a list of IAM users that are in the specified IAM group. You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
+    /// <p> Returns a list of IAM users that are in the specified IAM group. You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn get_group(&self, input: &GetGroupRequest) -> Result<GetGroupResponse, GetGroupError>;
 
-    #[doc="<p>Retrieves the specified inline policy document that is embedded in the specified IAM group.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href=\"https://tools.ietf.org/html/rfc3986\">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>An IAM group can also have managed policies attached to it. To retrieve a managed policy document that is attached to a group, use <a>GetPolicy</a> to determine the policy's default version, then use <a>GetPolicyVersion</a> to retrieve the policy document.</p> <p>For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Retrieves the specified inline policy document that is embedded in the specified IAM group.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>An IAM group can also have managed policies attached to it. To retrieve a managed policy document that is attached to a group, use <a>GetPolicy</a> to determine the policy's default version, then use <a>GetPolicyVersion</a> to retrieve the policy document.</p> <p>For more information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn get_group_policy(
         &self,
         input: &GetGroupPolicyRequest,
     ) -> Result<GetGroupPolicyResponse, GetGroupPolicyError>;
 
-    #[doc="<p> Retrieves information about the specified instance profile, including the instance profile's path, GUID, ARN, and role. For more information about instance profiles, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html\">About Instance Profiles</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p> Retrieves information about the specified instance profile, including the instance profile's path, GUID, ARN, and role. For more information about instance profiles, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a> in the <i>IAM User Guide</i>.</p>
     fn get_instance_profile(
         &self,
         input: &GetInstanceProfileRequest,
     ) -> Result<GetInstanceProfileResponse, GetInstanceProfileError>;
 
-    #[doc="<p>Retrieves the user name and password-creation date for the specified IAM user. If the user has not been assigned a password, the action returns a 404 (<code>NoSuchEntity</code>) error.</p>"]
+    /// <p>Retrieves the user name and password-creation date for the specified IAM user. If the user has not been assigned a password, the action returns a 404 (<code>NoSuchEntity</code>) error.</p>
     fn get_login_profile(
         &self,
         input: &GetLoginProfileRequest,
     ) -> Result<GetLoginProfileResponse, GetLoginProfileError>;
 
-    #[doc="<p>Returns information about the specified OpenID Connect (OIDC) provider resource object in IAM.</p>"]
+    /// <p>Returns information about the specified OpenID Connect (OIDC) provider resource object in IAM.</p>
     fn get_open_id_connect_provider(
         &self,
         input: &GetOpenIDConnectProviderRequest,
     ) -> Result<GetOpenIDConnectProviderResponse, GetOpenIDConnectProviderError>;
 
-    #[doc="<p>Retrieves information about the specified managed policy, including the policy's default version and the total number of IAM users, groups, and roles to which the policy is attached. To retrieve the list of the specific users, groups, and roles that the policy is attached to, use the <a>ListEntitiesForPolicy</a> API. This API returns metadata about the policy. To retrieve the actual policy document for a specific version of the policy, use <a>GetPolicyVersion</a>.</p> <p>This API retrieves information about managed policies. To retrieve information about an inline policy that is embedded with an IAM user, group, or role, use the <a>GetUserPolicy</a>, <a>GetGroupPolicy</a>, or <a>GetRolePolicy</a> API.</p> <p>For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Retrieves information about the specified managed policy, including the policy's default version and the total number of IAM users, groups, and roles to which the policy is attached. To retrieve the list of the specific users, groups, and roles that the policy is attached to, use the <a>ListEntitiesForPolicy</a> API. This API returns metadata about the policy. To retrieve the actual policy document for a specific version of the policy, use <a>GetPolicyVersion</a>.</p> <p>This API retrieves information about managed policies. To retrieve information about an inline policy that is embedded with an IAM user, group, or role, use the <a>GetUserPolicy</a>, <a>GetGroupPolicy</a>, or <a>GetRolePolicy</a> API.</p> <p>For more information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn get_policy(&self, input: &GetPolicyRequest) -> Result<GetPolicyResponse, GetPolicyError>;
 
-    #[doc="<p>Retrieves information about the specified version of the specified managed policy, including the policy document.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href=\"https://tools.ietf.org/html/rfc3986\">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>To list the available versions for a policy, use <a>ListPolicyVersions</a>.</p> <p>This API retrieves information about managed policies. To retrieve information about an inline policy that is embedded in a user, group, or role, use the <a>GetUserPolicy</a>, <a>GetGroupPolicy</a>, or <a>GetRolePolicy</a> API.</p> <p>For more information about the types of policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For more information about managed policy versions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html\">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Retrieves information about the specified version of the specified managed policy, including the policy document.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>To list the available versions for a policy, use <a>ListPolicyVersions</a>.</p> <p>This API retrieves information about managed policies. To retrieve information about an inline policy that is embedded in a user, group, or role, use the <a>GetUserPolicy</a>, <a>GetGroupPolicy</a>, or <a>GetRolePolicy</a> API.</p> <p>For more information about the types of policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For more information about managed policy versions, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>
     fn get_policy_version(
         &self,
         input: &GetPolicyVersionRequest,
     ) -> Result<GetPolicyVersionResponse, GetPolicyVersionError>;
 
-    #[doc="<p>Retrieves information about the specified role, including the role's path, GUID, ARN, and the role's trust policy that grants permission to assume the role. For more information about roles, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html\">Working with Roles</a>.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href=\"https://tools.ietf.org/html/rfc3986\">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note>"]
+    /// <p><p>Retrieves information about the specified role, including the role&#39;s path, GUID, ARN, and the role&#39;s trust policy that grants permission to assume the role. For more information about roles, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note></p>
     fn get_role(&self, input: &GetRoleRequest) -> Result<GetRoleResponse, GetRoleError>;
 
-    #[doc="<p>Retrieves the specified inline policy document that is embedded with the specified IAM role.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href=\"https://tools.ietf.org/html/rfc3986\">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>An IAM role can also have managed policies attached to it. To retrieve a managed policy document that is attached to a role, use <a>GetPolicy</a> to determine the policy's default version, then use <a>GetPolicyVersion</a> to retrieve the policy document.</p> <p>For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For more information about roles, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html\">Using Roles to Delegate Permissions and Federate Identities</a>.</p>"]
+    /// <p>Retrieves the specified inline policy document that is embedded with the specified IAM role.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>An IAM role can also have managed policies attached to it. To retrieve a managed policy document that is attached to a role, use <a>GetPolicy</a> to determine the policy's default version, then use <a>GetPolicyVersion</a> to retrieve the policy document.</p> <p>For more information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For more information about roles, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html">Using Roles to Delegate Permissions and Federate Identities</a>.</p>
     fn get_role_policy(
         &self,
         input: &GetRolePolicyRequest,
     ) -> Result<GetRolePolicyResponse, GetRolePolicyError>;
 
-    #[doc="<p>Returns the SAML provider metadocument that was uploaded when the IAM SAML provider resource object was created or updated.</p> <note> <p>This operation requires <a href=\"http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html\">Signature Version 4</a>.</p> </note>"]
+    /// <p><p>Returns the SAML provider metadocument that was uploaded when the IAM SAML provider resource object was created or updated.</p> <note> <p>This operation requires <a href="http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4</a>.</p> </note></p>
     fn get_saml_provider(
         &self,
         input: &GetSAMLProviderRequest,
     ) -> Result<GetSAMLProviderResponse, GetSAMLProviderError>;
 
-    #[doc="<p>Retrieves the specified SSH public key, including metadata about the key.</p> <p>The SSH public key retrieved by this action is used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href=\"http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html\">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>"]
+    /// <p>Retrieves the specified SSH public key, including metadata about the key.</p> <p>The SSH public key retrieved by this action is used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>
     fn get_ssh_public_key(
         &self,
         input: &GetSSHPublicKeyRequest,
     ) -> Result<GetSSHPublicKeyResponse, GetSSHPublicKeyError>;
 
-    #[doc="<p>Retrieves information about the specified server certificate stored in IAM.</p> <p>For more information about working with server certificates, including a list of AWS services that can use the server certificates that you manage with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html\">Working with Server Certificates</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Retrieves information about the specified server certificate stored in IAM.</p> <p>For more information about working with server certificates, including a list of AWS services that can use the server certificates that you manage with IAM, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">Working with Server Certificates</a> in the <i>IAM User Guide</i>.</p>
     fn get_server_certificate(
         &self,
         input: &GetServerCertificateRequest,
     ) -> Result<GetServerCertificateResponse, GetServerCertificateError>;
 
-    #[doc="<p>Retrieves information about the specified IAM user, including the user's creation date, path, unique ID, and ARN.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID used to sign the request to this API.</p>"]
+    /// <p>Retrieves information about the specified IAM user, including the user's creation date, path, unique ID, and ARN.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID used to sign the request to this API.</p>
     fn get_user(&self, input: &GetUserRequest) -> Result<GetUserResponse, GetUserError>;
 
-    #[doc="<p>Retrieves the specified inline policy document that is embedded in the specified IAM user.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href=\"https://tools.ietf.org/html/rfc3986\">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>An IAM user can also have managed policies attached to it. To retrieve a managed policy document that is attached to a user, use <a>GetPolicy</a> to determine the policy's default version, then use <a>GetPolicyVersion</a> to retrieve the policy document.</p> <p>For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Retrieves the specified inline policy document that is embedded in the specified IAM user.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>An IAM user can also have managed policies attached to it. To retrieve a managed policy document that is attached to a user, use <a>GetPolicy</a> to determine the policy's default version, then use <a>GetPolicyVersion</a> to retrieve the policy document.</p> <p>For more information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn get_user_policy(
         &self,
         input: &GetUserPolicyRequest,
     ) -> Result<GetUserPolicyResponse, GetUserPolicyError>;
 
-    #[doc="<p>Returns information about the access key IDs associated with the specified IAM user. If there are none, the action returns an empty list.</p> <p>Although each user is limited to a small number of keys, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>If the <code>UserName</code> field is not specified, the UserName is determined implicitly based on the AWS access key ID used to sign the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p> <note> <p>To ensure the security of your AWS account, the secret access key is accessible only during key and user creation.</p> </note>"]
+    /// <p><p>Returns information about the access key IDs associated with the specified IAM user. If there are none, the action returns an empty list.</p> <p>Although each user is limited to a small number of keys, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>If the <code>UserName</code> field is not specified, the UserName is determined implicitly based on the AWS access key ID used to sign the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p> <note> <p>To ensure the security of your AWS account, the secret access key is accessible only during key and user creation.</p> </note></p>
     fn list_access_keys(
         &self,
         input: &ListAccessKeysRequest,
     ) -> Result<ListAccessKeysResponse, ListAccessKeysError>;
 
-    #[doc="<p>Lists the account alias associated with the AWS account (Note: you can have only one). For information about using an AWS account alias, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AccountAlias.html\">Using an Alias for Your AWS Account ID</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Lists the account alias associated with the AWS account (Note: you can have only one). For information about using an AWS account alias, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/AccountAlias.html">Using an Alias for Your AWS Account ID</a> in the <i>IAM User Guide</i>.</p>
     fn list_account_aliases(
         &self,
         input: &ListAccountAliasesRequest,
     ) -> Result<ListAccountAliasesResponse, ListAccountAliasesError>;
 
-    #[doc="<p>Lists all managed policies that are attached to the specified IAM group.</p> <p>An IAM group can also have inline policies embedded with it. To list the inline policies for a group, use the <a>ListGroupPolicies</a> API. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. You can use the <code>PathPrefix</code> parameter to limit the list of policies to only those matching the specified path prefix. If there are no policies attached to the specified group (or none that match the specified path prefix), the action returns an empty list.</p>"]
+    /// <p>Lists all managed policies that are attached to the specified IAM group.</p> <p>An IAM group can also have inline policies embedded with it. To list the inline policies for a group, use the <a>ListGroupPolicies</a> API. For information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. You can use the <code>PathPrefix</code> parameter to limit the list of policies to only those matching the specified path prefix. If there are no policies attached to the specified group (or none that match the specified path prefix), the action returns an empty list.</p>
     fn list_attached_group_policies(
         &self,
         input: &ListAttachedGroupPoliciesRequest,
     ) -> Result<ListAttachedGroupPoliciesResponse, ListAttachedGroupPoliciesError>;
 
-    #[doc="<p>Lists all managed policies that are attached to the specified IAM role.</p> <p>An IAM role can also have inline policies embedded with it. To list the inline policies for a role, use the <a>ListRolePolicies</a> API. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. You can use the <code>PathPrefix</code> parameter to limit the list of policies to only those matching the specified path prefix. If there are no policies attached to the specified role (or none that match the specified path prefix), the action returns an empty list.</p>"]
+    /// <p>Lists all managed policies that are attached to the specified IAM role.</p> <p>An IAM role can also have inline policies embedded with it. To list the inline policies for a role, use the <a>ListRolePolicies</a> API. For information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. You can use the <code>PathPrefix</code> parameter to limit the list of policies to only those matching the specified path prefix. If there are no policies attached to the specified role (or none that match the specified path prefix), the action returns an empty list.</p>
     fn list_attached_role_policies(
         &self,
         input: &ListAttachedRolePoliciesRequest,
     ) -> Result<ListAttachedRolePoliciesResponse, ListAttachedRolePoliciesError>;
 
-    #[doc="<p>Lists all managed policies that are attached to the specified IAM user.</p> <p>An IAM user can also have inline policies embedded with it. To list the inline policies for a user, use the <a>ListUserPolicies</a> API. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. You can use the <code>PathPrefix</code> parameter to limit the list of policies to only those matching the specified path prefix. If there are no policies attached to the specified group (or none that match the specified path prefix), the action returns an empty list.</p>"]
+    /// <p>Lists all managed policies that are attached to the specified IAM user.</p> <p>An IAM user can also have inline policies embedded with it. To list the inline policies for a user, use the <a>ListUserPolicies</a> API. For information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. You can use the <code>PathPrefix</code> parameter to limit the list of policies to only those matching the specified path prefix. If there are no policies attached to the specified group (or none that match the specified path prefix), the action returns an empty list.</p>
     fn list_attached_user_policies(
         &self,
         input: &ListAttachedUserPoliciesRequest,
     ) -> Result<ListAttachedUserPoliciesResponse, ListAttachedUserPoliciesError>;
 
-    #[doc="<p>Lists all IAM users, groups, and roles that the specified managed policy is attached to.</p> <p>You can use the optional <code>EntityFilter</code> parameter to limit the results to a particular type of entity (users, groups, or roles). For example, to list only the roles that are attached to the specified policy, set <code>EntityFilter</code> to <code>Role</code>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
+    /// <p>Lists all IAM users, groups, and roles that the specified managed policy is attached to.</p> <p>You can use the optional <code>EntityFilter</code> parameter to limit the results to a particular type of entity (users, groups, or roles). For example, to list only the roles that are attached to the specified policy, set <code>EntityFilter</code> to <code>Role</code>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn list_entities_for_policy(
         &self,
         input: &ListEntitiesForPolicyRequest,
     ) -> Result<ListEntitiesForPolicyResponse, ListEntitiesForPolicyError>;
 
-    #[doc="<p>Lists the names of the inline policies that are embedded in the specified IAM group.</p> <p>An IAM group can also have managed policies attached to it. To list the managed policies that are attached to a group, use <a>ListAttachedGroupPolicies</a>. For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. If there are no inline policies embedded with the specified group, the action returns an empty list.</p>"]
+    /// <p>Lists the names of the inline policies that are embedded in the specified IAM group.</p> <p>An IAM group can also have managed policies attached to it. To list the managed policies that are attached to a group, use <a>ListAttachedGroupPolicies</a>. For more information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. If there are no inline policies embedded with the specified group, the action returns an empty list.</p>
     fn list_group_policies(
         &self,
         input: &ListGroupPoliciesRequest,
     ) -> Result<ListGroupPoliciesResponse, ListGroupPoliciesError>;
 
-    #[doc="<p>Lists the IAM groups that have the specified path prefix.</p> <p> You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
+    /// <p>Lists the IAM groups that have the specified path prefix.</p> <p> You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn list_groups(&self, input: &ListGroupsRequest)
         -> Result<ListGroupsResponse, ListGroupsError>;
 
-    #[doc="<p>Lists the IAM groups that the specified IAM user belongs to.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
+    /// <p>Lists the IAM groups that the specified IAM user belongs to.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn list_groups_for_user(
         &self,
         input: &ListGroupsForUserRequest,
     ) -> Result<ListGroupsForUserResponse, ListGroupsForUserError>;
 
-    #[doc="<p>Lists the instance profiles that have the specified path prefix. If there are none, the action returns an empty list. For more information about instance profiles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html\">About Instance Profiles</a>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
+    /// <p>Lists the instance profiles that have the specified path prefix. If there are none, the action returns an empty list. For more information about instance profiles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn list_instance_profiles(
         &self,
         input: &ListInstanceProfilesRequest,
     ) -> Result<ListInstanceProfilesResponse, ListInstanceProfilesError>;
 
-    #[doc="<p>Lists the instance profiles that have the specified associated IAM role. If there are none, the action returns an empty list. For more information about instance profiles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html\">About Instance Profiles</a>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
+    /// <p>Lists the instance profiles that have the specified associated IAM role. If there are none, the action returns an empty list. For more information about instance profiles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn list_instance_profiles_for_role(
         &self,
         input: &ListInstanceProfilesForRoleRequest,
     ) -> Result<ListInstanceProfilesForRoleResponse, ListInstanceProfilesForRoleError>;
 
-    #[doc="<p>Lists the MFA devices for an IAM user. If the request includes a IAM user name, then this action lists all the MFA devices associated with the specified user. If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request for this API.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
+    /// <p>Lists the MFA devices for an IAM user. If the request includes a IAM user name, then this action lists all the MFA devices associated with the specified user. If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request for this API.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn list_mfa_devices(
         &self,
         input: &ListMFADevicesRequest,
     ) -> Result<ListMFADevicesResponse, ListMFADevicesError>;
 
-    #[doc="<p>Lists information about the IAM OpenID Connect (OIDC) provider resource objects defined in the AWS account.</p>"]
+    /// <p>Lists information about the IAM OpenID Connect (OIDC) provider resource objects defined in the AWS account.</p>
     fn list_open_id_connect_providers(
         &self,
         input: &ListOpenIDConnectProvidersRequest,
     ) -> Result<ListOpenIDConnectProvidersResponse, ListOpenIDConnectProvidersError>;
 
-    #[doc="<p>Lists all the managed policies that are available in your AWS account, including your own customer-defined managed policies and all AWS managed policies.</p> <p>You can filter the list of policies that is returned using the optional <code>OnlyAttached</code>, <code>Scope</code>, and <code>PathPrefix</code> parameters. For example, to list only the customer managed policies in your AWS account, set <code>Scope</code> to <code>Local</code>. To list only AWS managed policies, set <code>Scope</code> to <code>AWS</code>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>For more information about managed policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Lists all the managed policies that are available in your AWS account, including your own customer-defined managed policies and all AWS managed policies.</p> <p>You can filter the list of policies that is returned using the optional <code>OnlyAttached</code>, <code>Scope</code>, and <code>PathPrefix</code> parameters. For example, to list only the customer managed policies in your AWS account, set <code>Scope</code> to <code>Local</code>. To list only AWS managed policies, set <code>Scope</code> to <code>AWS</code>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>For more information about managed policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn list_policies(
         &self,
         input: &ListPoliciesRequest,
     ) -> Result<ListPoliciesResponse, ListPoliciesError>;
 
-    #[doc="<p>Lists information about the versions of the specified managed policy, including the version that is currently set as the policy's default version.</p> <p>For more information about managed policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Lists information about the versions of the specified managed policy, including the version that is currently set as the policy's default version.</p> <p>For more information about managed policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn list_policy_versions(
         &self,
         input: &ListPolicyVersionsRequest,
     ) -> Result<ListPolicyVersionsResponse, ListPolicyVersionsError>;
 
-    #[doc="<p>Lists the names of the inline policies that are embedded in the specified IAM role.</p> <p>An IAM role can also have managed policies attached to it. To list the managed policies that are attached to a role, use <a>ListAttachedRolePolicies</a>. For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. If there are no inline policies embedded with the specified role, the action returns an empty list.</p>"]
+    /// <p>Lists the names of the inline policies that are embedded in the specified IAM role.</p> <p>An IAM role can also have managed policies attached to it. To list the managed policies that are attached to a role, use <a>ListAttachedRolePolicies</a>. For more information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. If there are no inline policies embedded with the specified role, the action returns an empty list.</p>
     fn list_role_policies(
         &self,
         input: &ListRolePoliciesRequest,
     ) -> Result<ListRolePoliciesResponse, ListRolePoliciesError>;
 
-    #[doc="<p>Lists the IAM roles that have the specified path prefix. If there are none, the action returns an empty list. For more information about roles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html\">Working with Roles</a>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
+    /// <p>Lists the IAM roles that have the specified path prefix. If there are none, the action returns an empty list. For more information about roles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn list_roles(&self, input: &ListRolesRequest) -> Result<ListRolesResponse, ListRolesError>;
 
-    #[doc="<p>Lists the SAML provider resource objects defined in IAM in the account.</p> <note> <p> This operation requires <a href=\"http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html\">Signature Version 4</a>.</p> </note>"]
+    /// <p><p>Lists the SAML provider resource objects defined in IAM in the account.</p> <note> <p> This operation requires <a href="http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4</a>.</p> </note></p>
     fn list_saml_providers(
         &self,
         input: &ListSAMLProvidersRequest,
     ) -> Result<ListSAMLProvidersResponse, ListSAMLProvidersError>;
 
-    #[doc="<p>Returns information about the SSH public keys associated with the specified IAM user. If there are none, the action returns an empty list.</p> <p>The SSH public keys returned by this action are used only for authenticating the IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href=\"http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html\">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p> <p>Although each user is limited to a small number of keys, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
+    /// <p>Returns information about the SSH public keys associated with the specified IAM user. If there are none, the action returns an empty list.</p> <p>The SSH public keys returned by this action are used only for authenticating the IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p> <p>Although each user is limited to a small number of keys, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn list_ssh_public_keys(
         &self,
         input: &ListSSHPublicKeysRequest,
     ) -> Result<ListSSHPublicKeysResponse, ListSSHPublicKeysError>;
 
-    #[doc="<p>Lists the server certificates stored in IAM that have the specified path prefix. If none exist, the action returns an empty list.</p> <p> You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>For more information about working with server certificates, including a list of AWS services that can use the server certificates that you manage with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html\">Working with Server Certificates</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Lists the server certificates stored in IAM that have the specified path prefix. If none exist, the action returns an empty list.</p> <p> You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>For more information about working with server certificates, including a list of AWS services that can use the server certificates that you manage with IAM, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">Working with Server Certificates</a> in the <i>IAM User Guide</i>.</p>
     fn list_server_certificates(
         &self,
         input: &ListServerCertificatesRequest,
     ) -> Result<ListServerCertificatesResponse, ListServerCertificatesError>;
 
-    #[doc="<p>Returns information about the service-specific credentials associated with the specified IAM user. If there are none, the action returns an empty list. The service-specific credentials returned by this action are used only for authenticating the IAM user to a specific service. For more information about using service-specific credentials to authenticate to an AWS service, see <a href=\"http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-gc.html\">Set Up service-specific credentials</a> in the AWS CodeCommit User Guide.</p>"]
+    /// <p>Returns information about the service-specific credentials associated with the specified IAM user. If there are none, the action returns an empty list. The service-specific credentials returned by this action are used only for authenticating the IAM user to a specific service. For more information about using service-specific credentials to authenticate to an AWS service, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-gc.html">Set Up service-specific credentials</a> in the AWS CodeCommit User Guide.</p>
     fn list_service_specific_credentials(
         &self,
         input: &ListServiceSpecificCredentialsRequest,
     ) -> Result<ListServiceSpecificCredentialsResponse, ListServiceSpecificCredentialsError>;
 
-    #[doc="<p>Returns information about the signing certificates associated with the specified IAM user. If there are none, the action returns an empty list.</p> <p>Although each user is limited to a small number of signing certificates, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>If the <code>UserName</code> field is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request for this API. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p>"]
+    /// <p>Returns information about the signing certificates associated with the specified IAM user. If there are none, the action returns an empty list.</p> <p>Although each user is limited to a small number of signing certificates, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>If the <code>UserName</code> field is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request for this API. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p>
     fn list_signing_certificates(
         &self,
         input: &ListSigningCertificatesRequest,
     ) -> Result<ListSigningCertificatesResponse, ListSigningCertificatesError>;
 
-    #[doc="<p>Lists the names of the inline policies embedded in the specified IAM user.</p> <p>An IAM user can also have managed policies attached to it. To list the managed policies that are attached to a user, use <a>ListAttachedUserPolicies</a>. For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. If there are no inline policies embedded with the specified user, the action returns an empty list.</p>"]
+    /// <p>Lists the names of the inline policies embedded in the specified IAM user.</p> <p>An IAM user can also have managed policies attached to it. To list the managed policies that are attached to a user, use <a>ListAttachedUserPolicies</a>. For more information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. If there are no inline policies embedded with the specified user, the action returns an empty list.</p>
     fn list_user_policies(
         &self,
         input: &ListUserPoliciesRequest,
     ) -> Result<ListUserPoliciesResponse, ListUserPoliciesError>;
 
-    #[doc="<p>Lists the IAM users that have the specified path prefix. If no path prefix is specified, the action returns all users in the AWS account. If there are none, the action returns an empty list.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
+    /// <p>Lists the IAM users that have the specified path prefix. If no path prefix is specified, the action returns all users in the AWS account. If there are none, the action returns an empty list.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn list_users(&self, input: &ListUsersRequest) -> Result<ListUsersResponse, ListUsersError>;
 
-    #[doc="<p>Lists the virtual MFA devices defined in the AWS account by assignment status. If you do not specify an assignment status, the action returns a list of all virtual MFA devices. Assignment status can be <code>Assigned</code>, <code>Unassigned</code>, or <code>Any</code>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
+    /// <p>Lists the virtual MFA devices defined in the AWS account by assignment status. If you do not specify an assignment status, the action returns a list of all virtual MFA devices. Assignment status can be <code>Assigned</code>, <code>Unassigned</code>, or <code>Any</code>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn list_virtual_mfa_devices(
         &self,
         input: &ListVirtualMFADevicesRequest,
     ) -> Result<ListVirtualMFADevicesResponse, ListVirtualMFADevicesError>;
 
-    #[doc="<p>Adds or updates an inline policy document that is embedded in the specified IAM group.</p> <p>A user can also have managed policies attached to it. To attach a managed policy to a group, use <a>AttachGroupPolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed in a group, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutGroupPolicy</code>. For general information about using the Query API with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html\">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note>"]
+    /// <p><p>Adds or updates an inline policy document that is embedded in the specified IAM group.</p> <p>A user can also have managed policies attached to it. To attach a managed policy to a group, use <a>AttachGroupPolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed in a group, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutGroupPolicy</code>. For general information about using the Query API with IAM, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
     fn put_group_policy(&self, input: &PutGroupPolicyRequest) -> Result<(), PutGroupPolicyError>;
 
-    #[doc="<p>Adds or updates an inline policy document that is embedded in the specified IAM role.</p> <p>When you embed an inline policy in a role, the inline policy is used as part of the role's access (permissions) policy. The role's trust policy is created at the same time as the role, using <a>CreateRole</a>. You can update a role's trust policy using <a>UpdateAssumeRolePolicy</a>. For more information about IAM roles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html\">Using Roles to Delegate Permissions and Federate Identities</a>.</p> <p>A role can also have a managed policy attached to it. To attach a managed policy to a role, use <a>AttachRolePolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed with a role, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutRolePolicy</code>. For general information about using the Query API with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html\">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note>"]
+    /// <p><p>Adds or updates an inline policy document that is embedded in the specified IAM role.</p> <p>When you embed an inline policy in a role, the inline policy is used as part of the role&#39;s access (permissions) policy. The role&#39;s trust policy is created at the same time as the role, using <a>CreateRole</a>. You can update a role&#39;s trust policy using <a>UpdateAssumeRolePolicy</a>. For more information about IAM roles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html">Using Roles to Delegate Permissions and Federate Identities</a>.</p> <p>A role can also have a managed policy attached to it. To attach a managed policy to a role, use <a>AttachRolePolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed with a role, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutRolePolicy</code>. For general information about using the Query API with IAM, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
     fn put_role_policy(&self, input: &PutRolePolicyRequest) -> Result<(), PutRolePolicyError>;
 
-    #[doc="<p>Adds or updates an inline policy document that is embedded in the specified IAM user.</p> <p>An IAM user can also have a managed policy attached to it. To attach a managed policy to a user, use <a>AttachUserPolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed in a user, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutUserPolicy</code>. For general information about using the Query API with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html\">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note>"]
+    /// <p><p>Adds or updates an inline policy document that is embedded in the specified IAM user.</p> <p>An IAM user can also have a managed policy attached to it. To attach a managed policy to a user, use <a>AttachUserPolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed in a user, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutUserPolicy</code>. For general information about using the Query API with IAM, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
     fn put_user_policy(&self, input: &PutUserPolicyRequest) -> Result<(), PutUserPolicyError>;
 
-    #[doc="<p>Removes the specified client ID (also known as audience) from the list of client IDs registered for the specified IAM OpenID Connect (OIDC) provider resource object.</p> <p>This action is idempotent; it does not fail or return an error if you try to remove a client ID that does not exist.</p>"]
+    /// <p>Removes the specified client ID (also known as audience) from the list of client IDs registered for the specified IAM OpenID Connect (OIDC) provider resource object.</p> <p>This action is idempotent; it does not fail or return an error if you try to remove a client ID that does not exist.</p>
     fn remove_client_id_from_open_id_connect_provider(
         &self,
         input: &RemoveClientIDFromOpenIDConnectProviderRequest,
     ) -> Result<(), RemoveClientIDFromOpenIDConnectProviderError>;
 
-    #[doc="<p>Removes the specified IAM role from the specified EC2 instance profile.</p> <important> <p>Make sure you do not have any Amazon EC2 instances running with the role you are about to remove from the instance profile. Removing a role from an instance profile that is associated with a running instance might break any applications running on the instance.</p> </important> <p> For more information about IAM roles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html\">Working with Roles</a>. For more information about instance profiles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html\">About Instance Profiles</a>.</p>"]
+    /// <p>Removes the specified IAM role from the specified EC2 instance profile.</p> <important> <p>Make sure you do not have any Amazon EC2 instances running with the role you are about to remove from the instance profile. Removing a role from an instance profile that is associated with a running instance might break any applications running on the instance.</p> </important> <p> For more information about IAM roles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>. For more information about instance profiles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p>
     fn remove_role_from_instance_profile(
         &self,
         input: &RemoveRoleFromInstanceProfileRequest,
     ) -> Result<(), RemoveRoleFromInstanceProfileError>;
 
-    #[doc = "<p>Removes the specified user from the specified group.</p>"]
+    /// <p>Removes the specified user from the specified group.</p>
     fn remove_user_from_group(
         &self,
         input: &RemoveUserFromGroupRequest,
     ) -> Result<(), RemoveUserFromGroupError>;
 
-    #[doc="<p>Resets the password for a service-specific credential. The new password is AWS generated and cryptographically strong. It cannot be configured by the user. Resetting the password immediately invalidates the previous password associated with this user.</p>"]
+    /// <p>Resets the password for a service-specific credential. The new password is AWS generated and cryptographically strong. It cannot be configured by the user. Resetting the password immediately invalidates the previous password associated with this user.</p>
     fn reset_service_specific_credential(
         &self,
         input: &ResetServiceSpecificCredentialRequest,
     ) -> Result<ResetServiceSpecificCredentialResponse, ResetServiceSpecificCredentialError>;
 
-    #[doc="<p>Synchronizes the specified MFA device with its IAM resource object on the AWS servers.</p> <p>For more information about creating and working with virtual MFA devices, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html\">Using a Virtual MFA Device</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Synchronizes the specified MFA device with its IAM resource object on the AWS servers.</p> <p>For more information about creating and working with virtual MFA devices, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html">Using a Virtual MFA Device</a> in the <i>IAM User Guide</i>.</p>
     fn resync_mfa_device(&self, input: &ResyncMFADeviceRequest)
         -> Result<(), ResyncMFADeviceError>;
 
-    #[doc="<p>Sets the specified version of the specified policy as the policy's default (operative) version.</p> <p>This action affects all users, groups, and roles that the policy is attached to. To list the users, groups, and roles that the policy is attached to, use the <a>ListEntitiesForPolicy</a> API.</p> <p>For information about managed policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Sets the specified version of the specified policy as the policy's default (operative) version.</p> <p>This action affects all users, groups, and roles that the policy is attached to. To list the users, groups, and roles that the policy is attached to, use the <a>ListEntitiesForPolicy</a> API.</p> <p>For information about managed policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn set_default_policy_version(
         &self,
         input: &SetDefaultPolicyVersionRequest,
     ) -> Result<(), SetDefaultPolicyVersionError>;
 
-    #[doc="<p>Simulate how a set of IAM policies and optionally a resource-based policy works with a list of API actions and AWS resources to determine the policies' effective permissions. The policies are provided as strings.</p> <p>The simulation does not perform the API actions; it only checks the authorization to determine if the simulated policies allow or deny the actions.</p> <p>If you want to simulate existing policies attached to an IAM user, group, or role, use <a>SimulatePrincipalPolicy</a> instead.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request. You can use the <code>Condition</code> element of an IAM policy to evaluate context keys. To get the list of context keys that the policies require for correct simulation, use <a>GetContextKeysForCustomPolicy</a>.</p> <p>If the output is long, you can use <code>MaxItems</code> and <code>Marker</code> parameters to paginate the results.</p>"]
+    /// <p>Simulate how a set of IAM policies and optionally a resource-based policy works with a list of API actions and AWS resources to determine the policies' effective permissions. The policies are provided as strings.</p> <p>The simulation does not perform the API actions; it only checks the authorization to determine if the simulated policies allow or deny the actions.</p> <p>If you want to simulate existing policies attached to an IAM user, group, or role, use <a>SimulatePrincipalPolicy</a> instead.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request. You can use the <code>Condition</code> element of an IAM policy to evaluate context keys. To get the list of context keys that the policies require for correct simulation, use <a>GetContextKeysForCustomPolicy</a>.</p> <p>If the output is long, you can use <code>MaxItems</code> and <code>Marker</code> parameters to paginate the results.</p>
     fn simulate_custom_policy(
         &self,
         input: &SimulateCustomPolicyRequest,
     ) -> Result<SimulatePolicyResponse, SimulateCustomPolicyError>;
 
-    #[doc="<p>Simulate how a set of IAM policies attached to an IAM entity works with a list of API actions and AWS resources to determine the policies' effective permissions. The entity can be an IAM user, group, or role. If you specify a user, then the simulation also includes all of the policies that are attached to groups that the user belongs to .</p> <p>You can optionally include a list of one or more additional policies specified as strings to include in the simulation. If you want to simulate only policies specified as strings, use <a>SimulateCustomPolicy</a> instead.</p> <p>You can also optionally include one resource-based policy to be evaluated with each of the resources included in the simulation.</p> <p>The simulation does not perform the API actions, it only checks the authorization to determine if the simulated policies allow or deny the actions.</p> <p> <b>Note:</b> This API discloses information about the permissions granted to other users. If you do not want users to see other user's permissions, then consider allowing them to use <a>SimulateCustomPolicy</a> instead.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request. You can use the <code>Condition</code> element of an IAM policy to evaluate context keys. To get the list of context keys that the policies require for correct simulation, use <a>GetContextKeysForPrincipalPolicy</a>.</p> <p>If the output is long, you can use the <code>MaxItems</code> and <code>Marker</code> parameters to paginate the results.</p>"]
+    /// <p>Simulate how a set of IAM policies attached to an IAM entity works with a list of API actions and AWS resources to determine the policies' effective permissions. The entity can be an IAM user, group, or role. If you specify a user, then the simulation also includes all of the policies that are attached to groups that the user belongs to .</p> <p>You can optionally include a list of one or more additional policies specified as strings to include in the simulation. If you want to simulate only policies specified as strings, use <a>SimulateCustomPolicy</a> instead.</p> <p>You can also optionally include one resource-based policy to be evaluated with each of the resources included in the simulation.</p> <p>The simulation does not perform the API actions, it only checks the authorization to determine if the simulated policies allow or deny the actions.</p> <p> <b>Note:</b> This API discloses information about the permissions granted to other users. If you do not want users to see other user's permissions, then consider allowing them to use <a>SimulateCustomPolicy</a> instead.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request. You can use the <code>Condition</code> element of an IAM policy to evaluate context keys. To get the list of context keys that the policies require for correct simulation, use <a>GetContextKeysForPrincipalPolicy</a>.</p> <p>If the output is long, you can use the <code>MaxItems</code> and <code>Marker</code> parameters to paginate the results.</p>
     fn simulate_principal_policy(
         &self,
         input: &SimulatePrincipalPolicyRequest,
     ) -> Result<SimulatePolicyResponse, SimulatePrincipalPolicyError>;
 
-    #[doc="<p>Changes the status of the specified access key from Active to Inactive, or vice versa. This action can be used to disable a user's key as part of a key rotation work flow.</p> <p>If the <code>UserName</code> field is not specified, the UserName is determined implicitly based on the AWS access key ID used to sign the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p> <p>For information about rotating keys, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/ManagingCredentials.html\">Managing Keys and Certificates</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Changes the status of the specified access key from Active to Inactive, or vice versa. This action can be used to disable a user's key as part of a key rotation work flow.</p> <p>If the <code>UserName</code> field is not specified, the UserName is determined implicitly based on the AWS access key ID used to sign the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p> <p>For information about rotating keys, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/ManagingCredentials.html">Managing Keys and Certificates</a> in the <i>IAM User Guide</i>.</p>
     fn update_access_key(&self, input: &UpdateAccessKeyRequest)
         -> Result<(), UpdateAccessKeyError>;
 
-    #[doc="<p>Updates the password policy settings for the AWS account.</p> <note> <p>This action does not support partial updates. No parameters are required, but if you do not specify a parameter, that parameter's value reverts to its default value. See the <b>Request Parameters</b> section for each parameter's default value.</p> </note> <p> For more information about using a password policy, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingPasswordPolicies.html\">Managing an IAM Password Policy</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Updates the password policy settings for the AWS account.</p> <note> <p>This action does not support partial updates. No parameters are required, but if you do not specify a parameter, that parameter's value reverts to its default value. See the <b>Request Parameters</b> section for each parameter's default value.</p> </note> <p> For more information about using a password policy, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingPasswordPolicies.html">Managing an IAM Password Policy</a> in the <i>IAM User Guide</i>.</p>
     fn update_account_password_policy(
         &self,
         input: &UpdateAccountPasswordPolicyRequest,
     ) -> Result<(), UpdateAccountPasswordPolicyError>;
 
-    #[doc="<p>Updates the policy that grants an IAM entity permission to assume a role. This is typically referred to as the \"role trust policy\". For more information about roles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html\">Using Roles to Delegate Permissions and Federate Identities</a>.</p>"]
+    /// <p>Updates the policy that grants an IAM entity permission to assume a role. This is typically referred to as the "role trust policy". For more information about roles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html">Using Roles to Delegate Permissions and Federate Identities</a>.</p>
     fn update_assume_role_policy(
         &self,
         input: &UpdateAssumeRolePolicyRequest,
     ) -> Result<(), UpdateAssumeRolePolicyError>;
 
-    #[doc="<p>Updates the name and/or the path of the specified IAM group.</p> <important> <p> You should understand the implications of changing a group's path or name. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_WorkingWithGroupsAndUsers.html\">Renaming Users and Groups</a> in the <i>IAM User Guide</i>.</p> </important> <note> <p>To change an IAM group name the requester must have appropriate permissions on both the source object and the target object. For example, to change \"Managers\" to \"MGRs\", the entity making the request must have permission on both \"Managers\" and \"MGRs\", or must have permission on all (*). For more information about permissions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/PermissionsAndPolicies.html\">Permissions and Policies</a>. </p> </note>"]
+    /// <p><p>Updates the name and/or the path of the specified IAM group.</p> <important> <p> You should understand the implications of changing a group&#39;s path or name. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_WorkingWithGroupsAndUsers.html">Renaming Users and Groups</a> in the <i>IAM User Guide</i>.</p> </important> <note> <p>To change an IAM group name the requester must have appropriate permissions on both the source object and the target object. For example, to change &quot;Managers&quot; to &quot;MGRs&quot;, the entity making the request must have permission on both &quot;Managers&quot; and &quot;MGRs&quot;, or must have permission on all (*). For more information about permissions, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/PermissionsAndPolicies.html">Permissions and Policies</a>. </p> </note></p>
     fn update_group(&self, input: &UpdateGroupRequest) -> Result<(), UpdateGroupError>;
 
-    #[doc="<p>Changes the password for the specified IAM user.</p> <p>IAM users can change their own passwords by calling <a>ChangePassword</a>. For more information about modifying passwords, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html\">Managing Passwords</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Changes the password for the specified IAM user.</p> <p>IAM users can change their own passwords by calling <a>ChangePassword</a>. For more information about modifying passwords, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html">Managing Passwords</a> in the <i>IAM User Guide</i>.</p>
     fn update_login_profile(
         &self,
         input: &UpdateLoginProfileRequest,
     ) -> Result<(), UpdateLoginProfileError>;
 
-    #[doc="<p>Replaces the existing list of server certificate thumbprints associated with an OpenID Connect (OIDC) provider resource object with a new list of thumbprints.</p> <p>The list that you pass with this action completely replaces the existing list of thumbprints. (The lists are not merged.)</p> <p>Typically, you need to update a thumbprint only when the identity provider's certificate changes, which occurs rarely. However, if the provider's certificate <i>does</i> change, any attempt to assume an IAM role that specifies the OIDC provider as a principal fails until the certificate thumbprint is updated.</p> <note> <p>Because trust for the OIDC provider is ultimately derived from the provider's certificate and is validated by the thumbprint, it is a best practice to limit access to the <code>UpdateOpenIDConnectProviderThumbprint</code> action to highly-privileged users.</p> </note>"]
+    /// <p><p>Replaces the existing list of server certificate thumbprints associated with an OpenID Connect (OIDC) provider resource object with a new list of thumbprints.</p> <p>The list that you pass with this action completely replaces the existing list of thumbprints. (The lists are not merged.)</p> <p>Typically, you need to update a thumbprint only when the identity provider&#39;s certificate changes, which occurs rarely. However, if the provider&#39;s certificate <i>does</i> change, any attempt to assume an IAM role that specifies the OIDC provider as a principal fails until the certificate thumbprint is updated.</p> <note> <p>Because trust for the OIDC provider is ultimately derived from the provider&#39;s certificate and is validated by the thumbprint, it is a best practice to limit access to the <code>UpdateOpenIDConnectProviderThumbprint</code> action to highly-privileged users.</p> </note></p>
     fn update_open_id_connect_provider_thumbprint(
         &self,
         input: &UpdateOpenIDConnectProviderThumbprintRequest,
     ) -> Result<(), UpdateOpenIDConnectProviderThumbprintError>;
 
-    #[doc = "<p>Modifies the description of a role.</p>"]
+    /// <p>Modifies the description of a role.</p>
     fn update_role_description(
         &self,
         input: &UpdateRoleDescriptionRequest,
     ) -> Result<UpdateRoleDescriptionResponse, UpdateRoleDescriptionError>;
 
-    #[doc="<p>Updates the metadata document for an existing SAML provider resource object.</p> <note> <p>This operation requires <a href=\"http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html\">Signature Version 4</a>.</p> </note>"]
+    /// <p><p>Updates the metadata document for an existing SAML provider resource object.</p> <note> <p>This operation requires <a href="http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4</a>.</p> </note></p>
     fn update_saml_provider(
         &self,
         input: &UpdateSAMLProviderRequest,
     ) -> Result<UpdateSAMLProviderResponse, UpdateSAMLProviderError>;
 
-    #[doc="<p>Sets the status of an IAM user's SSH public key to active or inactive. SSH public keys that are inactive cannot be used for authentication. This action can be used to disable a user's SSH public key as part of a key rotation work flow.</p> <p>The SSH public key affected by this action is used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href=\"http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html\">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>"]
+    /// <p>Sets the status of an IAM user's SSH public key to active or inactive. SSH public keys that are inactive cannot be used for authentication. This action can be used to disable a user's SSH public key as part of a key rotation work flow.</p> <p>The SSH public key affected by this action is used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>
     fn update_ssh_public_key(
         &self,
         input: &UpdateSSHPublicKeyRequest,
     ) -> Result<(), UpdateSSHPublicKeyError>;
 
-    #[doc="<p>Updates the name and/or the path of the specified server certificate stored in IAM.</p> <p>For more information about working with server certificates, including a list of AWS services that can use the server certificates that you manage with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html\">Working with Server Certificates</a> in the <i>IAM User Guide</i>.</p> <important> <p>You should understand the implications of changing a server certificate's path or name. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs_manage.html#RenamingServerCerts\">Renaming a Server Certificate</a> in the <i>IAM User Guide</i>.</p> </important> <note> <p>To change a server certificate name the requester must have appropriate permissions on both the source object and the target object. For example, to change the name from \"ProductionCert\" to \"ProdCert\", the entity making the request must have permission on \"ProductionCert\" and \"ProdCert\", or must have permission on all (*). For more information about permissions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/access.html\">Access Management</a> in the <i>IAM User Guide</i>.</p> </note>"]
+    /// <p><p>Updates the name and/or the path of the specified server certificate stored in IAM.</p> <p>For more information about working with server certificates, including a list of AWS services that can use the server certificates that you manage with IAM, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">Working with Server Certificates</a> in the <i>IAM User Guide</i>.</p> <important> <p>You should understand the implications of changing a server certificate&#39;s path or name. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs_manage.html#RenamingServerCerts">Renaming a Server Certificate</a> in the <i>IAM User Guide</i>.</p> </important> <note> <p>To change a server certificate name the requester must have appropriate permissions on both the source object and the target object. For example, to change the name from &quot;ProductionCert&quot; to &quot;ProdCert&quot;, the entity making the request must have permission on &quot;ProductionCert&quot; and &quot;ProdCert&quot;, or must have permission on all (*). For more information about permissions, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/access.html">Access Management</a> in the <i>IAM User Guide</i>.</p> </note></p>
     fn update_server_certificate(
         &self,
         input: &UpdateServerCertificateRequest,
     ) -> Result<(), UpdateServerCertificateError>;
 
-    #[doc="<p>Sets the status of a service-specific credential to <code>Active</code> or <code>Inactive</code>. Service-specific credentials that are inactive cannot be used for authentication to the service. This action can be used to disable a user’s service-specific credential as part of a credential rotation work flow.</p>"]
+    /// <p>Sets the status of a service-specific credential to <code>Active</code> or <code>Inactive</code>. Service-specific credentials that are inactive cannot be used for authentication to the service. This action can be used to disable a user’s service-specific credential as part of a credential rotation work flow.</p>
     fn update_service_specific_credential(
         &self,
         input: &UpdateServiceSpecificCredentialRequest,
     ) -> Result<(), UpdateServiceSpecificCredentialError>;
 
-    #[doc="<p>Changes the status of the specified user signing certificate from active to disabled, or vice versa. This action can be used to disable an IAM user's signing certificate as part of a certificate rotation work flow.</p> <p>If the <code>UserName</code> field is not specified, the UserName is determined implicitly based on the AWS access key ID used to sign the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p>"]
+    /// <p>Changes the status of the specified user signing certificate from active to disabled, or vice versa. This action can be used to disable an IAM user's signing certificate as part of a certificate rotation work flow.</p> <p>If the <code>UserName</code> field is not specified, the UserName is determined implicitly based on the AWS access key ID used to sign the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p>
     fn update_signing_certificate(
         &self,
         input: &UpdateSigningCertificateRequest,
     ) -> Result<(), UpdateSigningCertificateError>;
 
-    #[doc="<p>Updates the name and/or the path of the specified IAM user.</p> <important> <p> You should understand the implications of changing an IAM user's path or name. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_manage.html#id_users_renaming\">Renaming an IAM User</a> and <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_groups_manage_rename.html\">Renaming an IAM Group</a> in the <i>IAM User Guide</i>.</p> </important> <note> <p> To change a user name the requester must have appropriate permissions on both the source object and the target object. For example, to change Bob to Robert, the entity making the request must have permission on Bob and Robert, or must have permission on all (*). For more information about permissions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/PermissionsAndPolicies.html\">Permissions and Policies</a>. </p> </note>"]
+    /// <p><p>Updates the name and/or the path of the specified IAM user.</p> <important> <p> You should understand the implications of changing an IAM user&#39;s path or name. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_manage.html#id_users_renaming">Renaming an IAM User</a> and <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_groups_manage_rename.html">Renaming an IAM Group</a> in the <i>IAM User Guide</i>.</p> </important> <note> <p> To change a user name the requester must have appropriate permissions on both the source object and the target object. For example, to change Bob to Robert, the entity making the request must have permission on Bob and Robert, or must have permission on all (*). For more information about permissions, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/PermissionsAndPolicies.html">Permissions and Policies</a>. </p> </note></p>
     fn update_user(&self, input: &UpdateUserRequest) -> Result<(), UpdateUserError>;
 
-    #[doc="<p>Uploads an SSH public key and associates it with the specified IAM user.</p> <p>The SSH public key uploaded by this action can be used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href=\"http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html\">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>"]
+    /// <p>Uploads an SSH public key and associates it with the specified IAM user.</p> <p>The SSH public key uploaded by this action can be used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>
     fn upload_ssh_public_key(
         &self,
         input: &UploadSSHPublicKeyRequest,
     ) -> Result<UploadSSHPublicKeyResponse, UploadSSHPublicKeyError>;
 
-    #[doc="<p>Uploads a server certificate entity for the AWS account. The server certificate entity includes a public key certificate, a private key, and an optional certificate chain, which should all be PEM-encoded.</p> <p>We recommend that you use <a href=\"https://aws.amazon.com/certificate-manager/\">AWS Certificate Manager</a> to provision, manage, and deploy your server certificates. With ACM you can request a certificate, deploy it to AWS resources, and let ACM handle certificate renewals for you. Certificates provided by ACM are free. For more information about using ACM, see the <a href=\"http://docs.aws.amazon.com/acm/latest/userguide/\">AWS Certificate Manager User Guide</a>.</p> <p>For more information about working with server certificates, including a list of AWS services that can use the server certificates that you manage with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html\">Working with Server Certificates</a> in the <i>IAM User Guide</i>.</p> <p>For information about the number of server certificates you can upload, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-limits.html\">Limitations on IAM Entities and Objects</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because the body of the public key certificate, private key, and the certificate chain can be large, you should use POST rather than GET when calling <code>UploadServerCertificate</code>. For information about setting up signatures and authorization through the API, go to <a href=\"http://docs.aws.amazon.com/general/latest/gr/signing_aws_api_requests.html\">Signing AWS API Requests</a> in the <i>AWS General Reference</i>. For general information about using the Query API with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/programming.html\">Calling the API by Making HTTP Query Requests</a> in the <i>IAM User Guide</i>.</p> </note>"]
+    /// <p><p>Uploads a server certificate entity for the AWS account. The server certificate entity includes a public key certificate, a private key, and an optional certificate chain, which should all be PEM-encoded.</p> <p>We recommend that you use <a href="https://aws.amazon.com/certificate-manager/">AWS Certificate Manager</a> to provision, manage, and deploy your server certificates. With ACM you can request a certificate, deploy it to AWS resources, and let ACM handle certificate renewals for you. Certificates provided by ACM are free. For more information about using ACM, see the <a href="http://docs.aws.amazon.com/acm/latest/userguide/">AWS Certificate Manager User Guide</a>.</p> <p>For more information about working with server certificates, including a list of AWS services that can use the server certificates that you manage with IAM, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">Working with Server Certificates</a> in the <i>IAM User Guide</i>.</p> <p>For information about the number of server certificates you can upload, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-limits.html">Limitations on IAM Entities and Objects</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because the body of the public key certificate, private key, and the certificate chain can be large, you should use POST rather than GET when calling <code>UploadServerCertificate</code>. For information about setting up signatures and authorization through the API, go to <a href="http://docs.aws.amazon.com/general/latest/gr/signing_aws_api_requests.html">Signing AWS API Requests</a> in the <i>AWS General Reference</i>. For general information about using the Query API with IAM, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/programming.html">Calling the API by Making HTTP Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
     fn upload_server_certificate(
         &self,
         input: &UploadServerCertificateRequest,
     ) -> Result<UploadServerCertificateResponse, UploadServerCertificateError>;
 
-    #[doc="<p>Uploads an X.509 signing certificate and associates it with the specified IAM user. Some AWS services use X.509 signing certificates to validate requests that are signed with a corresponding private key. When you upload the certificate, its default status is <code>Active</code>.</p> <p>If the <code>UserName</code> field is not specified, the IAM user name is determined implicitly based on the AWS access key ID used to sign the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p> <note> <p>Because the body of a X.509 certificate can be large, you should use POST rather than GET when calling <code>UploadSigningCertificate</code>. For information about setting up signatures and authorization through the API, go to <a href=\"http://docs.aws.amazon.com/general/latest/gr/signing_aws_api_requests.html\">Signing AWS API Requests</a> in the <i>AWS General Reference</i>. For general information about using the Query API with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html\">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note>"]
+    /// <p><p>Uploads an X.509 signing certificate and associates it with the specified IAM user. Some AWS services use X.509 signing certificates to validate requests that are signed with a corresponding private key. When you upload the certificate, its default status is <code>Active</code>.</p> <p>If the <code>UserName</code> field is not specified, the IAM user name is determined implicitly based on the AWS access key ID used to sign the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p> <note> <p>Because the body of a X.509 certificate can be large, you should use POST rather than GET when calling <code>UploadSigningCertificate</code>. For information about setting up signatures and authorization through the API, go to <a href="http://docs.aws.amazon.com/general/latest/gr/signing_aws_api_requests.html">Signing AWS API Requests</a> in the <i>AWS General Reference</i>. For general information about using the Query API with IAM, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
     fn upload_signing_certificate(
         &self,
         input: &UploadSigningCertificateRequest,
@@ -23296,7 +23296,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Adds a new client ID (also known as audience) to the list of client IDs already registered for the specified IAM OpenID Connect (OIDC) provider resource.</p> <p>This action is idempotent; it does not fail or return an error if you add an existing client ID to the provider.</p>"]
+    /// <p>Adds a new client ID (also known as audience) to the list of client IDs already registered for the specified IAM OpenID Connect (OIDC) provider resource.</p> <p>This action is idempotent; it does not fail or return an error if you add an existing client ID to the provider.</p>
     fn add_client_id_to_open_id_connect_provider(
         &self,
         input: &AddClientIDToOpenIDConnectProviderRequest,
@@ -23326,7 +23326,7 @@ where
         }
     }
 
-    #[doc="<p>Adds the specified IAM role to the specified instance profile. An instance profile can contain only one role, and this limit cannot be increased.</p> <note> <p>The caller of this API must be granted the <code>PassRole</code> permission on the IAM role by a permission policy.</p> </note> <p>For more information about roles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html\">Working with Roles</a>. For more information about instance profiles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html\">About Instance Profiles</a>.</p>"]
+    /// <p>Adds the specified IAM role to the specified instance profile. An instance profile can contain only one role, and this limit cannot be increased.</p> <note> <p>The caller of this API must be granted the <code>PassRole</code> permission on the IAM role by a permission policy.</p> </note> <p>For more information about roles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>. For more information about instance profiles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p>
     fn add_role_to_instance_profile(
         &self,
         input: &AddRoleToInstanceProfileRequest,
@@ -23356,7 +23356,7 @@ where
         }
     }
 
-    #[doc = "<p>Adds the specified user to the specified group.</p>"]
+    /// <p>Adds the specified user to the specified group.</p>
     fn add_user_to_group(&self, input: &AddUserToGroupRequest) -> Result<(), AddUserToGroupError> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
         let mut params = Params::new();
@@ -23383,7 +23383,7 @@ where
         }
     }
 
-    #[doc="<p>Attaches the specified managed policy to the specified IAM group.</p> <p>You use this API to attach a managed policy to a group. To embed an inline policy in a group, use <a>PutGroupPolicy</a>.</p> <p>For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Attaches the specified managed policy to the specified IAM group.</p> <p>You use this API to attach a managed policy to a group. To embed an inline policy in a group, use <a>PutGroupPolicy</a>.</p> <p>For more information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn attach_group_policy(
         &self,
         input: &AttachGroupPolicyRequest,
@@ -23413,7 +23413,7 @@ where
         }
     }
 
-    #[doc="<p>Attaches the specified managed policy to the specified IAM role. When you attach a managed policy to a role, the managed policy becomes part of the role's permission (access) policy.</p> <note> <p>You cannot use a managed policy as the role's trust policy. The role's trust policy is created at the same time as the role, using <a>CreateRole</a>. You can update a role's trust policy using <a>UpdateAssumeRolePolicy</a>.</p> </note> <p>Use this API to attach a <i>managed</i> policy to a role. To embed an inline policy in a role, use <a>PutRolePolicy</a>. For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Attaches the specified managed policy to the specified IAM role. When you attach a managed policy to a role, the managed policy becomes part of the role's permission (access) policy.</p> <note> <p>You cannot use a managed policy as the role's trust policy. The role's trust policy is created at the same time as the role, using <a>CreateRole</a>. You can update a role's trust policy using <a>UpdateAssumeRolePolicy</a>.</p> </note> <p>Use this API to attach a <i>managed</i> policy to a role. To embed an inline policy in a role, use <a>PutRolePolicy</a>. For more information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn attach_role_policy(
         &self,
         input: &AttachRolePolicyRequest,
@@ -23443,7 +23443,7 @@ where
         }
     }
 
-    #[doc="<p>Attaches the specified managed policy to the specified user.</p> <p>You use this API to attach a <i>managed</i> policy to a user. To embed an inline policy in a user, use <a>PutUserPolicy</a>.</p> <p>For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Attaches the specified managed policy to the specified user.</p> <p>You use this API to attach a <i>managed</i> policy to a user. To embed an inline policy in a user, use <a>PutUserPolicy</a>.</p> <p>For more information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn attach_user_policy(
         &self,
         input: &AttachUserPolicyRequest,
@@ -23473,7 +23473,7 @@ where
         }
     }
 
-    #[doc="<p>Changes the password of the IAM user who is calling this action. The root account password is not affected by this action.</p> <p>To change the password for a different user, see <a>UpdateLoginProfile</a>. For more information about modifying passwords, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html\">Managing Passwords</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Changes the password of the IAM user who is calling this action. The root account password is not affected by this action.</p> <p>To change the password for a different user, see <a>UpdateLoginProfile</a>. For more information about modifying passwords, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html">Managing Passwords</a> in the <i>IAM User Guide</i>.</p>
     fn change_password(&self, input: &ChangePasswordRequest) -> Result<(), ChangePasswordError> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
         let mut params = Params::new();
@@ -23500,7 +23500,7 @@ where
         }
     }
 
-    #[doc="<p> Creates a new AWS secret access key and corresponding AWS access key ID for the specified user. The default status for new keys is <code>Active</code>.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p> <p> For information about limits on the number of keys you can create, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <important> <p>To ensure the security of your AWS account, the secret access key is accessible only during key and user creation. You must save the key (for example, in a text file) if you want to be able to access it again. If a secret key is lost, you can delete the access keys for the associated user and then create new keys.</p> </important>"]
+    /// <p><p> Creates a new AWS secret access key and corresponding AWS access key ID for the specified user. The default status for new keys is <code>Active</code>.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p> <p> For information about limits on the number of keys you can create, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <important> <p>To ensure the security of your AWS account, the secret access key is accessible only during key and user creation. You must save the key (for example, in a text file) if you want to be able to access it again. If a secret key is lost, you can delete the access keys for the associated user and then create new keys.</p> </important></p>
     fn create_access_key(
         &self,
         input: &CreateAccessKeyRequest,
@@ -23551,7 +23551,7 @@ where
         }
     }
 
-    #[doc="<p>Creates an alias for your AWS account. For information about using an AWS account alias, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AccountAlias.html\">Using an Alias for Your AWS Account ID</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Creates an alias for your AWS account. For information about using an AWS account alias, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/AccountAlias.html">Using an Alias for Your AWS Account ID</a> in the <i>IAM User Guide</i>.</p>
     fn create_account_alias(
         &self,
         input: &CreateAccountAliasRequest,
@@ -23581,7 +23581,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new group.</p> <p> For information about the number of groups you can create, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Creates a new group.</p> <p> For information about the number of groups you can create, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
     fn create_group(
         &self,
         input: &CreateGroupRequest,
@@ -23632,7 +23632,7 @@ where
         }
     }
 
-    #[doc="<p> Creates a new instance profile. For information about instance profiles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html\">About Instance Profiles</a>.</p> <p> For information about the number of instance profiles you can create, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p> Creates a new instance profile. For information about instance profiles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p> <p> For information about the number of instance profiles you can create, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
     fn create_instance_profile(
         &self,
         input: &CreateInstanceProfileRequest,
@@ -23683,7 +23683,7 @@ where
         }
     }
 
-    #[doc="<p> Creates a password for the specified user, giving the user the ability to access AWS services through the AWS Management Console. For more information about managing passwords, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html\">Managing Passwords</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p> Creates a password for the specified user, giving the user the ability to access AWS services through the AWS Management Console. For more information about managing passwords, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html">Managing Passwords</a> in the <i>IAM User Guide</i>.</p>
     fn create_login_profile(
         &self,
         input: &CreateLoginProfileRequest,
@@ -23734,7 +23734,7 @@ where
         }
     }
 
-    #[doc="<p>Creates an IAM entity to describe an identity provider (IdP) that supports <a href=\"http://openid.net/connect/\">OpenID Connect (OIDC)</a>.</p> <p>The OIDC provider that you create with this operation can be used as a principal in a role's trust policy to establish a trust relationship between AWS and the OIDC provider.</p> <p>When you create the IAM OIDC provider, you specify the URL of the OIDC identity provider (IdP) to trust, a list of client IDs (also known as audiences) that identify the application or applications that are allowed to authenticate using the OIDC provider, and a list of thumbprints of the server certificate(s) that the IdP uses. You get all of this information from the OIDC IdP that you want to use for access to AWS.</p> <note> <p>Because trust for the OIDC provider is ultimately derived from the IAM provider that this action creates, it is a best practice to limit access to the <a>CreateOpenIDConnectProvider</a> action to highly-privileged users.</p> </note>"]
+    /// <p><p>Creates an IAM entity to describe an identity provider (IdP) that supports <a href="http://openid.net/connect/">OpenID Connect (OIDC)</a>.</p> <p>The OIDC provider that you create with this operation can be used as a principal in a role&#39;s trust policy to establish a trust relationship between AWS and the OIDC provider.</p> <p>When you create the IAM OIDC provider, you specify the URL of the OIDC identity provider (IdP) to trust, a list of client IDs (also known as audiences) that identify the application or applications that are allowed to authenticate using the OIDC provider, and a list of thumbprints of the server certificate(s) that the IdP uses. You get all of this information from the OIDC IdP that you want to use for access to AWS.</p> <note> <p>Because trust for the OIDC provider is ultimately derived from the IAM provider that this action creates, it is a best practice to limit access to the <a>CreateOpenIDConnectProvider</a> action to highly-privileged users.</p> </note></p>
     fn create_open_id_connect_provider(
         &self,
         input: &CreateOpenIDConnectProviderRequest,
@@ -23787,7 +23787,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new managed policy for your AWS account.</p> <p>This operation creates a policy version with a version identifier of <code>v1</code> and sets v1 as the policy's default version. For more information about policy versions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html\">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p> <p>For more information about managed policies in general, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Creates a new managed policy for your AWS account.</p> <p>This operation creates a policy version with a version identifier of <code>v1</code> and sets v1 as the policy's default version. For more information about policy versions, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p> <p>For more information about managed policies in general, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn create_policy(
         &self,
         input: &CreatePolicyRequest,
@@ -23838,7 +23838,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new version of the specified managed policy. To update a managed policy, you create a new policy version. A managed policy can have up to five versions. If the policy has five versions, you must delete an existing version using <a>DeletePolicyVersion</a> before you create a new version.</p> <p>Optionally, you can set the new version as the policy's default version. The default version is the version that is in effect for the IAM users, groups, and roles to which the policy is attached.</p> <p>For more information about managed policy versions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html\">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Creates a new version of the specified managed policy. To update a managed policy, you create a new policy version. A managed policy can have up to five versions. If the policy has five versions, you must delete an existing version using <a>DeletePolicyVersion</a> before you create a new version.</p> <p>Optionally, you can set the new version as the policy's default version. The default version is the version that is in effect for the IAM users, groups, and roles to which the policy is attached.</p> <p>For more information about managed policy versions, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>
     fn create_policy_version(
         &self,
         input: &CreatePolicyVersionRequest,
@@ -23889,7 +23889,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new role for your AWS account. For more information about roles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html\">Working with Roles</a>. For information about limitations on role names and the number of roles you can create, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Creates a new role for your AWS account. For more information about roles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>. For information about limitations on role names and the number of roles you can create, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
     fn create_role(
         &self,
         input: &CreateRoleRequest,
@@ -23940,7 +23940,7 @@ where
         }
     }
 
-    #[doc="<p>Creates an IAM resource that describes an identity provider (IdP) that supports SAML 2.0.</p> <p>The SAML provider resource that you create with this operation can be used as a principal in an IAM role's trust policy to enable federated users who sign-in using the SAML IdP to assume the role. You can create an IAM role that supports Web-based single sign-on (SSO) to the AWS Management Console or one that supports API access to AWS.</p> <p>When you create the SAML provider resource, you upload an a SAML metadata document that you get from your IdP and that includes the issuer's name, expiration information, and keys that can be used to validate the SAML authentication response (assertions) that the IdP sends. You must generate the metadata document using the identity management software that is used as your organization's IdP.</p> <note> <p> This operation requires <a href=\"http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html\">Signature Version 4</a>.</p> </note> <p> For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-saml.html\">Enabling SAML 2.0 Federated Users to Access the AWS Management Console</a> and <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_saml.html\">About SAML 2.0-based Federation</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Creates an IAM resource that describes an identity provider (IdP) that supports SAML 2.0.</p> <p>The SAML provider resource that you create with this operation can be used as a principal in an IAM role's trust policy to enable federated users who sign-in using the SAML IdP to assume the role. You can create an IAM role that supports Web-based single sign-on (SSO) to the AWS Management Console or one that supports API access to AWS.</p> <p>When you create the SAML provider resource, you upload an a SAML metadata document that you get from your IdP and that includes the issuer's name, expiration information, and keys that can be used to validate the SAML authentication response (assertions) that the IdP sends. You must generate the metadata document using the identity management software that is used as your organization's IdP.</p> <note> <p> This operation requires <a href="http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4</a>.</p> </note> <p> For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-saml.html">Enabling SAML 2.0 Federated Users to Access the AWS Management Console</a> and <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_saml.html">About SAML 2.0-based Federation</a> in the <i>IAM User Guide</i>.</p>
     fn create_saml_provider(
         &self,
         input: &CreateSAMLProviderRequest,
@@ -23991,7 +23991,7 @@ where
         }
     }
 
-    #[doc="<p>Creates an IAM role that is linked to a specific AWS service. The service controls the attached policies and when the role can be deleted. This helps ensure that the service is not broken by an unexpectedly changed or deleted role, which could put your AWS resources into an unknown state. Allowing the service to control the role helps improve service stability and proper cleanup when a service and its role are no longer needed.</p> <p>The name of the role is autogenerated by combining the string that you specify for the <code>AWSServiceName</code> parameter with the string that you specify for the <code>CustomSuffix</code> parameter. The resulting name must be unique in your account or the request fails.</p> <p>To attach a policy to this service-linked role, you must make the request using the AWS service that depends on this role.</p>"]
+    /// <p>Creates an IAM role that is linked to a specific AWS service. The service controls the attached policies and when the role can be deleted. This helps ensure that the service is not broken by an unexpectedly changed or deleted role, which could put your AWS resources into an unknown state. Allowing the service to control the role helps improve service stability and proper cleanup when a service and its role are no longer needed.</p> <p>The name of the role is autogenerated by combining the string that you specify for the <code>AWSServiceName</code> parameter with the string that you specify for the <code>CustomSuffix</code> parameter. The resulting name must be unique in your account or the request fails.</p> <p>To attach a policy to this service-linked role, you must make the request using the AWS service that depends on this role.</p>
     fn create_service_linked_role(
         &self,
         input: &CreateServiceLinkedRoleRequest,
@@ -24042,7 +24042,7 @@ where
         }
     }
 
-    #[doc="<p>Generates a set of credentials consisting of a user name and password that can be used to access the service specified in the request. These credentials are generated by IAM, and can be used only for the specified service. </p> <p>You can have a maximum of two sets of service-specific credentials for each supported service per user.</p> <p>The only supported service at this time is AWS CodeCommit.</p> <p>You can reset the password to a new service-generated value by calling <a>ResetServiceSpecificCredential</a>.</p> <p>For more information about service-specific credentials, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_ssh-keys.html\">Using IAM with AWS CodeCommit: Git Credentials, SSH Keys, and AWS Access Keys</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Generates a set of credentials consisting of a user name and password that can be used to access the service specified in the request. These credentials are generated by IAM, and can be used only for the specified service. </p> <p>You can have a maximum of two sets of service-specific credentials for each supported service per user.</p> <p>The only supported service at this time is AWS CodeCommit.</p> <p>You can reset the password to a new service-generated value by calling <a>ResetServiceSpecificCredential</a>.</p> <p>For more information about service-specific credentials, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_ssh-keys.html">Using IAM with AWS CodeCommit: Git Credentials, SSH Keys, and AWS Access Keys</a> in the <i>IAM User Guide</i>.</p>
     fn create_service_specific_credential(
         &self,
         input: &CreateServiceSpecificCredentialRequest,
@@ -24095,7 +24095,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new IAM user for your AWS account.</p> <p> For information about limitations on the number of IAM users you can create, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Creates a new IAM user for your AWS account.</p> <p> For information about limitations on the number of IAM users you can create, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
     fn create_user(
         &self,
         input: &CreateUserRequest,
@@ -24146,7 +24146,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new virtual MFA device for the AWS account. After creating the virtual MFA, use <a>EnableMFADevice</a> to attach the MFA device to an IAM user. For more information about creating and working with virtual MFA devices, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html\">Using a Virtual MFA Device</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of MFA devices you can create, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on Entities</a> in the <i>IAM User Guide</i>.</p> <important> <p>The seed information contained in the QR code and the Base32 string should be treated like any other secret access information, such as your AWS access keys or your passwords. After you provision your virtual device, you should ensure that the information is destroyed following secure procedures.</p> </important>"]
+    /// <p><p>Creates a new virtual MFA device for the AWS account. After creating the virtual MFA, use <a>EnableMFADevice</a> to attach the MFA device to an IAM user. For more information about creating and working with virtual MFA devices, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html">Using a Virtual MFA Device</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of MFA devices you can create, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on Entities</a> in the <i>IAM User Guide</i>.</p> <important> <p>The seed information contained in the QR code and the Base32 string should be treated like any other secret access information, such as your AWS access keys or your passwords. After you provision your virtual device, you should ensure that the information is destroyed following secure procedures.</p> </important></p>
     fn create_virtual_mfa_device(
         &self,
         input: &CreateVirtualMFADeviceRequest,
@@ -24197,7 +24197,7 @@ where
         }
     }
 
-    #[doc="<p>Deactivates the specified MFA device and removes it from association with the user name for which it was originally enabled.</p> <p>For more information about creating and working with virtual MFA devices, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html\">Using a Virtual MFA Device</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Deactivates the specified MFA device and removes it from association with the user name for which it was originally enabled.</p> <p>For more information about creating and working with virtual MFA devices, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html">Using a Virtual MFA Device</a> in the <i>IAM User Guide</i>.</p>
     fn deactivate_mfa_device(
         &self,
         input: &DeactivateMFADeviceRequest,
@@ -24227,7 +24227,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the access key pair associated with the specified IAM user.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p>"]
+    /// <p>Deletes the access key pair associated with the specified IAM user.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p>
     fn delete_access_key(
         &self,
         input: &DeleteAccessKeyRequest,
@@ -24257,7 +24257,7 @@ where
         }
     }
 
-    #[doc="<p> Deletes the specified AWS account alias. For information about using an AWS account alias, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AccountAlias.html\">Using an Alias for Your AWS Account ID</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p> Deletes the specified AWS account alias. For information about using an AWS account alias, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/AccountAlias.html">Using an Alias for Your AWS Account ID</a> in the <i>IAM User Guide</i>.</p>
     fn delete_account_alias(
         &self,
         input: &DeleteAccountAliasRequest,
@@ -24287,7 +24287,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the password policy for the AWS account. There are no parameters.</p>"]
+    /// <p>Deletes the password policy for the AWS account. There are no parameters.</p>
     fn delete_account_password_policy(&self) -> Result<(), DeleteAccountPasswordPolicyError> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
         let mut params = Params::new();
@@ -24314,7 +24314,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified IAM group. The group must not contain any users or have any attached policies.</p>"]
+    /// <p>Deletes the specified IAM group. The group must not contain any users or have any attached policies.</p>
     fn delete_group(&self, input: &DeleteGroupRequest) -> Result<(), DeleteGroupError> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
         let mut params = Params::new();
@@ -24341,7 +24341,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified inline policy that is embedded in the specified IAM group.</p> <p>A group can also have managed policies attached to it. To detach a managed policy from a group, use <a>DetachGroupPolicy</a>. For more information about policies, refer to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Deletes the specified inline policy that is embedded in the specified IAM group.</p> <p>A group can also have managed policies attached to it. To detach a managed policy from a group, use <a>DetachGroupPolicy</a>. For more information about policies, refer to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn delete_group_policy(
         &self,
         input: &DeleteGroupPolicyRequest,
@@ -24371,7 +24371,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified instance profile. The instance profile must not have an associated role.</p> <important> <p>Make sure you do not have any Amazon EC2 instances running with the instance profile you are about to delete. Deleting a role or instance profile that is associated with a running instance will break any applications running on the instance.</p> </important> <p>For more information about instance profiles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html\">About Instance Profiles</a>.</p>"]
+    /// <p>Deletes the specified instance profile. The instance profile must not have an associated role.</p> <important> <p>Make sure you do not have any Amazon EC2 instances running with the instance profile you are about to delete. Deleting a role or instance profile that is associated with a running instance will break any applications running on the instance.</p> </important> <p>For more information about instance profiles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p>
     fn delete_instance_profile(
         &self,
         input: &DeleteInstanceProfileRequest,
@@ -24401,7 +24401,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the password for the specified IAM user, which terminates the user's ability to access AWS services through the AWS Management Console.</p> <important> <p> Deleting a user's password does not prevent a user from accessing AWS through the command line interface or the API. To prevent all user access you must also either make any access keys inactive or delete them. For more information about making keys inactive or deleting them, see <a>UpdateAccessKey</a> and <a>DeleteAccessKey</a>. </p> </important>"]
+    /// <p><p>Deletes the password for the specified IAM user, which terminates the user&#39;s ability to access AWS services through the AWS Management Console.</p> <important> <p> Deleting a user&#39;s password does not prevent a user from accessing AWS through the command line interface or the API. To prevent all user access you must also either make any access keys inactive or delete them. For more information about making keys inactive or deleting them, see <a>UpdateAccessKey</a> and <a>DeleteAccessKey</a>. </p> </important></p>
     fn delete_login_profile(
         &self,
         input: &DeleteLoginProfileRequest,
@@ -24431,7 +24431,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes an OpenID Connect identity provider (IdP) resource object in IAM.</p> <p>Deleting an IAM OIDC provider resource does not update any roles that reference the provider as a principal in their trust policies. Any attempt to assume a role that references a deleted provider fails.</p> <p>This action is idempotent; it does not fail or return an error if you call the action for a provider that does not exist.</p>"]
+    /// <p>Deletes an OpenID Connect identity provider (IdP) resource object in IAM.</p> <p>Deleting an IAM OIDC provider resource does not update any roles that reference the provider as a principal in their trust policies. Any attempt to assume a role that references a deleted provider fails.</p> <p>This action is idempotent; it does not fail or return an error if you call the action for a provider that does not exist.</p>
     fn delete_open_id_connect_provider(
         &self,
         input: &DeleteOpenIDConnectProviderRequest,
@@ -24461,7 +24461,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified managed policy.</p> <p>Before you can delete a managed policy, you must first detach the policy from all users, groups, and roles that it is attached to, and you must delete all of the policy's versions. The following steps describe the process for deleting a managed policy:</p> <ul> <li> <p>Detach the policy from all users, groups, and roles that the policy is attached to, using the <a>DetachUserPolicy</a>, <a>DetachGroupPolicy</a>, or <a>DetachRolePolicy</a> APIs. To list all the users, groups, and roles that a policy is attached to, use <a>ListEntitiesForPolicy</a>.</p> </li> <li> <p>Delete all versions of the policy using <a>DeletePolicyVersion</a>. To list the policy's versions, use <a>ListPolicyVersions</a>. You cannot use <a>DeletePolicyVersion</a> to delete the version that is marked as the default version. You delete the policy's default version in the next step of the process.</p> </li> <li> <p>Delete the policy (this automatically deletes the policy's default version) using this API.</p> </li> </ul> <p>For information about managed policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Deletes the specified managed policy.</p> <p>Before you can delete a managed policy, you must first detach the policy from all users, groups, and roles that it is attached to, and you must delete all of the policy's versions. The following steps describe the process for deleting a managed policy:</p> <ul> <li> <p>Detach the policy from all users, groups, and roles that the policy is attached to, using the <a>DetachUserPolicy</a>, <a>DetachGroupPolicy</a>, or <a>DetachRolePolicy</a> APIs. To list all the users, groups, and roles that a policy is attached to, use <a>ListEntitiesForPolicy</a>.</p> </li> <li> <p>Delete all versions of the policy using <a>DeletePolicyVersion</a>. To list the policy's versions, use <a>ListPolicyVersions</a>. You cannot use <a>DeletePolicyVersion</a> to delete the version that is marked as the default version. You delete the policy's default version in the next step of the process.</p> </li> <li> <p>Delete the policy (this automatically deletes the policy's default version) using this API.</p> </li> </ul> <p>For information about managed policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn delete_policy(&self, input: &DeletePolicyRequest) -> Result<(), DeletePolicyError> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
         let mut params = Params::new();
@@ -24488,7 +24488,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified version from the specified managed policy.</p> <p>You cannot delete the default version from a policy using this API. To delete the default version from a policy, use <a>DeletePolicy</a>. To find out which version of a policy is marked as the default version, use <a>ListPolicyVersions</a>.</p> <p>For information about versions for managed policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html\">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Deletes the specified version from the specified managed policy.</p> <p>You cannot delete the default version from a policy using this API. To delete the default version from a policy, use <a>DeletePolicy</a>. To find out which version of a policy is marked as the default version, use <a>ListPolicyVersions</a>.</p> <p>For information about versions for managed policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>
     fn delete_policy_version(
         &self,
         input: &DeletePolicyVersionRequest,
@@ -24518,7 +24518,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified role. The role must not have any policies attached. For more information about roles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html\">Working with Roles</a>.</p> <important> <p>Make sure you do not have any Amazon EC2 instances running with the role you are about to delete. Deleting a role or instance profile that is associated with a running instance will break any applications running on the instance.</p> </important>"]
+    /// <p><p>Deletes the specified role. The role must not have any policies attached. For more information about roles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>.</p> <important> <p>Make sure you do not have any Amazon EC2 instances running with the role you are about to delete. Deleting a role or instance profile that is associated with a running instance will break any applications running on the instance.</p> </important></p>
     fn delete_role(&self, input: &DeleteRoleRequest) -> Result<(), DeleteRoleError> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
         let mut params = Params::new();
@@ -24545,7 +24545,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified inline policy that is embedded in the specified IAM role.</p> <p>A role can also have managed policies attached to it. To detach a managed policy from a role, use <a>DetachRolePolicy</a>. For more information about policies, refer to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Deletes the specified inline policy that is embedded in the specified IAM role.</p> <p>A role can also have managed policies attached to it. To detach a managed policy from a role, use <a>DetachRolePolicy</a>. For more information about policies, refer to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn delete_role_policy(
         &self,
         input: &DeleteRolePolicyRequest,
@@ -24575,7 +24575,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a SAML provider resource in IAM.</p> <p>Deleting the provider resource from IAM does not update any roles that reference the SAML provider resource's ARN as a principal in their trust policies. Any attempt to assume a role that references a non-existent provider resource ARN fails.</p> <note> <p> This operation requires <a href=\"http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html\">Signature Version 4</a>.</p> </note>"]
+    /// <p><p>Deletes a SAML provider resource in IAM.</p> <p>Deleting the provider resource from IAM does not update any roles that reference the SAML provider resource&#39;s ARN as a principal in their trust policies. Any attempt to assume a role that references a non-existent provider resource ARN fails.</p> <note> <p> This operation requires <a href="http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4</a>.</p> </note></p>
     fn delete_saml_provider(
         &self,
         input: &DeleteSAMLProviderRequest,
@@ -24605,7 +24605,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified SSH public key.</p> <p>The SSH public key deleted by this action is used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href=\"http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html\">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>"]
+    /// <p>Deletes the specified SSH public key.</p> <p>The SSH public key deleted by this action is used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>
     fn delete_ssh_public_key(
         &self,
         input: &DeleteSSHPublicKeyRequest,
@@ -24635,7 +24635,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified server certificate.</p> <p>For more information about working with server certificates, including a list of AWS services that can use the server certificates that you manage with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html\">Working with Server Certificates</a> in the <i>IAM User Guide</i>.</p> <important> <p> If you are using a server certificate with Elastic Load Balancing, deleting the certificate could have implications for your application. If Elastic Load Balancing doesn't detect the deletion of bound certificates, it may continue to use the certificates. This could cause Elastic Load Balancing to stop accepting traffic. We recommend that you remove the reference to the certificate from Elastic Load Balancing before using this command to delete the certificate. For more information, go to <a href=\"http://docs.aws.amazon.com/ElasticLoadBalancing/latest/APIReference/API_DeleteLoadBalancerListeners.html\">DeleteLoadBalancerListeners</a> in the <i>Elastic Load Balancing API Reference</i>.</p> </important>"]
+    /// <p><p>Deletes the specified server certificate.</p> <p>For more information about working with server certificates, including a list of AWS services that can use the server certificates that you manage with IAM, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">Working with Server Certificates</a> in the <i>IAM User Guide</i>.</p> <important> <p> If you are using a server certificate with Elastic Load Balancing, deleting the certificate could have implications for your application. If Elastic Load Balancing doesn&#39;t detect the deletion of bound certificates, it may continue to use the certificates. This could cause Elastic Load Balancing to stop accepting traffic. We recommend that you remove the reference to the certificate from Elastic Load Balancing before using this command to delete the certificate. For more information, go to <a href="http://docs.aws.amazon.com/ElasticLoadBalancing/latest/APIReference/API_DeleteLoadBalancerListeners.html">DeleteLoadBalancerListeners</a> in the <i>Elastic Load Balancing API Reference</i>.</p> </important></p>
     fn delete_server_certificate(
         &self,
         input: &DeleteServerCertificateRequest,
@@ -24665,7 +24665,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the specified service-specific credential.</p>"]
+    /// <p>Deletes the specified service-specific credential.</p>
     fn delete_service_specific_credential(
         &self,
         input: &DeleteServiceSpecificCredentialRequest,
@@ -24695,7 +24695,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a signing certificate associated with the specified IAM user.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated IAM users.</p>"]
+    /// <p>Deletes a signing certificate associated with the specified IAM user.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated IAM users.</p>
     fn delete_signing_certificate(
         &self,
         input: &DeleteSigningCertificateRequest,
@@ -24725,7 +24725,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified IAM user. The user must not belong to any groups or have any access keys, signing certificates, or attached policies.</p>"]
+    /// <p>Deletes the specified IAM user. The user must not belong to any groups or have any access keys, signing certificates, or attached policies.</p>
     fn delete_user(&self, input: &DeleteUserRequest) -> Result<(), DeleteUserError> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
         let mut params = Params::new();
@@ -24752,7 +24752,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified inline policy that is embedded in the specified IAM user.</p> <p>A user can also have managed policies attached to it. To detach a managed policy from a user, use <a>DetachUserPolicy</a>. For more information about policies, refer to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Deletes the specified inline policy that is embedded in the specified IAM user.</p> <p>A user can also have managed policies attached to it. To detach a managed policy from a user, use <a>DetachUserPolicy</a>. For more information about policies, refer to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn delete_user_policy(
         &self,
         input: &DeleteUserPolicyRequest,
@@ -24782,7 +24782,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a virtual MFA device.</p> <note> <p> You must deactivate a user's virtual MFA device before you can delete it. For information about deactivating MFA devices, see <a>DeactivateMFADevice</a>. </p> </note>"]
+    /// <p><p>Deletes a virtual MFA device.</p> <note> <p> You must deactivate a user&#39;s virtual MFA device before you can delete it. For information about deactivating MFA devices, see <a>DeactivateMFADevice</a>. </p> </note></p>
     fn delete_virtual_mfa_device(
         &self,
         input: &DeleteVirtualMFADeviceRequest,
@@ -24812,7 +24812,7 @@ where
         }
     }
 
-    #[doc="<p>Removes the specified managed policy from the specified IAM group.</p> <p>A group can also have inline policies embedded with it. To delete an inline policy, use the <a>DeleteGroupPolicy</a> API. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Removes the specified managed policy from the specified IAM group.</p> <p>A group can also have inline policies embedded with it. To delete an inline policy, use the <a>DeleteGroupPolicy</a> API. For information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn detach_group_policy(
         &self,
         input: &DetachGroupPolicyRequest,
@@ -24842,7 +24842,7 @@ where
         }
     }
 
-    #[doc="<p>Removes the specified managed policy from the specified role.</p> <p>A role can also have inline policies embedded with it. To delete an inline policy, use the <a>DeleteRolePolicy</a> API. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Removes the specified managed policy from the specified role.</p> <p>A role can also have inline policies embedded with it. To delete an inline policy, use the <a>DeleteRolePolicy</a> API. For information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn detach_role_policy(
         &self,
         input: &DetachRolePolicyRequest,
@@ -24872,7 +24872,7 @@ where
         }
     }
 
-    #[doc="<p>Removes the specified managed policy from the specified user.</p> <p>A user can also have inline policies embedded with it. To delete an inline policy, use the <a>DeleteUserPolicy</a> API. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Removes the specified managed policy from the specified user.</p> <p>A user can also have inline policies embedded with it. To delete an inline policy, use the <a>DeleteUserPolicy</a> API. For information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn detach_user_policy(
         &self,
         input: &DetachUserPolicyRequest,
@@ -24902,7 +24902,7 @@ where
         }
     }
 
-    #[doc="<p>Enables the specified MFA device and associates it with the specified IAM user. When enabled, the MFA device is required for every subsequent login by the IAM user associated with the device.</p>"]
+    /// <p>Enables the specified MFA device and associates it with the specified IAM user. When enabled, the MFA device is required for every subsequent login by the IAM user associated with the device.</p>
     fn enable_mfa_device(
         &self,
         input: &EnableMFADeviceRequest,
@@ -24932,7 +24932,7 @@ where
         }
     }
 
-    #[doc="<p> Generates a credential report for the AWS account. For more information about the credential report, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/credential-reports.html\">Getting Credential Reports</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p> Generates a credential report for the AWS account. For more information about the credential report, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/credential-reports.html">Getting Credential Reports</a> in the <i>IAM User Guide</i>.</p>
     fn generate_credential_report(
         &self,
     ) -> Result<GenerateCredentialReportResponse, GenerateCredentialReportError> {
@@ -24982,7 +24982,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves information about when the specified access key was last used. The information includes the date and time of last use, along with the AWS service and region that were specified in the last request made with that key.</p>"]
+    /// <p>Retrieves information about when the specified access key was last used. The information includes the date and time of last use, along with the AWS service and region that were specified in the last request made with that key.</p>
     fn get_access_key_last_used(
         &self,
         input: &GetAccessKeyLastUsedRequest,
@@ -25033,7 +25033,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves information about all IAM users, groups, roles, and policies in your AWS account, including their relationships to one another. Use this API to obtain a snapshot of the configuration of IAM permissions (users, groups, roles, and policies) in your account.</p> <p>You can optionally filter the results using the <code>Filter</code> parameter. You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
+    /// <p>Retrieves information about all IAM users, groups, roles, and policies in your AWS account, including their relationships to one another. Use this API to obtain a snapshot of the configuration of IAM permissions (users, groups, roles, and policies) in your account.</p> <p>You can optionally filter the results using the <code>Filter</code> parameter. You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn get_account_authorization_details(
         &self,
         input: &GetAccountAuthorizationDetailsRequest,
@@ -25086,7 +25086,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves the password policy for the AWS account. For more information about using a password policy, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingPasswordPolicies.html\">Managing an IAM Password Policy</a>.</p>"]
+    /// <p>Retrieves the password policy for the AWS account. For more information about using a password policy, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingPasswordPolicies.html">Managing an IAM Password Policy</a>.</p>
     fn get_account_password_policy(
         &self,
     ) -> Result<GetAccountPasswordPolicyResponse, GetAccountPasswordPolicyError> {
@@ -25136,7 +25136,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves information about IAM entity usage and IAM quotas in the AWS account.</p> <p> For information about limitations on IAM entities, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Retrieves information about IAM entity usage and IAM quotas in the AWS account.</p> <p> For information about limitations on IAM entities, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
     fn get_account_summary(&self) -> Result<GetAccountSummaryResponse, GetAccountSummaryError> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
         let mut params = Params::new();
@@ -25184,7 +25184,7 @@ where
         }
     }
 
-    #[doc="<p>Gets a list of all of the context keys referenced in the input policies. The policies are supplied as a list of one or more strings. To get the context keys from policies associated with an IAM user, group, or role, use <a>GetContextKeysForPrincipalPolicy</a>.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request, and can be evaluated by testing against a value specified in an IAM policy. Use GetContextKeysForCustomPolicy to understand what key names and values you must supply when you call <a>SimulateCustomPolicy</a>. Note that all parameters are shown in unencoded form here for clarity, but must be URL encoded to be included as a part of a real HTML request.</p>"]
+    /// <p>Gets a list of all of the context keys referenced in the input policies. The policies are supplied as a list of one or more strings. To get the context keys from policies associated with an IAM user, group, or role, use <a>GetContextKeysForPrincipalPolicy</a>.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request, and can be evaluated by testing against a value specified in an IAM policy. Use GetContextKeysForCustomPolicy to understand what key names and values you must supply when you call <a>SimulateCustomPolicy</a>. Note that all parameters are shown in unencoded form here for clarity, but must be URL encoded to be included as a part of a real HTML request.</p>
     fn get_context_keys_for_custom_policy(
         &self,
         input: &GetContextKeysForCustomPolicyRequest,
@@ -25235,7 +25235,7 @@ where
         }
     }
 
-    #[doc="<p>Gets a list of all of the context keys referenced in all of the IAM policies attached to the specified IAM entity. The entity can be an IAM user, group, or role. If you specify a user, then the request also includes all of the policies attached to groups that the user is a member of.</p> <p>You can optionally include a list of one or more additional policies, specified as strings. If you want to include <i>only</i> a list of policies by string, use <a>GetContextKeysForCustomPolicy</a> instead.</p> <p> <b>Note:</b> This API discloses information about the permissions granted to other users. If you do not want users to see other user's permissions, then consider allowing them to use <a>GetContextKeysForCustomPolicy</a> instead.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request, and can be evaluated by testing against a value in an IAM policy. Use <a>GetContextKeysForPrincipalPolicy</a> to understand what key names and values you must supply when you call <a>SimulatePrincipalPolicy</a>.</p>"]
+    /// <p>Gets a list of all of the context keys referenced in all of the IAM policies attached to the specified IAM entity. The entity can be an IAM user, group, or role. If you specify a user, then the request also includes all of the policies attached to groups that the user is a member of.</p> <p>You can optionally include a list of one or more additional policies, specified as strings. If you want to include <i>only</i> a list of policies by string, use <a>GetContextKeysForCustomPolicy</a> instead.</p> <p> <b>Note:</b> This API discloses information about the permissions granted to other users. If you do not want users to see other user's permissions, then consider allowing them to use <a>GetContextKeysForCustomPolicy</a> instead.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request, and can be evaluated by testing against a value in an IAM policy. Use <a>GetContextKeysForPrincipalPolicy</a> to understand what key names and values you must supply when you call <a>SimulatePrincipalPolicy</a>.</p>
     fn get_context_keys_for_principal_policy(
         &self,
         input: &GetContextKeysForPrincipalPolicyRequest,
@@ -25286,7 +25286,7 @@ where
         }
     }
 
-    #[doc="<p> Retrieves a credential report for the AWS account. For more information about the credential report, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/credential-reports.html\">Getting Credential Reports</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p> Retrieves a credential report for the AWS account. For more information about the credential report, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/credential-reports.html">Getting Credential Reports</a> in the <i>IAM User Guide</i>.</p>
     fn get_credential_report(
         &self,
     ) -> Result<GetCredentialReportResponse, GetCredentialReportError> {
@@ -25336,7 +25336,7 @@ where
         }
     }
 
-    #[doc="<p> Returns a list of IAM users that are in the specified IAM group. You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
+    /// <p> Returns a list of IAM users that are in the specified IAM group. You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn get_group(&self, input: &GetGroupRequest) -> Result<GetGroupResponse, GetGroupError> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
         let mut params = Params::new();
@@ -25384,7 +25384,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves the specified inline policy document that is embedded in the specified IAM group.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href=\"https://tools.ietf.org/html/rfc3986\">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>An IAM group can also have managed policies attached to it. To retrieve a managed policy document that is attached to a group, use <a>GetPolicy</a> to determine the policy's default version, then use <a>GetPolicyVersion</a> to retrieve the policy document.</p> <p>For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Retrieves the specified inline policy document that is embedded in the specified IAM group.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>An IAM group can also have managed policies attached to it. To retrieve a managed policy document that is attached to a group, use <a>GetPolicy</a> to determine the policy's default version, then use <a>GetPolicyVersion</a> to retrieve the policy document.</p> <p>For more information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn get_group_policy(
         &self,
         input: &GetGroupPolicyRequest,
@@ -25435,7 +25435,7 @@ where
         }
     }
 
-    #[doc="<p> Retrieves information about the specified instance profile, including the instance profile's path, GUID, ARN, and role. For more information about instance profiles, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html\">About Instance Profiles</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p> Retrieves information about the specified instance profile, including the instance profile's path, GUID, ARN, and role. For more information about instance profiles, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a> in the <i>IAM User Guide</i>.</p>
     fn get_instance_profile(
         &self,
         input: &GetInstanceProfileRequest,
@@ -25486,7 +25486,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves the user name and password-creation date for the specified IAM user. If the user has not been assigned a password, the action returns a 404 (<code>NoSuchEntity</code>) error.</p>"]
+    /// <p>Retrieves the user name and password-creation date for the specified IAM user. If the user has not been assigned a password, the action returns a 404 (<code>NoSuchEntity</code>) error.</p>
     fn get_login_profile(
         &self,
         input: &GetLoginProfileRequest,
@@ -25537,7 +25537,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about the specified OpenID Connect (OIDC) provider resource object in IAM.</p>"]
+    /// <p>Returns information about the specified OpenID Connect (OIDC) provider resource object in IAM.</p>
     fn get_open_id_connect_provider(
         &self,
         input: &GetOpenIDConnectProviderRequest,
@@ -25588,7 +25588,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves information about the specified managed policy, including the policy's default version and the total number of IAM users, groups, and roles to which the policy is attached. To retrieve the list of the specific users, groups, and roles that the policy is attached to, use the <a>ListEntitiesForPolicy</a> API. This API returns metadata about the policy. To retrieve the actual policy document for a specific version of the policy, use <a>GetPolicyVersion</a>.</p> <p>This API retrieves information about managed policies. To retrieve information about an inline policy that is embedded with an IAM user, group, or role, use the <a>GetUserPolicy</a>, <a>GetGroupPolicy</a>, or <a>GetRolePolicy</a> API.</p> <p>For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Retrieves information about the specified managed policy, including the policy's default version and the total number of IAM users, groups, and roles to which the policy is attached. To retrieve the list of the specific users, groups, and roles that the policy is attached to, use the <a>ListEntitiesForPolicy</a> API. This API returns metadata about the policy. To retrieve the actual policy document for a specific version of the policy, use <a>GetPolicyVersion</a>.</p> <p>This API retrieves information about managed policies. To retrieve information about an inline policy that is embedded with an IAM user, group, or role, use the <a>GetUserPolicy</a>, <a>GetGroupPolicy</a>, or <a>GetRolePolicy</a> API.</p> <p>For more information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn get_policy(&self, input: &GetPolicyRequest) -> Result<GetPolicyResponse, GetPolicyError> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
         let mut params = Params::new();
@@ -25636,7 +25636,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves information about the specified version of the specified managed policy, including the policy document.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href=\"https://tools.ietf.org/html/rfc3986\">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>To list the available versions for a policy, use <a>ListPolicyVersions</a>.</p> <p>This API retrieves information about managed policies. To retrieve information about an inline policy that is embedded in a user, group, or role, use the <a>GetUserPolicy</a>, <a>GetGroupPolicy</a>, or <a>GetRolePolicy</a> API.</p> <p>For more information about the types of policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For more information about managed policy versions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html\">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Retrieves information about the specified version of the specified managed policy, including the policy document.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>To list the available versions for a policy, use <a>ListPolicyVersions</a>.</p> <p>This API retrieves information about managed policies. To retrieve information about an inline policy that is embedded in a user, group, or role, use the <a>GetUserPolicy</a>, <a>GetGroupPolicy</a>, or <a>GetRolePolicy</a> API.</p> <p>For more information about the types of policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For more information about managed policy versions, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>
     fn get_policy_version(
         &self,
         input: &GetPolicyVersionRequest,
@@ -25687,7 +25687,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves information about the specified role, including the role's path, GUID, ARN, and the role's trust policy that grants permission to assume the role. For more information about roles, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html\">Working with Roles</a>.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href=\"https://tools.ietf.org/html/rfc3986\">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note>"]
+    /// <p><p>Retrieves information about the specified role, including the role&#39;s path, GUID, ARN, and the role&#39;s trust policy that grants permission to assume the role. For more information about roles, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note></p>
     fn get_role(&self, input: &GetRoleRequest) -> Result<GetRoleResponse, GetRoleError> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
         let mut params = Params::new();
@@ -25735,7 +25735,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves the specified inline policy document that is embedded with the specified IAM role.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href=\"https://tools.ietf.org/html/rfc3986\">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>An IAM role can also have managed policies attached to it. To retrieve a managed policy document that is attached to a role, use <a>GetPolicy</a> to determine the policy's default version, then use <a>GetPolicyVersion</a> to retrieve the policy document.</p> <p>For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For more information about roles, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html\">Using Roles to Delegate Permissions and Federate Identities</a>.</p>"]
+    /// <p>Retrieves the specified inline policy document that is embedded with the specified IAM role.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>An IAM role can also have managed policies attached to it. To retrieve a managed policy document that is attached to a role, use <a>GetPolicy</a> to determine the policy's default version, then use <a>GetPolicyVersion</a> to retrieve the policy document.</p> <p>For more information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For more information about roles, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html">Using Roles to Delegate Permissions and Federate Identities</a>.</p>
     fn get_role_policy(
         &self,
         input: &GetRolePolicyRequest,
@@ -25786,7 +25786,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the SAML provider metadocument that was uploaded when the IAM SAML provider resource object was created or updated.</p> <note> <p>This operation requires <a href=\"http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html\">Signature Version 4</a>.</p> </note>"]
+    /// <p><p>Returns the SAML provider metadocument that was uploaded when the IAM SAML provider resource object was created or updated.</p> <note> <p>This operation requires <a href="http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4</a>.</p> </note></p>
     fn get_saml_provider(
         &self,
         input: &GetSAMLProviderRequest,
@@ -25837,7 +25837,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves the specified SSH public key, including metadata about the key.</p> <p>The SSH public key retrieved by this action is used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href=\"http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html\">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>"]
+    /// <p>Retrieves the specified SSH public key, including metadata about the key.</p> <p>The SSH public key retrieved by this action is used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>
     fn get_ssh_public_key(
         &self,
         input: &GetSSHPublicKeyRequest,
@@ -25888,7 +25888,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves information about the specified server certificate stored in IAM.</p> <p>For more information about working with server certificates, including a list of AWS services that can use the server certificates that you manage with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html\">Working with Server Certificates</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Retrieves information about the specified server certificate stored in IAM.</p> <p>For more information about working with server certificates, including a list of AWS services that can use the server certificates that you manage with IAM, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">Working with Server Certificates</a> in the <i>IAM User Guide</i>.</p>
     fn get_server_certificate(
         &self,
         input: &GetServerCertificateRequest,
@@ -25939,7 +25939,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves information about the specified IAM user, including the user's creation date, path, unique ID, and ARN.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID used to sign the request to this API.</p>"]
+    /// <p>Retrieves information about the specified IAM user, including the user's creation date, path, unique ID, and ARN.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID used to sign the request to this API.</p>
     fn get_user(&self, input: &GetUserRequest) -> Result<GetUserResponse, GetUserError> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
         let mut params = Params::new();
@@ -25987,7 +25987,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves the specified inline policy document that is embedded in the specified IAM user.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href=\"https://tools.ietf.org/html/rfc3986\">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>An IAM user can also have managed policies attached to it. To retrieve a managed policy document that is attached to a user, use <a>GetPolicy</a> to determine the policy's default version, then use <a>GetPolicyVersion</a> to retrieve the policy document.</p> <p>For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Retrieves the specified inline policy document that is embedded in the specified IAM user.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>An IAM user can also have managed policies attached to it. To retrieve a managed policy document that is attached to a user, use <a>GetPolicy</a> to determine the policy's default version, then use <a>GetPolicyVersion</a> to retrieve the policy document.</p> <p>For more information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn get_user_policy(
         &self,
         input: &GetUserPolicyRequest,
@@ -26038,7 +26038,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about the access key IDs associated with the specified IAM user. If there are none, the action returns an empty list.</p> <p>Although each user is limited to a small number of keys, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>If the <code>UserName</code> field is not specified, the UserName is determined implicitly based on the AWS access key ID used to sign the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p> <note> <p>To ensure the security of your AWS account, the secret access key is accessible only during key and user creation.</p> </note>"]
+    /// <p><p>Returns information about the access key IDs associated with the specified IAM user. If there are none, the action returns an empty list.</p> <p>Although each user is limited to a small number of keys, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>If the <code>UserName</code> field is not specified, the UserName is determined implicitly based on the AWS access key ID used to sign the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p> <note> <p>To ensure the security of your AWS account, the secret access key is accessible only during key and user creation.</p> </note></p>
     fn list_access_keys(
         &self,
         input: &ListAccessKeysRequest,
@@ -26089,7 +26089,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the account alias associated with the AWS account (Note: you can have only one). For information about using an AWS account alias, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AccountAlias.html\">Using an Alias for Your AWS Account ID</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Lists the account alias associated with the AWS account (Note: you can have only one). For information about using an AWS account alias, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/AccountAlias.html">Using an Alias for Your AWS Account ID</a> in the <i>IAM User Guide</i>.</p>
     fn list_account_aliases(
         &self,
         input: &ListAccountAliasesRequest,
@@ -26140,7 +26140,7 @@ where
         }
     }
 
-    #[doc="<p>Lists all managed policies that are attached to the specified IAM group.</p> <p>An IAM group can also have inline policies embedded with it. To list the inline policies for a group, use the <a>ListGroupPolicies</a> API. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. You can use the <code>PathPrefix</code> parameter to limit the list of policies to only those matching the specified path prefix. If there are no policies attached to the specified group (or none that match the specified path prefix), the action returns an empty list.</p>"]
+    /// <p>Lists all managed policies that are attached to the specified IAM group.</p> <p>An IAM group can also have inline policies embedded with it. To list the inline policies for a group, use the <a>ListGroupPolicies</a> API. For information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. You can use the <code>PathPrefix</code> parameter to limit the list of policies to only those matching the specified path prefix. If there are no policies attached to the specified group (or none that match the specified path prefix), the action returns an empty list.</p>
     fn list_attached_group_policies(
         &self,
         input: &ListAttachedGroupPoliciesRequest,
@@ -26191,7 +26191,7 @@ where
         }
     }
 
-    #[doc="<p>Lists all managed policies that are attached to the specified IAM role.</p> <p>An IAM role can also have inline policies embedded with it. To list the inline policies for a role, use the <a>ListRolePolicies</a> API. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. You can use the <code>PathPrefix</code> parameter to limit the list of policies to only those matching the specified path prefix. If there are no policies attached to the specified role (or none that match the specified path prefix), the action returns an empty list.</p>"]
+    /// <p>Lists all managed policies that are attached to the specified IAM role.</p> <p>An IAM role can also have inline policies embedded with it. To list the inline policies for a role, use the <a>ListRolePolicies</a> API. For information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. You can use the <code>PathPrefix</code> parameter to limit the list of policies to only those matching the specified path prefix. If there are no policies attached to the specified role (or none that match the specified path prefix), the action returns an empty list.</p>
     fn list_attached_role_policies(
         &self,
         input: &ListAttachedRolePoliciesRequest,
@@ -26242,7 +26242,7 @@ where
         }
     }
 
-    #[doc="<p>Lists all managed policies that are attached to the specified IAM user.</p> <p>An IAM user can also have inline policies embedded with it. To list the inline policies for a user, use the <a>ListUserPolicies</a> API. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. You can use the <code>PathPrefix</code> parameter to limit the list of policies to only those matching the specified path prefix. If there are no policies attached to the specified group (or none that match the specified path prefix), the action returns an empty list.</p>"]
+    /// <p>Lists all managed policies that are attached to the specified IAM user.</p> <p>An IAM user can also have inline policies embedded with it. To list the inline policies for a user, use the <a>ListUserPolicies</a> API. For information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. You can use the <code>PathPrefix</code> parameter to limit the list of policies to only those matching the specified path prefix. If there are no policies attached to the specified group (or none that match the specified path prefix), the action returns an empty list.</p>
     fn list_attached_user_policies(
         &self,
         input: &ListAttachedUserPoliciesRequest,
@@ -26293,7 +26293,7 @@ where
         }
     }
 
-    #[doc="<p>Lists all IAM users, groups, and roles that the specified managed policy is attached to.</p> <p>You can use the optional <code>EntityFilter</code> parameter to limit the results to a particular type of entity (users, groups, or roles). For example, to list only the roles that are attached to the specified policy, set <code>EntityFilter</code> to <code>Role</code>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
+    /// <p>Lists all IAM users, groups, and roles that the specified managed policy is attached to.</p> <p>You can use the optional <code>EntityFilter</code> parameter to limit the results to a particular type of entity (users, groups, or roles). For example, to list only the roles that are attached to the specified policy, set <code>EntityFilter</code> to <code>Role</code>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn list_entities_for_policy(
         &self,
         input: &ListEntitiesForPolicyRequest,
@@ -26344,7 +26344,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the names of the inline policies that are embedded in the specified IAM group.</p> <p>An IAM group can also have managed policies attached to it. To list the managed policies that are attached to a group, use <a>ListAttachedGroupPolicies</a>. For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. If there are no inline policies embedded with the specified group, the action returns an empty list.</p>"]
+    /// <p>Lists the names of the inline policies that are embedded in the specified IAM group.</p> <p>An IAM group can also have managed policies attached to it. To list the managed policies that are attached to a group, use <a>ListAttachedGroupPolicies</a>. For more information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. If there are no inline policies embedded with the specified group, the action returns an empty list.</p>
     fn list_group_policies(
         &self,
         input: &ListGroupPoliciesRequest,
@@ -26395,7 +26395,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the IAM groups that have the specified path prefix.</p> <p> You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
+    /// <p>Lists the IAM groups that have the specified path prefix.</p> <p> You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn list_groups(
         &self,
         input: &ListGroupsRequest,
@@ -26446,7 +26446,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the IAM groups that the specified IAM user belongs to.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
+    /// <p>Lists the IAM groups that the specified IAM user belongs to.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn list_groups_for_user(
         &self,
         input: &ListGroupsForUserRequest,
@@ -26497,7 +26497,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the instance profiles that have the specified path prefix. If there are none, the action returns an empty list. For more information about instance profiles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html\">About Instance Profiles</a>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
+    /// <p>Lists the instance profiles that have the specified path prefix. If there are none, the action returns an empty list. For more information about instance profiles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn list_instance_profiles(
         &self,
         input: &ListInstanceProfilesRequest,
@@ -26548,7 +26548,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the instance profiles that have the specified associated IAM role. If there are none, the action returns an empty list. For more information about instance profiles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html\">About Instance Profiles</a>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
+    /// <p>Lists the instance profiles that have the specified associated IAM role. If there are none, the action returns an empty list. For more information about instance profiles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn list_instance_profiles_for_role(
         &self,
         input: &ListInstanceProfilesForRoleRequest,
@@ -26601,7 +26601,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the MFA devices for an IAM user. If the request includes a IAM user name, then this action lists all the MFA devices associated with the specified user. If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request for this API.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
+    /// <p>Lists the MFA devices for an IAM user. If the request includes a IAM user name, then this action lists all the MFA devices associated with the specified user. If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request for this API.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn list_mfa_devices(
         &self,
         input: &ListMFADevicesRequest,
@@ -26652,7 +26652,7 @@ where
         }
     }
 
-    #[doc="<p>Lists information about the IAM OpenID Connect (OIDC) provider resource objects defined in the AWS account.</p>"]
+    /// <p>Lists information about the IAM OpenID Connect (OIDC) provider resource objects defined in the AWS account.</p>
     fn list_open_id_connect_providers(
         &self,
         input: &ListOpenIDConnectProvidersRequest,
@@ -26705,7 +26705,7 @@ where
         }
     }
 
-    #[doc="<p>Lists all the managed policies that are available in your AWS account, including your own customer-defined managed policies and all AWS managed policies.</p> <p>You can filter the list of policies that is returned using the optional <code>OnlyAttached</code>, <code>Scope</code>, and <code>PathPrefix</code> parameters. For example, to list only the customer managed policies in your AWS account, set <code>Scope</code> to <code>Local</code>. To list only AWS managed policies, set <code>Scope</code> to <code>AWS</code>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>For more information about managed policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Lists all the managed policies that are available in your AWS account, including your own customer-defined managed policies and all AWS managed policies.</p> <p>You can filter the list of policies that is returned using the optional <code>OnlyAttached</code>, <code>Scope</code>, and <code>PathPrefix</code> parameters. For example, to list only the customer managed policies in your AWS account, set <code>Scope</code> to <code>Local</code>. To list only AWS managed policies, set <code>Scope</code> to <code>AWS</code>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>For more information about managed policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn list_policies(
         &self,
         input: &ListPoliciesRequest,
@@ -26756,7 +26756,7 @@ where
         }
     }
 
-    #[doc="<p>Lists information about the versions of the specified managed policy, including the version that is currently set as the policy's default version.</p> <p>For more information about managed policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Lists information about the versions of the specified managed policy, including the version that is currently set as the policy's default version.</p> <p>For more information about managed policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn list_policy_versions(
         &self,
         input: &ListPolicyVersionsRequest,
@@ -26807,7 +26807,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the names of the inline policies that are embedded in the specified IAM role.</p> <p>An IAM role can also have managed policies attached to it. To list the managed policies that are attached to a role, use <a>ListAttachedRolePolicies</a>. For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. If there are no inline policies embedded with the specified role, the action returns an empty list.</p>"]
+    /// <p>Lists the names of the inline policies that are embedded in the specified IAM role.</p> <p>An IAM role can also have managed policies attached to it. To list the managed policies that are attached to a role, use <a>ListAttachedRolePolicies</a>. For more information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. If there are no inline policies embedded with the specified role, the action returns an empty list.</p>
     fn list_role_policies(
         &self,
         input: &ListRolePoliciesRequest,
@@ -26858,7 +26858,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the IAM roles that have the specified path prefix. If there are none, the action returns an empty list. For more information about roles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html\">Working with Roles</a>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
+    /// <p>Lists the IAM roles that have the specified path prefix. If there are none, the action returns an empty list. For more information about roles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn list_roles(&self, input: &ListRolesRequest) -> Result<ListRolesResponse, ListRolesError> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
         let mut params = Params::new();
@@ -26906,7 +26906,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the SAML provider resource objects defined in IAM in the account.</p> <note> <p> This operation requires <a href=\"http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html\">Signature Version 4</a>.</p> </note>"]
+    /// <p><p>Lists the SAML provider resource objects defined in IAM in the account.</p> <note> <p> This operation requires <a href="http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4</a>.</p> </note></p>
     fn list_saml_providers(
         &self,
         input: &ListSAMLProvidersRequest,
@@ -26957,7 +26957,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about the SSH public keys associated with the specified IAM user. If there are none, the action returns an empty list.</p> <p>The SSH public keys returned by this action are used only for authenticating the IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href=\"http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html\">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p> <p>Although each user is limited to a small number of keys, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
+    /// <p>Returns information about the SSH public keys associated with the specified IAM user. If there are none, the action returns an empty list.</p> <p>The SSH public keys returned by this action are used only for authenticating the IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p> <p>Although each user is limited to a small number of keys, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn list_ssh_public_keys(
         &self,
         input: &ListSSHPublicKeysRequest,
@@ -27008,7 +27008,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the server certificates stored in IAM that have the specified path prefix. If none exist, the action returns an empty list.</p> <p> You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>For more information about working with server certificates, including a list of AWS services that can use the server certificates that you manage with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html\">Working with Server Certificates</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Lists the server certificates stored in IAM that have the specified path prefix. If none exist, the action returns an empty list.</p> <p> You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>For more information about working with server certificates, including a list of AWS services that can use the server certificates that you manage with IAM, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">Working with Server Certificates</a> in the <i>IAM User Guide</i>.</p>
     fn list_server_certificates(
         &self,
         input: &ListServerCertificatesRequest,
@@ -27059,7 +27059,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about the service-specific credentials associated with the specified IAM user. If there are none, the action returns an empty list. The service-specific credentials returned by this action are used only for authenticating the IAM user to a specific service. For more information about using service-specific credentials to authenticate to an AWS service, see <a href=\"http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-gc.html\">Set Up service-specific credentials</a> in the AWS CodeCommit User Guide.</p>"]
+    /// <p>Returns information about the service-specific credentials associated with the specified IAM user. If there are none, the action returns an empty list. The service-specific credentials returned by this action are used only for authenticating the IAM user to a specific service. For more information about using service-specific credentials to authenticate to an AWS service, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-gc.html">Set Up service-specific credentials</a> in the AWS CodeCommit User Guide.</p>
     fn list_service_specific_credentials(
         &self,
         input: &ListServiceSpecificCredentialsRequest,
@@ -27112,7 +27112,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about the signing certificates associated with the specified IAM user. If there are none, the action returns an empty list.</p> <p>Although each user is limited to a small number of signing certificates, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>If the <code>UserName</code> field is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request for this API. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p>"]
+    /// <p>Returns information about the signing certificates associated with the specified IAM user. If there are none, the action returns an empty list.</p> <p>Although each user is limited to a small number of signing certificates, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>If the <code>UserName</code> field is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request for this API. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p>
     fn list_signing_certificates(
         &self,
         input: &ListSigningCertificatesRequest,
@@ -27163,7 +27163,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the names of the inline policies embedded in the specified IAM user.</p> <p>An IAM user can also have managed policies attached to it. To list the managed policies that are attached to a user, use <a>ListAttachedUserPolicies</a>. For more information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. If there are no inline policies embedded with the specified user, the action returns an empty list.</p>"]
+    /// <p>Lists the names of the inline policies embedded in the specified IAM user.</p> <p>An IAM user can also have managed policies attached to it. To list the managed policies that are attached to a user, use <a>ListAttachedUserPolicies</a>. For more information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. If there are no inline policies embedded with the specified user, the action returns an empty list.</p>
     fn list_user_policies(
         &self,
         input: &ListUserPoliciesRequest,
@@ -27214,7 +27214,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the IAM users that have the specified path prefix. If no path prefix is specified, the action returns all users in the AWS account. If there are none, the action returns an empty list.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
+    /// <p>Lists the IAM users that have the specified path prefix. If no path prefix is specified, the action returns all users in the AWS account. If there are none, the action returns an empty list.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn list_users(&self, input: &ListUsersRequest) -> Result<ListUsersResponse, ListUsersError> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
         let mut params = Params::new();
@@ -27262,7 +27262,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the virtual MFA devices defined in the AWS account by assignment status. If you do not specify an assignment status, the action returns a list of all virtual MFA devices. Assignment status can be <code>Assigned</code>, <code>Unassigned</code>, or <code>Any</code>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
+    /// <p>Lists the virtual MFA devices defined in the AWS account by assignment status. If you do not specify an assignment status, the action returns a list of all virtual MFA devices. Assignment status can be <code>Assigned</code>, <code>Unassigned</code>, or <code>Any</code>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn list_virtual_mfa_devices(
         &self,
         input: &ListVirtualMFADevicesRequest,
@@ -27313,7 +27313,7 @@ where
         }
     }
 
-    #[doc="<p>Adds or updates an inline policy document that is embedded in the specified IAM group.</p> <p>A user can also have managed policies attached to it. To attach a managed policy to a group, use <a>AttachGroupPolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed in a group, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutGroupPolicy</code>. For general information about using the Query API with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html\">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note>"]
+    /// <p><p>Adds or updates an inline policy document that is embedded in the specified IAM group.</p> <p>A user can also have managed policies attached to it. To attach a managed policy to a group, use <a>AttachGroupPolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed in a group, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutGroupPolicy</code>. For general information about using the Query API with IAM, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
     fn put_group_policy(&self, input: &PutGroupPolicyRequest) -> Result<(), PutGroupPolicyError> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
         let mut params = Params::new();
@@ -27340,7 +27340,7 @@ where
         }
     }
 
-    #[doc="<p>Adds or updates an inline policy document that is embedded in the specified IAM role.</p> <p>When you embed an inline policy in a role, the inline policy is used as part of the role's access (permissions) policy. The role's trust policy is created at the same time as the role, using <a>CreateRole</a>. You can update a role's trust policy using <a>UpdateAssumeRolePolicy</a>. For more information about IAM roles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html\">Using Roles to Delegate Permissions and Federate Identities</a>.</p> <p>A role can also have a managed policy attached to it. To attach a managed policy to a role, use <a>AttachRolePolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed with a role, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutRolePolicy</code>. For general information about using the Query API with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html\">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note>"]
+    /// <p><p>Adds or updates an inline policy document that is embedded in the specified IAM role.</p> <p>When you embed an inline policy in a role, the inline policy is used as part of the role&#39;s access (permissions) policy. The role&#39;s trust policy is created at the same time as the role, using <a>CreateRole</a>. You can update a role&#39;s trust policy using <a>UpdateAssumeRolePolicy</a>. For more information about IAM roles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html">Using Roles to Delegate Permissions and Federate Identities</a>.</p> <p>A role can also have a managed policy attached to it. To attach a managed policy to a role, use <a>AttachRolePolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed with a role, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutRolePolicy</code>. For general information about using the Query API with IAM, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
     fn put_role_policy(&self, input: &PutRolePolicyRequest) -> Result<(), PutRolePolicyError> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
         let mut params = Params::new();
@@ -27367,7 +27367,7 @@ where
         }
     }
 
-    #[doc="<p>Adds or updates an inline policy document that is embedded in the specified IAM user.</p> <p>An IAM user can also have a managed policy attached to it. To attach a managed policy to a user, use <a>AttachUserPolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed in a user, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html\">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutUserPolicy</code>. For general information about using the Query API with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html\">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note>"]
+    /// <p><p>Adds or updates an inline policy document that is embedded in the specified IAM user.</p> <p>An IAM user can also have a managed policy attached to it. To attach a managed policy to a user, use <a>AttachUserPolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed in a user, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutUserPolicy</code>. For general information about using the Query API with IAM, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
     fn put_user_policy(&self, input: &PutUserPolicyRequest) -> Result<(), PutUserPolicyError> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
         let mut params = Params::new();
@@ -27394,7 +27394,7 @@ where
         }
     }
 
-    #[doc="<p>Removes the specified client ID (also known as audience) from the list of client IDs registered for the specified IAM OpenID Connect (OIDC) provider resource object.</p> <p>This action is idempotent; it does not fail or return an error if you try to remove a client ID that does not exist.</p>"]
+    /// <p>Removes the specified client ID (also known as audience) from the list of client IDs registered for the specified IAM OpenID Connect (OIDC) provider resource object.</p> <p>This action is idempotent; it does not fail or return an error if you try to remove a client ID that does not exist.</p>
     fn remove_client_id_from_open_id_connect_provider(
         &self,
         input: &RemoveClientIDFromOpenIDConnectProviderRequest,
@@ -27428,7 +27428,7 @@ where
         }
     }
 
-    #[doc="<p>Removes the specified IAM role from the specified EC2 instance profile.</p> <important> <p>Make sure you do not have any Amazon EC2 instances running with the role you are about to remove from the instance profile. Removing a role from an instance profile that is associated with a running instance might break any applications running on the instance.</p> </important> <p> For more information about IAM roles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html\">Working with Roles</a>. For more information about instance profiles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html\">About Instance Profiles</a>.</p>"]
+    /// <p>Removes the specified IAM role from the specified EC2 instance profile.</p> <important> <p>Make sure you do not have any Amazon EC2 instances running with the role you are about to remove from the instance profile. Removing a role from an instance profile that is associated with a running instance might break any applications running on the instance.</p> </important> <p> For more information about IAM roles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>. For more information about instance profiles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p>
     fn remove_role_from_instance_profile(
         &self,
         input: &RemoveRoleFromInstanceProfileRequest,
@@ -27458,7 +27458,7 @@ where
         }
     }
 
-    #[doc = "<p>Removes the specified user from the specified group.</p>"]
+    /// <p>Removes the specified user from the specified group.</p>
     fn remove_user_from_group(
         &self,
         input: &RemoveUserFromGroupRequest,
@@ -27488,7 +27488,7 @@ where
         }
     }
 
-    #[doc="<p>Resets the password for a service-specific credential. The new password is AWS generated and cryptographically strong. It cannot be configured by the user. Resetting the password immediately invalidates the previous password associated with this user.</p>"]
+    /// <p>Resets the password for a service-specific credential. The new password is AWS generated and cryptographically strong. It cannot be configured by the user. Resetting the password immediately invalidates the previous password associated with this user.</p>
     fn reset_service_specific_credential(
         &self,
         input: &ResetServiceSpecificCredentialRequest,
@@ -27541,7 +27541,7 @@ where
         }
     }
 
-    #[doc="<p>Synchronizes the specified MFA device with its IAM resource object on the AWS servers.</p> <p>For more information about creating and working with virtual MFA devices, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html\">Using a Virtual MFA Device</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Synchronizes the specified MFA device with its IAM resource object on the AWS servers.</p> <p>For more information about creating and working with virtual MFA devices, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html">Using a Virtual MFA Device</a> in the <i>IAM User Guide</i>.</p>
     fn resync_mfa_device(
         &self,
         input: &ResyncMFADeviceRequest,
@@ -27571,7 +27571,7 @@ where
         }
     }
 
-    #[doc="<p>Sets the specified version of the specified policy as the policy's default (operative) version.</p> <p>This action affects all users, groups, and roles that the policy is attached to. To list the users, groups, and roles that the policy is attached to, use the <a>ListEntitiesForPolicy</a> API.</p> <p>For information about managed policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Sets the specified version of the specified policy as the policy's default (operative) version.</p> <p>This action affects all users, groups, and roles that the policy is attached to. To list the users, groups, and roles that the policy is attached to, use the <a>ListEntitiesForPolicy</a> API.</p> <p>For information about managed policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn set_default_policy_version(
         &self,
         input: &SetDefaultPolicyVersionRequest,
@@ -27601,7 +27601,7 @@ where
         }
     }
 
-    #[doc="<p>Simulate how a set of IAM policies and optionally a resource-based policy works with a list of API actions and AWS resources to determine the policies' effective permissions. The policies are provided as strings.</p> <p>The simulation does not perform the API actions; it only checks the authorization to determine if the simulated policies allow or deny the actions.</p> <p>If you want to simulate existing policies attached to an IAM user, group, or role, use <a>SimulatePrincipalPolicy</a> instead.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request. You can use the <code>Condition</code> element of an IAM policy to evaluate context keys. To get the list of context keys that the policies require for correct simulation, use <a>GetContextKeysForCustomPolicy</a>.</p> <p>If the output is long, you can use <code>MaxItems</code> and <code>Marker</code> parameters to paginate the results.</p>"]
+    /// <p>Simulate how a set of IAM policies and optionally a resource-based policy works with a list of API actions and AWS resources to determine the policies' effective permissions. The policies are provided as strings.</p> <p>The simulation does not perform the API actions; it only checks the authorization to determine if the simulated policies allow or deny the actions.</p> <p>If you want to simulate existing policies attached to an IAM user, group, or role, use <a>SimulatePrincipalPolicy</a> instead.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request. You can use the <code>Condition</code> element of an IAM policy to evaluate context keys. To get the list of context keys that the policies require for correct simulation, use <a>GetContextKeysForCustomPolicy</a>.</p> <p>If the output is long, you can use <code>MaxItems</code> and <code>Marker</code> parameters to paginate the results.</p>
     fn simulate_custom_policy(
         &self,
         input: &SimulateCustomPolicyRequest,
@@ -27652,7 +27652,7 @@ where
         }
     }
 
-    #[doc="<p>Simulate how a set of IAM policies attached to an IAM entity works with a list of API actions and AWS resources to determine the policies' effective permissions. The entity can be an IAM user, group, or role. If you specify a user, then the simulation also includes all of the policies that are attached to groups that the user belongs to .</p> <p>You can optionally include a list of one or more additional policies specified as strings to include in the simulation. If you want to simulate only policies specified as strings, use <a>SimulateCustomPolicy</a> instead.</p> <p>You can also optionally include one resource-based policy to be evaluated with each of the resources included in the simulation.</p> <p>The simulation does not perform the API actions, it only checks the authorization to determine if the simulated policies allow or deny the actions.</p> <p> <b>Note:</b> This API discloses information about the permissions granted to other users. If you do not want users to see other user's permissions, then consider allowing them to use <a>SimulateCustomPolicy</a> instead.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request. You can use the <code>Condition</code> element of an IAM policy to evaluate context keys. To get the list of context keys that the policies require for correct simulation, use <a>GetContextKeysForPrincipalPolicy</a>.</p> <p>If the output is long, you can use the <code>MaxItems</code> and <code>Marker</code> parameters to paginate the results.</p>"]
+    /// <p>Simulate how a set of IAM policies attached to an IAM entity works with a list of API actions and AWS resources to determine the policies' effective permissions. The entity can be an IAM user, group, or role. If you specify a user, then the simulation also includes all of the policies that are attached to groups that the user belongs to .</p> <p>You can optionally include a list of one or more additional policies specified as strings to include in the simulation. If you want to simulate only policies specified as strings, use <a>SimulateCustomPolicy</a> instead.</p> <p>You can also optionally include one resource-based policy to be evaluated with each of the resources included in the simulation.</p> <p>The simulation does not perform the API actions, it only checks the authorization to determine if the simulated policies allow or deny the actions.</p> <p> <b>Note:</b> This API discloses information about the permissions granted to other users. If you do not want users to see other user's permissions, then consider allowing them to use <a>SimulateCustomPolicy</a> instead.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request. You can use the <code>Condition</code> element of an IAM policy to evaluate context keys. To get the list of context keys that the policies require for correct simulation, use <a>GetContextKeysForPrincipalPolicy</a>.</p> <p>If the output is long, you can use the <code>MaxItems</code> and <code>Marker</code> parameters to paginate the results.</p>
     fn simulate_principal_policy(
         &self,
         input: &SimulatePrincipalPolicyRequest,
@@ -27703,7 +27703,7 @@ where
         }
     }
 
-    #[doc="<p>Changes the status of the specified access key from Active to Inactive, or vice versa. This action can be used to disable a user's key as part of a key rotation work flow.</p> <p>If the <code>UserName</code> field is not specified, the UserName is determined implicitly based on the AWS access key ID used to sign the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p> <p>For information about rotating keys, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/ManagingCredentials.html\">Managing Keys and Certificates</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Changes the status of the specified access key from Active to Inactive, or vice versa. This action can be used to disable a user's key as part of a key rotation work flow.</p> <p>If the <code>UserName</code> field is not specified, the UserName is determined implicitly based on the AWS access key ID used to sign the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p> <p>For information about rotating keys, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/ManagingCredentials.html">Managing Keys and Certificates</a> in the <i>IAM User Guide</i>.</p>
     fn update_access_key(
         &self,
         input: &UpdateAccessKeyRequest,
@@ -27733,7 +27733,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the password policy settings for the AWS account.</p> <note> <p>This action does not support partial updates. No parameters are required, but if you do not specify a parameter, that parameter's value reverts to its default value. See the <b>Request Parameters</b> section for each parameter's default value.</p> </note> <p> For more information about using a password policy, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingPasswordPolicies.html\">Managing an IAM Password Policy</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Updates the password policy settings for the AWS account.</p> <note> <p>This action does not support partial updates. No parameters are required, but if you do not specify a parameter, that parameter's value reverts to its default value. See the <b>Request Parameters</b> section for each parameter's default value.</p> </note> <p> For more information about using a password policy, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingPasswordPolicies.html">Managing an IAM Password Policy</a> in the <i>IAM User Guide</i>.</p>
     fn update_account_password_policy(
         &self,
         input: &UpdateAccountPasswordPolicyRequest,
@@ -27763,7 +27763,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the policy that grants an IAM entity permission to assume a role. This is typically referred to as the \"role trust policy\". For more information about roles, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html\">Using Roles to Delegate Permissions and Federate Identities</a>.</p>"]
+    /// <p>Updates the policy that grants an IAM entity permission to assume a role. This is typically referred to as the "role trust policy". For more information about roles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html">Using Roles to Delegate Permissions and Federate Identities</a>.</p>
     fn update_assume_role_policy(
         &self,
         input: &UpdateAssumeRolePolicyRequest,
@@ -27793,7 +27793,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the name and/or the path of the specified IAM group.</p> <important> <p> You should understand the implications of changing a group's path or name. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_WorkingWithGroupsAndUsers.html\">Renaming Users and Groups</a> in the <i>IAM User Guide</i>.</p> </important> <note> <p>To change an IAM group name the requester must have appropriate permissions on both the source object and the target object. For example, to change \"Managers\" to \"MGRs\", the entity making the request must have permission on both \"Managers\" and \"MGRs\", or must have permission on all (*). For more information about permissions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/PermissionsAndPolicies.html\">Permissions and Policies</a>. </p> </note>"]
+    /// <p><p>Updates the name and/or the path of the specified IAM group.</p> <important> <p> You should understand the implications of changing a group&#39;s path or name. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_WorkingWithGroupsAndUsers.html">Renaming Users and Groups</a> in the <i>IAM User Guide</i>.</p> </important> <note> <p>To change an IAM group name the requester must have appropriate permissions on both the source object and the target object. For example, to change &quot;Managers&quot; to &quot;MGRs&quot;, the entity making the request must have permission on both &quot;Managers&quot; and &quot;MGRs&quot;, or must have permission on all (*). For more information about permissions, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/PermissionsAndPolicies.html">Permissions and Policies</a>. </p> </note></p>
     fn update_group(&self, input: &UpdateGroupRequest) -> Result<(), UpdateGroupError> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
         let mut params = Params::new();
@@ -27820,7 +27820,7 @@ where
         }
     }
 
-    #[doc="<p>Changes the password for the specified IAM user.</p> <p>IAM users can change their own passwords by calling <a>ChangePassword</a>. For more information about modifying passwords, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html\">Managing Passwords</a> in the <i>IAM User Guide</i>.</p>"]
+    /// <p>Changes the password for the specified IAM user.</p> <p>IAM users can change their own passwords by calling <a>ChangePassword</a>. For more information about modifying passwords, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html">Managing Passwords</a> in the <i>IAM User Guide</i>.</p>
     fn update_login_profile(
         &self,
         input: &UpdateLoginProfileRequest,
@@ -27850,7 +27850,7 @@ where
         }
     }
 
-    #[doc="<p>Replaces the existing list of server certificate thumbprints associated with an OpenID Connect (OIDC) provider resource object with a new list of thumbprints.</p> <p>The list that you pass with this action completely replaces the existing list of thumbprints. (The lists are not merged.)</p> <p>Typically, you need to update a thumbprint only when the identity provider's certificate changes, which occurs rarely. However, if the provider's certificate <i>does</i> change, any attempt to assume an IAM role that specifies the OIDC provider as a principal fails until the certificate thumbprint is updated.</p> <note> <p>Because trust for the OIDC provider is ultimately derived from the provider's certificate and is validated by the thumbprint, it is a best practice to limit access to the <code>UpdateOpenIDConnectProviderThumbprint</code> action to highly-privileged users.</p> </note>"]
+    /// <p><p>Replaces the existing list of server certificate thumbprints associated with an OpenID Connect (OIDC) provider resource object with a new list of thumbprints.</p> <p>The list that you pass with this action completely replaces the existing list of thumbprints. (The lists are not merged.)</p> <p>Typically, you need to update a thumbprint only when the identity provider&#39;s certificate changes, which occurs rarely. However, if the provider&#39;s certificate <i>does</i> change, any attempt to assume an IAM role that specifies the OIDC provider as a principal fails until the certificate thumbprint is updated.</p> <note> <p>Because trust for the OIDC provider is ultimately derived from the provider&#39;s certificate and is validated by the thumbprint, it is a best practice to limit access to the <code>UpdateOpenIDConnectProviderThumbprint</code> action to highly-privileged users.</p> </note></p>
     fn update_open_id_connect_provider_thumbprint(
         &self,
         input: &UpdateOpenIDConnectProviderThumbprintRequest,
@@ -27880,7 +27880,7 @@ where
         }
     }
 
-    #[doc = "<p>Modifies the description of a role.</p>"]
+    /// <p>Modifies the description of a role.</p>
     fn update_role_description(
         &self,
         input: &UpdateRoleDescriptionRequest,
@@ -27931,7 +27931,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the metadata document for an existing SAML provider resource object.</p> <note> <p>This operation requires <a href=\"http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html\">Signature Version 4</a>.</p> </note>"]
+    /// <p><p>Updates the metadata document for an existing SAML provider resource object.</p> <note> <p>This operation requires <a href="http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4</a>.</p> </note></p>
     fn update_saml_provider(
         &self,
         input: &UpdateSAMLProviderRequest,
@@ -27982,7 +27982,7 @@ where
         }
     }
 
-    #[doc="<p>Sets the status of an IAM user's SSH public key to active or inactive. SSH public keys that are inactive cannot be used for authentication. This action can be used to disable a user's SSH public key as part of a key rotation work flow.</p> <p>The SSH public key affected by this action is used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href=\"http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html\">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>"]
+    /// <p>Sets the status of an IAM user's SSH public key to active or inactive. SSH public keys that are inactive cannot be used for authentication. This action can be used to disable a user's SSH public key as part of a key rotation work flow.</p> <p>The SSH public key affected by this action is used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>
     fn update_ssh_public_key(
         &self,
         input: &UpdateSSHPublicKeyRequest,
@@ -28012,7 +28012,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the name and/or the path of the specified server certificate stored in IAM.</p> <p>For more information about working with server certificates, including a list of AWS services that can use the server certificates that you manage with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html\">Working with Server Certificates</a> in the <i>IAM User Guide</i>.</p> <important> <p>You should understand the implications of changing a server certificate's path or name. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs_manage.html#RenamingServerCerts\">Renaming a Server Certificate</a> in the <i>IAM User Guide</i>.</p> </important> <note> <p>To change a server certificate name the requester must have appropriate permissions on both the source object and the target object. For example, to change the name from \"ProductionCert\" to \"ProdCert\", the entity making the request must have permission on \"ProductionCert\" and \"ProdCert\", or must have permission on all (*). For more information about permissions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/access.html\">Access Management</a> in the <i>IAM User Guide</i>.</p> </note>"]
+    /// <p><p>Updates the name and/or the path of the specified server certificate stored in IAM.</p> <p>For more information about working with server certificates, including a list of AWS services that can use the server certificates that you manage with IAM, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">Working with Server Certificates</a> in the <i>IAM User Guide</i>.</p> <important> <p>You should understand the implications of changing a server certificate&#39;s path or name. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs_manage.html#RenamingServerCerts">Renaming a Server Certificate</a> in the <i>IAM User Guide</i>.</p> </important> <note> <p>To change a server certificate name the requester must have appropriate permissions on both the source object and the target object. For example, to change the name from &quot;ProductionCert&quot; to &quot;ProdCert&quot;, the entity making the request must have permission on &quot;ProductionCert&quot; and &quot;ProdCert&quot;, or must have permission on all (*). For more information about permissions, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/access.html">Access Management</a> in the <i>IAM User Guide</i>.</p> </note></p>
     fn update_server_certificate(
         &self,
         input: &UpdateServerCertificateRequest,
@@ -28042,7 +28042,7 @@ where
         }
     }
 
-    #[doc="<p>Sets the status of a service-specific credential to <code>Active</code> or <code>Inactive</code>. Service-specific credentials that are inactive cannot be used for authentication to the service. This action can be used to disable a user’s service-specific credential as part of a credential rotation work flow.</p>"]
+    /// <p>Sets the status of a service-specific credential to <code>Active</code> or <code>Inactive</code>. Service-specific credentials that are inactive cannot be used for authentication to the service. This action can be used to disable a user’s service-specific credential as part of a credential rotation work flow.</p>
     fn update_service_specific_credential(
         &self,
         input: &UpdateServiceSpecificCredentialRequest,
@@ -28072,7 +28072,7 @@ where
         }
     }
 
-    #[doc="<p>Changes the status of the specified user signing certificate from active to disabled, or vice versa. This action can be used to disable an IAM user's signing certificate as part of a certificate rotation work flow.</p> <p>If the <code>UserName</code> field is not specified, the UserName is determined implicitly based on the AWS access key ID used to sign the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p>"]
+    /// <p>Changes the status of the specified user signing certificate from active to disabled, or vice versa. This action can be used to disable an IAM user's signing certificate as part of a certificate rotation work flow.</p> <p>If the <code>UserName</code> field is not specified, the UserName is determined implicitly based on the AWS access key ID used to sign the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p>
     fn update_signing_certificate(
         &self,
         input: &UpdateSigningCertificateRequest,
@@ -28102,7 +28102,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the name and/or the path of the specified IAM user.</p> <important> <p> You should understand the implications of changing an IAM user's path or name. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_manage.html#id_users_renaming\">Renaming an IAM User</a> and <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_groups_manage_rename.html\">Renaming an IAM Group</a> in the <i>IAM User Guide</i>.</p> </important> <note> <p> To change a user name the requester must have appropriate permissions on both the source object and the target object. For example, to change Bob to Robert, the entity making the request must have permission on Bob and Robert, or must have permission on all (*). For more information about permissions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/PermissionsAndPolicies.html\">Permissions and Policies</a>. </p> </note>"]
+    /// <p><p>Updates the name and/or the path of the specified IAM user.</p> <important> <p> You should understand the implications of changing an IAM user&#39;s path or name. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_manage.html#id_users_renaming">Renaming an IAM User</a> and <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_groups_manage_rename.html">Renaming an IAM Group</a> in the <i>IAM User Guide</i>.</p> </important> <note> <p> To change a user name the requester must have appropriate permissions on both the source object and the target object. For example, to change Bob to Robert, the entity making the request must have permission on Bob and Robert, or must have permission on all (*). For more information about permissions, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/PermissionsAndPolicies.html">Permissions and Policies</a>. </p> </note></p>
     fn update_user(&self, input: &UpdateUserRequest) -> Result<(), UpdateUserError> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
         let mut params = Params::new();
@@ -28129,7 +28129,7 @@ where
         }
     }
 
-    #[doc="<p>Uploads an SSH public key and associates it with the specified IAM user.</p> <p>The SSH public key uploaded by this action can be used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href=\"http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html\">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>"]
+    /// <p>Uploads an SSH public key and associates it with the specified IAM user.</p> <p>The SSH public key uploaded by this action can be used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>
     fn upload_ssh_public_key(
         &self,
         input: &UploadSSHPublicKeyRequest,
@@ -28180,7 +28180,7 @@ where
         }
     }
 
-    #[doc="<p>Uploads a server certificate entity for the AWS account. The server certificate entity includes a public key certificate, a private key, and an optional certificate chain, which should all be PEM-encoded.</p> <p>We recommend that you use <a href=\"https://aws.amazon.com/certificate-manager/\">AWS Certificate Manager</a> to provision, manage, and deploy your server certificates. With ACM you can request a certificate, deploy it to AWS resources, and let ACM handle certificate renewals for you. Certificates provided by ACM are free. For more information about using ACM, see the <a href=\"http://docs.aws.amazon.com/acm/latest/userguide/\">AWS Certificate Manager User Guide</a>.</p> <p>For more information about working with server certificates, including a list of AWS services that can use the server certificates that you manage with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html\">Working with Server Certificates</a> in the <i>IAM User Guide</i>.</p> <p>For information about the number of server certificates you can upload, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-limits.html\">Limitations on IAM Entities and Objects</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because the body of the public key certificate, private key, and the certificate chain can be large, you should use POST rather than GET when calling <code>UploadServerCertificate</code>. For information about setting up signatures and authorization through the API, go to <a href=\"http://docs.aws.amazon.com/general/latest/gr/signing_aws_api_requests.html\">Signing AWS API Requests</a> in the <i>AWS General Reference</i>. For general information about using the Query API with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/programming.html\">Calling the API by Making HTTP Query Requests</a> in the <i>IAM User Guide</i>.</p> </note>"]
+    /// <p><p>Uploads a server certificate entity for the AWS account. The server certificate entity includes a public key certificate, a private key, and an optional certificate chain, which should all be PEM-encoded.</p> <p>We recommend that you use <a href="https://aws.amazon.com/certificate-manager/">AWS Certificate Manager</a> to provision, manage, and deploy your server certificates. With ACM you can request a certificate, deploy it to AWS resources, and let ACM handle certificate renewals for you. Certificates provided by ACM are free. For more information about using ACM, see the <a href="http://docs.aws.amazon.com/acm/latest/userguide/">AWS Certificate Manager User Guide</a>.</p> <p>For more information about working with server certificates, including a list of AWS services that can use the server certificates that you manage with IAM, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">Working with Server Certificates</a> in the <i>IAM User Guide</i>.</p> <p>For information about the number of server certificates you can upload, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-limits.html">Limitations on IAM Entities and Objects</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because the body of the public key certificate, private key, and the certificate chain can be large, you should use POST rather than GET when calling <code>UploadServerCertificate</code>. For information about setting up signatures and authorization through the API, go to <a href="http://docs.aws.amazon.com/general/latest/gr/signing_aws_api_requests.html">Signing AWS API Requests</a> in the <i>AWS General Reference</i>. For general information about using the Query API with IAM, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/programming.html">Calling the API by Making HTTP Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
     fn upload_server_certificate(
         &self,
         input: &UploadServerCertificateRequest,
@@ -28231,7 +28231,7 @@ where
         }
     }
 
-    #[doc="<p>Uploads an X.509 signing certificate and associates it with the specified IAM user. Some AWS services use X.509 signing certificates to validate requests that are signed with a corresponding private key. When you upload the certificate, its default status is <code>Active</code>.</p> <p>If the <code>UserName</code> field is not specified, the IAM user name is determined implicitly based on the AWS access key ID used to sign the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p> <note> <p>Because the body of a X.509 certificate can be large, you should use POST rather than GET when calling <code>UploadSigningCertificate</code>. For information about setting up signatures and authorization through the API, go to <a href=\"http://docs.aws.amazon.com/general/latest/gr/signing_aws_api_requests.html\">Signing AWS API Requests</a> in the <i>AWS General Reference</i>. For general information about using the Query API with IAM, go to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html\">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note>"]
+    /// <p><p>Uploads an X.509 signing certificate and associates it with the specified IAM user. Some AWS services use X.509 signing certificates to validate requests that are signed with a corresponding private key. When you upload the certificate, its default status is <code>Active</code>.</p> <p>If the <code>UserName</code> field is not specified, the IAM user name is determined implicitly based on the AWS access key ID used to sign the request. Because this action works for access keys under the AWS account, you can use this action to manage root credentials even if the AWS account has no associated users.</p> <note> <p>Because the body of a X.509 certificate can be large, you should use POST rather than GET when calling <code>UploadSigningCertificate</code>. For information about setting up signatures and authorization through the API, go to <a href="http://docs.aws.amazon.com/general/latest/gr/signing_aws_api_requests.html">Signing AWS API Requests</a> in the <i>AWS General Reference</i>. For general information about using the Query API with IAM, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
     fn upload_signing_certificate(
         &self,
         input: &UploadSigningCertificateRequest,

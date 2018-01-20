@@ -62,7 +62,7 @@ pub struct AccountUsage {
     pub total_code_size: Option<i64>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AddPermissionRequest {
     /// <p>The AWS Lambda action you want to allow in this statement. Each Lambda action is a string starting with <code>lambda:</code> followed by the API name . For example, <code>lambda:CreateFunction</code>. You can use wildcard (<code>lambda:*</code>) to grant permission for all AWS Lambda actions. </p>
@@ -86,7 +86,7 @@ pub struct AddPermissionRequest {
     #[serde(rename = "SourceAccount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_account: Option<String>,
-    /// <p>This is optional; however, when granting permission to invoke your function, you should specify this field with the Amazon Resource Name (ARN) as its value. This ensures that only events generated from the specified source can invoke the function.</p> <important> <p>If you add a permission without providing the source ARN, any AWS account that creates a mapping to your function ARN can send events to invoke your Lambda function.</p> </important>
+    /// <p><p>This is optional; however, when granting permission to invoke your function, you should specify this field with the Amazon Resource Name (ARN) as its value. This ensures that only events generated from the specified source can invoke the function.</p> <important> <p>If you add a permission without providing the source ARN, any AWS account that creates a mapping to your function ARN can send events to invoke your Lambda function.</p> </important></p>
     #[serde(rename = "SourceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_arn: Option<String>,
@@ -95,7 +95,7 @@ pub struct AddPermissionRequest {
     pub statement_id: String,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct AddPermissionResponse {
     /// <p>The permission statement you specified in the request. The response returns the same as a string using a backslash ("\") as an escape character in the JSON.</p>
@@ -142,7 +142,7 @@ pub struct CreateAliasRequest {
     pub name: String,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateEventSourceMappingRequest {
     /// <p>The largest number of records that AWS Lambda will retrieve from your event source at the time of invoking your function. Your function receives an event with all the retrieved records. The default is 100 records.</p>
@@ -168,7 +168,7 @@ pub struct CreateEventSourceMappingRequest {
     pub starting_position_timestamp: Option<f64>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateFunctionRequest {
     /// <p>The code for the Lambda function.</p>
@@ -206,7 +206,7 @@ pub struct CreateFunctionRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM role that Lambda assumes when it executes your function to access any other Amazon Web Services (AWS) resources. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/lambda-introduction.html">AWS Lambda: How it Works</a>. </p>
     #[serde(rename = "Role")]
     pub role: String,
-    /// <p>The runtime environment for the Lambda function you are uploading.</p> <p>To use the Python runtime v3.6, set the value to "python3.6". To use the Python runtime v2.7, set the value to "python2.7". To use the Node.js runtime v6.10, set the value to "nodejs6.10". To use the Node.js runtime v4.3, set the value to "nodejs4.3".</p> <note> <p>Node v0.10.42 is currently marked as deprecated. You must migrate existing functions to the newer Node.js runtime versions available on AWS Lambda (nodejs4.3 or nodejs6.10) as soon as possible. You can request a one-time extension until June 30, 2017 by going to the Lambda console and following the instructions provided. Failure to do so will result in an invalid parmaeter error being returned. Note that you will have to follow this procedure for each region that contains functions written in the Node v0.10.42 runtime.</p> </note>
+    /// <p><p>The runtime environment for the Lambda function you are uploading.</p> <p>To use the Python runtime v3.6, set the value to &quot;python3.6&quot;. To use the Python runtime v2.7, set the value to &quot;python2.7&quot;. To use the Node.js runtime v6.10, set the value to &quot;nodejs6.10&quot;. To use the Node.js runtime v4.3, set the value to &quot;nodejs4.3&quot;.</p> <note> <p>Node v0.10.42 is currently marked as deprecated. You must migrate existing functions to the newer Node.js runtime versions available on AWS Lambda (nodejs4.3 or nodejs6.10) as soon as possible. You can request a one-time extension until June 30, 2017 by going to the Lambda console and following the instructions provided. Failure to do so will result in an invalid parmaeter error being returned. Note that you will have to follow this procedure for each region that contains functions written in the Node v0.10.42 runtime.</p> </note></p>
     #[serde(rename = "Runtime")]
     pub runtime: String,
     /// <p>The list of tags (key-value pairs) assigned to the new function.</p>
@@ -246,7 +246,7 @@ pub struct DeleteAliasRequest {
     pub name: String,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteEventSourceMappingRequest {
     /// <p>The event source mapping ID.</p>
@@ -471,7 +471,7 @@ pub struct GetAliasRequest {
     pub name: String,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetEventSourceMappingRequest {
     /// <p>The AWS Lambda assigned ID of the event source mapping.</p>
@@ -479,7 +479,7 @@ pub struct GetEventSourceMappingRequest {
     pub uuid: String,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetFunctionConfigurationRequest {
     /// <p>The name of the Lambda function for which you want to retrieve the configuration information.</p> <p> You can specify a function name (for example, <code>Thumbnail</code>) or you can specify Amazon Resource Name (ARN) of the function (for example, <code>arn:aws:lambda:us-west-2:account-id:function:ThumbNail</code>). AWS Lambda also allows you to specify a partial ARN (for example, <code>account-id:Thumbnail</code>). Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length. </p>
@@ -491,7 +491,7 @@ pub struct GetFunctionConfigurationRequest {
     pub qualifier: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetFunctionRequest {
     /// <p>The Lambda function name.</p> <p> You can specify a function name (for example, <code>Thumbnail</code>) or you can specify Amazon Resource Name (ARN) of the function (for example, <code>arn:aws:lambda:us-west-2:account-id:function:ThumbNail</code>). AWS Lambda also allows you to specify a partial ARN (for example, <code>account-id:Thumbnail</code>). Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length. </p>
@@ -518,7 +518,7 @@ pub struct GetFunctionResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetPolicyRequest {
     /// <p>Function name whose resource policy you want to retrieve.</p> <p> You can specify the function name (for example, <code>Thumbnail</code>) or you can specify Amazon Resource Name (ARN) of the function (for example, <code>arn:aws:lambda:us-west-2:account-id:function:ThumbNail</code>). If you are using versioning, you can also provide a qualified function ARN (ARN that is qualified with function version or alias name as suffix). AWS Lambda also allows you to specify only the function name with the account ID qualifier (for example, <code>account-id:Thumbnail</code>). Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length. </p>
@@ -530,7 +530,7 @@ pub struct GetPolicyRequest {
     pub qualifier: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetPolicyResponse {
     /// <p>The resource policy associated with the specified function. The response returns the same as a string using a backslash ("\") as an escape character in the JSON.</p>
@@ -539,7 +539,7 @@ pub struct GetPolicyResponse {
     pub policy: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct InvocationRequest {
     /// <p>Using the <code>ClientContext</code> you can pass client-specific information to the Lambda function you are invoking. You can then process the client information in your Lambda function as you choose through the context variable. For an example of a <code>ClientContext</code> JSON, see <a href="http://docs.aws.amazon.com/mobileanalytics/latest/ug/PutEvents.html">PutEvents</a> in the <i>Amazon Mobile Analytics API Reference and User Guide</i>.</p> <p>The ClientContext JSON must be base64-encoded.</p>
@@ -581,7 +581,7 @@ pub struct InvocationResponse {
     pub status_code: Option<i64>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct InvokeAsyncRequest {
     /// <p>The Lambda function name. Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
@@ -634,7 +634,7 @@ pub struct ListAliasesResponse {
     pub next_marker: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListEventSourceMappingsRequest {
     /// <p>The Amazon Resource Name (ARN) of the Amazon Kinesis stream. (This parameter is optional.)</p>
@@ -668,7 +668,7 @@ pub struct ListEventSourceMappingsResponse {
     pub next_marker: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListFunctionsRequest {
     /// <p>Optional string. If not specified, only the unqualified functions ARNs (Amazon Resource Names) will be returned.</p> <p>Valid value:</p> <p> <code>ALL</code> _ Will return all versions, including <code>$LATEST</code> which will have fully qualified ARNs (Amazon Resource Names).</p>
@@ -717,7 +717,7 @@ pub struct ListTagsResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListVersionsByFunctionRequest {
     /// <p>Function name whose versions to list. You can specify a function name (for example, <code>Thumbnail</code>) or you can specify Amazon Resource Name (ARN) of the function (for example, <code>arn:aws:lambda:us-west-2:account-id:function:ThumbNail</code>). AWS Lambda also allows you to specify a partial ARN (for example, <code>account-id:Thumbnail</code>). Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length. </p>
@@ -733,7 +733,7 @@ pub struct ListVersionsByFunctionRequest {
     pub max_items: Option<i64>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListVersionsByFunctionResponse {
     /// <p>A string, present if there are more function versions.</p>
@@ -746,7 +746,7 @@ pub struct ListVersionsByFunctionResponse {
     pub versions: Option<Vec<FunctionConfiguration>>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct PublishVersionRequest {
     /// <p>The SHA256 hash of the deployment package you want to publish. This provides validation on the code you are publishing. If you provide this parameter value must match the SHA256 of the $LATEST version for the publication to succeed.</p>
@@ -762,7 +762,7 @@ pub struct PublishVersionRequest {
     pub function_name: String,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct RemovePermissionRequest {
     /// <p>Lambda function whose resource policy you want to remove a permission from.</p> <p> You can specify a function name (for example, <code>Thumbnail</code>) or you can specify Amazon Resource Name (ARN) of the function (for example, <code>arn:aws:lambda:us-west-2:account-id:function:ThumbNail</code>). AWS Lambda also allows you to specify a partial ARN (for example, <code>account-id:Thumbnail</code>). Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length. </p>
@@ -833,7 +833,7 @@ pub struct UpdateAliasRequest {
     pub name: String,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateEventSourceMappingRequest {
     /// <p>The maximum number of stream records that can be sent to your Lambda function for a single invocation.</p>
@@ -853,7 +853,7 @@ pub struct UpdateEventSourceMappingRequest {
     pub uuid: String,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateFunctionCodeRequest {
     /// <p>This boolean parameter can be used to test your request to AWS Lambda to update the Lambda function and publish a version as an atomic operation. It will do all necessary computation and validation of your code but will not upload it or a publish a version. Each time this operation is invoked, the <code>CodeSha256</code> hash value the provided code will also be computed and returned in the response.</p>
@@ -886,7 +886,7 @@ pub struct UpdateFunctionCodeRequest {
     pub zip_file: Option<Vec<u8>>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateFunctionConfigurationRequest {
     /// <p>The parent object that contains the target ARN (Amazon Resource Name) of an Amazon SQS queue or Amazon SNS topic.</p>
@@ -920,7 +920,7 @@ pub struct UpdateFunctionConfigurationRequest {
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
-    /// <p>The runtime environment for the Lambda function.</p> <p>To use the Python runtime v3.6, set the value to "python3.6". To use the Python runtime v2.7, set the value to "python2.7". To use the Node.js runtime v6.10, set the value to "nodejs6.10". To use the Node.js runtime v4.3, set the value to "nodejs4.3". To use the Python runtime v3.6, set the value to "python3.6".</p> <note> <p>Node v0.10.42 is currently marked as deprecated. You must migrate existing functions to the newer Node.js runtime versions available on AWS Lambda (nodejs4.3 or nodejs6.10) as soon as possible. You can request a one-time extension until June 30, 2017 by going to the Lambda console and following the instructions provided. Failure to do so will result in an invalid parameter error being returned. Note that you will have to follow this procedure for each region that contains functions written in the Node v0.10.42 runtime.</p> </note>
+    /// <p><p>The runtime environment for the Lambda function.</p> <p>To use the Python runtime v3.6, set the value to &quot;python3.6&quot;. To use the Python runtime v2.7, set the value to &quot;python2.7&quot;. To use the Node.js runtime v6.10, set the value to &quot;nodejs6.10&quot;. To use the Node.js runtime v4.3, set the value to &quot;nodejs4.3&quot;. To use the Python runtime v3.6, set the value to &quot;python3.6&quot;.</p> <note> <p>Node v0.10.42 is currently marked as deprecated. You must migrate existing functions to the newer Node.js runtime versions available on AWS Lambda (nodejs4.3 or nodejs6.10) as soon as possible. You can request a one-time extension until June 30, 2017 by going to the Lambda console and following the instructions provided. Failure to do so will result in an invalid parameter error being returned. Note that you will have to follow this procedure for each region that contains functions written in the Node v0.10.42 runtime.</p> </note></p>
     #[serde(rename = "Runtime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub runtime: Option<String>,
@@ -970,17 +970,17 @@ pub struct VpcConfigResponse {
 /// Errors returned by AddPermission
 #[derive(Debug, PartialEq)]
 pub enum AddPermissionError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
+    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
-    ///<p>Lambda function access policy is limited to 20 KB.</p>
+    /// <p>Lambda function access policy is limited to 20 KB.</p>
     PolicyLengthExceeded(String),
-    ///<p>The resource already exists.</p>
+    /// <p>The resource already exists.</p>
     ResourceConflict(String),
-    ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The AWS Lambda service encountered an internal error.</p>
+    /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    ///<p/>
+    /// <p><p/></p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1076,15 +1076,15 @@ impl Error for AddPermissionError {
 /// Errors returned by CreateAlias
 #[derive(Debug, PartialEq)]
 pub enum CreateAliasError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
+    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
-    ///<p>The resource already exists.</p>
+    /// <p>The resource already exists.</p>
     ResourceConflict(String),
-    ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The AWS Lambda service encountered an internal error.</p>
+    /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    ///<p/>
+    /// <p><p/></p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1176,15 +1176,15 @@ impl Error for CreateAliasError {
 /// Errors returned by CreateEventSourceMapping
 #[derive(Debug, PartialEq)]
 pub enum CreateEventSourceMappingError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
+    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
-    ///<p>The resource already exists.</p>
+    /// <p>The resource already exists.</p>
     ResourceConflict(String),
-    ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The AWS Lambda service encountered an internal error.</p>
+    /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    ///<p/>
+    /// <p><p/></p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1282,17 +1282,17 @@ impl Error for CreateEventSourceMappingError {
 /// Errors returned by CreateFunction
 #[derive(Debug, PartialEq)]
 pub enum CreateFunctionError {
-    ///<p>You have exceeded your maximum total code size per account. <a href="http://docs.aws.amazon.com/lambda/latest/dg/limits.html">Limits</a> </p>
+    /// <p>You have exceeded your maximum total code size per account. <a href="http://docs.aws.amazon.com/lambda/latest/dg/limits.html">Limits</a> </p>
     CodeStorageExceeded(String),
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
+    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
-    ///<p>The resource already exists.</p>
+    /// <p>The resource already exists.</p>
     ResourceConflict(String),
-    ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The AWS Lambda service encountered an internal error.</p>
+    /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    ///<p/>
+    /// <p><p/></p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1388,11 +1388,11 @@ impl Error for CreateFunctionError {
 /// Errors returned by DeleteAlias
 #[derive(Debug, PartialEq)]
 pub enum DeleteAliasError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
+    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
-    ///<p>The AWS Lambda service encountered an internal error.</p>
+    /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    ///<p/>
+    /// <p><p/></p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1476,13 +1476,13 @@ impl Error for DeleteAliasError {
 /// Errors returned by DeleteEventSourceMapping
 #[derive(Debug, PartialEq)]
 pub enum DeleteEventSourceMappingError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
+    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
-    ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The AWS Lambda service encountered an internal error.</p>
+    /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    ///<p/>
+    /// <p><p/></p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1576,15 +1576,15 @@ impl Error for DeleteEventSourceMappingError {
 /// Errors returned by DeleteFunction
 #[derive(Debug, PartialEq)]
 pub enum DeleteFunctionError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
+    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
-    ///<p>The resource already exists.</p>
+    /// <p>The resource already exists.</p>
     ResourceConflict(String),
-    ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The AWS Lambda service encountered an internal error.</p>
+    /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    ///<p/>
+    /// <p><p/></p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1676,9 +1676,9 @@ impl Error for DeleteFunctionError {
 /// Errors returned by GetAccountSettings
 #[derive(Debug, PartialEq)]
 pub enum GetAccountSettingsError {
-    ///<p>The AWS Lambda service encountered an internal error.</p>
+    /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    ///<p/>
+    /// <p><p/></p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1762,13 +1762,13 @@ impl Error for GetAccountSettingsError {
 /// Errors returned by GetAlias
 #[derive(Debug, PartialEq)]
 pub enum GetAliasError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
+    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
-    ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The AWS Lambda service encountered an internal error.</p>
+    /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    ///<p/>
+    /// <p><p/></p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1854,13 +1854,13 @@ impl Error for GetAliasError {
 /// Errors returned by GetEventSourceMapping
 #[derive(Debug, PartialEq)]
 pub enum GetEventSourceMappingError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
+    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
-    ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The AWS Lambda service encountered an internal error.</p>
+    /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    ///<p/>
+    /// <p><p/></p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1954,13 +1954,13 @@ impl Error for GetEventSourceMappingError {
 /// Errors returned by GetFunction
 #[derive(Debug, PartialEq)]
 pub enum GetFunctionError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
+    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
-    ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The AWS Lambda service encountered an internal error.</p>
+    /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    ///<p/>
+    /// <p><p/></p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2048,13 +2048,13 @@ impl Error for GetFunctionError {
 /// Errors returned by GetFunctionConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetFunctionConfigurationError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
+    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
-    ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The AWS Lambda service encountered an internal error.</p>
+    /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    ///<p/>
+    /// <p><p/></p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2148,13 +2148,13 @@ impl Error for GetFunctionConfigurationError {
 /// Errors returned by GetPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetPolicyError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
+    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
-    ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The AWS Lambda service encountered an internal error.</p>
+    /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    ///<p/>
+    /// <p><p/></p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2240,45 +2240,45 @@ impl Error for GetPolicyError {
 /// Errors returned by Invoke
 #[derive(Debug, PartialEq)]
 pub enum InvokeError {
-    ///<p/>
+    /// <p><p/></p>
     EC2AccessDenied(String),
-    ///<p>AWS Lambda was throttled by Amazon EC2 during Lambda function initialization using the execution role provided for the Lambda function.</p>
+    /// <p>AWS Lambda was throttled by Amazon EC2 during Lambda function initialization using the execution role provided for the Lambda function.</p>
     EC2Throttled(String),
-    ///<p>AWS Lambda received an unexpected EC2 client exception while setting up for the Lambda function.</p>
+    /// <p>AWS Lambda received an unexpected EC2 client exception while setting up for the Lambda function.</p>
     EC2Unexpected(String),
-    ///<p>AWS Lambda was not able to create an Elastic Network Interface (ENI) in the VPC, specified as part of Lambda function configuration, because the limit for network interfaces has been reached.</p>
+    /// <p>AWS Lambda was not able to create an Elastic Network Interface (ENI) in the VPC, specified as part of Lambda function configuration, because the limit for network interfaces has been reached.</p>
     ENILimitReached(String),
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
+    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
-    ///<p>The request body could not be parsed as JSON.</p>
+    /// <p>The request body could not be parsed as JSON.</p>
     InvalidRequestContent(String),
-    ///<p>The runtime or runtime version specified is not supported.</p>
+    /// <p>The runtime or runtime version specified is not supported.</p>
     InvalidRuntime(String),
-    ///<p>The Security Group ID provided in the Lambda function VPC configuration is invalid.</p>
+    /// <p>The Security Group ID provided in the Lambda function VPC configuration is invalid.</p>
     InvalidSecurityGroupID(String),
-    ///<p>The Subnet ID provided in the Lambda function VPC configuration is invalid.</p>
+    /// <p>The Subnet ID provided in the Lambda function VPC configuration is invalid.</p>
     InvalidSubnetID(String),
-    ///<p>AWS Lambda could not unzip the function zip file.</p>
+    /// <p>AWS Lambda could not unzip the function zip file.</p>
     InvalidZipFile(String),
-    ///<p>Lambda was unable to decrypt the environment variables because KMS access was denied. Check the Lambda function's KMS permissions.</p>
+    /// <p>Lambda was unable to decrypt the environment variables because KMS access was denied. Check the Lambda function's KMS permissions.</p>
     KMSAccessDenied(String),
-    ///<p>Lambda was unable to decrypt the environment variables because the KMS key used is disabled. Check the Lambda function's KMS key settings.</p>
+    /// <p>Lambda was unable to decrypt the environment variables because the KMS key used is disabled. Check the Lambda function's KMS key settings.</p>
     KMSDisabled(String),
-    ///<p>Lambda was unable to decrypt the environment variables because the KMS key used is in an invalid state for Decrypt. Check the function's KMS key settings.</p>
+    /// <p>Lambda was unable to decrypt the environment variables because the KMS key used is in an invalid state for Decrypt. Check the function's KMS key settings.</p>
     KMSInvalidState(String),
-    ///<p>Lambda was unable to decrypt the environment variables because the KMS key was not found. Check the function's KMS key settings. </p>
+    /// <p>Lambda was unable to decrypt the environment variables because the KMS key was not found. Check the function's KMS key settings. </p>
     KMSNotFound(String),
-    ///<p>The request payload exceeded the <code>Invoke</code> request body JSON input limit. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/limits.html">Limits</a>. </p>
+    /// <p>The request payload exceeded the <code>Invoke</code> request body JSON input limit. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/limits.html">Limits</a>. </p>
     RequestTooLarge(String),
-    ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The AWS Lambda service encountered an internal error.</p>
+    /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    ///<p>AWS Lambda was not able to set up VPC access for the Lambda function because one or more configured subnets has no available IP addresses.</p>
+    /// <p>AWS Lambda was not able to set up VPC access for the Lambda function because one or more configured subnets has no available IP addresses.</p>
     SubnetIPAddressLimitReached(String),
-    ///<p/>
+    /// <p><p/></p>
     TooManyRequests(String),
-    ///<p>The content type of the <code>Invoke</code> request body is not JSON.</p>
+    /// <p>The content type of the <code>Invoke</code> request body is not JSON.</p>
     UnsupportedMediaType(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2424,13 +2424,13 @@ impl Error for InvokeError {
 /// Errors returned by InvokeAsync
 #[derive(Debug, PartialEq)]
 pub enum InvokeAsyncError {
-    ///<p>The request body could not be parsed as JSON.</p>
+    /// <p>The request body could not be parsed as JSON.</p>
     InvalidRequestContent(String),
-    ///<p>The runtime or runtime version specified is not supported.</p>
+    /// <p>The runtime or runtime version specified is not supported.</p>
     InvalidRuntime(String),
-    ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The AWS Lambda service encountered an internal error.</p>
+    /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2518,13 +2518,13 @@ impl Error for InvokeAsyncError {
 /// Errors returned by ListAliases
 #[derive(Debug, PartialEq)]
 pub enum ListAliasesError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
+    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
-    ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The AWS Lambda service encountered an internal error.</p>
+    /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    ///<p/>
+    /// <p><p/></p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2612,13 +2612,13 @@ impl Error for ListAliasesError {
 /// Errors returned by ListEventSourceMappings
 #[derive(Debug, PartialEq)]
 pub enum ListEventSourceMappingsError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
+    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
-    ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The AWS Lambda service encountered an internal error.</p>
+    /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    ///<p/>
+    /// <p><p/></p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2712,11 +2712,11 @@ impl Error for ListEventSourceMappingsError {
 /// Errors returned by ListFunctions
 #[derive(Debug, PartialEq)]
 pub enum ListFunctionsError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
+    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
-    ///<p>The AWS Lambda service encountered an internal error.</p>
+    /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    ///<p/>
+    /// <p><p/></p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2800,13 +2800,13 @@ impl Error for ListFunctionsError {
 /// Errors returned by ListTags
 #[derive(Debug, PartialEq)]
 pub enum ListTagsError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
+    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
-    ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The AWS Lambda service encountered an internal error.</p>
+    /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    ///<p/>
+    /// <p><p/></p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2892,13 +2892,13 @@ impl Error for ListTagsError {
 /// Errors returned by ListVersionsByFunction
 #[derive(Debug, PartialEq)]
 pub enum ListVersionsByFunctionError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
+    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
-    ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The AWS Lambda service encountered an internal error.</p>
+    /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    ///<p/>
+    /// <p><p/></p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2992,15 +2992,15 @@ impl Error for ListVersionsByFunctionError {
 /// Errors returned by PublishVersion
 #[derive(Debug, PartialEq)]
 pub enum PublishVersionError {
-    ///<p>You have exceeded your maximum total code size per account. <a href="http://docs.aws.amazon.com/lambda/latest/dg/limits.html">Limits</a> </p>
+    /// <p>You have exceeded your maximum total code size per account. <a href="http://docs.aws.amazon.com/lambda/latest/dg/limits.html">Limits</a> </p>
     CodeStorageExceeded(String),
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
+    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
-    ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The AWS Lambda service encountered an internal error.</p>
+    /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    ///<p/>
+    /// <p><p/></p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3092,13 +3092,13 @@ impl Error for PublishVersionError {
 /// Errors returned by RemovePermission
 #[derive(Debug, PartialEq)]
 pub enum RemovePermissionError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
+    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
-    ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The AWS Lambda service encountered an internal error.</p>
+    /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    ///<p/>
+    /// <p><p/></p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3188,13 +3188,13 @@ impl Error for RemovePermissionError {
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
+    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
-    ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The AWS Lambda service encountered an internal error.</p>
+    /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    ///<p/>
+    /// <p><p/></p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3282,13 +3282,13 @@ impl Error for TagResourceError {
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
+    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
-    ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The AWS Lambda service encountered an internal error.</p>
+    /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    ///<p/>
+    /// <p><p/></p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3376,13 +3376,13 @@ impl Error for UntagResourceError {
 /// Errors returned by UpdateAlias
 #[derive(Debug, PartialEq)]
 pub enum UpdateAliasError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
+    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
-    ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The AWS Lambda service encountered an internal error.</p>
+    /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    ///<p/>
+    /// <p><p/></p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3470,15 +3470,15 @@ impl Error for UpdateAliasError {
 /// Errors returned by UpdateEventSourceMapping
 #[derive(Debug, PartialEq)]
 pub enum UpdateEventSourceMappingError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
+    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
-    ///<p>The resource already exists.</p>
+    /// <p>The resource already exists.</p>
     ResourceConflict(String),
-    ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The AWS Lambda service encountered an internal error.</p>
+    /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    ///<p/>
+    /// <p><p/></p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3576,15 +3576,15 @@ impl Error for UpdateEventSourceMappingError {
 /// Errors returned by UpdateFunctionCode
 #[derive(Debug, PartialEq)]
 pub enum UpdateFunctionCodeError {
-    ///<p>You have exceeded your maximum total code size per account. <a href="http://docs.aws.amazon.com/lambda/latest/dg/limits.html">Limits</a> </p>
+    /// <p>You have exceeded your maximum total code size per account. <a href="http://docs.aws.amazon.com/lambda/latest/dg/limits.html">Limits</a> </p>
     CodeStorageExceeded(String),
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
+    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
-    ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The AWS Lambda service encountered an internal error.</p>
+    /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    ///<p/>
+    /// <p><p/></p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3680,15 +3680,15 @@ impl Error for UpdateFunctionCodeError {
 /// Errors returned by UpdateFunctionConfiguration
 #[derive(Debug, PartialEq)]
 pub enum UpdateFunctionConfigurationError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
+    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
-    ///<p>The resource already exists.</p>
+    /// <p>The resource already exists.</p>
     ResourceConflict(String),
-    ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The AWS Lambda service encountered an internal error.</p>
+    /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    ///<p/>
+    /// <p><p/></p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3791,142 +3791,142 @@ impl Error for UpdateFunctionConfigurationError {
 }
 /// Trait representing the capabilities of the AWS Lambda API. AWS Lambda clients implement this trait.
 pub trait Lambda {
-    #[doc="<p>Adds a permission to the resource policy associated with the specified AWS Lambda function. You use resource policies to grant permissions to event sources that use <i>push</i> model. In a <i>push</i> model, event sources (such as Amazon S3 and custom applications) invoke your Lambda function. Each permission you add to the resource policy allows an event source, permission to invoke the Lambda function. </p> <p>For information about the push model, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/lambda-introduction.html\">AWS Lambda: How it Works</a>. </p> <p>If you are using versioning, the permissions you add are specific to the Lambda function version or alias you specify in the <code>AddPermission</code> request via the <code>Qualifier</code> parameter. For more information about versioning, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:AddPermission</code> action.</p>"]
+    /// <p>Adds a permission to the resource policy associated with the specified AWS Lambda function. You use resource policies to grant permissions to event sources that use <i>push</i> model. In a <i>push</i> model, event sources (such as Amazon S3 and custom applications) invoke your Lambda function. Each permission you add to the resource policy allows an event source, permission to invoke the Lambda function. </p> <p>For information about the push model, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/lambda-introduction.html">AWS Lambda: How it Works</a>. </p> <p>If you are using versioning, the permissions you add are specific to the Lambda function version or alias you specify in the <code>AddPermission</code> request via the <code>Qualifier</code> parameter. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:AddPermission</code> action.</p>
     fn add_permission(
         &self,
         input: &AddPermissionRequest,
     ) -> Result<AddPermissionResponse, AddPermissionError>;
 
-    #[doc="<p>Creates an alias that points to the specified Lambda function version. For more information, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html\">Introduction to AWS Lambda Aliases</a>.</p> <p>Alias names are unique for a given function. This requires permission for the lambda:CreateAlias action.</p>"]
+    /// <p>Creates an alias that points to the specified Lambda function version. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html">Introduction to AWS Lambda Aliases</a>.</p> <p>Alias names are unique for a given function. This requires permission for the lambda:CreateAlias action.</p>
     fn create_alias(
         &self,
         input: &CreateAliasRequest,
     ) -> Result<AliasConfiguration, CreateAliasError>;
 
-    #[doc="<p>Identifies a stream as an event source for a Lambda function. It can be either an Amazon Kinesis stream or an Amazon DynamoDB stream. AWS Lambda invokes the specified function when records are posted to the stream.</p> <p>This association between a stream source and a Lambda function is called the event source mapping.</p> <important> <p>This event source mapping is relevant only in the AWS Lambda pull model, where AWS Lambda invokes the function. For more information, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/lambda-introduction.html\">AWS Lambda: How it Works</a> in the <i>AWS Lambda Developer Guide</i>.</p> </important> <p>You provide mapping information (for example, which stream to read from and which Lambda function to invoke) in the request body.</p> <p>Each event source, such as an Amazon Kinesis or a DynamoDB stream, can be associated with multiple AWS Lambda function. A given Lambda function can be associated with multiple AWS event sources.</p> <p>If you are using versioning, you can specify a specific function version or an alias via the function name parameter. For more information about versioning, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:CreateEventSourceMapping</code> action.</p>"]
+    /// <p>Identifies a stream as an event source for a Lambda function. It can be either an Amazon Kinesis stream or an Amazon DynamoDB stream. AWS Lambda invokes the specified function when records are posted to the stream.</p> <p>This association between a stream source and a Lambda function is called the event source mapping.</p> <important> <p>This event source mapping is relevant only in the AWS Lambda pull model, where AWS Lambda invokes the function. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/lambda-introduction.html">AWS Lambda: How it Works</a> in the <i>AWS Lambda Developer Guide</i>.</p> </important> <p>You provide mapping information (for example, which stream to read from and which Lambda function to invoke) in the request body.</p> <p>Each event source, such as an Amazon Kinesis or a DynamoDB stream, can be associated with multiple AWS Lambda function. A given Lambda function can be associated with multiple AWS event sources.</p> <p>If you are using versioning, you can specify a specific function version or an alias via the function name parameter. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:CreateEventSourceMapping</code> action.</p>
     fn create_event_source_mapping(
         &self,
         input: &CreateEventSourceMappingRequest,
     ) -> Result<EventSourceMappingConfiguration, CreateEventSourceMappingError>;
 
-    #[doc="<p>Creates a new Lambda function. The function metadata is created from the request parameters, and the code for the function is provided by a .zip file in the request body. If the function name already exists, the operation will fail. Note that the function name is case-sensitive.</p> <p> If you are using versioning, you can also publish a version of the Lambda function you are creating using the <code>Publish</code> parameter. For more information about versioning, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:CreateFunction</code> action.</p>"]
+    /// <p>Creates a new Lambda function. The function metadata is created from the request parameters, and the code for the function is provided by a .zip file in the request body. If the function name already exists, the operation will fail. Note that the function name is case-sensitive.</p> <p> If you are using versioning, you can also publish a version of the Lambda function you are creating using the <code>Publish</code> parameter. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:CreateFunction</code> action.</p>
     fn create_function(
         &self,
         input: &CreateFunctionRequest,
     ) -> Result<FunctionConfiguration, CreateFunctionError>;
 
-    #[doc="<p>Deletes the specified Lambda function alias. For more information, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html\">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the lambda:DeleteAlias action.</p>"]
+    /// <p>Deletes the specified Lambda function alias. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the lambda:DeleteAlias action.</p>
     fn delete_alias(&self, input: &DeleteAliasRequest) -> Result<(), DeleteAliasError>;
 
-    #[doc="<p>Removes an event source mapping. This means AWS Lambda will no longer invoke the function for events in the associated source.</p> <p>This operation requires permission for the <code>lambda:DeleteEventSourceMapping</code> action.</p>"]
+    /// <p>Removes an event source mapping. This means AWS Lambda will no longer invoke the function for events in the associated source.</p> <p>This operation requires permission for the <code>lambda:DeleteEventSourceMapping</code> action.</p>
     fn delete_event_source_mapping(
         &self,
         input: &DeleteEventSourceMappingRequest,
     ) -> Result<EventSourceMappingConfiguration, DeleteEventSourceMappingError>;
 
-    #[doc="<p>Deletes the specified Lambda function code and configuration.</p> <p>If you are using the versioning feature and you don't specify a function version in your <code>DeleteFunction</code> request, AWS Lambda will delete the function, including all its versions, and any aliases pointing to the function versions. To delete a specific function version, you must provide the function version via the <code>Qualifier</code> parameter. For information about function versioning, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>When you delete a function the associated resource policy is also deleted. You will need to delete the event source mappings explicitly.</p> <p>This operation requires permission for the <code>lambda:DeleteFunction</code> action.</p>"]
+    /// <p>Deletes the specified Lambda function code and configuration.</p> <p>If you are using the versioning feature and you don't specify a function version in your <code>DeleteFunction</code> request, AWS Lambda will delete the function, including all its versions, and any aliases pointing to the function versions. To delete a specific function version, you must provide the function version via the <code>Qualifier</code> parameter. For information about function versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>When you delete a function the associated resource policy is also deleted. You will need to delete the event source mappings explicitly.</p> <p>This operation requires permission for the <code>lambda:DeleteFunction</code> action.</p>
     fn delete_function(&self, input: &DeleteFunctionRequest) -> Result<(), DeleteFunctionError>;
 
-    #[doc="<p>Returns a customer's account settings.</p> <p>You can use this operation to retrieve Lambda limits information, such as code size and concurrency limits. For more information about limits, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/limits.html\">AWS Lambda Limits</a>. You can also retrieve resource usage statistics, such as code storage usage and function count.</p>"]
+    /// <p>Returns a customer's account settings.</p> <p>You can use this operation to retrieve Lambda limits information, such as code size and concurrency limits. For more information about limits, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/limits.html">AWS Lambda Limits</a>. You can also retrieve resource usage statistics, such as code storage usage and function count.</p>
     fn get_account_settings(&self) -> Result<GetAccountSettingsResponse, GetAccountSettingsError>;
 
-    #[doc="<p>Returns the specified alias information such as the alias ARN, description, and function version it is pointing to. For more information, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html\">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the <code>lambda:GetAlias</code> action.</p>"]
+    /// <p>Returns the specified alias information such as the alias ARN, description, and function version it is pointing to. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the <code>lambda:GetAlias</code> action.</p>
     fn get_alias(&self, input: &GetAliasRequest) -> Result<AliasConfiguration, GetAliasError>;
 
-    #[doc="<p>Returns configuration information for the specified event source mapping (see <a>CreateEventSourceMapping</a>).</p> <p>This operation requires permission for the <code>lambda:GetEventSourceMapping</code> action.</p>"]
+    /// <p>Returns configuration information for the specified event source mapping (see <a>CreateEventSourceMapping</a>).</p> <p>This operation requires permission for the <code>lambda:GetEventSourceMapping</code> action.</p>
     fn get_event_source_mapping(
         &self,
         input: &GetEventSourceMappingRequest,
     ) -> Result<EventSourceMappingConfiguration, GetEventSourceMappingError>;
 
-    #[doc="<p>Returns the configuration information of the Lambda function and a presigned URL link to the .zip file you uploaded with <a>CreateFunction</a> so you can download the .zip file. Note that the URL is valid for up to 10 minutes. The configuration information is the same information you provided as parameters when uploading the function.</p> <p>Using the optional <code>Qualifier</code> parameter, you can specify a specific function version for which you want this information. If you don't specify this parameter, the API uses unqualified function ARN which return information about the <code>$LATEST</code> version of the Lambda function. For more information, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>.</p> <p>This operation requires permission for the <code>lambda:GetFunction</code> action.</p>"]
+    /// <p>Returns the configuration information of the Lambda function and a presigned URL link to the .zip file you uploaded with <a>CreateFunction</a> so you can download the .zip file. Note that the URL is valid for up to 10 minutes. The configuration information is the same information you provided as parameters when uploading the function.</p> <p>Using the optional <code>Qualifier</code> parameter, you can specify a specific function version for which you want this information. If you don't specify this parameter, the API uses unqualified function ARN which return information about the <code>$LATEST</code> version of the Lambda function. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>.</p> <p>This operation requires permission for the <code>lambda:GetFunction</code> action.</p>
     fn get_function(
         &self,
         input: &GetFunctionRequest,
     ) -> Result<GetFunctionResponse, GetFunctionError>;
 
-    #[doc="<p>Returns the configuration information of the Lambda function. This the same information you provided as parameters when uploading the function by using <a>CreateFunction</a>.</p> <p>If you are using the versioning feature, you can retrieve this information for a specific function version by using the optional <code>Qualifier</code> parameter and specifying the function version or alias that points to it. If you don't provide it, the API returns information about the $LATEST version of the function. For more information about versioning, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>.</p> <p>This operation requires permission for the <code>lambda:GetFunctionConfiguration</code> operation.</p>"]
+    /// <p>Returns the configuration information of the Lambda function. This the same information you provided as parameters when uploading the function by using <a>CreateFunction</a>.</p> <p>If you are using the versioning feature, you can retrieve this information for a specific function version by using the optional <code>Qualifier</code> parameter and specifying the function version or alias that points to it. If you don't provide it, the API returns information about the $LATEST version of the function. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>.</p> <p>This operation requires permission for the <code>lambda:GetFunctionConfiguration</code> operation.</p>
     fn get_function_configuration(
         &self,
         input: &GetFunctionConfigurationRequest,
     ) -> Result<FunctionConfiguration, GetFunctionConfigurationError>;
 
-    #[doc="<p>Returns the resource policy associated with the specified Lambda function.</p> <p> If you are using the versioning feature, you can get the resource policy associated with the specific Lambda function version or alias by specifying the version or alias name using the <code>Qualifier</code> parameter. For more information about versioning, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>You need permission for the <code>lambda:GetPolicy action.</code> </p>"]
+    /// <p>Returns the resource policy associated with the specified Lambda function.</p> <p> If you are using the versioning feature, you can get the resource policy associated with the specific Lambda function version or alias by specifying the version or alias name using the <code>Qualifier</code> parameter. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>You need permission for the <code>lambda:GetPolicy action.</code> </p>
     fn get_policy(&self, input: &GetPolicyRequest) -> Result<GetPolicyResponse, GetPolicyError>;
 
-    #[doc="<p>Invokes a specific Lambda function. For an example, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/with-dynamodb-create-function.html#with-dbb-invoke-manually\">Create the Lambda Function and Test It Manually</a>. </p> <p>If you are using the versioning feature, you can invoke the specific function version by providing function version or alias name that is pointing to the function version using the <code>Qualifier</code> parameter in the request. If you don't provide the <code>Qualifier</code> parameter, the <code>$LATEST</code> version of the Lambda function is invoked. Invocations occur at least once in response to an event and functions must be idempotent to handle this. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p>"]
+    /// <p>Invokes a specific Lambda function. For an example, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/with-dynamodb-create-function.html#with-dbb-invoke-manually">Create the Lambda Function and Test It Manually</a>. </p> <p>If you are using the versioning feature, you can invoke the specific function version by providing function version or alias name that is pointing to the function version using the <code>Qualifier</code> parameter in the request. If you don't provide the <code>Qualifier</code> parameter, the <code>$LATEST</code> version of the Lambda function is invoked. Invocations occur at least once in response to an event and functions must be idempotent to handle this. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p>
     fn invoke(&self, input: &InvocationRequest) -> Result<InvocationResponse, InvokeError>;
 
-    #[doc="<important> <p>This API is deprecated. We recommend you use <code>Invoke</code> API (see <a>Invoke</a>).</p> </important> <p>Submits an invocation request to AWS Lambda. Upon receiving the request, Lambda executes the specified function asynchronously. To see the logs generated by the Lambda function execution, see the CloudWatch Logs console.</p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p>"]
+    /// <p><important> <p>This API is deprecated. We recommend you use <code>Invoke</code> API (see <a>Invoke</a>).</p> </important> <p>Submits an invocation request to AWS Lambda. Upon receiving the request, Lambda executes the specified function asynchronously. To see the logs generated by the Lambda function execution, see the CloudWatch Logs console.</p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p></p>
     fn invoke_async(
         &self,
         input: &InvokeAsyncRequest,
     ) -> Result<InvokeAsyncResponse, InvokeAsyncError>;
 
-    #[doc="<p>Returns list of aliases created for a Lambda function. For each alias, the response includes information such as the alias ARN, description, alias name, and the function version to which it points. For more information, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html\">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the lambda:ListAliases action.</p>"]
+    /// <p>Returns list of aliases created for a Lambda function. For each alias, the response includes information such as the alias ARN, description, alias name, and the function version to which it points. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the lambda:ListAliases action.</p>
     fn list_aliases(
         &self,
         input: &ListAliasesRequest,
     ) -> Result<ListAliasesResponse, ListAliasesError>;
 
-    #[doc="<p>Returns a list of event source mappings you created using the <code>CreateEventSourceMapping</code> (see <a>CreateEventSourceMapping</a>). </p> <p>For each mapping, the API returns configuration information. You can optionally specify filters to retrieve specific event source mappings.</p> <p>If you are using the versioning feature, you can get list of event source mappings for a specific Lambda function version or an alias as described in the <code>FunctionName</code> parameter. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:ListEventSourceMappings</code> action.</p>"]
+    /// <p>Returns a list of event source mappings you created using the <code>CreateEventSourceMapping</code> (see <a>CreateEventSourceMapping</a>). </p> <p>For each mapping, the API returns configuration information. You can optionally specify filters to retrieve specific event source mappings.</p> <p>If you are using the versioning feature, you can get list of event source mappings for a specific Lambda function version or an alias as described in the <code>FunctionName</code> parameter. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:ListEventSourceMappings</code> action.</p>
     fn list_event_source_mappings(
         &self,
         input: &ListEventSourceMappingsRequest,
     ) -> Result<ListEventSourceMappingsResponse, ListEventSourceMappingsError>;
 
-    #[doc="<p>Returns a list of your Lambda functions. For each function, the response includes the function configuration information. You must use <a>GetFunction</a> to retrieve the code for your function.</p> <p>This operation requires permission for the <code>lambda:ListFunctions</code> action.</p> <p>If you are using the versioning feature, you can list all of your functions or only <code>$LATEST</code> versions. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p>"]
+    /// <p>Returns a list of your Lambda functions. For each function, the response includes the function configuration information. You must use <a>GetFunction</a> to retrieve the code for your function.</p> <p>This operation requires permission for the <code>lambda:ListFunctions</code> action.</p> <p>If you are using the versioning feature, you can list all of your functions or only <code>$LATEST</code> versions. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p>
     fn list_functions(
         &self,
         input: &ListFunctionsRequest,
     ) -> Result<ListFunctionsResponse, ListFunctionsError>;
 
-    #[doc="<p>Returns a list of tags assigned to a function when supplied the function ARN (Amazon Resource Name).</p>"]
+    /// <p>Returns a list of tags assigned to a function when supplied the function ARN (Amazon Resource Name).</p>
     fn list_tags(&self, input: &ListTagsRequest) -> Result<ListTagsResponse, ListTagsError>;
 
-    #[doc="<p>List all versions of a function. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p>"]
+    /// <p>List all versions of a function. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p>
     fn list_versions_by_function(
         &self,
         input: &ListVersionsByFunctionRequest,
     ) -> Result<ListVersionsByFunctionResponse, ListVersionsByFunctionError>;
 
-    #[doc="<p>Publishes a version of your function from the current snapshot of $LATEST. That is, AWS Lambda takes a snapshot of the function code and configuration information from $LATEST and publishes a new version. The code and configuration cannot be modified after publication. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p>"]
+    /// <p>Publishes a version of your function from the current snapshot of $LATEST. That is, AWS Lambda takes a snapshot of the function code and configuration information from $LATEST and publishes a new version. The code and configuration cannot be modified after publication. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p>
     fn publish_version(
         &self,
         input: &PublishVersionRequest,
     ) -> Result<FunctionConfiguration, PublishVersionError>;
 
-    #[doc="<p>You can remove individual permissions from an resource policy associated with a Lambda function by providing a statement ID that you provided when you added the permission.</p> <p>If you are using versioning, the permissions you remove are specific to the Lambda function version or alias you specify in the <code>AddPermission</code> request via the <code>Qualifier</code> parameter. For more information about versioning, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>Note that removal of a permission will cause an active event source to lose permission to the function.</p> <p>You need permission for the <code>lambda:RemovePermission</code> action.</p>"]
+    /// <p>You can remove individual permissions from an resource policy associated with a Lambda function by providing a statement ID that you provided when you added the permission.</p> <p>If you are using versioning, the permissions you remove are specific to the Lambda function version or alias you specify in the <code>AddPermission</code> request via the <code>Qualifier</code> parameter. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>Note that removal of a permission will cause an active event source to lose permission to the function.</p> <p>You need permission for the <code>lambda:RemovePermission</code> action.</p>
     fn remove_permission(
         &self,
         input: &RemovePermissionRequest,
     ) -> Result<(), RemovePermissionError>;
 
-    #[doc="<p>Creates a list of tags (key-value pairs) on the Lambda function. Requires the Lambda function ARN (Amazon Resource Name). If a key is specified without a value, Lambda creates a tag with the specified key and a value of null. </p>"]
+    /// <p>Creates a list of tags (key-value pairs) on the Lambda function. Requires the Lambda function ARN (Amazon Resource Name). If a key is specified without a value, Lambda creates a tag with the specified key and a value of null. </p>
     fn tag_resource(&self, input: &TagResourceRequest) -> Result<(), TagResourceError>;
 
-    #[doc="<p>Removes tags from a Lambda function. Requires the function ARN (Amazon Resource Name). </p>"]
+    /// <p>Removes tags from a Lambda function. Requires the function ARN (Amazon Resource Name). </p>
     fn untag_resource(&self, input: &UntagResourceRequest) -> Result<(), UntagResourceError>;
 
-    #[doc="<p>Using this API you can update the function version to which the alias points and the alias description. For more information, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html\">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the lambda:UpdateAlias action.</p>"]
+    /// <p>Using this API you can update the function version to which the alias points and the alias description. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the lambda:UpdateAlias action.</p>
     fn update_alias(
         &self,
         input: &UpdateAliasRequest,
     ) -> Result<AliasConfiguration, UpdateAliasError>;
 
-    #[doc="<p>You can update an event source mapping. This is useful if you want to change the parameters of the existing mapping without losing your position in the stream. You can change which function will receive the stream records, but to change the stream itself, you must create a new mapping.</p> <p>If you are using the versioning feature, you can update the event source mapping to map to a specific Lambda function version or alias as described in the <code>FunctionName</code> parameter. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>If you disable the event source mapping, AWS Lambda stops polling. If you enable again, it will resume polling from the time it had stopped polling, so you don't lose processing of any records. However, if you delete event source mapping and create it again, it will reset.</p> <p>This operation requires permission for the <code>lambda:UpdateEventSourceMapping</code> action.</p>"]
+    /// <p>You can update an event source mapping. This is useful if you want to change the parameters of the existing mapping without losing your position in the stream. You can change which function will receive the stream records, but to change the stream itself, you must create a new mapping.</p> <p>If you are using the versioning feature, you can update the event source mapping to map to a specific Lambda function version or alias as described in the <code>FunctionName</code> parameter. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>If you disable the event source mapping, AWS Lambda stops polling. If you enable again, it will resume polling from the time it had stopped polling, so you don't lose processing of any records. However, if you delete event source mapping and create it again, it will reset.</p> <p>This operation requires permission for the <code>lambda:UpdateEventSourceMapping</code> action.</p>
     fn update_event_source_mapping(
         &self,
         input: &UpdateEventSourceMappingRequest,
     ) -> Result<EventSourceMappingConfiguration, UpdateEventSourceMappingError>;
 
-    #[doc="<p>Updates the code for the specified Lambda function. This operation must only be used on an existing Lambda function and cannot be used to update the function configuration.</p> <p>If you are using the versioning feature, note this API will always update the $LATEST version of your Lambda function. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:UpdateFunctionCode</code> action.</p>"]
+    /// <p>Updates the code for the specified Lambda function. This operation must only be used on an existing Lambda function and cannot be used to update the function configuration.</p> <p>If you are using the versioning feature, note this API will always update the $LATEST version of your Lambda function. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:UpdateFunctionCode</code> action.</p>
     fn update_function_code(
         &self,
         input: &UpdateFunctionCodeRequest,
     ) -> Result<FunctionConfiguration, UpdateFunctionCodeError>;
 
-    #[doc="<p>Updates the configuration parameters for the specified Lambda function by using the values provided in the request. You provide only the parameters you want to change. This operation must only be used on an existing Lambda function and cannot be used to update the function's code.</p> <p>If you are using the versioning feature, note this API will always update the $LATEST version of your Lambda function. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:UpdateFunctionConfiguration</code> action.</p>"]
+    /// <p>Updates the configuration parameters for the specified Lambda function by using the values provided in the request. You provide only the parameters you want to change. This operation must only be used on an existing Lambda function and cannot be used to update the function's code.</p> <p>If you are using the versioning feature, note this API will always update the $LATEST version of your Lambda function. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:UpdateFunctionConfiguration</code> action.</p>
     fn update_function_configuration(
         &self,
         input: &UpdateFunctionConfigurationRequest,
@@ -3962,7 +3962,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Adds a permission to the resource policy associated with the specified AWS Lambda function. You use resource policies to grant permissions to event sources that use <i>push</i> model. In a <i>push</i> model, event sources (such as Amazon S3 and custom applications) invoke your Lambda function. Each permission you add to the resource policy allows an event source, permission to invoke the Lambda function. </p> <p>For information about the push model, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/lambda-introduction.html\">AWS Lambda: How it Works</a>. </p> <p>If you are using versioning, the permissions you add are specific to the Lambda function version or alias you specify in the <code>AddPermission</code> request via the <code>Qualifier</code> parameter. For more information about versioning, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:AddPermission</code> action.</p>"]
+    /// <p>Adds a permission to the resource policy associated with the specified AWS Lambda function. You use resource policies to grant permissions to event sources that use <i>push</i> model. In a <i>push</i> model, event sources (such as Amazon S3 and custom applications) invoke your Lambda function. Each permission you add to the resource policy allows an event source, permission to invoke the Lambda function. </p> <p>For information about the push model, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/lambda-introduction.html">AWS Lambda: How it Works</a>. </p> <p>If you are using versioning, the permissions you add are specific to the Lambda function version or alias you specify in the <code>AddPermission</code> request via the <code>Qualifier</code> parameter. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:AddPermission</code> action.</p>
     fn add_permission(
         &self,
         input: &AddPermissionRequest,
@@ -4012,7 +4012,7 @@ where
         }
     }
 
-    #[doc="<p>Creates an alias that points to the specified Lambda function version. For more information, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html\">Introduction to AWS Lambda Aliases</a>.</p> <p>Alias names are unique for a given function. This requires permission for the lambda:CreateAlias action.</p>"]
+    /// <p>Creates an alias that points to the specified Lambda function version. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html">Introduction to AWS Lambda Aliases</a>.</p> <p>Alias names are unique for a given function. This requires permission for the lambda:CreateAlias action.</p>
     fn create_alias(
         &self,
         input: &CreateAliasRequest,
@@ -4056,7 +4056,7 @@ where
         }
     }
 
-    #[doc="<p>Identifies a stream as an event source for a Lambda function. It can be either an Amazon Kinesis stream or an Amazon DynamoDB stream. AWS Lambda invokes the specified function when records are posted to the stream.</p> <p>This association between a stream source and a Lambda function is called the event source mapping.</p> <important> <p>This event source mapping is relevant only in the AWS Lambda pull model, where AWS Lambda invokes the function. For more information, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/lambda-introduction.html\">AWS Lambda: How it Works</a> in the <i>AWS Lambda Developer Guide</i>.</p> </important> <p>You provide mapping information (for example, which stream to read from and which Lambda function to invoke) in the request body.</p> <p>Each event source, such as an Amazon Kinesis or a DynamoDB stream, can be associated with multiple AWS Lambda function. A given Lambda function can be associated with multiple AWS event sources.</p> <p>If you are using versioning, you can specify a specific function version or an alias via the function name parameter. For more information about versioning, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:CreateEventSourceMapping</code> action.</p>"]
+    /// <p>Identifies a stream as an event source for a Lambda function. It can be either an Amazon Kinesis stream or an Amazon DynamoDB stream. AWS Lambda invokes the specified function when records are posted to the stream.</p> <p>This association between a stream source and a Lambda function is called the event source mapping.</p> <important> <p>This event source mapping is relevant only in the AWS Lambda pull model, where AWS Lambda invokes the function. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/lambda-introduction.html">AWS Lambda: How it Works</a> in the <i>AWS Lambda Developer Guide</i>.</p> </important> <p>You provide mapping information (for example, which stream to read from and which Lambda function to invoke) in the request body.</p> <p>Each event source, such as an Amazon Kinesis or a DynamoDB stream, can be associated with multiple AWS Lambda function. A given Lambda function can be associated with multiple AWS event sources.</p> <p>If you are using versioning, you can specify a specific function version or an alias via the function name parameter. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:CreateEventSourceMapping</code> action.</p>
     fn create_event_source_mapping(
         &self,
         input: &CreateEventSourceMappingRequest,
@@ -4098,7 +4098,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new Lambda function. The function metadata is created from the request parameters, and the code for the function is provided by a .zip file in the request body. If the function name already exists, the operation will fail. Note that the function name is case-sensitive.</p> <p> If you are using versioning, you can also publish a version of the Lambda function you are creating using the <code>Publish</code> parameter. For more information about versioning, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:CreateFunction</code> action.</p>"]
+    /// <p>Creates a new Lambda function. The function metadata is created from the request parameters, and the code for the function is provided by a .zip file in the request body. If the function name already exists, the operation will fail. Note that the function name is case-sensitive.</p> <p> If you are using versioning, you can also publish a version of the Lambda function you are creating using the <code>Publish</code> parameter. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:CreateFunction</code> action.</p>
     fn create_function(
         &self,
         input: &CreateFunctionRequest,
@@ -4139,7 +4139,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified Lambda function alias. For more information, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html\">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the lambda:DeleteAlias action.</p>"]
+    /// <p>Deletes the specified Lambda function alias. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the lambda:DeleteAlias action.</p>
     fn delete_alias(&self, input: &DeleteAliasRequest) -> Result<(), DeleteAliasError> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/aliases/{name}",
@@ -4169,7 +4169,7 @@ where
         }
     }
 
-    #[doc="<p>Removes an event source mapping. This means AWS Lambda will no longer invoke the function for events in the associated source.</p> <p>This operation requires permission for the <code>lambda:DeleteEventSourceMapping</code> action.</p>"]
+    /// <p>Removes an event source mapping. This means AWS Lambda will no longer invoke the function for events in the associated source.</p> <p>This operation requires permission for the <code>lambda:DeleteEventSourceMapping</code> action.</p>
     fn delete_event_source_mapping(
         &self,
         input: &DeleteEventSourceMappingRequest,
@@ -4211,7 +4211,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified Lambda function code and configuration.</p> <p>If you are using the versioning feature and you don't specify a function version in your <code>DeleteFunction</code> request, AWS Lambda will delete the function, including all its versions, and any aliases pointing to the function versions. To delete a specific function version, you must provide the function version via the <code>Qualifier</code> parameter. For information about function versioning, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>When you delete a function the associated resource policy is also deleted. You will need to delete the event source mappings explicitly.</p> <p>This operation requires permission for the <code>lambda:DeleteFunction</code> action.</p>"]
+    /// <p>Deletes the specified Lambda function code and configuration.</p> <p>If you are using the versioning feature and you don't specify a function version in your <code>DeleteFunction</code> request, AWS Lambda will delete the function, including all its versions, and any aliases pointing to the function versions. To delete a specific function version, you must provide the function version via the <code>Qualifier</code> parameter. For information about function versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>When you delete a function the associated resource policy is also deleted. You will need to delete the event source mappings explicitly.</p> <p>This operation requires permission for the <code>lambda:DeleteFunction</code> action.</p>
     fn delete_function(&self, input: &DeleteFunctionRequest) -> Result<(), DeleteFunctionError> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}",
@@ -4246,7 +4246,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a customer's account settings.</p> <p>You can use this operation to retrieve Lambda limits information, such as code size and concurrency limits. For more information about limits, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/limits.html\">AWS Lambda Limits</a>. You can also retrieve resource usage statistics, such as code storage usage and function count.</p>"]
+    /// <p>Returns a customer's account settings.</p> <p>You can use this operation to retrieve Lambda limits information, such as code size and concurrency limits. For more information about limits, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/limits.html">AWS Lambda Limits</a>. You can also retrieve resource usage statistics, such as code storage usage and function count.</p>
     fn get_account_settings(&self) -> Result<GetAccountSettingsResponse, GetAccountSettingsError> {
         let request_uri = "/2016-08-19/account-settings/";
 
@@ -4281,7 +4281,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the specified alias information such as the alias ARN, description, and function version it is pointing to. For more information, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html\">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the <code>lambda:GetAlias</code> action.</p>"]
+    /// <p>Returns the specified alias information such as the alias ARN, description, and function version it is pointing to. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the <code>lambda:GetAlias</code> action.</p>
     fn get_alias(&self, input: &GetAliasRequest) -> Result<AliasConfiguration, GetAliasError> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/aliases/{name}",
@@ -4320,7 +4320,7 @@ where
         }
     }
 
-    #[doc="<p>Returns configuration information for the specified event source mapping (see <a>CreateEventSourceMapping</a>).</p> <p>This operation requires permission for the <code>lambda:GetEventSourceMapping</code> action.</p>"]
+    /// <p>Returns configuration information for the specified event source mapping (see <a>CreateEventSourceMapping</a>).</p> <p>This operation requires permission for the <code>lambda:GetEventSourceMapping</code> action.</p>
     fn get_event_source_mapping(
         &self,
         input: &GetEventSourceMappingRequest,
@@ -4362,7 +4362,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the configuration information of the Lambda function and a presigned URL link to the .zip file you uploaded with <a>CreateFunction</a> so you can download the .zip file. Note that the URL is valid for up to 10 minutes. The configuration information is the same information you provided as parameters when uploading the function.</p> <p>Using the optional <code>Qualifier</code> parameter, you can specify a specific function version for which you want this information. If you don't specify this parameter, the API uses unqualified function ARN which return information about the <code>$LATEST</code> version of the Lambda function. For more information, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>.</p> <p>This operation requires permission for the <code>lambda:GetFunction</code> action.</p>"]
+    /// <p>Returns the configuration information of the Lambda function and a presigned URL link to the .zip file you uploaded with <a>CreateFunction</a> so you can download the .zip file. Note that the URL is valid for up to 10 minutes. The configuration information is the same information you provided as parameters when uploading the function.</p> <p>Using the optional <code>Qualifier</code> parameter, you can specify a specific function version for which you want this information. If you don't specify this parameter, the API uses unqualified function ARN which return information about the <code>$LATEST</code> version of the Lambda function. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>.</p> <p>This operation requires permission for the <code>lambda:GetFunction</code> action.</p>
     fn get_function(
         &self,
         input: &GetFunctionRequest,
@@ -4409,7 +4409,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the configuration information of the Lambda function. This the same information you provided as parameters when uploading the function by using <a>CreateFunction</a>.</p> <p>If you are using the versioning feature, you can retrieve this information for a specific function version by using the optional <code>Qualifier</code> parameter and specifying the function version or alias that points to it. If you don't provide it, the API returns information about the $LATEST version of the function. For more information about versioning, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>.</p> <p>This operation requires permission for the <code>lambda:GetFunctionConfiguration</code> operation.</p>"]
+    /// <p>Returns the configuration information of the Lambda function. This the same information you provided as parameters when uploading the function by using <a>CreateFunction</a>.</p> <p>If you are using the versioning feature, you can retrieve this information for a specific function version by using the optional <code>Qualifier</code> parameter and specifying the function version or alias that points to it. If you don't provide it, the API returns information about the $LATEST version of the function. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>.</p> <p>This operation requires permission for the <code>lambda:GetFunctionConfiguration</code> operation.</p>
     fn get_function_configuration(
         &self,
         input: &GetFunctionConfigurationRequest,
@@ -4456,7 +4456,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the resource policy associated with the specified Lambda function.</p> <p> If you are using the versioning feature, you can get the resource policy associated with the specific Lambda function version or alias by specifying the version or alias name using the <code>Qualifier</code> parameter. For more information about versioning, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>You need permission for the <code>lambda:GetPolicy action.</code> </p>"]
+    /// <p>Returns the resource policy associated with the specified Lambda function.</p> <p> If you are using the versioning feature, you can get the resource policy associated with the specific Lambda function version or alias by specifying the version or alias name using the <code>Qualifier</code> parameter. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>You need permission for the <code>lambda:GetPolicy action.</code> </p>
     fn get_policy(&self, input: &GetPolicyRequest) -> Result<GetPolicyResponse, GetPolicyError> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/policy",
@@ -4500,7 +4500,7 @@ where
         }
     }
 
-    #[doc="<p>Invokes a specific Lambda function. For an example, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/with-dynamodb-create-function.html#with-dbb-invoke-manually\">Create the Lambda Function and Test It Manually</a>. </p> <p>If you are using the versioning feature, you can invoke the specific function version by providing function version or alias name that is pointing to the function version using the <code>Qualifier</code> parameter in the request. If you don't provide the <code>Qualifier</code> parameter, the <code>$LATEST</code> version of the Lambda function is invoked. Invocations occur at least once in response to an event and functions must be idempotent to handle this. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p>"]
+    /// <p>Invokes a specific Lambda function. For an example, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/with-dynamodb-create-function.html#with-dbb-invoke-manually">Create the Lambda Function and Test It Manually</a>. </p> <p>If you are using the versioning feature, you can invoke the specific function version by providing function version or alias name that is pointing to the function version using the <code>Qualifier</code> parameter in the request. If you don't provide the <code>Qualifier</code> parameter, the <code>$LATEST</code> version of the Lambda function is invoked. Invocations occur at least once in response to an event and functions must be idempotent to handle this. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p>
     fn invoke(&self, input: &InvocationRequest) -> Result<InvocationResponse, InvokeError> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/invocations",
@@ -4567,7 +4567,7 @@ where
         }
     }
 
-    #[doc="<important> <p>This API is deprecated. We recommend you use <code>Invoke</code> API (see <a>Invoke</a>).</p> </important> <p>Submits an invocation request to AWS Lambda. Upon receiving the request, Lambda executes the specified function asynchronously. To see the logs generated by the Lambda function execution, see the CloudWatch Logs console.</p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p>"]
+    /// <p><important> <p>This API is deprecated. We recommend you use <code>Invoke</code> API (see <a>Invoke</a>).</p> </important> <p>Submits an invocation request to AWS Lambda. Upon receiving the request, Lambda executes the specified function asynchronously. To see the logs generated by the Lambda function execution, see the CloudWatch Logs console.</p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p></p>
     fn invoke_async(
         &self,
         input: &InvokeAsyncRequest,
@@ -4612,7 +4612,7 @@ where
         }
     }
 
-    #[doc="<p>Returns list of aliases created for a Lambda function. For each alias, the response includes information such as the alias ARN, description, alias name, and the function version to which it points. For more information, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html\">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the lambda:ListAliases action.</p>"]
+    /// <p>Returns list of aliases created for a Lambda function. For each alias, the response includes information such as the alias ARN, description, alias name, and the function version to which it points. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the lambda:ListAliases action.</p>
     fn list_aliases(
         &self,
         input: &ListAliasesRequest,
@@ -4665,7 +4665,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list of event source mappings you created using the <code>CreateEventSourceMapping</code> (see <a>CreateEventSourceMapping</a>). </p> <p>For each mapping, the API returns configuration information. You can optionally specify filters to retrieve specific event source mappings.</p> <p>If you are using the versioning feature, you can get list of event source mappings for a specific Lambda function version or an alias as described in the <code>FunctionName</code> parameter. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:ListEventSourceMappings</code> action.</p>"]
+    /// <p>Returns a list of event source mappings you created using the <code>CreateEventSourceMapping</code> (see <a>CreateEventSourceMapping</a>). </p> <p>For each mapping, the API returns configuration information. You can optionally specify filters to retrieve specific event source mappings.</p> <p>If you are using the versioning feature, you can get list of event source mappings for a specific Lambda function version or an alias as described in the <code>FunctionName</code> parameter. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:ListEventSourceMappings</code> action.</p>
     fn list_event_source_mappings(
         &self,
         input: &ListEventSourceMappingsRequest,
@@ -4719,7 +4719,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list of your Lambda functions. For each function, the response includes the function configuration information. You must use <a>GetFunction</a> to retrieve the code for your function.</p> <p>This operation requires permission for the <code>lambda:ListFunctions</code> action.</p> <p>If you are using the versioning feature, you can list all of your functions or only <code>$LATEST</code> versions. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p>"]
+    /// <p>Returns a list of your Lambda functions. For each function, the response includes the function configuration information. You must use <a>GetFunction</a> to retrieve the code for your function.</p> <p>This operation requires permission for the <code>lambda:ListFunctions</code> action.</p> <p>If you are using the versioning feature, you can list all of your functions or only <code>$LATEST</code> versions. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p>
     fn list_functions(
         &self,
         input: &ListFunctionsRequest,
@@ -4772,7 +4772,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list of tags assigned to a function when supplied the function ARN (Amazon Resource Name).</p>"]
+    /// <p>Returns a list of tags assigned to a function when supplied the function ARN (Amazon Resource Name).</p>
     fn list_tags(&self, input: &ListTagsRequest) -> Result<ListTagsResponse, ListTagsError> {
         let request_uri = format!("/2017-03-31/tags/{arn}", arn = input.resource);
 
@@ -4807,7 +4807,7 @@ where
         }
     }
 
-    #[doc="<p>List all versions of a function. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p>"]
+    /// <p>List all versions of a function. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p>
     fn list_versions_by_function(
         &self,
         input: &ListVersionsByFunctionRequest,
@@ -4858,7 +4858,7 @@ where
         }
     }
 
-    #[doc="<p>Publishes a version of your function from the current snapshot of $LATEST. That is, AWS Lambda takes a snapshot of the function code and configuration information from $LATEST and publishes a new version. The code and configuration cannot be modified after publication. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p>"]
+    /// <p>Publishes a version of your function from the current snapshot of $LATEST. That is, AWS Lambda takes a snapshot of the function code and configuration information from $LATEST and publishes a new version. The code and configuration cannot be modified after publication. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p>
     fn publish_version(
         &self,
         input: &PublishVersionRequest,
@@ -4902,7 +4902,7 @@ where
         }
     }
 
-    #[doc="<p>You can remove individual permissions from an resource policy associated with a Lambda function by providing a statement ID that you provided when you added the permission.</p> <p>If you are using versioning, the permissions you remove are specific to the Lambda function version or alias you specify in the <code>AddPermission</code> request via the <code>Qualifier</code> parameter. For more information about versioning, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>Note that removal of a permission will cause an active event source to lose permission to the function.</p> <p>You need permission for the <code>lambda:RemovePermission</code> action.</p>"]
+    /// <p>You can remove individual permissions from an resource policy associated with a Lambda function by providing a statement ID that you provided when you added the permission.</p> <p>If you are using versioning, the permissions you remove are specific to the Lambda function version or alias you specify in the <code>AddPermission</code> request via the <code>Qualifier</code> parameter. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>Note that removal of a permission will cause an active event source to lose permission to the function.</p> <p>You need permission for the <code>lambda:RemovePermission</code> action.</p>
     fn remove_permission(
         &self,
         input: &RemovePermissionRequest,
@@ -4941,7 +4941,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a list of tags (key-value pairs) on the Lambda function. Requires the Lambda function ARN (Amazon Resource Name). If a key is specified without a value, Lambda creates a tag with the specified key and a value of null. </p>"]
+    /// <p>Creates a list of tags (key-value pairs) on the Lambda function. Requires the Lambda function ARN (Amazon Resource Name). If a key is specified without a value, Lambda creates a tag with the specified key and a value of null. </p>
     fn tag_resource(&self, input: &TagResourceRequest) -> Result<(), TagResourceError> {
         let request_uri = format!("/2017-03-31/tags/{arn}", arn = input.resource);
 
@@ -4970,7 +4970,7 @@ where
         }
     }
 
-    #[doc="<p>Removes tags from a Lambda function. Requires the function ARN (Amazon Resource Name). </p>"]
+    /// <p>Removes tags from a Lambda function. Requires the function ARN (Amazon Resource Name). </p>
     fn untag_resource(&self, input: &UntagResourceRequest) -> Result<(), UntagResourceError> {
         let request_uri = format!("/2017-03-31/tags/{arn}", arn = input.resource);
 
@@ -5002,7 +5002,7 @@ where
         }
     }
 
-    #[doc="<p>Using this API you can update the function version to which the alias points and the alias description. For more information, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html\">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the lambda:UpdateAlias action.</p>"]
+    /// <p>Using this API you can update the function version to which the alias points and the alias description. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the lambda:UpdateAlias action.</p>
     fn update_alias(
         &self,
         input: &UpdateAliasRequest,
@@ -5047,7 +5047,7 @@ where
         }
     }
 
-    #[doc="<p>You can update an event source mapping. This is useful if you want to change the parameters of the existing mapping without losing your position in the stream. You can change which function will receive the stream records, but to change the stream itself, you must create a new mapping.</p> <p>If you are using the versioning feature, you can update the event source mapping to map to a specific Lambda function version or alias as described in the <code>FunctionName</code> parameter. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>If you disable the event source mapping, AWS Lambda stops polling. If you enable again, it will resume polling from the time it had stopped polling, so you don't lose processing of any records. However, if you delete event source mapping and create it again, it will reset.</p> <p>This operation requires permission for the <code>lambda:UpdateEventSourceMapping</code> action.</p>"]
+    /// <p>You can update an event source mapping. This is useful if you want to change the parameters of the existing mapping without losing your position in the stream. You can change which function will receive the stream records, but to change the stream itself, you must create a new mapping.</p> <p>If you are using the versioning feature, you can update the event source mapping to map to a specific Lambda function version or alias as described in the <code>FunctionName</code> parameter. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>If you disable the event source mapping, AWS Lambda stops polling. If you enable again, it will resume polling from the time it had stopped polling, so you don't lose processing of any records. However, if you delete event source mapping and create it again, it will reset.</p> <p>This operation requires permission for the <code>lambda:UpdateEventSourceMapping</code> action.</p>
     fn update_event_source_mapping(
         &self,
         input: &UpdateEventSourceMappingRequest,
@@ -5092,7 +5092,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the code for the specified Lambda function. This operation must only be used on an existing Lambda function and cannot be used to update the function configuration.</p> <p>If you are using the versioning feature, note this API will always update the $LATEST version of your Lambda function. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:UpdateFunctionCode</code> action.</p>"]
+    /// <p>Updates the code for the specified Lambda function. This operation must only be used on an existing Lambda function and cannot be used to update the function configuration.</p> <p>If you are using the versioning feature, note this API will always update the $LATEST version of your Lambda function. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:UpdateFunctionCode</code> action.</p>
     fn update_function_code(
         &self,
         input: &UpdateFunctionCodeRequest,
@@ -5136,7 +5136,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the configuration parameters for the specified Lambda function by using the values provided in the request. You provide only the parameters you want to change. This operation must only be used on an existing Lambda function and cannot be used to update the function's code.</p> <p>If you are using the versioning feature, note this API will always update the $LATEST version of your Lambda function. For information about the versioning feature, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:UpdateFunctionConfiguration</code> action.</p>"]
+    /// <p>Updates the configuration parameters for the specified Lambda function by using the values provided in the request. You provide only the parameters you want to change. This operation must only be used on an existing Lambda function and cannot be used to update the function's code.</p> <p>If you are using the versioning feature, note this API will always update the $LATEST version of your Lambda function. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:UpdateFunctionConfiguration</code> action.</p>
     fn update_function_configuration(
         &self,
         input: &UpdateFunctionConfigurationRequest,

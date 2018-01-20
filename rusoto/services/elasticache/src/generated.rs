@@ -379,7 +379,7 @@ pub struct CacheCluster {
     pub replication_group_id: Option<String>,
     /// <p>A list of VPC Security Groups associated with the cache cluster.</p>
     pub security_groups: Option<Vec<SecurityGroupMembership>>,
-    /// <p>The number of days for which ElastiCache retains automatic cache cluster snapshots before deleting them. For example, if you set <code>SnapshotRetentionLimit</code> to 5, a snapshot that was taken today is retained for 5 days before being deleted.</p> <important> <p> If the value of SnapshotRetentionLimit is set to zero (0), backups are turned off.</p> </important>
+    /// <p><p>The number of days for which ElastiCache retains automatic cache cluster snapshots before deleting them. For example, if you set <code>SnapshotRetentionLimit</code> to 5, a snapshot that was taken today is retained for 5 days before being deleted.</p> <important> <p> If the value of SnapshotRetentionLimit is set to zero (0), backups are turned off.</p> </important></p>
     pub snapshot_retention_limit: Option<i64>,
     /// <p>The daily time range (in UTC) during which ElastiCache begins taking a daily snapshot of your cache cluster.</p> <p>Example: <code>05:00-09:00</code> </p>
     pub snapshot_window: Option<String>,
@@ -1420,7 +1420,7 @@ impl CacheParameterGroupListDeserializer {
         Ok(obj)
     }
 }
-/// <p>Represents the output of one of the following operations:</p> <ul> <li> <p> <code>ModifyCacheParameterGroup</code> </p> </li> <li> <p> <code>ResetCacheParameterGroup</code> </p> </li> </ul>
+/// <p><p>Represents the output of one of the following operations:</p> <ul> <li> <p> <code>ModifyCacheParameterGroup</code> </p> </li> <li> <p> <code>ResetCacheParameterGroup</code> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone)]
 pub struct CacheParameterGroupNameMessage {
     /// <p>The name of the cache parameter group.</p>
@@ -1588,7 +1588,7 @@ impl CacheParameterGroupsMessageDeserializer {
         Ok(obj)
     }
 }
-/// <p>Represents the output of one of the following operations:</p> <ul> <li> <p> <code>AuthorizeCacheSecurityGroupIngress</code> </p> </li> <li> <p> <code>CreateCacheSecurityGroup</code> </p> </li> <li> <p> <code>RevokeCacheSecurityGroupIngress</code> </p> </li> </ul>
+/// <p><p>Represents the output of one of the following operations:</p> <ul> <li> <p> <code>AuthorizeCacheSecurityGroupIngress</code> </p> </li> <li> <p> <code>CreateCacheSecurityGroup</code> </p> </li> <li> <p> <code>RevokeCacheSecurityGroupIngress</code> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone)]
 pub struct CacheSecurityGroup {
     /// <p>The name of the cache security group.</p>
@@ -1865,7 +1865,7 @@ impl CacheSecurityGroupsDeserializer {
         Ok(obj)
     }
 }
-/// <p>Represents the output of one of the following operations:</p> <ul> <li> <p> <code>CreateCacheSubnetGroup</code> </p> </li> <li> <p> <code>ModifyCacheSubnetGroup</code> </p> </li> </ul>
+/// <p><p>Represents the output of one of the following operations:</p> <ul> <li> <p> <code>CreateCacheSubnetGroup</code> </p> </li> <li> <p> <code>ModifyCacheSubnetGroup</code> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone)]
 pub struct CacheSubnetGroup {
     /// <p>The description of the cache subnet group.</p>
@@ -2173,7 +2173,7 @@ pub struct CreateCacheClusterMessage {
     pub auth_token: Option<String>,
     /// <p>This parameter is currently disabled.</p>
     pub auto_minor_version_upgrade: Option<bool>,
-    /// <p>The node group (shard) identifier. This parameter is stored as a lowercase string.</p> <p> <b>Constraints:</b> </p> <ul> <li> <p>A name must contain from 1 to 20 alphanumeric characters or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>A name cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>
+    /// <p><p>The node group (shard) identifier. This parameter is stored as a lowercase string.</p> <p> <b>Constraints:</b> </p> <ul> <li> <p>A name must contain from 1 to 20 alphanumeric characters or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>A name cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
     pub cache_cluster_id: String,
     /// <p>The compute and memory capacity of the nodes in the node group (shard).</p> <p>Valid node types are as follows:</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code>, <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code>, <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.t1.micro</code>, <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized: <code>cache.c1.xlarge</code> </p> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Notes:</b> </p> <ul> <li> <p>All T2 instances are created in an Amazon Virtual Private Cloud (Amazon VPC).</p> </li> <li> <p>Redis backup/restore is not supported for Redis (cluster mode disabled) T1 and T2 instances. Backup/restore is supported on Redis (cluster mode enabled) T2 instances.</p> </li> <li> <p>Redis Append-only files (AOF) functionality is not supported for T1 or T2 instances.</p> </li> </ul> <p>For a complete listing of node types and specifications, see <a href="http://aws.amazon.com/elasticache/details">Amazon ElastiCache Product Features and Details</a> and either <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Memcached.html#ParameterGroups.Memcached.NodeSpecific">Cache Node Type-Specific Parameters for Memcached</a> or <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Redis.html#ParameterGroups.Redis.NodeSpecific">Cache Node Type-Specific Parameters for Redis</a>.</p>
     pub cache_node_type: Option<String>,
@@ -2181,13 +2181,13 @@ pub struct CreateCacheClusterMessage {
     pub cache_parameter_group_name: Option<String>,
     /// <p>A list of security group names to associate with this cache cluster.</p> <p>Use this parameter only when you are creating a cache cluster outside of an Amazon Virtual Private Cloud (Amazon VPC).</p>
     pub cache_security_group_names: Option<Vec<String>>,
-    /// <p>The name of the subnet group to be used for the cache cluster.</p> <p>Use this parameter only when you are creating a cache cluster in an Amazon Virtual Private Cloud (Amazon VPC).</p> <important> <p>If you're going to launch your cluster in an Amazon VPC, you need to create a subnet group before you start creating a cluster. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/SubnetGroups.html">Subnets and Subnet Groups</a>.</p> </important>
+    /// <p><p>The name of the subnet group to be used for the cache cluster.</p> <p>Use this parameter only when you are creating a cache cluster in an Amazon Virtual Private Cloud (Amazon VPC).</p> <important> <p>If you&#39;re going to launch your cluster in an Amazon VPC, you need to create a subnet group before you start creating a cluster. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/SubnetGroups.html">Subnets and Subnet Groups</a>.</p> </important></p>
     pub cache_subnet_group_name: Option<String>,
     /// <p>The name of the cache engine to be used for this cache cluster.</p> <p>Valid values for this parameter are: <code>memcached</code> | <code>redis</code> </p>
     pub engine: Option<String>,
     /// <p>The version number of the cache engine to be used for this cache cluster. To view the supported cache engine versions, use the DescribeCacheEngineVersions operation.</p> <p> <b>Important:</b> You can upgrade to a newer engine version (see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/SelectEngine.html#VersionManagement">Selecting a Cache Engine and Version</a>), but you cannot downgrade to an earlier engine version. If you want to use an earlier engine version, you must delete the existing cache cluster or replication group and create it anew with the earlier engine version. </p>
     pub engine_version: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (SNS) topic to which notifications are sent.</p> <note> <p>The Amazon SNS topic owner must be the same as the cache cluster owner.</p> </note>
+    /// <p><p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (SNS) topic to which notifications are sent.</p> <note> <p>The Amazon SNS topic owner must be the same as the cache cluster owner.</p> </note></p>
     pub notification_topic_arn: Option<String>,
     /// <p>The initial number of cache nodes that the cache cluster has.</p> <p>For clusters running Redis, this value must be 1. For clusters running Memcached, this value must be between 1 and 20.</p> <p>If you need more than 20 nodes for your Memcached cluster, please fill out the ElastiCache Limit Increase Request form at <a href="http://aws.amazon.com/contact-us/elasticache-node-limit-request/">http://aws.amazon.com/contact-us/elasticache-node-limit-request/</a>.</p>
     pub num_cache_nodes: Option<i64>,
@@ -2199,13 +2199,13 @@ pub struct CreateCacheClusterMessage {
     pub preferred_availability_zones: Option<Vec<String>>,
     /// <p>Specifies the weekly time range during which maintenance on the cache cluster is performed. It is specified as a range in the format ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period. Valid values for <code>ddd</code> are:</p> <p>Specifies the weekly time range during which maintenance on the cluster is performed. It is specified as a range in the format ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period.</p> <p>Valid values for <code>ddd</code> are:</p> <ul> <li> <p> <code>sun</code> </p> </li> <li> <p> <code>mon</code> </p> </li> <li> <p> <code>tue</code> </p> </li> <li> <p> <code>wed</code> </p> </li> <li> <p> <code>thu</code> </p> </li> <li> <p> <code>fri</code> </p> </li> <li> <p> <code>sat</code> </p> </li> </ul> <p>Example: <code>sun:23:00-mon:01:30</code> </p>
     pub preferred_maintenance_window: Option<String>,
-    /// <important> <p>Due to current limitations on Redis (cluster mode disabled), this operation or parameter is not supported on Redis (cluster mode enabled) replication groups.</p> </important> <p>The ID of the replication group to which this cache cluster should belong. If this parameter is specified, the cache cluster is added to the specified replication group as a read replica; otherwise, the cache cluster is a standalone primary that is not part of any replication group.</p> <p>If the specified replication group is Multi-AZ enabled and the Availability Zone is not specified, the cache cluster is created in Availability Zones that provide the best spread of read replicas across Availability Zones.</p> <note> <p>This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p> </note>
+    /// <p><important> <p>Due to current limitations on Redis (cluster mode disabled), this operation or parameter is not supported on Redis (cluster mode enabled) replication groups.</p> </important> <p>The ID of the replication group to which this cache cluster should belong. If this parameter is specified, the cache cluster is added to the specified replication group as a read replica; otherwise, the cache cluster is a standalone primary that is not part of any replication group.</p> <p>If the specified replication group is Multi-AZ enabled and the Availability Zone is not specified, the cache cluster is created in Availability Zones that provide the best spread of read replicas across Availability Zones.</p> <note> <p>This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p> </note></p>
     pub replication_group_id: Option<String>,
     /// <p>One or more VPC security groups associated with the cache cluster.</p> <p>Use this parameter only when you are creating a cache cluster in an Amazon Virtual Private Cloud (Amazon VPC).</p>
     pub security_group_ids: Option<Vec<String>>,
     /// <p>A single-element string list containing an Amazon Resource Name (ARN) that uniquely identifies a Redis RDB snapshot file stored in Amazon S3. The snapshot file is used to populate the node group (shard). The Amazon S3 object name in the ARN cannot contain any commas.</p> <note> <p>This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p> </note> <p>Example of an Amazon S3 ARN: <code>arn:aws:s3:::my_bucket/snapshot1.rdb</code> </p>
     pub snapshot_arns: Option<Vec<String>>,
-    /// <p>The name of a Redis snapshot from which to restore data into the new node group (shard). The snapshot status changes to <code>restoring</code> while the new node group (shard) is being created.</p> <note> <p>This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p> </note>
+    /// <p><p>The name of a Redis snapshot from which to restore data into the new node group (shard). The snapshot status changes to <code>restoring</code> while the new node group (shard) is being created.</p> <note> <p>This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p> </note></p>
     pub snapshot_name: Option<String>,
     /// <p>The number of days for which ElastiCache retains automatic snapshots before deleting them. For example, if you set <code>SnapshotRetentionLimit</code> to 5, a snapshot taken today is retained for 5 days before being deleted.</p> <note> <p>This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p> </note> <p>Default: 0 (i.e., automatic backups are disabled for this cache cluster).</p>
     pub snapshot_retention_limit: Option<i64>,
@@ -2660,15 +2660,15 @@ pub struct CreateReplicationGroupMessage {
     pub auth_token: Option<String>,
     /// <p>This parameter is currently disabled.</p>
     pub auto_minor_version_upgrade: Option<bool>,
-    /// <p>Specifies whether a read-only replica is automatically promoted to read/write primary if the existing primary fails.</p> <p>If <code>true</code>, Multi-AZ is enabled for this replication group. If <code>false</code>, Multi-AZ is disabled for this replication group.</p> <p> <code>AutomaticFailoverEnabled</code> must be enabled for Redis (cluster mode enabled) replication groups.</p> <p>Default: false</p> <note> <p>ElastiCache Multi-AZ replication groups is not supported on:</p> <ul> <li> <p>Redis versions earlier than 2.8.6.</p> </li> <li> <p>Redis (cluster mode disabled): T1 and T2 node types.</p> <p>Redis (cluster mode enabled): T2 node types.</p> </li> </ul> </note>
+    /// <p><p>Specifies whether a read-only replica is automatically promoted to read/write primary if the existing primary fails.</p> <p>If <code>true</code>, Multi-AZ is enabled for this replication group. If <code>false</code>, Multi-AZ is disabled for this replication group.</p> <p> <code>AutomaticFailoverEnabled</code> must be enabled for Redis (cluster mode enabled) replication groups.</p> <p>Default: false</p> <note> <p>ElastiCache Multi-AZ replication groups is not supported on:</p> <ul> <li> <p>Redis versions earlier than 2.8.6.</p> </li> <li> <p>Redis (cluster mode disabled): T1 and T2 node types.</p> <p>Redis (cluster mode enabled): T2 node types.</p> </li> </ul> </note></p>
     pub automatic_failover_enabled: Option<bool>,
     /// <p>The compute and memory capacity of the nodes in the node group (shard).</p> <p>Valid node types are as follows:</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code>, <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code>, <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.t1.micro</code>, <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized: <code>cache.c1.xlarge</code> </p> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Notes:</b> </p> <ul> <li> <p>All T2 instances are created in an Amazon Virtual Private Cloud (Amazon VPC).</p> </li> <li> <p>Redis backup/restore is not supported for Redis (cluster mode disabled) T1 and T2 instances. Backup/restore is supported on Redis (cluster mode enabled) T2 instances.</p> </li> <li> <p>Redis Append-only files (AOF) functionality is not supported for T1 or T2 instances.</p> </li> </ul> <p>For a complete listing of node types and specifications, see <a href="http://aws.amazon.com/elasticache/details">Amazon ElastiCache Product Features and Details</a> and either <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Memcached.html#ParameterGroups.Memcached.NodeSpecific">Cache Node Type-Specific Parameters for Memcached</a> or <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Redis.html#ParameterGroups.Redis.NodeSpecific">Cache Node Type-Specific Parameters for Redis</a>.</p>
     pub cache_node_type: Option<String>,
-    /// <p>The name of the parameter group to associate with this replication group. If this argument is omitted, the default cache parameter group for the specified engine is used.</p> <p>If you are running Redis version 3.2.4 or later, only one node group (shard), and want to use a default parameter group, we recommend that you specify the parameter group by name. </p> <ul> <li> <p>To create a Redis (cluster mode disabled) replication group, use <code>CacheParameterGroupName=default.redis3.2</code>.</p> </li> <li> <p>To create a Redis (cluster mode enabled) replication group, use <code>CacheParameterGroupName=default.redis3.2.cluster.on</code>.</p> </li> </ul>
+    /// <p><p>The name of the parameter group to associate with this replication group. If this argument is omitted, the default cache parameter group for the specified engine is used.</p> <p>If you are running Redis version 3.2.4 or later, only one node group (shard), and want to use a default parameter group, we recommend that you specify the parameter group by name. </p> <ul> <li> <p>To create a Redis (cluster mode disabled) replication group, use <code>CacheParameterGroupName=default.redis3.2</code>.</p> </li> <li> <p>To create a Redis (cluster mode enabled) replication group, use <code>CacheParameterGroupName=default.redis3.2.cluster.on</code>.</p> </li> </ul></p>
     pub cache_parameter_group_name: Option<String>,
     /// <p>A list of cache security group names to associate with this replication group.</p>
     pub cache_security_group_names: Option<Vec<String>>,
-    /// <p>The name of the cache subnet group to be used for the replication group.</p> <important> <p>If you're going to launch your cluster in an Amazon VPC, you need to create a subnet group before you start creating a cluster. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/SubnetGroups.html">Subnets and Subnet Groups</a>.</p> </important>
+    /// <p><p>The name of the cache subnet group to be used for the replication group.</p> <important> <p>If you&#39;re going to launch your cluster in an Amazon VPC, you need to create a subnet group before you start creating a cluster. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/SubnetGroups.html">Subnets and Subnet Groups</a>.</p> </important></p>
     pub cache_subnet_group_name: Option<String>,
     /// <p>The name of the cache engine to be used for the cache clusters in this replication group.</p>
     pub engine: Option<String>,
@@ -2676,7 +2676,7 @@ pub struct CreateReplicationGroupMessage {
     pub engine_version: Option<String>,
     /// <p>A list of node group (shard) configuration options. Each node group (shard) configuration has the following: Slots, PrimaryAvailabilityZone, ReplicaAvailabilityZones, ReplicaCount.</p> <p>If you're creating a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group, you can use this parameter to individually configure each node group (shard), or you can omit this parameter.</p>
     pub node_group_configuration: Option<Vec<NodeGroupConfiguration>>,
-    /// <p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (SNS) topic to which notifications are sent.</p> <note> <p>The Amazon SNS topic owner must be the same as the cache cluster owner.</p> </note>
+    /// <p><p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (SNS) topic to which notifications are sent.</p> <note> <p>The Amazon SNS topic owner must be the same as the cache cluster owner.</p> </note></p>
     pub notification_topic_arn: Option<String>,
     /// <p>The number of clusters this replication group initially has.</p> <p>This parameter is not used if there is more than one node group (shard). You should use <code>ReplicasPerNodeGroup</code> instead.</p> <p>If <code>AutomaticFailoverEnabled</code> is <code>true</code>, the value of this parameter must be at least 2. If <code>AutomaticFailoverEnabled</code> is <code>false</code> you can omit this parameter (it will default to 1), or you can explicitly set it to a value between 2 and 6.</p> <p>The maximum permitted value for <code>NumCacheClusters</code> is 6 (primary plus 5 replicas).</p>
     pub num_cache_clusters: Option<i64>,
@@ -2694,17 +2694,17 @@ pub struct CreateReplicationGroupMessage {
     pub replicas_per_node_group: Option<i64>,
     /// <p>A user-created description for the replication group.</p>
     pub replication_group_description: String,
-    /// <p>The replication group identifier. This parameter is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>A name must contain from 1 to 20 alphanumeric characters or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>A name cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>
+    /// <p><p>The replication group identifier. This parameter is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>A name must contain from 1 to 20 alphanumeric characters or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>A name cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
     pub replication_group_id: String,
     /// <p>One or more Amazon VPC security groups associated with this replication group.</p> <p>Use this parameter only when you are creating a replication group in an Amazon Virtual Private Cloud (Amazon VPC).</p>
     pub security_group_ids: Option<Vec<String>>,
     /// <p>A list of Amazon Resource Names (ARN) that uniquely identify the Redis RDB snapshot files stored in Amazon S3. The snapshot files are used to populate the new replication group. The Amazon S3 object name in the ARN cannot contain any commas. The new replication group will have the number of node groups (console: shards) specified by the parameter <i>NumNodeGroups</i> or the number of node groups configured by <i>NodeGroupConfiguration</i> regardless of the number of ARNs specified here.</p> <note> <p>This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p> </note> <p>Example of an Amazon S3 ARN: <code>arn:aws:s3:::my_bucket/snapshot1.rdb</code> </p>
     pub snapshot_arns: Option<Vec<String>>,
-    /// <p>The name of a snapshot from which to restore data into the new replication group. The snapshot status changes to <code>restoring</code> while the new replication group is being created.</p> <note> <p>This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p> </note>
+    /// <p><p>The name of a snapshot from which to restore data into the new replication group. The snapshot status changes to <code>restoring</code> while the new replication group is being created.</p> <note> <p>This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p> </note></p>
     pub snapshot_name: Option<String>,
     /// <p>The number of days for which ElastiCache retains automatic snapshots before deleting them. For example, if you set <code>SnapshotRetentionLimit</code> to 5, a snapshot that was taken today is retained for 5 days before being deleted.</p> <note> <p>This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p> </note> <p>Default: 0 (i.e., automatic backups are disabled for this cache cluster).</p>
     pub snapshot_retention_limit: Option<i64>,
-    /// <p>The daily time range (in UTC) during which ElastiCache begins taking a daily snapshot of your node group (shard).</p> <p>Example: <code>05:00-09:00</code> </p> <p>If you do not specify this parameter, ElastiCache automatically chooses an appropriate time range.</p> <note> <p>This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p> </note>
+    /// <p><p>The daily time range (in UTC) during which ElastiCache begins taking a daily snapshot of your node group (shard).</p> <p>Example: <code>05:00-09:00</code> </p> <p>If you do not specify this parameter, ElastiCache automatically chooses an appropriate time range.</p> <note> <p>This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p> </note></p>
     pub snapshot_window: Option<String>,
     /// <p>A list of cost allocation tags to be added to this resource. A tag is a key-value pair. A tag key must be accompanied by a tag value.</p>
     pub tags: Option<Vec<Tag>>,
@@ -3087,7 +3087,7 @@ impl DeleteCacheClusterResultDeserializer {
 /// <p>Represents the input of a <code>DeleteCacheParameterGroup</code> operation.</p>
 #[derive(Default, Debug, Clone)]
 pub struct DeleteCacheParameterGroupMessage {
-    /// <p>The name of the cache parameter group to delete.</p> <note> <p>The specified cache security group must not be associated with any cache clusters.</p> </note>
+    /// <p><p>The name of the cache parameter group to delete.</p> <note> <p>The specified cache security group must not be associated with any cache clusters.</p> </note></p>
     pub cache_parameter_group_name: String,
 }
 
@@ -3110,7 +3110,7 @@ impl DeleteCacheParameterGroupMessageSerializer {
 /// <p>Represents the input of a <code>DeleteCacheSecurityGroup</code> operation.</p>
 #[derive(Default, Debug, Clone)]
 pub struct DeleteCacheSecurityGroupMessage {
-    /// <p>The name of the cache security group to delete.</p> <note> <p>You cannot delete the default security group.</p> </note>
+    /// <p><p>The name of the cache security group to delete.</p> <note> <p>You cannot delete the default security group.</p> </note></p>
     pub cache_security_group_name: String,
 }
 
@@ -3366,7 +3366,7 @@ impl DescribeCacheClustersMessageSerializer {
 /// <p>Represents the input of a <code>DescribeCacheEngineVersions</code> operation.</p>
 #[derive(Default, Debug, Clone)]
 pub struct DescribeCacheEngineVersionsMessage {
-    /// <p>The name of a specific cache parameter group family to return details for.</p> <p>Valid values are: <code>memcached1.4</code> | <code>redis2.6</code> | <code>redis2.8</code> | <code>redis3.2</code> </p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul>
+    /// <p><p>The name of a specific cache parameter group family to return details for.</p> <p>Valid values are: <code>memcached1.4</code> | <code>redis2.6</code> | <code>redis2.8</code> | <code>redis3.2</code> </p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul></p>
     pub cache_parameter_group_family: Option<String>,
     /// <p>If <code>true</code>, specifies that only the default version of the specified engine or engine and major version combination is to be returned.</p>
     pub default_only: Option<bool>,
@@ -4525,9 +4525,9 @@ impl KeyListSerializer {
 /// <p>The input parameters for the <code>ListAllowedNodeTypeModifications</code> operation.</p>
 #[derive(Default, Debug, Clone)]
 pub struct ListAllowedNodeTypeModificationsMessage {
-    /// <p>The name of the cache cluster you want to scale up to a larger node instanced type. ElastiCache uses the cluster id to identify the current node type of this cluster and from that to create a list of node types you can scale up to.</p> <important> <p>You must provide a value for either the <code>CacheClusterId</code> or the <code>ReplicationGroupId</code>.</p> </important>
+    /// <p><p>The name of the cache cluster you want to scale up to a larger node instanced type. ElastiCache uses the cluster id to identify the current node type of this cluster and from that to create a list of node types you can scale up to.</p> <important> <p>You must provide a value for either the <code>CacheClusterId</code> or the <code>ReplicationGroupId</code>.</p> </important></p>
     pub cache_cluster_id: Option<String>,
-    /// <p>The name of the replication group want to scale up to a larger node type. ElastiCache uses the replication group id to identify the current node type being used by this replication group, and from that to create a list of node types you can scale up to.</p> <important> <p>You must provide a value for either the <code>CacheClusterId</code> or the <code>ReplicationGroupId</code>.</p> </important>
+    /// <p><p>The name of the replication group want to scale up to a larger node type. ElastiCache uses the replication group id to identify the current node type being used by this replication group, and from that to create a list of node types you can scale up to.</p> <important> <p>You must provide a value for either the <code>CacheClusterId</code> or the <code>ReplicationGroupId</code>.</p> </important></p>
     pub replication_group_id: Option<String>,
 }
 
@@ -4581,7 +4581,7 @@ impl ListTagsForResourceMessageSerializer {
 /// <p>Represents the input of a <code>ModifyCacheCluster</code> operation.</p>
 #[derive(Default, Debug, Clone)]
 pub struct ModifyCacheClusterMessage {
-    /// <p>Specifies whether the new nodes in this Memcached cache cluster are all created in a single Availability Zone or created across multiple Availability Zones.</p> <p>Valid values: <code>single-az</code> | <code>cross-az</code>.</p> <p>This option is only supported for Memcached cache clusters.</p> <note> <p>You cannot specify <code>single-az</code> if the Memcached cache cluster already has cache nodes in different Availability Zones. If <code>cross-az</code> is specified, existing Memcached nodes remain in their current Availability Zone.</p> <p>Only newly created nodes are located in different Availability Zones. For instructions on how to move existing Memcached nodes to different Availability Zones, see the <b>Availability Zone Considerations</b> section of <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheNode.Memcached.html">Cache Node Considerations for Memcached</a>.</p> </note>
+    /// <p><p>Specifies whether the new nodes in this Memcached cache cluster are all created in a single Availability Zone or created across multiple Availability Zones.</p> <p>Valid values: <code>single-az</code> | <code>cross-az</code>.</p> <p>This option is only supported for Memcached cache clusters.</p> <note> <p>You cannot specify <code>single-az</code> if the Memcached cache cluster already has cache nodes in different Availability Zones. If <code>cross-az</code> is specified, existing Memcached nodes remain in their current Availability Zone.</p> <p>Only newly created nodes are located in different Availability Zones. For instructions on how to move existing Memcached nodes to different Availability Zones, see the <b>Availability Zone Considerations</b> section of <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheNode.Memcached.html">Cache Node Considerations for Memcached</a>.</p> </note></p>
     pub az_mode: Option<String>,
     /// <p>If <code>true</code>, this parameter causes the modifications in this request and any pending modifications to be applied, asynchronously and as soon as possible, regardless of the <code>PreferredMaintenanceWindow</code> setting for the cache cluster.</p> <p>If <code>false</code>, changes to the cache cluster are applied on the next maintenance reboot, or the next failure reboot, whichever occurs first.</p> <important> <p>If you perform a <code>ModifyCacheCluster</code> before a pending modification is applied, the pending modification is replaced by the newer modification.</p> </important> <p>Valid values: <code>true</code> | <code>false</code> </p> <p>Default: <code>false</code> </p>
     pub apply_immediately: Option<bool>,
@@ -4599,19 +4599,19 @@ pub struct ModifyCacheClusterMessage {
     pub cache_security_group_names: Option<Vec<String>>,
     /// <p>The upgraded version of the cache engine to be run on the cache nodes.</p> <p> <b>Important:</b> You can upgrade to a newer engine version (see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/SelectEngine.html#VersionManagement">Selecting a Cache Engine and Version</a>), but you cannot downgrade to an earlier engine version. If you want to use an earlier engine version, you must delete the existing cache cluster and create it anew with the earlier engine version. </p>
     pub engine_version: Option<String>,
-    /// <p>The list of Availability Zones where the new Memcached cache nodes are created.</p> <p>This parameter is only valid when <code>NumCacheNodes</code> in the request is greater than the sum of the number of active cache nodes and the number of cache nodes pending creation (which may be zero). The number of Availability Zones supplied in this list must match the cache nodes being added in this request.</p> <p>This option is only supported on Memcached clusters.</p> <p>Scenarios:</p> <ul> <li> <p> <b>Scenario 1:</b> You have 3 active nodes and wish to add 2 nodes. Specify <code>NumCacheNodes=5</code> (3 + 2) and optionally specify two Availability Zones for the two new nodes.</p> </li> <li> <p> <b>Scenario 2:</b> You have 3 active nodes and 2 nodes pending creation (from the scenario 1 call) and want to add 1 more node. Specify <code>NumCacheNodes=6</code> ((3 + 2) + 1) and optionally specify an Availability Zone for the new node.</p> </li> <li> <p> <b>Scenario 3:</b> You want to cancel all pending operations. Specify <code>NumCacheNodes=3</code> to cancel all pending operations.</p> </li> </ul> <p>The Availability Zone placement of nodes pending creation cannot be modified. If you wish to cancel any nodes pending creation, add 0 nodes by setting <code>NumCacheNodes</code> to the number of current nodes.</p> <p>If <code>cross-az</code> is specified, existing Memcached nodes remain in their current Availability Zone. Only newly created nodes can be located in different Availability Zones. For guidance on how to move existing Memcached nodes to different Availability Zones, see the <b>Availability Zone Considerations</b> section of <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheNode.Memcached.html">Cache Node Considerations for Memcached</a>.</p> <p> <b>Impact of new add/remove requests upon pending requests</b> </p> <ul> <li> <p>Scenario-1</p> <ul> <li> <p>Pending Action: Delete</p> </li> <li> <p>New Request: Delete</p> </li> <li> <p>Result: The new delete, pending or immediate, replaces the pending delete.</p> </li> </ul> </li> <li> <p>Scenario-2</p> <ul> <li> <p>Pending Action: Delete</p> </li> <li> <p>New Request: Create</p> </li> <li> <p>Result: The new create, pending or immediate, replaces the pending delete.</p> </li> </ul> </li> <li> <p>Scenario-3</p> <ul> <li> <p>Pending Action: Create</p> </li> <li> <p>New Request: Delete</p> </li> <li> <p>Result: The new delete, pending or immediate, replaces the pending create.</p> </li> </ul> </li> <li> <p>Scenario-4</p> <ul> <li> <p>Pending Action: Create</p> </li> <li> <p>New Request: Create</p> </li> <li> <p>Result: The new create is added to the pending create.</p> <important> <p> <b>Important:</b> If the new create request is <b>Apply Immediately - Yes</b>, all creates are performed immediately. If the new create request is <b>Apply Immediately - No</b>, all creates are pending.</p> </important> </li> </ul> </li> </ul>
+    /// <p><p>The list of Availability Zones where the new Memcached cache nodes are created.</p> <p>This parameter is only valid when <code>NumCacheNodes</code> in the request is greater than the sum of the number of active cache nodes and the number of cache nodes pending creation (which may be zero). The number of Availability Zones supplied in this list must match the cache nodes being added in this request.</p> <p>This option is only supported on Memcached clusters.</p> <p>Scenarios:</p> <ul> <li> <p> <b>Scenario 1:</b> You have 3 active nodes and wish to add 2 nodes. Specify <code>NumCacheNodes=5</code> (3 + 2) and optionally specify two Availability Zones for the two new nodes.</p> </li> <li> <p> <b>Scenario 2:</b> You have 3 active nodes and 2 nodes pending creation (from the scenario 1 call) and want to add 1 more node. Specify <code>NumCacheNodes=6</code> ((3 + 2) + 1) and optionally specify an Availability Zone for the new node.</p> </li> <li> <p> <b>Scenario 3:</b> You want to cancel all pending operations. Specify <code>NumCacheNodes=3</code> to cancel all pending operations.</p> </li> </ul> <p>The Availability Zone placement of nodes pending creation cannot be modified. If you wish to cancel any nodes pending creation, add 0 nodes by setting <code>NumCacheNodes</code> to the number of current nodes.</p> <p>If <code>cross-az</code> is specified, existing Memcached nodes remain in their current Availability Zone. Only newly created nodes can be located in different Availability Zones. For guidance on how to move existing Memcached nodes to different Availability Zones, see the <b>Availability Zone Considerations</b> section of <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheNode.Memcached.html">Cache Node Considerations for Memcached</a>.</p> <p> <b>Impact of new add/remove requests upon pending requests</b> </p> <ul> <li> <p>Scenario-1</p> <ul> <li> <p>Pending Action: Delete</p> </li> <li> <p>New Request: Delete</p> </li> <li> <p>Result: The new delete, pending or immediate, replaces the pending delete.</p> </li> </ul> </li> <li> <p>Scenario-2</p> <ul> <li> <p>Pending Action: Delete</p> </li> <li> <p>New Request: Create</p> </li> <li> <p>Result: The new create, pending or immediate, replaces the pending delete.</p> </li> </ul> </li> <li> <p>Scenario-3</p> <ul> <li> <p>Pending Action: Create</p> </li> <li> <p>New Request: Delete</p> </li> <li> <p>Result: The new delete, pending or immediate, replaces the pending create.</p> </li> </ul> </li> <li> <p>Scenario-4</p> <ul> <li> <p>Pending Action: Create</p> </li> <li> <p>New Request: Create</p> </li> <li> <p>Result: The new create is added to the pending create.</p> <important> <p> <b>Important:</b> If the new create request is <b>Apply Immediately - Yes</b>, all creates are performed immediately. If the new create request is <b>Apply Immediately - No</b>, all creates are pending.</p> </important> </li> </ul> </li> </ul></p>
     pub new_availability_zones: Option<Vec<String>>,
-    /// <p>The Amazon Resource Name (ARN) of the Amazon SNS topic to which notifications are sent.</p> <note> <p>The Amazon SNS topic owner must be same as the cache cluster owner.</p> </note>
+    /// <p><p>The Amazon Resource Name (ARN) of the Amazon SNS topic to which notifications are sent.</p> <note> <p>The Amazon SNS topic owner must be same as the cache cluster owner.</p> </note></p>
     pub notification_topic_arn: Option<String>,
     /// <p>The status of the Amazon SNS notification topic. Notifications are sent only if the status is <code>active</code>.</p> <p>Valid values: <code>active</code> | <code>inactive</code> </p>
     pub notification_topic_status: Option<String>,
-    /// <p>The number of cache nodes that the cache cluster should have. If the value for <code>NumCacheNodes</code> is greater than the sum of the number of current cache nodes and the number of cache nodes pending creation (which may be zero), more nodes are added. If the value is less than the number of existing cache nodes, nodes are removed. If the value is equal to the number of current cache nodes, any pending add or remove requests are canceled.</p> <p>If you are removing cache nodes, you must use the <code>CacheNodeIdsToRemove</code> parameter to provide the IDs of the specific cache nodes to remove.</p> <p>For clusters running Redis, this value must be 1. For clusters running Memcached, this value must be between 1 and 20.</p> <note> <p>Adding or removing Memcached cache nodes can be applied immediately or as a pending operation (see <code>ApplyImmediately</code>).</p> <p>A pending operation to modify the number of cache nodes in a cluster during its maintenance window, whether by adding or removing nodes in accordance with the scale out architecture, is not queued. The customer's latest request to add or remove nodes to the cluster overrides any previous pending operations to modify the number of cache nodes in the cluster. For example, a request to remove 2 nodes would override a previous pending operation to remove 3 nodes. Similarly, a request to add 2 nodes would override a previous pending operation to remove 3 nodes and vice versa. As Memcached cache nodes may now be provisioned in different Availability Zones with flexible cache node placement, a request to add nodes does not automatically override a previous pending operation to add nodes. The customer can modify the previous pending operation to add more nodes or explicitly cancel the pending request and retry the new request. To cancel pending operations to modify the number of cache nodes in a cluster, use the <code>ModifyCacheCluster</code> request and set <code>NumCacheNodes</code> equal to the number of cache nodes currently in the cache cluster.</p> </note>
+    /// <p><p>The number of cache nodes that the cache cluster should have. If the value for <code>NumCacheNodes</code> is greater than the sum of the number of current cache nodes and the number of cache nodes pending creation (which may be zero), more nodes are added. If the value is less than the number of existing cache nodes, nodes are removed. If the value is equal to the number of current cache nodes, any pending add or remove requests are canceled.</p> <p>If you are removing cache nodes, you must use the <code>CacheNodeIdsToRemove</code> parameter to provide the IDs of the specific cache nodes to remove.</p> <p>For clusters running Redis, this value must be 1. For clusters running Memcached, this value must be between 1 and 20.</p> <note> <p>Adding or removing Memcached cache nodes can be applied immediately or as a pending operation (see <code>ApplyImmediately</code>).</p> <p>A pending operation to modify the number of cache nodes in a cluster during its maintenance window, whether by adding or removing nodes in accordance with the scale out architecture, is not queued. The customer&#39;s latest request to add or remove nodes to the cluster overrides any previous pending operations to modify the number of cache nodes in the cluster. For example, a request to remove 2 nodes would override a previous pending operation to remove 3 nodes. Similarly, a request to add 2 nodes would override a previous pending operation to remove 3 nodes and vice versa. As Memcached cache nodes may now be provisioned in different Availability Zones with flexible cache node placement, a request to add nodes does not automatically override a previous pending operation to add nodes. The customer can modify the previous pending operation to add more nodes or explicitly cancel the pending request and retry the new request. To cancel pending operations to modify the number of cache nodes in a cluster, use the <code>ModifyCacheCluster</code> request and set <code>NumCacheNodes</code> equal to the number of cache nodes currently in the cache cluster.</p> </note></p>
     pub num_cache_nodes: Option<i64>,
     /// <p>Specifies the weekly time range during which maintenance on the cluster is performed. It is specified as a range in the format ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period.</p> <p>Valid values for <code>ddd</code> are:</p> <ul> <li> <p> <code>sun</code> </p> </li> <li> <p> <code>mon</code> </p> </li> <li> <p> <code>tue</code> </p> </li> <li> <p> <code>wed</code> </p> </li> <li> <p> <code>thu</code> </p> </li> <li> <p> <code>fri</code> </p> </li> <li> <p> <code>sat</code> </p> </li> </ul> <p>Example: <code>sun:23:00-mon:01:30</code> </p>
     pub preferred_maintenance_window: Option<String>,
     /// <p>Specifies the VPC Security Groups associated with the cache cluster.</p> <p>This parameter can be used only with clusters that are created in an Amazon Virtual Private Cloud (Amazon VPC).</p>
     pub security_group_ids: Option<Vec<String>>,
-    /// <p>The number of days for which ElastiCache retains automatic cache cluster snapshots before deleting them. For example, if you set <code>SnapshotRetentionLimit</code> to 5, a snapshot that was taken today is retained for 5 days before being deleted.</p> <note> <p>If the value of <code>SnapshotRetentionLimit</code> is set to zero (0), backups are turned off.</p> </note>
+    /// <p><p>The number of days for which ElastiCache retains automatic cache cluster snapshots before deleting them. For example, if you set <code>SnapshotRetentionLimit</code> to 5, a snapshot that was taken today is retained for 5 days before being deleted.</p> <note> <p>If the value of <code>SnapshotRetentionLimit</code> is set to zero (0), backups are turned off.</p> </note></p>
     pub snapshot_retention_limit: Option<i64>,
     /// <p>The daily time range (in UTC) during which ElastiCache begins taking a daily snapshot of your cache cluster. </p>
     pub snapshot_window: Option<String>,
@@ -4903,7 +4903,7 @@ pub struct ModifyReplicationGroupMessage {
     pub apply_immediately: Option<bool>,
     /// <p>This parameter is currently disabled.</p>
     pub auto_minor_version_upgrade: Option<bool>,
-    /// <p>Determines whether a read replica is automatically promoted to read/write primary if the existing primary encounters a failure.</p> <p>Valid values: <code>true</code> | <code>false</code> </p> <note> <p>ElastiCache Multi-AZ replication groups are not supported on:</p> <ul> <li> <p>Redis versions earlier than 2.8.6.</p> </li> <li> <p>Redis (cluster mode disabled):T1 and T2 cache node types.</p> <p>Redis (cluster mode enabled): T1 node types.</p> </li> </ul> </note>
+    /// <p><p>Determines whether a read replica is automatically promoted to read/write primary if the existing primary encounters a failure.</p> <p>Valid values: <code>true</code> | <code>false</code> </p> <note> <p>ElastiCache Multi-AZ replication groups are not supported on:</p> <ul> <li> <p>Redis versions earlier than 2.8.6.</p> </li> <li> <p>Redis (cluster mode disabled):T1 and T2 cache node types.</p> <p>Redis (cluster mode enabled): T1 node types.</p> </li> </ul> </note></p>
     pub automatic_failover_enabled: Option<bool>,
     /// <p>A valid cache node type that you want to scale this replication group to.</p>
     pub cache_node_type: Option<String>,
@@ -4915,7 +4915,7 @@ pub struct ModifyReplicationGroupMessage {
     pub engine_version: Option<String>,
     /// <p>The name of the Node Group (called shard in the console).</p>
     pub node_group_id: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the Amazon SNS topic to which notifications are sent.</p> <note> <p>The Amazon SNS topic owner must be same as the replication group owner. </p> </note>
+    /// <p><p>The Amazon Resource Name (ARN) of the Amazon SNS topic to which notifications are sent.</p> <note> <p>The Amazon SNS topic owner must be same as the replication group owner. </p> </note></p>
     pub notification_topic_arn: Option<String>,
     /// <p>The status of the Amazon SNS notification topic for the replication group. Notifications are sent only if the status is <code>active</code>.</p> <p>Valid values: <code>active</code> | <code>inactive</code> </p>
     pub notification_topic_status: Option<String>,
@@ -6259,7 +6259,7 @@ impl RemoveTagsFromResourceMessageSerializer {
 /// <p>Contains all of the attributes of a specific Redis replication group.</p>
 #[derive(Default, Debug, Clone)]
 pub struct ReplicationGroup {
-    /// <p>Indicates the status of Multi-AZ for this replication group.</p> <note> <p>ElastiCache Multi-AZ replication groups are not supported on:</p> <ul> <li> <p>Redis versions earlier than 2.8.6.</p> </li> <li> <p>Redis (cluster mode disabled):T1 and T2 cache node types.</p> <p>Redis (cluster mode enabled): T1 node types.</p> </li> </ul> </note>
+    /// <p><p>Indicates the status of Multi-AZ for this replication group.</p> <note> <p>ElastiCache Multi-AZ replication groups are not supported on:</p> <ul> <li> <p>Redis versions earlier than 2.8.6.</p> </li> <li> <p>Redis (cluster mode disabled):T1 and T2 cache node types.</p> <p>Redis (cluster mode enabled): T1 node types.</p> </li> </ul> </note></p>
     pub automatic_failover: Option<String>,
     /// <p>The name of the compute and memory capacity node type for each node in the replication group.</p>
     pub cache_node_type: Option<String>,
@@ -6277,7 +6277,7 @@ pub struct ReplicationGroup {
     pub pending_modified_values: Option<ReplicationGroupPendingModifiedValues>,
     /// <p>The identifier for the replication group.</p>
     pub replication_group_id: Option<String>,
-    /// <p>The number of days for which ElastiCache retains automatic cache cluster snapshots before deleting them. For example, if you set <code>SnapshotRetentionLimit</code> to 5, a snapshot that was taken today is retained for 5 days before being deleted.</p> <important> <p> If the value of <code>SnapshotRetentionLimit</code> is set to zero (0), backups are turned off.</p> </important>
+    /// <p><p>The number of days for which ElastiCache retains automatic cache cluster snapshots before deleting them. For example, if you set <code>SnapshotRetentionLimit</code> to 5, a snapshot that was taken today is retained for 5 days before being deleted.</p> <important> <p> If the value of <code>SnapshotRetentionLimit</code> is set to zero (0), backups are turned off.</p> </important></p>
     pub snapshot_retention_limit: Option<i64>,
     /// <p>The daily time range (in UTC) during which ElastiCache begins taking a daily snapshot of your node group (shard).</p> <p>Example: <code>05:00-09:00</code> </p> <p>If you do not specify this parameter, ElastiCache automatically chooses an appropriate time range.</p> <p> <b>Note:</b> This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p>
     pub snapshot_window: Option<String>,
@@ -6499,7 +6499,7 @@ impl ReplicationGroupMessageDeserializer {
 /// <p>The settings to be applied to the Redis replication group, either immediately or during the next maintenance window.</p>
 #[derive(Default, Debug, Clone)]
 pub struct ReplicationGroupPendingModifiedValues {
-    /// <p>Indicates the status of Multi-AZ for this Redis replication group.</p> <note> <p>ElastiCache Multi-AZ replication groups are not supported on:</p> <ul> <li> <p>Redis versions earlier than 2.8.6.</p> </li> <li> <p>Redis (cluster mode disabled):T1 and T2 cache node types.</p> <p>Redis (cluster mode enabled): T1 node types.</p> </li> </ul> </note>
+    /// <p><p>Indicates the status of Multi-AZ for this Redis replication group.</p> <note> <p>ElastiCache Multi-AZ replication groups are not supported on:</p> <ul> <li> <p>Redis versions earlier than 2.8.6.</p> </li> <li> <p>Redis (cluster mode disabled):T1 and T2 cache node types.</p> <p>Redis (cluster mode enabled): T1 node types.</p> </li> </ul> </note></p>
     pub automatic_failover_status: Option<String>,
     /// <p>The primary cluster ID that is applied immediately (if <code>--apply-immediately</code> was specified), or during the next maintenance window.</p>
     pub primary_cluster_id: Option<String>,
@@ -7206,7 +7206,7 @@ impl SecurityGroupMembershipListDeserializer {
 pub struct Snapshot {
     /// <p>This parameter is currently disabled.</p>
     pub auto_minor_version_upgrade: Option<bool>,
-    /// <p>Indicates the status of Multi-AZ for the source replication group.</p> <note> <p>ElastiCache Multi-AZ replication groups are not supported on:</p> <ul> <li> <p>Redis versions earlier than 2.8.6.</p> </li> <li> <p>Redis (cluster mode disabled):T1 and T2 cache node types.</p> <p>Redis (cluster mode enabled): T1 node types.</p> </li> </ul> </note>
+    /// <p><p>Indicates the status of Multi-AZ for the source replication group.</p> <note> <p>ElastiCache Multi-AZ replication groups are not supported on:</p> <ul> <li> <p>Redis versions earlier than 2.8.6.</p> </li> <li> <p>Redis (cluster mode disabled):T1 and T2 cache node types.</p> <p>Redis (cluster mode enabled): T1 node types.</p> </li> </ul> </note></p>
     pub automatic_failover: Option<String>,
     /// <p>The date and time when the source cache cluster was created.</p>
     pub cache_cluster_create_time: Option<String>,
@@ -7873,13 +7873,13 @@ impl TestFailoverResultDeserializer {
 /// Errors returned by AddTagsToResource
 #[derive(Debug, PartialEq)]
 pub enum AddTagsToResourceError {
-    ///<p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
+    /// <p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
     CacheClusterNotFoundFault(String),
-    ///<p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
+    /// <p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
     InvalidARNFault(String),
-    ///<p>The requested snapshot name does not refer to an existing snapshot.</p>
+    /// <p>The requested snapshot name does not refer to an existing snapshot.</p>
     SnapshotNotFoundFault(String),
-    ///<p>The request cannot be processed because it would cause the resource to have more than the allowed number of tags. The maximum number of tags permitted on a resource is 50.</p>
+    /// <p>The request cannot be processed because it would cause the resource to have more than the allowed number of tags. The maximum number of tags permitted on a resource is 50.</p>
     TagQuotaPerResourceExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7964,15 +7964,15 @@ impl Error for AddTagsToResourceError {
 /// Errors returned by AuthorizeCacheSecurityGroupIngress
 #[derive(Debug, PartialEq)]
 pub enum AuthorizeCacheSecurityGroupIngressError {
-    ///<p>The specified Amazon EC2 security group is already authorized for the specified cache security group.</p>
+    /// <p>The specified Amazon EC2 security group is already authorized for the specified cache security group.</p>
     AuthorizationAlreadyExistsFault(String),
-    ///<p>The requested cache security group name does not refer to an existing cache security group.</p>
+    /// <p>The requested cache security group name does not refer to an existing cache security group.</p>
     CacheSecurityGroupNotFoundFault(String),
-    ///<p>The current state of the cache security group does not allow deletion.</p>
+    /// <p>The current state of the cache security group does not allow deletion.</p>
     InvalidCacheSecurityGroupStateFault(String),
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8077,17 +8077,17 @@ impl Error for AuthorizeCacheSecurityGroupIngressError {
 /// Errors returned by CopySnapshot
 #[derive(Debug, PartialEq)]
 pub enum CopySnapshotError {
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-    ///<p>The current state of the snapshot does not allow the requested operation to occur.</p>
+    /// <p>The current state of the snapshot does not allow the requested operation to occur.</p>
     InvalidSnapshotStateFault(String),
-    ///<p>You already have a snapshot with the given name.</p>
+    /// <p>You already have a snapshot with the given name.</p>
     SnapshotAlreadyExistsFault(String),
-    ///<p>The requested snapshot name does not refer to an existing snapshot.</p>
+    /// <p>The requested snapshot name does not refer to an existing snapshot.</p>
     SnapshotNotFoundFault(String),
-    ///<p>The request cannot be processed because it would exceed the maximum number of snapshots.</p>
+    /// <p>The request cannot be processed because it would exceed the maximum number of snapshots.</p>
     SnapshotQuotaExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8178,33 +8178,33 @@ impl Error for CopySnapshotError {
 /// Errors returned by CreateCacheCluster
 #[derive(Debug, PartialEq)]
 pub enum CreateCacheClusterError {
-    ///<p>You already have a cache cluster with the given identifier.</p>
+    /// <p>You already have a cache cluster with the given identifier.</p>
     CacheClusterAlreadyExistsFault(String),
-    ///<p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
+    /// <p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
     CacheParameterGroupNotFoundFault(String),
-    ///<p>The requested cache security group name does not refer to an existing cache security group.</p>
+    /// <p>The requested cache security group name does not refer to an existing cache security group.</p>
     CacheSecurityGroupNotFoundFault(String),
-    ///<p>The requested cache subnet group name does not refer to an existing cache subnet group.</p>
+    /// <p>The requested cache subnet group name does not refer to an existing cache subnet group.</p>
     CacheSubnetGroupNotFoundFault(String),
-    ///<p>The request cannot be processed because it would exceed the allowed number of cache clusters per customer.</p>
+    /// <p>The request cannot be processed because it would exceed the allowed number of cache clusters per customer.</p>
     ClusterQuotaForCustomerExceededFault(String),
-    ///<p>The requested cache node type is not available in the specified Availability Zone.</p>
+    /// <p>The requested cache node type is not available in the specified Availability Zone.</p>
     InsufficientCacheClusterCapacityFault(String),
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-    ///<p>The requested replication group is not in the <code>available</code> state.</p>
+    /// <p>The requested replication group is not in the <code>available</code> state.</p>
     InvalidReplicationGroupStateFault(String),
-    ///<p>The VPC network is in an invalid state.</p>
+    /// <p>The VPC network is in an invalid state.</p>
     InvalidVPCNetworkStateFault(String),
-    ///<p>The request cannot be processed because it would exceed the allowed number of cache nodes in a single cache cluster.</p>
+    /// <p>The request cannot be processed because it would exceed the allowed number of cache nodes in a single cache cluster.</p>
     NodeQuotaForClusterExceededFault(String),
-    ///<p>The request cannot be processed because it would exceed the allowed number of cache nodes per customer.</p>
+    /// <p>The request cannot be processed because it would exceed the allowed number of cache nodes per customer.</p>
     NodeQuotaForCustomerExceededFault(String),
-    ///<p>The specified replication group does not exist.</p>
+    /// <p>The specified replication group does not exist.</p>
     ReplicationGroupNotFoundFault(String),
-    ///<p>The request cannot be processed because it would cause the resource to have more than the allowed number of tags. The maximum number of tags permitted on a resource is 50.</p>
+    /// <p>The request cannot be processed because it would cause the resource to have more than the allowed number of tags. The maximum number of tags permitted on a resource is 50.</p>
     TagQuotaPerResourceExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8355,15 +8355,15 @@ impl Error for CreateCacheClusterError {
 /// Errors returned by CreateCacheParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateCacheParameterGroupError {
-    ///<p>A cache parameter group with the requested name already exists.</p>
+    /// <p>A cache parameter group with the requested name already exists.</p>
     CacheParameterGroupAlreadyExistsFault(String),
-    ///<p>The request cannot be processed because it would exceed the maximum number of cache security groups.</p>
+    /// <p>The request cannot be processed because it would exceed the maximum number of cache security groups.</p>
     CacheParameterGroupQuotaExceededFault(String),
-    ///<p>The current state of the cache parameter group does not allow the requested operation to occur.</p>
+    /// <p>The current state of the cache parameter group does not allow the requested operation to occur.</p>
     InvalidCacheParameterGroupStateFault(String),
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8466,13 +8466,13 @@ impl Error for CreateCacheParameterGroupError {
 /// Errors returned by CreateCacheSecurityGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateCacheSecurityGroupError {
-    ///<p>A cache security group with the specified name already exists.</p>
+    /// <p>A cache security group with the specified name already exists.</p>
     CacheSecurityGroupAlreadyExistsFault(String),
-    ///<p>The request cannot be processed because it would exceed the allowed number of cache security groups.</p>
+    /// <p>The request cannot be processed because it would exceed the allowed number of cache security groups.</p>
     CacheSecurityGroupQuotaExceededFault(String),
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8563,13 +8563,13 @@ impl Error for CreateCacheSecurityGroupError {
 /// Errors returned by CreateCacheSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateCacheSubnetGroupError {
-    ///<p>The requested cache subnet group name is already in use by an existing cache subnet group.</p>
+    /// <p>The requested cache subnet group name is already in use by an existing cache subnet group.</p>
     CacheSubnetGroupAlreadyExistsFault(String),
-    ///<p>The request cannot be processed because it would exceed the allowed number of cache subnet groups.</p>
+    /// <p>The request cannot be processed because it would exceed the allowed number of cache subnet groups.</p>
     CacheSubnetGroupQuotaExceededFault(String),
-    ///<p>The request cannot be processed because it would exceed the allowed number of subnets in a cache subnet group.</p>
+    /// <p>The request cannot be processed because it would exceed the allowed number of subnets in a cache subnet group.</p>
     CacheSubnetQuotaExceededFault(String),
-    ///<p>An invalid subnet identifier was specified.</p>
+    /// <p>An invalid subnet identifier was specified.</p>
     InvalidSubnet(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8658,35 +8658,35 @@ impl Error for CreateCacheSubnetGroupError {
 /// Errors returned by CreateReplicationGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateReplicationGroupError {
-    ///<p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
+    /// <p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
     CacheClusterNotFoundFault(String),
-    ///<p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
+    /// <p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
     CacheParameterGroupNotFoundFault(String),
-    ///<p>The requested cache security group name does not refer to an existing cache security group.</p>
+    /// <p>The requested cache security group name does not refer to an existing cache security group.</p>
     CacheSecurityGroupNotFoundFault(String),
-    ///<p>The requested cache subnet group name does not refer to an existing cache subnet group.</p>
+    /// <p>The requested cache subnet group name does not refer to an existing cache subnet group.</p>
     CacheSubnetGroupNotFoundFault(String),
-    ///<p>The request cannot be processed because it would exceed the allowed number of cache clusters per customer.</p>
+    /// <p>The request cannot be processed because it would exceed the allowed number of cache clusters per customer.</p>
     ClusterQuotaForCustomerExceededFault(String),
-    ///<p>The requested cache node type is not available in the specified Availability Zone.</p>
+    /// <p>The requested cache node type is not available in the specified Availability Zone.</p>
     InsufficientCacheClusterCapacityFault(String),
-    ///<p>The requested cache cluster is not in the <code>available</code> state.</p>
+    /// <p>The requested cache cluster is not in the <code>available</code> state.</p>
     InvalidCacheClusterStateFault(String),
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-    ///<p>The VPC network is in an invalid state.</p>
+    /// <p>The VPC network is in an invalid state.</p>
     InvalidVPCNetworkStateFault(String),
-    ///<p>The request cannot be processed because it would exceed the maximum of 15 node groups (shards) in a single replication group.</p>
+    /// <p>The request cannot be processed because it would exceed the maximum of 15 node groups (shards) in a single replication group.</p>
     NodeGroupsPerReplicationGroupQuotaExceededFault(String),
-    ///<p>The request cannot be processed because it would exceed the allowed number of cache nodes in a single cache cluster.</p>
+    /// <p>The request cannot be processed because it would exceed the allowed number of cache nodes in a single cache cluster.</p>
     NodeQuotaForClusterExceededFault(String),
-    ///<p>The request cannot be processed because it would exceed the allowed number of cache nodes per customer.</p>
+    /// <p>The request cannot be processed because it would exceed the allowed number of cache nodes per customer.</p>
     NodeQuotaForCustomerExceededFault(String),
-    ///<p>The specified replication group already exists.</p>
+    /// <p>The specified replication group already exists.</p>
     ReplicationGroupAlreadyExistsFault(String),
-    ///<p>The request cannot be processed because it would cause the resource to have more than the allowed number of tags. The maximum number of tags permitted on a resource is 50.</p>
+    /// <p>The request cannot be processed because it would cause the resource to have more than the allowed number of tags. The maximum number of tags permitted on a resource is 50.</p>
     TagQuotaPerResourceExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8845,23 +8845,23 @@ impl Error for CreateReplicationGroupError {
 /// Errors returned by CreateSnapshot
 #[derive(Debug, PartialEq)]
 pub enum CreateSnapshotError {
-    ///<p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
+    /// <p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
     CacheClusterNotFoundFault(String),
-    ///<p>The requested cache cluster is not in the <code>available</code> state.</p>
+    /// <p>The requested cache cluster is not in the <code>available</code> state.</p>
     InvalidCacheClusterStateFault(String),
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-    ///<p>The requested replication group is not in the <code>available</code> state.</p>
+    /// <p>The requested replication group is not in the <code>available</code> state.</p>
     InvalidReplicationGroupStateFault(String),
-    ///<p>The specified replication group does not exist.</p>
+    /// <p>The specified replication group does not exist.</p>
     ReplicationGroupNotFoundFault(String),
-    ///<p>You already have a snapshot with the given name.</p>
+    /// <p>You already have a snapshot with the given name.</p>
     SnapshotAlreadyExistsFault(String),
-    ///<p>You attempted one of the following operations:</p> <ul> <li> <p>Creating a snapshot of a Redis cache cluster running on a <code>cache.t1.micro</code> cache node.</p> </li> <li> <p>Creating a snapshot of a cache cluster that is running Memcached rather than Redis.</p> </li> </ul> <p>Neither of these are supported by ElastiCache.</p>
+    /// <p>You attempted one of the following operations:</p> <ul> <li> <p>Creating a snapshot of a Redis cache cluster running on a <code>cache.t1.micro</code> cache node.</p> </li> <li> <p>Creating a snapshot of a cache cluster that is running Memcached rather than Redis.</p> </li> </ul> <p>Neither of these are supported by ElastiCache.</p>
     SnapshotFeatureNotSupportedFault(String),
-    ///<p>The request cannot be processed because it would exceed the maximum number of snapshots.</p>
+    /// <p>The request cannot be processed because it would exceed the maximum number of snapshots.</p>
     SnapshotQuotaExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8972,19 +8972,19 @@ impl Error for CreateSnapshotError {
 /// Errors returned by DeleteCacheCluster
 #[derive(Debug, PartialEq)]
 pub enum DeleteCacheClusterError {
-    ///<p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
+    /// <p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
     CacheClusterNotFoundFault(String),
-    ///<p>The requested cache cluster is not in the <code>available</code> state.</p>
+    /// <p>The requested cache cluster is not in the <code>available</code> state.</p>
     InvalidCacheClusterStateFault(String),
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-    ///<p>You already have a snapshot with the given name.</p>
+    /// <p>You already have a snapshot with the given name.</p>
     SnapshotAlreadyExistsFault(String),
-    ///<p>You attempted one of the following operations:</p> <ul> <li> <p>Creating a snapshot of a Redis cache cluster running on a <code>cache.t1.micro</code> cache node.</p> </li> <li> <p>Creating a snapshot of a cache cluster that is running Memcached rather than Redis.</p> </li> </ul> <p>Neither of these are supported by ElastiCache.</p>
+    /// <p>You attempted one of the following operations:</p> <ul> <li> <p>Creating a snapshot of a Redis cache cluster running on a <code>cache.t1.micro</code> cache node.</p> </li> <li> <p>Creating a snapshot of a cache cluster that is running Memcached rather than Redis.</p> </li> </ul> <p>Neither of these are supported by ElastiCache.</p>
     SnapshotFeatureNotSupportedFault(String),
-    ///<p>The request cannot be processed because it would exceed the maximum number of snapshots.</p>
+    /// <p>The request cannot be processed because it would exceed the maximum number of snapshots.</p>
     SnapshotQuotaExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9091,13 +9091,13 @@ impl Error for DeleteCacheClusterError {
 /// Errors returned by DeleteCacheParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteCacheParameterGroupError {
-    ///<p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
+    /// <p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
     CacheParameterGroupNotFoundFault(String),
-    ///<p>The current state of the cache parameter group does not allow the requested operation to occur.</p>
+    /// <p>The current state of the cache parameter group does not allow the requested operation to occur.</p>
     InvalidCacheParameterGroupStateFault(String),
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9190,13 +9190,13 @@ impl Error for DeleteCacheParameterGroupError {
 /// Errors returned by DeleteCacheSecurityGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteCacheSecurityGroupError {
-    ///<p>The requested cache security group name does not refer to an existing cache security group.</p>
+    /// <p>The requested cache security group name does not refer to an existing cache security group.</p>
     CacheSecurityGroupNotFoundFault(String),
-    ///<p>The current state of the cache security group does not allow deletion.</p>
+    /// <p>The current state of the cache security group does not allow deletion.</p>
     InvalidCacheSecurityGroupStateFault(String),
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9287,9 +9287,9 @@ impl Error for DeleteCacheSecurityGroupError {
 /// Errors returned by DeleteCacheSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteCacheSubnetGroupError {
-    ///<p>The requested cache subnet group is currently in use.</p>
+    /// <p>The requested cache subnet group is currently in use.</p>
     CacheSubnetGroupInUse(String),
-    ///<p>The requested cache subnet group name does not refer to an existing cache subnet group.</p>
+    /// <p>The requested cache subnet group name does not refer to an existing cache subnet group.</p>
     CacheSubnetGroupNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9366,19 +9366,19 @@ impl Error for DeleteCacheSubnetGroupError {
 /// Errors returned by DeleteReplicationGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteReplicationGroupError {
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-    ///<p>The requested replication group is not in the <code>available</code> state.</p>
+    /// <p>The requested replication group is not in the <code>available</code> state.</p>
     InvalidReplicationGroupStateFault(String),
-    ///<p>The specified replication group does not exist.</p>
+    /// <p>The specified replication group does not exist.</p>
     ReplicationGroupNotFoundFault(String),
-    ///<p>You already have a snapshot with the given name.</p>
+    /// <p>You already have a snapshot with the given name.</p>
     SnapshotAlreadyExistsFault(String),
-    ///<p>You attempted one of the following operations:</p> <ul> <li> <p>Creating a snapshot of a Redis cache cluster running on a <code>cache.t1.micro</code> cache node.</p> </li> <li> <p>Creating a snapshot of a cache cluster that is running Memcached rather than Redis.</p> </li> </ul> <p>Neither of these are supported by ElastiCache.</p>
+    /// <p>You attempted one of the following operations:</p> <ul> <li> <p>Creating a snapshot of a Redis cache cluster running on a <code>cache.t1.micro</code> cache node.</p> </li> <li> <p>Creating a snapshot of a cache cluster that is running Memcached rather than Redis.</p> </li> </ul> <p>Neither of these are supported by ElastiCache.</p>
     SnapshotFeatureNotSupportedFault(String),
-    ///<p>The request cannot be processed because it would exceed the maximum number of snapshots.</p>
+    /// <p>The request cannot be processed because it would exceed the maximum number of snapshots.</p>
     SnapshotQuotaExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9487,13 +9487,13 @@ impl Error for DeleteReplicationGroupError {
 /// Errors returned by DeleteSnapshot
 #[derive(Debug, PartialEq)]
 pub enum DeleteSnapshotError {
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-    ///<p>The current state of the snapshot does not allow the requested operation to occur.</p>
+    /// <p>The current state of the snapshot does not allow the requested operation to occur.</p>
     InvalidSnapshotStateFault(String),
-    ///<p>The requested snapshot name does not refer to an existing snapshot.</p>
+    /// <p>The requested snapshot name does not refer to an existing snapshot.</p>
     SnapshotNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9576,11 +9576,11 @@ impl Error for DeleteSnapshotError {
 /// Errors returned by DescribeCacheClusters
 #[derive(Debug, PartialEq)]
 pub enum DescribeCacheClustersError {
-    ///<p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
+    /// <p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
     CacheClusterNotFoundFault(String),
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9730,11 +9730,11 @@ impl Error for DescribeCacheEngineVersionsError {
 /// Errors returned by DescribeCacheParameterGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeCacheParameterGroupsError {
-    ///<p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
+    /// <p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
     CacheParameterGroupNotFoundFault(String),
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9819,11 +9819,11 @@ impl Error for DescribeCacheParameterGroupsError {
 /// Errors returned by DescribeCacheParameters
 #[derive(Debug, PartialEq)]
 pub enum DescribeCacheParametersError {
-    ///<p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
+    /// <p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
     CacheParameterGroupNotFoundFault(String),
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9908,11 +9908,11 @@ impl Error for DescribeCacheParametersError {
 /// Errors returned by DescribeCacheSecurityGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeCacheSecurityGroupsError {
-    ///<p>The requested cache security group name does not refer to an existing cache security group.</p>
+    /// <p>The requested cache security group name does not refer to an existing cache security group.</p>
     CacheSecurityGroupNotFoundFault(String),
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9997,7 +9997,7 @@ impl Error for DescribeCacheSecurityGroupsError {
 /// Errors returned by DescribeCacheSubnetGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeCacheSubnetGroupsError {
-    ///<p>The requested cache subnet group name does not refer to an existing cache subnet group.</p>
+    /// <p>The requested cache subnet group name does not refer to an existing cache subnet group.</p>
     CacheSubnetGroupNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10070,9 +10070,9 @@ impl Error for DescribeCacheSubnetGroupsError {
 /// Errors returned by DescribeEngineDefaultParameters
 #[derive(Debug, PartialEq)]
 pub enum DescribeEngineDefaultParametersError {
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10151,9 +10151,9 @@ impl Error for DescribeEngineDefaultParametersError {
 /// Errors returned by DescribeEvents
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventsError {
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10228,11 +10228,11 @@ impl Error for DescribeEventsError {
 /// Errors returned by DescribeReplicationGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeReplicationGroupsError {
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-    ///<p>The specified replication group does not exist.</p>
+    /// <p>The specified replication group does not exist.</p>
     ReplicationGroupNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10317,11 +10317,11 @@ impl Error for DescribeReplicationGroupsError {
 /// Errors returned by DescribeReservedCacheNodes
 #[derive(Debug, PartialEq)]
 pub enum DescribeReservedCacheNodesError {
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-    ///<p>The requested reserved cache node was not found.</p>
+    /// <p>The requested reserved cache node was not found.</p>
     ReservedCacheNodeNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10406,11 +10406,11 @@ impl Error for DescribeReservedCacheNodesError {
 /// Errors returned by DescribeReservedCacheNodesOfferings
 #[derive(Debug, PartialEq)]
 pub enum DescribeReservedCacheNodesOfferingsError {
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-    ///<p>The requested cache node offering does not exist.</p>
+    /// <p>The requested cache node offering does not exist.</p>
     ReservedCacheNodesOfferingNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10486,13 +10486,13 @@ impl Error for DescribeReservedCacheNodesOfferingsError {
 /// Errors returned by DescribeSnapshots
 #[derive(Debug, PartialEq)]
 pub enum DescribeSnapshotsError {
-    ///<p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
+    /// <p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
     CacheClusterNotFoundFault(String),
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-    ///<p>The requested snapshot name does not refer to an existing snapshot.</p>
+    /// <p>The requested snapshot name does not refer to an existing snapshot.</p>
     SnapshotNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10577,13 +10577,13 @@ impl Error for DescribeSnapshotsError {
 /// Errors returned by ListAllowedNodeTypeModifications
 #[derive(Debug, PartialEq)]
 pub enum ListAllowedNodeTypeModificationsError {
-    ///<p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
+    /// <p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
     CacheClusterNotFoundFault(String),
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-    ///<p>The specified replication group does not exist.</p>
+    /// <p>The specified replication group does not exist.</p>
     ReplicationGroupNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10676,11 +10676,11 @@ impl Error for ListAllowedNodeTypeModificationsError {
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
-    ///<p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
+    /// <p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
     CacheClusterNotFoundFault(String),
-    ///<p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
+    /// <p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
     InvalidARNFault(String),
-    ///<p>The requested snapshot name does not refer to an existing snapshot.</p>
+    /// <p>The requested snapshot name does not refer to an existing snapshot.</p>
     SnapshotNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10761,27 +10761,27 @@ impl Error for ListTagsForResourceError {
 /// Errors returned by ModifyCacheCluster
 #[derive(Debug, PartialEq)]
 pub enum ModifyCacheClusterError {
-    ///<p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
+    /// <p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
     CacheClusterNotFoundFault(String),
-    ///<p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
+    /// <p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
     CacheParameterGroupNotFoundFault(String),
-    ///<p>The requested cache security group name does not refer to an existing cache security group.</p>
+    /// <p>The requested cache security group name does not refer to an existing cache security group.</p>
     CacheSecurityGroupNotFoundFault(String),
-    ///<p>The requested cache node type is not available in the specified Availability Zone.</p>
+    /// <p>The requested cache node type is not available in the specified Availability Zone.</p>
     InsufficientCacheClusterCapacityFault(String),
-    ///<p>The requested cache cluster is not in the <code>available</code> state.</p>
+    /// <p>The requested cache cluster is not in the <code>available</code> state.</p>
     InvalidCacheClusterStateFault(String),
-    ///<p>The current state of the cache security group does not allow deletion.</p>
+    /// <p>The current state of the cache security group does not allow deletion.</p>
     InvalidCacheSecurityGroupStateFault(String),
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-    ///<p>The VPC network is in an invalid state.</p>
+    /// <p>The VPC network is in an invalid state.</p>
     InvalidVPCNetworkStateFault(String),
-    ///<p>The request cannot be processed because it would exceed the allowed number of cache nodes in a single cache cluster.</p>
+    /// <p>The request cannot be processed because it would exceed the allowed number of cache nodes in a single cache cluster.</p>
     NodeQuotaForClusterExceededFault(String),
-    ///<p>The request cannot be processed because it would exceed the allowed number of cache nodes per customer.</p>
+    /// <p>The request cannot be processed because it would exceed the allowed number of cache nodes per customer.</p>
     NodeQuotaForCustomerExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10912,13 +10912,13 @@ impl Error for ModifyCacheClusterError {
 /// Errors returned by ModifyCacheParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum ModifyCacheParameterGroupError {
-    ///<p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
+    /// <p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
     CacheParameterGroupNotFoundFault(String),
-    ///<p>The current state of the cache parameter group does not allow the requested operation to occur.</p>
+    /// <p>The current state of the cache parameter group does not allow the requested operation to occur.</p>
     InvalidCacheParameterGroupStateFault(String),
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11011,13 +11011,13 @@ impl Error for ModifyCacheParameterGroupError {
 /// Errors returned by ModifyCacheSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum ModifyCacheSubnetGroupError {
-    ///<p>The requested cache subnet group name does not refer to an existing cache subnet group.</p>
+    /// <p>The requested cache subnet group name does not refer to an existing cache subnet group.</p>
     CacheSubnetGroupNotFoundFault(String),
-    ///<p>The request cannot be processed because it would exceed the allowed number of subnets in a cache subnet group.</p>
+    /// <p>The request cannot be processed because it would exceed the allowed number of subnets in a cache subnet group.</p>
     CacheSubnetQuotaExceededFault(String),
-    ///<p>An invalid subnet identifier was specified.</p>
+    /// <p>An invalid subnet identifier was specified.</p>
     InvalidSubnet(String),
-    ///<p>The requested subnet is being used by another cache subnet group.</p>
+    /// <p>The requested subnet is being used by another cache subnet group.</p>
     SubnetInUse(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11104,31 +11104,31 @@ impl Error for ModifyCacheSubnetGroupError {
 /// Errors returned by ModifyReplicationGroup
 #[derive(Debug, PartialEq)]
 pub enum ModifyReplicationGroupError {
-    ///<p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
+    /// <p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
     CacheClusterNotFoundFault(String),
-    ///<p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
+    /// <p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
     CacheParameterGroupNotFoundFault(String),
-    ///<p>The requested cache security group name does not refer to an existing cache security group.</p>
+    /// <p>The requested cache security group name does not refer to an existing cache security group.</p>
     CacheSecurityGroupNotFoundFault(String),
-    ///<p>The requested cache node type is not available in the specified Availability Zone.</p>
+    /// <p>The requested cache node type is not available in the specified Availability Zone.</p>
     InsufficientCacheClusterCapacityFault(String),
-    ///<p>The requested cache cluster is not in the <code>available</code> state.</p>
+    /// <p>The requested cache cluster is not in the <code>available</code> state.</p>
     InvalidCacheClusterStateFault(String),
-    ///<p>The current state of the cache security group does not allow deletion.</p>
+    /// <p>The current state of the cache security group does not allow deletion.</p>
     InvalidCacheSecurityGroupStateFault(String),
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-    ///<p>The requested replication group is not in the <code>available</code> state.</p>
+    /// <p>The requested replication group is not in the <code>available</code> state.</p>
     InvalidReplicationGroupStateFault(String),
-    ///<p>The VPC network is in an invalid state.</p>
+    /// <p>The VPC network is in an invalid state.</p>
     InvalidVPCNetworkStateFault(String),
-    ///<p>The request cannot be processed because it would exceed the allowed number of cache nodes in a single cache cluster.</p>
+    /// <p>The request cannot be processed because it would exceed the allowed number of cache nodes in a single cache cluster.</p>
     NodeQuotaForClusterExceededFault(String),
-    ///<p>The request cannot be processed because it would exceed the allowed number of cache nodes per customer.</p>
+    /// <p>The request cannot be processed because it would exceed the allowed number of cache nodes per customer.</p>
     NodeQuotaForCustomerExceededFault(String),
-    ///<p>The specified replication group does not exist.</p>
+    /// <p>The specified replication group does not exist.</p>
     ReplicationGroupNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11273,15 +11273,15 @@ impl Error for ModifyReplicationGroupError {
 /// Errors returned by PurchaseReservedCacheNodesOffering
 #[derive(Debug, PartialEq)]
 pub enum PurchaseReservedCacheNodesOfferingError {
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-    ///<p>You already have a reservation with the given identifier.</p>
+    /// <p>You already have a reservation with the given identifier.</p>
     ReservedCacheNodeAlreadyExistsFault(String),
-    ///<p>The request cannot be processed because it would exceed the user's cache node quota.</p>
+    /// <p>The request cannot be processed because it would exceed the user's cache node quota.</p>
     ReservedCacheNodeQuotaExceededFault(String),
-    ///<p>The requested cache node offering does not exist.</p>
+    /// <p>The requested cache node offering does not exist.</p>
     ReservedCacheNodesOfferingNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11363,9 +11363,9 @@ impl Error for PurchaseReservedCacheNodesOfferingError {
 /// Errors returned by RebootCacheCluster
 #[derive(Debug, PartialEq)]
 pub enum RebootCacheClusterError {
-    ///<p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
+    /// <p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
     CacheClusterNotFoundFault(String),
-    ///<p>The requested cache cluster is not in the <code>available</code> state.</p>
+    /// <p>The requested cache cluster is not in the <code>available</code> state.</p>
     InvalidCacheClusterStateFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11442,13 +11442,13 @@ impl Error for RebootCacheClusterError {
 /// Errors returned by RemoveTagsFromResource
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsFromResourceError {
-    ///<p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
+    /// <p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
     CacheClusterNotFoundFault(String),
-    ///<p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
+    /// <p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
     InvalidARNFault(String),
-    ///<p>The requested snapshot name does not refer to an existing snapshot.</p>
+    /// <p>The requested snapshot name does not refer to an existing snapshot.</p>
     SnapshotNotFoundFault(String),
-    ///<p>The requested tag was not found on this resource.</p>
+    /// <p>The requested tag was not found on this resource.</p>
     TagNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11533,13 +11533,13 @@ impl Error for RemoveTagsFromResourceError {
 /// Errors returned by ResetCacheParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum ResetCacheParameterGroupError {
-    ///<p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
+    /// <p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
     CacheParameterGroupNotFoundFault(String),
-    ///<p>The current state of the cache parameter group does not allow the requested operation to occur.</p>
+    /// <p>The current state of the cache parameter group does not allow the requested operation to occur.</p>
     InvalidCacheParameterGroupStateFault(String),
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11630,15 +11630,15 @@ impl Error for ResetCacheParameterGroupError {
 /// Errors returned by RevokeCacheSecurityGroupIngress
 #[derive(Debug, PartialEq)]
 pub enum RevokeCacheSecurityGroupIngressError {
-    ///<p>The specified Amazon EC2 security group is not authorized for the specified cache security group.</p>
+    /// <p>The specified Amazon EC2 security group is not authorized for the specified cache security group.</p>
     AuthorizationNotFoundFault(String),
-    ///<p>The requested cache security group name does not refer to an existing cache security group.</p>
+    /// <p>The requested cache security group name does not refer to an existing cache security group.</p>
     CacheSecurityGroupNotFoundFault(String),
-    ///<p>The current state of the cache security group does not allow deletion.</p>
+    /// <p>The current state of the cache security group does not allow deletion.</p>
     InvalidCacheSecurityGroupStateFault(String),
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11739,21 +11739,21 @@ impl Error for RevokeCacheSecurityGroupIngressError {
 /// Errors returned by TestFailover
 #[derive(Debug, PartialEq)]
 pub enum TestFailoverError {
-    ///<p>The customer has exceeded the allowed rate of API calls.</p>
+    /// <p>The customer has exceeded the allowed rate of API calls.</p>
     APICallRateForCustomerExceededFault(String),
-    ///<p>The requested cache cluster is not in the <code>available</code> state.</p>
+    /// <p>The requested cache cluster is not in the <code>available</code> state.</p>
     InvalidCacheClusterStateFault(String),
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-    ///<p>The requested replication group is not in the <code>available</code> state.</p>
+    /// <p>The requested replication group is not in the <code>available</code> state.</p>
     InvalidReplicationGroupStateFault(String),
-    ///<p>The node group specified by the <code>NodeGroupId</code> parameter could not be found. Please verify that the node group exists and that you spelled the <code>NodeGroupId</code> value correctly.</p>
+    /// <p>The node group specified by the <code>NodeGroupId</code> parameter could not be found. Please verify that the node group exists and that you spelled the <code>NodeGroupId</code> value correctly.</p>
     NodeGroupNotFoundFault(String),
-    ///<p>The specified replication group does not exist.</p>
+    /// <p>The specified replication group does not exist.</p>
     ReplicationGroupNotFoundFault(String),
-    ///
+
     TestFailoverNotAvailableFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11861,235 +11861,235 @@ impl Error for TestFailoverError {
 }
 /// Trait representing the capabilities of the Amazon ElastiCache API. Amazon ElastiCache clients implement this trait.
 pub trait ElastiCache {
-    #[doc="<p>Adds up to 50 cost allocation tags to the named resource. A cost allocation tag is a key-value pair where the key and value are case-sensitive. You can use cost allocation tags to categorize and track your AWS costs.</p> <p> When you apply tags to your ElastiCache resources, AWS generates a cost allocation report as a comma-separated value (CSV) file with your usage and costs aggregated by your tags. You can apply tags that represent business categories (such as cost centers, application names, or owners) to organize your costs across multiple services. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Tagging.html\">Using Cost Allocation Tags in Amazon ElastiCache</a> in the <i>ElastiCache User Guide</i>.</p>"]
+    /// <p>Adds up to 50 cost allocation tags to the named resource. A cost allocation tag is a key-value pair where the key and value are case-sensitive. You can use cost allocation tags to categorize and track your AWS costs.</p> <p> When you apply tags to your ElastiCache resources, AWS generates a cost allocation report as a comma-separated value (CSV) file with your usage and costs aggregated by your tags. You can apply tags that represent business categories (such as cost centers, application names, or owners) to organize your costs across multiple services. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Tagging.html">Using Cost Allocation Tags in Amazon ElastiCache</a> in the <i>ElastiCache User Guide</i>.</p>
     fn add_tags_to_resource(
         &self,
         input: &AddTagsToResourceMessage,
     ) -> Result<TagListMessage, AddTagsToResourceError>;
 
-    #[doc="<p>Allows network ingress to a cache security group. Applications using ElastiCache must be running on Amazon EC2, and Amazon EC2 security groups are used as the authorization mechanism.</p> <note> <p>You cannot authorize ingress from an Amazon EC2 security group in one region to an ElastiCache cluster in another region.</p> </note>"]
+    /// <p><p>Allows network ingress to a cache security group. Applications using ElastiCache must be running on Amazon EC2, and Amazon EC2 security groups are used as the authorization mechanism.</p> <note> <p>You cannot authorize ingress from an Amazon EC2 security group in one region to an ElastiCache cluster in another region.</p> </note></p>
     fn authorize_cache_security_group_ingress(
         &self,
         input: &AuthorizeCacheSecurityGroupIngressMessage,
     ) -> Result<AuthorizeCacheSecurityGroupIngressResult, AuthorizeCacheSecurityGroupIngressError>;
 
-    #[doc="<p>Makes a copy of an existing snapshot.</p> <note> <p>This operation is valid for Redis only.</p> </note> <important> <p>Users or groups that have permissions to use the <code>CopySnapshot</code> operation can create their own Amazon S3 buckets and copy snapshots to it. To control access to your snapshots, use an IAM policy to control who has the ability to use the <code>CopySnapshot</code> operation. For more information about using IAM to control the use of ElastiCache operations, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html\">Exporting Snapshots</a> and <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/IAM.html\">Authentication &amp; Access Control</a>.</p> </important> <p>You could receive the following error messages.</p> <p class=\"title\"> <b>Error Messages</b> </p> <ul> <li> <p> <b>Error Message:</b> The S3 bucket %s is outside of the region.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.CreateBucket\">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s does not exist.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.CreateBucket\">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s is not owned by the authenticated user.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.CreateBucket\">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The authenticated user does not have sufficient permissions to perform the desired activity.</p> <p> <b>Solution:</b> Contact your system administrator to get the needed permissions.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s already contains an object with key %s.</p> <p> <b>Solution:</b> Give the <code>TargetSnapshotName</code> a new and unique value. If exporting a snapshot, you could alternatively create a new Amazon S3 bucket and use this same value for <code>TargetSnapshotName</code>.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add List and Read permissions on the bucket. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.GrantAccess\">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted WRITE permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add Upload/Delete permissions on the bucket. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.GrantAccess\">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ_ACP permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add View Permissions on the bucket. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.GrantAccess\">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> </ul>"]
+    /// <p><p>Makes a copy of an existing snapshot.</p> <note> <p>This operation is valid for Redis only.</p> </note> <important> <p>Users or groups that have permissions to use the <code>CopySnapshot</code> operation can create their own Amazon S3 buckets and copy snapshots to it. To control access to your snapshots, use an IAM policy to control who has the ability to use the <code>CopySnapshot</code> operation. For more information about using IAM to control the use of ElastiCache operations, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html">Exporting Snapshots</a> and <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/IAM.html">Authentication &amp; Access Control</a>.</p> </important> <p>You could receive the following error messages.</p> <p class="title"> <b>Error Messages</b> </p> <ul> <li> <p> <b>Error Message:</b> The S3 bucket %s is outside of the region.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.CreateBucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s does not exist.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.CreateBucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s is not owned by the authenticated user.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.CreateBucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The authenticated user does not have sufficient permissions to perform the desired activity.</p> <p> <b>Solution:</b> Contact your system administrator to get the needed permissions.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s already contains an object with key %s.</p> <p> <b>Solution:</b> Give the <code>TargetSnapshotName</code> a new and unique value. If exporting a snapshot, you could alternatively create a new Amazon S3 bucket and use this same value for <code>TargetSnapshotName</code>.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add List and Read permissions on the bucket. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.GrantAccess">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted WRITE permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add Upload/Delete permissions on the bucket. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.GrantAccess">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ_ACP permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add View Permissions on the bucket. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.GrantAccess">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> </ul></p>
     fn copy_snapshot(
         &self,
         input: &CopySnapshotMessage,
     ) -> Result<CopySnapshotResult, CopySnapshotError>;
 
-    #[doc="<p>Creates a cache cluster. All nodes in the cache cluster run the same protocol-compliant cache engine software, either Memcached or Redis.</p> <important> <p>Due to current limitations on Redis (cluster mode disabled), this operation or parameter is not supported on Redis (cluster mode enabled) replication groups.</p> </important>"]
+    /// <p><p>Creates a cache cluster. All nodes in the cache cluster run the same protocol-compliant cache engine software, either Memcached or Redis.</p> <important> <p>Due to current limitations on Redis (cluster mode disabled), this operation or parameter is not supported on Redis (cluster mode enabled) replication groups.</p> </important></p>
     fn create_cache_cluster(
         &self,
         input: &CreateCacheClusterMessage,
     ) -> Result<CreateCacheClusterResult, CreateCacheClusterError>;
 
-    #[doc="<p>Creates a new Amazon ElastiCache cache parameter group. An ElastiCache cache parameter group is a collection of parameters and their values that are applied to all of the nodes in any cache cluster or replication group using the CacheParameterGroup.</p> <p>A newly created CacheParameterGroup is an exact duplicate of the default parameter group for the CacheParameterGroupFamily. To customize the newly created CacheParameterGroup you can change the values of specific parameters. For more information, see:</p> <ul> <li> <p> <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_ModifyCacheParameterGroup.html\">ModifyCacheParameterGroup</a> in the ElastiCache API Reference.</p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/ParameterGroups.html\">Parameters and Parameter Groups</a> in the ElastiCache User Guide.</p> </li> </ul>"]
+    /// <p><p>Creates a new Amazon ElastiCache cache parameter group. An ElastiCache cache parameter group is a collection of parameters and their values that are applied to all of the nodes in any cache cluster or replication group using the CacheParameterGroup.</p> <p>A newly created CacheParameterGroup is an exact duplicate of the default parameter group for the CacheParameterGroupFamily. To customize the newly created CacheParameterGroup you can change the values of specific parameters. For more information, see:</p> <ul> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_ModifyCacheParameterGroup.html">ModifyCacheParameterGroup</a> in the ElastiCache API Reference.</p> </li> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/ParameterGroups.html">Parameters and Parameter Groups</a> in the ElastiCache User Guide.</p> </li> </ul></p>
     fn create_cache_parameter_group(
         &self,
         input: &CreateCacheParameterGroupMessage,
     ) -> Result<CreateCacheParameterGroupResult, CreateCacheParameterGroupError>;
 
-    #[doc="<p>Creates a new cache security group. Use a cache security group to control access to one or more cache clusters.</p> <p>Cache security groups are only used when you are creating a cache cluster outside of an Amazon Virtual Private Cloud (Amazon VPC). If you are creating a cache cluster inside of a VPC, use a cache subnet group instead. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_CreateCacheSubnetGroup.html\">CreateCacheSubnetGroup</a>.</p>"]
+    /// <p>Creates a new cache security group. Use a cache security group to control access to one or more cache clusters.</p> <p>Cache security groups are only used when you are creating a cache cluster outside of an Amazon Virtual Private Cloud (Amazon VPC). If you are creating a cache cluster inside of a VPC, use a cache subnet group instead. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_CreateCacheSubnetGroup.html">CreateCacheSubnetGroup</a>.</p>
     fn create_cache_security_group(
         &self,
         input: &CreateCacheSecurityGroupMessage,
     ) -> Result<CreateCacheSecurityGroupResult, CreateCacheSecurityGroupError>;
 
-    #[doc="<p>Creates a new cache subnet group.</p> <p>Use this parameter only when you are creating a cluster in an Amazon Virtual Private Cloud (Amazon VPC).</p>"]
+    /// <p>Creates a new cache subnet group.</p> <p>Use this parameter only when you are creating a cluster in an Amazon Virtual Private Cloud (Amazon VPC).</p>
     fn create_cache_subnet_group(
         &self,
         input: &CreateCacheSubnetGroupMessage,
     ) -> Result<CreateCacheSubnetGroupResult, CreateCacheSubnetGroupError>;
 
-    #[doc="<p>Creates a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group.</p> <p>A Redis (cluster mode disabled) replication group is a collection of cache clusters, where one of the cache clusters is a read/write primary and the others are read-only replicas. Writes to the primary are asynchronously propagated to the replicas.</p> <p>A Redis (cluster mode enabled) replication group is a collection of 1 to 15 node groups (shards). Each node group (shard) has one read/write primary node and up to 5 read-only replica nodes. Writes to the primary are asynchronously propagated to the replicas. Redis (cluster mode enabled) replication groups partition the data across node groups (shards).</p> <p>When a Redis (cluster mode disabled) replication group has been successfully created, you can add one or more read replicas to it, up to a total of 5 read replicas. You cannot alter a Redis (cluster mode enabled) replication group after it has been created. However, if you need to increase or decrease the number of node groups (console: shards), you can avail yourself of ElastiCache for Redis' enhanced backup and restore. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/backups-restoring.html\">Restoring From a Backup with Cluster Resizing</a> in the <i>ElastiCache User Guide</i>.</p> <note> <p>This operation is valid for Redis only.</p> </note>"]
+    /// <p><p>Creates a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group.</p> <p>A Redis (cluster mode disabled) replication group is a collection of cache clusters, where one of the cache clusters is a read/write primary and the others are read-only replicas. Writes to the primary are asynchronously propagated to the replicas.</p> <p>A Redis (cluster mode enabled) replication group is a collection of 1 to 15 node groups (shards). Each node group (shard) has one read/write primary node and up to 5 read-only replica nodes. Writes to the primary are asynchronously propagated to the replicas. Redis (cluster mode enabled) replication groups partition the data across node groups (shards).</p> <p>When a Redis (cluster mode disabled) replication group has been successfully created, you can add one or more read replicas to it, up to a total of 5 read replicas. You cannot alter a Redis (cluster mode enabled) replication group after it has been created. However, if you need to increase or decrease the number of node groups (console: shards), you can avail yourself of ElastiCache for Redis&#39; enhanced backup and restore. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/backups-restoring.html">Restoring From a Backup with Cluster Resizing</a> in the <i>ElastiCache User Guide</i>.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
     fn create_replication_group(
         &self,
         input: &CreateReplicationGroupMessage,
     ) -> Result<CreateReplicationGroupResult, CreateReplicationGroupError>;
 
-    #[doc="<p>Creates a copy of an entire cache cluster or replication group at a specific moment in time.</p> <note> <p>This operation is valid for Redis only.</p> </note>"]
+    /// <p><p>Creates a copy of an entire cache cluster or replication group at a specific moment in time.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
     fn create_snapshot(
         &self,
         input: &CreateSnapshotMessage,
     ) -> Result<CreateSnapshotResult, CreateSnapshotError>;
 
-    #[doc="<p>Deletes a previously provisioned cache cluster. <code>DeleteCacheCluster</code> deletes all associated cache nodes, node endpoints and the cache cluster itself. When you receive a successful response from this operation, Amazon ElastiCache immediately begins deleting the cache cluster; you cannot cancel or revert this operation.</p> <p>This operation cannot be used to delete a cache cluster that is the last read replica of a replication group or node group (shard) that has Multi-AZ mode enabled or a cache cluster from a Redis (cluster mode enabled) replication group.</p> <important> <p>Due to current limitations on Redis (cluster mode disabled), this operation or parameter is not supported on Redis (cluster mode enabled) replication groups.</p> </important>"]
+    /// <p><p>Deletes a previously provisioned cache cluster. <code>DeleteCacheCluster</code> deletes all associated cache nodes, node endpoints and the cache cluster itself. When you receive a successful response from this operation, Amazon ElastiCache immediately begins deleting the cache cluster; you cannot cancel or revert this operation.</p> <p>This operation cannot be used to delete a cache cluster that is the last read replica of a replication group or node group (shard) that has Multi-AZ mode enabled or a cache cluster from a Redis (cluster mode enabled) replication group.</p> <important> <p>Due to current limitations on Redis (cluster mode disabled), this operation or parameter is not supported on Redis (cluster mode enabled) replication groups.</p> </important></p>
     fn delete_cache_cluster(
         &self,
         input: &DeleteCacheClusterMessage,
     ) -> Result<DeleteCacheClusterResult, DeleteCacheClusterError>;
 
-    #[doc="<p>Deletes the specified cache parameter group. You cannot delete a cache parameter group if it is associated with any cache clusters.</p>"]
+    /// <p>Deletes the specified cache parameter group. You cannot delete a cache parameter group if it is associated with any cache clusters.</p>
     fn delete_cache_parameter_group(
         &self,
         input: &DeleteCacheParameterGroupMessage,
     ) -> Result<(), DeleteCacheParameterGroupError>;
 
-    #[doc="<p>Deletes a cache security group.</p> <note> <p>You cannot delete a cache security group if it is associated with any cache clusters.</p> </note>"]
+    /// <p><p>Deletes a cache security group.</p> <note> <p>You cannot delete a cache security group if it is associated with any cache clusters.</p> </note></p>
     fn delete_cache_security_group(
         &self,
         input: &DeleteCacheSecurityGroupMessage,
     ) -> Result<(), DeleteCacheSecurityGroupError>;
 
-    #[doc="<p>Deletes a cache subnet group.</p> <note> <p>You cannot delete a cache subnet group if it is associated with any cache clusters.</p> </note>"]
+    /// <p><p>Deletes a cache subnet group.</p> <note> <p>You cannot delete a cache subnet group if it is associated with any cache clusters.</p> </note></p>
     fn delete_cache_subnet_group(
         &self,
         input: &DeleteCacheSubnetGroupMessage,
     ) -> Result<(), DeleteCacheSubnetGroupError>;
 
-    #[doc="<p>Deletes an existing replication group. By default, this operation deletes the entire replication group, including the primary/primaries and all of the read replicas. If the replication group has only one primary, you can optionally delete only the read replicas, while retaining the primary by setting <code>RetainPrimaryCluster=true</code>.</p> <p>When you receive a successful response from this operation, Amazon ElastiCache immediately begins deleting the selected resources; you cannot cancel or revert this operation.</p> <note> <p>This operation is valid for Redis only.</p> </note>"]
+    /// <p><p>Deletes an existing replication group. By default, this operation deletes the entire replication group, including the primary/primaries and all of the read replicas. If the replication group has only one primary, you can optionally delete only the read replicas, while retaining the primary by setting <code>RetainPrimaryCluster=true</code>.</p> <p>When you receive a successful response from this operation, Amazon ElastiCache immediately begins deleting the selected resources; you cannot cancel or revert this operation.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
     fn delete_replication_group(
         &self,
         input: &DeleteReplicationGroupMessage,
     ) -> Result<DeleteReplicationGroupResult, DeleteReplicationGroupError>;
 
-    #[doc="<p>Deletes an existing snapshot. When you receive a successful response from this operation, ElastiCache immediately begins deleting the snapshot; you cannot cancel or revert this operation.</p> <note> <p>This operation is valid for Redis only.</p> </note>"]
+    /// <p><p>Deletes an existing snapshot. When you receive a successful response from this operation, ElastiCache immediately begins deleting the snapshot; you cannot cancel or revert this operation.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
     fn delete_snapshot(
         &self,
         input: &DeleteSnapshotMessage,
     ) -> Result<DeleteSnapshotResult, DeleteSnapshotError>;
 
-    #[doc="<p>Returns information about all provisioned cache clusters if no cache cluster identifier is specified, or about a specific cache cluster if a cache cluster identifier is supplied.</p> <p>By default, abbreviated information about the cache clusters is returned. You can use the optional <i>ShowCacheNodeInfo</i> flag to retrieve detailed information about the cache nodes associated with the cache clusters. These details include the DNS address and port for the cache node endpoint.</p> <p>If the cluster is in the <i>creating</i> state, only cluster-level information is displayed until all of the nodes are successfully provisioned.</p> <p>If the cluster is in the <i>deleting</i> state, only cluster-level information is displayed.</p> <p>If cache nodes are currently being added to the cache cluster, node endpoint information and creation time for the additional nodes are not displayed until they are completely provisioned. When the cache cluster state is <i>available</i>, the cluster is ready for use.</p> <p>If cache nodes are currently being removed from the cache cluster, no endpoint information for the removed nodes is displayed.</p>"]
+    /// <p>Returns information about all provisioned cache clusters if no cache cluster identifier is specified, or about a specific cache cluster if a cache cluster identifier is supplied.</p> <p>By default, abbreviated information about the cache clusters is returned. You can use the optional <i>ShowCacheNodeInfo</i> flag to retrieve detailed information about the cache nodes associated with the cache clusters. These details include the DNS address and port for the cache node endpoint.</p> <p>If the cluster is in the <i>creating</i> state, only cluster-level information is displayed until all of the nodes are successfully provisioned.</p> <p>If the cluster is in the <i>deleting</i> state, only cluster-level information is displayed.</p> <p>If cache nodes are currently being added to the cache cluster, node endpoint information and creation time for the additional nodes are not displayed until they are completely provisioned. When the cache cluster state is <i>available</i>, the cluster is ready for use.</p> <p>If cache nodes are currently being removed from the cache cluster, no endpoint information for the removed nodes is displayed.</p>
     fn describe_cache_clusters(
         &self,
         input: &DescribeCacheClustersMessage,
     ) -> Result<CacheClusterMessage, DescribeCacheClustersError>;
 
-    #[doc = "<p>Returns a list of the available cache engines and their versions.</p>"]
+    /// <p>Returns a list of the available cache engines and their versions.</p>
     fn describe_cache_engine_versions(
         &self,
         input: &DescribeCacheEngineVersionsMessage,
     ) -> Result<CacheEngineVersionMessage, DescribeCacheEngineVersionsError>;
 
-    #[doc="<p>Returns a list of cache parameter group descriptions. If a cache parameter group name is specified, the list contains only the descriptions for that group.</p>"]
+    /// <p>Returns a list of cache parameter group descriptions. If a cache parameter group name is specified, the list contains only the descriptions for that group.</p>
     fn describe_cache_parameter_groups(
         &self,
         input: &DescribeCacheParameterGroupsMessage,
     ) -> Result<CacheParameterGroupsMessage, DescribeCacheParameterGroupsError>;
 
-    #[doc = "<p>Returns the detailed parameter list for a particular cache parameter group.</p>"]
+    /// <p>Returns the detailed parameter list for a particular cache parameter group.</p>
     fn describe_cache_parameters(
         &self,
         input: &DescribeCacheParametersMessage,
     ) -> Result<CacheParameterGroupDetails, DescribeCacheParametersError>;
 
-    #[doc="<p>Returns a list of cache security group descriptions. If a cache security group name is specified, the list contains only the description of that group.</p>"]
+    /// <p>Returns a list of cache security group descriptions. If a cache security group name is specified, the list contains only the description of that group.</p>
     fn describe_cache_security_groups(
         &self,
         input: &DescribeCacheSecurityGroupsMessage,
     ) -> Result<CacheSecurityGroupMessage, DescribeCacheSecurityGroupsError>;
 
-    #[doc="<p>Returns a list of cache subnet group descriptions. If a subnet group name is specified, the list contains only the description of that group.</p>"]
+    /// <p>Returns a list of cache subnet group descriptions. If a subnet group name is specified, the list contains only the description of that group.</p>
     fn describe_cache_subnet_groups(
         &self,
         input: &DescribeCacheSubnetGroupsMessage,
     ) -> Result<CacheSubnetGroupMessage, DescribeCacheSubnetGroupsError>;
 
-    #[doc="<p>Returns the default engine and system parameter information for the specified cache engine.</p>"]
+    /// <p>Returns the default engine and system parameter information for the specified cache engine.</p>
     fn describe_engine_default_parameters(
         &self,
         input: &DescribeEngineDefaultParametersMessage,
     ) -> Result<DescribeEngineDefaultParametersResult, DescribeEngineDefaultParametersError>;
 
-    #[doc="<p>Returns events related to cache clusters, cache security groups, and cache parameter groups. You can obtain events specific to a particular cache cluster, cache security group, or cache parameter group by providing the name as a parameter.</p> <p>By default, only the events occurring within the last hour are returned; however, you can retrieve up to 14 days' worth of events if necessary.</p>"]
+    /// <p>Returns events related to cache clusters, cache security groups, and cache parameter groups. You can obtain events specific to a particular cache cluster, cache security group, or cache parameter group by providing the name as a parameter.</p> <p>By default, only the events occurring within the last hour are returned; however, you can retrieve up to 14 days' worth of events if necessary.</p>
     fn describe_events(
         &self,
         input: &DescribeEventsMessage,
     ) -> Result<EventsMessage, DescribeEventsError>;
 
-    #[doc="<p>Returns information about a particular replication group. If no identifier is specified, <code>DescribeReplicationGroups</code> returns information about all replication groups.</p> <note> <p>This operation is valid for Redis only.</p> </note>"]
+    /// <p><p>Returns information about a particular replication group. If no identifier is specified, <code>DescribeReplicationGroups</code> returns information about all replication groups.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
     fn describe_replication_groups(
         &self,
         input: &DescribeReplicationGroupsMessage,
     ) -> Result<ReplicationGroupMessage, DescribeReplicationGroupsError>;
 
-    #[doc="<p>Returns information about reserved cache nodes for this account, or about a specified reserved cache node.</p>"]
+    /// <p>Returns information about reserved cache nodes for this account, or about a specified reserved cache node.</p>
     fn describe_reserved_cache_nodes(
         &self,
         input: &DescribeReservedCacheNodesMessage,
     ) -> Result<ReservedCacheNodeMessage, DescribeReservedCacheNodesError>;
 
-    #[doc = "<p>Lists available reserved cache node offerings.</p>"]
+    /// <p>Lists available reserved cache node offerings.</p>
     fn describe_reserved_cache_nodes_offerings(
         &self,
         input: &DescribeReservedCacheNodesOfferingsMessage,
     ) -> Result<ReservedCacheNodesOfferingMessage, DescribeReservedCacheNodesOfferingsError>;
 
-    #[doc="<p>Returns information about cache cluster or replication group snapshots. By default, <code>DescribeSnapshots</code> lists all of your snapshots; it can optionally describe a single snapshot, or just the snapshots associated with a particular cache cluster.</p> <note> <p>This operation is valid for Redis only.</p> </note>"]
+    /// <p><p>Returns information about cache cluster or replication group snapshots. By default, <code>DescribeSnapshots</code> lists all of your snapshots; it can optionally describe a single snapshot, or just the snapshots associated with a particular cache cluster.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
     fn describe_snapshots(
         &self,
         input: &DescribeSnapshotsMessage,
     ) -> Result<DescribeSnapshotsListMessage, DescribeSnapshotsError>;
 
-    #[doc="<p>Lists all available node types that you can scale your Redis cluster's or replication group's current node type up to.</p> <p>When you use the <code>ModifyCacheCluster</code> or <code>ModifyReplicationGroup</code> operations to scale up your cluster or replication group, the value of the <code>CacheNodeType</code> parameter must be one of the node types returned by this operation.</p>"]
+    /// <p>Lists all available node types that you can scale your Redis cluster's or replication group's current node type up to.</p> <p>When you use the <code>ModifyCacheCluster</code> or <code>ModifyReplicationGroup</code> operations to scale up your cluster or replication group, the value of the <code>CacheNodeType</code> parameter must be one of the node types returned by this operation.</p>
     fn list_allowed_node_type_modifications(
         &self,
         input: &ListAllowedNodeTypeModificationsMessage,
     ) -> Result<AllowedNodeTypeModificationsMessage, ListAllowedNodeTypeModificationsError>;
 
-    #[doc="<p>Lists all cost allocation tags currently on the named resource. A <code>cost allocation tag</code> is a key-value pair where the key is case-sensitive and the value is optional. You can use cost allocation tags to categorize and track your AWS costs.</p> <p>You can have a maximum of 50 cost allocation tags on an ElastiCache resource. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/BestPractices.html\">Using Cost Allocation Tags in Amazon ElastiCache</a>.</p>"]
+    /// <p>Lists all cost allocation tags currently on the named resource. A <code>cost allocation tag</code> is a key-value pair where the key is case-sensitive and the value is optional. You can use cost allocation tags to categorize and track your AWS costs.</p> <p>You can have a maximum of 50 cost allocation tags on an ElastiCache resource. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/BestPractices.html">Using Cost Allocation Tags in Amazon ElastiCache</a>.</p>
     fn list_tags_for_resource(
         &self,
         input: &ListTagsForResourceMessage,
     ) -> Result<TagListMessage, ListTagsForResourceError>;
 
-    #[doc="<p>Modifies the settings for a cache cluster. You can use this operation to change one or more cluster configuration parameters by specifying the parameters and the new values.</p>"]
+    /// <p>Modifies the settings for a cache cluster. You can use this operation to change one or more cluster configuration parameters by specifying the parameters and the new values.</p>
     fn modify_cache_cluster(
         &self,
         input: &ModifyCacheClusterMessage,
     ) -> Result<ModifyCacheClusterResult, ModifyCacheClusterError>;
 
-    #[doc="<p>Modifies the parameters of a cache parameter group. You can modify up to 20 parameters in a single request by submitting a list parameter name and value pairs.</p>"]
+    /// <p>Modifies the parameters of a cache parameter group. You can modify up to 20 parameters in a single request by submitting a list parameter name and value pairs.</p>
     fn modify_cache_parameter_group(
         &self,
         input: &ModifyCacheParameterGroupMessage,
     ) -> Result<CacheParameterGroupNameMessage, ModifyCacheParameterGroupError>;
 
-    #[doc = "<p>Modifies an existing cache subnet group.</p>"]
+    /// <p>Modifies an existing cache subnet group.</p>
     fn modify_cache_subnet_group(
         &self,
         input: &ModifyCacheSubnetGroupMessage,
     ) -> Result<ModifyCacheSubnetGroupResult, ModifyCacheSubnetGroupError>;
 
-    #[doc="<p>Modifies the settings for a replication group.</p> <important> <p>Due to current limitations on Redis (cluster mode disabled), this operation or parameter is not supported on Redis (cluster mode enabled) replication groups.</p> </important> <note> <p>This operation is valid for Redis only.</p> </note>"]
+    /// <p><p>Modifies the settings for a replication group.</p> <important> <p>Due to current limitations on Redis (cluster mode disabled), this operation or parameter is not supported on Redis (cluster mode enabled) replication groups.</p> </important> <note> <p>This operation is valid for Redis only.</p> </note></p>
     fn modify_replication_group(
         &self,
         input: &ModifyReplicationGroupMessage,
     ) -> Result<ModifyReplicationGroupResult, ModifyReplicationGroupError>;
 
-    #[doc = "<p>Allows you to purchase a reserved cache node offering.</p>"]
+    /// <p>Allows you to purchase a reserved cache node offering.</p>
     fn purchase_reserved_cache_nodes_offering(
         &self,
         input: &PurchaseReservedCacheNodesOfferingMessage,
     ) -> Result<PurchaseReservedCacheNodesOfferingResult, PurchaseReservedCacheNodesOfferingError>;
 
-    #[doc="<p>Reboots some, or all, of the cache nodes within a provisioned cache cluster. This operation applies any modified cache parameter groups to the cache cluster. The reboot operation takes place as soon as possible, and results in a momentary outage to the cache cluster. During the reboot, the cache cluster status is set to REBOOTING.</p> <p>The reboot causes the contents of the cache (for each cache node being rebooted) to be lost.</p> <p>When the reboot is complete, a cache cluster event is created.</p>"]
+    /// <p>Reboots some, or all, of the cache nodes within a provisioned cache cluster. This operation applies any modified cache parameter groups to the cache cluster. The reboot operation takes place as soon as possible, and results in a momentary outage to the cache cluster. During the reboot, the cache cluster status is set to REBOOTING.</p> <p>The reboot causes the contents of the cache (for each cache node being rebooted) to be lost.</p> <p>When the reboot is complete, a cache cluster event is created.</p>
     fn reboot_cache_cluster(
         &self,
         input: &RebootCacheClusterMessage,
     ) -> Result<RebootCacheClusterResult, RebootCacheClusterError>;
 
-    #[doc="<p>Removes the tags identified by the <code>TagKeys</code> list from the named resource.</p>"]
+    /// <p>Removes the tags identified by the <code>TagKeys</code> list from the named resource.</p>
     fn remove_tags_from_resource(
         &self,
         input: &RemoveTagsFromResourceMessage,
     ) -> Result<TagListMessage, RemoveTagsFromResourceError>;
 
-    #[doc="<p>Modifies the parameters of a cache parameter group to the engine or system default value. You can reset specific parameters by submitting a list of parameter names. To reset the entire cache parameter group, specify the <code>ResetAllParameters</code> and <code>CacheParameterGroupName</code> parameters.</p>"]
+    /// <p>Modifies the parameters of a cache parameter group to the engine or system default value. You can reset specific parameters by submitting a list of parameter names. To reset the entire cache parameter group, specify the <code>ResetAllParameters</code> and <code>CacheParameterGroupName</code> parameters.</p>
     fn reset_cache_parameter_group(
         &self,
         input: &ResetCacheParameterGroupMessage,
     ) -> Result<CacheParameterGroupNameMessage, ResetCacheParameterGroupError>;
 
-    #[doc="<p>Revokes ingress from a cache security group. Use this operation to disallow access from an Amazon EC2 security group that had been previously authorized.</p>"]
+    /// <p>Revokes ingress from a cache security group. Use this operation to disallow access from an Amazon EC2 security group that had been previously authorized.</p>
     fn revoke_cache_security_group_ingress(
         &self,
         input: &RevokeCacheSecurityGroupIngressMessage,
     ) -> Result<RevokeCacheSecurityGroupIngressResult, RevokeCacheSecurityGroupIngressError>;
 
-    #[doc="<p>Represents the input of a <code>TestFailover</code> operation which test automatic failover on a specified node group (called shard in the console) in a replication group (called cluster in the console).</p> <p class=\"title\"> <b>Note the following</b> </p> <ul> <li> <p>A customer can use this operation to test automatic failover on up to 5 shards (called node groups in the ElastiCache API and AWS CLI) in any rolling 24-hour period.</p> </li> <li> <p>If calling this operation on shards in different clusters (called replication groups in the API and CLI), the calls can be made concurrently.</p> <p> </p> </li> <li> <p>If calling this operation multiple times on different shards in the same Redis (cluster mode enabled) replication group, the first node replacement must complete before a subsequent call can be made.</p> </li> <li> <p>To determine whether the node replacement is complete you can check Events using the Amazon ElastiCache console, the AWS CLI, or the ElastiCache API. Look for the following automatic failover related events, listed here in order of occurrance:</p> <ol> <li> <p>Replication group message: <code>Test Failover API called for node group &lt;node-group-id&gt;</code> </p> </li> <li> <p>Cache cluster message: <code>Failover from master node &lt;primary-node-id&gt; to replica node &lt;node-id&gt; completed</code> </p> </li> <li> <p>Replication group message: <code>Failover from master node &lt;primary-node-id&gt; to replica node &lt;node-id&gt; completed</code> </p> </li> <li> <p>Cache cluster message: <code>Recovering cache nodes &lt;node-id&gt;</code> </p> </li> <li> <p>Cache cluster message: <code>Finished recovery for cache nodes &lt;node-id&gt;</code> </p> </li> </ol> <p>For more information see:</p> <ul> <li> <p> <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/ECEvents.Viewing.html\">Viewing ElastiCache Events</a> in the <i>ElastiCache User Guide</i> </p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_DescribeEvents.html\">DescribeEvents</a> in the ElastiCache API Reference</p> </li> </ul> </li> </ul> <p>Also see, <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/AutoFailover.html#auto-failover-test\">Testing Multi-AZ with Automatic Failover</a> in the <i>ElastiCache User Guide</i>.</p>"]
+    /// <p>Represents the input of a <code>TestFailover</code> operation which test automatic failover on a specified node group (called shard in the console) in a replication group (called cluster in the console).</p> <p class="title"> <b>Note the following</b> </p> <ul> <li> <p>A customer can use this operation to test automatic failover on up to 5 shards (called node groups in the ElastiCache API and AWS CLI) in any rolling 24-hour period.</p> </li> <li> <p>If calling this operation on shards in different clusters (called replication groups in the API and CLI), the calls can be made concurrently.</p> <p> </p> </li> <li> <p>If calling this operation multiple times on different shards in the same Redis (cluster mode enabled) replication group, the first node replacement must complete before a subsequent call can be made.</p> </li> <li> <p>To determine whether the node replacement is complete you can check Events using the Amazon ElastiCache console, the AWS CLI, or the ElastiCache API. Look for the following automatic failover related events, listed here in order of occurrance:</p> <ol> <li> <p>Replication group message: <code>Test Failover API called for node group &lt;node-group-id&gt;</code> </p> </li> <li> <p>Cache cluster message: <code>Failover from master node &lt;primary-node-id&gt; to replica node &lt;node-id&gt; completed</code> </p> </li> <li> <p>Replication group message: <code>Failover from master node &lt;primary-node-id&gt; to replica node &lt;node-id&gt; completed</code> </p> </li> <li> <p>Cache cluster message: <code>Recovering cache nodes &lt;node-id&gt;</code> </p> </li> <li> <p>Cache cluster message: <code>Finished recovery for cache nodes &lt;node-id&gt;</code> </p> </li> </ol> <p>For more information see:</p> <ul> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/ECEvents.Viewing.html">Viewing ElastiCache Events</a> in the <i>ElastiCache User Guide</i> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_DescribeEvents.html">DescribeEvents</a> in the ElastiCache API Reference</p> </li> </ul> </li> </ul> <p>Also see, <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/AutoFailover.html#auto-failover-test">Testing Multi-AZ with Automatic Failover</a> in the <i>ElastiCache User Guide</i>.</p>
     fn test_failover(
         &self,
         input: &TestFailoverMessage,
@@ -12125,7 +12125,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Adds up to 50 cost allocation tags to the named resource. A cost allocation tag is a key-value pair where the key and value are case-sensitive. You can use cost allocation tags to categorize and track your AWS costs.</p> <p> When you apply tags to your ElastiCache resources, AWS generates a cost allocation report as a comma-separated value (CSV) file with your usage and costs aggregated by your tags. You can apply tags that represent business categories (such as cost centers, application names, or owners) to organize your costs across multiple services. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Tagging.html\">Using Cost Allocation Tags in Amazon ElastiCache</a> in the <i>ElastiCache User Guide</i>.</p>"]
+    /// <p>Adds up to 50 cost allocation tags to the named resource. A cost allocation tag is a key-value pair where the key and value are case-sensitive. You can use cost allocation tags to categorize and track your AWS costs.</p> <p> When you apply tags to your ElastiCache resources, AWS generates a cost allocation report as a comma-separated value (CSV) file with your usage and costs aggregated by your tags. You can apply tags that represent business categories (such as cost centers, application names, or owners) to organize your costs across multiple services. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Tagging.html">Using Cost Allocation Tags in Amazon ElastiCache</a> in the <i>ElastiCache User Guide</i>.</p>
     fn add_tags_to_resource(
         &self,
         input: &AddTagsToResourceMessage,
@@ -12176,7 +12176,7 @@ where
         }
     }
 
-    #[doc="<p>Allows network ingress to a cache security group. Applications using ElastiCache must be running on Amazon EC2, and Amazon EC2 security groups are used as the authorization mechanism.</p> <note> <p>You cannot authorize ingress from an Amazon EC2 security group in one region to an ElastiCache cluster in another region.</p> </note>"]
+    /// <p><p>Allows network ingress to a cache security group. Applications using ElastiCache must be running on Amazon EC2, and Amazon EC2 security groups are used as the authorization mechanism.</p> <note> <p>You cannot authorize ingress from an Amazon EC2 security group in one region to an ElastiCache cluster in another region.</p> </note></p>
     fn authorize_cache_security_group_ingress(
         &self,
         input: &AuthorizeCacheSecurityGroupIngressMessage,
@@ -12230,7 +12230,7 @@ where
         }
     }
 
-    #[doc="<p>Makes a copy of an existing snapshot.</p> <note> <p>This operation is valid for Redis only.</p> </note> <important> <p>Users or groups that have permissions to use the <code>CopySnapshot</code> operation can create their own Amazon S3 buckets and copy snapshots to it. To control access to your snapshots, use an IAM policy to control who has the ability to use the <code>CopySnapshot</code> operation. For more information about using IAM to control the use of ElastiCache operations, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html\">Exporting Snapshots</a> and <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/IAM.html\">Authentication &amp; Access Control</a>.</p> </important> <p>You could receive the following error messages.</p> <p class=\"title\"> <b>Error Messages</b> </p> <ul> <li> <p> <b>Error Message:</b> The S3 bucket %s is outside of the region.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.CreateBucket\">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s does not exist.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.CreateBucket\">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s is not owned by the authenticated user.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.CreateBucket\">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The authenticated user does not have sufficient permissions to perform the desired activity.</p> <p> <b>Solution:</b> Contact your system administrator to get the needed permissions.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s already contains an object with key %s.</p> <p> <b>Solution:</b> Give the <code>TargetSnapshotName</code> a new and unique value. If exporting a snapshot, you could alternatively create a new Amazon S3 bucket and use this same value for <code>TargetSnapshotName</code>.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add List and Read permissions on the bucket. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.GrantAccess\">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted WRITE permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add Upload/Delete permissions on the bucket. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.GrantAccess\">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ_ACP permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add View Permissions on the bucket. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.GrantAccess\">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> </ul>"]
+    /// <p><p>Makes a copy of an existing snapshot.</p> <note> <p>This operation is valid for Redis only.</p> </note> <important> <p>Users or groups that have permissions to use the <code>CopySnapshot</code> operation can create their own Amazon S3 buckets and copy snapshots to it. To control access to your snapshots, use an IAM policy to control who has the ability to use the <code>CopySnapshot</code> operation. For more information about using IAM to control the use of ElastiCache operations, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html">Exporting Snapshots</a> and <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/IAM.html">Authentication &amp; Access Control</a>.</p> </important> <p>You could receive the following error messages.</p> <p class="title"> <b>Error Messages</b> </p> <ul> <li> <p> <b>Error Message:</b> The S3 bucket %s is outside of the region.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.CreateBucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s does not exist.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.CreateBucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s is not owned by the authenticated user.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.CreateBucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The authenticated user does not have sufficient permissions to perform the desired activity.</p> <p> <b>Solution:</b> Contact your system administrator to get the needed permissions.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s already contains an object with key %s.</p> <p> <b>Solution:</b> Give the <code>TargetSnapshotName</code> a new and unique value. If exporting a snapshot, you could alternatively create a new Amazon S3 bucket and use this same value for <code>TargetSnapshotName</code>.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add List and Read permissions on the bucket. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.GrantAccess">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted WRITE permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add Upload/Delete permissions on the bucket. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.GrantAccess">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ_ACP permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add View Permissions on the bucket. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.GrantAccess">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> </ul></p>
     fn copy_snapshot(
         &self,
         input: &CopySnapshotMessage,
@@ -12281,7 +12281,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a cache cluster. All nodes in the cache cluster run the same protocol-compliant cache engine software, either Memcached or Redis.</p> <important> <p>Due to current limitations on Redis (cluster mode disabled), this operation or parameter is not supported on Redis (cluster mode enabled) replication groups.</p> </important>"]
+    /// <p><p>Creates a cache cluster. All nodes in the cache cluster run the same protocol-compliant cache engine software, either Memcached or Redis.</p> <important> <p>Due to current limitations on Redis (cluster mode disabled), this operation or parameter is not supported on Redis (cluster mode enabled) replication groups.</p> </important></p>
     fn create_cache_cluster(
         &self,
         input: &CreateCacheClusterMessage,
@@ -12332,7 +12332,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new Amazon ElastiCache cache parameter group. An ElastiCache cache parameter group is a collection of parameters and their values that are applied to all of the nodes in any cache cluster or replication group using the CacheParameterGroup.</p> <p>A newly created CacheParameterGroup is an exact duplicate of the default parameter group for the CacheParameterGroupFamily. To customize the newly created CacheParameterGroup you can change the values of specific parameters. For more information, see:</p> <ul> <li> <p> <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_ModifyCacheParameterGroup.html\">ModifyCacheParameterGroup</a> in the ElastiCache API Reference.</p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/ParameterGroups.html\">Parameters and Parameter Groups</a> in the ElastiCache User Guide.</p> </li> </ul>"]
+    /// <p><p>Creates a new Amazon ElastiCache cache parameter group. An ElastiCache cache parameter group is a collection of parameters and their values that are applied to all of the nodes in any cache cluster or replication group using the CacheParameterGroup.</p> <p>A newly created CacheParameterGroup is an exact duplicate of the default parameter group for the CacheParameterGroupFamily. To customize the newly created CacheParameterGroup you can change the values of specific parameters. For more information, see:</p> <ul> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_ModifyCacheParameterGroup.html">ModifyCacheParameterGroup</a> in the ElastiCache API Reference.</p> </li> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/ParameterGroups.html">Parameters and Parameter Groups</a> in the ElastiCache User Guide.</p> </li> </ul></p>
     fn create_cache_parameter_group(
         &self,
         input: &CreateCacheParameterGroupMessage,
@@ -12383,7 +12383,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new cache security group. Use a cache security group to control access to one or more cache clusters.</p> <p>Cache security groups are only used when you are creating a cache cluster outside of an Amazon Virtual Private Cloud (Amazon VPC). If you are creating a cache cluster inside of a VPC, use a cache subnet group instead. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_CreateCacheSubnetGroup.html\">CreateCacheSubnetGroup</a>.</p>"]
+    /// <p>Creates a new cache security group. Use a cache security group to control access to one or more cache clusters.</p> <p>Cache security groups are only used when you are creating a cache cluster outside of an Amazon Virtual Private Cloud (Amazon VPC). If you are creating a cache cluster inside of a VPC, use a cache subnet group instead. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_CreateCacheSubnetGroup.html">CreateCacheSubnetGroup</a>.</p>
     fn create_cache_security_group(
         &self,
         input: &CreateCacheSecurityGroupMessage,
@@ -12434,7 +12434,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new cache subnet group.</p> <p>Use this parameter only when you are creating a cluster in an Amazon Virtual Private Cloud (Amazon VPC).</p>"]
+    /// <p>Creates a new cache subnet group.</p> <p>Use this parameter only when you are creating a cluster in an Amazon Virtual Private Cloud (Amazon VPC).</p>
     fn create_cache_subnet_group(
         &self,
         input: &CreateCacheSubnetGroupMessage,
@@ -12485,7 +12485,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group.</p> <p>A Redis (cluster mode disabled) replication group is a collection of cache clusters, where one of the cache clusters is a read/write primary and the others are read-only replicas. Writes to the primary are asynchronously propagated to the replicas.</p> <p>A Redis (cluster mode enabled) replication group is a collection of 1 to 15 node groups (shards). Each node group (shard) has one read/write primary node and up to 5 read-only replica nodes. Writes to the primary are asynchronously propagated to the replicas. Redis (cluster mode enabled) replication groups partition the data across node groups (shards).</p> <p>When a Redis (cluster mode disabled) replication group has been successfully created, you can add one or more read replicas to it, up to a total of 5 read replicas. You cannot alter a Redis (cluster mode enabled) replication group after it has been created. However, if you need to increase or decrease the number of node groups (console: shards), you can avail yourself of ElastiCache for Redis' enhanced backup and restore. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/backups-restoring.html\">Restoring From a Backup with Cluster Resizing</a> in the <i>ElastiCache User Guide</i>.</p> <note> <p>This operation is valid for Redis only.</p> </note>"]
+    /// <p><p>Creates a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group.</p> <p>A Redis (cluster mode disabled) replication group is a collection of cache clusters, where one of the cache clusters is a read/write primary and the others are read-only replicas. Writes to the primary are asynchronously propagated to the replicas.</p> <p>A Redis (cluster mode enabled) replication group is a collection of 1 to 15 node groups (shards). Each node group (shard) has one read/write primary node and up to 5 read-only replica nodes. Writes to the primary are asynchronously propagated to the replicas. Redis (cluster mode enabled) replication groups partition the data across node groups (shards).</p> <p>When a Redis (cluster mode disabled) replication group has been successfully created, you can add one or more read replicas to it, up to a total of 5 read replicas. You cannot alter a Redis (cluster mode enabled) replication group after it has been created. However, if you need to increase or decrease the number of node groups (console: shards), you can avail yourself of ElastiCache for Redis&#39; enhanced backup and restore. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/backups-restoring.html">Restoring From a Backup with Cluster Resizing</a> in the <i>ElastiCache User Guide</i>.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
     fn create_replication_group(
         &self,
         input: &CreateReplicationGroupMessage,
@@ -12536,7 +12536,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a copy of an entire cache cluster or replication group at a specific moment in time.</p> <note> <p>This operation is valid for Redis only.</p> </note>"]
+    /// <p><p>Creates a copy of an entire cache cluster or replication group at a specific moment in time.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
     fn create_snapshot(
         &self,
         input: &CreateSnapshotMessage,
@@ -12587,7 +12587,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a previously provisioned cache cluster. <code>DeleteCacheCluster</code> deletes all associated cache nodes, node endpoints and the cache cluster itself. When you receive a successful response from this operation, Amazon ElastiCache immediately begins deleting the cache cluster; you cannot cancel or revert this operation.</p> <p>This operation cannot be used to delete a cache cluster that is the last read replica of a replication group or node group (shard) that has Multi-AZ mode enabled or a cache cluster from a Redis (cluster mode enabled) replication group.</p> <important> <p>Due to current limitations on Redis (cluster mode disabled), this operation or parameter is not supported on Redis (cluster mode enabled) replication groups.</p> </important>"]
+    /// <p><p>Deletes a previously provisioned cache cluster. <code>DeleteCacheCluster</code> deletes all associated cache nodes, node endpoints and the cache cluster itself. When you receive a successful response from this operation, Amazon ElastiCache immediately begins deleting the cache cluster; you cannot cancel or revert this operation.</p> <p>This operation cannot be used to delete a cache cluster that is the last read replica of a replication group or node group (shard) that has Multi-AZ mode enabled or a cache cluster from a Redis (cluster mode enabled) replication group.</p> <important> <p>Due to current limitations on Redis (cluster mode disabled), this operation or parameter is not supported on Redis (cluster mode enabled) replication groups.</p> </important></p>
     fn delete_cache_cluster(
         &self,
         input: &DeleteCacheClusterMessage,
@@ -12638,7 +12638,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified cache parameter group. You cannot delete a cache parameter group if it is associated with any cache clusters.</p>"]
+    /// <p>Deletes the specified cache parameter group. You cannot delete a cache parameter group if it is associated with any cache clusters.</p>
     fn delete_cache_parameter_group(
         &self,
         input: &DeleteCacheParameterGroupMessage,
@@ -12668,7 +12668,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a cache security group.</p> <note> <p>You cannot delete a cache security group if it is associated with any cache clusters.</p> </note>"]
+    /// <p><p>Deletes a cache security group.</p> <note> <p>You cannot delete a cache security group if it is associated with any cache clusters.</p> </note></p>
     fn delete_cache_security_group(
         &self,
         input: &DeleteCacheSecurityGroupMessage,
@@ -12698,7 +12698,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a cache subnet group.</p> <note> <p>You cannot delete a cache subnet group if it is associated with any cache clusters.</p> </note>"]
+    /// <p><p>Deletes a cache subnet group.</p> <note> <p>You cannot delete a cache subnet group if it is associated with any cache clusters.</p> </note></p>
     fn delete_cache_subnet_group(
         &self,
         input: &DeleteCacheSubnetGroupMessage,
@@ -12728,7 +12728,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes an existing replication group. By default, this operation deletes the entire replication group, including the primary/primaries and all of the read replicas. If the replication group has only one primary, you can optionally delete only the read replicas, while retaining the primary by setting <code>RetainPrimaryCluster=true</code>.</p> <p>When you receive a successful response from this operation, Amazon ElastiCache immediately begins deleting the selected resources; you cannot cancel or revert this operation.</p> <note> <p>This operation is valid for Redis only.</p> </note>"]
+    /// <p><p>Deletes an existing replication group. By default, this operation deletes the entire replication group, including the primary/primaries and all of the read replicas. If the replication group has only one primary, you can optionally delete only the read replicas, while retaining the primary by setting <code>RetainPrimaryCluster=true</code>.</p> <p>When you receive a successful response from this operation, Amazon ElastiCache immediately begins deleting the selected resources; you cannot cancel or revert this operation.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
     fn delete_replication_group(
         &self,
         input: &DeleteReplicationGroupMessage,
@@ -12779,7 +12779,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes an existing snapshot. When you receive a successful response from this operation, ElastiCache immediately begins deleting the snapshot; you cannot cancel or revert this operation.</p> <note> <p>This operation is valid for Redis only.</p> </note>"]
+    /// <p><p>Deletes an existing snapshot. When you receive a successful response from this operation, ElastiCache immediately begins deleting the snapshot; you cannot cancel or revert this operation.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
     fn delete_snapshot(
         &self,
         input: &DeleteSnapshotMessage,
@@ -12830,7 +12830,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about all provisioned cache clusters if no cache cluster identifier is specified, or about a specific cache cluster if a cache cluster identifier is supplied.</p> <p>By default, abbreviated information about the cache clusters is returned. You can use the optional <i>ShowCacheNodeInfo</i> flag to retrieve detailed information about the cache nodes associated with the cache clusters. These details include the DNS address and port for the cache node endpoint.</p> <p>If the cluster is in the <i>creating</i> state, only cluster-level information is displayed until all of the nodes are successfully provisioned.</p> <p>If the cluster is in the <i>deleting</i> state, only cluster-level information is displayed.</p> <p>If cache nodes are currently being added to the cache cluster, node endpoint information and creation time for the additional nodes are not displayed until they are completely provisioned. When the cache cluster state is <i>available</i>, the cluster is ready for use.</p> <p>If cache nodes are currently being removed from the cache cluster, no endpoint information for the removed nodes is displayed.</p>"]
+    /// <p>Returns information about all provisioned cache clusters if no cache cluster identifier is specified, or about a specific cache cluster if a cache cluster identifier is supplied.</p> <p>By default, abbreviated information about the cache clusters is returned. You can use the optional <i>ShowCacheNodeInfo</i> flag to retrieve detailed information about the cache nodes associated with the cache clusters. These details include the DNS address and port for the cache node endpoint.</p> <p>If the cluster is in the <i>creating</i> state, only cluster-level information is displayed until all of the nodes are successfully provisioned.</p> <p>If the cluster is in the <i>deleting</i> state, only cluster-level information is displayed.</p> <p>If cache nodes are currently being added to the cache cluster, node endpoint information and creation time for the additional nodes are not displayed until they are completely provisioned. When the cache cluster state is <i>available</i>, the cluster is ready for use.</p> <p>If cache nodes are currently being removed from the cache cluster, no endpoint information for the removed nodes is displayed.</p>
     fn describe_cache_clusters(
         &self,
         input: &DescribeCacheClustersMessage,
@@ -12881,7 +12881,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns a list of the available cache engines and their versions.</p>"]
+    /// <p>Returns a list of the available cache engines and their versions.</p>
     fn describe_cache_engine_versions(
         &self,
         input: &DescribeCacheEngineVersionsMessage,
@@ -12932,7 +12932,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list of cache parameter group descriptions. If a cache parameter group name is specified, the list contains only the descriptions for that group.</p>"]
+    /// <p>Returns a list of cache parameter group descriptions. If a cache parameter group name is specified, the list contains only the descriptions for that group.</p>
     fn describe_cache_parameter_groups(
         &self,
         input: &DescribeCacheParameterGroupsMessage,
@@ -12983,7 +12983,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns the detailed parameter list for a particular cache parameter group.</p>"]
+    /// <p>Returns the detailed parameter list for a particular cache parameter group.</p>
     fn describe_cache_parameters(
         &self,
         input: &DescribeCacheParametersMessage,
@@ -13034,7 +13034,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list of cache security group descriptions. If a cache security group name is specified, the list contains only the description of that group.</p>"]
+    /// <p>Returns a list of cache security group descriptions. If a cache security group name is specified, the list contains only the description of that group.</p>
     fn describe_cache_security_groups(
         &self,
         input: &DescribeCacheSecurityGroupsMessage,
@@ -13085,7 +13085,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list of cache subnet group descriptions. If a subnet group name is specified, the list contains only the description of that group.</p>"]
+    /// <p>Returns a list of cache subnet group descriptions. If a subnet group name is specified, the list contains only the description of that group.</p>
     fn describe_cache_subnet_groups(
         &self,
         input: &DescribeCacheSubnetGroupsMessage,
@@ -13136,7 +13136,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the default engine and system parameter information for the specified cache engine.</p>"]
+    /// <p>Returns the default engine and system parameter information for the specified cache engine.</p>
     fn describe_engine_default_parameters(
         &self,
         input: &DescribeEngineDefaultParametersMessage,
@@ -13189,7 +13189,7 @@ where
         }
     }
 
-    #[doc="<p>Returns events related to cache clusters, cache security groups, and cache parameter groups. You can obtain events specific to a particular cache cluster, cache security group, or cache parameter group by providing the name as a parameter.</p> <p>By default, only the events occurring within the last hour are returned; however, you can retrieve up to 14 days' worth of events if necessary.</p>"]
+    /// <p>Returns events related to cache clusters, cache security groups, and cache parameter groups. You can obtain events specific to a particular cache cluster, cache security group, or cache parameter group by providing the name as a parameter.</p> <p>By default, only the events occurring within the last hour are returned; however, you can retrieve up to 14 days' worth of events if necessary.</p>
     fn describe_events(
         &self,
         input: &DescribeEventsMessage,
@@ -13240,7 +13240,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about a particular replication group. If no identifier is specified, <code>DescribeReplicationGroups</code> returns information about all replication groups.</p> <note> <p>This operation is valid for Redis only.</p> </note>"]
+    /// <p><p>Returns information about a particular replication group. If no identifier is specified, <code>DescribeReplicationGroups</code> returns information about all replication groups.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
     fn describe_replication_groups(
         &self,
         input: &DescribeReplicationGroupsMessage,
@@ -13291,7 +13291,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about reserved cache nodes for this account, or about a specified reserved cache node.</p>"]
+    /// <p>Returns information about reserved cache nodes for this account, or about a specified reserved cache node.</p>
     fn describe_reserved_cache_nodes(
         &self,
         input: &DescribeReservedCacheNodesMessage,
@@ -13342,7 +13342,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists available reserved cache node offerings.</p>"]
+    /// <p>Lists available reserved cache node offerings.</p>
     fn describe_reserved_cache_nodes_offerings(
         &self,
         input: &DescribeReservedCacheNodesOfferingsMessage,
@@ -13393,7 +13393,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about cache cluster or replication group snapshots. By default, <code>DescribeSnapshots</code> lists all of your snapshots; it can optionally describe a single snapshot, or just the snapshots associated with a particular cache cluster.</p> <note> <p>This operation is valid for Redis only.</p> </note>"]
+    /// <p><p>Returns information about cache cluster or replication group snapshots. By default, <code>DescribeSnapshots</code> lists all of your snapshots; it can optionally describe a single snapshot, or just the snapshots associated with a particular cache cluster.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
     fn describe_snapshots(
         &self,
         input: &DescribeSnapshotsMessage,
@@ -13444,7 +13444,7 @@ where
         }
     }
 
-    #[doc="<p>Lists all available node types that you can scale your Redis cluster's or replication group's current node type up to.</p> <p>When you use the <code>ModifyCacheCluster</code> or <code>ModifyReplicationGroup</code> operations to scale up your cluster or replication group, the value of the <code>CacheNodeType</code> parameter must be one of the node types returned by this operation.</p>"]
+    /// <p>Lists all available node types that you can scale your Redis cluster's or replication group's current node type up to.</p> <p>When you use the <code>ModifyCacheCluster</code> or <code>ModifyReplicationGroup</code> operations to scale up your cluster or replication group, the value of the <code>CacheNodeType</code> parameter must be one of the node types returned by this operation.</p>
     fn list_allowed_node_type_modifications(
         &self,
         input: &ListAllowedNodeTypeModificationsMessage,
@@ -13497,7 +13497,7 @@ where
         }
     }
 
-    #[doc="<p>Lists all cost allocation tags currently on the named resource. A <code>cost allocation tag</code> is a key-value pair where the key is case-sensitive and the value is optional. You can use cost allocation tags to categorize and track your AWS costs.</p> <p>You can have a maximum of 50 cost allocation tags on an ElastiCache resource. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/BestPractices.html\">Using Cost Allocation Tags in Amazon ElastiCache</a>.</p>"]
+    /// <p>Lists all cost allocation tags currently on the named resource. A <code>cost allocation tag</code> is a key-value pair where the key is case-sensitive and the value is optional. You can use cost allocation tags to categorize and track your AWS costs.</p> <p>You can have a maximum of 50 cost allocation tags on an ElastiCache resource. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/BestPractices.html">Using Cost Allocation Tags in Amazon ElastiCache</a>.</p>
     fn list_tags_for_resource(
         &self,
         input: &ListTagsForResourceMessage,
@@ -13548,7 +13548,7 @@ where
         }
     }
 
-    #[doc="<p>Modifies the settings for a cache cluster. You can use this operation to change one or more cluster configuration parameters by specifying the parameters and the new values.</p>"]
+    /// <p>Modifies the settings for a cache cluster. You can use this operation to change one or more cluster configuration parameters by specifying the parameters and the new values.</p>
     fn modify_cache_cluster(
         &self,
         input: &ModifyCacheClusterMessage,
@@ -13599,7 +13599,7 @@ where
         }
     }
 
-    #[doc="<p>Modifies the parameters of a cache parameter group. You can modify up to 20 parameters in a single request by submitting a list parameter name and value pairs.</p>"]
+    /// <p>Modifies the parameters of a cache parameter group. You can modify up to 20 parameters in a single request by submitting a list parameter name and value pairs.</p>
     fn modify_cache_parameter_group(
         &self,
         input: &ModifyCacheParameterGroupMessage,
@@ -13650,7 +13650,7 @@ where
         }
     }
 
-    #[doc = "<p>Modifies an existing cache subnet group.</p>"]
+    /// <p>Modifies an existing cache subnet group.</p>
     fn modify_cache_subnet_group(
         &self,
         input: &ModifyCacheSubnetGroupMessage,
@@ -13701,7 +13701,7 @@ where
         }
     }
 
-    #[doc="<p>Modifies the settings for a replication group.</p> <important> <p>Due to current limitations on Redis (cluster mode disabled), this operation or parameter is not supported on Redis (cluster mode enabled) replication groups.</p> </important> <note> <p>This operation is valid for Redis only.</p> </note>"]
+    /// <p><p>Modifies the settings for a replication group.</p> <important> <p>Due to current limitations on Redis (cluster mode disabled), this operation or parameter is not supported on Redis (cluster mode enabled) replication groups.</p> </important> <note> <p>This operation is valid for Redis only.</p> </note></p>
     fn modify_replication_group(
         &self,
         input: &ModifyReplicationGroupMessage,
@@ -13752,7 +13752,7 @@ where
         }
     }
 
-    #[doc = "<p>Allows you to purchase a reserved cache node offering.</p>"]
+    /// <p>Allows you to purchase a reserved cache node offering.</p>
     fn purchase_reserved_cache_nodes_offering(
         &self,
         input: &PurchaseReservedCacheNodesOfferingMessage,
@@ -13806,7 +13806,7 @@ where
         }
     }
 
-    #[doc="<p>Reboots some, or all, of the cache nodes within a provisioned cache cluster. This operation applies any modified cache parameter groups to the cache cluster. The reboot operation takes place as soon as possible, and results in a momentary outage to the cache cluster. During the reboot, the cache cluster status is set to REBOOTING.</p> <p>The reboot causes the contents of the cache (for each cache node being rebooted) to be lost.</p> <p>When the reboot is complete, a cache cluster event is created.</p>"]
+    /// <p>Reboots some, or all, of the cache nodes within a provisioned cache cluster. This operation applies any modified cache parameter groups to the cache cluster. The reboot operation takes place as soon as possible, and results in a momentary outage to the cache cluster. During the reboot, the cache cluster status is set to REBOOTING.</p> <p>The reboot causes the contents of the cache (for each cache node being rebooted) to be lost.</p> <p>When the reboot is complete, a cache cluster event is created.</p>
     fn reboot_cache_cluster(
         &self,
         input: &RebootCacheClusterMessage,
@@ -13857,7 +13857,7 @@ where
         }
     }
 
-    #[doc="<p>Removes the tags identified by the <code>TagKeys</code> list from the named resource.</p>"]
+    /// <p>Removes the tags identified by the <code>TagKeys</code> list from the named resource.</p>
     fn remove_tags_from_resource(
         &self,
         input: &RemoveTagsFromResourceMessage,
@@ -13908,7 +13908,7 @@ where
         }
     }
 
-    #[doc="<p>Modifies the parameters of a cache parameter group to the engine or system default value. You can reset specific parameters by submitting a list of parameter names. To reset the entire cache parameter group, specify the <code>ResetAllParameters</code> and <code>CacheParameterGroupName</code> parameters.</p>"]
+    /// <p>Modifies the parameters of a cache parameter group to the engine or system default value. You can reset specific parameters by submitting a list of parameter names. To reset the entire cache parameter group, specify the <code>ResetAllParameters</code> and <code>CacheParameterGroupName</code> parameters.</p>
     fn reset_cache_parameter_group(
         &self,
         input: &ResetCacheParameterGroupMessage,
@@ -13959,7 +13959,7 @@ where
         }
     }
 
-    #[doc="<p>Revokes ingress from a cache security group. Use this operation to disallow access from an Amazon EC2 security group that had been previously authorized.</p>"]
+    /// <p>Revokes ingress from a cache security group. Use this operation to disallow access from an Amazon EC2 security group that had been previously authorized.</p>
     fn revoke_cache_security_group_ingress(
         &self,
         input: &RevokeCacheSecurityGroupIngressMessage,
@@ -14012,7 +14012,7 @@ where
         }
     }
 
-    #[doc="<p>Represents the input of a <code>TestFailover</code> operation which test automatic failover on a specified node group (called shard in the console) in a replication group (called cluster in the console).</p> <p class=\"title\"> <b>Note the following</b> </p> <ul> <li> <p>A customer can use this operation to test automatic failover on up to 5 shards (called node groups in the ElastiCache API and AWS CLI) in any rolling 24-hour period.</p> </li> <li> <p>If calling this operation on shards in different clusters (called replication groups in the API and CLI), the calls can be made concurrently.</p> <p> </p> </li> <li> <p>If calling this operation multiple times on different shards in the same Redis (cluster mode enabled) replication group, the first node replacement must complete before a subsequent call can be made.</p> </li> <li> <p>To determine whether the node replacement is complete you can check Events using the Amazon ElastiCache console, the AWS CLI, or the ElastiCache API. Look for the following automatic failover related events, listed here in order of occurrance:</p> <ol> <li> <p>Replication group message: <code>Test Failover API called for node group &lt;node-group-id&gt;</code> </p> </li> <li> <p>Cache cluster message: <code>Failover from master node &lt;primary-node-id&gt; to replica node &lt;node-id&gt; completed</code> </p> </li> <li> <p>Replication group message: <code>Failover from master node &lt;primary-node-id&gt; to replica node &lt;node-id&gt; completed</code> </p> </li> <li> <p>Cache cluster message: <code>Recovering cache nodes &lt;node-id&gt;</code> </p> </li> <li> <p>Cache cluster message: <code>Finished recovery for cache nodes &lt;node-id&gt;</code> </p> </li> </ol> <p>For more information see:</p> <ul> <li> <p> <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/ECEvents.Viewing.html\">Viewing ElastiCache Events</a> in the <i>ElastiCache User Guide</i> </p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_DescribeEvents.html\">DescribeEvents</a> in the ElastiCache API Reference</p> </li> </ul> </li> </ul> <p>Also see, <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/AutoFailover.html#auto-failover-test\">Testing Multi-AZ with Automatic Failover</a> in the <i>ElastiCache User Guide</i>.</p>"]
+    /// <p>Represents the input of a <code>TestFailover</code> operation which test automatic failover on a specified node group (called shard in the console) in a replication group (called cluster in the console).</p> <p class="title"> <b>Note the following</b> </p> <ul> <li> <p>A customer can use this operation to test automatic failover on up to 5 shards (called node groups in the ElastiCache API and AWS CLI) in any rolling 24-hour period.</p> </li> <li> <p>If calling this operation on shards in different clusters (called replication groups in the API and CLI), the calls can be made concurrently.</p> <p> </p> </li> <li> <p>If calling this operation multiple times on different shards in the same Redis (cluster mode enabled) replication group, the first node replacement must complete before a subsequent call can be made.</p> </li> <li> <p>To determine whether the node replacement is complete you can check Events using the Amazon ElastiCache console, the AWS CLI, or the ElastiCache API. Look for the following automatic failover related events, listed here in order of occurrance:</p> <ol> <li> <p>Replication group message: <code>Test Failover API called for node group &lt;node-group-id&gt;</code> </p> </li> <li> <p>Cache cluster message: <code>Failover from master node &lt;primary-node-id&gt; to replica node &lt;node-id&gt; completed</code> </p> </li> <li> <p>Replication group message: <code>Failover from master node &lt;primary-node-id&gt; to replica node &lt;node-id&gt; completed</code> </p> </li> <li> <p>Cache cluster message: <code>Recovering cache nodes &lt;node-id&gt;</code> </p> </li> <li> <p>Cache cluster message: <code>Finished recovery for cache nodes &lt;node-id&gt;</code> </p> </li> </ol> <p>For more information see:</p> <ul> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/ECEvents.Viewing.html">Viewing ElastiCache Events</a> in the <i>ElastiCache User Guide</i> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_DescribeEvents.html">DescribeEvents</a> in the ElastiCache API Reference</p> </li> </ul> </li> </ul> <p>Also see, <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/AutoFailover.html#auto-failover-test">Testing Multi-AZ with Automatic Failover</a> in the <i>ElastiCache User Guide</i>.</p>
     fn test_failover(
         &self,
         input: &TestFailoverMessage,

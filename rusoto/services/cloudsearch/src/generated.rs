@@ -658,7 +658,7 @@ impl CreateDomainResponseDeserializer {
 /// <p>Options for a field that contains an array of dates. Present if <code>IndexFieldType</code> specifies the field is of type <code>date-array</code>. All options are enabled by default.</p>
 #[derive(Default, Debug, Clone)]
 pub struct DateArrayOptions {
-    /// A value to use for the field if the field isn't specified for a document.
+    /// <p>A value to use for the field if the field isn&#39;t specified for a document.</p>
     pub default_value: Option<String>,
     /// <p>Whether facet information can be returned for the field.</p>
     pub facet_enabled: Option<bool>,
@@ -781,7 +781,7 @@ impl DateArrayOptionsSerializer {
 /// <p>Options for a date field. Dates and times are specified in UTC (Coordinated Universal Time) according to IETF RFC3339: yyyy-mm-ddT00:00:00Z. Present if <code>IndexFieldType</code> specifies the field is of type <code>date</code>. All options are enabled by default.</p>
 #[derive(Default, Debug, Clone)]
 pub struct DateOptions {
-    /// A value to use for the field if the field isn't specified for a document.
+    /// <p>A value to use for the field if the field isn&#39;t specified for a document.</p>
     pub default_value: Option<String>,
     /// <p>Whether facet information can be returned for the field.</p>
     pub facet_enabled: Option<bool>,
@@ -2590,7 +2590,7 @@ impl DoubleDeserializer {
 /// <p>Options for a field that contains an array of double-precision 64-bit floating point values. Present if <code>IndexFieldType</code> specifies the field is of type <code>double-array</code>. All options are enabled by default.</p>
 #[derive(Default, Debug, Clone)]
 pub struct DoubleArrayOptions {
-    /// A value to use for the field if the field isn't specified for a document.
+    /// <p>A value to use for the field if the field isn&#39;t specified for a document.</p>
     pub default_value: Option<f64>,
     /// <p>Whether facet information can be returned for the field.</p>
     pub facet_enabled: Option<bool>,
@@ -3557,7 +3557,7 @@ impl InstanceCountDeserializer {
 /// <p>Options for a field that contains an array of 64-bit signed integers. Present if <code>IndexFieldType</code> specifies the field is of type <code>int-array</code>. All options are enabled by default.</p>
 #[derive(Default, Debug, Clone)]
 pub struct IntArrayOptions {
-    /// A value to use for the field if the field isn't specified for a document.
+    /// <p>A value to use for the field if the field isn&#39;t specified for a document.</p>
     pub default_value: Option<i64>,
     /// <p>Whether facet information can be returned for the field.</p>
     pub facet_enabled: Option<bool>,
@@ -3678,7 +3678,7 @@ impl IntArrayOptionsSerializer {
 /// <p>Options for a 64-bit signed integer field. Present if <code>IndexFieldType</code> specifies the field is of type <code>int</code>. All options are enabled by default.</p>
 #[derive(Default, Debug, Clone)]
 pub struct IntOptions {
-    /// A value to use for the field if the field isn't specified for a document. This can be important if you are using the field in an expression and that field is not present in every document.
+    /// <p>A value to use for the field if the field isn&#39;t specified for a document. This can be important if you are using the field in an expression and that field is not present in every document.</p>
     pub default_value: Option<i64>,
     /// <p>Whether facet information can be returned for the field.</p>
     pub facet_enabled: Option<bool>,
@@ -3812,7 +3812,7 @@ impl IntOptionsSerializer {
 /// <p>Options for a latlon field. A latlon field contains a location stored as a latitude and longitude value pair. Present if <code>IndexFieldType</code> specifies the field is of type <code>latlon</code>. All options are enabled by default.</p>
 #[derive(Default, Debug, Clone)]
 pub struct LatLonOptions {
-    /// A value to use for the field if the field isn't specified for a document.
+    /// <p>A value to use for the field if the field isn&#39;t specified for a document.</p>
     pub default_value: Option<String>,
     /// <p>Whether facet information can be returned for the field.</p>
     pub facet_enabled: Option<bool>,
@@ -4052,7 +4052,7 @@ impl ListDomainNamesResponseDeserializer {
 /// <p>Options for a field that contains an array of literal strings. Present if <code>IndexFieldType</code> specifies the field is of type <code>literal-array</code>. All options are enabled by default.</p>
 #[derive(Default, Debug, Clone)]
 pub struct LiteralArrayOptions {
-    /// A value to use for the field if the field isn't specified for a document.
+    /// <p>A value to use for the field if the field isn&#39;t specified for a document.</p>
     pub default_value: Option<String>,
     /// <p>Whether facet information can be returned for the field.</p>
     pub facet_enabled: Option<bool>,
@@ -4175,7 +4175,7 @@ impl LiteralArrayOptionsSerializer {
 /// <p>Options for literal field. Present if <code>IndexFieldType</code> specifies the field is of type <code>literal</code>. All options are enabled by default.</p>
 #[derive(Default, Debug, Clone)]
 pub struct LiteralOptions {
-    /// A value to use for the field if the field isn't specified for a document.
+    /// <p>A value to use for the field if the field isn&#39;t specified for a document.</p>
     pub default_value: Option<String>,
     /// <p>Whether facet information can be returned for the field.</p>
     pub facet_enabled: Option<bool>,
@@ -4384,7 +4384,7 @@ pub struct OptionStatus {
     pub creation_date: String,
     /// <p>Indicates that the option will be deleted once processing is complete.</p>
     pub pending_deletion: Option<bool>,
-    /// <p>The state of processing a change to an option. Possible values:</p> <ul> <li> <code>RequiresIndexDocuments</code>: the option's latest value will not be deployed until <a>IndexDocuments</a> has been called and indexing is complete.</li> <li> <code>Processing</code>: the option's latest value is in the process of being activated. </li> <li> <code>Active</code>: the option's latest value is completely deployed.</li> <li> <code>FailedToValidate</code>: the option value is not compatible with the domain's data and cannot be used to index the data. You must either modify the option value or update or remove the incompatible documents.</li> </ul>
+    /// <p><p>The state of processing a change to an option. Possible values:</p> <ul> <li> <code>RequiresIndexDocuments</code>: the option&#39;s latest value will not be deployed until <a>IndexDocuments</a> has been called and indexing is complete.</li> <li> <code>Processing</code>: the option&#39;s latest value is in the process of being activated. </li> <li> <code>Active</code>: the option&#39;s latest value is completely deployed.</li> <li> <code>FailedToValidate</code>: the option value is not compatible with the domain&#39;s data and cannot be used to index the data. You must either modify the option value or update or remove the incompatible documents.</li> </ul></p>
     pub state: String,
     /// <p>A timestamp for when this option was last updated.</p>
     pub update_date: String,
@@ -4945,7 +4945,7 @@ impl SuggesterStatusListDeserializer {
 pub struct TextArrayOptions {
     /// <p>The name of an analysis scheme for a <code>text-array</code> field.</p>
     pub analysis_scheme: Option<String>,
-    /// A value to use for the field if the field isn't specified for a document.
+    /// <p>A value to use for the field if the field isn&#39;t specified for a document.</p>
     pub default_value: Option<String>,
     /// <p>Whether highlights can be returned for the field.</p>
     pub highlight_enabled: Option<bool>,
@@ -5066,7 +5066,7 @@ impl TextArrayOptionsSerializer {
 pub struct TextOptions {
     /// <p>The name of an analysis scheme for a <code>text</code> field.</p>
     pub analysis_scheme: Option<String>,
-    /// A value to use for the field if the field isn't specified for a document.
+    /// <p>A value to use for the field if the field isn&#39;t specified for a document.</p>
     pub default_value: Option<String>,
     /// <p>Whether highlights can be returned for the field.</p>
     pub highlight_enabled: Option<bool>,
@@ -5471,11 +5471,11 @@ impl WordDeserializer {
 /// Errors returned by BuildSuggesters
 #[derive(Debug, PartialEq)]
 pub enum BuildSuggestersError {
-    ///<p>An error occurred while processing the request.</p>
+    /// <p>An error occurred while processing the request.</p>
     Base(String),
-    ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
+    /// <p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
     Internal(String),
-    ///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
+    /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5550,11 +5550,11 @@ impl Error for BuildSuggestersError {
 /// Errors returned by CreateDomain
 #[derive(Debug, PartialEq)]
 pub enum CreateDomainError {
-    ///<p>An error occurred while processing the request.</p>
+    /// <p>An error occurred while processing the request.</p>
     Base(String),
-    ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
+    /// <p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
     Internal(String),
-    ///<p>The request was rejected because a resource limit has already been met.</p>
+    /// <p>The request was rejected because a resource limit has already been met.</p>
     LimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5629,15 +5629,15 @@ impl Error for CreateDomainError {
 /// Errors returned by DefineAnalysisScheme
 #[derive(Debug, PartialEq)]
 pub enum DefineAnalysisSchemeError {
-    ///<p>An error occurred while processing the request.</p>
+    /// <p>An error occurred while processing the request.</p>
     Base(String),
-    ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
+    /// <p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
     Internal(String),
-    ///<p>The request was rejected because a resource limit has already been met.</p>
+    /// <p>The request was rejected because a resource limit has already been met.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
+    /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The request was rejected because it specified an invalid type definition.</p>
+    /// <p>The request was rejected because it specified an invalid type definition.</p>
     InvalidType(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5724,15 +5724,15 @@ impl Error for DefineAnalysisSchemeError {
 /// Errors returned by DefineExpression
 #[derive(Debug, PartialEq)]
 pub enum DefineExpressionError {
-    ///<p>An error occurred while processing the request.</p>
+    /// <p>An error occurred while processing the request.</p>
     Base(String),
-    ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
+    /// <p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
     Internal(String),
-    ///<p>The request was rejected because a resource limit has already been met.</p>
+    /// <p>The request was rejected because a resource limit has already been met.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
+    /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The request was rejected because it specified an invalid type definition.</p>
+    /// <p>The request was rejected because it specified an invalid type definition.</p>
     InvalidType(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5815,15 +5815,15 @@ impl Error for DefineExpressionError {
 /// Errors returned by DefineIndexField
 #[derive(Debug, PartialEq)]
 pub enum DefineIndexFieldError {
-    ///<p>An error occurred while processing the request.</p>
+    /// <p>An error occurred while processing the request.</p>
     Base(String),
-    ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
+    /// <p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
     Internal(String),
-    ///<p>The request was rejected because a resource limit has already been met.</p>
+    /// <p>The request was rejected because a resource limit has already been met.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
+    /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The request was rejected because it specified an invalid type definition.</p>
+    /// <p>The request was rejected because it specified an invalid type definition.</p>
     InvalidType(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5906,15 +5906,15 @@ impl Error for DefineIndexFieldError {
 /// Errors returned by DefineSuggester
 #[derive(Debug, PartialEq)]
 pub enum DefineSuggesterError {
-    ///<p>An error occurred while processing the request.</p>
+    /// <p>An error occurred while processing the request.</p>
     Base(String),
-    ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
+    /// <p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
     Internal(String),
-    ///<p>The request was rejected because a resource limit has already been met.</p>
+    /// <p>The request was rejected because a resource limit has already been met.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
+    /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The request was rejected because it specified an invalid type definition.</p>
+    /// <p>The request was rejected because it specified an invalid type definition.</p>
     InvalidType(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5997,13 +5997,13 @@ impl Error for DefineSuggesterError {
 /// Errors returned by DeleteAnalysisScheme
 #[derive(Debug, PartialEq)]
 pub enum DeleteAnalysisSchemeError {
-    ///<p>An error occurred while processing the request.</p>
+    /// <p>An error occurred while processing the request.</p>
     Base(String),
-    ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
+    /// <p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
     Internal(String),
-    ///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
+    /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The request was rejected because it specified an invalid type definition.</p>
+    /// <p>The request was rejected because it specified an invalid type definition.</p>
     InvalidType(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6086,9 +6086,9 @@ impl Error for DeleteAnalysisSchemeError {
 /// Errors returned by DeleteDomain
 #[derive(Debug, PartialEq)]
 pub enum DeleteDomainError {
-    ///<p>An error occurred while processing the request.</p>
+    /// <p>An error occurred while processing the request.</p>
     Base(String),
-    ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
+    /// <p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
     Internal(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6159,13 +6159,13 @@ impl Error for DeleteDomainError {
 /// Errors returned by DeleteExpression
 #[derive(Debug, PartialEq)]
 pub enum DeleteExpressionError {
-    ///<p>An error occurred while processing the request.</p>
+    /// <p>An error occurred while processing the request.</p>
     Base(String),
-    ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
+    /// <p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
     Internal(String),
-    ///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
+    /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The request was rejected because it specified an invalid type definition.</p>
+    /// <p>The request was rejected because it specified an invalid type definition.</p>
     InvalidType(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6244,13 +6244,13 @@ impl Error for DeleteExpressionError {
 /// Errors returned by DeleteIndexField
 #[derive(Debug, PartialEq)]
 pub enum DeleteIndexFieldError {
-    ///<p>An error occurred while processing the request.</p>
+    /// <p>An error occurred while processing the request.</p>
     Base(String),
-    ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
+    /// <p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
     Internal(String),
-    ///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
+    /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The request was rejected because it specified an invalid type definition.</p>
+    /// <p>The request was rejected because it specified an invalid type definition.</p>
     InvalidType(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6329,13 +6329,13 @@ impl Error for DeleteIndexFieldError {
 /// Errors returned by DeleteSuggester
 #[derive(Debug, PartialEq)]
 pub enum DeleteSuggesterError {
-    ///<p>An error occurred while processing the request.</p>
+    /// <p>An error occurred while processing the request.</p>
     Base(String),
-    ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
+    /// <p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
     Internal(String),
-    ///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
+    /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The request was rejected because it specified an invalid type definition.</p>
+    /// <p>The request was rejected because it specified an invalid type definition.</p>
     InvalidType(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6414,11 +6414,11 @@ impl Error for DeleteSuggesterError {
 /// Errors returned by DescribeAnalysisSchemes
 #[derive(Debug, PartialEq)]
 pub enum DescribeAnalysisSchemesError {
-    ///<p>An error occurred while processing the request.</p>
+    /// <p>An error occurred while processing the request.</p>
     Base(String),
-    ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
+    /// <p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
     Internal(String),
-    ///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
+    /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6497,17 +6497,17 @@ impl Error for DescribeAnalysisSchemesError {
 /// Errors returned by DescribeAvailabilityOptions
 #[derive(Debug, PartialEq)]
 pub enum DescribeAvailabilityOptionsError {
-    ///<p>An error occurred while processing the request.</p>
+    /// <p>An error occurred while processing the request.</p>
     Base(String),
-    ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
+    /// <p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
     Internal(String),
-    ///<p>The request was rejected because a resource limit has already been met.</p>
+    /// <p>The request was rejected because a resource limit has already been met.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it attempted an operation which is not enabled.</p>
+    /// <p>The request was rejected because it attempted an operation which is not enabled.</p>
     DisabledOperation(String),
-    ///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
+    /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The request was rejected because it specified an invalid type definition.</p>
+    /// <p>The request was rejected because it specified an invalid type definition.</p>
     InvalidType(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6600,9 +6600,9 @@ impl Error for DescribeAvailabilityOptionsError {
 /// Errors returned by DescribeDomains
 #[derive(Debug, PartialEq)]
 pub enum DescribeDomainsError {
-    ///<p>An error occurred while processing the request.</p>
+    /// <p>An error occurred while processing the request.</p>
     Base(String),
-    ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
+    /// <p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
     Internal(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6673,11 +6673,11 @@ impl Error for DescribeDomainsError {
 /// Errors returned by DescribeExpressions
 #[derive(Debug, PartialEq)]
 pub enum DescribeExpressionsError {
-    ///<p>An error occurred while processing the request.</p>
+    /// <p>An error occurred while processing the request.</p>
     Base(String),
-    ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
+    /// <p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
     Internal(String),
-    ///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
+    /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6756,11 +6756,11 @@ impl Error for DescribeExpressionsError {
 /// Errors returned by DescribeIndexFields
 #[derive(Debug, PartialEq)]
 pub enum DescribeIndexFieldsError {
-    ///<p>An error occurred while processing the request.</p>
+    /// <p>An error occurred while processing the request.</p>
     Base(String),
-    ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
+    /// <p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
     Internal(String),
-    ///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
+    /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6839,11 +6839,11 @@ impl Error for DescribeIndexFieldsError {
 /// Errors returned by DescribeScalingParameters
 #[derive(Debug, PartialEq)]
 pub enum DescribeScalingParametersError {
-    ///<p>An error occurred while processing the request.</p>
+    /// <p>An error occurred while processing the request.</p>
     Base(String),
-    ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
+    /// <p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
     Internal(String),
-    ///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
+    /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6922,11 +6922,11 @@ impl Error for DescribeScalingParametersError {
 /// Errors returned by DescribeServiceAccessPolicies
 #[derive(Debug, PartialEq)]
 pub enum DescribeServiceAccessPoliciesError {
-    ///<p>An error occurred while processing the request.</p>
+    /// <p>An error occurred while processing the request.</p>
     Base(String),
-    ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
+    /// <p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
     Internal(String),
-    ///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
+    /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7007,11 +7007,11 @@ impl Error for DescribeServiceAccessPoliciesError {
 /// Errors returned by DescribeSuggesters
 #[derive(Debug, PartialEq)]
 pub enum DescribeSuggestersError {
-    ///<p>An error occurred while processing the request.</p>
+    /// <p>An error occurred while processing the request.</p>
     Base(String),
-    ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
+    /// <p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
     Internal(String),
-    ///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
+    /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7090,11 +7090,11 @@ impl Error for DescribeSuggestersError {
 /// Errors returned by IndexDocuments
 #[derive(Debug, PartialEq)]
 pub enum IndexDocumentsError {
-    ///<p>An error occurred while processing the request.</p>
+    /// <p>An error occurred while processing the request.</p>
     Base(String),
-    ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
+    /// <p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
     Internal(String),
-    ///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
+    /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7169,7 +7169,7 @@ impl Error for IndexDocumentsError {
 /// Errors returned by ListDomainNames
 #[derive(Debug, PartialEq)]
 pub enum ListDomainNamesError {
-    ///<p>An error occurred while processing the request.</p>
+    /// <p>An error occurred while processing the request.</p>
     Base(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7236,17 +7236,17 @@ impl Error for ListDomainNamesError {
 /// Errors returned by UpdateAvailabilityOptions
 #[derive(Debug, PartialEq)]
 pub enum UpdateAvailabilityOptionsError {
-    ///<p>An error occurred while processing the request.</p>
+    /// <p>An error occurred while processing the request.</p>
     Base(String),
-    ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
+    /// <p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
     Internal(String),
-    ///<p>The request was rejected because a resource limit has already been met.</p>
+    /// <p>The request was rejected because a resource limit has already been met.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it attempted an operation which is not enabled.</p>
+    /// <p>The request was rejected because it attempted an operation which is not enabled.</p>
     DisabledOperation(String),
-    ///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
+    /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The request was rejected because it specified an invalid type definition.</p>
+    /// <p>The request was rejected because it specified an invalid type definition.</p>
     InvalidType(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7337,15 +7337,15 @@ impl Error for UpdateAvailabilityOptionsError {
 /// Errors returned by UpdateScalingParameters
 #[derive(Debug, PartialEq)]
 pub enum UpdateScalingParametersError {
-    ///<p>An error occurred while processing the request.</p>
+    /// <p>An error occurred while processing the request.</p>
     Base(String),
-    ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
+    /// <p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
     Internal(String),
-    ///<p>The request was rejected because a resource limit has already been met.</p>
+    /// <p>The request was rejected because a resource limit has already been met.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
+    /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The request was rejected because it specified an invalid type definition.</p>
+    /// <p>The request was rejected because it specified an invalid type definition.</p>
     InvalidType(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7432,15 +7432,15 @@ impl Error for UpdateScalingParametersError {
 /// Errors returned by UpdateServiceAccessPolicies
 #[derive(Debug, PartialEq)]
 pub enum UpdateServiceAccessPoliciesError {
-    ///<p>An error occurred while processing the request.</p>
+    /// <p>An error occurred while processing the request.</p>
     Base(String),
-    ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
+    /// <p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
     Internal(String),
-    ///<p>The request was rejected because a resource limit has already been met.</p>
+    /// <p>The request was rejected because a resource limit has already been met.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
+    /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The request was rejected because it specified an invalid type definition.</p>
+    /// <p>The request was rejected because it specified an invalid type definition.</p>
     InvalidType(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7526,142 +7526,142 @@ impl Error for UpdateServiceAccessPoliciesError {
 }
 /// Trait representing the capabilities of the Amazon CloudSearch API. Amazon CloudSearch clients implement this trait.
 pub trait CloudSearch {
-    #[doc="<p>Indexes the search suggestions. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html#configuring-suggesters\">Configuring Suggesters</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Indexes the search suggestions. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html#configuring-suggesters">Configuring Suggesters</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn build_suggesters(
         &self,
         input: &BuildSuggestersRequest,
     ) -> Result<BuildSuggestersResponse, BuildSuggestersError>;
 
-    #[doc="<p>Creates a new search domain. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/creating-domains.html\" target=\"_blank\">Creating a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Creates a new search domain. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/creating-domains.html" target="_blank">Creating a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn create_domain(
         &self,
         input: &CreateDomainRequest,
     ) -> Result<CreateDomainResponse, CreateDomainError>;
 
-    #[doc="<p>Configures an analysis scheme that can be applied to a <code>text</code> or <code>text-array</code> field to define language-specific text processing options. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html\" target=\"_blank\">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Configures an analysis scheme that can be applied to a <code>text</code> or <code>text-array</code> field to define language-specific text processing options. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html" target="_blank">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn define_analysis_scheme(
         &self,
         input: &DefineAnalysisSchemeRequest,
     ) -> Result<DefineAnalysisSchemeResponse, DefineAnalysisSchemeError>;
 
-    #[doc="<p>Configures an <code><a>Expression</a></code> for the search domain. Used to create new expressions and modify existing ones. If the expression exists, the new configuration replaces the old one. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html\" target=\"_blank\">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Configures an <code><a>Expression</a></code> for the search domain. Used to create new expressions and modify existing ones. If the expression exists, the new configuration replaces the old one. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html" target="_blank">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn define_expression(
         &self,
         input: &DefineExpressionRequest,
     ) -> Result<DefineExpressionResponse, DefineExpressionError>;
 
-    #[doc="<p>Configures an <code><a>IndexField</a></code> for the search domain. Used to create new fields and modify existing ones. You must specify the name of the domain you are configuring and an index field configuration. The index field configuration specifies a unique name, the index field type, and the options you want to configure for the field. The options you can specify depend on the <code><a>IndexFieldType</a></code>. If the field exists, the new configuration replaces the old one. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-index-fields.html\" target=\"_blank\">Configuring Index Fields</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>"]
+    /// <p>Configures an <code><a>IndexField</a></code> for the search domain. Used to create new fields and modify existing ones. You must specify the name of the domain you are configuring and an index field configuration. The index field configuration specifies a unique name, the index field type, and the options you want to configure for the field. The options you can specify depend on the <code><a>IndexFieldType</a></code>. If the field exists, the new configuration replaces the old one. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-index-fields.html" target="_blank">Configuring Index Fields</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>
     fn define_index_field(
         &self,
         input: &DefineIndexFieldRequest,
     ) -> Result<DefineIndexFieldResponse, DefineIndexFieldError>;
 
-    #[doc="<p>Configures a suggester for a domain. A suggester enables you to display possible matches before users finish typing their queries. When you configure a suggester, you must specify the name of the text field you want to search for possible matches and a unique name for the suggester. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html\" target=\"_blank\">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Configures a suggester for a domain. A suggester enables you to display possible matches before users finish typing their queries. When you configure a suggester, you must specify the name of the text field you want to search for possible matches and a unique name for the suggester. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html" target="_blank">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn define_suggester(
         &self,
         input: &DefineSuggesterRequest,
     ) -> Result<DefineSuggesterResponse, DefineSuggesterError>;
 
-    #[doc="<p>Deletes an analysis scheme. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html\" target=\"_blank\">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>"]
+    /// <p>Deletes an analysis scheme. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html" target="_blank">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>
     fn delete_analysis_scheme(
         &self,
         input: &DeleteAnalysisSchemeRequest,
     ) -> Result<DeleteAnalysisSchemeResponse, DeleteAnalysisSchemeError>;
 
-    #[doc="<p>Permanently deletes a search domain and all of its data. Once a domain has been deleted, it cannot be recovered. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/deleting-domains.html\" target=\"_blank\">Deleting a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>"]
+    /// <p>Permanently deletes a search domain and all of its data. Once a domain has been deleted, it cannot be recovered. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/deleting-domains.html" target="_blank">Deleting a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>
     fn delete_domain(
         &self,
         input: &DeleteDomainRequest,
     ) -> Result<DeleteDomainResponse, DeleteDomainError>;
 
-    #[doc="<p>Removes an <code><a>Expression</a></code> from the search domain. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html\" target=\"_blank\">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Removes an <code><a>Expression</a></code> from the search domain. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html" target="_blank">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn delete_expression(
         &self,
         input: &DeleteExpressionRequest,
     ) -> Result<DeleteExpressionResponse, DeleteExpressionError>;
 
-    #[doc="<p>Removes an <code><a>IndexField</a></code> from the search domain. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-index-fields.html\" target=\"_blank\">Configuring Index Fields</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Removes an <code><a>IndexField</a></code> from the search domain. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-index-fields.html" target="_blank">Configuring Index Fields</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn delete_index_field(
         &self,
         input: &DeleteIndexFieldRequest,
     ) -> Result<DeleteIndexFieldResponse, DeleteIndexFieldError>;
 
-    #[doc="<p>Deletes a suggester. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html\" target=\"_blank\">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Deletes a suggester. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html" target="_blank">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn delete_suggester(
         &self,
         input: &DeleteSuggesterRequest,
     ) -> Result<DeleteSuggesterResponse, DeleteSuggesterError>;
 
-    #[doc="<p>Gets the analysis schemes configured for a domain. An analysis scheme defines language-specific text processing options for a <code>text</code> field. Can be limited to specific analysis schemes by name. By default, shows all analysis schemes and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html\" target=\"_blank\">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Gets the analysis schemes configured for a domain. An analysis scheme defines language-specific text processing options for a <code>text</code> field. Can be limited to specific analysis schemes by name. By default, shows all analysis schemes and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html" target="_blank">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn describe_analysis_schemes(
         &self,
         input: &DescribeAnalysisSchemesRequest,
     ) -> Result<DescribeAnalysisSchemesResponse, DescribeAnalysisSchemesError>;
 
-    #[doc="<p>Gets the availability options configured for a domain. By default, shows the configuration with any pending changes. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-availability-options.html\" target=\"_blank\">Configuring Availability Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Gets the availability options configured for a domain. By default, shows the configuration with any pending changes. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-availability-options.html" target="_blank">Configuring Availability Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn describe_availability_options(
         &self,
         input: &DescribeAvailabilityOptionsRequest,
     ) -> Result<DescribeAvailabilityOptionsResponse, DescribeAvailabilityOptionsError>;
 
-    #[doc="<p>Gets information about the search domains owned by this account. Can be limited to specific domains. Shows all domains by default. To get the number of searchable documents in a domain, use the console or submit a <code>matchall</code> request to your domain's search endpoint: <code>q=matchall&amp;amp;q.parser=structured&amp;amp;size=0</code>. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-domain-info.html\" target=\"_blank\">Getting Information about a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Gets information about the search domains owned by this account. Can be limited to specific domains. Shows all domains by default. To get the number of searchable documents in a domain, use the console or submit a <code>matchall</code> request to your domain's search endpoint: <code>q=matchall&amp;amp;q.parser=structured&amp;amp;size=0</code>. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-domain-info.html" target="_blank">Getting Information about a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn describe_domains(
         &self,
         input: &DescribeDomainsRequest,
     ) -> Result<DescribeDomainsResponse, DescribeDomainsError>;
 
-    #[doc="<p>Gets the expressions configured for the search domain. Can be limited to specific expressions by name. By default, shows all expressions and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html\" target=\"_blank\">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Gets the expressions configured for the search domain. Can be limited to specific expressions by name. By default, shows all expressions and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html" target="_blank">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn describe_expressions(
         &self,
         input: &DescribeExpressionsRequest,
     ) -> Result<DescribeExpressionsResponse, DescribeExpressionsError>;
 
-    #[doc="<p>Gets information about the index fields configured for the search domain. Can be limited to specific fields by name. By default, shows all fields and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-domain-info.html\" target=\"_blank\">Getting Domain Information</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Gets information about the index fields configured for the search domain. Can be limited to specific fields by name. By default, shows all fields and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-domain-info.html" target="_blank">Getting Domain Information</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn describe_index_fields(
         &self,
         input: &DescribeIndexFieldsRequest,
     ) -> Result<DescribeIndexFieldsResponse, DescribeIndexFieldsError>;
 
-    #[doc="<p>Gets the scaling parameters configured for a domain. A domain's scaling parameters specify the desired search instance type and replication count. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-scaling-options.html\" target=\"_blank\">Configuring Scaling Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Gets the scaling parameters configured for a domain. A domain's scaling parameters specify the desired search instance type and replication count. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-scaling-options.html" target="_blank">Configuring Scaling Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn describe_scaling_parameters(
         &self,
         input: &DescribeScalingParametersRequest,
     ) -> Result<DescribeScalingParametersResponse, DescribeScalingParametersError>;
 
-    #[doc="<p>Gets information about the access policies that control access to the domain's document and search endpoints. By default, shows the configuration with any pending changes. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-access.html\" target=\"_blank\">Configuring Access for a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Gets information about the access policies that control access to the domain's document and search endpoints. By default, shows the configuration with any pending changes. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-access.html" target="_blank">Configuring Access for a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn describe_service_access_policies(
         &self,
         input: &DescribeServiceAccessPoliciesRequest,
     ) -> Result<DescribeServiceAccessPoliciesResponse, DescribeServiceAccessPoliciesError>;
 
-    #[doc="<p>Gets the suggesters configured for a domain. A suggester enables you to display possible matches before users finish typing their queries. Can be limited to specific suggesters by name. By default, shows all suggesters and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html\" target=\"_blank\">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Gets the suggesters configured for a domain. A suggester enables you to display possible matches before users finish typing their queries. Can be limited to specific suggesters by name. By default, shows all suggesters and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html" target="_blank">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn describe_suggesters(
         &self,
         input: &DescribeSuggestersRequest,
     ) -> Result<DescribeSuggestersResponse, DescribeSuggestersError>;
 
-    #[doc="<p>Tells the search domain to start indexing its documents using the latest indexing options. This operation must be invoked to activate options whose <a>OptionStatus</a> is <code>RequiresIndexDocuments</code>.</p>"]
+    /// <p>Tells the search domain to start indexing its documents using the latest indexing options. This operation must be invoked to activate options whose <a>OptionStatus</a> is <code>RequiresIndexDocuments</code>.</p>
     fn index_documents(
         &self,
         input: &IndexDocumentsRequest,
     ) -> Result<IndexDocumentsResponse, IndexDocumentsError>;
 
-    #[doc = "<p>Lists all search domains owned by an account.</p>"]
+    /// <p>Lists all search domains owned by an account.</p>
     fn list_domain_names(&self) -> Result<ListDomainNamesResponse, ListDomainNamesError>;
 
-    #[doc="<p>Configures the availability options for a domain. Enabling the Multi-AZ option expands an Amazon CloudSearch domain to an additional Availability Zone in the same Region to increase fault tolerance in the event of a service disruption. Changes to the Multi-AZ option can take about half an hour to become active. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-availability-options.html\" target=\"_blank\">Configuring Availability Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Configures the availability options for a domain. Enabling the Multi-AZ option expands an Amazon CloudSearch domain to an additional Availability Zone in the same Region to increase fault tolerance in the event of a service disruption. Changes to the Multi-AZ option can take about half an hour to become active. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-availability-options.html" target="_blank">Configuring Availability Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn update_availability_options(
         &self,
         input: &UpdateAvailabilityOptionsRequest,
     ) -> Result<UpdateAvailabilityOptionsResponse, UpdateAvailabilityOptionsError>;
 
-    #[doc="<p>Configures scaling parameters for a domain. A domain's scaling parameters specify the desired search instance type and replication count. Amazon CloudSearch will still automatically scale your domain based on the volume of data and traffic, but not below the desired instance type and replication count. If the Multi-AZ option is enabled, these values control the resources used per Availability Zone. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-scaling-options.html\" target=\"_blank\">Configuring Scaling Options</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>"]
+    /// <p>Configures scaling parameters for a domain. A domain's scaling parameters specify the desired search instance type and replication count. Amazon CloudSearch will still automatically scale your domain based on the volume of data and traffic, but not below the desired instance type and replication count. If the Multi-AZ option is enabled, these values control the resources used per Availability Zone. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-scaling-options.html" target="_blank">Configuring Scaling Options</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>
     fn update_scaling_parameters(
         &self,
         input: &UpdateScalingParametersRequest,
     ) -> Result<UpdateScalingParametersResponse, UpdateScalingParametersError>;
 
-    #[doc="<p>Configures the access rules that control access to the domain's document and search endpoints. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-access.html\" target=\"_blank\"> Configuring Access for an Amazon CloudSearch Domain</a>.</p>"]
+    /// <p>Configures the access rules that control access to the domain's document and search endpoints. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-access.html" target="_blank"> Configuring Access for an Amazon CloudSearch Domain</a>.</p>
     fn update_service_access_policies(
         &self,
         input: &UpdateServiceAccessPoliciesRequest,
@@ -7697,7 +7697,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Indexes the search suggestions. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html#configuring-suggesters\">Configuring Suggesters</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Indexes the search suggestions. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html#configuring-suggesters">Configuring Suggesters</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn build_suggesters(
         &self,
         input: &BuildSuggestersRequest,
@@ -7748,7 +7748,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new search domain. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/creating-domains.html\" target=\"_blank\">Creating a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Creates a new search domain. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/creating-domains.html" target="_blank">Creating a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn create_domain(
         &self,
         input: &CreateDomainRequest,
@@ -7799,7 +7799,7 @@ where
         }
     }
 
-    #[doc="<p>Configures an analysis scheme that can be applied to a <code>text</code> or <code>text-array</code> field to define language-specific text processing options. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html\" target=\"_blank\">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Configures an analysis scheme that can be applied to a <code>text</code> or <code>text-array</code> field to define language-specific text processing options. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html" target="_blank">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn define_analysis_scheme(
         &self,
         input: &DefineAnalysisSchemeRequest,
@@ -7850,7 +7850,7 @@ where
         }
     }
 
-    #[doc="<p>Configures an <code><a>Expression</a></code> for the search domain. Used to create new expressions and modify existing ones. If the expression exists, the new configuration replaces the old one. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html\" target=\"_blank\">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Configures an <code><a>Expression</a></code> for the search domain. Used to create new expressions and modify existing ones. If the expression exists, the new configuration replaces the old one. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html" target="_blank">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn define_expression(
         &self,
         input: &DefineExpressionRequest,
@@ -7901,7 +7901,7 @@ where
         }
     }
 
-    #[doc="<p>Configures an <code><a>IndexField</a></code> for the search domain. Used to create new fields and modify existing ones. You must specify the name of the domain you are configuring and an index field configuration. The index field configuration specifies a unique name, the index field type, and the options you want to configure for the field. The options you can specify depend on the <code><a>IndexFieldType</a></code>. If the field exists, the new configuration replaces the old one. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-index-fields.html\" target=\"_blank\">Configuring Index Fields</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>"]
+    /// <p>Configures an <code><a>IndexField</a></code> for the search domain. Used to create new fields and modify existing ones. You must specify the name of the domain you are configuring and an index field configuration. The index field configuration specifies a unique name, the index field type, and the options you want to configure for the field. The options you can specify depend on the <code><a>IndexFieldType</a></code>. If the field exists, the new configuration replaces the old one. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-index-fields.html" target="_blank">Configuring Index Fields</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>
     fn define_index_field(
         &self,
         input: &DefineIndexFieldRequest,
@@ -7952,7 +7952,7 @@ where
         }
     }
 
-    #[doc="<p>Configures a suggester for a domain. A suggester enables you to display possible matches before users finish typing their queries. When you configure a suggester, you must specify the name of the text field you want to search for possible matches and a unique name for the suggester. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html\" target=\"_blank\">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Configures a suggester for a domain. A suggester enables you to display possible matches before users finish typing their queries. When you configure a suggester, you must specify the name of the text field you want to search for possible matches and a unique name for the suggester. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html" target="_blank">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn define_suggester(
         &self,
         input: &DefineSuggesterRequest,
@@ -8003,7 +8003,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes an analysis scheme. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html\" target=\"_blank\">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>"]
+    /// <p>Deletes an analysis scheme. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html" target="_blank">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>
     fn delete_analysis_scheme(
         &self,
         input: &DeleteAnalysisSchemeRequest,
@@ -8054,7 +8054,7 @@ where
         }
     }
 
-    #[doc="<p>Permanently deletes a search domain and all of its data. Once a domain has been deleted, it cannot be recovered. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/deleting-domains.html\" target=\"_blank\">Deleting a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>"]
+    /// <p>Permanently deletes a search domain and all of its data. Once a domain has been deleted, it cannot be recovered. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/deleting-domains.html" target="_blank">Deleting a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>
     fn delete_domain(
         &self,
         input: &DeleteDomainRequest,
@@ -8105,7 +8105,7 @@ where
         }
     }
 
-    #[doc="<p>Removes an <code><a>Expression</a></code> from the search domain. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html\" target=\"_blank\">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Removes an <code><a>Expression</a></code> from the search domain. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html" target="_blank">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn delete_expression(
         &self,
         input: &DeleteExpressionRequest,
@@ -8156,7 +8156,7 @@ where
         }
     }
 
-    #[doc="<p>Removes an <code><a>IndexField</a></code> from the search domain. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-index-fields.html\" target=\"_blank\">Configuring Index Fields</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Removes an <code><a>IndexField</a></code> from the search domain. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-index-fields.html" target="_blank">Configuring Index Fields</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn delete_index_field(
         &self,
         input: &DeleteIndexFieldRequest,
@@ -8207,7 +8207,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a suggester. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html\" target=\"_blank\">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Deletes a suggester. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html" target="_blank">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn delete_suggester(
         &self,
         input: &DeleteSuggesterRequest,
@@ -8258,7 +8258,7 @@ where
         }
     }
 
-    #[doc="<p>Gets the analysis schemes configured for a domain. An analysis scheme defines language-specific text processing options for a <code>text</code> field. Can be limited to specific analysis schemes by name. By default, shows all analysis schemes and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html\" target=\"_blank\">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Gets the analysis schemes configured for a domain. An analysis scheme defines language-specific text processing options for a <code>text</code> field. Can be limited to specific analysis schemes by name. By default, shows all analysis schemes and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html" target="_blank">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn describe_analysis_schemes(
         &self,
         input: &DescribeAnalysisSchemesRequest,
@@ -8309,7 +8309,7 @@ where
         }
     }
 
-    #[doc="<p>Gets the availability options configured for a domain. By default, shows the configuration with any pending changes. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-availability-options.html\" target=\"_blank\">Configuring Availability Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Gets the availability options configured for a domain. By default, shows the configuration with any pending changes. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-availability-options.html" target="_blank">Configuring Availability Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn describe_availability_options(
         &self,
         input: &DescribeAvailabilityOptionsRequest,
@@ -8362,7 +8362,7 @@ where
         }
     }
 
-    #[doc="<p>Gets information about the search domains owned by this account. Can be limited to specific domains. Shows all domains by default. To get the number of searchable documents in a domain, use the console or submit a <code>matchall</code> request to your domain's search endpoint: <code>q=matchall&amp;amp;q.parser=structured&amp;amp;size=0</code>. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-domain-info.html\" target=\"_blank\">Getting Information about a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Gets information about the search domains owned by this account. Can be limited to specific domains. Shows all domains by default. To get the number of searchable documents in a domain, use the console or submit a <code>matchall</code> request to your domain's search endpoint: <code>q=matchall&amp;amp;q.parser=structured&amp;amp;size=0</code>. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-domain-info.html" target="_blank">Getting Information about a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn describe_domains(
         &self,
         input: &DescribeDomainsRequest,
@@ -8413,7 +8413,7 @@ where
         }
     }
 
-    #[doc="<p>Gets the expressions configured for the search domain. Can be limited to specific expressions by name. By default, shows all expressions and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html\" target=\"_blank\">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Gets the expressions configured for the search domain. Can be limited to specific expressions by name. By default, shows all expressions and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html" target="_blank">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn describe_expressions(
         &self,
         input: &DescribeExpressionsRequest,
@@ -8464,7 +8464,7 @@ where
         }
     }
 
-    #[doc="<p>Gets information about the index fields configured for the search domain. Can be limited to specific fields by name. By default, shows all fields and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-domain-info.html\" target=\"_blank\">Getting Domain Information</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Gets information about the index fields configured for the search domain. Can be limited to specific fields by name. By default, shows all fields and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-domain-info.html" target="_blank">Getting Domain Information</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn describe_index_fields(
         &self,
         input: &DescribeIndexFieldsRequest,
@@ -8515,7 +8515,7 @@ where
         }
     }
 
-    #[doc="<p>Gets the scaling parameters configured for a domain. A domain's scaling parameters specify the desired search instance type and replication count. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-scaling-options.html\" target=\"_blank\">Configuring Scaling Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Gets the scaling parameters configured for a domain. A domain's scaling parameters specify the desired search instance type and replication count. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-scaling-options.html" target="_blank">Configuring Scaling Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn describe_scaling_parameters(
         &self,
         input: &DescribeScalingParametersRequest,
@@ -8566,7 +8566,7 @@ where
         }
     }
 
-    #[doc="<p>Gets information about the access policies that control access to the domain's document and search endpoints. By default, shows the configuration with any pending changes. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-access.html\" target=\"_blank\">Configuring Access for a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Gets information about the access policies that control access to the domain's document and search endpoints. By default, shows the configuration with any pending changes. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-access.html" target="_blank">Configuring Access for a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn describe_service_access_policies(
         &self,
         input: &DescribeServiceAccessPoliciesRequest,
@@ -8619,7 +8619,7 @@ where
         }
     }
 
-    #[doc="<p>Gets the suggesters configured for a domain. A suggester enables you to display possible matches before users finish typing their queries. Can be limited to specific suggesters by name. By default, shows all suggesters and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html\" target=\"_blank\">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Gets the suggesters configured for a domain. A suggester enables you to display possible matches before users finish typing their queries. Can be limited to specific suggesters by name. By default, shows all suggesters and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html" target="_blank">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn describe_suggesters(
         &self,
         input: &DescribeSuggestersRequest,
@@ -8670,7 +8670,7 @@ where
         }
     }
 
-    #[doc="<p>Tells the search domain to start indexing its documents using the latest indexing options. This operation must be invoked to activate options whose <a>OptionStatus</a> is <code>RequiresIndexDocuments</code>.</p>"]
+    /// <p>Tells the search domain to start indexing its documents using the latest indexing options. This operation must be invoked to activate options whose <a>OptionStatus</a> is <code>RequiresIndexDocuments</code>.</p>
     fn index_documents(
         &self,
         input: &IndexDocumentsRequest,
@@ -8721,7 +8721,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists all search domains owned by an account.</p>"]
+    /// <p>Lists all search domains owned by an account.</p>
     fn list_domain_names(&self) -> Result<ListDomainNamesResponse, ListDomainNamesError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
@@ -8769,7 +8769,7 @@ where
         }
     }
 
-    #[doc="<p>Configures the availability options for a domain. Enabling the Multi-AZ option expands an Amazon CloudSearch domain to an additional Availability Zone in the same Region to increase fault tolerance in the event of a service disruption. Changes to the Multi-AZ option can take about half an hour to become active. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-availability-options.html\" target=\"_blank\">Configuring Availability Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>Configures the availability options for a domain. Enabling the Multi-AZ option expands an Amazon CloudSearch domain to an additional Availability Zone in the same Region to increase fault tolerance in the event of a service disruption. Changes to the Multi-AZ option can take about half an hour to become active. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-availability-options.html" target="_blank">Configuring Availability Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn update_availability_options(
         &self,
         input: &UpdateAvailabilityOptionsRequest,
@@ -8820,7 +8820,7 @@ where
         }
     }
 
-    #[doc="<p>Configures scaling parameters for a domain. A domain's scaling parameters specify the desired search instance type and replication count. Amazon CloudSearch will still automatically scale your domain based on the volume of data and traffic, but not below the desired instance type and replication count. If the Multi-AZ option is enabled, these values control the resources used per Availability Zone. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-scaling-options.html\" target=\"_blank\">Configuring Scaling Options</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>"]
+    /// <p>Configures scaling parameters for a domain. A domain's scaling parameters specify the desired search instance type and replication count. Amazon CloudSearch will still automatically scale your domain based on the volume of data and traffic, but not below the desired instance type and replication count. If the Multi-AZ option is enabled, these values control the resources used per Availability Zone. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-scaling-options.html" target="_blank">Configuring Scaling Options</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>
     fn update_scaling_parameters(
         &self,
         input: &UpdateScalingParametersRequest,
@@ -8871,7 +8871,7 @@ where
         }
     }
 
-    #[doc="<p>Configures the access rules that control access to the domain's document and search endpoints. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-access.html\" target=\"_blank\"> Configuring Access for an Amazon CloudSearch Domain</a>.</p>"]
+    /// <p>Configures the access rules that control access to the domain's document and search endpoints. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-access.html" target="_blank"> Configuring Access for an Amazon CloudSearch Domain</a>.</p>
     fn update_service_access_policies(
         &self,
         input: &UpdateServiceAccessPoliciesRequest,

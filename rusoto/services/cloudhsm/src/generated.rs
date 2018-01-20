@@ -574,11 +574,11 @@ pub struct Tag {
 /// Errors returned by AddTagsToResource
 #[derive(Debug, PartialEq)]
 pub enum AddTagsToResourceError {
-    ///<p>Indicates that an internal error occurred.</p>
+    /// <p>Indicates that an internal error occurred.</p>
     CloudHsmInternal(String),
-    ///<p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
+    /// <p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
     CloudHsmService(String),
-    ///<p>Indicates that one or more of the request parameters are not valid.</p>
+    /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -666,11 +666,11 @@ impl Error for AddTagsToResourceError {
 /// Errors returned by CreateHapg
 #[derive(Debug, PartialEq)]
 pub enum CreateHapgError {
-    ///<p>Indicates that an internal error occurred.</p>
+    /// <p>Indicates that an internal error occurred.</p>
     CloudHsmInternal(String),
-    ///<p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
+    /// <p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
     CloudHsmService(String),
-    ///<p>Indicates that one or more of the request parameters are not valid.</p>
+    /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -754,11 +754,11 @@ impl Error for CreateHapgError {
 /// Errors returned by CreateHsm
 #[derive(Debug, PartialEq)]
 pub enum CreateHsmError {
-    ///<p>Indicates that an internal error occurred.</p>
+    /// <p>Indicates that an internal error occurred.</p>
     CloudHsmInternal(String),
-    ///<p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
+    /// <p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
     CloudHsmService(String),
-    ///<p>Indicates that one or more of the request parameters are not valid.</p>
+    /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -842,11 +842,11 @@ impl Error for CreateHsmError {
 /// Errors returned by CreateLunaClient
 #[derive(Debug, PartialEq)]
 pub enum CreateLunaClientError {
-    ///<p>Indicates that an internal error occurred.</p>
+    /// <p>Indicates that an internal error occurred.</p>
     CloudHsmInternal(String),
-    ///<p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
+    /// <p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
     CloudHsmService(String),
-    ///<p>Indicates that one or more of the request parameters are not valid.</p>
+    /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -932,11 +932,11 @@ impl Error for CreateLunaClientError {
 /// Errors returned by DeleteHapg
 #[derive(Debug, PartialEq)]
 pub enum DeleteHapgError {
-    ///<p>Indicates that an internal error occurred.</p>
+    /// <p>Indicates that an internal error occurred.</p>
     CloudHsmInternal(String),
-    ///<p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
+    /// <p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
     CloudHsmService(String),
-    ///<p>Indicates that one or more of the request parameters are not valid.</p>
+    /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1020,11 +1020,11 @@ impl Error for DeleteHapgError {
 /// Errors returned by DeleteHsm
 #[derive(Debug, PartialEq)]
 pub enum DeleteHsmError {
-    ///<p>Indicates that an internal error occurred.</p>
+    /// <p>Indicates that an internal error occurred.</p>
     CloudHsmInternal(String),
-    ///<p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
+    /// <p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
     CloudHsmService(String),
-    ///<p>Indicates that one or more of the request parameters are not valid.</p>
+    /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1108,11 +1108,11 @@ impl Error for DeleteHsmError {
 /// Errors returned by DeleteLunaClient
 #[derive(Debug, PartialEq)]
 pub enum DeleteLunaClientError {
-    ///<p>Indicates that an internal error occurred.</p>
+    /// <p>Indicates that an internal error occurred.</p>
     CloudHsmInternal(String),
-    ///<p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
+    /// <p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
     CloudHsmService(String),
-    ///<p>Indicates that one or more of the request parameters are not valid.</p>
+    /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1198,11 +1198,11 @@ impl Error for DeleteLunaClientError {
 /// Errors returned by DescribeHapg
 #[derive(Debug, PartialEq)]
 pub enum DescribeHapgError {
-    ///<p>Indicates that an internal error occurred.</p>
+    /// <p>Indicates that an internal error occurred.</p>
     CloudHsmInternal(String),
-    ///<p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
+    /// <p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
     CloudHsmService(String),
-    ///<p>Indicates that one or more of the request parameters are not valid.</p>
+    /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1288,11 +1288,11 @@ impl Error for DescribeHapgError {
 /// Errors returned by DescribeHsm
 #[derive(Debug, PartialEq)]
 pub enum DescribeHsmError {
-    ///<p>Indicates that an internal error occurred.</p>
+    /// <p>Indicates that an internal error occurred.</p>
     CloudHsmInternal(String),
-    ///<p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
+    /// <p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
     CloudHsmService(String),
-    ///<p>Indicates that one or more of the request parameters are not valid.</p>
+    /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1378,11 +1378,11 @@ impl Error for DescribeHsmError {
 /// Errors returned by DescribeLunaClient
 #[derive(Debug, PartialEq)]
 pub enum DescribeLunaClientError {
-    ///<p>Indicates that an internal error occurred.</p>
+    /// <p>Indicates that an internal error occurred.</p>
     CloudHsmInternal(String),
-    ///<p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
+    /// <p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
     CloudHsmService(String),
-    ///<p>Indicates that one or more of the request parameters are not valid.</p>
+    /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1470,11 +1470,11 @@ impl Error for DescribeLunaClientError {
 /// Errors returned by GetConfig
 #[derive(Debug, PartialEq)]
 pub enum GetConfigError {
-    ///<p>Indicates that an internal error occurred.</p>
+    /// <p>Indicates that an internal error occurred.</p>
     CloudHsmInternal(String),
-    ///<p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
+    /// <p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
     CloudHsmService(String),
-    ///<p>Indicates that one or more of the request parameters are not valid.</p>
+    /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1558,11 +1558,11 @@ impl Error for GetConfigError {
 /// Errors returned by ListAvailableZones
 #[derive(Debug, PartialEq)]
 pub enum ListAvailableZonesError {
-    ///<p>Indicates that an internal error occurred.</p>
+    /// <p>Indicates that an internal error occurred.</p>
     CloudHsmInternal(String),
-    ///<p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
+    /// <p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
     CloudHsmService(String),
-    ///<p>Indicates that one or more of the request parameters are not valid.</p>
+    /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1650,11 +1650,11 @@ impl Error for ListAvailableZonesError {
 /// Errors returned by ListHapgs
 #[derive(Debug, PartialEq)]
 pub enum ListHapgsError {
-    ///<p>Indicates that an internal error occurred.</p>
+    /// <p>Indicates that an internal error occurred.</p>
     CloudHsmInternal(String),
-    ///<p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
+    /// <p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
     CloudHsmService(String),
-    ///<p>Indicates that one or more of the request parameters are not valid.</p>
+    /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1738,11 +1738,11 @@ impl Error for ListHapgsError {
 /// Errors returned by ListHsms
 #[derive(Debug, PartialEq)]
 pub enum ListHsmsError {
-    ///<p>Indicates that an internal error occurred.</p>
+    /// <p>Indicates that an internal error occurred.</p>
     CloudHsmInternal(String),
-    ///<p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
+    /// <p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
     CloudHsmService(String),
-    ///<p>Indicates that one or more of the request parameters are not valid.</p>
+    /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1826,11 +1826,11 @@ impl Error for ListHsmsError {
 /// Errors returned by ListLunaClients
 #[derive(Debug, PartialEq)]
 pub enum ListLunaClientsError {
-    ///<p>Indicates that an internal error occurred.</p>
+    /// <p>Indicates that an internal error occurred.</p>
     CloudHsmInternal(String),
-    ///<p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
+    /// <p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
     CloudHsmService(String),
-    ///<p>Indicates that one or more of the request parameters are not valid.</p>
+    /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1916,11 +1916,11 @@ impl Error for ListLunaClientsError {
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
-    ///<p>Indicates that an internal error occurred.</p>
+    /// <p>Indicates that an internal error occurred.</p>
     CloudHsmInternal(String),
-    ///<p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
+    /// <p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
     CloudHsmService(String),
-    ///<p>Indicates that one or more of the request parameters are not valid.</p>
+    /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2008,11 +2008,11 @@ impl Error for ListTagsForResourceError {
 /// Errors returned by ModifyHapg
 #[derive(Debug, PartialEq)]
 pub enum ModifyHapgError {
-    ///<p>Indicates that an internal error occurred.</p>
+    /// <p>Indicates that an internal error occurred.</p>
     CloudHsmInternal(String),
-    ///<p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
+    /// <p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
     CloudHsmService(String),
-    ///<p>Indicates that one or more of the request parameters are not valid.</p>
+    /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2096,11 +2096,11 @@ impl Error for ModifyHapgError {
 /// Errors returned by ModifyHsm
 #[derive(Debug, PartialEq)]
 pub enum ModifyHsmError {
-    ///<p>Indicates that an internal error occurred.</p>
+    /// <p>Indicates that an internal error occurred.</p>
     CloudHsmInternal(String),
-    ///<p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
+    /// <p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
     CloudHsmService(String),
-    ///<p>Indicates that one or more of the request parameters are not valid.</p>
+    /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2184,7 +2184,7 @@ impl Error for ModifyHsmError {
 /// Errors returned by ModifyLunaClient
 #[derive(Debug, PartialEq)]
 pub enum ModifyLunaClientError {
-    ///<p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
+    /// <p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
     CloudHsmService(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2262,11 +2262,11 @@ impl Error for ModifyLunaClientError {
 /// Errors returned by RemoveTagsFromResource
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsFromResourceError {
-    ///<p>Indicates that an internal error occurred.</p>
+    /// <p>Indicates that an internal error occurred.</p>
     CloudHsmInternal(String),
-    ///<p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
+    /// <p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
     CloudHsmService(String),
-    ///<p>Indicates that one or more of the request parameters are not valid.</p>
+    /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2353,94 +2353,94 @@ impl Error for RemoveTagsFromResourceError {
 }
 /// Trait representing the capabilities of the CloudHSM API. CloudHSM clients implement this trait.
 pub trait CloudHsm {
-    #[doc="<p>Adds or overwrites one or more tags for the specified AWS CloudHSM resource.</p> <p>Each tag consists of a key and a value. Tag keys must be unique to each resource.</p>"]
+    /// <p>Adds or overwrites one or more tags for the specified AWS CloudHSM resource.</p> <p>Each tag consists of a key and a value. Tag keys must be unique to each resource.</p>
     fn add_tags_to_resource(
         &self,
         input: &AddTagsToResourceRequest,
     ) -> Result<AddTagsToResourceResponse, AddTagsToResourceError>;
 
-    #[doc="<p>Creates a high-availability partition group. A high-availability partition group is a group of partitions that spans multiple physical HSMs.</p>"]
+    /// <p>Creates a high-availability partition group. A high-availability partition group is a group of partitions that spans multiple physical HSMs.</p>
     fn create_hapg(&self, input: &CreateHapgRequest)
         -> Result<CreateHapgResponse, CreateHapgError>;
 
-    #[doc="<p>Creates an uninitialized HSM instance.</p> <p>There is an upfront fee charged for each HSM instance that you create with the <a>CreateHsm</a> operation. If you accidentally provision an HSM and want to request a refund, delete the instance using the <a>DeleteHsm</a> operation, go to the <a href=\"https://console.aws.amazon.com/support/home#/\">AWS Support Center</a>, create a new case, and select <b>Account and Billing Support</b>.</p> <important> <p>It can take up to 20 minutes to create and provision an HSM. You can monitor the status of the HSM with the <a>DescribeHsm</a> operation. The HSM is ready to be initialized when the status changes to <code>RUNNING</code>.</p> </important>"]
+    /// <p><p>Creates an uninitialized HSM instance.</p> <p>There is an upfront fee charged for each HSM instance that you create with the <a>CreateHsm</a> operation. If you accidentally provision an HSM and want to request a refund, delete the instance using the <a>DeleteHsm</a> operation, go to the <a href="https://console.aws.amazon.com/support/home#/">AWS Support Center</a>, create a new case, and select <b>Account and Billing Support</b>.</p> <important> <p>It can take up to 20 minutes to create and provision an HSM. You can monitor the status of the HSM with the <a>DescribeHsm</a> operation. The HSM is ready to be initialized when the status changes to <code>RUNNING</code>.</p> </important></p>
     fn create_hsm(&self, input: &CreateHsmRequest) -> Result<CreateHsmResponse, CreateHsmError>;
 
-    #[doc = "<p>Creates an HSM client.</p>"]
+    /// <p>Creates an HSM client.</p>
     fn create_luna_client(
         &self,
         input: &CreateLunaClientRequest,
     ) -> Result<CreateLunaClientResponse, CreateLunaClientError>;
 
-    #[doc = "<p>Deletes a high-availability partition group.</p>"]
+    /// <p>Deletes a high-availability partition group.</p>
     fn delete_hapg(&self, input: &DeleteHapgRequest)
         -> Result<DeleteHapgResponse, DeleteHapgError>;
 
-    #[doc="<p>Deletes an HSM. After completion, this operation cannot be undone and your key material cannot be recovered.</p>"]
+    /// <p>Deletes an HSM. After completion, this operation cannot be undone and your key material cannot be recovered.</p>
     fn delete_hsm(&self, input: &DeleteHsmRequest) -> Result<DeleteHsmResponse, DeleteHsmError>;
 
-    #[doc = "<p>Deletes a client.</p>"]
+    /// <p>Deletes a client.</p>
     fn delete_luna_client(
         &self,
         input: &DeleteLunaClientRequest,
     ) -> Result<DeleteLunaClientResponse, DeleteLunaClientError>;
 
-    #[doc = "<p>Retrieves information about a high-availability partition group.</p>"]
+    /// <p>Retrieves information about a high-availability partition group.</p>
     fn describe_hapg(
         &self,
         input: &DescribeHapgRequest,
     ) -> Result<DescribeHapgResponse, DescribeHapgError>;
 
-    #[doc="<p>Retrieves information about an HSM. You can identify the HSM by its ARN or its serial number.</p>"]
+    /// <p>Retrieves information about an HSM. You can identify the HSM by its ARN or its serial number.</p>
     fn describe_hsm(
         &self,
         input: &DescribeHsmRequest,
     ) -> Result<DescribeHsmResponse, DescribeHsmError>;
 
-    #[doc = "<p>Retrieves information about an HSM client.</p>"]
+    /// <p>Retrieves information about an HSM client.</p>
     fn describe_luna_client(
         &self,
         input: &DescribeLunaClientRequest,
     ) -> Result<DescribeLunaClientResponse, DescribeLunaClientError>;
 
-    #[doc="<p>Gets the configuration files necessary to connect to all high availability partition groups the client is associated with.</p>"]
+    /// <p>Gets the configuration files necessary to connect to all high availability partition groups the client is associated with.</p>
     fn get_config(&self, input: &GetConfigRequest) -> Result<GetConfigResponse, GetConfigError>;
 
-    #[doc = "<p>Lists the Availability Zones that have available AWS CloudHSM capacity.</p>"]
+    /// <p>Lists the Availability Zones that have available AWS CloudHSM capacity.</p>
     fn list_available_zones(&self) -> Result<ListAvailableZonesResponse, ListAvailableZonesError>;
 
-    #[doc="<p>Lists the high-availability partition groups for the account.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> member. If more results are available, the <i>NextToken</i> member of the response contains a token that you pass in the next call to <a>ListHapgs</a> to retrieve the next set of items.</p>"]
+    /// <p>Lists the high-availability partition groups for the account.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> member. If more results are available, the <i>NextToken</i> member of the response contains a token that you pass in the next call to <a>ListHapgs</a> to retrieve the next set of items.</p>
     fn list_hapgs(&self, input: &ListHapgsRequest) -> Result<ListHapgsResponse, ListHapgsError>;
 
-    #[doc="<p>Retrieves the identifiers of all of the HSMs provisioned for the current customer.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> member. If more results are available, the <i>NextToken</i> member of the response contains a token that you pass in the next call to <a>ListHsms</a> to retrieve the next set of items.</p>"]
+    /// <p>Retrieves the identifiers of all of the HSMs provisioned for the current customer.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> member. If more results are available, the <i>NextToken</i> member of the response contains a token that you pass in the next call to <a>ListHsms</a> to retrieve the next set of items.</p>
     fn list_hsms(&self, input: &ListHsmsRequest) -> Result<ListHsmsResponse, ListHsmsError>;
 
-    #[doc="<p>Lists all of the clients.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> member. If more results are available, the <i>NextToken</i> member of the response contains a token that you pass in the next call to <a>ListLunaClients</a> to retrieve the next set of items.</p>"]
+    /// <p>Lists all of the clients.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> member. If more results are available, the <i>NextToken</i> member of the response contains a token that you pass in the next call to <a>ListLunaClients</a> to retrieve the next set of items.</p>
     fn list_luna_clients(
         &self,
         input: &ListLunaClientsRequest,
     ) -> Result<ListLunaClientsResponse, ListLunaClientsError>;
 
-    #[doc = "<p>Returns a list of all tags for the specified AWS CloudHSM resource.</p>"]
+    /// <p>Returns a list of all tags for the specified AWS CloudHSM resource.</p>
     fn list_tags_for_resource(
         &self,
         input: &ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, ListTagsForResourceError>;
 
-    #[doc = "<p>Modifies an existing high-availability partition group.</p>"]
+    /// <p>Modifies an existing high-availability partition group.</p>
     fn modify_hapg(&self, input: &ModifyHapgRequest)
         -> Result<ModifyHapgResponse, ModifyHapgError>;
 
-    #[doc="<p>Modifies an HSM.</p> <important> <p>This operation can result in the HSM being offline for up to 15 minutes while the AWS CloudHSM service is reconfigured. If you are modifying a production HSM, you should ensure that your AWS CloudHSM service is configured for high availability, and consider executing this operation during a maintenance window.</p> </important>"]
+    /// <p><p>Modifies an HSM.</p> <important> <p>This operation can result in the HSM being offline for up to 15 minutes while the AWS CloudHSM service is reconfigured. If you are modifying a production HSM, you should ensure that your AWS CloudHSM service is configured for high availability, and consider executing this operation during a maintenance window.</p> </important></p>
     fn modify_hsm(&self, input: &ModifyHsmRequest) -> Result<ModifyHsmResponse, ModifyHsmError>;
 
-    #[doc="<p>Modifies the certificate used by the client.</p> <p>This action can potentially start a workflow to install the new certificate on the client's HSMs.</p>"]
+    /// <p>Modifies the certificate used by the client.</p> <p>This action can potentially start a workflow to install the new certificate on the client's HSMs.</p>
     fn modify_luna_client(
         &self,
         input: &ModifyLunaClientRequest,
     ) -> Result<ModifyLunaClientResponse, ModifyLunaClientError>;
 
-    #[doc="<p>Removes one or more tags from the specified AWS CloudHSM resource.</p> <p>To remove a tag, specify only the tag key to remove (not the value). To overwrite the value for an existing tag, use <a>AddTagsToResource</a>.</p>"]
+    /// <p>Removes one or more tags from the specified AWS CloudHSM resource.</p> <p>To remove a tag, specify only the tag key to remove (not the value). To overwrite the value for an existing tag, use <a>AddTagsToResource</a>.</p>
     fn remove_tags_from_resource(
         &self,
         input: &RemoveTagsFromResourceRequest,
@@ -2476,7 +2476,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Adds or overwrites one or more tags for the specified AWS CloudHSM resource.</p> <p>Each tag consists of a key and a value. Tag keys must be unique to each resource.</p>"]
+    /// <p>Adds or overwrites one or more tags for the specified AWS CloudHSM resource.</p> <p>Each tag consists of a key and a value. Tag keys must be unique to each resource.</p>
     fn add_tags_to_resource(
         &self,
         input: &AddTagsToResourceRequest,
@@ -2510,7 +2510,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a high-availability partition group. A high-availability partition group is a group of partitions that spans multiple physical HSMs.</p>"]
+    /// <p>Creates a high-availability partition group. A high-availability partition group is a group of partitions that spans multiple physical HSMs.</p>
     fn create_hapg(
         &self,
         input: &CreateHapgRequest,
@@ -2544,7 +2544,7 @@ where
         }
     }
 
-    #[doc="<p>Creates an uninitialized HSM instance.</p> <p>There is an upfront fee charged for each HSM instance that you create with the <a>CreateHsm</a> operation. If you accidentally provision an HSM and want to request a refund, delete the instance using the <a>DeleteHsm</a> operation, go to the <a href=\"https://console.aws.amazon.com/support/home#/\">AWS Support Center</a>, create a new case, and select <b>Account and Billing Support</b>.</p> <important> <p>It can take up to 20 minutes to create and provision an HSM. You can monitor the status of the HSM with the <a>DescribeHsm</a> operation. The HSM is ready to be initialized when the status changes to <code>RUNNING</code>.</p> </important>"]
+    /// <p><p>Creates an uninitialized HSM instance.</p> <p>There is an upfront fee charged for each HSM instance that you create with the <a>CreateHsm</a> operation. If you accidentally provision an HSM and want to request a refund, delete the instance using the <a>DeleteHsm</a> operation, go to the <a href="https://console.aws.amazon.com/support/home#/">AWS Support Center</a>, create a new case, and select <b>Account and Billing Support</b>.</p> <important> <p>It can take up to 20 minutes to create and provision an HSM. You can monitor the status of the HSM with the <a>DescribeHsm</a> operation. The HSM is ready to be initialized when the status changes to <code>RUNNING</code>.</p> </important></p>
     fn create_hsm(&self, input: &CreateHsmRequest) -> Result<CreateHsmResponse, CreateHsmError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
@@ -2575,7 +2575,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates an HSM client.</p>"]
+    /// <p>Creates an HSM client.</p>
     fn create_luna_client(
         &self,
         input: &CreateLunaClientRequest,
@@ -2609,7 +2609,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a high-availability partition group.</p>"]
+    /// <p>Deletes a high-availability partition group.</p>
     fn delete_hapg(
         &self,
         input: &DeleteHapgRequest,
@@ -2643,7 +2643,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes an HSM. After completion, this operation cannot be undone and your key material cannot be recovered.</p>"]
+    /// <p>Deletes an HSM. After completion, this operation cannot be undone and your key material cannot be recovered.</p>
     fn delete_hsm(&self, input: &DeleteHsmRequest) -> Result<DeleteHsmResponse, DeleteHsmError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
@@ -2674,7 +2674,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a client.</p>"]
+    /// <p>Deletes a client.</p>
     fn delete_luna_client(
         &self,
         input: &DeleteLunaClientRequest,
@@ -2708,7 +2708,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves information about a high-availability partition group.</p>"]
+    /// <p>Retrieves information about a high-availability partition group.</p>
     fn describe_hapg(
         &self,
         input: &DescribeHapgRequest,
@@ -2742,7 +2742,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves information about an HSM. You can identify the HSM by its ARN or its serial number.</p>"]
+    /// <p>Retrieves information about an HSM. You can identify the HSM by its ARN or its serial number.</p>
     fn describe_hsm(
         &self,
         input: &DescribeHsmRequest,
@@ -2776,7 +2776,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves information about an HSM client.</p>"]
+    /// <p>Retrieves information about an HSM client.</p>
     fn describe_luna_client(
         &self,
         input: &DescribeLunaClientRequest,
@@ -2810,7 +2810,7 @@ where
         }
     }
 
-    #[doc="<p>Gets the configuration files necessary to connect to all high availability partition groups the client is associated with.</p>"]
+    /// <p>Gets the configuration files necessary to connect to all high availability partition groups the client is associated with.</p>
     fn get_config(&self, input: &GetConfigRequest) -> Result<GetConfigResponse, GetConfigError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
@@ -2841,7 +2841,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists the Availability Zones that have available AWS CloudHSM capacity.</p>"]
+    /// <p>Lists the Availability Zones that have available AWS CloudHSM capacity.</p>
     fn list_available_zones(&self) -> Result<ListAvailableZonesResponse, ListAvailableZonesError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
@@ -2871,7 +2871,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the high-availability partition groups for the account.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> member. If more results are available, the <i>NextToken</i> member of the response contains a token that you pass in the next call to <a>ListHapgs</a> to retrieve the next set of items.</p>"]
+    /// <p>Lists the high-availability partition groups for the account.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> member. If more results are available, the <i>NextToken</i> member of the response contains a token that you pass in the next call to <a>ListHapgs</a> to retrieve the next set of items.</p>
     fn list_hapgs(&self, input: &ListHapgsRequest) -> Result<ListHapgsResponse, ListHapgsError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
@@ -2902,7 +2902,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves the identifiers of all of the HSMs provisioned for the current customer.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> member. If more results are available, the <i>NextToken</i> member of the response contains a token that you pass in the next call to <a>ListHsms</a> to retrieve the next set of items.</p>"]
+    /// <p>Retrieves the identifiers of all of the HSMs provisioned for the current customer.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> member. If more results are available, the <i>NextToken</i> member of the response contains a token that you pass in the next call to <a>ListHsms</a> to retrieve the next set of items.</p>
     fn list_hsms(&self, input: &ListHsmsRequest) -> Result<ListHsmsResponse, ListHsmsError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
@@ -2933,7 +2933,7 @@ where
         }
     }
 
-    #[doc="<p>Lists all of the clients.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> member. If more results are available, the <i>NextToken</i> member of the response contains a token that you pass in the next call to <a>ListLunaClients</a> to retrieve the next set of items.</p>"]
+    /// <p>Lists all of the clients.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> member. If more results are available, the <i>NextToken</i> member of the response contains a token that you pass in the next call to <a>ListLunaClients</a> to retrieve the next set of items.</p>
     fn list_luna_clients(
         &self,
         input: &ListLunaClientsRequest,
@@ -2967,7 +2967,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns a list of all tags for the specified AWS CloudHSM resource.</p>"]
+    /// <p>Returns a list of all tags for the specified AWS CloudHSM resource.</p>
     fn list_tags_for_resource(
         &self,
         input: &ListTagsForResourceRequest,
@@ -3004,7 +3004,7 @@ where
         }
     }
 
-    #[doc = "<p>Modifies an existing high-availability partition group.</p>"]
+    /// <p>Modifies an existing high-availability partition group.</p>
     fn modify_hapg(
         &self,
         input: &ModifyHapgRequest,
@@ -3038,7 +3038,7 @@ where
         }
     }
 
-    #[doc="<p>Modifies an HSM.</p> <important> <p>This operation can result in the HSM being offline for up to 15 minutes while the AWS CloudHSM service is reconfigured. If you are modifying a production HSM, you should ensure that your AWS CloudHSM service is configured for high availability, and consider executing this operation during a maintenance window.</p> </important>"]
+    /// <p><p>Modifies an HSM.</p> <important> <p>This operation can result in the HSM being offline for up to 15 minutes while the AWS CloudHSM service is reconfigured. If you are modifying a production HSM, you should ensure that your AWS CloudHSM service is configured for high availability, and consider executing this operation during a maintenance window.</p> </important></p>
     fn modify_hsm(&self, input: &ModifyHsmRequest) -> Result<ModifyHsmResponse, ModifyHsmError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
 
@@ -3069,7 +3069,7 @@ where
         }
     }
 
-    #[doc="<p>Modifies the certificate used by the client.</p> <p>This action can potentially start a workflow to install the new certificate on the client's HSMs.</p>"]
+    /// <p>Modifies the certificate used by the client.</p> <p>This action can potentially start a workflow to install the new certificate on the client's HSMs.</p>
     fn modify_luna_client(
         &self,
         input: &ModifyLunaClientRequest,
@@ -3103,7 +3103,7 @@ where
         }
     }
 
-    #[doc="<p>Removes one or more tags from the specified AWS CloudHSM resource.</p> <p>To remove a tag, specify only the tag key to remove (not the value). To overwrite the value for an existing tag, use <a>AddTagsToResource</a>.</p>"]
+    /// <p>Removes one or more tags from the specified AWS CloudHSM resource.</p> <p>To remove a tag, specify only the tag key to remove (not the value). To overwrite the value for an existing tag, use <a>AddTagsToResource</a>.</p>
     fn remove_tags_from_resource(
         &self,
         input: &RemoveTagsFromResourceRequest,

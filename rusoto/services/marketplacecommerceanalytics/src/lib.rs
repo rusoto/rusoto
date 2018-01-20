@@ -11,7 +11,7 @@
 //
 // =================================================================
 
-//! Provides AWS Marketplace business intelligence data on-demand.
+//! <p>Provides AWS Marketplace business intelligence data on-demand.</p>
 //!
 //! If you're using the service, you're probably looking for [MarketplaceCommerceAnalyticsClient](struct.MarketplaceCommerceAnalyticsClient.html) and [MarketplaceCommerceAnalytics](trait.MarketplaceCommerceAnalytics.html).
 

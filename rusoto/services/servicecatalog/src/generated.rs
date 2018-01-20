@@ -2086,11 +2086,11 @@ pub struct UsageInstruction {
 /// Errors returned by AcceptPortfolioShare
 #[derive(Debug, PartialEq)]
 pub enum AcceptPortfolioShareError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
-    ///<p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
+    /// <p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
     LimitExceeded(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2178,11 +2178,11 @@ impl Error for AcceptPortfolioShareError {
 /// Errors returned by AssociatePrincipalWithPortfolio
 #[derive(Debug, PartialEq)]
 pub enum AssociatePrincipalWithPortfolioError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
-    ///<p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
+    /// <p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
     LimitExceeded(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2276,11 +2276,11 @@ impl Error for AssociatePrincipalWithPortfolioError {
 /// Errors returned by AssociateProductWithPortfolio
 #[derive(Debug, PartialEq)]
 pub enum AssociateProductWithPortfolioError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
-    ///<p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
+    /// <p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
     LimitExceeded(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2372,17 +2372,17 @@ impl Error for AssociateProductWithPortfolioError {
 /// Errors returned by AssociateTagOptionWithResource
 #[derive(Debug, PartialEq)]
 pub enum AssociateTagOptionWithResourceError {
-    ///<p>The specified resource is a duplicate.</p>
+    /// <p>The specified resource is a duplicate.</p>
     DuplicateResource(String),
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
-    ///<p>An attempt was made to modify a resource that is in an invalid state. Inspect the resource you are using for this operation to ensure that all resource states are valid before retrying the operation.</p>
+    /// <p>An attempt was made to modify a resource that is in an invalid state. Inspect the resource you are using for this operation to ensure that all resource states are valid before retrying the operation.</p>
     InvalidState(String),
-    ///<p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
+    /// <p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
     LimitExceeded(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    ///<p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
+    /// <p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
     TagOptionNotMigrated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2492,13 +2492,13 @@ impl Error for AssociateTagOptionWithResourceError {
 /// Errors returned by CreateConstraint
 #[derive(Debug, PartialEq)]
 pub enum CreateConstraintError {
-    ///<p>The specified resource is a duplicate.</p>
+    /// <p>The specified resource is a duplicate.</p>
     DuplicateResource(String),
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
-    ///<p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
+    /// <p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
     LimitExceeded(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2588,11 +2588,11 @@ impl Error for CreateConstraintError {
 /// Errors returned by CreatePortfolio
 #[derive(Debug, PartialEq)]
 pub enum CreatePortfolioError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
-    ///<p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
+    /// <p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
     LimitExceeded(String),
-    ///<p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
+    /// <p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
     TagOptionNotMigrated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2678,11 +2678,11 @@ impl Error for CreatePortfolioError {
 /// Errors returned by CreatePortfolioShare
 #[derive(Debug, PartialEq)]
 pub enum CreatePortfolioShareError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
-    ///<p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
+    /// <p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
     LimitExceeded(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2770,11 +2770,11 @@ impl Error for CreatePortfolioShareError {
 /// Errors returned by CreateProduct
 #[derive(Debug, PartialEq)]
 pub enum CreateProductError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
-    ///<p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
+    /// <p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
     LimitExceeded(String),
-    ///<p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
+    /// <p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
     TagOptionNotMigrated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2860,11 +2860,11 @@ impl Error for CreateProductError {
 /// Errors returned by CreateProvisioningArtifact
 #[derive(Debug, PartialEq)]
 pub enum CreateProvisioningArtifactError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
-    ///<p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
+    /// <p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
     LimitExceeded(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2956,11 +2956,11 @@ impl Error for CreateProvisioningArtifactError {
 /// Errors returned by CreateTagOption
 #[derive(Debug, PartialEq)]
 pub enum CreateTagOptionError {
-    ///<p>The specified resource is a duplicate.</p>
+    /// <p>The specified resource is a duplicate.</p>
     DuplicateResource(String),
-    ///<p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
+    /// <p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
     LimitExceeded(String),
-    ///<p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
+    /// <p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
     TagOptionNotMigrated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3046,9 +3046,9 @@ impl Error for CreateTagOptionError {
 /// Errors returned by DeleteConstraint
 #[derive(Debug, PartialEq)]
 pub enum DeleteConstraintError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3130,13 +3130,13 @@ impl Error for DeleteConstraintError {
 /// Errors returned by DeletePortfolio
 #[derive(Debug, PartialEq)]
 pub enum DeletePortfolioError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
-    ///<p>The operation was requested against a resource that is currently in use. Free the resource from use and retry the operation.</p>
+    /// <p>The operation was requested against a resource that is currently in use. Free the resource from use and retry the operation.</p>
     ResourceInUse(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    ///<p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
+    /// <p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
     TagOptionNotMigrated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3226,7 +3226,7 @@ impl Error for DeletePortfolioError {
 /// Errors returned by DeletePortfolioShare
 #[derive(Debug, PartialEq)]
 pub enum DeletePortfolioShareError {
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3306,13 +3306,13 @@ impl Error for DeletePortfolioShareError {
 /// Errors returned by DeleteProduct
 #[derive(Debug, PartialEq)]
 pub enum DeleteProductError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
-    ///<p>The operation was requested against a resource that is currently in use. Free the resource from use and retry the operation.</p>
+    /// <p>The operation was requested against a resource that is currently in use. Free the resource from use and retry the operation.</p>
     ResourceInUse(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    ///<p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
+    /// <p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
     TagOptionNotMigrated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3402,11 +3402,11 @@ impl Error for DeleteProductError {
 /// Errors returned by DeleteProvisioningArtifact
 #[derive(Debug, PartialEq)]
 pub enum DeleteProvisioningArtifactError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
-    ///<p>The operation was requested against a resource that is currently in use. Free the resource from use and retry the operation.</p>
+    /// <p>The operation was requested against a resource that is currently in use. Free the resource from use and retry the operation.</p>
     ResourceInUse(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3498,7 +3498,7 @@ impl Error for DeleteProvisioningArtifactError {
 /// Errors returned by DescribeConstraint
 #[derive(Debug, PartialEq)]
 pub enum DescribeConstraintError {
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3578,7 +3578,7 @@ impl Error for DescribeConstraintError {
 /// Errors returned by DescribePortfolio
 #[derive(Debug, PartialEq)]
 pub enum DescribePortfolioError {
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3658,9 +3658,9 @@ impl Error for DescribePortfolioError {
 /// Errors returned by DescribeProduct
 #[derive(Debug, PartialEq)]
 pub enum DescribeProductError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3742,7 +3742,7 @@ impl Error for DescribeProductError {
 /// Errors returned by DescribeProductAsAdmin
 #[derive(Debug, PartialEq)]
 pub enum DescribeProductAsAdminError {
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3822,9 +3822,9 @@ impl Error for DescribeProductAsAdminError {
 /// Errors returned by DescribeProductView
 #[derive(Debug, PartialEq)]
 pub enum DescribeProductViewError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3908,7 +3908,7 @@ impl Error for DescribeProductViewError {
 /// Errors returned by DescribeProvisionedProduct
 #[derive(Debug, PartialEq)]
 pub enum DescribeProvisionedProductError {
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3990,7 +3990,7 @@ impl Error for DescribeProvisionedProductError {
 /// Errors returned by DescribeProvisioningArtifact
 #[derive(Debug, PartialEq)]
 pub enum DescribeProvisioningArtifactError {
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4072,9 +4072,9 @@ impl Error for DescribeProvisioningArtifactError {
 /// Errors returned by DescribeProvisioningParameters
 #[derive(Debug, PartialEq)]
 pub enum DescribeProvisioningParametersError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4162,7 +4162,7 @@ impl Error for DescribeProvisioningParametersError {
 /// Errors returned by DescribeRecord
 #[derive(Debug, PartialEq)]
 pub enum DescribeRecordError {
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4240,9 +4240,9 @@ impl Error for DescribeRecordError {
 /// Errors returned by DescribeTagOption
 #[derive(Debug, PartialEq)]
 pub enum DescribeTagOptionError {
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    ///<p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
+    /// <p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
     TagOptionNotMigrated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4326,9 +4326,9 @@ impl Error for DescribeTagOptionError {
 /// Errors returned by DisassociatePrincipalFromPortfolio
 #[derive(Debug, PartialEq)]
 pub enum DisassociatePrincipalFromPortfolioError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4416,11 +4416,11 @@ impl Error for DisassociatePrincipalFromPortfolioError {
 /// Errors returned by DisassociateProductFromPortfolio
 #[derive(Debug, PartialEq)]
 pub enum DisassociateProductFromPortfolioError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
-    ///<p>The operation was requested against a resource that is currently in use. Free the resource from use and retry the operation.</p>
+    /// <p>The operation was requested against a resource that is currently in use. Free the resource from use and retry the operation.</p>
     ResourceInUse(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4514,9 +4514,9 @@ impl Error for DisassociateProductFromPortfolioError {
 /// Errors returned by DisassociateTagOptionFromResource
 #[derive(Debug, PartialEq)]
 pub enum DisassociateTagOptionFromResourceError {
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    ///<p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
+    /// <p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
     TagOptionNotMigrated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4604,7 +4604,7 @@ impl Error for DisassociateTagOptionFromResourceError {
 /// Errors returned by ListAcceptedPortfolioShares
 #[derive(Debug, PartialEq)]
 pub enum ListAcceptedPortfolioSharesError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4686,9 +4686,9 @@ impl Error for ListAcceptedPortfolioSharesError {
 /// Errors returned by ListConstraintsForPortfolio
 #[derive(Debug, PartialEq)]
 pub enum ListConstraintsForPortfolioError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4776,9 +4776,9 @@ impl Error for ListConstraintsForPortfolioError {
 /// Errors returned by ListLaunchPaths
 #[derive(Debug, PartialEq)]
 pub enum ListLaunchPathsError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4860,7 +4860,7 @@ impl Error for ListLaunchPathsError {
 /// Errors returned by ListPortfolioAccess
 #[derive(Debug, PartialEq)]
 pub enum ListPortfolioAccessError {
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4940,7 +4940,7 @@ impl Error for ListPortfolioAccessError {
 /// Errors returned by ListPortfolios
 #[derive(Debug, PartialEq)]
 pub enum ListPortfoliosError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5018,9 +5018,9 @@ impl Error for ListPortfoliosError {
 /// Errors returned by ListPortfoliosForProduct
 #[derive(Debug, PartialEq)]
 pub enum ListPortfoliosForProductError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5106,9 +5106,9 @@ impl Error for ListPortfoliosForProductError {
 /// Errors returned by ListPrincipalsForPortfolio
 #[derive(Debug, PartialEq)]
 pub enum ListPrincipalsForPortfolioError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5196,9 +5196,9 @@ impl Error for ListPrincipalsForPortfolioError {
 /// Errors returned by ListProvisioningArtifacts
 #[derive(Debug, PartialEq)]
 pub enum ListProvisioningArtifactsError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5286,7 +5286,7 @@ impl Error for ListProvisioningArtifactsError {
 /// Errors returned by ListRecordHistory
 #[derive(Debug, PartialEq)]
 pub enum ListRecordHistoryError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5366,11 +5366,11 @@ impl Error for ListRecordHistoryError {
 /// Errors returned by ListResourcesForTagOption
 #[derive(Debug, PartialEq)]
 pub enum ListResourcesForTagOptionError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    ///<p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
+    /// <p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
     TagOptionNotMigrated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5464,9 +5464,9 @@ impl Error for ListResourcesForTagOptionError {
 /// Errors returned by ListTagOptions
 #[derive(Debug, PartialEq)]
 pub enum ListTagOptionsError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
-    ///<p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
+    /// <p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
     TagOptionNotMigrated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5548,11 +5548,11 @@ impl Error for ListTagOptionsError {
 /// Errors returned by ProvisionProduct
 #[derive(Debug, PartialEq)]
 pub enum ProvisionProductError {
-    ///<p>The specified resource is a duplicate.</p>
+    /// <p>The specified resource is a duplicate.</p>
     DuplicateResource(String),
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5638,7 +5638,7 @@ impl Error for ProvisionProductError {
 /// Errors returned by RejectPortfolioShare
 #[derive(Debug, PartialEq)]
 pub enum RejectPortfolioShareError {
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5718,7 +5718,7 @@ impl Error for RejectPortfolioShareError {
 /// Errors returned by ScanProvisionedProducts
 #[derive(Debug, PartialEq)]
 pub enum ScanProvisionedProductsError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5798,7 +5798,7 @@ impl Error for ScanProvisionedProductsError {
 /// Errors returned by SearchProducts
 #[derive(Debug, PartialEq)]
 pub enum SearchProductsError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5876,9 +5876,9 @@ impl Error for SearchProductsError {
 /// Errors returned by SearchProductsAsAdmin
 #[derive(Debug, PartialEq)]
 pub enum SearchProductsAsAdminError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5962,7 +5962,7 @@ impl Error for SearchProductsAsAdminError {
 /// Errors returned by TerminateProvisionedProduct
 #[derive(Debug, PartialEq)]
 pub enum TerminateProvisionedProductError {
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6044,9 +6044,9 @@ impl Error for TerminateProvisionedProductError {
 /// Errors returned by UpdateConstraint
 #[derive(Debug, PartialEq)]
 pub enum UpdateConstraintError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6128,13 +6128,13 @@ impl Error for UpdateConstraintError {
 /// Errors returned by UpdatePortfolio
 #[derive(Debug, PartialEq)]
 pub enum UpdatePortfolioError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
-    ///<p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
+    /// <p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
     LimitExceeded(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    ///<p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
+    /// <p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
     TagOptionNotMigrated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6224,11 +6224,11 @@ impl Error for UpdatePortfolioError {
 /// Errors returned by UpdateProduct
 #[derive(Debug, PartialEq)]
 pub enum UpdateProductError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    ///<p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
+    /// <p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
     TagOptionNotMigrated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6314,9 +6314,9 @@ impl Error for UpdateProductError {
 /// Errors returned by UpdateProvisionedProduct
 #[derive(Debug, PartialEq)]
 pub enum UpdateProvisionedProductError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6402,9 +6402,9 @@ impl Error for UpdateProvisionedProductError {
 /// Errors returned by UpdateProvisioningArtifact
 #[derive(Debug, PartialEq)]
 pub enum UpdateProvisioningArtifactError {
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6492,13 +6492,13 @@ impl Error for UpdateProvisioningArtifactError {
 /// Errors returned by UpdateTagOption
 #[derive(Debug, PartialEq)]
 pub enum UpdateTagOptionError {
-    ///<p>The specified resource is a duplicate.</p>
+    /// <p>The specified resource is a duplicate.</p>
     DuplicateResource(String),
-    ///<p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are invalid.</p>
     InvalidParameters(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    ///<p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
+    /// <p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
     TagOptionNotMigrated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6587,307 +6587,307 @@ impl Error for UpdateTagOptionError {
 }
 /// Trait representing the capabilities of the AWS Service Catalog API. AWS Service Catalog clients implement this trait.
 pub trait ServiceCatalog {
-    #[doc = "<p>Accepts an offer to share a portfolio.</p>"]
+    /// <p>Accepts an offer to share a portfolio.</p>
     fn accept_portfolio_share(
         &self,
         input: &AcceptPortfolioShareInput,
     ) -> Result<AcceptPortfolioShareOutput, AcceptPortfolioShareError>;
 
-    #[doc = "<p>Associates the specified principal ARN with the specified portfolio.</p>"]
+    /// <p>Associates the specified principal ARN with the specified portfolio.</p>
     fn associate_principal_with_portfolio(
         &self,
         input: &AssociatePrincipalWithPortfolioInput,
     ) -> Result<AssociatePrincipalWithPortfolioOutput, AssociatePrincipalWithPortfolioError>;
 
-    #[doc = "<p>Associates a product with a portfolio.</p>"]
+    /// <p>Associates a product with a portfolio.</p>
     fn associate_product_with_portfolio(
         &self,
         input: &AssociateProductWithPortfolioInput,
     ) -> Result<AssociateProductWithPortfolioOutput, AssociateProductWithPortfolioError>;
 
-    #[doc = "<p>Associate a TagOption identifier with a resource identifier.</p>"]
+    /// <p>Associate a TagOption identifier with a resource identifier.</p>
     fn associate_tag_option_with_resource(
         &self,
         input: &AssociateTagOptionWithResourceInput,
     ) -> Result<AssociateTagOptionWithResourceOutput, AssociateTagOptionWithResourceError>;
 
-    #[doc="<p>Creates a new constraint. For more information, see <a href=\"http://docs.aws.amazon.com/servicecatalog/latest/adminguide/constraints.html\">Using Constraints</a>.</p>"]
+    /// <p>Creates a new constraint. For more information, see <a href="http://docs.aws.amazon.com/servicecatalog/latest/adminguide/constraints.html">Using Constraints</a>.</p>
     fn create_constraint(
         &self,
         input: &CreateConstraintInput,
     ) -> Result<CreateConstraintOutput, CreateConstraintError>;
 
-    #[doc = "<p>Creates a new portfolio.</p>"]
+    /// <p>Creates a new portfolio.</p>
     fn create_portfolio(
         &self,
         input: &CreatePortfolioInput,
     ) -> Result<CreatePortfolioOutput, CreatePortfolioError>;
 
-    #[doc = "<p>Creates a new portfolio share.</p>"]
+    /// <p>Creates a new portfolio share.</p>
     fn create_portfolio_share(
         &self,
         input: &CreatePortfolioShareInput,
     ) -> Result<CreatePortfolioShareOutput, CreatePortfolioShareError>;
 
-    #[doc = "<p>Creates a new product.</p>"]
+    /// <p>Creates a new product.</p>
     fn create_product(
         &self,
         input: &CreateProductInput,
     ) -> Result<CreateProductOutput, CreateProductError>;
 
-    #[doc="<p>Create a new provisioning artifact for the specified product. This operation does not work with a product that has been shared with you.</p> <p>See the bottom of this topic for an example JSON request.</p>"]
+    /// <p>Create a new provisioning artifact for the specified product. This operation does not work with a product that has been shared with you.</p> <p>See the bottom of this topic for an example JSON request.</p>
     fn create_provisioning_artifact(
         &self,
         input: &CreateProvisioningArtifactInput,
     ) -> Result<CreateProvisioningArtifactOutput, CreateProvisioningArtifactError>;
 
-    #[doc = "<p>Create a new TagOption.</p>"]
+    /// <p>Create a new TagOption.</p>
     fn create_tag_option(
         &self,
         input: &CreateTagOptionInput,
     ) -> Result<CreateTagOptionOutput, CreateTagOptionError>;
 
-    #[doc = "<p>Deletes the specified constraint.</p>"]
+    /// <p>Deletes the specified constraint.</p>
     fn delete_constraint(
         &self,
         input: &DeleteConstraintInput,
     ) -> Result<DeleteConstraintOutput, DeleteConstraintError>;
 
-    #[doc="<p>Deletes the specified portfolio. This operation does not work with a portfolio that has been shared with you or if it has products, users, constraints, or shared accounts associated with it.</p>"]
+    /// <p>Deletes the specified portfolio. This operation does not work with a portfolio that has been shared with you or if it has products, users, constraints, or shared accounts associated with it.</p>
     fn delete_portfolio(
         &self,
         input: &DeletePortfolioInput,
     ) -> Result<DeletePortfolioOutput, DeletePortfolioError>;
 
-    #[doc = "<p>Deletes the specified portfolio share.</p>"]
+    /// <p>Deletes the specified portfolio share.</p>
     fn delete_portfolio_share(
         &self,
         input: &DeletePortfolioShareInput,
     ) -> Result<DeletePortfolioShareOutput, DeletePortfolioShareError>;
 
-    #[doc="<p>Deletes the specified product. This operation does not work with a product that has been shared with you or is associated with a portfolio. </p>"]
+    /// <p>Deletes the specified product. This operation does not work with a product that has been shared with you or is associated with a portfolio. </p>
     fn delete_product(
         &self,
         input: &DeleteProductInput,
     ) -> Result<DeleteProductOutput, DeleteProductError>;
 
-    #[doc="<p>Deletes the specified provisioning artifact. This operation does not work on a provisioning artifact associated with a product that has been shared with you, or on the last provisioning artifact associated with a product (a product must have at least one provisioning artifact).</p>"]
+    /// <p>Deletes the specified provisioning artifact. This operation does not work on a provisioning artifact associated with a product that has been shared with you, or on the last provisioning artifact associated with a product (a product must have at least one provisioning artifact).</p>
     fn delete_provisioning_artifact(
         &self,
         input: &DeleteProvisioningArtifactInput,
     ) -> Result<DeleteProvisioningArtifactOutput, DeleteProvisioningArtifactError>;
 
-    #[doc = "<p>Retrieves detailed information for a specified constraint.</p>"]
+    /// <p>Retrieves detailed information for a specified constraint.</p>
     fn describe_constraint(
         &self,
         input: &DescribeConstraintInput,
     ) -> Result<DescribeConstraintOutput, DescribeConstraintError>;
 
-    #[doc="<p>Retrieves detailed information and any tags associated with the specified portfolio.</p>"]
+    /// <p>Retrieves detailed information and any tags associated with the specified portfolio.</p>
     fn describe_portfolio(
         &self,
         input: &DescribePortfolioInput,
     ) -> Result<DescribePortfolioOutput, DescribePortfolioError>;
 
-    #[doc="<p>Retrieves information about a specified product.</p> <p>This operation is functionally identical to <a>DescribeProductView</a> except that it takes as input <code>ProductId</code> instead of <code>ProductViewId</code>.</p>"]
+    /// <p>Retrieves information about a specified product.</p> <p>This operation is functionally identical to <a>DescribeProductView</a> except that it takes as input <code>ProductId</code> instead of <code>ProductViewId</code>.</p>
     fn describe_product(
         &self,
         input: &DescribeProductInput,
     ) -> Result<DescribeProductOutput, DescribeProductError>;
 
-    #[doc = "<p>Retrieves information about a specified product, run with administrator access.</p>"]
+    /// <p>Retrieves information about a specified product, run with administrator access.</p>
     fn describe_product_as_admin(
         &self,
         input: &DescribeProductAsAdminInput,
     ) -> Result<DescribeProductAsAdminOutput, DescribeProductAsAdminError>;
 
-    #[doc="<p>Retrieves information about a specified product.</p> <p>This operation is functionally identical to <a>DescribeProduct</a> except that it takes as input <code>ProductViewId</code> instead of <code>ProductId</code>.</p>"]
+    /// <p>Retrieves information about a specified product.</p> <p>This operation is functionally identical to <a>DescribeProduct</a> except that it takes as input <code>ProductViewId</code> instead of <code>ProductId</code>.</p>
     fn describe_product_view(
         &self,
         input: &DescribeProductViewInput,
     ) -> Result<DescribeProductViewOutput, DescribeProductViewError>;
 
-    #[doc = "<p>Retrieve detailed information about the provisioned product.</p>"]
+    /// <p>Retrieve detailed information about the provisioned product.</p>
     fn describe_provisioned_product(
         &self,
         input: &DescribeProvisionedProductInput,
     ) -> Result<DescribeProvisionedProductOutput, DescribeProvisionedProductError>;
 
-    #[doc = "<p>Retrieves detailed information about the specified provisioning artifact.</p>"]
+    /// <p>Retrieves detailed information about the specified provisioning artifact.</p>
     fn describe_provisioning_artifact(
         &self,
         input: &DescribeProvisioningArtifactInput,
     ) -> Result<DescribeProvisioningArtifactOutput, DescribeProvisioningArtifactError>;
 
-    #[doc="<p>Provides information about parameters required to provision a specified product in a specified manner. Use this operation to obtain the list of <code>ProvisioningArtifactParameters</code> parameters available to call the <a>ProvisionProduct</a> operation for the specified product.</p> <p>If the output contains a TagOption key with an empty list of values, there is a TagOption conflict for that key. The end user cannot take action to fix the conflict, and launch is not blocked. In subsequent calls to the <code>ProvisionProduct</code> operation, do not include conflicted TagOption keys as tags. Calls to <code>ProvisionProduct</code> with empty TagOption values cause the error \"Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i> \". Calls to <code>ProvisionProduct</code> with conflicted TagOption keys automatically tag the provisioned product with the conflicted keys with the value \"<code>sc-tagoption-conflict-portfolioId-productId</code>\".</p>"]
+    /// <p>Provides information about parameters required to provision a specified product in a specified manner. Use this operation to obtain the list of <code>ProvisioningArtifactParameters</code> parameters available to call the <a>ProvisionProduct</a> operation for the specified product.</p> <p>If the output contains a TagOption key with an empty list of values, there is a TagOption conflict for that key. The end user cannot take action to fix the conflict, and launch is not blocked. In subsequent calls to the <code>ProvisionProduct</code> operation, do not include conflicted TagOption keys as tags. Calls to <code>ProvisionProduct</code> with empty TagOption values cause the error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i> ". Calls to <code>ProvisionProduct</code> with conflicted TagOption keys automatically tag the provisioned product with the conflicted keys with the value "<code>sc-tagoption-conflict-portfolioId-productId</code>".</p>
     fn describe_provisioning_parameters(
         &self,
         input: &DescribeProvisioningParametersInput,
     ) -> Result<DescribeProvisioningParametersOutput, DescribeProvisioningParametersError>;
 
-    #[doc="<p>Retrieves a paginated list of the full details of a specific request. Use this operation after calling a request operation (<a>ProvisionProduct</a>, <a>TerminateProvisionedProduct</a>, or <a>UpdateProvisionedProduct</a>). </p>"]
+    /// <p>Retrieves a paginated list of the full details of a specific request. Use this operation after calling a request operation (<a>ProvisionProduct</a>, <a>TerminateProvisionedProduct</a>, or <a>UpdateProvisionedProduct</a>). </p>
     fn describe_record(
         &self,
         input: &DescribeRecordInput,
     ) -> Result<DescribeRecordOutput, DescribeRecordError>;
 
-    #[doc = "<p>Describes a TagOption.</p>"]
+    /// <p>Describes a TagOption.</p>
     fn describe_tag_option(
         &self,
         input: &DescribeTagOptionInput,
     ) -> Result<DescribeTagOptionOutput, DescribeTagOptionError>;
 
-    #[doc = "<p>Disassociates a previously associated principal ARN from a specified portfolio.</p>"]
+    /// <p>Disassociates a previously associated principal ARN from a specified portfolio.</p>
     fn disassociate_principal_from_portfolio(
         &self,
         input: &DisassociatePrincipalFromPortfolioInput,
     ) -> Result<DisassociatePrincipalFromPortfolioOutput, DisassociatePrincipalFromPortfolioError>;
 
-    #[doc = "<p>Disassociates the specified product from the specified portfolio. </p>"]
+    /// <p>Disassociates the specified product from the specified portfolio. </p>
     fn disassociate_product_from_portfolio(
         &self,
         input: &DisassociateProductFromPortfolioInput,
     ) -> Result<DisassociateProductFromPortfolioOutput, DisassociateProductFromPortfolioError>;
 
-    #[doc = "<p>Disassociates a TagOption from a resource.</p>"]
+    /// <p>Disassociates a TagOption from a resource.</p>
     fn disassociate_tag_option_from_resource(
         &self,
         input: &DisassociateTagOptionFromResourceInput,
     ) -> Result<DisassociateTagOptionFromResourceOutput, DisassociateTagOptionFromResourceError>;
 
-    #[doc = "<p>Lists details of all portfolios for which sharing was accepted by this account.</p>"]
+    /// <p>Lists details of all portfolios for which sharing was accepted by this account.</p>
     fn list_accepted_portfolio_shares(
         &self,
         input: &ListAcceptedPortfolioSharesInput,
     ) -> Result<ListAcceptedPortfolioSharesOutput, ListAcceptedPortfolioSharesError>;
 
-    #[doc="<p>Retrieves detailed constraint information for the specified portfolio and product.</p>"]
+    /// <p>Retrieves detailed constraint information for the specified portfolio and product.</p>
     fn list_constraints_for_portfolio(
         &self,
         input: &ListConstraintsForPortfolioInput,
     ) -> Result<ListConstraintsForPortfolioOutput, ListConstraintsForPortfolioError>;
 
-    #[doc="<p>Returns a paginated list of all paths to a specified product. A path is how the user has access to a specified product, and is necessary when provisioning a product. A path also determines the constraints put on the product.</p>"]
+    /// <p>Returns a paginated list of all paths to a specified product. A path is how the user has access to a specified product, and is necessary when provisioning a product. A path also determines the constraints put on the product.</p>
     fn list_launch_paths(
         &self,
         input: &ListLaunchPathsInput,
     ) -> Result<ListLaunchPathsOutput, ListLaunchPathsError>;
 
-    #[doc="<p>Lists the account IDs that have been authorized sharing of the specified portfolio.</p>"]
+    /// <p>Lists the account IDs that have been authorized sharing of the specified portfolio.</p>
     fn list_portfolio_access(
         &self,
         input: &ListPortfolioAccessInput,
     ) -> Result<ListPortfolioAccessOutput, ListPortfolioAccessError>;
 
-    #[doc = "<p>Lists all portfolios in the catalog.</p>"]
+    /// <p>Lists all portfolios in the catalog.</p>
     fn list_portfolios(
         &self,
         input: &ListPortfoliosInput,
     ) -> Result<ListPortfoliosOutput, ListPortfoliosError>;
 
-    #[doc = "<p>Lists all portfolios that the specified product is associated with.</p>"]
+    /// <p>Lists all portfolios that the specified product is associated with.</p>
     fn list_portfolios_for_product(
         &self,
         input: &ListPortfoliosForProductInput,
     ) -> Result<ListPortfoliosForProductOutput, ListPortfoliosForProductError>;
 
-    #[doc = "<p>Lists all principal ARNs associated with the specified portfolio.</p>"]
+    /// <p>Lists all principal ARNs associated with the specified portfolio.</p>
     fn list_principals_for_portfolio(
         &self,
         input: &ListPrincipalsForPortfolioInput,
     ) -> Result<ListPrincipalsForPortfolioOutput, ListPrincipalsForPortfolioError>;
 
-    #[doc = "<p>Lists all provisioning artifacts associated with the specified product.</p>"]
+    /// <p>Lists all provisioning artifacts associated with the specified product.</p>
     fn list_provisioning_artifacts(
         &self,
         input: &ListProvisioningArtifactsInput,
     ) -> Result<ListProvisioningArtifactsOutput, ListProvisioningArtifactsError>;
 
-    #[doc="<p>Returns a paginated list of all performed requests, in the form of RecordDetails objects that are filtered as specified.</p>"]
+    /// <p>Returns a paginated list of all performed requests, in the form of RecordDetails objects that are filtered as specified.</p>
     fn list_record_history(
         &self,
         input: &ListRecordHistoryInput,
     ) -> Result<ListRecordHistoryOutput, ListRecordHistoryError>;
 
-    #[doc = "<p>Lists resources associated with a TagOption.</p>"]
+    /// <p>Lists resources associated with a TagOption.</p>
     fn list_resources_for_tag_option(
         &self,
         input: &ListResourcesForTagOptionInput,
     ) -> Result<ListResourcesForTagOptionOutput, ListResourcesForTagOptionError>;
 
-    #[doc = "<p>Lists detailed TagOptions information.</p>"]
+    /// <p>Lists detailed TagOptions information.</p>
     fn list_tag_options(
         &self,
         input: &ListTagOptionsInput,
     ) -> Result<ListTagOptionsOutput, ListTagOptionsError>;
 
-    #[doc="<p>Requests a <i>provision</i> of a specified product. A <i>provisioned product</i> is a resourced instance for a product. For example, provisioning a CloudFormation-template-backed product results in launching a CloudFormation stack and all the underlying resources that come with it. </p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation. The error \"Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>\" indicates that your request contains a tag which has a tag key but no corresponding tag value (value is empty or null). Your call may have included values returned from a <code>DescribeProvisioningParameters</code> call that resulted in a TagOption key with an empty list. This happens when TagOption keys are in conflict. For more information, see <a>DescribeProvisioningParameters</a>.</p>"]
+    /// <p>Requests a <i>provision</i> of a specified product. A <i>provisioned product</i> is a resourced instance for a product. For example, provisioning a CloudFormation-template-backed product results in launching a CloudFormation stack and all the underlying resources that come with it. </p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation. The error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>" indicates that your request contains a tag which has a tag key but no corresponding tag value (value is empty or null). Your call may have included values returned from a <code>DescribeProvisioningParameters</code> call that resulted in a TagOption key with an empty list. This happens when TagOption keys are in conflict. For more information, see <a>DescribeProvisioningParameters</a>.</p>
     fn provision_product(
         &self,
         input: &ProvisionProductInput,
     ) -> Result<ProvisionProductOutput, ProvisionProductError>;
 
-    #[doc = "<p>Rejects an offer to share a portfolio.</p>"]
+    /// <p>Rejects an offer to share a portfolio.</p>
     fn reject_portfolio_share(
         &self,
         input: &RejectPortfolioShareInput,
     ) -> Result<RejectPortfolioShareOutput, RejectPortfolioShareError>;
 
-    #[doc="<p>Returns a paginated list of all the ProvisionedProduct objects that are currently available (not terminated). </p>"]
+    /// <p>Returns a paginated list of all the ProvisionedProduct objects that are currently available (not terminated). </p>
     fn scan_provisioned_products(
         &self,
         input: &ScanProvisionedProductsInput,
     ) -> Result<ScanProvisionedProductsOutput, ScanProvisionedProductsError>;
 
-    #[doc="<p>Returns a paginated list all of the <code>Products</code> objects to which the caller has access. </p> <p>The output of this operation can be used as input for other operations, such as <a>DescribeProductView</a>.</p>"]
+    /// <p>Returns a paginated list all of the <code>Products</code> objects to which the caller has access. </p> <p>The output of this operation can be used as input for other operations, such as <a>DescribeProductView</a>.</p>
     fn search_products(
         &self,
         input: &SearchProductsInput,
     ) -> Result<SearchProductsOutput, SearchProductsError>;
 
-    #[doc="<p>Retrieves summary and status information about all products created within the caller's account. If a portfolio ID is provided, this operation retrieves information for only those products that are associated with the specified portfolio.</p>"]
+    /// <p>Retrieves summary and status information about all products created within the caller's account. If a portfolio ID is provided, this operation retrieves information for only those products that are associated with the specified portfolio.</p>
     fn search_products_as_admin(
         &self,
         input: &SearchProductsAsAdminInput,
     ) -> Result<SearchProductsAsAdminOutput, SearchProductsAsAdminError>;
 
-    #[doc="<p>Requests termination of an existing ProvisionedProduct object. If there are <code>Tags</code> associated with the object, they are terminated when the ProvisionedProduct object is terminated. </p> <p>This operation does not delete any records associated with the ProvisionedProduct object.</p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation.</p>"]
+    /// <p>Requests termination of an existing ProvisionedProduct object. If there are <code>Tags</code> associated with the object, they are terminated when the ProvisionedProduct object is terminated. </p> <p>This operation does not delete any records associated with the ProvisionedProduct object.</p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation.</p>
     fn terminate_provisioned_product(
         &self,
         input: &TerminateProvisionedProductInput,
     ) -> Result<TerminateProvisionedProductOutput, TerminateProvisionedProductError>;
 
-    #[doc = "<p>Updates an existing constraint.</p>"]
+    /// <p>Updates an existing constraint.</p>
     fn update_constraint(
         &self,
         input: &UpdateConstraintInput,
     ) -> Result<UpdateConstraintOutput, UpdateConstraintError>;
 
-    #[doc="<p>Updates the specified portfolio's details. This operation does not work with a product that has been shared with you.</p>"]
+    /// <p>Updates the specified portfolio's details. This operation does not work with a product that has been shared with you.</p>
     fn update_portfolio(
         &self,
         input: &UpdatePortfolioInput,
     ) -> Result<UpdatePortfolioOutput, UpdatePortfolioError>;
 
-    #[doc = "<p>Updates an existing product.</p>"]
+    /// <p>Updates an existing product.</p>
     fn update_product(
         &self,
         input: &UpdateProductInput,
     ) -> Result<UpdateProductOutput, UpdateProductError>;
 
-    #[doc="<p>Requests updates to the configuration of an existing ProvisionedProduct object. If there are tags associated with the object, they cannot be updated or added with this operation. Depending on the specific updates requested, this operation may update with no interruption, with some interruption, or replace the ProvisionedProduct object entirely. </p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation.</p>"]
+    /// <p>Requests updates to the configuration of an existing ProvisionedProduct object. If there are tags associated with the object, they cannot be updated or added with this operation. Depending on the specific updates requested, this operation may update with no interruption, with some interruption, or replace the ProvisionedProduct object entirely. </p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation.</p>
     fn update_provisioned_product(
         &self,
         input: &UpdateProvisionedProductInput,
     ) -> Result<UpdateProvisionedProductOutput, UpdateProvisionedProductError>;
 
-    #[doc="<p>Updates an existing provisioning artifact's information. This operation does not work on a provisioning artifact associated with a product that has been shared with you.</p>"]
+    /// <p>Updates an existing provisioning artifact's information. This operation does not work on a provisioning artifact associated with a product that has been shared with you.</p>
     fn update_provisioning_artifact(
         &self,
         input: &UpdateProvisioningArtifactInput,
     ) -> Result<UpdateProvisioningArtifactOutput, UpdateProvisioningArtifactError>;
 
-    #[doc = "<p>Updates an existing TagOption.</p>"]
+    /// <p>Updates an existing TagOption.</p>
     fn update_tag_option(
         &self,
         input: &UpdateTagOptionInput,
@@ -6923,7 +6923,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc = "<p>Accepts an offer to share a portfolio.</p>"]
+    /// <p>Accepts an offer to share a portfolio.</p>
     fn accept_portfolio_share(
         &self,
         input: &AcceptPortfolioShareInput,
@@ -6960,7 +6960,7 @@ where
         }
     }
 
-    #[doc = "<p>Associates the specified principal ARN with the specified portfolio.</p>"]
+    /// <p>Associates the specified principal ARN with the specified portfolio.</p>
     fn associate_principal_with_portfolio(
         &self,
         input: &AssociatePrincipalWithPortfolioInput,
@@ -6999,7 +6999,7 @@ where
         }
     }
 
-    #[doc = "<p>Associates a product with a portfolio.</p>"]
+    /// <p>Associates a product with a portfolio.</p>
     fn associate_product_with_portfolio(
         &self,
         input: &AssociateProductWithPortfolioInput,
@@ -7036,7 +7036,7 @@ where
         }
     }
 
-    #[doc = "<p>Associate a TagOption identifier with a resource identifier.</p>"]
+    /// <p>Associate a TagOption identifier with a resource identifier.</p>
     fn associate_tag_option_with_resource(
         &self,
         input: &AssociateTagOptionWithResourceInput,
@@ -7075,7 +7075,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new constraint. For more information, see <a href=\"http://docs.aws.amazon.com/servicecatalog/latest/adminguide/constraints.html\">Using Constraints</a>.</p>"]
+    /// <p>Creates a new constraint. For more information, see <a href="http://docs.aws.amazon.com/servicecatalog/latest/adminguide/constraints.html">Using Constraints</a>.</p>
     fn create_constraint(
         &self,
         input: &CreateConstraintInput,
@@ -7112,7 +7112,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a new portfolio.</p>"]
+    /// <p>Creates a new portfolio.</p>
     fn create_portfolio(
         &self,
         input: &CreatePortfolioInput,
@@ -7149,7 +7149,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a new portfolio share.</p>"]
+    /// <p>Creates a new portfolio share.</p>
     fn create_portfolio_share(
         &self,
         input: &CreatePortfolioShareInput,
@@ -7186,7 +7186,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a new product.</p>"]
+    /// <p>Creates a new product.</p>
     fn create_product(
         &self,
         input: &CreateProductInput,
@@ -7220,7 +7220,7 @@ where
         }
     }
 
-    #[doc="<p>Create a new provisioning artifact for the specified product. This operation does not work with a product that has been shared with you.</p> <p>See the bottom of this topic for an example JSON request.</p>"]
+    /// <p>Create a new provisioning artifact for the specified product. This operation does not work with a product that has been shared with you.</p> <p>See the bottom of this topic for an example JSON request.</p>
     fn create_provisioning_artifact(
         &self,
         input: &CreateProvisioningArtifactInput,
@@ -7257,7 +7257,7 @@ where
         }
     }
 
-    #[doc = "<p>Create a new TagOption.</p>"]
+    /// <p>Create a new TagOption.</p>
     fn create_tag_option(
         &self,
         input: &CreateTagOptionInput,
@@ -7294,7 +7294,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the specified constraint.</p>"]
+    /// <p>Deletes the specified constraint.</p>
     fn delete_constraint(
         &self,
         input: &DeleteConstraintInput,
@@ -7331,7 +7331,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified portfolio. This operation does not work with a portfolio that has been shared with you or if it has products, users, constraints, or shared accounts associated with it.</p>"]
+    /// <p>Deletes the specified portfolio. This operation does not work with a portfolio that has been shared with you or if it has products, users, constraints, or shared accounts associated with it.</p>
     fn delete_portfolio(
         &self,
         input: &DeletePortfolioInput,
@@ -7368,7 +7368,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the specified portfolio share.</p>"]
+    /// <p>Deletes the specified portfolio share.</p>
     fn delete_portfolio_share(
         &self,
         input: &DeletePortfolioShareInput,
@@ -7405,7 +7405,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified product. This operation does not work with a product that has been shared with you or is associated with a portfolio. </p>"]
+    /// <p>Deletes the specified product. This operation does not work with a product that has been shared with you or is associated with a portfolio. </p>
     fn delete_product(
         &self,
         input: &DeleteProductInput,
@@ -7439,7 +7439,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified provisioning artifact. This operation does not work on a provisioning artifact associated with a product that has been shared with you, or on the last provisioning artifact associated with a product (a product must have at least one provisioning artifact).</p>"]
+    /// <p>Deletes the specified provisioning artifact. This operation does not work on a provisioning artifact associated with a product that has been shared with you, or on the last provisioning artifact associated with a product (a product must have at least one provisioning artifact).</p>
     fn delete_provisioning_artifact(
         &self,
         input: &DeleteProvisioningArtifactInput,
@@ -7476,7 +7476,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves detailed information for a specified constraint.</p>"]
+    /// <p>Retrieves detailed information for a specified constraint.</p>
     fn describe_constraint(
         &self,
         input: &DescribeConstraintInput,
@@ -7513,7 +7513,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves detailed information and any tags associated with the specified portfolio.</p>"]
+    /// <p>Retrieves detailed information and any tags associated with the specified portfolio.</p>
     fn describe_portfolio(
         &self,
         input: &DescribePortfolioInput,
@@ -7550,7 +7550,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves information about a specified product.</p> <p>This operation is functionally identical to <a>DescribeProductView</a> except that it takes as input <code>ProductId</code> instead of <code>ProductViewId</code>.</p>"]
+    /// <p>Retrieves information about a specified product.</p> <p>This operation is functionally identical to <a>DescribeProductView</a> except that it takes as input <code>ProductId</code> instead of <code>ProductViewId</code>.</p>
     fn describe_product(
         &self,
         input: &DescribeProductInput,
@@ -7587,7 +7587,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves information about a specified product, run with administrator access.</p>"]
+    /// <p>Retrieves information about a specified product, run with administrator access.</p>
     fn describe_product_as_admin(
         &self,
         input: &DescribeProductAsAdminInput,
@@ -7624,7 +7624,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves information about a specified product.</p> <p>This operation is functionally identical to <a>DescribeProduct</a> except that it takes as input <code>ProductViewId</code> instead of <code>ProductId</code>.</p>"]
+    /// <p>Retrieves information about a specified product.</p> <p>This operation is functionally identical to <a>DescribeProduct</a> except that it takes as input <code>ProductViewId</code> instead of <code>ProductId</code>.</p>
     fn describe_product_view(
         &self,
         input: &DescribeProductViewInput,
@@ -7661,7 +7661,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieve detailed information about the provisioned product.</p>"]
+    /// <p>Retrieve detailed information about the provisioned product.</p>
     fn describe_provisioned_product(
         &self,
         input: &DescribeProvisionedProductInput,
@@ -7698,7 +7698,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves detailed information about the specified provisioning artifact.</p>"]
+    /// <p>Retrieves detailed information about the specified provisioning artifact.</p>
     fn describe_provisioning_artifact(
         &self,
         input: &DescribeProvisioningArtifactInput,
@@ -7735,7 +7735,7 @@ where
         }
     }
 
-    #[doc="<p>Provides information about parameters required to provision a specified product in a specified manner. Use this operation to obtain the list of <code>ProvisioningArtifactParameters</code> parameters available to call the <a>ProvisionProduct</a> operation for the specified product.</p> <p>If the output contains a TagOption key with an empty list of values, there is a TagOption conflict for that key. The end user cannot take action to fix the conflict, and launch is not blocked. In subsequent calls to the <code>ProvisionProduct</code> operation, do not include conflicted TagOption keys as tags. Calls to <code>ProvisionProduct</code> with empty TagOption values cause the error \"Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i> \". Calls to <code>ProvisionProduct</code> with conflicted TagOption keys automatically tag the provisioned product with the conflicted keys with the value \"<code>sc-tagoption-conflict-portfolioId-productId</code>\".</p>"]
+    /// <p>Provides information about parameters required to provision a specified product in a specified manner. Use this operation to obtain the list of <code>ProvisioningArtifactParameters</code> parameters available to call the <a>ProvisionProduct</a> operation for the specified product.</p> <p>If the output contains a TagOption key with an empty list of values, there is a TagOption conflict for that key. The end user cannot take action to fix the conflict, and launch is not blocked. In subsequent calls to the <code>ProvisionProduct</code> operation, do not include conflicted TagOption keys as tags. Calls to <code>ProvisionProduct</code> with empty TagOption values cause the error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i> ". Calls to <code>ProvisionProduct</code> with conflicted TagOption keys automatically tag the provisioned product with the conflicted keys with the value "<code>sc-tagoption-conflict-portfolioId-productId</code>".</p>
     fn describe_provisioning_parameters(
         &self,
         input: &DescribeProvisioningParametersInput,
@@ -7774,7 +7774,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves a paginated list of the full details of a specific request. Use this operation after calling a request operation (<a>ProvisionProduct</a>, <a>TerminateProvisionedProduct</a>, or <a>UpdateProvisionedProduct</a>). </p>"]
+    /// <p>Retrieves a paginated list of the full details of a specific request. Use this operation after calling a request operation (<a>ProvisionProduct</a>, <a>TerminateProvisionedProduct</a>, or <a>UpdateProvisionedProduct</a>). </p>
     fn describe_record(
         &self,
         input: &DescribeRecordInput,
@@ -7808,7 +7808,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes a TagOption.</p>"]
+    /// <p>Describes a TagOption.</p>
     fn describe_tag_option(
         &self,
         input: &DescribeTagOptionInput,
@@ -7845,7 +7845,7 @@ where
         }
     }
 
-    #[doc = "<p>Disassociates a previously associated principal ARN from a specified portfolio.</p>"]
+    /// <p>Disassociates a previously associated principal ARN from a specified portfolio.</p>
     fn disassociate_principal_from_portfolio(
         &self,
         input: &DisassociatePrincipalFromPortfolioInput,
@@ -7885,7 +7885,7 @@ where
         }
     }
 
-    #[doc = "<p>Disassociates the specified product from the specified portfolio. </p>"]
+    /// <p>Disassociates the specified product from the specified portfolio. </p>
     fn disassociate_product_from_portfolio(
         &self,
         input: &DisassociateProductFromPortfolioInput,
@@ -7924,7 +7924,7 @@ where
         }
     }
 
-    #[doc = "<p>Disassociates a TagOption from a resource.</p>"]
+    /// <p>Disassociates a TagOption from a resource.</p>
     fn disassociate_tag_option_from_resource(
         &self,
         input: &DisassociateTagOptionFromResourceInput,
@@ -7964,7 +7964,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists details of all portfolios for which sharing was accepted by this account.</p>"]
+    /// <p>Lists details of all portfolios for which sharing was accepted by this account.</p>
     fn list_accepted_portfolio_shares(
         &self,
         input: &ListAcceptedPortfolioSharesInput,
@@ -8001,7 +8001,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves detailed constraint information for the specified portfolio and product.</p>"]
+    /// <p>Retrieves detailed constraint information for the specified portfolio and product.</p>
     fn list_constraints_for_portfolio(
         &self,
         input: &ListConstraintsForPortfolioInput,
@@ -8038,7 +8038,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a paginated list of all paths to a specified product. A path is how the user has access to a specified product, and is necessary when provisioning a product. A path also determines the constraints put on the product.</p>"]
+    /// <p>Returns a paginated list of all paths to a specified product. A path is how the user has access to a specified product, and is necessary when provisioning a product. A path also determines the constraints put on the product.</p>
     fn list_launch_paths(
         &self,
         input: &ListLaunchPathsInput,
@@ -8075,7 +8075,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the account IDs that have been authorized sharing of the specified portfolio.</p>"]
+    /// <p>Lists the account IDs that have been authorized sharing of the specified portfolio.</p>
     fn list_portfolio_access(
         &self,
         input: &ListPortfolioAccessInput,
@@ -8112,7 +8112,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists all portfolios in the catalog.</p>"]
+    /// <p>Lists all portfolios in the catalog.</p>
     fn list_portfolios(
         &self,
         input: &ListPortfoliosInput,
@@ -8146,7 +8146,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists all portfolios that the specified product is associated with.</p>"]
+    /// <p>Lists all portfolios that the specified product is associated with.</p>
     fn list_portfolios_for_product(
         &self,
         input: &ListPortfoliosForProductInput,
@@ -8183,7 +8183,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists all principal ARNs associated with the specified portfolio.</p>"]
+    /// <p>Lists all principal ARNs associated with the specified portfolio.</p>
     fn list_principals_for_portfolio(
         &self,
         input: &ListPrincipalsForPortfolioInput,
@@ -8220,7 +8220,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists all provisioning artifacts associated with the specified product.</p>"]
+    /// <p>Lists all provisioning artifacts associated with the specified product.</p>
     fn list_provisioning_artifacts(
         &self,
         input: &ListProvisioningArtifactsInput,
@@ -8257,7 +8257,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a paginated list of all performed requests, in the form of RecordDetails objects that are filtered as specified.</p>"]
+    /// <p>Returns a paginated list of all performed requests, in the form of RecordDetails objects that are filtered as specified.</p>
     fn list_record_history(
         &self,
         input: &ListRecordHistoryInput,
@@ -8294,7 +8294,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists resources associated with a TagOption.</p>"]
+    /// <p>Lists resources associated with a TagOption.</p>
     fn list_resources_for_tag_option(
         &self,
         input: &ListResourcesForTagOptionInput,
@@ -8331,7 +8331,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists detailed TagOptions information.</p>"]
+    /// <p>Lists detailed TagOptions information.</p>
     fn list_tag_options(
         &self,
         input: &ListTagOptionsInput,
@@ -8365,7 +8365,7 @@ where
         }
     }
 
-    #[doc="<p>Requests a <i>provision</i> of a specified product. A <i>provisioned product</i> is a resourced instance for a product. For example, provisioning a CloudFormation-template-backed product results in launching a CloudFormation stack and all the underlying resources that come with it. </p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation. The error \"Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>\" indicates that your request contains a tag which has a tag key but no corresponding tag value (value is empty or null). Your call may have included values returned from a <code>DescribeProvisioningParameters</code> call that resulted in a TagOption key with an empty list. This happens when TagOption keys are in conflict. For more information, see <a>DescribeProvisioningParameters</a>.</p>"]
+    /// <p>Requests a <i>provision</i> of a specified product. A <i>provisioned product</i> is a resourced instance for a product. For example, provisioning a CloudFormation-template-backed product results in launching a CloudFormation stack and all the underlying resources that come with it. </p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation. The error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>" indicates that your request contains a tag which has a tag key but no corresponding tag value (value is empty or null). Your call may have included values returned from a <code>DescribeProvisioningParameters</code> call that resulted in a TagOption key with an empty list. This happens when TagOption keys are in conflict. For more information, see <a>DescribeProvisioningParameters</a>.</p>
     fn provision_product(
         &self,
         input: &ProvisionProductInput,
@@ -8402,7 +8402,7 @@ where
         }
     }
 
-    #[doc = "<p>Rejects an offer to share a portfolio.</p>"]
+    /// <p>Rejects an offer to share a portfolio.</p>
     fn reject_portfolio_share(
         &self,
         input: &RejectPortfolioShareInput,
@@ -8439,7 +8439,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a paginated list of all the ProvisionedProduct objects that are currently available (not terminated). </p>"]
+    /// <p>Returns a paginated list of all the ProvisionedProduct objects that are currently available (not terminated). </p>
     fn scan_provisioned_products(
         &self,
         input: &ScanProvisionedProductsInput,
@@ -8476,7 +8476,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a paginated list all of the <code>Products</code> objects to which the caller has access. </p> <p>The output of this operation can be used as input for other operations, such as <a>DescribeProductView</a>.</p>"]
+    /// <p>Returns a paginated list all of the <code>Products</code> objects to which the caller has access. </p> <p>The output of this operation can be used as input for other operations, such as <a>DescribeProductView</a>.</p>
     fn search_products(
         &self,
         input: &SearchProductsInput,
@@ -8510,7 +8510,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves summary and status information about all products created within the caller's account. If a portfolio ID is provided, this operation retrieves information for only those products that are associated with the specified portfolio.</p>"]
+    /// <p>Retrieves summary and status information about all products created within the caller's account. If a portfolio ID is provided, this operation retrieves information for only those products that are associated with the specified portfolio.</p>
     fn search_products_as_admin(
         &self,
         input: &SearchProductsAsAdminInput,
@@ -8547,7 +8547,7 @@ where
         }
     }
 
-    #[doc="<p>Requests termination of an existing ProvisionedProduct object. If there are <code>Tags</code> associated with the object, they are terminated when the ProvisionedProduct object is terminated. </p> <p>This operation does not delete any records associated with the ProvisionedProduct object.</p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation.</p>"]
+    /// <p>Requests termination of an existing ProvisionedProduct object. If there are <code>Tags</code> associated with the object, they are terminated when the ProvisionedProduct object is terminated. </p> <p>This operation does not delete any records associated with the ProvisionedProduct object.</p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation.</p>
     fn terminate_provisioned_product(
         &self,
         input: &TerminateProvisionedProductInput,
@@ -8584,7 +8584,7 @@ where
         }
     }
 
-    #[doc = "<p>Updates an existing constraint.</p>"]
+    /// <p>Updates an existing constraint.</p>
     fn update_constraint(
         &self,
         input: &UpdateConstraintInput,
@@ -8621,7 +8621,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the specified portfolio's details. This operation does not work with a product that has been shared with you.</p>"]
+    /// <p>Updates the specified portfolio's details. This operation does not work with a product that has been shared with you.</p>
     fn update_portfolio(
         &self,
         input: &UpdatePortfolioInput,
@@ -8658,7 +8658,7 @@ where
         }
     }
 
-    #[doc = "<p>Updates an existing product.</p>"]
+    /// <p>Updates an existing product.</p>
     fn update_product(
         &self,
         input: &UpdateProductInput,
@@ -8692,7 +8692,7 @@ where
         }
     }
 
-    #[doc="<p>Requests updates to the configuration of an existing ProvisionedProduct object. If there are tags associated with the object, they cannot be updated or added with this operation. Depending on the specific updates requested, this operation may update with no interruption, with some interruption, or replace the ProvisionedProduct object entirely. </p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation.</p>"]
+    /// <p>Requests updates to the configuration of an existing ProvisionedProduct object. If there are tags associated with the object, they cannot be updated or added with this operation. Depending on the specific updates requested, this operation may update with no interruption, with some interruption, or replace the ProvisionedProduct object entirely. </p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation.</p>
     fn update_provisioned_product(
         &self,
         input: &UpdateProvisionedProductInput,
@@ -8729,7 +8729,7 @@ where
         }
     }
 
-    #[doc="<p>Updates an existing provisioning artifact's information. This operation does not work on a provisioning artifact associated with a product that has been shared with you.</p>"]
+    /// <p>Updates an existing provisioning artifact's information. This operation does not work on a provisioning artifact associated with a product that has been shared with you.</p>
     fn update_provisioning_artifact(
         &self,
         input: &UpdateProvisioningArtifactInput,
@@ -8766,7 +8766,7 @@ where
         }
     }
 
-    #[doc = "<p>Updates an existing TagOption.</p>"]
+    /// <p>Updates an existing TagOption.</p>
     fn update_tag_option(
         &self,
         input: &UpdateTagOptionInput,

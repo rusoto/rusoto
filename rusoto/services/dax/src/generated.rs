@@ -102,7 +102,7 @@ pub struct CreateClusterRequest {
     #[serde(rename = "AvailabilityZones")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zones: Option<Vec<String>>,
-    /// <p>The cluster identifier. This parameter is stored as a lowercase string.</p> <p> <b>Constraints:</b> </p> <ul> <li> <p>A name must contain from 1 to 20 alphanumeric characters or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>A name cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>
+    /// <p><p>The cluster identifier. This parameter is stored as a lowercase string.</p> <p> <b>Constraints:</b> </p> <ul> <li> <p>A name must contain from 1 to 20 alphanumeric characters or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>A name cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
     #[serde(rename = "ClusterName")]
     pub cluster_name: String,
     /// <p>A description of the cluster.</p>
@@ -115,7 +115,7 @@ pub struct CreateClusterRequest {
     /// <p>The compute and memory capacity of the nodes in the cluster.</p>
     #[serde(rename = "NodeType")]
     pub node_type: String,
-    /// <p>The Amazon Resource Name (ARN) of the Amazon SNS topic to which notifications will be sent.</p> <note> <p>The Amazon SNS topic owner must be same as the DAX cluster owner.</p> </note>
+    /// <p><p>The Amazon Resource Name (ARN) of the Amazon SNS topic to which notifications will be sent.</p> <note> <p>The Amazon SNS topic owner must be same as the DAX cluster owner.</p> </note></p>
     #[serde(rename = "NotificationTopicArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_topic_arn: Option<String>,
@@ -123,18 +123,18 @@ pub struct CreateClusterRequest {
     #[serde(rename = "ParameterGroupName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_group_name: Option<String>,
-    /// <p>Specifies the weekly time range during which maintenance on the DAX cluster is performed. It is specified as a range in the format ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period. Valid values for <code>ddd</code> are:</p> <ul> <li> <p> <code>sun</code> </p> </li> <li> <p> <code>mon</code> </p> </li> <li> <p> <code>tue</code> </p> </li> <li> <p> <code>wed</code> </p> </li> <li> <p> <code>thu</code> </p> </li> <li> <p> <code>fri</code> </p> </li> <li> <p> <code>sat</code> </p> </li> </ul> <p>Example: <code>sun:05:00-sun:09:00</code> </p> <note> <p>If you don't specify a preferred maintenance window when you create or modify a cache cluster, DAX assigns a 60-minute maintenance window on a randomly selected day of the week.</p> </note>
+    /// <p><p>Specifies the weekly time range during which maintenance on the DAX cluster is performed. It is specified as a range in the format ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period. Valid values for <code>ddd</code> are:</p> <ul> <li> <p> <code>sun</code> </p> </li> <li> <p> <code>mon</code> </p> </li> <li> <p> <code>tue</code> </p> </li> <li> <p> <code>wed</code> </p> </li> <li> <p> <code>thu</code> </p> </li> <li> <p> <code>fri</code> </p> </li> <li> <p> <code>sat</code> </p> </li> </ul> <p>Example: <code>sun:05:00-sun:09:00</code> </p> <note> <p>If you don&#39;t specify a preferred maintenance window when you create or modify a cache cluster, DAX assigns a 60-minute maintenance window on a randomly selected day of the week.</p> </note></p>
     #[serde(rename = "PreferredMaintenanceWindow")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub preferred_maintenance_window: Option<String>,
-    /// <p>The number of nodes in the DAX cluster. A replication factor of 1 will create a single-node cluster, without any read replicas. For additional fault tolerance, you can create a multiple node cluster with one or more read replicas. To do this, set <i>ReplicationFactor</i> to 2 or more.</p> <note> <p>AWS recommends that you have at least two read replicas per cluster.</p> </note>
+    /// <p><p>The number of nodes in the DAX cluster. A replication factor of 1 will create a single-node cluster, without any read replicas. For additional fault tolerance, you can create a multiple node cluster with one or more read replicas. To do this, set <i>ReplicationFactor</i> to 2 or more.</p> <note> <p>AWS recommends that you have at least two read replicas per cluster.</p> </note></p>
     #[serde(rename = "ReplicationFactor")]
     pub replication_factor: i64,
     /// <p>A list of security group IDs to be assigned to each node in the DAX cluster. (Each of the security group ID is system-generated.)</p> <p>If this parameter is not specified, DAX assigns the default VPC security group to each node.</p>
     #[serde(rename = "SecurityGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_group_ids: Option<Vec<String>>,
-    /// <p>The name of the subnet group to be used for the replication group.</p> <important> <p>DAX clusters can only run in an Amazon VPC environment. All of the subnets that you specify in a subnet group must exist in the same VPC.</p> </important>
+    /// <p><p>The name of the subnet group to be used for the replication group.</p> <important> <p>DAX clusters can only run in an Amazon VPC environment. All of the subnets that you specify in a subnet group must exist in the same VPC.</p> </important></p>
     #[serde(rename = "SubnetGroupName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_group_name: Option<String>,
@@ -713,7 +713,7 @@ pub struct Subnet {
     pub subnet_identifier: Option<String>,
 }
 
-/// <p>Represents the output of one of the following actions:</p> <ul> <li> <p> <i>CreateSubnetGroup</i> </p> </li> <li> <p> <i>ModifySubnetGroup</i> </p> </li> </ul>
+/// <p><p>Represents the output of one of the following actions:</p> <ul> <li> <p> <i>CreateSubnetGroup</i> </p> </li> <li> <p> <i>ModifySubnetGroup</i> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct SubnetGroup {
     /// <p>The description of the subnet group.</p>
@@ -866,31 +866,31 @@ pub struct UpdateSubnetGroupResponse {
 /// Errors returned by CreateCluster
 #[derive(Debug, PartialEq)]
 pub enum CreateClusterError {
-    ///<p>You already have a DAX cluster with the given identifier.</p>
+    /// <p>You already have a DAX cluster with the given identifier.</p>
     ClusterAlreadyExistsFault(String),
-    ///<p>You have attempted to exceed the maximum number of DAX clusters for your AWS account.</p>
+    /// <p>You have attempted to exceed the maximum number of DAX clusters for your AWS account.</p>
     ClusterQuotaForCustomerExceededFault(String),
-    ///<p>There are not enough system resources to create the cluster you requested (or to resize an already-existing cluster). </p>
+    /// <p>There are not enough system resources to create the cluster you requested (or to resize an already-existing cluster). </p>
     InsufficientClusterCapacityFault(String),
-    ///<p>The requested DAX cluster is not in the <i>available</i> state.</p>
+    /// <p>The requested DAX cluster is not in the <i>available</i> state.</p>
     InvalidClusterStateFault(String),
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>One or more parameters in a parameter group are in an invalid state.</p>
+    /// <p>One or more parameters in a parameter group are in an invalid state.</p>
     InvalidParameterGroupStateFault(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-    ///<p>The VPC network is in an invalid state.</p>
+    /// <p>The VPC network is in an invalid state.</p>
     InvalidVPCNetworkStateFault(String),
-    ///<p>You have attempted to exceed the maximum number of nodes for a DAX cluster.</p>
+    /// <p>You have attempted to exceed the maximum number of nodes for a DAX cluster.</p>
     NodeQuotaForClusterExceededFault(String),
-    ///<p>You have attempted to exceed the maximum number of nodes for your AWS account.</p>
+    /// <p>You have attempted to exceed the maximum number of nodes for your AWS account.</p>
     NodeQuotaForCustomerExceededFault(String),
-    ///<p>The specified parameter group does not exist.</p>
+    /// <p>The specified parameter group does not exist.</p>
     ParameterGroupNotFoundFault(String),
-    ///<p>The requested subnet group name does not refer to an existing subnet group.</p>
+    /// <p>The requested subnet group name does not refer to an existing subnet group.</p>
     SubnetGroupNotFoundFault(String),
-    ///<p>You have exceeded the maximum number of tags for this DAX cluster.</p>
+    /// <p>You have exceeded the maximum number of tags for this DAX cluster.</p>
     TagQuotaPerResourceExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1026,15 +1026,15 @@ impl Error for CreateClusterError {
 /// Errors returned by CreateParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateParameterGroupError {
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>One or more parameters in a parameter group are in an invalid state.</p>
+    /// <p>One or more parameters in a parameter group are in an invalid state.</p>
     InvalidParameterGroupStateFault(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-    ///<p>The specified parameter group already exists.</p>
+    /// <p>The specified parameter group already exists.</p>
     ParameterGroupAlreadyExistsFault(String),
-    ///<p>You have attempted to exceed the maximum number of parameter groups.</p>
+    /// <p>You have attempted to exceed the maximum number of parameter groups.</p>
     ParameterGroupQuotaExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1140,13 +1140,13 @@ impl Error for CreateParameterGroupError {
 /// Errors returned by CreateSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateSubnetGroupError {
-    ///<p>An invalid subnet identifier was specified.</p>
+    /// <p>An invalid subnet identifier was specified.</p>
     InvalidSubnet(String),
-    ///<p>The specified subnet group already exists.</p>
+    /// <p>The specified subnet group already exists.</p>
     SubnetGroupAlreadyExistsFault(String),
-    ///<p>The request cannot be processed because it would exceed the allowed number of subnets in a subnet group.</p>
+    /// <p>The request cannot be processed because it would exceed the allowed number of subnets in a subnet group.</p>
     SubnetGroupQuotaExceededFault(String),
-    ///<p>The request cannot be processed because it would exceed the allowed number of subnets in a subnet group.</p>
+    /// <p>The request cannot be processed because it would exceed the allowed number of subnets in a subnet group.</p>
     SubnetQuotaExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1244,15 +1244,15 @@ impl Error for CreateSubnetGroupError {
 /// Errors returned by DecreaseReplicationFactor
 #[derive(Debug, PartialEq)]
 pub enum DecreaseReplicationFactorError {
-    ///<p>The requested cluster ID does not refer to an existing DAX cluster.</p>
+    /// <p>The requested cluster ID does not refer to an existing DAX cluster.</p>
     ClusterNotFoundFault(String),
-    ///<p>The requested DAX cluster is not in the <i>available</i> state.</p>
+    /// <p>The requested DAX cluster is not in the <i>available</i> state.</p>
     InvalidClusterStateFault(String),
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-    ///<p>None of the nodes in the cluster have the given node ID.</p>
+    /// <p>None of the nodes in the cluster have the given node ID.</p>
     NodeNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1356,13 +1356,13 @@ impl Error for DecreaseReplicationFactorError {
 /// Errors returned by DeleteCluster
 #[derive(Debug, PartialEq)]
 pub enum DeleteClusterError {
-    ///<p>The requested cluster ID does not refer to an existing DAX cluster.</p>
+    /// <p>The requested cluster ID does not refer to an existing DAX cluster.</p>
     ClusterNotFoundFault(String),
-    ///<p>The requested DAX cluster is not in the <i>available</i> state.</p>
+    /// <p>The requested DAX cluster is not in the <i>available</i> state.</p>
     InvalidClusterStateFault(String),
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1452,13 +1452,13 @@ impl Error for DeleteClusterError {
 /// Errors returned by DeleteParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteParameterGroupError {
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>One or more parameters in a parameter group are in an invalid state.</p>
+    /// <p>One or more parameters in a parameter group are in an invalid state.</p>
     InvalidParameterGroupStateFault(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-    ///<p>The specified parameter group does not exist.</p>
+    /// <p>The specified parameter group does not exist.</p>
     ParameterGroupNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1558,9 +1558,9 @@ impl Error for DeleteParameterGroupError {
 /// Errors returned by DeleteSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteSubnetGroupError {
-    ///<p>The specified subnet group is currently in use.</p>
+    /// <p>The specified subnet group is currently in use.</p>
     SubnetGroupInUseFault(String),
-    ///<p>The requested subnet group name does not refer to an existing subnet group.</p>
+    /// <p>The requested subnet group name does not refer to an existing subnet group.</p>
     SubnetGroupNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1646,11 +1646,11 @@ impl Error for DeleteSubnetGroupError {
 /// Errors returned by DescribeClusters
 #[derive(Debug, PartialEq)]
 pub enum DescribeClustersError {
-    ///<p>The requested cluster ID does not refer to an existing DAX cluster.</p>
+    /// <p>The requested cluster ID does not refer to an existing DAX cluster.</p>
     ClusterNotFoundFault(String),
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1738,9 +1738,9 @@ impl Error for DescribeClustersError {
 /// Errors returned by DescribeDefaultParameters
 #[derive(Debug, PartialEq)]
 pub enum DescribeDefaultParametersError {
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1828,9 +1828,9 @@ impl Error for DescribeDefaultParametersError {
 /// Errors returned by DescribeEvents
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventsError {
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1914,11 +1914,11 @@ impl Error for DescribeEventsError {
 /// Errors returned by DescribeParameterGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeParameterGroupsError {
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-    ///<p>The specified parameter group does not exist.</p>
+    /// <p>The specified parameter group does not exist.</p>
     ParameterGroupNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2012,11 +2012,11 @@ impl Error for DescribeParameterGroupsError {
 /// Errors returned by DescribeParameters
 #[derive(Debug, PartialEq)]
 pub enum DescribeParametersError {
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-    ///<p>The specified parameter group does not exist.</p>
+    /// <p>The specified parameter group does not exist.</p>
     ParameterGroupNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2108,7 +2108,7 @@ impl Error for DescribeParametersError {
 /// Errors returned by DescribeSubnetGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeSubnetGroupsError {
-    ///<p>The requested subnet group name does not refer to an existing subnet group.</p>
+    /// <p>The requested subnet group name does not refer to an existing subnet group.</p>
     SubnetGroupNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2190,21 +2190,21 @@ impl Error for DescribeSubnetGroupsError {
 /// Errors returned by IncreaseReplicationFactor
 #[derive(Debug, PartialEq)]
 pub enum IncreaseReplicationFactorError {
-    ///<p>The requested cluster ID does not refer to an existing DAX cluster.</p>
+    /// <p>The requested cluster ID does not refer to an existing DAX cluster.</p>
     ClusterNotFoundFault(String),
-    ///<p>There are not enough system resources to create the cluster you requested (or to resize an already-existing cluster). </p>
+    /// <p>There are not enough system resources to create the cluster you requested (or to resize an already-existing cluster). </p>
     InsufficientClusterCapacityFault(String),
-    ///<p>The requested DAX cluster is not in the <i>available</i> state.</p>
+    /// <p>The requested DAX cluster is not in the <i>available</i> state.</p>
     InvalidClusterStateFault(String),
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-    ///<p>The VPC network is in an invalid state.</p>
+    /// <p>The VPC network is in an invalid state.</p>
     InvalidVPCNetworkStateFault(String),
-    ///<p>You have attempted to exceed the maximum number of nodes for a DAX cluster.</p>
+    /// <p>You have attempted to exceed the maximum number of nodes for a DAX cluster.</p>
     NodeQuotaForClusterExceededFault(String),
-    ///<p>You have attempted to exceed the maximum number of nodes for your AWS account.</p>
+    /// <p>You have attempted to exceed the maximum number of nodes for your AWS account.</p>
     NodeQuotaForCustomerExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2328,15 +2328,15 @@ impl Error for IncreaseReplicationFactorError {
 /// Errors returned by ListTags
 #[derive(Debug, PartialEq)]
 pub enum ListTagsError {
-    ///<p>The requested cluster ID does not refer to an existing DAX cluster.</p>
+    /// <p>The requested cluster ID does not refer to an existing DAX cluster.</p>
     ClusterNotFoundFault(String),
-    ///<p>The Amazon Resource Name (ARN) supplied in the request is not valid.</p>
+    /// <p>The Amazon Resource Name (ARN) supplied in the request is not valid.</p>
     InvalidARNFault(String),
-    ///<p>The requested DAX cluster is not in the <i>available</i> state.</p>
+    /// <p>The requested DAX cluster is not in the <i>available</i> state.</p>
     InvalidClusterStateFault(String),
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2428,15 +2428,15 @@ impl Error for ListTagsError {
 /// Errors returned by RebootNode
 #[derive(Debug, PartialEq)]
 pub enum RebootNodeError {
-    ///<p>The requested cluster ID does not refer to an existing DAX cluster.</p>
+    /// <p>The requested cluster ID does not refer to an existing DAX cluster.</p>
     ClusterNotFoundFault(String),
-    ///<p>The requested DAX cluster is not in the <i>available</i> state.</p>
+    /// <p>The requested DAX cluster is not in the <i>available</i> state.</p>
     InvalidClusterStateFault(String),
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-    ///<p>None of the nodes in the cluster have the given node ID.</p>
+    /// <p>None of the nodes in the cluster have the given node ID.</p>
     NodeNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2528,17 +2528,17 @@ impl Error for RebootNodeError {
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
-    ///<p>The requested cluster ID does not refer to an existing DAX cluster.</p>
+    /// <p>The requested cluster ID does not refer to an existing DAX cluster.</p>
     ClusterNotFoundFault(String),
-    ///<p>The Amazon Resource Name (ARN) supplied in the request is not valid.</p>
+    /// <p>The Amazon Resource Name (ARN) supplied in the request is not valid.</p>
     InvalidARNFault(String),
-    ///<p>The requested DAX cluster is not in the <i>available</i> state.</p>
+    /// <p>The requested DAX cluster is not in the <i>available</i> state.</p>
     InvalidClusterStateFault(String),
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-    ///<p>You have exceeded the maximum number of tags for this DAX cluster.</p>
+    /// <p>You have exceeded the maximum number of tags for this DAX cluster.</p>
     TagQuotaPerResourceExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2636,17 +2636,17 @@ impl Error for TagResourceError {
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
-    ///<p>The requested cluster ID does not refer to an existing DAX cluster.</p>
+    /// <p>The requested cluster ID does not refer to an existing DAX cluster.</p>
     ClusterNotFoundFault(String),
-    ///<p>The Amazon Resource Name (ARN) supplied in the request is not valid.</p>
+    /// <p>The Amazon Resource Name (ARN) supplied in the request is not valid.</p>
     InvalidARNFault(String),
-    ///<p>The requested DAX cluster is not in the <i>available</i> state.</p>
+    /// <p>The requested DAX cluster is not in the <i>available</i> state.</p>
     InvalidClusterStateFault(String),
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-    ///<p>The tag does not exist.</p>
+    /// <p>The tag does not exist.</p>
     TagNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2744,17 +2744,17 @@ impl Error for UntagResourceError {
 /// Errors returned by UpdateCluster
 #[derive(Debug, PartialEq)]
 pub enum UpdateClusterError {
-    ///<p>The requested cluster ID does not refer to an existing DAX cluster.</p>
+    /// <p>The requested cluster ID does not refer to an existing DAX cluster.</p>
     ClusterNotFoundFault(String),
-    ///<p>The requested DAX cluster is not in the <i>available</i> state.</p>
+    /// <p>The requested DAX cluster is not in the <i>available</i> state.</p>
     InvalidClusterStateFault(String),
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>One or more parameters in a parameter group are in an invalid state.</p>
+    /// <p>One or more parameters in a parameter group are in an invalid state.</p>
     InvalidParameterGroupStateFault(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-    ///<p>The specified parameter group does not exist.</p>
+    /// <p>The specified parameter group does not exist.</p>
     ParameterGroupNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2854,13 +2854,13 @@ impl Error for UpdateClusterError {
 /// Errors returned by UpdateParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateParameterGroupError {
-    ///<p>Two or more incompatible parameters were specified.</p>
+    /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
-    ///<p>One or more parameters in a parameter group are in an invalid state.</p>
+    /// <p>One or more parameters in a parameter group are in an invalid state.</p>
     InvalidParameterGroupStateFault(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-    ///<p>The specified parameter group does not exist.</p>
+    /// <p>The specified parameter group does not exist.</p>
     ParameterGroupNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2960,13 +2960,13 @@ impl Error for UpdateParameterGroupError {
 /// Errors returned by UpdateSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateSubnetGroupError {
-    ///<p>An invalid subnet identifier was specified.</p>
+    /// <p>An invalid subnet identifier was specified.</p>
     InvalidSubnet(String),
-    ///<p>The requested subnet group name does not refer to an existing subnet group.</p>
+    /// <p>The requested subnet group name does not refer to an existing subnet group.</p>
     SubnetGroupNotFoundFault(String),
-    ///<p>The requested subnet is being used by another subnet group.</p>
+    /// <p>The requested subnet is being used by another subnet group.</p>
     SubnetInUse(String),
-    ///<p>The request cannot be processed because it would exceed the allowed number of subnets in a subnet group.</p>
+    /// <p>The request cannot be processed because it would exceed the allowed number of subnets in a subnet group.</p>
     SubnetQuotaExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3061,122 +3061,122 @@ impl Error for UpdateSubnetGroupError {
 }
 /// Trait representing the capabilities of the Amazon DAX API. Amazon DAX clients implement this trait.
 pub trait DynamodbAccelerator {
-    #[doc="<p>Creates a DAX cluster. All nodes in the cluster run the same DAX caching software.</p>"]
+    /// <p>Creates a DAX cluster. All nodes in the cluster run the same DAX caching software.</p>
     fn create_cluster(
         &self,
         input: &CreateClusterRequest,
     ) -> Result<CreateClusterResponse, CreateClusterError>;
 
-    #[doc="<p>Creates a new parameter group. A parameter group is a collection of parameters that you apply to all of the nodes in a DAX cluster.</p>"]
+    /// <p>Creates a new parameter group. A parameter group is a collection of parameters that you apply to all of the nodes in a DAX cluster.</p>
     fn create_parameter_group(
         &self,
         input: &CreateParameterGroupRequest,
     ) -> Result<CreateParameterGroupResponse, CreateParameterGroupError>;
 
-    #[doc = "<p>Creates a new subnet group.</p>"]
+    /// <p>Creates a new subnet group.</p>
     fn create_subnet_group(
         &self,
         input: &CreateSubnetGroupRequest,
     ) -> Result<CreateSubnetGroupResponse, CreateSubnetGroupError>;
 
-    #[doc="<p>Removes one or more nodes from a DAX cluster.</p> <note> <p>You cannot use <code>DecreaseReplicationFactor</code> to remove the last node in a DAX cluster. If you need to do this, use <code>DeleteCluster</code> instead.</p> </note>"]
+    /// <p><p>Removes one or more nodes from a DAX cluster.</p> <note> <p>You cannot use <code>DecreaseReplicationFactor</code> to remove the last node in a DAX cluster. If you need to do this, use <code>DeleteCluster</code> instead.</p> </note></p>
     fn decrease_replication_factor(
         &self,
         input: &DecreaseReplicationFactorRequest,
     ) -> Result<DecreaseReplicationFactorResponse, DecreaseReplicationFactorError>;
 
-    #[doc="<p>Deletes a previously provisioned DAX cluster. <i>DeleteCluster</i> deletes all associated nodes, node endpoints and the DAX cluster itself. When you receive a successful response from this action, DAX immediately begins deleting the cluster; you cannot cancel or revert this action.</p>"]
+    /// <p>Deletes a previously provisioned DAX cluster. <i>DeleteCluster</i> deletes all associated nodes, node endpoints and the DAX cluster itself. When you receive a successful response from this action, DAX immediately begins deleting the cluster; you cannot cancel or revert this action.</p>
     fn delete_cluster(
         &self,
         input: &DeleteClusterRequest,
     ) -> Result<DeleteClusterResponse, DeleteClusterError>;
 
-    #[doc="<p>Deletes the specified parameter group. You cannot delete a parameter group if it is associated with any DAX clusters.</p>"]
+    /// <p>Deletes the specified parameter group. You cannot delete a parameter group if it is associated with any DAX clusters.</p>
     fn delete_parameter_group(
         &self,
         input: &DeleteParameterGroupRequest,
     ) -> Result<DeleteParameterGroupResponse, DeleteParameterGroupError>;
 
-    #[doc="<p>Deletes a subnet group.</p> <note> <p>You cannot delete a subnet group if it is associated with any DAX clusters.</p> </note>"]
+    /// <p><p>Deletes a subnet group.</p> <note> <p>You cannot delete a subnet group if it is associated with any DAX clusters.</p> </note></p>
     fn delete_subnet_group(
         &self,
         input: &DeleteSubnetGroupRequest,
     ) -> Result<DeleteSubnetGroupResponse, DeleteSubnetGroupError>;
 
-    #[doc="<p>Returns information about all provisioned DAX clusters if no cluster identifier is specified, or about a specific DAX cluster if a cluster identifier is supplied.</p> <p>If the cluster is in the CREATING state, only cluster level information will be displayed until all of the nodes are successfully provisioned.</p> <p>If the cluster is in the DELETING state, only cluster level information will be displayed.</p> <p>If nodes are currently being added to the DAX cluster, node endpoint information and creation time for the additional nodes will not be displayed until they are completely provisioned. When the DAX cluster state is <i>available</i>, the cluster is ready for use.</p> <p>If nodes are currently being removed from the DAX cluster, no endpoint information for the removed nodes is displayed.</p>"]
+    /// <p>Returns information about all provisioned DAX clusters if no cluster identifier is specified, or about a specific DAX cluster if a cluster identifier is supplied.</p> <p>If the cluster is in the CREATING state, only cluster level information will be displayed until all of the nodes are successfully provisioned.</p> <p>If the cluster is in the DELETING state, only cluster level information will be displayed.</p> <p>If nodes are currently being added to the DAX cluster, node endpoint information and creation time for the additional nodes will not be displayed until they are completely provisioned. When the DAX cluster state is <i>available</i>, the cluster is ready for use.</p> <p>If nodes are currently being removed from the DAX cluster, no endpoint information for the removed nodes is displayed.</p>
     fn describe_clusters(
         &self,
         input: &DescribeClustersRequest,
     ) -> Result<DescribeClustersResponse, DescribeClustersError>;
 
-    #[doc = "<p>Returns the default system parameter information for the DAX caching software.</p>"]
+    /// <p>Returns the default system parameter information for the DAX caching software.</p>
     fn describe_default_parameters(
         &self,
         input: &DescribeDefaultParametersRequest,
     ) -> Result<DescribeDefaultParametersResponse, DescribeDefaultParametersError>;
 
-    #[doc="<p>Returns events related to DAX clusters and parameter groups. You can obtain events specific to a particular DAX cluster or parameter group by providing the name as a parameter.</p> <p>By default, only the events occurring within the last hour are returned; however, you can retrieve up to 14 days' worth of events if necessary.</p>"]
+    /// <p>Returns events related to DAX clusters and parameter groups. You can obtain events specific to a particular DAX cluster or parameter group by providing the name as a parameter.</p> <p>By default, only the events occurring within the last hour are returned; however, you can retrieve up to 14 days' worth of events if necessary.</p>
     fn describe_events(
         &self,
         input: &DescribeEventsRequest,
     ) -> Result<DescribeEventsResponse, DescribeEventsError>;
 
-    #[doc="<p>Returns a list of parameter group descriptions. If a parameter group name is specified, the list will contain only the descriptions for that group.</p>"]
+    /// <p>Returns a list of parameter group descriptions. If a parameter group name is specified, the list will contain only the descriptions for that group.</p>
     fn describe_parameter_groups(
         &self,
         input: &DescribeParameterGroupsRequest,
     ) -> Result<DescribeParameterGroupsResponse, DescribeParameterGroupsError>;
 
-    #[doc = "<p>Returns the detailed parameter list for a particular parameter group.</p>"]
+    /// <p>Returns the detailed parameter list for a particular parameter group.</p>
     fn describe_parameters(
         &self,
         input: &DescribeParametersRequest,
     ) -> Result<DescribeParametersResponse, DescribeParametersError>;
 
-    #[doc="<p>Returns a list of subnet group descriptions. If a subnet group name is specified, the list will contain only the description of that group.</p>"]
+    /// <p>Returns a list of subnet group descriptions. If a subnet group name is specified, the list will contain only the description of that group.</p>
     fn describe_subnet_groups(
         &self,
         input: &DescribeSubnetGroupsRequest,
     ) -> Result<DescribeSubnetGroupsResponse, DescribeSubnetGroupsError>;
 
-    #[doc = "<p>Adds one or more nodes to a DAX cluster.</p>"]
+    /// <p>Adds one or more nodes to a DAX cluster.</p>
     fn increase_replication_factor(
         &self,
         input: &IncreaseReplicationFactorRequest,
     ) -> Result<IncreaseReplicationFactorResponse, IncreaseReplicationFactorError>;
 
-    #[doc="<p>List all of the tags for a DAX cluster. You can call <code>ListTags</code> up to 10 times per second, per account.</p>"]
+    /// <p>List all of the tags for a DAX cluster. You can call <code>ListTags</code> up to 10 times per second, per account.</p>
     fn list_tags(&self, input: &ListTagsRequest) -> Result<ListTagsResponse, ListTagsError>;
 
-    #[doc="<p>Reboots a single node of a DAX cluster. The reboot action takes place as soon as possible. During the reboot, the node status is set to REBOOTING.</p>"]
+    /// <p>Reboots a single node of a DAX cluster. The reboot action takes place as soon as possible. During the reboot, the node status is set to REBOOTING.</p>
     fn reboot_node(&self, input: &RebootNodeRequest)
         -> Result<RebootNodeResponse, RebootNodeError>;
 
-    #[doc="<p>Associates a set of tags with a DAX resource. You can call <code>TagResource</code> up to 5 times per second, per account. </p>"]
+    /// <p>Associates a set of tags with a DAX resource. You can call <code>TagResource</code> up to 5 times per second, per account. </p>
     fn tag_resource(
         &self,
         input: &TagResourceRequest,
     ) -> Result<TagResourceResponse, TagResourceError>;
 
-    #[doc="<p>Removes the association of tags from a DAX resource. You can call <code>UntagResource</code> up to 5 times per second, per account. </p>"]
+    /// <p>Removes the association of tags from a DAX resource. You can call <code>UntagResource</code> up to 5 times per second, per account. </p>
     fn untag_resource(
         &self,
         input: &UntagResourceRequest,
     ) -> Result<UntagResourceResponse, UntagResourceError>;
 
-    #[doc="<p>Modifies the settings for a DAX cluster. You can use this action to change one or more cluster configuration parameters by specifying the parameters and the new values.</p>"]
+    /// <p>Modifies the settings for a DAX cluster. You can use this action to change one or more cluster configuration parameters by specifying the parameters and the new values.</p>
     fn update_cluster(
         &self,
         input: &UpdateClusterRequest,
     ) -> Result<UpdateClusterResponse, UpdateClusterError>;
 
-    #[doc="<p>Modifies the parameters of a parameter group. You can modify up to 20 parameters in a single request by submitting a list parameter name and value pairs.</p>"]
+    /// <p>Modifies the parameters of a parameter group. You can modify up to 20 parameters in a single request by submitting a list parameter name and value pairs.</p>
     fn update_parameter_group(
         &self,
         input: &UpdateParameterGroupRequest,
     ) -> Result<UpdateParameterGroupResponse, UpdateParameterGroupError>;
 
-    #[doc = "<p>Modifies an existing subnet group.</p>"]
+    /// <p>Modifies an existing subnet group.</p>
     fn update_subnet_group(
         &self,
         input: &UpdateSubnetGroupRequest,
@@ -3212,7 +3212,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Creates a DAX cluster. All nodes in the cluster run the same DAX caching software.</p>"]
+    /// <p>Creates a DAX cluster. All nodes in the cluster run the same DAX caching software.</p>
     fn create_cluster(
         &self,
         input: &CreateClusterRequest,
@@ -3246,7 +3246,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new parameter group. A parameter group is a collection of parameters that you apply to all of the nodes in a DAX cluster.</p>"]
+    /// <p>Creates a new parameter group. A parameter group is a collection of parameters that you apply to all of the nodes in a DAX cluster.</p>
     fn create_parameter_group(
         &self,
         input: &CreateParameterGroupRequest,
@@ -3280,7 +3280,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a new subnet group.</p>"]
+    /// <p>Creates a new subnet group.</p>
     fn create_subnet_group(
         &self,
         input: &CreateSubnetGroupRequest,
@@ -3314,7 +3314,7 @@ where
         }
     }
 
-    #[doc="<p>Removes one or more nodes from a DAX cluster.</p> <note> <p>You cannot use <code>DecreaseReplicationFactor</code> to remove the last node in a DAX cluster. If you need to do this, use <code>DeleteCluster</code> instead.</p> </note>"]
+    /// <p><p>Removes one or more nodes from a DAX cluster.</p> <note> <p>You cannot use <code>DecreaseReplicationFactor</code> to remove the last node in a DAX cluster. If you need to do this, use <code>DeleteCluster</code> instead.</p> </note></p>
     fn decrease_replication_factor(
         &self,
         input: &DecreaseReplicationFactorRequest,
@@ -3348,7 +3348,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a previously provisioned DAX cluster. <i>DeleteCluster</i> deletes all associated nodes, node endpoints and the DAX cluster itself. When you receive a successful response from this action, DAX immediately begins deleting the cluster; you cannot cancel or revert this action.</p>"]
+    /// <p>Deletes a previously provisioned DAX cluster. <i>DeleteCluster</i> deletes all associated nodes, node endpoints and the DAX cluster itself. When you receive a successful response from this action, DAX immediately begins deleting the cluster; you cannot cancel or revert this action.</p>
     fn delete_cluster(
         &self,
         input: &DeleteClusterRequest,
@@ -3382,7 +3382,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified parameter group. You cannot delete a parameter group if it is associated with any DAX clusters.</p>"]
+    /// <p>Deletes the specified parameter group. You cannot delete a parameter group if it is associated with any DAX clusters.</p>
     fn delete_parameter_group(
         &self,
         input: &DeleteParameterGroupRequest,
@@ -3416,7 +3416,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a subnet group.</p> <note> <p>You cannot delete a subnet group if it is associated with any DAX clusters.</p> </note>"]
+    /// <p><p>Deletes a subnet group.</p> <note> <p>You cannot delete a subnet group if it is associated with any DAX clusters.</p> </note></p>
     fn delete_subnet_group(
         &self,
         input: &DeleteSubnetGroupRequest,
@@ -3450,7 +3450,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about all provisioned DAX clusters if no cluster identifier is specified, or about a specific DAX cluster if a cluster identifier is supplied.</p> <p>If the cluster is in the CREATING state, only cluster level information will be displayed until all of the nodes are successfully provisioned.</p> <p>If the cluster is in the DELETING state, only cluster level information will be displayed.</p> <p>If nodes are currently being added to the DAX cluster, node endpoint information and creation time for the additional nodes will not be displayed until they are completely provisioned. When the DAX cluster state is <i>available</i>, the cluster is ready for use.</p> <p>If nodes are currently being removed from the DAX cluster, no endpoint information for the removed nodes is displayed.</p>"]
+    /// <p>Returns information about all provisioned DAX clusters if no cluster identifier is specified, or about a specific DAX cluster if a cluster identifier is supplied.</p> <p>If the cluster is in the CREATING state, only cluster level information will be displayed until all of the nodes are successfully provisioned.</p> <p>If the cluster is in the DELETING state, only cluster level information will be displayed.</p> <p>If nodes are currently being added to the DAX cluster, node endpoint information and creation time for the additional nodes will not be displayed until they are completely provisioned. When the DAX cluster state is <i>available</i>, the cluster is ready for use.</p> <p>If nodes are currently being removed from the DAX cluster, no endpoint information for the removed nodes is displayed.</p>
     fn describe_clusters(
         &self,
         input: &DescribeClustersRequest,
@@ -3484,7 +3484,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns the default system parameter information for the DAX caching software.</p>"]
+    /// <p>Returns the default system parameter information for the DAX caching software.</p>
     fn describe_default_parameters(
         &self,
         input: &DescribeDefaultParametersRequest,
@@ -3518,7 +3518,7 @@ where
         }
     }
 
-    #[doc="<p>Returns events related to DAX clusters and parameter groups. You can obtain events specific to a particular DAX cluster or parameter group by providing the name as a parameter.</p> <p>By default, only the events occurring within the last hour are returned; however, you can retrieve up to 14 days' worth of events if necessary.</p>"]
+    /// <p>Returns events related to DAX clusters and parameter groups. You can obtain events specific to a particular DAX cluster or parameter group by providing the name as a parameter.</p> <p>By default, only the events occurring within the last hour are returned; however, you can retrieve up to 14 days' worth of events if necessary.</p>
     fn describe_events(
         &self,
         input: &DescribeEventsRequest,
@@ -3552,7 +3552,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list of parameter group descriptions. If a parameter group name is specified, the list will contain only the descriptions for that group.</p>"]
+    /// <p>Returns a list of parameter group descriptions. If a parameter group name is specified, the list will contain only the descriptions for that group.</p>
     fn describe_parameter_groups(
         &self,
         input: &DescribeParameterGroupsRequest,
@@ -3586,7 +3586,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns the detailed parameter list for a particular parameter group.</p>"]
+    /// <p>Returns the detailed parameter list for a particular parameter group.</p>
     fn describe_parameters(
         &self,
         input: &DescribeParametersRequest,
@@ -3620,7 +3620,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list of subnet group descriptions. If a subnet group name is specified, the list will contain only the description of that group.</p>"]
+    /// <p>Returns a list of subnet group descriptions. If a subnet group name is specified, the list will contain only the description of that group.</p>
     fn describe_subnet_groups(
         &self,
         input: &DescribeSubnetGroupsRequest,
@@ -3654,7 +3654,7 @@ where
         }
     }
 
-    #[doc = "<p>Adds one or more nodes to a DAX cluster.</p>"]
+    /// <p>Adds one or more nodes to a DAX cluster.</p>
     fn increase_replication_factor(
         &self,
         input: &IncreaseReplicationFactorRequest,
@@ -3688,7 +3688,7 @@ where
         }
     }
 
-    #[doc="<p>List all of the tags for a DAX cluster. You can call <code>ListTags</code> up to 10 times per second, per account.</p>"]
+    /// <p>List all of the tags for a DAX cluster. You can call <code>ListTags</code> up to 10 times per second, per account.</p>
     fn list_tags(&self, input: &ListTagsRequest) -> Result<ListTagsResponse, ListTagsError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
@@ -3719,7 +3719,7 @@ where
         }
     }
 
-    #[doc="<p>Reboots a single node of a DAX cluster. The reboot action takes place as soon as possible. During the reboot, the node status is set to REBOOTING.</p>"]
+    /// <p>Reboots a single node of a DAX cluster. The reboot action takes place as soon as possible. During the reboot, the node status is set to REBOOTING.</p>
     fn reboot_node(
         &self,
         input: &RebootNodeRequest,
@@ -3753,7 +3753,7 @@ where
         }
     }
 
-    #[doc="<p>Associates a set of tags with a DAX resource. You can call <code>TagResource</code> up to 5 times per second, per account. </p>"]
+    /// <p>Associates a set of tags with a DAX resource. You can call <code>TagResource</code> up to 5 times per second, per account. </p>
     fn tag_resource(
         &self,
         input: &TagResourceRequest,
@@ -3787,7 +3787,7 @@ where
         }
     }
 
-    #[doc="<p>Removes the association of tags from a DAX resource. You can call <code>UntagResource</code> up to 5 times per second, per account. </p>"]
+    /// <p>Removes the association of tags from a DAX resource. You can call <code>UntagResource</code> up to 5 times per second, per account. </p>
     fn untag_resource(
         &self,
         input: &UntagResourceRequest,
@@ -3821,7 +3821,7 @@ where
         }
     }
 
-    #[doc="<p>Modifies the settings for a DAX cluster. You can use this action to change one or more cluster configuration parameters by specifying the parameters and the new values.</p>"]
+    /// <p>Modifies the settings for a DAX cluster. You can use this action to change one or more cluster configuration parameters by specifying the parameters and the new values.</p>
     fn update_cluster(
         &self,
         input: &UpdateClusterRequest,
@@ -3855,7 +3855,7 @@ where
         }
     }
 
-    #[doc="<p>Modifies the parameters of a parameter group. You can modify up to 20 parameters in a single request by submitting a list parameter name and value pairs.</p>"]
+    /// <p>Modifies the parameters of a parameter group. You can modify up to 20 parameters in a single request by submitting a list parameter name and value pairs.</p>
     fn update_parameter_group(
         &self,
         input: &UpdateParameterGroupRequest,
@@ -3889,7 +3889,7 @@ where
         }
     }
 
-    #[doc = "<p>Modifies an existing subnet group.</p>"]
+    /// <p>Modifies an existing subnet group.</p>
     fn update_subnet_group(
         &self,
         input: &UpdateSubnetGroupRequest,

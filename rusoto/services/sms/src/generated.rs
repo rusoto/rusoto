@@ -27,7 +27,7 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-/// Object representing a Connector
+/// <p>Object representing a Connector</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Connector {
     #[serde(rename = "associatedOn")]
@@ -206,7 +206,7 @@ pub struct ImportServerCatalogRequest;
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ImportServerCatalogResponse;
 
-/// Object representing a Replication Job
+/// <p>Object representing a Replication Job</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ReplicationJob {
     #[serde(rename = "description")]
@@ -253,7 +253,7 @@ pub struct ReplicationJob {
     pub vm_server: Option<VmServer>,
 }
 
-/// Object representing a Replication Run
+/// <p>Object representing a Replication Run</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ReplicationRun {
     #[serde(rename = "amiId")]
@@ -282,7 +282,7 @@ pub struct ReplicationRun {
     pub type_: Option<String>,
 }
 
-/// Object representing a server
+/// <p>Object representing a server</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Server {
     #[serde(rename = "replicationJobId")]
@@ -340,7 +340,7 @@ pub struct UpdateReplicationJobRequest {
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateReplicationJobResponse;
 
-/// Object representing a VM server
+/// <p>Object representing a VM server</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct VmServer {
     #[serde(rename = "vmManagerName")]
@@ -360,7 +360,7 @@ pub struct VmServer {
     pub vm_server_address: Option<VmServerAddress>,
 }
 
-/// Object representing a server's location
+/// <p>Object representing a server&#39;s location</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct VmServerAddress {
     #[serde(rename = "vmId")]
@@ -374,21 +374,21 @@ pub struct VmServerAddress {
 /// Errors returned by CreateReplicationJob
 #[derive(Debug, PartialEq)]
 pub enum CreateReplicationJobError {
-    ///An internal error has occured.
+    /// <p>An internal error has occured.</p>
     InternalError(String),
-    ///A parameter specified in the request is not valid, is unsupported, or cannot be used.
+    /// <p>A parameter specified in the request is not valid, is unsupported, or cannot be used.</p>
     InvalidParameter(String),
-    ///The request is missing a required parameter. Ensure that you have supplied all the required parameters for the request.
+    /// <p>The request is missing a required parameter. Ensure that you have supplied all the required parameters for the request.</p>
     MissingRequiredParameter(String),
-    ///No connectors are available to handle this request. Please associate connector(s) and verify any existing connectors are healthy and can respond to requests.
+    /// <p>No connectors are available to handle this request. Please associate connector(s) and verify any existing connectors are healthy and can respond to requests.</p>
     NoConnectorsAvailable(String),
-    ///The specified operation is not allowed. This error can occur for a number of reasons; for example, you might be trying to start a Replication Run before seed Replication Run.
+    /// <p>The specified operation is not allowed. This error can occur for a number of reasons; for example, you might be trying to start a Replication Run before seed Replication Run.</p>
     OperationNotPermitted(String),
-    ///An active Replication Job already exists for the specified server.
+    /// <p>An active Replication Job already exists for the specified server.</p>
     ReplicationJobAlreadyExists(String),
-    ///The provided server cannot be replicated.
+    /// <p>The provided server cannot be replicated.</p>
     ServerCannotBeReplicated(String),
-    ///This user does not have permissions to perform this operation.
+    /// <p>This user does not have permissions to perform this operation.</p>
     UnauthorizedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -508,15 +508,15 @@ impl Error for CreateReplicationJobError {
 /// Errors returned by DeleteReplicationJob
 #[derive(Debug, PartialEq)]
 pub enum DeleteReplicationJobError {
-    ///A parameter specified in the request is not valid, is unsupported, or cannot be used.
+    /// <p>A parameter specified in the request is not valid, is unsupported, or cannot be used.</p>
     InvalidParameter(String),
-    ///The request is missing a required parameter. Ensure that you have supplied all the required parameters for the request.
+    /// <p>The request is missing a required parameter. Ensure that you have supplied all the required parameters for the request.</p>
     MissingRequiredParameter(String),
-    ///The specified operation is not allowed. This error can occur for a number of reasons; for example, you might be trying to start a Replication Run before seed Replication Run.
+    /// <p>The specified operation is not allowed. This error can occur for a number of reasons; for example, you might be trying to start a Replication Run before seed Replication Run.</p>
     OperationNotPermitted(String),
-    ///The specified Replication Job cannot be found.
+    /// <p>The specified Replication Job cannot be found.</p>
     ReplicationJobNotFound(String),
-    ///This user does not have permissions to perform this operation.
+    /// <p>This user does not have permissions to perform this operation.</p>
     UnauthorizedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -620,13 +620,13 @@ impl Error for DeleteReplicationJobError {
 /// Errors returned by DeleteServerCatalog
 #[derive(Debug, PartialEq)]
 pub enum DeleteServerCatalogError {
-    ///A parameter specified in the request is not valid, is unsupported, or cannot be used.
+    /// <p>A parameter specified in the request is not valid, is unsupported, or cannot be used.</p>
     InvalidParameter(String),
-    ///The request is missing a required parameter. Ensure that you have supplied all the required parameters for the request.
+    /// <p>The request is missing a required parameter. Ensure that you have supplied all the required parameters for the request.</p>
     MissingRequiredParameter(String),
-    ///The specified operation is not allowed. This error can occur for a number of reasons; for example, you might be trying to start a Replication Run before seed Replication Run.
+    /// <p>The specified operation is not allowed. This error can occur for a number of reasons; for example, you might be trying to start a Replication Run before seed Replication Run.</p>
     OperationNotPermitted(String),
-    ///This user does not have permissions to perform this operation.
+    /// <p>This user does not have permissions to perform this operation.</p>
     UnauthorizedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -720,13 +720,13 @@ impl Error for DeleteServerCatalogError {
 /// Errors returned by DisassociateConnector
 #[derive(Debug, PartialEq)]
 pub enum DisassociateConnectorError {
-    ///A parameter specified in the request is not valid, is unsupported, or cannot be used.
+    /// <p>A parameter specified in the request is not valid, is unsupported, or cannot be used.</p>
     InvalidParameter(String),
-    ///The request is missing a required parameter. Ensure that you have supplied all the required parameters for the request.
+    /// <p>The request is missing a required parameter. Ensure that you have supplied all the required parameters for the request.</p>
     MissingRequiredParameter(String),
-    ///The specified operation is not allowed. This error can occur for a number of reasons; for example, you might be trying to start a Replication Run before seed Replication Run.
+    /// <p>The specified operation is not allowed. This error can occur for a number of reasons; for example, you might be trying to start a Replication Run before seed Replication Run.</p>
     OperationNotPermitted(String),
-    ///This user does not have permissions to perform this operation.
+    /// <p>This user does not have permissions to perform this operation.</p>
     UnauthorizedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -824,7 +824,7 @@ impl Error for DisassociateConnectorError {
 /// Errors returned by GetConnectors
 #[derive(Debug, PartialEq)]
 pub enum GetConnectorsError {
-    ///This user does not have permissions to perform this operation.
+    /// <p>This user does not have permissions to perform this operation.</p>
     UnauthorizedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -902,11 +902,11 @@ impl Error for GetConnectorsError {
 /// Errors returned by GetReplicationJobs
 #[derive(Debug, PartialEq)]
 pub enum GetReplicationJobsError {
-    ///A parameter specified in the request is not valid, is unsupported, or cannot be used.
+    /// <p>A parameter specified in the request is not valid, is unsupported, or cannot be used.</p>
     InvalidParameter(String),
-    ///The request is missing a required parameter. Ensure that you have supplied all the required parameters for the request.
+    /// <p>The request is missing a required parameter. Ensure that you have supplied all the required parameters for the request.</p>
     MissingRequiredParameter(String),
-    ///This user does not have permissions to perform this operation.
+    /// <p>This user does not have permissions to perform this operation.</p>
     UnauthorizedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -996,11 +996,11 @@ impl Error for GetReplicationJobsError {
 /// Errors returned by GetReplicationRuns
 #[derive(Debug, PartialEq)]
 pub enum GetReplicationRunsError {
-    ///A parameter specified in the request is not valid, is unsupported, or cannot be used.
+    /// <p>A parameter specified in the request is not valid, is unsupported, or cannot be used.</p>
     InvalidParameter(String),
-    ///The request is missing a required parameter. Ensure that you have supplied all the required parameters for the request.
+    /// <p>The request is missing a required parameter. Ensure that you have supplied all the required parameters for the request.</p>
     MissingRequiredParameter(String),
-    ///This user does not have permissions to perform this operation.
+    /// <p>This user does not have permissions to perform this operation.</p>
     UnauthorizedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1090,7 +1090,7 @@ impl Error for GetReplicationRunsError {
 /// Errors returned by GetServers
 #[derive(Debug, PartialEq)]
 pub enum GetServersError {
-    ///This user does not have permissions to perform this operation.
+    /// <p>This user does not have permissions to perform this operation.</p>
     UnauthorizedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1166,15 +1166,15 @@ impl Error for GetServersError {
 /// Errors returned by ImportServerCatalog
 #[derive(Debug, PartialEq)]
 pub enum ImportServerCatalogError {
-    ///A parameter specified in the request is not valid, is unsupported, or cannot be used.
+    /// <p>A parameter specified in the request is not valid, is unsupported, or cannot be used.</p>
     InvalidParameter(String),
-    ///The request is missing a required parameter. Ensure that you have supplied all the required parameters for the request.
+    /// <p>The request is missing a required parameter. Ensure that you have supplied all the required parameters for the request.</p>
     MissingRequiredParameter(String),
-    ///No connectors are available to handle this request. Please associate connector(s) and verify any existing connectors are healthy and can respond to requests.
+    /// <p>No connectors are available to handle this request. Please associate connector(s) and verify any existing connectors are healthy and can respond to requests.</p>
     NoConnectorsAvailable(String),
-    ///The specified operation is not allowed. This error can occur for a number of reasons; for example, you might be trying to start a Replication Run before seed Replication Run.
+    /// <p>The specified operation is not allowed. This error can occur for a number of reasons; for example, you might be trying to start a Replication Run before seed Replication Run.</p>
     OperationNotPermitted(String),
-    ///This user does not have permissions to perform this operation.
+    /// <p>This user does not have permissions to perform this operation.</p>
     UnauthorizedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1272,15 +1272,15 @@ impl Error for ImportServerCatalogError {
 /// Errors returned by StartOnDemandReplicationRun
 #[derive(Debug, PartialEq)]
 pub enum StartOnDemandReplicationRunError {
-    ///A parameter specified in the request is not valid, is unsupported, or cannot be used.
+    /// <p>A parameter specified in the request is not valid, is unsupported, or cannot be used.</p>
     InvalidParameter(String),
-    ///The request is missing a required parameter. Ensure that you have supplied all the required parameters for the request.
+    /// <p>The request is missing a required parameter. Ensure that you have supplied all the required parameters for the request.</p>
     MissingRequiredParameter(String),
-    ///The specified operation is not allowed. This error can occur for a number of reasons; for example, you might be trying to start a Replication Run before seed Replication Run.
+    /// <p>The specified operation is not allowed. This error can occur for a number of reasons; for example, you might be trying to start a Replication Run before seed Replication Run.</p>
     OperationNotPermitted(String),
-    ///This user has exceeded the maximum allowed Replication Run limit.
+    /// <p>This user has exceeded the maximum allowed Replication Run limit.</p>
     ReplicationRunLimitExceeded(String),
-    ///This user does not have permissions to perform this operation.
+    /// <p>This user does not have permissions to perform this operation.</p>
     UnauthorizedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1386,19 +1386,19 @@ impl Error for StartOnDemandReplicationRunError {
 /// Errors returned by UpdateReplicationJob
 #[derive(Debug, PartialEq)]
 pub enum UpdateReplicationJobError {
-    ///An internal error has occured.
+    /// <p>An internal error has occured.</p>
     InternalError(String),
-    ///A parameter specified in the request is not valid, is unsupported, or cannot be used.
+    /// <p>A parameter specified in the request is not valid, is unsupported, or cannot be used.</p>
     InvalidParameter(String),
-    ///The request is missing a required parameter. Ensure that you have supplied all the required parameters for the request.
+    /// <p>The request is missing a required parameter. Ensure that you have supplied all the required parameters for the request.</p>
     MissingRequiredParameter(String),
-    ///The specified operation is not allowed. This error can occur for a number of reasons; for example, you might be trying to start a Replication Run before seed Replication Run.
+    /// <p>The specified operation is not allowed. This error can occur for a number of reasons; for example, you might be trying to start a Replication Run before seed Replication Run.</p>
     OperationNotPermitted(String),
-    ///The specified Replication Job cannot be found.
+    /// <p>The specified Replication Job cannot be found.</p>
     ReplicationJobNotFound(String),
-    ///The provided server cannot be replicated.
+    /// <p>The provided server cannot be replicated.</p>
     ServerCannotBeReplicated(String),
-    ///This user does not have permissions to perform this operation.
+    /// <p>This user does not have permissions to perform this operation.</p>
     UnauthorizedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1511,63 +1511,63 @@ impl Error for UpdateReplicationJobError {
 }
 /// Trait representing the capabilities of the SMS API. SMS clients implement this trait.
 pub trait ServerMigrationService {
-    #[doc="The CreateReplicationJob API is used to create a ReplicationJob to replicate a server on AWS. Call this API to first create a ReplicationJob, which will then schedule periodic ReplicationRuns to replicate your server to AWS. Each ReplicationRun will result in the creation of an AWS AMI."]
+    /// <p>The CreateReplicationJob API is used to create a ReplicationJob to replicate a server on AWS. Call this API to first create a ReplicationJob, which will then schedule periodic ReplicationRuns to replicate your server to AWS. Each ReplicationRun will result in the creation of an AWS AMI.</p>
     fn create_replication_job(
         &self,
         input: &CreateReplicationJobRequest,
     ) -> Result<CreateReplicationJobResponse, CreateReplicationJobError>;
 
-    #[doc="The DeleteReplicationJob API is used to delete a ReplicationJob, resulting in no further ReplicationRuns. This will delete the contents of the S3 bucket used to store SMS artifacts, but will not delete any AMIs created by the SMS service."]
+    /// <p>The DeleteReplicationJob API is used to delete a ReplicationJob, resulting in no further ReplicationRuns. This will delete the contents of the S3 bucket used to store SMS artifacts, but will not delete any AMIs created by the SMS service.</p>
     fn delete_replication_job(
         &self,
         input: &DeleteReplicationJobRequest,
     ) -> Result<DeleteReplicationJobResponse, DeleteReplicationJobError>;
 
-    #[doc="The DeleteServerCatalog API clears all servers from your server catalog. This means that these servers will no longer be accessible to the Server Migration Service."]
+    /// <p>The DeleteServerCatalog API clears all servers from your server catalog. This means that these servers will no longer be accessible to the Server Migration Service.</p>
     fn delete_server_catalog(
         &self,
     ) -> Result<DeleteServerCatalogResponse, DeleteServerCatalogError>;
 
-    #[doc="The DisassociateConnector API will disassociate a connector from the Server Migration Service, rendering it unavailable to support replication jobs."]
+    /// <p>The DisassociateConnector API will disassociate a connector from the Server Migration Service, rendering it unavailable to support replication jobs.</p>
     fn disassociate_connector(
         &self,
         input: &DisassociateConnectorRequest,
     ) -> Result<DisassociateConnectorResponse, DisassociateConnectorError>;
 
-    #[doc="The GetConnectors API returns a list of connectors that are registered with the Server Migration Service."]
+    /// <p>The GetConnectors API returns a list of connectors that are registered with the Server Migration Service.</p>
     fn get_connectors(
         &self,
         input: &GetConnectorsRequest,
     ) -> Result<GetConnectorsResponse, GetConnectorsError>;
 
-    #[doc="The GetReplicationJobs API will return all of your ReplicationJobs and their details. This API returns a paginated list, that may be consecutively called with nextToken to retrieve all ReplicationJobs."]
+    /// <p>The GetReplicationJobs API will return all of your ReplicationJobs and their details. This API returns a paginated list, that may be consecutively called with nextToken to retrieve all ReplicationJobs.</p>
     fn get_replication_jobs(
         &self,
         input: &GetReplicationJobsRequest,
     ) -> Result<GetReplicationJobsResponse, GetReplicationJobsError>;
 
-    #[doc="The GetReplicationRuns API will return all ReplicationRuns for a given ReplicationJob. This API returns a paginated list, that may be consecutively called with nextToken to retrieve all ReplicationRuns for a ReplicationJob."]
+    /// <p>The GetReplicationRuns API will return all ReplicationRuns for a given ReplicationJob. This API returns a paginated list, that may be consecutively called with nextToken to retrieve all ReplicationRuns for a ReplicationJob.</p>
     fn get_replication_runs(
         &self,
         input: &GetReplicationRunsRequest,
     ) -> Result<GetReplicationRunsResponse, GetReplicationRunsError>;
 
-    #[doc="The GetServers API returns a list of all servers in your server catalog. For this call to succeed, you must previously have called ImportServerCatalog."]
+    /// <p>The GetServers API returns a list of all servers in your server catalog. For this call to succeed, you must previously have called ImportServerCatalog.</p>
     fn get_servers(&self, input: &GetServersRequest)
         -> Result<GetServersResponse, GetServersError>;
 
-    #[doc="The ImportServerCatalog API is used to gather the complete list of on-premises servers on your premises. This API call requires connectors to be installed and monitoring all servers you would like imported. This API call returns immediately, but may take some time to retrieve all of the servers."]
+    /// <p>The ImportServerCatalog API is used to gather the complete list of on-premises servers on your premises. This API call requires connectors to be installed and monitoring all servers you would like imported. This API call returns immediately, but may take some time to retrieve all of the servers.</p>
     fn import_server_catalog(
         &self,
     ) -> Result<ImportServerCatalogResponse, ImportServerCatalogError>;
 
-    #[doc="The StartOnDemandReplicationRun API is used to start a ReplicationRun on demand (in addition to those that are scheduled based on your frequency). This ReplicationRun will start immediately. StartOnDemandReplicationRun is subject to limits on how many on demand ReplicationRuns you may call per 24-hour period."]
+    /// <p>The StartOnDemandReplicationRun API is used to start a ReplicationRun on demand (in addition to those that are scheduled based on your frequency). This ReplicationRun will start immediately. StartOnDemandReplicationRun is subject to limits on how many on demand ReplicationRuns you may call per 24-hour period.</p>
     fn start_on_demand_replication_run(
         &self,
         input: &StartOnDemandReplicationRunRequest,
     ) -> Result<StartOnDemandReplicationRunResponse, StartOnDemandReplicationRunError>;
 
-    #[doc="The UpdateReplicationJob API is used to change the settings of your existing ReplicationJob created using CreateReplicationJob. Calling this API will affect the next scheduled ReplicationRun."]
+    /// <p>The UpdateReplicationJob API is used to change the settings of your existing ReplicationJob created using CreateReplicationJob. Calling this API will affect the next scheduled ReplicationRun.</p>
     fn update_replication_job(
         &self,
         input: &UpdateReplicationJobRequest,
@@ -1603,7 +1603,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="The CreateReplicationJob API is used to create a ReplicationJob to replicate a server on AWS. Call this API to first create a ReplicationJob, which will then schedule periodic ReplicationRuns to replicate your server to AWS. Each ReplicationRun will result in the creation of an AWS AMI."]
+    /// <p>The CreateReplicationJob API is used to create a ReplicationJob to replicate a server on AWS. Call this API to first create a ReplicationJob, which will then schedule periodic ReplicationRuns to replicate your server to AWS. Each ReplicationRun will result in the creation of an AWS AMI.</p>
     fn create_replication_job(
         &self,
         input: &CreateReplicationJobRequest,
@@ -1640,7 +1640,7 @@ where
         }
     }
 
-    #[doc="The DeleteReplicationJob API is used to delete a ReplicationJob, resulting in no further ReplicationRuns. This will delete the contents of the S3 bucket used to store SMS artifacts, but will not delete any AMIs created by the SMS service."]
+    /// <p>The DeleteReplicationJob API is used to delete a ReplicationJob, resulting in no further ReplicationRuns. This will delete the contents of the S3 bucket used to store SMS artifacts, but will not delete any AMIs created by the SMS service.</p>
     fn delete_replication_job(
         &self,
         input: &DeleteReplicationJobRequest,
@@ -1677,7 +1677,7 @@ where
         }
     }
 
-    #[doc="The DeleteServerCatalog API clears all servers from your server catalog. This means that these servers will no longer be accessible to the Server Migration Service."]
+    /// <p>The DeleteServerCatalog API clears all servers from your server catalog. This means that these servers will no longer be accessible to the Server Migration Service.</p>
     fn delete_server_catalog(
         &self,
     ) -> Result<DeleteServerCatalogResponse, DeleteServerCatalogError> {
@@ -1712,7 +1712,7 @@ where
         }
     }
 
-    #[doc="The DisassociateConnector API will disassociate a connector from the Server Migration Service, rendering it unavailable to support replication jobs."]
+    /// <p>The DisassociateConnector API will disassociate a connector from the Server Migration Service, rendering it unavailable to support replication jobs.</p>
     fn disassociate_connector(
         &self,
         input: &DisassociateConnectorRequest,
@@ -1749,7 +1749,7 @@ where
         }
     }
 
-    #[doc="The GetConnectors API returns a list of connectors that are registered with the Server Migration Service."]
+    /// <p>The GetConnectors API returns a list of connectors that are registered with the Server Migration Service.</p>
     fn get_connectors(
         &self,
         input: &GetConnectorsRequest,
@@ -1786,7 +1786,7 @@ where
         }
     }
 
-    #[doc="The GetReplicationJobs API will return all of your ReplicationJobs and their details. This API returns a paginated list, that may be consecutively called with nextToken to retrieve all ReplicationJobs."]
+    /// <p>The GetReplicationJobs API will return all of your ReplicationJobs and their details. This API returns a paginated list, that may be consecutively called with nextToken to retrieve all ReplicationJobs.</p>
     fn get_replication_jobs(
         &self,
         input: &GetReplicationJobsRequest,
@@ -1823,7 +1823,7 @@ where
         }
     }
 
-    #[doc="The GetReplicationRuns API will return all ReplicationRuns for a given ReplicationJob. This API returns a paginated list, that may be consecutively called with nextToken to retrieve all ReplicationRuns for a ReplicationJob."]
+    /// <p>The GetReplicationRuns API will return all ReplicationRuns for a given ReplicationJob. This API returns a paginated list, that may be consecutively called with nextToken to retrieve all ReplicationRuns for a ReplicationJob.</p>
     fn get_replication_runs(
         &self,
         input: &GetReplicationRunsRequest,
@@ -1860,7 +1860,7 @@ where
         }
     }
 
-    #[doc="The GetServers API returns a list of all servers in your server catalog. For this call to succeed, you must previously have called ImportServerCatalog."]
+    /// <p>The GetServers API returns a list of all servers in your server catalog. For this call to succeed, you must previously have called ImportServerCatalog.</p>
     fn get_servers(
         &self,
         input: &GetServersRequest,
@@ -1897,7 +1897,7 @@ where
         }
     }
 
-    #[doc="The ImportServerCatalog API is used to gather the complete list of on-premises servers on your premises. This API call requires connectors to be installed and monitoring all servers you would like imported. This API call returns immediately, but may take some time to retrieve all of the servers."]
+    /// <p>The ImportServerCatalog API is used to gather the complete list of on-premises servers on your premises. This API call requires connectors to be installed and monitoring all servers you would like imported. This API call returns immediately, but may take some time to retrieve all of the servers.</p>
     fn import_server_catalog(
         &self,
     ) -> Result<ImportServerCatalogResponse, ImportServerCatalogError> {
@@ -1932,7 +1932,7 @@ where
         }
     }
 
-    #[doc="The StartOnDemandReplicationRun API is used to start a ReplicationRun on demand (in addition to those that are scheduled based on your frequency). This ReplicationRun will start immediately. StartOnDemandReplicationRun is subject to limits on how many on demand ReplicationRuns you may call per 24-hour period."]
+    /// <p>The StartOnDemandReplicationRun API is used to start a ReplicationRun on demand (in addition to those that are scheduled based on your frequency). This ReplicationRun will start immediately. StartOnDemandReplicationRun is subject to limits on how many on demand ReplicationRuns you may call per 24-hour period.</p>
     fn start_on_demand_replication_run(
         &self,
         input: &StartOnDemandReplicationRunRequest,
@@ -1969,7 +1969,7 @@ where
         }
     }
 
-    #[doc="The UpdateReplicationJob API is used to change the settings of your existing ReplicationJob created using CreateReplicationJob. Calling this API will affect the next scheduled ReplicationRun."]
+    /// <p>The UpdateReplicationJob API is used to change the settings of your existing ReplicationJob created using CreateReplicationJob. Calling this API will affect the next scheduled ReplicationRun.</p>
     fn update_replication_job(
         &self,
         input: &UpdateReplicationJobRequest,

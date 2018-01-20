@@ -56,7 +56,7 @@ impl AccountDeserializer {
 /// <p>Structure that contains the results of the account gate function which AWS CloudFormation invokes, if present, before proceeding with a stack set operation in an account and region.</p> <p>For each account and region, AWS CloudFormation lets you specify a Lamdba function that encapsulates any requirements that must be met before CloudFormation can proceed with a stack set operation in that account and region. CloudFormation invokes the function each time a stack set operation is requested for that account and region; if the function returns <code>FAILED</code>, CloudFormation cancels the operation in that account and region, and sets the stack set operation result status for that account and region to <code>FAILED</code>. </p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-account-gating.html">Configuring a target account gate</a>.</p>
 #[derive(Default, Debug, Clone)]
 pub struct AccountGateResult {
-    /// <p>The status of the account gate function.</p> <ul> <li> <p> <code>SUCCEEDED</code>: The account gate function has determined that the account and region passes any requirements for a stack set operation to occur. AWS CloudFormation proceeds with the stack operation in that account and region. </p> </li> <li> <p> <code>FAILED</code>: The account gate function has determined that the account and region does not meet the requirements for a stack set operation to occur. AWS CloudFormation cancels the stack set operation in that account and region, and sets the stack set operation result status for that account and region to <code>FAILED</code>. </p> </li> <li> <p> <code>SKIPPED</code>: AWS CloudFormation has skipped calling the account gate function for this account and region, for one of the following reasons:</p> <ul> <li> <p>An account gate function has not been specified for the account and region. AWS CloudFormation proceeds with the stack set operation in this account and region.</p> </li> <li> <p>The <code>AWSCloudFormationStackSetExecutionRole</code> of the stack set adminstration account lacks permissions to invoke the function. AWS CloudFormation proceeds with the stack set operation in this account and region.</p> </li> <li> <p>Either no action is necessary, or no action is possible, on the stack. AWS CloudFormation skips the stack set operation in this account and region.</p> </li> </ul> </li> </ul>
+    /// <p><p>The status of the account gate function.</p> <ul> <li> <p> <code>SUCCEEDED</code>: The account gate function has determined that the account and region passes any requirements for a stack set operation to occur. AWS CloudFormation proceeds with the stack operation in that account and region. </p> </li> <li> <p> <code>FAILED</code>: The account gate function has determined that the account and region does not meet the requirements for a stack set operation to occur. AWS CloudFormation cancels the stack set operation in that account and region, and sets the stack set operation result status for that account and region to <code>FAILED</code>. </p> </li> <li> <p> <code>SKIPPED</code>: AWS CloudFormation has skipped calling the account gate function for this account and region, for one of the following reasons:</p> <ul> <li> <p>An account gate function has not been specified for the account and region. AWS CloudFormation proceeds with the stack set operation in this account and region.</p> </li> <li> <p>The <code>AWSCloudFormationStackSetExecutionRole</code> of the stack set adminstration account lacks permissions to invoke the function. AWS CloudFormation proceeds with the stack set operation in this account and region.</p> </li> <li> <p>Either no action is necessary, or no action is possible, on the stack. AWS CloudFormation skips the stack set operation in this account and region.</p> </li> </ul> </li> </ul></p>
     pub status: Option<String>,
     /// <p>The reason for the account gate status assigned to this account and region for the stack set operation.</p>
     pub status_reason: Option<String>,
@@ -794,11 +794,11 @@ impl ClientRequestTokenDeserializer {
 pub struct ContinueUpdateRollbackInput {
     /// <p>A unique identifier for this <code>ContinueUpdateRollback</code> request. Specify this token if you plan to retry requests so that AWS CloudFormation knows that you're not attempting to continue the rollback to a stack with the same name. You might retry <code>ContinueUpdateRollback</code> requests to ensure that AWS CloudFormation successfully received them.</p>
     pub client_request_token: Option<String>,
-    /// <p>A list of the logical IDs of the resources that AWS CloudFormation skips during the continue update rollback operation. You can specify only resources that are in the <code>UPDATE_FAILED</code> state because a rollback failed. You can't specify resources that are in the <code>UPDATE_FAILED</code> state for other reasons, for example, because an update was cancelled. To check why a resource update failed, use the <a>DescribeStackResources</a> action, and view the resource status reason. </p> <important> <p>Specify this property to skip rolling back resources that AWS CloudFormation can't successfully roll back. We recommend that you <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html#troubleshooting-errors-update-rollback-failed"> troubleshoot</a> resources before skipping them. AWS CloudFormation sets the status of the specified resources to <code>UPDATE_COMPLETE</code> and continues to roll back the stack. After the rollback is complete, the state of the skipped resources will be inconsistent with the state of the resources in the stack template. Before performing another stack update, you must update the stack or resources to be consistent with each other. If you don't, subsequent stack updates might fail, and the stack will become unrecoverable. </p> </important> <p>Specify the minimum number of resources required to successfully roll back your stack. For example, a failed resource update might cause dependent resources to fail. In this case, it might not be necessary to skip the dependent resources. </p> <p>To skip resources that are part of nested stacks, use the following format: <code>NestedStackName.ResourceLogicalID</code>. If you want to specify the logical ID of a stack resource (<code>Type: AWS::CloudFormation::Stack</code>) in the <code>ResourcesToSkip</code> list, then its corresponding embedded stack must be in one of the following states: <code>DELETE_IN_PROGRESS</code>, <code>DELETE_COMPLETE</code>, or <code>DELETE_FAILED</code>. </p> <note> <p>Don't confuse a child stack's name with its corresponding logical ID defined in the parent stack. For an example of a continue update rollback operation with nested stacks, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-continueupdaterollback.html#nested-stacks">Using ResourcesToSkip to recover a nested stacks hierarchy</a>. </p> </note>
+    /// <p><p>A list of the logical IDs of the resources that AWS CloudFormation skips during the continue update rollback operation. You can specify only resources that are in the <code>UPDATE<em>FAILED</code> state because a rollback failed. You can&#39;t specify resources that are in the <code>UPDATE</em>FAILED</code> state for other reasons, for example, because an update was cancelled. To check why a resource update failed, use the <a>DescribeStackResources</a> action, and view the resource status reason. </p> <important> <p>Specify this property to skip rolling back resources that AWS CloudFormation can&#39;t successfully roll back. We recommend that you <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html#troubleshooting-errors-update-rollback-failed"> troubleshoot</a> resources before skipping them. AWS CloudFormation sets the status of the specified resources to <code>UPDATE<em>COMPLETE</code> and continues to roll back the stack. After the rollback is complete, the state of the skipped resources will be inconsistent with the state of the resources in the stack template. Before performing another stack update, you must update the stack or resources to be consistent with each other. If you don&#39;t, subsequent stack updates might fail, and the stack will become unrecoverable. </p> </important> <p>Specify the minimum number of resources required to successfully roll back your stack. For example, a failed resource update might cause dependent resources to fail. In this case, it might not be necessary to skip the dependent resources. </p> <p>To skip resources that are part of nested stacks, use the following format: <code>NestedStackName.ResourceLogicalID</code>. If you want to specify the logical ID of a stack resource (<code>Type: AWS::CloudFormation::Stack</code>) in the <code>ResourcesToSkip</code> list, then its corresponding embedded stack must be in one of the following states: <code>DELETE</em>IN<em>PROGRESS</code>, <code>DELETE</em>COMPLETE</code>, or <code>DELETE_FAILED</code>. </p> <note> <p>Don&#39;t confuse a child stack&#39;s name with its corresponding logical ID defined in the parent stack. For an example of a continue update rollback operation with nested stacks, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-continueupdaterollback.html#nested-stacks">Using ResourcesToSkip to recover a nested stacks hierarchy</a>. </p> </note></p>
     pub resources_to_skip: Option<Vec<String>>,
     /// <p>The Amazon Resource Name (ARN) of an AWS Identity and Access Management (IAM) role that AWS CloudFormation assumes to roll back the stack. AWS CloudFormation uses the role's credentials to make calls on your behalf. AWS CloudFormation always uses this role for all future operations on the stack. As long as users have permission to operate on the stack, AWS CloudFormation uses this role even if the users don't have permission to pass it. Ensure that the role grants least privilege.</p> <p>If you don't specify a value, AWS CloudFormation uses the role that was previously associated with the stack. If no role is available, AWS CloudFormation uses a temporary session that is generated from your user credentials.</p>
     pub role_arn: Option<String>,
-    /// <p>The name or the unique ID of the stack that you want to continue rolling back.</p> <note> <p>Don't specify the name of a nested stack (a stack that was created by using the <code>AWS::CloudFormation::Stack</code> resource). Instead, use this operation on the parent stack (the stack that contains the <code>AWS::CloudFormation::Stack</code> resource).</p> </note>
+    /// <p><p>The name or the unique ID of the stack that you want to continue rolling back.</p> <note> <p>Don&#39;t specify the name of a nested stack (a stack that was created by using the <code>AWS::CloudFormation::Stack</code> resource). Instead, use this operation on the parent stack (the stack that contains the <code>AWS::CloudFormation::Stack</code> resource).</p> </note></p>
     pub stack_name: String,
 }
 
@@ -1065,7 +1065,7 @@ pub struct CreateStackInput {
     pub role_arn: Option<String>,
     /// <p>The rollback triggers for AWS CloudFormation to monitor during stack creation and updating operations, and for the specified monitoring period afterwards.</p>
     pub rollback_configuration: Option<RollbackConfiguration>,
-    /// <p>The name that is associated with the stack. The name must be unique in the region in which you are creating the stack.</p> <note> <p>A stack name can contain only alphanumeric characters (case sensitive) and hyphens. It must start with an alphabetic character and cannot be longer than 128 characters.</p> </note>
+    /// <p><p>The name that is associated with the stack. The name must be unique in the region in which you are creating the stack.</p> <note> <p>A stack name can contain only alphanumeric characters (case sensitive) and hyphens. It must start with an alphabetic character and cannot be longer than 128 characters.</p> </note></p>
     pub stack_name: String,
     /// <p>Structure containing the stack policy body. For more information, go to <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/protect-stack-resources.html"> Prevent Updates to Stack Resources</a> in the <i>AWS CloudFormation User Guide</i>. You can specify either the <code>StackPolicyBody</code> or the <code>StackPolicyURL</code> parameter, but not both.</p>
     pub stack_policy_body: Option<String>,
@@ -1342,7 +1342,7 @@ pub struct CreateStackSetInput {
     pub description: Option<String>,
     /// <p>The input parameters for the stack set template. </p>
     pub parameters: Option<Vec<Parameter>>,
-    /// <p>The name to associate with the stack set. The name must be unique in the region where you create your stack set.</p> <note> <p>A stack name can contain only alphanumeric characters (case-sensitive) and hyphens. It must start with an alphabetic character and can't be longer than 128 characters.</p> </note>
+    /// <p><p>The name to associate with the stack set. The name must be unique in the region where you create your stack set.</p> <note> <p>A stack name can contain only alphanumeric characters (case-sensitive) and hyphens. It must start with an alphabetic character and can&#39;t be longer than 128 characters.</p> </note></p>
     pub stack_set_name: String,
     /// <p>The key-value pairs to associate with this stack set and the stacks created from it. AWS CloudFormation also propagates these tags to supported resources that are created in the stacks. A maximum number of 50 tags can be specified.</p> <p>If you specify tags as part of a <code>CreateStackSet</code> action, AWS CloudFormation checks to see if you have the required IAM permission to tag resources. If you don't, the entire <code>CreateStackSet</code> action fails with an <code>access denied</code> error, and the stack set is not created.</p>
     pub tags: Option<Vec<Tag>>,
@@ -5074,7 +5074,7 @@ impl ResourceChangeDeserializer {
 pub struct ResourceChangeDetail {
     /// <p>The identity of the entity that triggered this change. This entity is a member of the group that is specified by the <code>ChangeSource</code> field. For example, if you modified the value of the <code>KeyPairName</code> parameter, the <code>CausingEntity</code> is the name of the parameter (<code>KeyPairName</code>).</p> <p>If the <code>ChangeSource</code> value is <code>DirectModification</code>, no value is given for <code>CausingEntity</code>.</p>
     pub causing_entity: Option<String>,
-    /// <p>The group to which the <code>CausingEntity</code> value belongs. There are five entity groups:</p> <ul> <li> <p> <code>ResourceReference</code> entities are <code>Ref</code> intrinsic functions that refer to resources in the template, such as <code>{ "Ref" : "MyEC2InstanceResource" }</code>.</p> </li> <li> <p> <code>ParameterReference</code> entities are <code>Ref</code> intrinsic functions that get template parameter values, such as <code>{ "Ref" : "MyPasswordParameter" }</code>.</p> </li> <li> <p> <code>ResourceAttribute</code> entities are <code>Fn::GetAtt</code> intrinsic functions that get resource attribute values, such as <code>{ "Fn::GetAtt" : [ "MyEC2InstanceResource", "PublicDnsName" ] }</code>.</p> </li> <li> <p> <code>DirectModification</code> entities are changes that are made directly to the template.</p> </li> <li> <p> <code>Automatic</code> entities are <code>AWS::CloudFormation::Stack</code> resource types, which are also known as nested stacks. If you made no changes to the <code>AWS::CloudFormation::Stack</code> resource, AWS CloudFormation sets the <code>ChangeSource</code> to <code>Automatic</code> because the nested stack's template might have changed. Changes to a nested stack's template aren't visible to AWS CloudFormation until you run an update on the parent stack.</p> </li> </ul>
+    /// <p><p>The group to which the <code>CausingEntity</code> value belongs. There are five entity groups:</p> <ul> <li> <p> <code>ResourceReference</code> entities are <code>Ref</code> intrinsic functions that refer to resources in the template, such as <code>{ &quot;Ref&quot; : &quot;MyEC2InstanceResource&quot; }</code>.</p> </li> <li> <p> <code>ParameterReference</code> entities are <code>Ref</code> intrinsic functions that get template parameter values, such as <code>{ &quot;Ref&quot; : &quot;MyPasswordParameter&quot; }</code>.</p> </li> <li> <p> <code>ResourceAttribute</code> entities are <code>Fn::GetAtt</code> intrinsic functions that get resource attribute values, such as <code>{ &quot;Fn::GetAtt&quot; : [ &quot;MyEC2InstanceResource&quot;, &quot;PublicDnsName&quot; ] }</code>.</p> </li> <li> <p> <code>DirectModification</code> entities are changes that are made directly to the template.</p> </li> <li> <p> <code>Automatic</code> entities are <code>AWS::CloudFormation::Stack</code> resource types, which are also known as nested stacks. If you made no changes to the <code>AWS::CloudFormation::Stack</code> resource, AWS CloudFormation sets the <code>ChangeSource</code> to <code>Automatic</code> because the nested stack&#39;s template might have changed. Changes to a nested stack&#39;s template aren&#39;t visible to AWS CloudFormation until you run an update on the parent stack.</p> </li> </ul></p>
     pub change_source: Option<String>,
     /// <p>Indicates whether AWS CloudFormation can determine the target value, and whether the target value will change before you execute a change set.</p> <p>For <code>Static</code> evaluations, AWS CloudFormation can determine that the target value will change, and its value. For example, if you directly modify the <code>InstanceType</code> property of an EC2 instance, AWS CloudFormation knows that this property value will change, and its value, so this is a <code>Static</code> evaluation.</p> <p>For <code>Dynamic</code> evaluations, cannot determine the target value because it depends on the result of an intrinsic function, such as a <code>Ref</code> or <code>Fn::GetAtt</code> intrinsic function, when the stack is updated. For example, if your template includes a reference to a resource that is conditionally recreated, the value of the reference (the physical ID of the resource) might change, depending on if the resource is recreated. If the resource is recreated, it will have a new physical ID, so all references to that resource will also be updated.</p>
     pub evaluation: Option<String>,
@@ -5749,7 +5749,7 @@ pub struct Stack {
     pub creation_time: String,
     /// <p>A user-defined description associated with the stack.</p>
     pub description: Option<String>,
-    /// <p>Boolean to enable or disable rollback on stack creation failures:</p> <ul> <li> <p> <code>true</code>: disable rollback</p> </li> <li> <p> <code>false</code>: enable rollback</p> </li> </ul>
+    /// <p><p>Boolean to enable or disable rollback on stack creation failures:</p> <ul> <li> <p> <code>true</code>: disable rollback</p> </li> <li> <p> <code>false</code>: enable rollback</p> </li> </ul></p>
     pub disable_rollback: Option<bool>,
     /// <p>The time the stack was last updated. This field will only be returned if the stack has been updated at least once.</p>
     pub last_updated_time: Option<String>,
@@ -6083,7 +6083,7 @@ pub struct StackInstance {
     pub stack_id: Option<String>,
     /// <p>The name or unique ID of the stack set that the stack instance is associated with.</p>
     pub stack_set_id: Option<String>,
-    /// <p>The status of the stack instance, in terms of its synchronization with its associated stack set.</p> <ul> <li> <p> <code>INOPERABLE</code>: A <code>DeleteStackInstances</code> operation has failed and left the stack in an unstable state. Stacks in this state are excluded from further <code>UpdateStackSet</code> operations. You might need to perform a <code>DeleteStackInstances</code> operation, with <code>RetainStacks</code> set to <code>true</code>, to delete the stack instance, and then delete the stack manually.</p> </li> <li> <p> <code>OUTDATED</code>: The stack isn't currently up to date with the stack set because:</p> <ul> <li> <p>The associated stack failed during a <code>CreateStackSet</code> or <code>UpdateStackSet</code> operation. </p> </li> <li> <p>The stack was part of a <code>CreateStackSet</code> or <code>UpdateStackSet</code> operation that failed or was stopped before the stack was created or updated. </p> </li> </ul> </li> <li> <p> <code>CURRENT</code>: The stack is currently up to date with the stack set.</p> </li> </ul>
+    /// <p><p>The status of the stack instance, in terms of its synchronization with its associated stack set.</p> <ul> <li> <p> <code>INOPERABLE</code>: A <code>DeleteStackInstances</code> operation has failed and left the stack in an unstable state. Stacks in this state are excluded from further <code>UpdateStackSet</code> operations. You might need to perform a <code>DeleteStackInstances</code> operation, with <code>RetainStacks</code> set to <code>true</code>, to delete the stack instance, and then delete the stack manually.</p> </li> <li> <p> <code>OUTDATED</code>: The stack isn&#39;t currently up to date with the stack set because:</p> <ul> <li> <p>The associated stack failed during a <code>CreateStackSet</code> or <code>UpdateStackSet</code> operation. </p> </li> <li> <p>The stack was part of a <code>CreateStackSet</code> or <code>UpdateStackSet</code> operation that failed or was stopped before the stack was created or updated. </p> </li> </ul> </li> <li> <p> <code>CURRENT</code>: The stack is currently up to date with the stack set.</p> </li> </ul></p>
     pub status: Option<String>,
     /// <p>The explanation for the specific status code that is assigned to this stack instance.</p>
     pub status_reason: Option<String>,
@@ -6220,7 +6220,7 @@ pub struct StackInstanceSummary {
     pub stack_id: Option<String>,
     /// <p>The name or unique ID of the stack set that the stack instance is associated with.</p>
     pub stack_set_id: Option<String>,
-    /// <p>The status of the stack instance, in terms of its synchronization with its associated stack set.</p> <ul> <li> <p> <code>INOPERABLE</code>: A <code>DeleteStackInstances</code> operation has failed and left the stack in an unstable state. Stacks in this state are excluded from further <code>UpdateStackSet</code> operations. You might need to perform a <code>DeleteStackInstances</code> operation, with <code>RetainStacks</code> set to <code>true</code>, to delete the stack instance, and then delete the stack manually.</p> </li> <li> <p> <code>OUTDATED</code>: The stack isn't currently up to date with the stack set because:</p> <ul> <li> <p>The associated stack failed during a <code>CreateStackSet</code> or <code>UpdateStackSet</code> operation. </p> </li> <li> <p>The stack was part of a <code>CreateStackSet</code> or <code>UpdateStackSet</code> operation that failed or was stopped before the stack was created or updated. </p> </li> </ul> </li> <li> <p> <code>CURRENT</code>: The stack is currently up to date with the stack set.</p> </li> </ul>
+    /// <p><p>The status of the stack instance, in terms of its synchronization with its associated stack set.</p> <ul> <li> <p> <code>INOPERABLE</code>: A <code>DeleteStackInstances</code> operation has failed and left the stack in an unstable state. Stacks in this state are excluded from further <code>UpdateStackSet</code> operations. You might need to perform a <code>DeleteStackInstances</code> operation, with <code>RetainStacks</code> set to <code>true</code>, to delete the stack instance, and then delete the stack manually.</p> </li> <li> <p> <code>OUTDATED</code>: The stack isn&#39;t currently up to date with the stack set because:</p> <ul> <li> <p>The associated stack failed during a <code>CreateStackSet</code> or <code>UpdateStackSet</code> operation. </p> </li> <li> <p>The stack was part of a <code>CreateStackSet</code> or <code>UpdateStackSet</code> operation that failed or was stopped before the stack was created or updated. </p> </li> </ul> </li> <li> <p> <code>CURRENT</code>: The stack is currently up to date with the stack set.</p> </li> </ul></p>
     pub status: Option<String>,
     /// <p>The explanation for the specific status code assigned to this stack instance.</p>
     pub status_reason: Option<String>,
@@ -6858,7 +6858,7 @@ pub struct StackSetOperation {
     pub retain_stacks: Option<bool>,
     /// <p>The ID of the stack set.</p>
     pub stack_set_id: Option<String>,
-    /// <p>The status of the operation. </p> <ul> <li> <p> <code>FAILED</code>: The operation exceeded the specified failure tolerance. The failure tolerance value that you've set for an operation is applied for each region during stack create and update operations. If the number of failed stacks within a region exceeds the failure tolerance, the status of the operation in the region is set to <code>FAILED</code>. This in turn sets the status of the operation as a whole to <code>FAILED</code>, and AWS CloudFormation cancels the operation in any remaining regions.</p> </li> <li> <p> <code>RUNNING</code>: The operation is currently being performed.</p> </li> <li> <p> <code>STOPPED</code>: The user has cancelled the operation.</p> </li> <li> <p> <code>STOPPING</code>: The operation is in the process of stopping, at user request. </p> </li> <li> <p> <code>SUCCEEDED</code>: The operation completed creating or updating all the specified stacks without exceeding the failure tolerance for the operation.</p> </li> </ul>
+    /// <p><p>The status of the operation. </p> <ul> <li> <p> <code>FAILED</code>: The operation exceeded the specified failure tolerance. The failure tolerance value that you&#39;ve set for an operation is applied for each region during stack create and update operations. If the number of failed stacks within a region exceeds the failure tolerance, the status of the operation in the region is set to <code>FAILED</code>. This in turn sets the status of the operation as a whole to <code>FAILED</code>, and AWS CloudFormation cancels the operation in any remaining regions.</p> </li> <li> <p> <code>RUNNING</code>: The operation is currently being performed.</p> </li> <li> <p> <code>STOPPED</code>: The user has cancelled the operation.</p> </li> <li> <p> <code>STOPPING</code>: The operation is in the process of stopping, at user request. </p> </li> <li> <p> <code>SUCCEEDED</code>: The operation completed creating or updating all the specified stacks without exceeding the failure tolerance for the operation.</p> </li> </ul></p>
     pub status: Option<String>,
 }
 
@@ -7157,7 +7157,7 @@ pub struct StackSetOperationResultSummary {
     pub account_gate_result: Option<AccountGateResult>,
     /// <p>The name of the AWS region for this operation result.</p>
     pub region: Option<String>,
-    /// <p>The result status of the stack set operation for the given account in the given region.</p> <ul> <li> <p> <code>CANCELLED</code>: The operation in the specified account and region has been cancelled. This is either because a user has stopped the stack set operation, or because the failure tolerance of the stack set operation has been exceeded.</p> </li> <li> <p> <code>FAILED</code>: The operation in the specified account and region failed. </p> <p>If the stack set operation fails in enough accounts within a region, the failure tolerance for the stack set operation as a whole might be exceeded. </p> </li> <li> <p> <code>RUNNING</code>: The operation in the specified account and region is currently in progress.</p> </li> <li> <p> <code>PENDING</code>: The operation in the specified account and region has yet to start. </p> </li> <li> <p> <code>SUCCEEDED</code>: The operation in the specified account and region completed successfully.</p> </li> </ul>
+    /// <p><p>The result status of the stack set operation for the given account in the given region.</p> <ul> <li> <p> <code>CANCELLED</code>: The operation in the specified account and region has been cancelled. This is either because a user has stopped the stack set operation, or because the failure tolerance of the stack set operation has been exceeded.</p> </li> <li> <p> <code>FAILED</code>: The operation in the specified account and region failed. </p> <p>If the stack set operation fails in enough accounts within a region, the failure tolerance for the stack set operation as a whole might be exceeded. </p> </li> <li> <p> <code>RUNNING</code>: The operation in the specified account and region is currently in progress.</p> </li> <li> <p> <code>PENDING</code>: The operation in the specified account and region has yet to start. </p> </li> <li> <p> <code>SUCCEEDED</code>: The operation in the specified account and region completed successfully.</p> </li> </ul></p>
     pub status: Option<String>,
     /// <p>The reason for the assigned result status.</p>
     pub status_reason: Option<String>,
@@ -7288,7 +7288,7 @@ pub struct StackSetOperationSummary {
     pub end_timestamp: Option<String>,
     /// <p>The unique ID of the stack set operation.</p>
     pub operation_id: Option<String>,
-    /// <p>The overall status of the operation.</p> <ul> <li> <p> <code>FAILED</code>: The operation exceeded the specified failure tolerance. The failure tolerance value that you've set for an operation is applied for each region during stack create and update operations. If the number of failed stacks within a region exceeds the failure tolerance, the status of the operation in the region is set to <code>FAILED</code>. This in turn sets the status of the operation as a whole to <code>FAILED</code>, and AWS CloudFormation cancels the operation in any remaining regions.</p> </li> <li> <p> <code>RUNNING</code>: The operation is currently being performed.</p> </li> <li> <p> <code>STOPPED</code>: The user has cancelled the operation.</p> </li> <li> <p> <code>STOPPING</code>: The operation is in the process of stopping, at user request. </p> </li> <li> <p> <code>SUCCEEDED</code>: The operation completed creating or updating all the specified stacks without exceeding the failure tolerance for the operation.</p> </li> </ul>
+    /// <p><p>The overall status of the operation.</p> <ul> <li> <p> <code>FAILED</code>: The operation exceeded the specified failure tolerance. The failure tolerance value that you&#39;ve set for an operation is applied for each region during stack create and update operations. If the number of failed stacks within a region exceeds the failure tolerance, the status of the operation in the region is set to <code>FAILED</code>. This in turn sets the status of the operation as a whole to <code>FAILED</code>, and AWS CloudFormation cancels the operation in any remaining regions.</p> </li> <li> <p> <code>RUNNING</code>: The operation is currently being performed.</p> </li> <li> <p> <code>STOPPED</code>: The user has cancelled the operation.</p> </li> <li> <p> <code>STOPPING</code>: The operation is in the process of stopping, at user request. </p> </li> <li> <p> <code>SUCCEEDED</code>: The operation completed creating or updating all the specified stacks without exceeding the failure tolerance for the operation.</p> </li> </ul></p>
     pub status: Option<String>,
 }
 
@@ -8690,7 +8690,7 @@ impl VersionDeserializer {
 /// Errors returned by CancelUpdateStack
 #[derive(Debug, PartialEq)]
 pub enum CancelUpdateStackError {
-    ///<p>A client request token already exists.</p>
+    /// <p>A client request token already exists.</p>
     TokenAlreadyExists(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8761,7 +8761,7 @@ impl Error for CancelUpdateStackError {
 /// Errors returned by ContinueUpdateRollback
 #[derive(Debug, PartialEq)]
 pub enum ContinueUpdateRollbackError {
-    ///<p>A client request token already exists.</p>
+    /// <p>A client request token already exists.</p>
     TokenAlreadyExists(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8832,11 +8832,11 @@ impl Error for ContinueUpdateRollbackError {
 /// Errors returned by CreateChangeSet
 #[derive(Debug, PartialEq)]
 pub enum CreateChangeSetError {
-    ///<p>The resource with the name requested already exists.</p>
+    /// <p>The resource with the name requested already exists.</p>
     AlreadyExists(String),
-    ///<p>The template contains resources with capabilities that weren't specified in the Capabilities parameter.</p>
+    /// <p>The template contains resources with capabilities that weren't specified in the Capabilities parameter.</p>
     InsufficientCapabilities(String),
-    ///<p>The quota for the resource has already been reached.</p> <p>For information on stack set limitations, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-limitations.html">Limitations of StackSets</a>.</p>
+    /// <p>The quota for the resource has already been reached.</p> <p>For information on stack set limitations, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-limitations.html">Limitations of StackSets</a>.</p>
     LimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8915,13 +8915,13 @@ impl Error for CreateChangeSetError {
 /// Errors returned by CreateStack
 #[derive(Debug, PartialEq)]
 pub enum CreateStackError {
-    ///<p>The resource with the name requested already exists.</p>
+    /// <p>The resource with the name requested already exists.</p>
     AlreadyExists(String),
-    ///<p>The template contains resources with capabilities that weren't specified in the Capabilities parameter.</p>
+    /// <p>The template contains resources with capabilities that weren't specified in the Capabilities parameter.</p>
     InsufficientCapabilities(String),
-    ///<p>The quota for the resource has already been reached.</p> <p>For information on stack set limitations, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-limitations.html">Limitations of StackSets</a>.</p>
+    /// <p>The quota for the resource has already been reached.</p> <p>For information on stack set limitations, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-limitations.html">Limitations of StackSets</a>.</p>
     LimitExceeded(String),
-    ///<p>A client request token already exists.</p>
+    /// <p>A client request token already exists.</p>
     TokenAlreadyExists(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9002,17 +9002,17 @@ impl Error for CreateStackError {
 /// Errors returned by CreateStackInstances
 #[derive(Debug, PartialEq)]
 pub enum CreateStackInstancesError {
-    ///<p>The specified operation isn't valid.</p>
+    /// <p>The specified operation isn't valid.</p>
     InvalidOperation(String),
-    ///<p>The quota for the resource has already been reached.</p> <p>For information on stack set limitations, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-limitations.html">Limitations of StackSets</a>.</p>
+    /// <p>The quota for the resource has already been reached.</p> <p>For information on stack set limitations, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-limitations.html">Limitations of StackSets</a>.</p>
     LimitExceeded(String),
-    ///<p>The specified operation ID already exists.</p>
+    /// <p>The specified operation ID already exists.</p>
     OperationIdAlreadyExists(String),
-    ///<p>Another operation is currently in progress for this stack set. Only one operation can be performed for a stack set at a given time.</p>
+    /// <p>Another operation is currently in progress for this stack set. Only one operation can be performed for a stack set at a given time.</p>
     OperationInProgress(String),
-    ///<p>The specified stack set doesn't exist.</p>
+    /// <p>The specified stack set doesn't exist.</p>
     StackSetNotFound(String),
-    ///<p>Another operation has been performed on this stack set since the specified operation was performed. </p>
+    /// <p>Another operation has been performed on this stack set since the specified operation was performed. </p>
     StaleRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9105,11 +9105,11 @@ impl Error for CreateStackInstancesError {
 /// Errors returned by CreateStackSet
 #[derive(Debug, PartialEq)]
 pub enum CreateStackSetError {
-    ///<p>The specified resource exists, but has been changed.</p>
+    /// <p>The specified resource exists, but has been changed.</p>
     CreatedButModified(String),
-    ///<p>The quota for the resource has already been reached.</p> <p>For information on stack set limitations, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-limitations.html">Limitations of StackSets</a>.</p>
+    /// <p>The quota for the resource has already been reached.</p> <p>For information on stack set limitations, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-limitations.html">Limitations of StackSets</a>.</p>
     LimitExceeded(String),
-    ///<p>The specified name is already in use.</p>
+    /// <p>The specified name is already in use.</p>
     NameAlreadyExists(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9186,7 +9186,7 @@ impl Error for CreateStackSetError {
 /// Errors returned by DeleteChangeSet
 #[derive(Debug, PartialEq)]
 pub enum DeleteChangeSetError {
-    ///<p>The specified change set can't be used to update the stack. For example, the change set status might be <code>CREATE_IN_PROGRESS</code>, or the stack status might be <code>UPDATE_IN_PROGRESS</code>.</p>
+    /// <p>The specified change set can't be used to update the stack. For example, the change set status might be <code>CREATE_IN_PROGRESS</code>, or the stack status might be <code>UPDATE_IN_PROGRESS</code>.</p>
     InvalidChangeSetStatus(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9255,7 +9255,7 @@ impl Error for DeleteChangeSetError {
 /// Errors returned by DeleteStack
 #[derive(Debug, PartialEq)]
 pub enum DeleteStackError {
-    ///<p>A client request token already exists.</p>
+    /// <p>A client request token already exists.</p>
     TokenAlreadyExists(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9324,15 +9324,15 @@ impl Error for DeleteStackError {
 /// Errors returned by DeleteStackInstances
 #[derive(Debug, PartialEq)]
 pub enum DeleteStackInstancesError {
-    ///<p>The specified operation isn't valid.</p>
+    /// <p>The specified operation isn't valid.</p>
     InvalidOperation(String),
-    ///<p>The specified operation ID already exists.</p>
+    /// <p>The specified operation ID already exists.</p>
     OperationIdAlreadyExists(String),
-    ///<p>Another operation is currently in progress for this stack set. Only one operation can be performed for a stack set at a given time.</p>
+    /// <p>Another operation is currently in progress for this stack set. Only one operation can be performed for a stack set at a given time.</p>
     OperationInProgress(String),
-    ///<p>The specified stack set doesn't exist.</p>
+    /// <p>The specified stack set doesn't exist.</p>
     StackSetNotFound(String),
-    ///<p>Another operation has been performed on this stack set since the specified operation was performed. </p>
+    /// <p>Another operation has been performed on this stack set since the specified operation was performed. </p>
     StaleRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9421,9 +9421,9 @@ impl Error for DeleteStackInstancesError {
 /// Errors returned by DeleteStackSet
 #[derive(Debug, PartialEq)]
 pub enum DeleteStackSetError {
-    ///<p>Another operation is currently in progress for this stack set. Only one operation can be performed for a stack set at a given time.</p>
+    /// <p>Another operation is currently in progress for this stack set. Only one operation can be performed for a stack set at a given time.</p>
     OperationInProgress(String),
-    ///<p>You can't yet delete this stack set, because it still contains one or more stack instances. Delete all stack instances from the stack set before deleting the stack set.</p>
+    /// <p>You can't yet delete this stack set, because it still contains one or more stack instances. Delete all stack instances from the stack set before deleting the stack set.</p>
     StackSetNotEmpty(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9561,7 +9561,7 @@ impl Error for DescribeAccountLimitsError {
 /// Errors returned by DescribeChangeSet
 #[derive(Debug, PartialEq)]
 pub enum DescribeChangeSetError {
-    ///<p>The specified change set name or ID doesn't exit. To view valid change sets for a stack, use the <code>ListChangeSets</code> action.</p>
+    /// <p>The specified change set name or ID doesn't exit. To view valid change sets for a stack, use the <code>ListChangeSets</code> action.</p>
     ChangeSetNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9697,9 +9697,9 @@ impl Error for DescribeStackEventsError {
 /// Errors returned by DescribeStackInstance
 #[derive(Debug, PartialEq)]
 pub enum DescribeStackInstanceError {
-    ///<p>The specified stack instance doesn't exist.</p>
+    /// <p>The specified stack instance doesn't exist.</p>
     StackInstanceNotFound(String),
-    ///<p>The specified stack set doesn't exist.</p>
+    /// <p>The specified stack set doesn't exist.</p>
     StackSetNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9906,7 +9906,7 @@ impl Error for DescribeStackResourcesError {
 /// Errors returned by DescribeStackSet
 #[derive(Debug, PartialEq)]
 pub enum DescribeStackSetError {
-    ///<p>The specified stack set doesn't exist.</p>
+    /// <p>The specified stack set doesn't exist.</p>
     StackSetNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9975,9 +9975,9 @@ impl Error for DescribeStackSetError {
 /// Errors returned by DescribeStackSetOperation
 #[derive(Debug, PartialEq)]
 pub enum DescribeStackSetOperationError {
-    ///<p>The specified ID refers to an operation that doesn't exist.</p>
+    /// <p>The specified ID refers to an operation that doesn't exist.</p>
     OperationNotFound(String),
-    ///<p>The specified stack set doesn't exist.</p>
+    /// <p>The specified stack set doesn't exist.</p>
     StackSetNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10180,13 +10180,13 @@ impl Error for EstimateTemplateCostError {
 /// Errors returned by ExecuteChangeSet
 #[derive(Debug, PartialEq)]
 pub enum ExecuteChangeSetError {
-    ///<p>The specified change set name or ID doesn't exit. To view valid change sets for a stack, use the <code>ListChangeSets</code> action.</p>
+    /// <p>The specified change set name or ID doesn't exit. To view valid change sets for a stack, use the <code>ListChangeSets</code> action.</p>
     ChangeSetNotFound(String),
-    ///<p>The template contains resources with capabilities that weren't specified in the Capabilities parameter.</p>
+    /// <p>The template contains resources with capabilities that weren't specified in the Capabilities parameter.</p>
     InsufficientCapabilities(String),
-    ///<p>The specified change set can't be used to update the stack. For example, the change set status might be <code>CREATE_IN_PROGRESS</code>, or the stack status might be <code>UPDATE_IN_PROGRESS</code>.</p>
+    /// <p>The specified change set can't be used to update the stack. For example, the change set status might be <code>CREATE_IN_PROGRESS</code>, or the stack status might be <code>UPDATE_IN_PROGRESS</code>.</p>
     InvalidChangeSetStatus(String),
-    ///<p>A client request token already exists.</p>
+    /// <p>A client request token already exists.</p>
     TokenAlreadyExists(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10334,7 +10334,7 @@ impl Error for GetStackPolicyError {
 /// Errors returned by GetTemplate
 #[derive(Debug, PartialEq)]
 pub enum GetTemplateError {
-    ///<p>The specified change set name or ID doesn't exit. To view valid change sets for a stack, use the <code>ListChangeSets</code> action.</p>
+    /// <p>The specified change set name or ID doesn't exit. To view valid change sets for a stack, use the <code>ListChangeSets</code> action.</p>
     ChangeSetNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10403,7 +10403,7 @@ impl Error for GetTemplateError {
 /// Errors returned by GetTemplateSummary
 #[derive(Debug, PartialEq)]
 pub enum GetTemplateSummaryError {
-    ///<p>The specified stack set doesn't exist.</p>
+    /// <p>The specified stack set doesn't exist.</p>
     StackSetNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10663,7 +10663,7 @@ impl Error for ListImportsError {
 /// Errors returned by ListStackInstances
 #[derive(Debug, PartialEq)]
 pub enum ListStackInstancesError {
-    ///<p>The specified stack set doesn't exist.</p>
+    /// <p>The specified stack set doesn't exist.</p>
     StackSetNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10799,9 +10799,9 @@ impl Error for ListStackResourcesError {
 /// Errors returned by ListStackSetOperationResults
 #[derive(Debug, PartialEq)]
 pub enum ListStackSetOperationResultsError {
-    ///<p>The specified ID refers to an operation that doesn't exist.</p>
+    /// <p>The specified ID refers to an operation that doesn't exist.</p>
     OperationNotFound(String),
-    ///<p>The specified stack set doesn't exist.</p>
+    /// <p>The specified stack set doesn't exist.</p>
     StackSetNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10880,7 +10880,7 @@ impl Error for ListStackSetOperationResultsError {
 /// Errors returned by ListStackSetOperations
 #[derive(Debug, PartialEq)]
 pub enum ListStackSetOperationsError {
-    ///<p>The specified stack set doesn't exist.</p>
+    /// <p>The specified stack set doesn't exist.</p>
     StackSetNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11203,11 +11203,11 @@ impl Error for SignalResourceError {
 /// Errors returned by StopStackSetOperation
 #[derive(Debug, PartialEq)]
 pub enum StopStackSetOperationError {
-    ///<p>The specified operation isn't valid.</p>
+    /// <p>The specified operation isn't valid.</p>
     InvalidOperation(String),
-    ///<p>The specified ID refers to an operation that doesn't exist.</p>
+    /// <p>The specified ID refers to an operation that doesn't exist.</p>
     OperationNotFound(String),
-    ///<p>The specified stack set doesn't exist.</p>
+    /// <p>The specified stack set doesn't exist.</p>
     StackSetNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11286,9 +11286,9 @@ impl Error for StopStackSetOperationError {
 /// Errors returned by UpdateStack
 #[derive(Debug, PartialEq)]
 pub enum UpdateStackError {
-    ///<p>The template contains resources with capabilities that weren't specified in the Capabilities parameter.</p>
+    /// <p>The template contains resources with capabilities that weren't specified in the Capabilities parameter.</p>
     InsufficientCapabilities(String),
-    ///<p>A client request token already exists.</p>
+    /// <p>A client request token already exists.</p>
     TokenAlreadyExists(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11361,15 +11361,15 @@ impl Error for UpdateStackError {
 /// Errors returned by UpdateStackSet
 #[derive(Debug, PartialEq)]
 pub enum UpdateStackSetError {
-    ///<p>The specified operation isn't valid.</p>
+    /// <p>The specified operation isn't valid.</p>
     InvalidOperation(String),
-    ///<p>The specified operation ID already exists.</p>
+    /// <p>The specified operation ID already exists.</p>
     OperationIdAlreadyExists(String),
-    ///<p>Another operation is currently in progress for this stack set. Only one operation can be performed for a stack set at a given time.</p>
+    /// <p>Another operation is currently in progress for this stack set. Only one operation can be performed for a stack set at a given time.</p>
     OperationInProgress(String),
-    ///<p>The specified stack set doesn't exist.</p>
+    /// <p>The specified stack set doesn't exist.</p>
     StackSetNotFound(String),
-    ///<p>Another operation has been performed on this stack set since the specified operation was performed. </p>
+    /// <p>Another operation has been performed on this stack set since the specified operation was performed. </p>
     StaleRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11518,213 +11518,213 @@ impl Error for ValidateTemplateError {
 }
 /// Trait representing the capabilities of the AWS CloudFormation API. AWS CloudFormation clients implement this trait.
 pub trait CloudFormation {
-    #[doc="<p>Cancels an update on the specified stack. If the call completes successfully, the stack rolls back the update and reverts to the previous stack configuration.</p> <note> <p>You can cancel only stacks that are in the UPDATE_IN_PROGRESS state.</p> </note>"]
+    /// <p><p>Cancels an update on the specified stack. If the call completes successfully, the stack rolls back the update and reverts to the previous stack configuration.</p> <note> <p>You can cancel only stacks that are in the UPDATE<em>IN</em>PROGRESS state.</p> </note></p>
     fn cancel_update_stack(
         &self,
         input: &CancelUpdateStackInput,
     ) -> Result<(), CancelUpdateStackError>;
 
-    #[doc="<p>For a specified stack that is in the <code>UPDATE_ROLLBACK_FAILED</code> state, continues rolling it back to the <code>UPDATE_ROLLBACK_COMPLETE</code> state. Depending on the cause of the failure, you can manually <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html#troubleshooting-errors-update-rollback-failed\"> fix the error</a> and continue the rollback. By continuing the rollback, you can return your stack to a working state (the <code>UPDATE_ROLLBACK_COMPLETE</code> state), and then try to update the stack again.</p> <p>A stack goes into the <code>UPDATE_ROLLBACK_FAILED</code> state when AWS CloudFormation cannot roll back all changes after a failed stack update. For example, you might have a stack that is rolling back to an old database instance that was deleted outside of AWS CloudFormation. Because AWS CloudFormation doesn't know the database was deleted, it assumes that the database instance still exists and attempts to roll back to it, causing the update rollback to fail.</p>"]
+    /// <p>For a specified stack that is in the <code>UPDATE_ROLLBACK_FAILED</code> state, continues rolling it back to the <code>UPDATE_ROLLBACK_COMPLETE</code> state. Depending on the cause of the failure, you can manually <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html#troubleshooting-errors-update-rollback-failed"> fix the error</a> and continue the rollback. By continuing the rollback, you can return your stack to a working state (the <code>UPDATE_ROLLBACK_COMPLETE</code> state), and then try to update the stack again.</p> <p>A stack goes into the <code>UPDATE_ROLLBACK_FAILED</code> state when AWS CloudFormation cannot roll back all changes after a failed stack update. For example, you might have a stack that is rolling back to an old database instance that was deleted outside of AWS CloudFormation. Because AWS CloudFormation doesn't know the database was deleted, it assumes that the database instance still exists and attempts to roll back to it, causing the update rollback to fail.</p>
     fn continue_update_rollback(
         &self,
         input: &ContinueUpdateRollbackInput,
     ) -> Result<ContinueUpdateRollbackOutput, ContinueUpdateRollbackError>;
 
-    #[doc="<p>Creates a list of changes that will be applied to a stack so that you can review the changes before executing them. You can create a change set for a stack that doesn't exist or an existing stack. If you create a change set for a stack that doesn't exist, the change set shows all of the resources that AWS CloudFormation will create. If you create a change set for an existing stack, AWS CloudFormation compares the stack's information with the information that you submit in the change set and lists the differences. Use change sets to understand which resources AWS CloudFormation will create or change, and how it will change resources in an existing stack, before you create or update a stack.</p> <p>To create a change set for a stack that doesn't exist, for the <code>ChangeSetType</code> parameter, specify <code>CREATE</code>. To create a change set for an existing stack, specify <code>UPDATE</code> for the <code>ChangeSetType</code> parameter. After the <code>CreateChangeSet</code> call successfully completes, AWS CloudFormation starts creating the change set. To check the status of the change set or to review it, use the <a>DescribeChangeSet</a> action.</p> <p>When you are satisfied with the changes the change set will make, execute the change set by using the <a>ExecuteChangeSet</a> action. AWS CloudFormation doesn't make changes until you execute the change set.</p>"]
+    /// <p>Creates a list of changes that will be applied to a stack so that you can review the changes before executing them. You can create a change set for a stack that doesn't exist or an existing stack. If you create a change set for a stack that doesn't exist, the change set shows all of the resources that AWS CloudFormation will create. If you create a change set for an existing stack, AWS CloudFormation compares the stack's information with the information that you submit in the change set and lists the differences. Use change sets to understand which resources AWS CloudFormation will create or change, and how it will change resources in an existing stack, before you create or update a stack.</p> <p>To create a change set for a stack that doesn't exist, for the <code>ChangeSetType</code> parameter, specify <code>CREATE</code>. To create a change set for an existing stack, specify <code>UPDATE</code> for the <code>ChangeSetType</code> parameter. After the <code>CreateChangeSet</code> call successfully completes, AWS CloudFormation starts creating the change set. To check the status of the change set or to review it, use the <a>DescribeChangeSet</a> action.</p> <p>When you are satisfied with the changes the change set will make, execute the change set by using the <a>ExecuteChangeSet</a> action. AWS CloudFormation doesn't make changes until you execute the change set.</p>
     fn create_change_set(
         &self,
         input: &CreateChangeSetInput,
     ) -> Result<CreateChangeSetOutput, CreateChangeSetError>;
 
-    #[doc="<p>Creates a stack as specified in the template. After the call completes successfully, the stack creation starts. You can check the status of the stack via the <a>DescribeStacks</a> API.</p>"]
+    /// <p>Creates a stack as specified in the template. After the call completes successfully, the stack creation starts. You can check the status of the stack via the <a>DescribeStacks</a> API.</p>
     fn create_stack(&self, input: &CreateStackInput)
         -> Result<CreateStackOutput, CreateStackError>;
 
-    #[doc="<p>Creates stack instances for the specified accounts, within the specified regions. A stack instance refers to a stack in a specific account and region. <code>Accounts</code> and <code>Regions</code> are required parameters—you must specify at least one account and one region. </p>"]
+    /// <p>Creates stack instances for the specified accounts, within the specified regions. A stack instance refers to a stack in a specific account and region. <code>Accounts</code> and <code>Regions</code> are required parameters—you must specify at least one account and one region. </p>
     fn create_stack_instances(
         &self,
         input: &CreateStackInstancesInput,
     ) -> Result<CreateStackInstancesOutput, CreateStackInstancesError>;
 
-    #[doc = "<p>Creates a stack set.</p>"]
+    /// <p>Creates a stack set.</p>
     fn create_stack_set(
         &self,
         input: &CreateStackSetInput,
     ) -> Result<CreateStackSetOutput, CreateStackSetError>;
 
-    #[doc="<p>Deletes the specified change set. Deleting change sets ensures that no one executes the wrong change set.</p> <p>If the call successfully completes, AWS CloudFormation successfully deleted the change set.</p>"]
+    /// <p>Deletes the specified change set. Deleting change sets ensures that no one executes the wrong change set.</p> <p>If the call successfully completes, AWS CloudFormation successfully deleted the change set.</p>
     fn delete_change_set(
         &self,
         input: &DeleteChangeSetInput,
     ) -> Result<DeleteChangeSetOutput, DeleteChangeSetError>;
 
-    #[doc="<p>Deletes a specified stack. Once the call completes successfully, stack deletion starts. Deleted stacks do not show up in the <a>DescribeStacks</a> API if the deletion has been completed successfully.</p>"]
+    /// <p>Deletes a specified stack. Once the call completes successfully, stack deletion starts. Deleted stacks do not show up in the <a>DescribeStacks</a> API if the deletion has been completed successfully.</p>
     fn delete_stack(&self, input: &DeleteStackInput) -> Result<(), DeleteStackError>;
 
-    #[doc = "<p>Deletes stack instances for the specified accounts, in the specified regions. </p>"]
+    /// <p>Deletes stack instances for the specified accounts, in the specified regions. </p>
     fn delete_stack_instances(
         &self,
         input: &DeleteStackInstancesInput,
     ) -> Result<DeleteStackInstancesOutput, DeleteStackInstancesError>;
 
-    #[doc="<p>Deletes a stack set. Before you can delete a stack set, all of its member stack instances must be deleted. For more information about how to do this, see <a>DeleteStackInstances</a>. </p>"]
+    /// <p>Deletes a stack set. Before you can delete a stack set, all of its member stack instances must be deleted. For more information about how to do this, see <a>DeleteStackInstances</a>. </p>
     fn delete_stack_set(
         &self,
         input: &DeleteStackSetInput,
     ) -> Result<DeleteStackSetOutput, DeleteStackSetError>;
 
-    #[doc="<p>Retrieves your account's AWS CloudFormation limits, such as the maximum number of stacks that you can create in your account.</p>"]
+    /// <p>Retrieves your account's AWS CloudFormation limits, such as the maximum number of stacks that you can create in your account.</p>
     fn describe_account_limits(
         &self,
         input: &DescribeAccountLimitsInput,
     ) -> Result<DescribeAccountLimitsOutput, DescribeAccountLimitsError>;
 
-    #[doc="<p>Returns the inputs for the change set and a list of changes that AWS CloudFormation will make if you execute the change set. For more information, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-changesets.html\">Updating Stacks Using Change Sets</a> in the AWS CloudFormation User Guide.</p>"]
+    /// <p>Returns the inputs for the change set and a list of changes that AWS CloudFormation will make if you execute the change set. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-changesets.html">Updating Stacks Using Change Sets</a> in the AWS CloudFormation User Guide.</p>
     fn describe_change_set(
         &self,
         input: &DescribeChangeSetInput,
     ) -> Result<DescribeChangeSetOutput, DescribeChangeSetError>;
 
-    #[doc="<p>Returns all stack related events for a specified stack in reverse chronological order. For more information about a stack's event history, go to <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/concept-stack.html\">Stacks</a> in the AWS CloudFormation User Guide.</p> <note> <p>You can list events for stacks that have failed to create or have been deleted by specifying the unique stack identifier (stack ID).</p> </note>"]
+    /// <p><p>Returns all stack related events for a specified stack in reverse chronological order. For more information about a stack&#39;s event history, go to <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/concept-stack.html">Stacks</a> in the AWS CloudFormation User Guide.</p> <note> <p>You can list events for stacks that have failed to create or have been deleted by specifying the unique stack identifier (stack ID).</p> </note></p>
     fn describe_stack_events(
         &self,
         input: &DescribeStackEventsInput,
     ) -> Result<DescribeStackEventsOutput, DescribeStackEventsError>;
 
-    #[doc="<p>Returns the stack instance that's associated with the specified stack set, AWS account, and region.</p> <p>For a list of stack instances that are associated with a specific stack set, use <a>ListStackInstances</a>.</p>"]
+    /// <p>Returns the stack instance that's associated with the specified stack set, AWS account, and region.</p> <p>For a list of stack instances that are associated with a specific stack set, use <a>ListStackInstances</a>.</p>
     fn describe_stack_instance(
         &self,
         input: &DescribeStackInstanceInput,
     ) -> Result<DescribeStackInstanceOutput, DescribeStackInstanceError>;
 
-    #[doc="<p>Returns a description of the specified resource in the specified stack.</p> <p>For deleted stacks, DescribeStackResource returns resource information for up to 90 days after the stack has been deleted.</p>"]
+    /// <p>Returns a description of the specified resource in the specified stack.</p> <p>For deleted stacks, DescribeStackResource returns resource information for up to 90 days after the stack has been deleted.</p>
     fn describe_stack_resource(
         &self,
         input: &DescribeStackResourceInput,
     ) -> Result<DescribeStackResourceOutput, DescribeStackResourceError>;
 
-    #[doc="<p>Returns AWS resource descriptions for running and deleted stacks. If <code>StackName</code> is specified, all the associated resources that are part of the stack are returned. If <code>PhysicalResourceId</code> is specified, the associated resources of the stack that the resource belongs to are returned.</p> <note> <p>Only the first 100 resources will be returned. If your stack has more resources than this, you should use <code>ListStackResources</code> instead.</p> </note> <p>For deleted stacks, <code>DescribeStackResources</code> returns resource information for up to 90 days after the stack has been deleted.</p> <p>You must specify either <code>StackName</code> or <code>PhysicalResourceId</code>, but not both. In addition, you can specify <code>LogicalResourceId</code> to filter the returned result. For more information about resources, the <code>LogicalResourceId</code> and <code>PhysicalResourceId</code>, go to the <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/\">AWS CloudFormation User Guide</a>.</p> <note> <p>A <code>ValidationError</code> is returned if you specify both <code>StackName</code> and <code>PhysicalResourceId</code> in the same request.</p> </note>"]
+    /// <p><p>Returns AWS resource descriptions for running and deleted stacks. If <code>StackName</code> is specified, all the associated resources that are part of the stack are returned. If <code>PhysicalResourceId</code> is specified, the associated resources of the stack that the resource belongs to are returned.</p> <note> <p>Only the first 100 resources will be returned. If your stack has more resources than this, you should use <code>ListStackResources</code> instead.</p> </note> <p>For deleted stacks, <code>DescribeStackResources</code> returns resource information for up to 90 days after the stack has been deleted.</p> <p>You must specify either <code>StackName</code> or <code>PhysicalResourceId</code>, but not both. In addition, you can specify <code>LogicalResourceId</code> to filter the returned result. For more information about resources, the <code>LogicalResourceId</code> and <code>PhysicalResourceId</code>, go to the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/">AWS CloudFormation User Guide</a>.</p> <note> <p>A <code>ValidationError</code> is returned if you specify both <code>StackName</code> and <code>PhysicalResourceId</code> in the same request.</p> </note></p>
     fn describe_stack_resources(
         &self,
         input: &DescribeStackResourcesInput,
     ) -> Result<DescribeStackResourcesOutput, DescribeStackResourcesError>;
 
-    #[doc = "<p>Returns the description of the specified stack set. </p>"]
+    /// <p>Returns the description of the specified stack set. </p>
     fn describe_stack_set(
         &self,
         input: &DescribeStackSetInput,
     ) -> Result<DescribeStackSetOutput, DescribeStackSetError>;
 
-    #[doc = "<p>Returns the description of the specified stack set operation. </p>"]
+    /// <p>Returns the description of the specified stack set operation. </p>
     fn describe_stack_set_operation(
         &self,
         input: &DescribeStackSetOperationInput,
     ) -> Result<DescribeStackSetOperationOutput, DescribeStackSetOperationError>;
 
-    #[doc="<p>Returns the description for the specified stack; if no stack name was specified, then it returns the description for all the stacks created.</p> <note> <p>If the stack does not exist, an <code>AmazonCloudFormationException</code> is returned.</p> </note>"]
+    /// <p><p>Returns the description for the specified stack; if no stack name was specified, then it returns the description for all the stacks created.</p> <note> <p>If the stack does not exist, an <code>AmazonCloudFormationException</code> is returned.</p> </note></p>
     fn describe_stacks(
         &self,
         input: &DescribeStacksInput,
     ) -> Result<DescribeStacksOutput, DescribeStacksError>;
 
-    #[doc="<p>Returns the estimated monthly cost of a template. The return value is an AWS Simple Monthly Calculator URL with a query string that describes the resources required to run the template.</p>"]
+    /// <p>Returns the estimated monthly cost of a template. The return value is an AWS Simple Monthly Calculator URL with a query string that describes the resources required to run the template.</p>
     fn estimate_template_cost(
         &self,
         input: &EstimateTemplateCostInput,
     ) -> Result<EstimateTemplateCostOutput, EstimateTemplateCostError>;
 
-    #[doc="<p>Updates a stack using the input information that was provided when the specified change set was created. After the call successfully completes, AWS CloudFormation starts updating the stack. Use the <a>DescribeStacks</a> action to view the status of the update.</p> <p>When you execute a change set, AWS CloudFormation deletes all other change sets associated with the stack because they aren't valid for the updated stack.</p> <p>If a stack policy is associated with the stack, AWS CloudFormation enforces the policy during the update. You can't specify a temporary stack policy that overrides the current policy.</p>"]
+    /// <p>Updates a stack using the input information that was provided when the specified change set was created. After the call successfully completes, AWS CloudFormation starts updating the stack. Use the <a>DescribeStacks</a> action to view the status of the update.</p> <p>When you execute a change set, AWS CloudFormation deletes all other change sets associated with the stack because they aren't valid for the updated stack.</p> <p>If a stack policy is associated with the stack, AWS CloudFormation enforces the policy during the update. You can't specify a temporary stack policy that overrides the current policy.</p>
     fn execute_change_set(
         &self,
         input: &ExecuteChangeSetInput,
     ) -> Result<ExecuteChangeSetOutput, ExecuteChangeSetError>;
 
-    #[doc="<p>Returns the stack policy for a specified stack. If a stack doesn't have a policy, a null value is returned.</p>"]
+    /// <p>Returns the stack policy for a specified stack. If a stack doesn't have a policy, a null value is returned.</p>
     fn get_stack_policy(
         &self,
         input: &GetStackPolicyInput,
     ) -> Result<GetStackPolicyOutput, GetStackPolicyError>;
 
-    #[doc="<p>Returns the template body for a specified stack. You can get the template for running or deleted stacks.</p> <p>For deleted stacks, GetTemplate returns the template for up to 90 days after the stack has been deleted.</p> <note> <p> If the template does not exist, a <code>ValidationError</code> is returned. </p> </note>"]
+    /// <p><p>Returns the template body for a specified stack. You can get the template for running or deleted stacks.</p> <p>For deleted stacks, GetTemplate returns the template for up to 90 days after the stack has been deleted.</p> <note> <p> If the template does not exist, a <code>ValidationError</code> is returned. </p> </note></p>
     fn get_template(&self, input: &GetTemplateInput)
         -> Result<GetTemplateOutput, GetTemplateError>;
 
-    #[doc="<p>Returns information about a new or existing template. The <code>GetTemplateSummary</code> action is useful for viewing parameter information, such as default parameter values and parameter types, before you create or update a stack or stack set.</p> <p>You can use the <code>GetTemplateSummary</code> action when you submit a template, or you can get template information for a stack set, or a running or deleted stack.</p> <p>For deleted stacks, <code>GetTemplateSummary</code> returns the template information for up to 90 days after the stack has been deleted. If the template does not exist, a <code>ValidationError</code> is returned.</p>"]
+    /// <p>Returns information about a new or existing template. The <code>GetTemplateSummary</code> action is useful for viewing parameter information, such as default parameter values and parameter types, before you create or update a stack or stack set.</p> <p>You can use the <code>GetTemplateSummary</code> action when you submit a template, or you can get template information for a stack set, or a running or deleted stack.</p> <p>For deleted stacks, <code>GetTemplateSummary</code> returns the template information for up to 90 days after the stack has been deleted. If the template does not exist, a <code>ValidationError</code> is returned.</p>
     fn get_template_summary(
         &self,
         input: &GetTemplateSummaryInput,
     ) -> Result<GetTemplateSummaryOutput, GetTemplateSummaryError>;
 
-    #[doc="<p>Returns the ID and status of each active change set for a stack. For example, AWS CloudFormation lists change sets that are in the <code>CREATE_IN_PROGRESS</code> or <code>CREATE_PENDING</code> state.</p>"]
+    /// <p>Returns the ID and status of each active change set for a stack. For example, AWS CloudFormation lists change sets that are in the <code>CREATE_IN_PROGRESS</code> or <code>CREATE_PENDING</code> state.</p>
     fn list_change_sets(
         &self,
         input: &ListChangeSetsInput,
     ) -> Result<ListChangeSetsOutput, ListChangeSetsError>;
 
-    #[doc="<p>Lists all exported output values in the account and region in which you call this action. Use this action to see the exported output values that you can import into other stacks. To import values, use the <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html\"> <code>Fn::ImportValue</code> </a> function. </p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-exports.html\"> AWS CloudFormation Export Stack Output Values</a>.</p>"]
+    /// <p>Lists all exported output values in the account and region in which you call this action. Use this action to see the exported output values that you can import into other stacks. To import values, use the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html"> <code>Fn::ImportValue</code> </a> function. </p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-exports.html"> AWS CloudFormation Export Stack Output Values</a>.</p>
     fn list_exports(&self, input: &ListExportsInput)
         -> Result<ListExportsOutput, ListExportsError>;
 
-    #[doc="<p>Lists all stacks that are importing an exported output value. To modify or remove an exported output value, first use this action to see which stacks are using it. To see the exported output values in your account, see <a>ListExports</a>. </p> <p>For more information about importing an exported output value, see the <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html\"> <code>Fn::ImportValue</code> </a> function. </p>"]
+    /// <p>Lists all stacks that are importing an exported output value. To modify or remove an exported output value, first use this action to see which stacks are using it. To see the exported output values in your account, see <a>ListExports</a>. </p> <p>For more information about importing an exported output value, see the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html"> <code>Fn::ImportValue</code> </a> function. </p>
     fn list_imports(&self, input: &ListImportsInput)
         -> Result<ListImportsOutput, ListImportsError>;
 
-    #[doc="<p>Returns summary information about stack instances that are associated with the specified stack set. You can filter for stack instances that are associated with a specific AWS account name or region.</p>"]
+    /// <p>Returns summary information about stack instances that are associated with the specified stack set. You can filter for stack instances that are associated with a specific AWS account name or region.</p>
     fn list_stack_instances(
         &self,
         input: &ListStackInstancesInput,
     ) -> Result<ListStackInstancesOutput, ListStackInstancesError>;
 
-    #[doc="<p>Returns descriptions of all resources of the specified stack.</p> <p>For deleted stacks, ListStackResources returns resource information for up to 90 days after the stack has been deleted.</p>"]
+    /// <p>Returns descriptions of all resources of the specified stack.</p> <p>For deleted stacks, ListStackResources returns resource information for up to 90 days after the stack has been deleted.</p>
     fn list_stack_resources(
         &self,
         input: &ListStackResourcesInput,
     ) -> Result<ListStackResourcesOutput, ListStackResourcesError>;
 
-    #[doc = "<p>Returns summary information about the results of a stack set operation. </p>"]
+    /// <p>Returns summary information about the results of a stack set operation. </p>
     fn list_stack_set_operation_results(
         &self,
         input: &ListStackSetOperationResultsInput,
     ) -> Result<ListStackSetOperationResultsOutput, ListStackSetOperationResultsError>;
 
-    #[doc = "<p>Returns summary information about operations performed on a stack set. </p>"]
+    /// <p>Returns summary information about operations performed on a stack set. </p>
     fn list_stack_set_operations(
         &self,
         input: &ListStackSetOperationsInput,
     ) -> Result<ListStackSetOperationsOutput, ListStackSetOperationsError>;
 
-    #[doc = "<p>Returns summary information about stack sets that are associated with the user.</p>"]
+    /// <p>Returns summary information about stack sets that are associated with the user.</p>
     fn list_stack_sets(
         &self,
         input: &ListStackSetsInput,
     ) -> Result<ListStackSetsOutput, ListStackSetsError>;
 
-    #[doc="<p>Returns the summary information for stacks whose status matches the specified StackStatusFilter. Summary information for stacks that have been deleted is kept for 90 days after the stack is deleted. If no StackStatusFilter is specified, summary information for all stacks is returned (including existing stacks and stacks that have been deleted).</p>"]
+    /// <p>Returns the summary information for stacks whose status matches the specified StackStatusFilter. Summary information for stacks that have been deleted is kept for 90 days after the stack is deleted. If no StackStatusFilter is specified, summary information for all stacks is returned (including existing stacks and stacks that have been deleted).</p>
     fn list_stacks(&self, input: &ListStacksInput) -> Result<ListStacksOutput, ListStacksError>;
 
-    #[doc = "<p>Sets a stack policy for a specified stack.</p>"]
+    /// <p>Sets a stack policy for a specified stack.</p>
     fn set_stack_policy(&self, input: &SetStackPolicyInput) -> Result<(), SetStackPolicyError>;
 
-    #[doc="<p>Sends a signal to the specified resource with a success or failure status. You can use the SignalResource API in conjunction with a creation policy or update policy. AWS CloudFormation doesn't proceed with a stack creation or update until resources receive the required number of signals or the timeout period is exceeded. The SignalResource API is useful in cases where you want to send signals from anywhere other than an Amazon EC2 instance.</p>"]
+    /// <p>Sends a signal to the specified resource with a success or failure status. You can use the SignalResource API in conjunction with a creation policy or update policy. AWS CloudFormation doesn't proceed with a stack creation or update until resources receive the required number of signals or the timeout period is exceeded. The SignalResource API is useful in cases where you want to send signals from anywhere other than an Amazon EC2 instance.</p>
     fn signal_resource(&self, input: &SignalResourceInput) -> Result<(), SignalResourceError>;
 
-    #[doc="<p>Stops an in-progress operation on a stack set and its associated stack instances. </p>"]
+    /// <p>Stops an in-progress operation on a stack set and its associated stack instances. </p>
     fn stop_stack_set_operation(
         &self,
         input: &StopStackSetOperationInput,
     ) -> Result<StopStackSetOperationOutput, StopStackSetOperationError>;
 
-    #[doc="<p>Updates a stack as specified in the template. After the call completes successfully, the stack update starts. You can check the status of the stack via the <a>DescribeStacks</a> action.</p> <p>To get a copy of the template for an existing stack, you can use the <a>GetTemplate</a> action.</p> <p>For more information about creating an update template, updating a stack, and monitoring the progress of the update, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks.html\">Updating a Stack</a>.</p>"]
+    /// <p>Updates a stack as specified in the template. After the call completes successfully, the stack update starts. You can check the status of the stack via the <a>DescribeStacks</a> action.</p> <p>To get a copy of the template for an existing stack, you can use the <a>GetTemplate</a> action.</p> <p>For more information about creating an update template, updating a stack, and monitoring the progress of the update, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks.html">Updating a Stack</a>.</p>
     fn update_stack(&self, input: &UpdateStackInput)
         -> Result<UpdateStackOutput, UpdateStackError>;
 
-    #[doc="<p>Updates the stack set and <i>all</i> associated stack instances.</p> <p>Even if the stack set operation created by updating the stack set fails (completely or partially, below or above a specified failure tolerance), the stack set is updated with your changes. Subsequent <a>CreateStackInstances</a> calls on the specified stack set use the updated stack set.</p>"]
+    /// <p>Updates the stack set and <i>all</i> associated stack instances.</p> <p>Even if the stack set operation created by updating the stack set fails (completely or partially, below or above a specified failure tolerance), the stack set is updated with your changes. Subsequent <a>CreateStackInstances</a> calls on the specified stack set use the updated stack set.</p>
     fn update_stack_set(
         &self,
         input: &UpdateStackSetInput,
     ) -> Result<UpdateStackSetOutput, UpdateStackSetError>;
 
-    #[doc="<p>Validates a specified template. AWS CloudFormation first checks if the template is valid JSON. If it isn't, AWS CloudFormation checks if the template is valid YAML. If both these checks fail, AWS CloudFormation returns a template validation error.</p>"]
+    /// <p>Validates a specified template. AWS CloudFormation first checks if the template is valid JSON. If it isn't, AWS CloudFormation checks if the template is valid YAML. If both these checks fail, AWS CloudFormation returns a template validation error.</p>
     fn validate_template(
         &self,
         input: &ValidateTemplateInput,
@@ -11760,7 +11760,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Cancels an update on the specified stack. If the call completes successfully, the stack rolls back the update and reverts to the previous stack configuration.</p> <note> <p>You can cancel only stacks that are in the UPDATE_IN_PROGRESS state.</p> </note>"]
+    /// <p><p>Cancels an update on the specified stack. If the call completes successfully, the stack rolls back the update and reverts to the previous stack configuration.</p> <note> <p>You can cancel only stacks that are in the UPDATE<em>IN</em>PROGRESS state.</p> </note></p>
     fn cancel_update_stack(
         &self,
         input: &CancelUpdateStackInput,
@@ -11790,7 +11790,7 @@ where
         }
     }
 
-    #[doc="<p>For a specified stack that is in the <code>UPDATE_ROLLBACK_FAILED</code> state, continues rolling it back to the <code>UPDATE_ROLLBACK_COMPLETE</code> state. Depending on the cause of the failure, you can manually <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html#troubleshooting-errors-update-rollback-failed\"> fix the error</a> and continue the rollback. By continuing the rollback, you can return your stack to a working state (the <code>UPDATE_ROLLBACK_COMPLETE</code> state), and then try to update the stack again.</p> <p>A stack goes into the <code>UPDATE_ROLLBACK_FAILED</code> state when AWS CloudFormation cannot roll back all changes after a failed stack update. For example, you might have a stack that is rolling back to an old database instance that was deleted outside of AWS CloudFormation. Because AWS CloudFormation doesn't know the database was deleted, it assumes that the database instance still exists and attempts to roll back to it, causing the update rollback to fail.</p>"]
+    /// <p>For a specified stack that is in the <code>UPDATE_ROLLBACK_FAILED</code> state, continues rolling it back to the <code>UPDATE_ROLLBACK_COMPLETE</code> state. Depending on the cause of the failure, you can manually <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html#troubleshooting-errors-update-rollback-failed"> fix the error</a> and continue the rollback. By continuing the rollback, you can return your stack to a working state (the <code>UPDATE_ROLLBACK_COMPLETE</code> state), and then try to update the stack again.</p> <p>A stack goes into the <code>UPDATE_ROLLBACK_FAILED</code> state when AWS CloudFormation cannot roll back all changes after a failed stack update. For example, you might have a stack that is rolling back to an old database instance that was deleted outside of AWS CloudFormation. Because AWS CloudFormation doesn't know the database was deleted, it assumes that the database instance still exists and attempts to roll back to it, causing the update rollback to fail.</p>
     fn continue_update_rollback(
         &self,
         input: &ContinueUpdateRollbackInput,
@@ -11841,7 +11841,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a list of changes that will be applied to a stack so that you can review the changes before executing them. You can create a change set for a stack that doesn't exist or an existing stack. If you create a change set for a stack that doesn't exist, the change set shows all of the resources that AWS CloudFormation will create. If you create a change set for an existing stack, AWS CloudFormation compares the stack's information with the information that you submit in the change set and lists the differences. Use change sets to understand which resources AWS CloudFormation will create or change, and how it will change resources in an existing stack, before you create or update a stack.</p> <p>To create a change set for a stack that doesn't exist, for the <code>ChangeSetType</code> parameter, specify <code>CREATE</code>. To create a change set for an existing stack, specify <code>UPDATE</code> for the <code>ChangeSetType</code> parameter. After the <code>CreateChangeSet</code> call successfully completes, AWS CloudFormation starts creating the change set. To check the status of the change set or to review it, use the <a>DescribeChangeSet</a> action.</p> <p>When you are satisfied with the changes the change set will make, execute the change set by using the <a>ExecuteChangeSet</a> action. AWS CloudFormation doesn't make changes until you execute the change set.</p>"]
+    /// <p>Creates a list of changes that will be applied to a stack so that you can review the changes before executing them. You can create a change set for a stack that doesn't exist or an existing stack. If you create a change set for a stack that doesn't exist, the change set shows all of the resources that AWS CloudFormation will create. If you create a change set for an existing stack, AWS CloudFormation compares the stack's information with the information that you submit in the change set and lists the differences. Use change sets to understand which resources AWS CloudFormation will create or change, and how it will change resources in an existing stack, before you create or update a stack.</p> <p>To create a change set for a stack that doesn't exist, for the <code>ChangeSetType</code> parameter, specify <code>CREATE</code>. To create a change set for an existing stack, specify <code>UPDATE</code> for the <code>ChangeSetType</code> parameter. After the <code>CreateChangeSet</code> call successfully completes, AWS CloudFormation starts creating the change set. To check the status of the change set or to review it, use the <a>DescribeChangeSet</a> action.</p> <p>When you are satisfied with the changes the change set will make, execute the change set by using the <a>ExecuteChangeSet</a> action. AWS CloudFormation doesn't make changes until you execute the change set.</p>
     fn create_change_set(
         &self,
         input: &CreateChangeSetInput,
@@ -11892,7 +11892,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a stack as specified in the template. After the call completes successfully, the stack creation starts. You can check the status of the stack via the <a>DescribeStacks</a> API.</p>"]
+    /// <p>Creates a stack as specified in the template. After the call completes successfully, the stack creation starts. You can check the status of the stack via the <a>DescribeStacks</a> API.</p>
     fn create_stack(
         &self,
         input: &CreateStackInput,
@@ -11943,7 +11943,7 @@ where
         }
     }
 
-    #[doc="<p>Creates stack instances for the specified accounts, within the specified regions. A stack instance refers to a stack in a specific account and region. <code>Accounts</code> and <code>Regions</code> are required parameters—you must specify at least one account and one region. </p>"]
+    /// <p>Creates stack instances for the specified accounts, within the specified regions. A stack instance refers to a stack in a specific account and region. <code>Accounts</code> and <code>Regions</code> are required parameters—you must specify at least one account and one region. </p>
     fn create_stack_instances(
         &self,
         input: &CreateStackInstancesInput,
@@ -11994,7 +11994,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a stack set.</p>"]
+    /// <p>Creates a stack set.</p>
     fn create_stack_set(
         &self,
         input: &CreateStackSetInput,
@@ -12045,7 +12045,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified change set. Deleting change sets ensures that no one executes the wrong change set.</p> <p>If the call successfully completes, AWS CloudFormation successfully deleted the change set.</p>"]
+    /// <p>Deletes the specified change set. Deleting change sets ensures that no one executes the wrong change set.</p> <p>If the call successfully completes, AWS CloudFormation successfully deleted the change set.</p>
     fn delete_change_set(
         &self,
         input: &DeleteChangeSetInput,
@@ -12096,7 +12096,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a specified stack. Once the call completes successfully, stack deletion starts. Deleted stacks do not show up in the <a>DescribeStacks</a> API if the deletion has been completed successfully.</p>"]
+    /// <p>Deletes a specified stack. Once the call completes successfully, stack deletion starts. Deleted stacks do not show up in the <a>DescribeStacks</a> API if the deletion has been completed successfully.</p>
     fn delete_stack(&self, input: &DeleteStackInput) -> Result<(), DeleteStackError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -12123,7 +12123,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes stack instances for the specified accounts, in the specified regions. </p>"]
+    /// <p>Deletes stack instances for the specified accounts, in the specified regions. </p>
     fn delete_stack_instances(
         &self,
         input: &DeleteStackInstancesInput,
@@ -12174,7 +12174,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a stack set. Before you can delete a stack set, all of its member stack instances must be deleted. For more information about how to do this, see <a>DeleteStackInstances</a>. </p>"]
+    /// <p>Deletes a stack set. Before you can delete a stack set, all of its member stack instances must be deleted. For more information about how to do this, see <a>DeleteStackInstances</a>. </p>
     fn delete_stack_set(
         &self,
         input: &DeleteStackSetInput,
@@ -12225,7 +12225,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves your account's AWS CloudFormation limits, such as the maximum number of stacks that you can create in your account.</p>"]
+    /// <p>Retrieves your account's AWS CloudFormation limits, such as the maximum number of stacks that you can create in your account.</p>
     fn describe_account_limits(
         &self,
         input: &DescribeAccountLimitsInput,
@@ -12276,7 +12276,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the inputs for the change set and a list of changes that AWS CloudFormation will make if you execute the change set. For more information, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-changesets.html\">Updating Stacks Using Change Sets</a> in the AWS CloudFormation User Guide.</p>"]
+    /// <p>Returns the inputs for the change set and a list of changes that AWS CloudFormation will make if you execute the change set. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-changesets.html">Updating Stacks Using Change Sets</a> in the AWS CloudFormation User Guide.</p>
     fn describe_change_set(
         &self,
         input: &DescribeChangeSetInput,
@@ -12327,7 +12327,7 @@ where
         }
     }
 
-    #[doc="<p>Returns all stack related events for a specified stack in reverse chronological order. For more information about a stack's event history, go to <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/concept-stack.html\">Stacks</a> in the AWS CloudFormation User Guide.</p> <note> <p>You can list events for stacks that have failed to create or have been deleted by specifying the unique stack identifier (stack ID).</p> </note>"]
+    /// <p><p>Returns all stack related events for a specified stack in reverse chronological order. For more information about a stack&#39;s event history, go to <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/concept-stack.html">Stacks</a> in the AWS CloudFormation User Guide.</p> <note> <p>You can list events for stacks that have failed to create or have been deleted by specifying the unique stack identifier (stack ID).</p> </note></p>
     fn describe_stack_events(
         &self,
         input: &DescribeStackEventsInput,
@@ -12378,7 +12378,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the stack instance that's associated with the specified stack set, AWS account, and region.</p> <p>For a list of stack instances that are associated with a specific stack set, use <a>ListStackInstances</a>.</p>"]
+    /// <p>Returns the stack instance that's associated with the specified stack set, AWS account, and region.</p> <p>For a list of stack instances that are associated with a specific stack set, use <a>ListStackInstances</a>.</p>
     fn describe_stack_instance(
         &self,
         input: &DescribeStackInstanceInput,
@@ -12429,7 +12429,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a description of the specified resource in the specified stack.</p> <p>For deleted stacks, DescribeStackResource returns resource information for up to 90 days after the stack has been deleted.</p>"]
+    /// <p>Returns a description of the specified resource in the specified stack.</p> <p>For deleted stacks, DescribeStackResource returns resource information for up to 90 days after the stack has been deleted.</p>
     fn describe_stack_resource(
         &self,
         input: &DescribeStackResourceInput,
@@ -12480,7 +12480,7 @@ where
         }
     }
 
-    #[doc="<p>Returns AWS resource descriptions for running and deleted stacks. If <code>StackName</code> is specified, all the associated resources that are part of the stack are returned. If <code>PhysicalResourceId</code> is specified, the associated resources of the stack that the resource belongs to are returned.</p> <note> <p>Only the first 100 resources will be returned. If your stack has more resources than this, you should use <code>ListStackResources</code> instead.</p> </note> <p>For deleted stacks, <code>DescribeStackResources</code> returns resource information for up to 90 days after the stack has been deleted.</p> <p>You must specify either <code>StackName</code> or <code>PhysicalResourceId</code>, but not both. In addition, you can specify <code>LogicalResourceId</code> to filter the returned result. For more information about resources, the <code>LogicalResourceId</code> and <code>PhysicalResourceId</code>, go to the <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/\">AWS CloudFormation User Guide</a>.</p> <note> <p>A <code>ValidationError</code> is returned if you specify both <code>StackName</code> and <code>PhysicalResourceId</code> in the same request.</p> </note>"]
+    /// <p><p>Returns AWS resource descriptions for running and deleted stacks. If <code>StackName</code> is specified, all the associated resources that are part of the stack are returned. If <code>PhysicalResourceId</code> is specified, the associated resources of the stack that the resource belongs to are returned.</p> <note> <p>Only the first 100 resources will be returned. If your stack has more resources than this, you should use <code>ListStackResources</code> instead.</p> </note> <p>For deleted stacks, <code>DescribeStackResources</code> returns resource information for up to 90 days after the stack has been deleted.</p> <p>You must specify either <code>StackName</code> or <code>PhysicalResourceId</code>, but not both. In addition, you can specify <code>LogicalResourceId</code> to filter the returned result. For more information about resources, the <code>LogicalResourceId</code> and <code>PhysicalResourceId</code>, go to the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/">AWS CloudFormation User Guide</a>.</p> <note> <p>A <code>ValidationError</code> is returned if you specify both <code>StackName</code> and <code>PhysicalResourceId</code> in the same request.</p> </note></p>
     fn describe_stack_resources(
         &self,
         input: &DescribeStackResourcesInput,
@@ -12531,7 +12531,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns the description of the specified stack set. </p>"]
+    /// <p>Returns the description of the specified stack set. </p>
     fn describe_stack_set(
         &self,
         input: &DescribeStackSetInput,
@@ -12582,7 +12582,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns the description of the specified stack set operation. </p>"]
+    /// <p>Returns the description of the specified stack set operation. </p>
     fn describe_stack_set_operation(
         &self,
         input: &DescribeStackSetOperationInput,
@@ -12633,7 +12633,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the description for the specified stack; if no stack name was specified, then it returns the description for all the stacks created.</p> <note> <p>If the stack does not exist, an <code>AmazonCloudFormationException</code> is returned.</p> </note>"]
+    /// <p><p>Returns the description for the specified stack; if no stack name was specified, then it returns the description for all the stacks created.</p> <note> <p>If the stack does not exist, an <code>AmazonCloudFormationException</code> is returned.</p> </note></p>
     fn describe_stacks(
         &self,
         input: &DescribeStacksInput,
@@ -12684,7 +12684,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the estimated monthly cost of a template. The return value is an AWS Simple Monthly Calculator URL with a query string that describes the resources required to run the template.</p>"]
+    /// <p>Returns the estimated monthly cost of a template. The return value is an AWS Simple Monthly Calculator URL with a query string that describes the resources required to run the template.</p>
     fn estimate_template_cost(
         &self,
         input: &EstimateTemplateCostInput,
@@ -12735,7 +12735,7 @@ where
         }
     }
 
-    #[doc="<p>Updates a stack using the input information that was provided when the specified change set was created. After the call successfully completes, AWS CloudFormation starts updating the stack. Use the <a>DescribeStacks</a> action to view the status of the update.</p> <p>When you execute a change set, AWS CloudFormation deletes all other change sets associated with the stack because they aren't valid for the updated stack.</p> <p>If a stack policy is associated with the stack, AWS CloudFormation enforces the policy during the update. You can't specify a temporary stack policy that overrides the current policy.</p>"]
+    /// <p>Updates a stack using the input information that was provided when the specified change set was created. After the call successfully completes, AWS CloudFormation starts updating the stack. Use the <a>DescribeStacks</a> action to view the status of the update.</p> <p>When you execute a change set, AWS CloudFormation deletes all other change sets associated with the stack because they aren't valid for the updated stack.</p> <p>If a stack policy is associated with the stack, AWS CloudFormation enforces the policy during the update. You can't specify a temporary stack policy that overrides the current policy.</p>
     fn execute_change_set(
         &self,
         input: &ExecuteChangeSetInput,
@@ -12786,7 +12786,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the stack policy for a specified stack. If a stack doesn't have a policy, a null value is returned.</p>"]
+    /// <p>Returns the stack policy for a specified stack. If a stack doesn't have a policy, a null value is returned.</p>
     fn get_stack_policy(
         &self,
         input: &GetStackPolicyInput,
@@ -12837,7 +12837,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the template body for a specified stack. You can get the template for running or deleted stacks.</p> <p>For deleted stacks, GetTemplate returns the template for up to 90 days after the stack has been deleted.</p> <note> <p> If the template does not exist, a <code>ValidationError</code> is returned. </p> </note>"]
+    /// <p><p>Returns the template body for a specified stack. You can get the template for running or deleted stacks.</p> <p>For deleted stacks, GetTemplate returns the template for up to 90 days after the stack has been deleted.</p> <note> <p> If the template does not exist, a <code>ValidationError</code> is returned. </p> </note></p>
     fn get_template(
         &self,
         input: &GetTemplateInput,
@@ -12888,7 +12888,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about a new or existing template. The <code>GetTemplateSummary</code> action is useful for viewing parameter information, such as default parameter values and parameter types, before you create or update a stack or stack set.</p> <p>You can use the <code>GetTemplateSummary</code> action when you submit a template, or you can get template information for a stack set, or a running or deleted stack.</p> <p>For deleted stacks, <code>GetTemplateSummary</code> returns the template information for up to 90 days after the stack has been deleted. If the template does not exist, a <code>ValidationError</code> is returned.</p>"]
+    /// <p>Returns information about a new or existing template. The <code>GetTemplateSummary</code> action is useful for viewing parameter information, such as default parameter values and parameter types, before you create or update a stack or stack set.</p> <p>You can use the <code>GetTemplateSummary</code> action when you submit a template, or you can get template information for a stack set, or a running or deleted stack.</p> <p>For deleted stacks, <code>GetTemplateSummary</code> returns the template information for up to 90 days after the stack has been deleted. If the template does not exist, a <code>ValidationError</code> is returned.</p>
     fn get_template_summary(
         &self,
         input: &GetTemplateSummaryInput,
@@ -12939,7 +12939,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the ID and status of each active change set for a stack. For example, AWS CloudFormation lists change sets that are in the <code>CREATE_IN_PROGRESS</code> or <code>CREATE_PENDING</code> state.</p>"]
+    /// <p>Returns the ID and status of each active change set for a stack. For example, AWS CloudFormation lists change sets that are in the <code>CREATE_IN_PROGRESS</code> or <code>CREATE_PENDING</code> state.</p>
     fn list_change_sets(
         &self,
         input: &ListChangeSetsInput,
@@ -12990,7 +12990,7 @@ where
         }
     }
 
-    #[doc="<p>Lists all exported output values in the account and region in which you call this action. Use this action to see the exported output values that you can import into other stacks. To import values, use the <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html\"> <code>Fn::ImportValue</code> </a> function. </p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-exports.html\"> AWS CloudFormation Export Stack Output Values</a>.</p>"]
+    /// <p>Lists all exported output values in the account and region in which you call this action. Use this action to see the exported output values that you can import into other stacks. To import values, use the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html"> <code>Fn::ImportValue</code> </a> function. </p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-exports.html"> AWS CloudFormation Export Stack Output Values</a>.</p>
     fn list_exports(
         &self,
         input: &ListExportsInput,
@@ -13041,7 +13041,7 @@ where
         }
     }
 
-    #[doc="<p>Lists all stacks that are importing an exported output value. To modify or remove an exported output value, first use this action to see which stacks are using it. To see the exported output values in your account, see <a>ListExports</a>. </p> <p>For more information about importing an exported output value, see the <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html\"> <code>Fn::ImportValue</code> </a> function. </p>"]
+    /// <p>Lists all stacks that are importing an exported output value. To modify or remove an exported output value, first use this action to see which stacks are using it. To see the exported output values in your account, see <a>ListExports</a>. </p> <p>For more information about importing an exported output value, see the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html"> <code>Fn::ImportValue</code> </a> function. </p>
     fn list_imports(
         &self,
         input: &ListImportsInput,
@@ -13092,7 +13092,7 @@ where
         }
     }
 
-    #[doc="<p>Returns summary information about stack instances that are associated with the specified stack set. You can filter for stack instances that are associated with a specific AWS account name or region.</p>"]
+    /// <p>Returns summary information about stack instances that are associated with the specified stack set. You can filter for stack instances that are associated with a specific AWS account name or region.</p>
     fn list_stack_instances(
         &self,
         input: &ListStackInstancesInput,
@@ -13143,7 +13143,7 @@ where
         }
     }
 
-    #[doc="<p>Returns descriptions of all resources of the specified stack.</p> <p>For deleted stacks, ListStackResources returns resource information for up to 90 days after the stack has been deleted.</p>"]
+    /// <p>Returns descriptions of all resources of the specified stack.</p> <p>For deleted stacks, ListStackResources returns resource information for up to 90 days after the stack has been deleted.</p>
     fn list_stack_resources(
         &self,
         input: &ListStackResourcesInput,
@@ -13194,7 +13194,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns summary information about the results of a stack set operation. </p>"]
+    /// <p>Returns summary information about the results of a stack set operation. </p>
     fn list_stack_set_operation_results(
         &self,
         input: &ListStackSetOperationResultsInput,
@@ -13247,7 +13247,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns summary information about operations performed on a stack set. </p>"]
+    /// <p>Returns summary information about operations performed on a stack set. </p>
     fn list_stack_set_operations(
         &self,
         input: &ListStackSetOperationsInput,
@@ -13298,7 +13298,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns summary information about stack sets that are associated with the user.</p>"]
+    /// <p>Returns summary information about stack sets that are associated with the user.</p>
     fn list_stack_sets(
         &self,
         input: &ListStackSetsInput,
@@ -13349,7 +13349,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the summary information for stacks whose status matches the specified StackStatusFilter. Summary information for stacks that have been deleted is kept for 90 days after the stack is deleted. If no StackStatusFilter is specified, summary information for all stacks is returned (including existing stacks and stacks that have been deleted).</p>"]
+    /// <p>Returns the summary information for stacks whose status matches the specified StackStatusFilter. Summary information for stacks that have been deleted is kept for 90 days after the stack is deleted. If no StackStatusFilter is specified, summary information for all stacks is returned (including existing stacks and stacks that have been deleted).</p>
     fn list_stacks(&self, input: &ListStacksInput) -> Result<ListStacksOutput, ListStacksError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -13397,7 +13397,7 @@ where
         }
     }
 
-    #[doc = "<p>Sets a stack policy for a specified stack.</p>"]
+    /// <p>Sets a stack policy for a specified stack.</p>
     fn set_stack_policy(&self, input: &SetStackPolicyInput) -> Result<(), SetStackPolicyError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -13424,7 +13424,7 @@ where
         }
     }
 
-    #[doc="<p>Sends a signal to the specified resource with a success or failure status. You can use the SignalResource API in conjunction with a creation policy or update policy. AWS CloudFormation doesn't proceed with a stack creation or update until resources receive the required number of signals or the timeout period is exceeded. The SignalResource API is useful in cases where you want to send signals from anywhere other than an Amazon EC2 instance.</p>"]
+    /// <p>Sends a signal to the specified resource with a success or failure status. You can use the SignalResource API in conjunction with a creation policy or update policy. AWS CloudFormation doesn't proceed with a stack creation or update until resources receive the required number of signals or the timeout period is exceeded. The SignalResource API is useful in cases where you want to send signals from anywhere other than an Amazon EC2 instance.</p>
     fn signal_resource(&self, input: &SignalResourceInput) -> Result<(), SignalResourceError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -13451,7 +13451,7 @@ where
         }
     }
 
-    #[doc="<p>Stops an in-progress operation on a stack set and its associated stack instances. </p>"]
+    /// <p>Stops an in-progress operation on a stack set and its associated stack instances. </p>
     fn stop_stack_set_operation(
         &self,
         input: &StopStackSetOperationInput,
@@ -13502,7 +13502,7 @@ where
         }
     }
 
-    #[doc="<p>Updates a stack as specified in the template. After the call completes successfully, the stack update starts. You can check the status of the stack via the <a>DescribeStacks</a> action.</p> <p>To get a copy of the template for an existing stack, you can use the <a>GetTemplate</a> action.</p> <p>For more information about creating an update template, updating a stack, and monitoring the progress of the update, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks.html\">Updating a Stack</a>.</p>"]
+    /// <p>Updates a stack as specified in the template. After the call completes successfully, the stack update starts. You can check the status of the stack via the <a>DescribeStacks</a> action.</p> <p>To get a copy of the template for an existing stack, you can use the <a>GetTemplate</a> action.</p> <p>For more information about creating an update template, updating a stack, and monitoring the progress of the update, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks.html">Updating a Stack</a>.</p>
     fn update_stack(
         &self,
         input: &UpdateStackInput,
@@ -13553,7 +13553,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the stack set and <i>all</i> associated stack instances.</p> <p>Even if the stack set operation created by updating the stack set fails (completely or partially, below or above a specified failure tolerance), the stack set is updated with your changes. Subsequent <a>CreateStackInstances</a> calls on the specified stack set use the updated stack set.</p>"]
+    /// <p>Updates the stack set and <i>all</i> associated stack instances.</p> <p>Even if the stack set operation created by updating the stack set fails (completely or partially, below or above a specified failure tolerance), the stack set is updated with your changes. Subsequent <a>CreateStackInstances</a> calls on the specified stack set use the updated stack set.</p>
     fn update_stack_set(
         &self,
         input: &UpdateStackSetInput,
@@ -13604,7 +13604,7 @@ where
         }
     }
 
-    #[doc="<p>Validates a specified template. AWS CloudFormation first checks if the template is valid JSON. If it isn't, AWS CloudFormation checks if the template is valid YAML. If both these checks fail, AWS CloudFormation returns a template validation error.</p>"]
+    /// <p>Validates a specified template. AWS CloudFormation first checks if the template is valid JSON. If it isn't, AWS CloudFormation checks if the template is valid YAML. If both these checks fail, AWS CloudFormation returns a template validation error.</p>
     fn validate_template(
         &self,
         input: &ValidateTemplateInput,
