@@ -22,14 +22,12 @@ script:
   - |
       echo "Generating service crates..." &&
       ( cd service_crategen && \
-        cargo +nightly run -- generate -c ./services.json -o ../rusoto/services && \
-        cd .. )
+        cargo +nightly run -- generate -c ./services.json -o ../rusoto/services )
   - echo "Running Rusoto tests" && cargo update && cargo test --lib --all -v
   - |
       echo "Building integration tests" &&
       ( cd integration_tests && \
-        cargo check --tests --features "all" && \
-        cd .. )
+        cargo check --tests --features "all" )
   - |
       echo "Running cargo docs on stable Rust on Linux" &&
       if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_RUST_VERSION" == "stable" ]]; then
