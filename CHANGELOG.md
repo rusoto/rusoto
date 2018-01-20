@@ -3,6 +3,7 @@
 ## [Unreleased]
 (Please put an entry here in each PR)
 
+- Use ```$AWS_PROFILE``` to obtain default profile name 
 - Update Rusoto Core ReadMe
 - use correct China-northwest region domain
 - Fix handling of error responses from Ceph (S3)

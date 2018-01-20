@@ -20,6 +20,18 @@ pub struct ProfileProvider {
 }
 
 impl ProfileProvider {
+
+    /// Get the default profile name:
+    /// 1. if set use value from environment variable ```AWS_PROFILE```
+    /// 2. otherwise return ```"default"```
+    /// see https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/credentials.html.
+    fn default_profile_name() -> String {
+         match env_var("AWS_PROFILE") {
+            Ok(name) => name,
+            Err(_) => "default".to_owned(),
+        }
+    }
+
     /// Create a new `ProfileProvider` for the default credentials file path and profile name.
     pub fn new() -> Result<ProfileProvider, CredentialsError> {
         let profile_location = match env_var("AWS_SHARED_CREDENTIALS_FILE") {
@@ -34,7 +46,7 @@ impl ProfileProvider {
 
         Ok(ProfileProvider {
             file_path: profile_location,
-            profile: "default".to_owned(),
+            profile: ProfileProvider::default_profile_name(),
         })
     }
 
@@ -68,6 +80,17 @@ impl ProfileProvider {
             profile: profile.into(),
         }
     }
+
+    /// Create a new `ProfileProvider` for the credentials file at the given path, using
+    /// the profile name from environment variable ```AWS_PROFILE``` or fall-back to ```"default"```
+    /// if ```AWS_PROFILE``` is not set.
+    pub fn with_default_configuration<F>(file_path: F) -> ProfileProvider
+    where
+        F: Into<PathBuf>
+    {
+        ProfileProvider::with_configuration(file_path, ProfileProvider::default_profile_name())
+    }
+
 
     /// Get a reference to the credentials file path.
     pub fn file_path(&self) -> &Path {
@@ -313,6 +336,21 @@ mod tests {
         assert_eq!(provider.file_path().to_str().unwrap(), credentials_path);
         env::remove_var("AWS_SHARED_CREDENTIALS_FILE");
     }
+
+    #[test]
+    fn profile_provider_profile_name_via_environment_variable() {
+        let credentials_path = "tests/sample-data/multiple_profile_credentials";
+        env::set_var("AWS_SHARED_CREDENTIALS_FILE", credentials_path);
+        env::set_var("AWS_PROFILE", "bar");
+        let result = ProfileProvider::new();
+        assert!(result.is_ok());
+        let provider = result.unwrap();
+        assert_eq!(provider.file_path().to_str().unwrap(), credentials_path);
+        let creds = provider.credentials();
+        assert_eq!(creds.unwrap().aws_access_key_id(), "bar_access_key");
+        env::remove_var("AWS_SHARED_CREDENTIALS_FILE");
+        env::remove_var("AWS_PROFILE");
+    } 
 
     #[test]
     fn profile_provider_bad_profile() {
