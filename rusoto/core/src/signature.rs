@@ -6,8 +6,6 @@
 //! If needed, the request will be re-issued to a temporary redirect endpoint.  This can happen with
 //! newly created S3 buckets not in us-standard/us-east-1.
 
-extern crate hex;
-
 use std::collections::BTreeMap;
 use std::collections::btree_map::Entry;
 use std::str;
@@ -17,6 +15,7 @@ use sha2::{Digest, Sha256};
 use time::Tm;
 use time::now_utc;
 use url::percent_encoding::{utf8_percent_encode, percent_decode, EncodeSet};
+use hex;
 
 use param::Params;
 use region::Region;
