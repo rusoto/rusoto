@@ -96,9 +96,9 @@ pub trait GenerateErrorTypes {
                 // some botocore definitions include Validation in every errors list, some take it as assumed
                 // skip it if it's listed, as we implement it for all error types below
                 if error.idiomatic_error_name() != "Validation" {
-                    enum_types.push(format!("\n///{}\n{}(String)",
-                                            error_documentation.get(&error.shape)
-                                                .unwrap_or(&&String::from("")),
+                    enum_types.push(format!("\n{}\n{}(String)",
+                                            ::doco::Item(error_documentation.get(&error.shape)
+                                                .unwrap_or(&&String::from(""))),
                                             error.idiomatic_error_name()));
                 }
             }
