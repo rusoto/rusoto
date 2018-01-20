@@ -114,7 +114,7 @@ impl <'b> Service <'b> {
                 dependencies.insert("xml-rs".to_owned(), cargo::Dependency::Simple("0.7".into()));
             },
             "rest-json" => {
-                dependencies.insert("log".to_owned(), cargo::Dependency::Simple("0.3.6".into()));
+                dependencies.insert("log".to_owned(), cargo::Dependency::Simple("0.4.1".into()));
                 dependencies.insert("serde".to_owned(), cargo::Dependency::Simple("1.0.2".into()));
                 dependencies.insert("serde_derive".to_owned(), cargo::Dependency::Simple("1.0.2".into()));
                 dependencies.insert("serde_json".to_owned(), cargo::Dependency::Simple("1.0.1".into()));
