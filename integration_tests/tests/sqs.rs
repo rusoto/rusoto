@@ -24,7 +24,7 @@ fn list_queues() {
 
 #[test]
 fn sqs_roundtrip_tests() {
-	env_logger::init();
+	let _ = env_logger::try_init();
     let credentials = DefaultCredentialsProvider::new().unwrap();
     let sqs = SqsClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
 

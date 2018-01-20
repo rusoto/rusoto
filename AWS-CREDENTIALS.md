@@ -35,7 +35,7 @@ use rusoto_ec2::{Ec2Client, Ec2};
 use rusoto_sts::{StsClient, StsAssumeRoleSessionCredentialsProvider};
 
 fn main() {
-    env_logger::init();
+    let _ = env_logger::try_init();
 
     let credentials = DefaultCredentialsProvider::new().unwrap();
     let sts = StsClient::new(default_tls_client().unwrap(), credentials, Region::EuWest1);

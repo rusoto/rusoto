@@ -15,7 +15,7 @@ use rusoto_core::default_tls_client;
 // For now we'll accept the error message returned if the account is not whitelisted.
 #[test]
 fn should_describe_tags() {
-    env_logger::init();
+    let _ = env_logger::try_init();
     let credentials = DefaultCredentialsProvider::new().unwrap();
     let client = DiscoveryClient::new(default_tls_client().unwrap(), credentials, Region::UsWest2);
     let request = DescribeTagsRequest::default();
@@ -28,7 +28,7 @@ fn should_describe_tags() {
 
 #[test]
 fn should_list_configurations() {
-    env_logger::init();
+    let _ = env_logger::try_init();
     let credentials = DefaultCredentialsProvider::new().unwrap();
     let client = DiscoveryClient::new(default_tls_client().unwrap(), credentials, Region::UsWest2);
     let request = ListConfigurationsRequest{

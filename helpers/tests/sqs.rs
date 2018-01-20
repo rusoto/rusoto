@@ -14,7 +14,7 @@ use time::get_time;
 
 #[test]
 fn main() {
-    env_logger::init();
+    let _ = env_logger::try_init();
     let provider = ChainProvider::new().unwrap();
     let mut sqs = SqsHelper::new(provider, Region::UsWest2);
 

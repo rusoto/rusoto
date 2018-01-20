@@ -17,7 +17,7 @@ use cargo;
 use ::{Service, ServiceConfig, ServiceDefinition};
 
 pub fn generate_services(services: &BTreeMap<String, ServiceConfig>, out_dir: &Path) {
-    env_logger::init();
+    let _ = env_logger::try_init();
     if !out_dir.exists() {
         fs::create_dir(out_dir).expect("Unable to create output directory");
     }
