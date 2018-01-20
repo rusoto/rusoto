@@ -7,7 +7,7 @@
 #![deny(missing_docs)]
 
 //! Rusoto is an [AWS](https://aws.amazon.com/) SDK for Rust.
-//! A high level overview is available in `README.md` at https://github.com/rusoto/rusoto.
+//! A high level overview is available in `README.md` at <https://github.com/rusoto/rusoto>.
 //!
 //! # Example
 //!
