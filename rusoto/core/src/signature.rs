@@ -6,6 +6,8 @@
 //! If needed, the request will be re-issued to a temporary redirect endpoint.  This can happen with
 //! newly created S3 buckets not in us-standard/us-east-1.
 
+extern crate hex;
+
 use std::collections::BTreeMap;
 use std::collections::btree_map::Entry;
 use std::str;
@@ -15,7 +17,6 @@ use sha2::{Digest, Sha256};
 use time::Tm;
 use time::now_utc;
 use url::percent_encoding::{utf8_percent_encode, percent_decode, EncodeSet};
-use hex::ToHex;
 
 use param::Params;
 use region::Region;
@@ -307,8 +308,8 @@ fn sign_string(string_to_sign: &str, secret: &str, date: Tm, region: &str, servi
         .result().code();
     let signing_hmac = hmac(service_hmac.as_ref(), b"aws4_request")
         .result().code();
-    hmac(signing_hmac.as_ref(), string_to_sign.as_bytes())
-        .result().code().as_ref().to_hex()
+    hex::encode(hmac(signing_hmac.as_ref(), string_to_sign.as_bytes())
+        .result().code().as_ref())
 }
 
 /// Mark string as AWS4-HMAC-SHA256 hashed
@@ -485,7 +486,7 @@ fn decode_uri(uri: &str) -> String {
 
 fn to_hexdigest<T: AsRef<[u8]>>(t: T) -> String {
     let h = Sha256::digest(t.as_ref());
-    h.as_ref().to_hex()
+    hex::encode(h.as_ref())
 }
 
 fn remove_scheme_from_custom_hostname(hostname: &str) -> String {

@@ -125,7 +125,7 @@ impl<P> Drop for TestEtsClient<P>
 // need to be refactored so that it is only called once, instead of per test
 // case.
 fn initialize() {
-    let _ = env_logger::init();
+    env_logger::init();
 }
 
 fn create_client() -> TestEtsClient<ChainProvider> {

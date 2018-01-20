@@ -10,7 +10,7 @@ use rusoto_core::default_tls_client;
 
 #[test]
 fn should_list_things() {
-    let _ = env_logger::init();
+    env_logger::init();
     let credentials = DefaultCredentialsProvider::new().unwrap();
     let client = IotClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = ListThingsRequest::default();

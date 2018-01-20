@@ -25,7 +25,7 @@ serde_json = "1.0.0"
 toml = "0.4.0"
 stopwatch = "0.0.7"
 log = "0.4.1"
-env_logger = "0.4.0"
+env_logger = "0.5"
 
 [dependencies.clippy]
 optional = true
