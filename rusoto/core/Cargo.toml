@@ -53,7 +53,7 @@ serde_test = "1.0.1"
 
 [dev-dependencies.rusoto_dynamodb]
 path = "../services/dynamodb"
-version = "0.30"
+version = "0.31"
 
 [features]
 nightly-testing = ["clippy", "rusoto_credential/nightly-testing"]
