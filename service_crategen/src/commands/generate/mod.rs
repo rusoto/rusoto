@@ -193,7 +193,7 @@ See [LICENSE][license] for details.
 //
 // =================================================================
 
-//! {service_docs}
+{service_docs}
 //!
 //! If you're using the service, you're probably looking for [{client_name}](struct.{client_name}.html) and [{trait_name}](trait.{trait_name}.html).
 
@@ -205,7 +205,7 @@ mod custom;
 pub use generated::*;
 pub use custom::*;
             "#,
-            service_docs = service.documentation().unwrap_or(&service.full_name().to_owned()),
+            service_docs = ::doco::Module(service.documentation().unwrap_or(&service.full_name().to_owned())),
             client_name = service.client_type_name(),
             trait_name = service.service_type_name(),
             extern_crates = extern_crates

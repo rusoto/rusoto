@@ -11,7 +11,7 @@
 //
 // =================================================================
 
-//! <fullname>Amazon Lex Build-Time Actions</fullname> <p> Amazon Lex is an AWS service for building conversational voice and text interfaces. Use these actions to create, update, and delete conversational bots for new and existing client applications. </p>
+//! <p><fullname>Amazon Lex Build-Time Actions</fullname> <p> Amazon Lex is an AWS service for building conversational voice and text interfaces. Use these actions to create, update, and delete conversational bots for new and existing client applications. </p></p>
 //!
 //! If you're using the service, you're probably looking for [LexModelsClient](struct.LexModelsClient.html) and [LexModels](trait.LexModels.html).
 

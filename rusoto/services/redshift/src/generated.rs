@@ -135,7 +135,7 @@ impl AccountsWithRestoreAccessListDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct AuthorizeClusterSecurityGroupIngressMessage {
     /// <p>The IP range to be added the Amazon Redshift security group.</p>
@@ -234,7 +234,7 @@ impl AuthorizeClusterSecurityGroupIngressResultDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct AuthorizeSnapshotAccessMessage {
     /// <p>The identifier of the AWS customer account authorized to restore the specified snapshot.</p> <p>To share a snapshot with AWS support, specify amazon-redshift-support.</p>
@@ -458,7 +458,7 @@ pub struct Cluster {
     pub cluster_security_groups: Option<Vec<ClusterSecurityGroupMembership>>,
     /// <p>A value that returns the destination region and retention period that are configured for cross-region snapshot copy.</p>
     pub cluster_snapshot_copy_status: Option<ClusterSnapshotCopyStatus>,
-    /// <p> The current state of the cluster. Possible values are the following:</p> <ul> <li> <p> <code>available</code> </p> </li> <li> <p> <code>creating</code> </p> </li> <li> <p> <code>deleting</code> </p> </li> <li> <p> <code>final-snapshot</code> </p> </li> <li> <p> <code>hardware-failure</code> </p> </li> <li> <p> <code>incompatible-hsm</code> </p> </li> <li> <p> <code>incompatible-network</code> </p> </li> <li> <p> <code>incompatible-parameters</code> </p> </li> <li> <p> <code>incompatible-restore</code> </p> </li> <li> <p> <code>modifying</code> </p> </li> <li> <p> <code>rebooting</code> </p> </li> <li> <p> <code>renaming</code> </p> </li> <li> <p> <code>resizing</code> </p> </li> <li> <p> <code>rotating-keys</code> </p> </li> <li> <p> <code>storage-full</code> </p> </li> <li> <p> <code>updating-hsm</code> </p> </li> </ul>
+    /// <p><p> The current state of the cluster. Possible values are the following:</p> <ul> <li> <p> <code>available</code> </p> </li> <li> <p> <code>creating</code> </p> </li> <li> <p> <code>deleting</code> </p> </li> <li> <p> <code>final-snapshot</code> </p> </li> <li> <p> <code>hardware-failure</code> </p> </li> <li> <p> <code>incompatible-hsm</code> </p> </li> <li> <p> <code>incompatible-network</code> </p> </li> <li> <p> <code>incompatible-parameters</code> </p> </li> <li> <p> <code>incompatible-restore</code> </p> </li> <li> <p> <code>modifying</code> </p> </li> <li> <p> <code>rebooting</code> </p> </li> <li> <p> <code>renaming</code> </p> </li> <li> <p> <code>resizing</code> </p> </li> <li> <p> <code>rotating-keys</code> </p> </li> <li> <p> <code>storage-full</code> </p> </li> <li> <p> <code>updating-hsm</code> </p> </li> </ul></p>
     pub cluster_status: Option<String>,
     /// <p>The name of the subnet group that is associated with the cluster. This parameter is valid only when the cluster is in a VPC.</p>
     pub cluster_subnet_group_name: Option<String>,
@@ -785,7 +785,7 @@ impl ClusterCredentialsDeserializer {
 /// <p>An AWS Identity and Access Management (IAM) role that can be used by the associated Amazon Redshift cluster to access other AWS services.</p>
 #[derive(Default, Debug, Clone)]
 pub struct ClusterIamRole {
-    /// <p>A value that describes the status of the IAM role's association with an Amazon Redshift cluster.</p> <p>The following are possible statuses and descriptions.</p> <ul> <li> <p> <code>in-sync</code>: The role is available for use by the cluster.</p> </li> <li> <p> <code>adding</code>: The role is in the process of being associated with the cluster.</p> </li> <li> <p> <code>removing</code>: The role is in the process of being disassociated with the cluster.</p> </li> </ul>
+    /// <p><p>A value that describes the status of the IAM role&#39;s association with an Amazon Redshift cluster.</p> <p>The following are possible statuses and descriptions.</p> <ul> <li> <p> <code>in-sync</code>: The role is available for use by the cluster.</p> </li> <li> <p> <code>adding</code>: The role is in the process of being associated with the cluster.</p> </li> <li> <p> <code>removing</code>: The role is in the process of being disassociated with the cluster.</p> </li> </ul></p>
     pub apply_status: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the IAM role, for example, <code>arn:aws:iam::123456789012:role/RedshiftCopyUnload</code>. </p>
     pub iam_role_arn: Option<String>,
@@ -1143,7 +1143,7 @@ impl ClusterParameterGroupDetailsDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct ClusterParameterGroupNameMessage {
     /// <p>The name of the cluster parameter group.</p>
@@ -1367,7 +1367,7 @@ impl ClusterParameterGroupsMessageDeserializer {
 pub struct ClusterParameterStatus {
     /// <p>The error that prevented the parameter from being applied to the database.</p>
     pub parameter_apply_error_description: Option<String>,
-    /// <p>The status of the parameter that indicates whether the parameter is in sync with the database, waiting for a cluster reboot, or encountered an error when being applied.</p> <p>The following are possible statuses and descriptions.</p> <ul> <li> <p> <code>in-sync</code>: The parameter value is in sync with the database.</p> </li> <li> <p> <code>pending-reboot</code>: The parameter value will be applied after the cluster reboots.</p> </li> <li> <p> <code>applying</code>: The parameter value is being applied to the database.</p> </li> <li> <p> <code>invalid-parameter</code>: Cannot apply the parameter value because it has an invalid value or syntax.</p> </li> <li> <p> <code>apply-deferred</code>: The parameter contains static property changes. The changes are deferred until the cluster reboots.</p> </li> <li> <p> <code>apply-error</code>: Cannot connect to the cluster. The parameter change will be applied after the cluster reboots.</p> </li> <li> <p> <code>unknown-error</code>: Cannot apply the parameter change right now. The change will be applied after the cluster reboots.</p> </li> </ul>
+    /// <p><p>The status of the parameter that indicates whether the parameter is in sync with the database, waiting for a cluster reboot, or encountered an error when being applied.</p> <p>The following are possible statuses and descriptions.</p> <ul> <li> <p> <code>in-sync</code>: The parameter value is in sync with the database.</p> </li> <li> <p> <code>pending-reboot</code>: The parameter value will be applied after the cluster reboots.</p> </li> <li> <p> <code>applying</code>: The parameter value is being applied to the database.</p> </li> <li> <p> <code>invalid-parameter</code>: Cannot apply the parameter value because it has an invalid value or syntax.</p> </li> <li> <p> <code>apply-deferred</code>: The parameter contains static property changes. The changes are deferred until the cluster reboots.</p> </li> <li> <p> <code>apply-error</code>: Cannot connect to the cluster. The parameter change will be applied after the cluster reboots.</p> </li> <li> <p> <code>unknown-error</code>: Cannot apply the parameter change right now. The change will be applied after the cluster reboots.</p> </li> </ul></p>
     pub parameter_apply_status: Option<String>,
     /// <p>The name of the parameter.</p>
     pub parameter_name: Option<String>,
@@ -1645,7 +1645,7 @@ impl ClusterSecurityGroupMembershipListDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct ClusterSecurityGroupMessage {
     /// <p>A list of <a>ClusterSecurityGroup</a> instances. </p>
@@ -2207,14 +2207,14 @@ impl ClustersMessageDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct CopyClusterSnapshotMessage {
-    /// <p>The identifier of the cluster the source snapshot was created from. This parameter is required if your IAM user has a policy containing a snapshot resource element that specifies anything other than * for the cluster name.</p> <p>Constraints:</p> <ul> <li> <p>Must be the identifier for a valid cluster.</p> </li> </ul>
+    /// <p><p>The identifier of the cluster the source snapshot was created from. This parameter is required if your IAM user has a policy containing a snapshot resource element that specifies anything other than * for the cluster name.</p> <p>Constraints:</p> <ul> <li> <p>Must be the identifier for a valid cluster.</p> </li> </ul></p>
     pub source_snapshot_cluster_identifier: Option<String>,
-    /// <p>The identifier for the source snapshot.</p> <p>Constraints:</p> <ul> <li> <p>Must be the identifier for a valid automated snapshot whose state is <code>available</code>.</p> </li> </ul>
+    /// <p><p>The identifier for the source snapshot.</p> <p>Constraints:</p> <ul> <li> <p>Must be the identifier for a valid automated snapshot whose state is <code>available</code>.</p> </li> </ul></p>
     pub source_snapshot_identifier: String,
-    /// <p>The identifier given to the new manual snapshot.</p> <p>Constraints:</p> <ul> <li> <p>Cannot be null, empty, or blank.</p> </li> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique for the AWS account that is making the request.</p> </li> </ul>
+    /// <p><p>The identifier given to the new manual snapshot.</p> <p>Constraints:</p> <ul> <li> <p>Cannot be null, empty, or blank.</p> </li> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique for the AWS account that is making the request.</p> </li> </ul></p>
     pub target_snapshot_identifier: String,
 }
 
@@ -2289,7 +2289,7 @@ impl CopyClusterSnapshotResultDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct CreateClusterMessage {
     /// <p>Reserved.</p>
@@ -2302,7 +2302,7 @@ pub struct CreateClusterMessage {
     pub availability_zone: Option<String>,
     /// <p>A unique identifier for the cluster. You use this identifier to refer to the cluster for any subsequent cluster operations such as deleting or modifying. The identifier also appears in the Amazon Redshift console.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>Alphabetic characters must be lowercase.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique for all clusters within an AWS account.</p> </li> </ul> <p>Example: <code>myexamplecluster</code> </p>
     pub cluster_identifier: String,
-    /// <p>The name of the parameter group to be associated with this cluster.</p> <p>Default: The default Amazon Redshift cluster parameter group. For information about the default parameter group, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Working with Amazon Redshift Parameter Groups</a> </p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>
+    /// <p><p>The name of the parameter group to be associated with this cluster.</p> <p>Default: The default Amazon Redshift cluster parameter group. For information about the default parameter group, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Working with Amazon Redshift Parameter Groups</a> </p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
     pub cluster_parameter_group_name: Option<String>,
     /// <p>A list of security groups to be associated with this cluster.</p> <p>Default: The default cluster security group for Amazon Redshift.</p>
     pub cluster_security_groups: Option<Vec<String>>,
@@ -2312,7 +2312,7 @@ pub struct CreateClusterMessage {
     pub cluster_type: Option<String>,
     /// <p>The version of the Amazon Redshift engine software that you want to deploy on the cluster.</p> <p>The version selected runs on all the nodes in the cluster.</p> <p>Constraints: Only version 1.0 is currently available.</p> <p>Example: <code>1.0</code> </p>
     pub cluster_version: Option<String>,
-    /// <p>The name of the first database to be created when the cluster is created.</p> <p>To create additional databases after the cluster is created, connect to the cluster with a SQL client and use SQL commands to create a database. For more information, go to <a href="http://docs.aws.amazon.com/redshift/latest/dg/t_creating_database.html">Create a Database</a> in the Amazon Redshift Database Developer Guide. </p> <p>Default: <code>dev</code> </p> <p>Constraints:</p> <ul> <li> <p>Must contain 1 to 64 alphanumeric characters.</p> </li> <li> <p>Must contain only lowercase letters.</p> </li> <li> <p>Cannot be a word that is reserved by the service. A list of reserved words can be found in <a href="http://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html">Reserved Words</a> in the Amazon Redshift Database Developer Guide. </p> </li> </ul>
+    /// <p><p>The name of the first database to be created when the cluster is created.</p> <p>To create additional databases after the cluster is created, connect to the cluster with a SQL client and use SQL commands to create a database. For more information, go to <a href="http://docs.aws.amazon.com/redshift/latest/dg/t_creating_database.html">Create a Database</a> in the Amazon Redshift Database Developer Guide. </p> <p>Default: <code>dev</code> </p> <p>Constraints:</p> <ul> <li> <p>Must contain 1 to 64 alphanumeric characters.</p> </li> <li> <p>Must contain only lowercase letters.</p> </li> <li> <p>Cannot be a word that is reserved by the service. A list of reserved words can be found in <a href="http://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html">Reserved Words</a> in the Amazon Redshift Database Developer Guide. </p> </li> </ul></p>
     pub db_name: Option<String>,
     /// <p>The Elastic IP (EIP) address for the cluster.</p> <p>Constraints: The cluster must be provisioned in EC2-VPC and publicly-accessible through an Internet gateway. For more information about provisioning clusters in EC2-VPC, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#cluster-platforms">Supported Platforms to Launch Your Cluster</a> in the Amazon Redshift Cluster Management Guide.</p>
     pub elastic_ip: Option<String>,
@@ -2328,9 +2328,9 @@ pub struct CreateClusterMessage {
     pub iam_roles: Option<Vec<String>>,
     /// <p>The AWS Key Management Service (KMS) key ID of the encryption key that you want to use to encrypt data in the cluster.</p>
     pub kms_key_id: Option<String>,
-    /// <p>The password associated with the master user account for the cluster that is being created.</p> <p>Constraints:</p> <ul> <li> <p>Must be between 8 and 64 characters in length.</p> </li> <li> <p>Must contain at least one uppercase letter.</p> </li> <li> <p>Must contain at least one lowercase letter.</p> </li> <li> <p>Must contain one number.</p> </li> <li> <p>Can be any printable ASCII character (ASCII code 33 to 126) except ' (single quote), " (double quote), \, /, @, or space.</p> </li> </ul>
+    /// <p><p>The password associated with the master user account for the cluster that is being created.</p> <p>Constraints:</p> <ul> <li> <p>Must be between 8 and 64 characters in length.</p> </li> <li> <p>Must contain at least one uppercase letter.</p> </li> <li> <p>Must contain at least one lowercase letter.</p> </li> <li> <p>Must contain one number.</p> </li> <li> <p>Can be any printable ASCII character (ASCII code 33 to 126) except &#39; (single quote), &quot; (double quote), \, /, @, or space.</p> </li> </ul></p>
     pub master_user_password: String,
-    /// <p>The user name associated with the master user account for the cluster that is being created.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 - 128 alphanumeric characters.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot be a reserved word. A list of reserved words can be found in <a href="http://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html">Reserved Words</a> in the Amazon Redshift Database Developer Guide. </p> </li> </ul>
+    /// <p><p>The user name associated with the master user account for the cluster that is being created.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 - 128 alphanumeric characters.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot be a reserved word. A list of reserved words can be found in <a href="http://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html">Reserved Words</a> in the Amazon Redshift Database Developer Guide. </p> </li> </ul></p>
     pub master_username: String,
     /// <p>The node type to be provisioned for the cluster. For information about node types, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#how-many-nodes"> Working with Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p> <p>Valid Values: <code>ds1.xlarge</code> | <code>ds1.8xlarge</code> | <code>ds2.xlarge</code> | <code>ds2.8xlarge</code> | <code>dc1.large</code> | <code>dc1.8xlarge</code>. </p>
     pub node_type: String,
@@ -2514,14 +2514,14 @@ impl CreateClusterMessageSerializer {
     }
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct CreateClusterParameterGroupMessage {
     /// <p>A description of the parameter group.</p>
     pub description: String,
     /// <p>The Amazon Redshift engine version to which the cluster parameter group applies. The cluster engine version determines the set of parameters.</p> <p>To get a list of valid parameter group family names, you can call <a>DescribeClusterParameterGroups</a>. By default, Amazon Redshift returns a list of all the parameter groups that are owned by your AWS account, including the default parameter groups for each Amazon Redshift engine version. The parameter group family names associated with the default parameter groups provide you the valid values. For example, a valid family name is "redshift-1.0". </p>
     pub parameter_group_family: String,
-    /// <p>The name of the cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique withing your AWS account.</p> </li> </ul> <note> <p>This value is stored as a lower-case string.</p> </note>
+    /// <p><p>The name of the cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique withing your AWS account.</p> </li> </ul> <note> <p>This value is stored as a lower-case string.</p> </note></p>
     pub parameter_group_name: String,
     /// <p>A list of tag instances.</p>
     pub tags: Option<Vec<Tag>>,
@@ -2647,7 +2647,7 @@ impl CreateClusterResultDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct CreateClusterSecurityGroupMessage {
     /// <p>The name for the security group. Amazon Redshift stores the value as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain no more than 255 alphanumeric characters or hyphens.</p> </li> <li> <p>Must not be "Default".</p> </li> <li> <p>Must be unique for all security groups that are created by your AWS account.</p> </li> </ul> <p>Example: <code>examplesecuritygroup</code> </p>
@@ -2729,7 +2729,7 @@ impl CreateClusterSecurityGroupResultDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct CreateClusterSnapshotMessage {
     /// <p>The cluster identifier for which you want a snapshot.</p>
@@ -2808,7 +2808,7 @@ impl CreateClusterSnapshotResultDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct CreateClusterSubnetGroupMessage {
     /// <p>The name for the subnet group. Amazon Redshift stores the value as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain no more than 255 alphanumeric characters or hyphens.</p> </li> <li> <p>Must not be "Default".</p> </li> <li> <p>Must be unique for all subnet groups that are created by your AWS account.</p> </li> </ul> <p>Example: <code>examplesubnetgroup</code> </p>
@@ -2897,7 +2897,7 @@ impl CreateClusterSubnetGroupResultDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct CreateEventSubscriptionMessage {
     /// <p>A Boolean value; set to <code>true</code> to activate the subscription, set to <code>false</code> to create the subscription but not active it. </p>
@@ -2912,7 +2912,7 @@ pub struct CreateEventSubscriptionMessage {
     pub source_ids: Option<Vec<String>>,
     /// <p>The type of source that will be generating the events. For example, if you want to be notified of events generated by a cluster, you would set this parameter to cluster. If this value is not specified, events are returned for all Amazon Redshift objects in your AWS account. You must specify a source type in order to specify source IDs.</p> <p>Valid values: cluster, cluster-parameter-group, cluster-security-group, and cluster-snapshot.</p>
     pub source_type: Option<String>,
-    /// <p>The name of the event subscription to be created.</p> <p>Constraints:</p> <ul> <li> <p>Cannot be null, empty, or blank.</p> </li> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>
+    /// <p><p>The name of the event subscription to be created.</p> <p>Constraints:</p> <ul> <li> <p>Cannot be null, empty, or blank.</p> </li> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
     pub subscription_name: String,
     /// <p>A list of tag instances.</p>
     pub tags: Option<Vec<Tag>>,
@@ -3019,7 +3019,7 @@ impl CreateEventSubscriptionResultDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct CreateHsmClientCertificateMessage {
     /// <p>The identifier to be assigned to the new HSM client certificate that the cluster will use to connect to the HSM to use the database encryption keys.</p>
@@ -3095,7 +3095,7 @@ impl CreateHsmClientCertificateResultDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct CreateHsmConfigurationMessage {
     /// <p>A text description of the HSM configuration to be created.</p>
@@ -3204,7 +3204,7 @@ impl CreateHsmConfigurationResultDeserializer {
 pub struct CreateSnapshotCopyGrantMessage {
     /// <p>The unique identifier of the customer master key (CMK) to which to grant Amazon Redshift permission. If no key is specified, the default key is used.</p>
     pub kms_key_id: Option<String>,
-    /// <p>The name of the snapshot copy grant. This name must be unique in the region for the AWS account.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>Alphabetic characters must be lowercase.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique for all clusters within an AWS account.</p> </li> </ul>
+    /// <p><p>The name of the snapshot copy grant. This name must be unique in the region for the AWS account.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>Alphabetic characters must be lowercase.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique for all clusters within an AWS account.</p> </li> </ul></p>
     pub snapshot_copy_grant_name: String,
     /// <p>A list of tag instances.</p>
     pub tags: Option<Vec<Tag>>,
@@ -3380,12 +3380,12 @@ impl DefaultClusterParametersDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct DeleteClusterMessage {
-    /// <p>The identifier of the cluster to be deleted.</p> <p>Constraints:</p> <ul> <li> <p>Must contain lowercase characters.</p> </li> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>
+    /// <p><p>The identifier of the cluster to be deleted.</p> <p>Constraints:</p> <ul> <li> <p>Must contain lowercase characters.</p> </li> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
     pub cluster_identifier: String,
-    /// <p>The identifier of the final snapshot that is to be created immediately before deleting the cluster. If this parameter is provided, <i>SkipFinalClusterSnapshot</i> must be <code>false</code>. </p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>
+    /// <p><p>The identifier of the final snapshot that is to be created immediately before deleting the cluster. If this parameter is provided, <i>SkipFinalClusterSnapshot</i> must be <code>false</code>. </p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
     pub final_cluster_snapshot_identifier: Option<String>,
     /// <p>Determines whether a final snapshot of the cluster is created before Amazon Redshift deletes the cluster. If <code>true</code>, a final cluster snapshot is not created. If <code>false</code>, a final cluster snapshot is created before the cluster is deleted. </p> <note> <p>The <i>FinalClusterSnapshotIdentifier</i> parameter must be specified if <i>SkipFinalClusterSnapshot</i> is <code>false</code>.</p> </note> <p>Default: <code>false</code> </p>
     pub skip_final_cluster_snapshot: Option<bool>,
@@ -3419,10 +3419,10 @@ impl DeleteClusterMessageSerializer {
     }
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct DeleteClusterParameterGroupMessage {
-    /// <p>The name of the parameter group to be deleted.</p> <p>Constraints:</p> <ul> <li> <p>Must be the name of an existing cluster parameter group.</p> </li> <li> <p>Cannot delete a default cluster parameter group.</p> </li> </ul>
+    /// <p><p>The name of the parameter group to be deleted.</p> <p>Constraints:</p> <ul> <li> <p>Must be the name of an existing cluster parameter group.</p> </li> <li> <p>Cannot delete a default cluster parameter group.</p> </li> </ul></p>
     pub parameter_group_name: String,
 }
 
@@ -3487,7 +3487,7 @@ impl DeleteClusterResultDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct DeleteClusterSecurityGroupMessage {
     /// <p>The name of the cluster security group to be deleted.</p>
@@ -3510,7 +3510,7 @@ impl DeleteClusterSecurityGroupMessageSerializer {
     }
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct DeleteClusterSnapshotMessage {
     /// <p>The unique identifier of the cluster the snapshot was created from. This parameter is required if your IAM user has a policy containing a snapshot resource element that specifies anything other than * for the cluster name.</p> <p>Constraints: Must be the name of valid cluster.</p>
@@ -3586,7 +3586,7 @@ impl DeleteClusterSnapshotResultDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct DeleteClusterSubnetGroupMessage {
     /// <p>The name of the cluster subnet group name to be deleted.</p>
@@ -3609,7 +3609,7 @@ impl DeleteClusterSubnetGroupMessageSerializer {
     }
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct DeleteEventSubscriptionMessage {
     /// <p>The name of the Amazon Redshift event notification subscription to be deleted.</p>
@@ -3632,7 +3632,7 @@ impl DeleteEventSubscriptionMessageSerializer {
     }
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct DeleteHsmClientCertificateMessage {
     /// <p>The identifier of the HSM client certificate to be deleted.</p>
@@ -3655,7 +3655,7 @@ impl DeleteHsmClientCertificateMessageSerializer {
     }
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct DeleteHsmConfigurationMessage {
     /// <p>The identifier of the Amazon Redshift HSM configuration to be deleted.</p>
@@ -3727,7 +3727,7 @@ impl DeleteTagsMessageSerializer {
     }
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct DescribeClusterParameterGroupsMessage {
     /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeClusterParameterGroups</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>
@@ -3786,7 +3786,7 @@ impl DescribeClusterParameterGroupsMessageSerializer {
     }
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct DescribeClusterParametersMessage {
     /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeClusterParameters</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>
@@ -3833,7 +3833,7 @@ impl DescribeClusterParametersMessageSerializer {
     }
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct DescribeClusterSecurityGroupsMessage {
     /// <p>The name of a cluster security group for which you are requesting details. You can specify either the <b>Marker</b> parameter or a <b>ClusterSecurityGroupName</b> parameter, but not both. </p> <p> Example: <code>securitygroup1</code> </p>
@@ -3892,7 +3892,7 @@ impl DescribeClusterSecurityGroupsMessageSerializer {
     }
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct DescribeClusterSnapshotsMessage {
     /// <p>The identifier of the cluster for which information about snapshots is requested.</p>
@@ -3991,7 +3991,7 @@ impl DescribeClusterSnapshotsMessageSerializer {
     }
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct DescribeClusterSubnetGroupsMessage {
     /// <p>The name of the cluster subnet group for which information is requested.</p>
@@ -4050,10 +4050,10 @@ impl DescribeClusterSubnetGroupsMessageSerializer {
     }
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct DescribeClusterVersionsMessage {
-    /// <p>The name of a specific cluster parameter group family to return details for.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul>
+    /// <p><p>The name of a specific cluster parameter group family to return details for.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul></p>
     pub cluster_parameter_group_family: Option<String>,
     /// <p>The specific cluster version to return.</p> <p>Example: <code>1.0</code> </p>
     pub cluster_version: Option<String>,
@@ -4099,7 +4099,7 @@ impl DescribeClusterVersionsMessageSerializer {
     }
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct DescribeClustersMessage {
     /// <p>The unique identifier of a cluster whose properties you are requesting. This parameter is case sensitive.</p> <p>The default is that all clusters defined for an account are returned.</p>
@@ -4158,7 +4158,7 @@ impl DescribeClustersMessageSerializer {
     }
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct DescribeDefaultClusterParametersMessage {
     /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeDefaultClusterParameters</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>
@@ -4245,7 +4245,7 @@ impl DescribeDefaultClusterParametersResultDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct DescribeEventCategoriesMessage {
     /// <p>The source type, such as cluster or parameter group, to which the described event categories apply.</p> <p>Valid values: cluster, cluster-snapshot, cluster-parameter-group, and cluster-security-group.</p>
@@ -4270,7 +4270,7 @@ impl DescribeEventCategoriesMessageSerializer {
     }
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct DescribeEventSubscriptionsMessage {
     /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeEventSubscriptions</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>
@@ -4311,7 +4311,7 @@ impl DescribeEventSubscriptionsMessageSerializer {
     }
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct DescribeEventsMessage {
     /// <p>The number of minutes prior to the time of the request for which to retrieve events. For example, if the request is sent at 18:00 and you specify a duration of 60, then only events which have occurred after 17:00 will be returned.</p> <p>Default: <code>60</code> </p>
@@ -4322,9 +4322,9 @@ pub struct DescribeEventsMessage {
     pub marker: Option<String>,
     /// <p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
-    /// <p>The identifier of the event source for which events will be returned. If this parameter is not specified, then all sources are included in the response.</p> <p>Constraints:</p> <p>If <i>SourceIdentifier</i> is supplied, <i>SourceType</i> must also be provided.</p> <ul> <li> <p>Specify a cluster identifier when <i>SourceType</i> is <code>cluster</code>.</p> </li> <li> <p>Specify a cluster security group name when <i>SourceType</i> is <code>cluster-security-group</code>.</p> </li> <li> <p>Specify a cluster parameter group name when <i>SourceType</i> is <code>cluster-parameter-group</code>.</p> </li> <li> <p>Specify a cluster snapshot identifier when <i>SourceType</i> is <code>cluster-snapshot</code>.</p> </li> </ul>
+    /// <p><p>The identifier of the event source for which events will be returned. If this parameter is not specified, then all sources are included in the response.</p> <p>Constraints:</p> <p>If <i>SourceIdentifier</i> is supplied, <i>SourceType</i> must also be provided.</p> <ul> <li> <p>Specify a cluster identifier when <i>SourceType</i> is <code>cluster</code>.</p> </li> <li> <p>Specify a cluster security group name when <i>SourceType</i> is <code>cluster-security-group</code>.</p> </li> <li> <p>Specify a cluster parameter group name when <i>SourceType</i> is <code>cluster-parameter-group</code>.</p> </li> <li> <p>Specify a cluster snapshot identifier when <i>SourceType</i> is <code>cluster-snapshot</code>.</p> </li> </ul></p>
     pub source_identifier: Option<String>,
-    /// <p>The event source to retrieve events for. If no value is specified, all events are returned.</p> <p>Constraints:</p> <p>If <i>SourceType</i> is supplied, <i>SourceIdentifier</i> must also be provided.</p> <ul> <li> <p>Specify <code>cluster</code> when <i>SourceIdentifier</i> is a cluster identifier.</p> </li> <li> <p>Specify <code>cluster-security-group</code> when <i>SourceIdentifier</i> is a cluster security group name.</p> </li> <li> <p>Specify <code>cluster-parameter-group</code> when <i>SourceIdentifier</i> is a cluster parameter group name.</p> </li> <li> <p>Specify <code>cluster-snapshot</code> when <i>SourceIdentifier</i> is a cluster snapshot identifier.</p> </li> </ul>
+    /// <p><p>The event source to retrieve events for. If no value is specified, all events are returned.</p> <p>Constraints:</p> <p>If <i>SourceType</i> is supplied, <i>SourceIdentifier</i> must also be provided.</p> <ul> <li> <p>Specify <code>cluster</code> when <i>SourceIdentifier</i> is a cluster identifier.</p> </li> <li> <p>Specify <code>cluster-security-group</code> when <i>SourceIdentifier</i> is a cluster security group name.</p> </li> <li> <p>Specify <code>cluster-parameter-group</code> when <i>SourceIdentifier</i> is a cluster parameter group name.</p> </li> <li> <p>Specify <code>cluster-snapshot</code> when <i>SourceIdentifier</i> is a cluster snapshot identifier.</p> </li> </ul></p>
     pub source_type: Option<String>,
     /// <p>The beginning of the time interval to retrieve events for, specified in ISO 8601 format. For more information about ISO 8601, go to the <a href="http://en.wikipedia.org/wiki/ISO_8601">ISO8601 Wikipedia page.</a> </p> <p>Example: <code>2009-07-08T18:00Z</code> </p>
     pub start_time: Option<String>,
@@ -4384,7 +4384,7 @@ impl DescribeEventsMessageSerializer {
     }
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct DescribeHsmClientCertificatesMessage {
     /// <p>The identifier of a specific HSM client certificate for which you want information. If no identifier is specified, information is returned for all HSM client certificates owned by your AWS customer account.</p>
@@ -4443,7 +4443,7 @@ impl DescribeHsmClientCertificatesMessageSerializer {
     }
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct DescribeHsmConfigurationsMessage {
     /// <p>The identifier of a specific Amazon Redshift HSM configuration to be described. If no identifier is specified, information is returned for all HSM configurations owned by your AWS customer account.</p>
@@ -4502,7 +4502,7 @@ impl DescribeHsmConfigurationsMessageSerializer {
     }
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct DescribeLoggingStatusMessage {
     /// <p>The identifier of the cluster from which to get the logging status.</p> <p>Example: <code>examplecluster</code> </p>
@@ -4525,7 +4525,7 @@ impl DescribeLoggingStatusMessageSerializer {
     }
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct DescribeOrderableClusterOptionsMessage {
     /// <p>The version filter value. Specify this parameter to show only the available offerings matching the specified version.</p> <p>Default: All versions.</p> <p>Constraints: Must be one of the version returned from <a>DescribeClusterVersions</a>.</p>
@@ -4574,7 +4574,7 @@ impl DescribeOrderableClusterOptionsMessageSerializer {
     }
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct DescribeReservedNodeOfferingsMessage {
     /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeReservedNodeOfferings</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>
@@ -4615,7 +4615,7 @@ impl DescribeReservedNodeOfferingsMessageSerializer {
     }
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct DescribeReservedNodesMessage {
     /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeReservedNodes</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>
@@ -4656,7 +4656,7 @@ impl DescribeReservedNodesMessageSerializer {
     }
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct DescribeResizeMessage {
     /// <p>The unique identifier of a cluster whose resize progress you are requesting. This parameter is case-sensitive.</p> <p>By default, resize operations for all clusters defined for an AWS account are returned.</p>
@@ -4738,7 +4738,7 @@ impl DescribeSnapshotCopyGrantsMessageSerializer {
     }
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct DescribeTableRestoreStatusMessage {
     /// <p>The Amazon Redshift cluster that the table is being restored to.</p>
@@ -4787,7 +4787,7 @@ impl DescribeTableRestoreStatusMessageSerializer {
     }
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct DescribeTagsMessage {
     /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>marker</code> parameter and retrying the command. If the <code>marker</code> field is empty, all response records have been retrieved for the request. </p>
@@ -4854,7 +4854,7 @@ impl DescribeTagsMessageSerializer {
     }
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct DisableLoggingMessage {
     /// <p>The identifier of the cluster on which logging is to be stopped.</p> <p>Example: <code>examplecluster</code> </p>
@@ -4877,7 +4877,7 @@ impl DisableLoggingMessageSerializer {
     }
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct DisableSnapshotCopyMessage {
     /// <p>The unique identifier of the source cluster that you want to disable copying of snapshots to a destination region.</p> <p>Constraints: Must be the valid name of an existing cluster that has cross-region snapshot copy enabled.</p>
@@ -5134,14 +5134,14 @@ impl ElasticIpStatusDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct EnableLoggingMessage {
-    /// <p>The name of an existing S3 bucket where the log files are to be stored.</p> <p>Constraints:</p> <ul> <li> <p>Must be in the same region as the cluster</p> </li> <li> <p>The cluster must have read bucket and put object permissions</p> </li> </ul>
+    /// <p><p>The name of an existing S3 bucket where the log files are to be stored.</p> <p>Constraints:</p> <ul> <li> <p>Must be in the same region as the cluster</p> </li> <li> <p>The cluster must have read bucket and put object permissions</p> </li> </ul></p>
     pub bucket_name: String,
     /// <p>The identifier of the cluster on which logging is to be started.</p> <p>Example: <code>examplecluster</code> </p>
     pub cluster_identifier: String,
-    /// <p>The prefix applied to the log file names.</p> <p>Constraints:</p> <ul> <li> <p>Cannot exceed 512 characters</p> </li> <li> <p>Cannot contain spaces( ), double quotes ("), single quotes ('), a backslash (\), or control characters. The hexadecimal codes for invalid characters are: </p> <ul> <li> <p>x00 to x20</p> </li> <li> <p>x22</p> </li> <li> <p>x27</p> </li> <li> <p>x5c</p> </li> <li> <p>x7f or larger</p> </li> </ul> </li> </ul>
+    /// <p><p>The prefix applied to the log file names.</p> <p>Constraints:</p> <ul> <li> <p>Cannot exceed 512 characters</p> </li> <li> <p>Cannot contain spaces( ), double quotes (&quot;), single quotes (&#39;), a backslash (), or control characters. The hexadecimal codes for invalid characters are: </p> <ul> <li> <p>x00 to x20</p> </li> <li> <p>x22</p> </li> <li> <p>x27</p> </li> <li> <p>x5c</p> </li> <li> <p>x7f or larger</p> </li> </ul> </li> </ul></p>
     pub s3_key_prefix: Option<String>,
 }
 
@@ -5171,7 +5171,7 @@ impl EnableLoggingMessageSerializer {
     }
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct EnableSnapshotCopyMessage {
     /// <p>The unique identifier of the source cluster to copy snapshots from.</p> <p>Constraints: Must be the valid name of an existing cluster that does not already have cross-region snapshot copy enabled.</p>
@@ -5551,7 +5551,7 @@ impl EventCategoriesMapListDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct EventCategoriesMessage {
     /// <p>A list of event categories descriptions.</p>
@@ -5771,7 +5771,7 @@ pub struct EventSubscription {
     pub source_ids_list: Option<Vec<String>>,
     /// <p>The source type of the events returned the Amazon Redshift event notification, such as cluster, or cluster-snapshot.</p>
     pub source_type: Option<String>,
-    /// <p>The status of the Amazon Redshift event notification subscription.</p> <p>Constraints:</p> <ul> <li> <p>Can be one of the following: active | no-permission | topic-not-exist</p> </li> <li> <p>The status "no-permission" indicates that Amazon Redshift no longer has permission to post to the Amazon SNS topic. The status "topic-not-exist" indicates that the topic was deleted after the subscription was created.</p> </li> </ul>
+    /// <p><p>The status of the Amazon Redshift event notification subscription.</p> <p>Constraints:</p> <ul> <li> <p>Can be one of the following: active | no-permission | topic-not-exist</p> </li> <li> <p>The status &quot;no-permission&quot; indicates that Amazon Redshift no longer has permission to post to the Amazon SNS topic. The status &quot;topic-not-exist&quot; indicates that the topic was deleted after the subscription was created.</p> </li> </ul></p>
     pub status: Option<String>,
     /// <p>The date and time the Amazon Redshift event notification subscription was created.</p>
     pub subscription_creation_time: Option<String>,
@@ -5910,7 +5910,7 @@ impl EventSubscriptionsListDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct EventSubscriptionsMessage {
     /// <p>A list of event subscriptions.</p>
@@ -5965,7 +5965,7 @@ impl EventSubscriptionsMessageDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct EventsMessage {
     /// <p>A list of <code>Event</code> instances. </p>
@@ -6026,9 +6026,9 @@ pub struct GetClusterCredentialsMessage {
     pub cluster_identifier: String,
     /// <p>A list of the names of existing database groups that <code>DbUser</code> will join for the current session. If not specified, the new user is added only to PUBLIC.</p>
     pub db_groups: Option<Vec<String>>,
-    /// <p>The name of a database that <code>DbUser</code> is authorized to log on to. If <code>DbName</code> is not specified, <code>DbUser</code> can log in to any existing database.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 64 alphanumeric characters or hyphens</p> </li> <li> <p>Must contain only lowercase letters.</p> </li> <li> <p>Cannot be a reserved word. A list of reserved words can be found in <a href="http://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html">Reserved Words</a> in the Amazon Redshift Database Developer Guide.</p> </li> </ul>
+    /// <p><p>The name of a database that <code>DbUser</code> is authorized to log on to. If <code>DbName</code> is not specified, <code>DbUser</code> can log in to any existing database.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 64 alphanumeric characters or hyphens</p> </li> <li> <p>Must contain only lowercase letters.</p> </li> <li> <p>Cannot be a reserved word. A list of reserved words can be found in <a href="http://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html">Reserved Words</a> in the Amazon Redshift Database Developer Guide.</p> </li> </ul></p>
     pub db_name: Option<String>,
-    /// <p>The name of a database user. If a user name matching <code>DbUser</code> exists in the database, the temporary user credentials have the same permissions as the existing user. If <code>DbUser</code> doesn't exist in the database and <code>Autocreate</code> is <code>True</code>, a new user is created using the value for <code>DbUser</code> with PUBLIC permissions. If a database user matching the value for <code>DbUser</code> doesn't exist and <code>Autocreate</code> is <code>False</code>, then the command succeeds but the connection attempt will fail because the user doesn't exist in the database.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/http:/docs.aws.amazon.com/redshift/latest/dg/r_CREATE_USER.html">CREATE USER</a> in the Amazon Redshift Database Developer Guide. </p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 128 alphanumeric characters or hyphens</p> </li> <li> <p>Must contain only lowercase letters.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Must not contain a colon ( : ) or slash ( / ). </p> </li> <li> <p>Cannot be a reserved word. A list of reserved words can be found in <a href="http://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html">Reserved Words</a> in the Amazon Redshift Database Developer Guide.</p> </li> </ul>
+    /// <p><p>The name of a database user. If a user name matching <code>DbUser</code> exists in the database, the temporary user credentials have the same permissions as the existing user. If <code>DbUser</code> doesn&#39;t exist in the database and <code>Autocreate</code> is <code>True</code>, a new user is created using the value for <code>DbUser</code> with PUBLIC permissions. If a database user matching the value for <code>DbUser</code> doesn&#39;t exist and <code>Autocreate</code> is <code>False</code>, then the command succeeds but the connection attempt will fail because the user doesn&#39;t exist in the database.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/http:/docs.aws.amazon.com/redshift/latest/dg/r_CREATE_USER.html">CREATE USER</a> in the Amazon Redshift Database Developer Guide. </p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 128 alphanumeric characters or hyphens</p> </li> <li> <p>Must contain only lowercase letters.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Must not contain a colon ( : ) or slash ( / ). </p> </li> <li> <p>Cannot be a reserved word. A list of reserved words can be found in <a href="http://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html">Reserved Words</a> in the Amazon Redshift Database Developer Guide.</p> </li> </ul></p>
     pub db_user: String,
     /// <p>The number of seconds until the returned temporary password expires.</p> <p>Constraint: minimum 900, maximum 3600.</p> <p>Default: 900</p>
     pub duration_seconds: Option<i64>,
@@ -6184,7 +6184,7 @@ impl HsmClientCertificateListDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct HsmClientCertificateMessage {
     /// <p>A list of the identifiers for one or more HSM client certificates used by Amazon Redshift clusters to store and retrieve database encryption keys in an HSM.</p>
@@ -6355,7 +6355,7 @@ impl HsmConfigurationListDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct HsmConfigurationMessage {
     /// <p>A list of <code>HsmConfiguration</code> objects.</p>
@@ -6840,7 +6840,7 @@ impl LongOptionalDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct ModifyClusterIamRolesMessage {
     /// <p>Zero or more IAM roles to associate with the cluster. The roles must be in their Amazon Resource Name (ARN) format. You can associate up to 10 IAM roles with a single cluster in a single request.</p>
@@ -6926,7 +6926,7 @@ impl ModifyClusterIamRolesResultDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct ModifyClusterMessage {
     /// <p>If <code>true</code>, major version upgrades will be applied automatically to the cluster during the maintenance window. </p> <p>Default: <code>false</code> </p>
@@ -6937,7 +6937,7 @@ pub struct ModifyClusterMessage {
     pub cluster_identifier: String,
     /// <p>The name of the cluster parameter group to apply to this cluster. This change is applied only after the cluster is rebooted. To reboot a cluster use <a>RebootCluster</a>. </p> <p>Default: Uses existing setting.</p> <p>Constraints: The cluster parameter group must be in the same parameter group family that matches the cluster version.</p>
     pub cluster_parameter_group_name: Option<String>,
-    /// <p>A list of cluster security groups to be authorized on this cluster. This change is asynchronously applied as soon as possible.</p> <p>Security groups currently associated with the cluster, and not in the list of groups to apply, will be revoked from the cluster.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul>
+    /// <p><p>A list of cluster security groups to be authorized on this cluster. This change is asynchronously applied as soon as possible.</p> <p>Security groups currently associated with the cluster, and not in the list of groups to apply, will be revoked from the cluster.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul></p>
     pub cluster_security_groups: Option<Vec<String>>,
     /// <p>The new cluster type.</p> <p>When you submit your cluster resize request, your existing cluster goes into a read-only mode. After Amazon Redshift provisions a new cluster based on your resize requirements, there will be outage for a period while the old cluster is deleted and your connection is switched to the new cluster. You can use <a>DescribeResize</a> to track the progress of the resize request. </p> <p>Valid Values: <code> multi-node | single-node </code> </p>
     pub cluster_type: Option<String>,
@@ -6951,7 +6951,7 @@ pub struct ModifyClusterMessage {
     pub hsm_client_certificate_identifier: Option<String>,
     /// <p>Specifies the name of the HSM configuration that contains the information the Amazon Redshift cluster can use to retrieve and store keys in an HSM.</p>
     pub hsm_configuration_identifier: Option<String>,
-    /// <p>The new password for the cluster master user. This change is asynchronously applied as soon as possible. Between the time of the request and the completion of the request, the <code>MasterUserPassword</code> element exists in the <code>PendingModifiedValues</code> element of the operation response. </p> <note> <p>Operations never return the password, so this operation provides a way to regain access to the master user account for a cluster if the password is lost.</p> </note> <p>Default: Uses existing setting.</p> <p>Constraints:</p> <ul> <li> <p>Must be between 8 and 64 characters in length.</p> </li> <li> <p>Must contain at least one uppercase letter.</p> </li> <li> <p>Must contain at least one lowercase letter.</p> </li> <li> <p>Must contain one number.</p> </li> <li> <p>Can be any printable ASCII character (ASCII code 33 to 126) except ' (single quote), " (double quote), \, /, @, or space.</p> </li> </ul>
+    /// <p><p>The new password for the cluster master user. This change is asynchronously applied as soon as possible. Between the time of the request and the completion of the request, the <code>MasterUserPassword</code> element exists in the <code>PendingModifiedValues</code> element of the operation response. </p> <note> <p>Operations never return the password, so this operation provides a way to regain access to the master user account for a cluster if the password is lost.</p> </note> <p>Default: Uses existing setting.</p> <p>Constraints:</p> <ul> <li> <p>Must be between 8 and 64 characters in length.</p> </li> <li> <p>Must contain at least one uppercase letter.</p> </li> <li> <p>Must contain at least one lowercase letter.</p> </li> <li> <p>Must contain one number.</p> </li> <li> <p>Can be any printable ASCII character (ASCII code 33 to 126) except &#39; (single quote), &quot; (double quote), \, /, @, or space.</p> </li> </ul></p>
     pub master_user_password: Option<String>,
     /// <p>The new identifier for the cluster.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>Alphabetic characters must be lowercase.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique for all clusters within an AWS account.</p> </li> </ul> <p>Example: <code>examplecluster</code> </p>
     pub new_cluster_identifier: Option<String>,
@@ -7087,7 +7087,7 @@ impl ModifyClusterMessageSerializer {
     }
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct ModifyClusterParameterGroupMessage {
     /// <p>The name of the parameter group to be modified.</p>
@@ -7162,7 +7162,7 @@ impl ModifyClusterResultDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct ModifyClusterSubnetGroupMessage {
     /// <p>The name of the subnet group to be modified.</p>
@@ -7248,7 +7248,7 @@ impl ModifyClusterSubnetGroupResultDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct ModifyEventSubscriptionMessage {
     /// <p>A Boolean value indicating if the subscription is enabled. <code>true</code> indicates the subscription is enabled </p>
@@ -7367,7 +7367,7 @@ impl ModifyEventSubscriptionResultDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct ModifySnapshotCopyRetentionPeriodMessage {
     /// <p>The unique identifier of the cluster for which you want to change the retention period for automated snapshots that are copied to a destination region.</p> <p>Constraints: Must be the valid name of an existing cluster that has cross-region snapshot copy enabled.</p>
@@ -7998,7 +7998,7 @@ impl PendingModifiedValuesDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct PurchaseReservedNodeOfferingMessage {
     /// <p>The number of reserved nodes that you want to purchase.</p> <p>Default: <code>1</code> </p>
@@ -8076,7 +8076,7 @@ impl PurchaseReservedNodeOfferingResultDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct RebootClusterMessage {
     /// <p>The cluster identifier.</p>
@@ -8266,7 +8266,7 @@ pub struct ReservedNode {
     pub reserved_node_offering_id: Option<String>,
     /// <p>The time the reservation started. You purchase a reserved node offering for a duration. This is the start time of that duration.</p>
     pub start_time: Option<String>,
-    /// <p>The state of the reserved compute node.</p> <p>Possible Values:</p> <ul> <li> <p>pending-payment-This reserved node has recently been purchased, and the sale has been approved, but payment has not yet been confirmed.</p> </li> <li> <p>active-This reserved node is owned by the caller and is available for use.</p> </li> <li> <p>payment-failed-Payment failed for the purchase attempt.</p> </li> </ul>
+    /// <p><p>The state of the reserved compute node.</p> <p>Possible Values:</p> <ul> <li> <p>pending-payment-This reserved node has recently been purchased, and the sale has been approved, but payment has not yet been confirmed.</p> </li> <li> <p>active-This reserved node is owned by the caller and is available for use.</p> </li> <li> <p>payment-failed-Payment failed for the purchase attempt.</p> </li> </ul></p>
     pub state: Option<String>,
     /// <p>The hourly rate Amazon Redshift charges you for this reserved node.</p>
     pub usage_price: Option<f64>,
@@ -8536,7 +8536,7 @@ impl ReservedNodeOfferingListDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct ReservedNodeOfferingsMessage {
     /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
@@ -8591,7 +8591,7 @@ impl ReservedNodeOfferingsMessageDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct ReservedNodesMessage {
     /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
@@ -8644,7 +8644,7 @@ impl ReservedNodesMessageDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct ResetClusterParameterGroupMessage {
     /// <p>The name of the cluster parameter group to be reset.</p>
@@ -8861,7 +8861,7 @@ impl RestorableNodeTypeListDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct RestoreFromClusterSnapshotMessage {
     /// <p>Reserved.</p>
@@ -8872,9 +8872,9 @@ pub struct RestoreFromClusterSnapshotMessage {
     pub automated_snapshot_retention_period: Option<i64>,
     /// <p>The Amazon EC2 Availability Zone in which to restore the cluster.</p> <p>Default: A random, system-chosen Availability Zone.</p> <p>Example: <code>us-east-1a</code> </p>
     pub availability_zone: Option<String>,
-    /// <p>The identifier of the cluster that will be created from restoring the snapshot.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>Alphabetic characters must be lowercase.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique for all clusters within an AWS account.</p> </li> </ul>
+    /// <p><p>The identifier of the cluster that will be created from restoring the snapshot.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>Alphabetic characters must be lowercase.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique for all clusters within an AWS account.</p> </li> </ul></p>
     pub cluster_identifier: String,
-    /// <p>The name of the parameter group to be associated with this cluster.</p> <p>Default: The default Amazon Redshift cluster parameter group. For information about the default parameter group, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Working with Amazon Redshift Parameter Groups</a>.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>
+    /// <p><p>The name of the parameter group to be associated with this cluster.</p> <p>Default: The default Amazon Redshift cluster parameter group. For information about the default parameter group, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Working with Amazon Redshift Parameter Groups</a>.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
     pub cluster_parameter_group_name: Option<String>,
     /// <p>A list of security groups to be associated with this cluster.</p> <p>Default: The default cluster security group for Amazon Redshift.</p> <p>Cluster security groups only apply to clusters outside of VPCs.</p>
     pub cluster_security_groups: Option<Vec<String>>,
@@ -9185,7 +9185,7 @@ impl RestoreStatusDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct RestoreTableFromClusterSnapshotMessage {
     /// <p>The identifier of the Amazon Redshift cluster to restore the table to.</p>
@@ -9304,7 +9304,7 @@ impl RestoreTableFromClusterSnapshotResultDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct RevokeClusterSecurityGroupIngressMessage {
     /// <p>The IP range for which to revoke access. This range must be a valid Classless Inter-Domain Routing (CIDR) block of IP addresses. If <code>CIDRIP</code> is specified, <code>EC2SecurityGroupName</code> and <code>EC2SecurityGroupOwnerId</code> cannot be provided. </p>
@@ -9399,7 +9399,7 @@ impl RevokeClusterSecurityGroupIngressResultDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct RevokeSnapshotAccessMessage {
     /// <p>The identifier of the AWS customer account that can no longer restore the specified snapshot.</p>
@@ -9481,7 +9481,7 @@ impl RevokeSnapshotAccessResultDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct RotateEncryptionKeyMessage {
     /// <p>The unique identifier of the cluster that you want to rotate the encryption keys for.</p> <p>Constraints: Must be the name of valid cluster that has encryption enabled.</p>
@@ -9616,7 +9616,7 @@ pub struct Snapshot {
     pub snapshot_type: Option<String>,
     /// <p>The source region from which the snapshot was copied.</p>
     pub source_region: Option<String>,
-    /// <p>The snapshot status. The value of the status depends on the API operation used. </p> <ul> <li> <p> <a>CreateClusterSnapshot</a> and <a>CopyClusterSnapshot</a> returns status as "creating". </p> </li> <li> <p> <a>DescribeClusterSnapshots</a> returns status as "creating", "available", "final snapshot", or "failed".</p> </li> <li> <p> <a>DeleteClusterSnapshot</a> returns status as "deleted".</p> </li> </ul>
+    /// <p><p>The snapshot status. The value of the status depends on the API operation used. </p> <ul> <li> <p> <a>CreateClusterSnapshot</a> and <a>CopyClusterSnapshot</a> returns status as &quot;creating&quot;. </p> </li> <li> <p> <a>DescribeClusterSnapshots</a> returns status as &quot;creating&quot;, &quot;available&quot;, &quot;final snapshot&quot;, or &quot;failed&quot;.</p> </li> <li> <p> <a>DeleteClusterSnapshot</a> returns status as &quot;deleted&quot;.</p> </li> </ul></p>
     pub status: Option<String>,
     /// <p>The list of tags for the cluster snapshot.</p>
     pub tags: Option<Vec<Tag>>,
@@ -9913,7 +9913,7 @@ impl SnapshotCopyGrantListDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct SnapshotCopyGrantMessage {
     /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <code>DescribeSnapshotCopyGrant</code> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p> <p>Constraints: You can specify either the <b>SnapshotCopyGrantName</b> parameter or the <b>Marker</b> parameter, but not both. </p>
@@ -10457,7 +10457,7 @@ impl TableRestoreStatusListDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct TableRestoreStatusMessage {
     /// <p>A pagination token that can be used in a subsequent <a>DescribeTableRestoreStatus</a> request.</p>
@@ -10777,7 +10777,7 @@ impl TaggedResourceListDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct TaggedResourceListMessage {
     /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
@@ -10942,13 +10942,13 @@ impl VpcSecurityGroupMembershipListDeserializer {
 /// Errors returned by AuthorizeClusterSecurityGroupIngress
 #[derive(Debug, PartialEq)]
 pub enum AuthorizeClusterSecurityGroupIngressError {
-    ///<p>The specified CIDR block or EC2 security group is already authorized for the specified cluster security group.</p>
+    /// <p>The specified CIDR block or EC2 security group is already authorized for the specified cluster security group.</p>
     AuthorizationAlreadyExistsFault(String),
-    ///<p>The authorization quota for the cluster security group has been reached.</p>
+    /// <p>The authorization quota for the cluster security group has been reached.</p>
     AuthorizationQuotaExceededFault(String),
-    ///<p>The cluster security group name does not refer to an existing cluster security group.</p>
+    /// <p>The cluster security group name does not refer to an existing cluster security group.</p>
     ClusterSecurityGroupNotFoundFault(String),
-    ///<p>The state of the cluster security group is not <code>available</code>. </p>
+    /// <p>The state of the cluster security group is not <code>available</code>. </p>
     InvalidClusterSecurityGroupStateFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11029,17 +11029,17 @@ impl Error for AuthorizeClusterSecurityGroupIngressError {
 /// Errors returned by AuthorizeSnapshotAccess
 #[derive(Debug, PartialEq)]
 pub enum AuthorizeSnapshotAccessError {
-    ///<p>The specified CIDR block or EC2 security group is already authorized for the specified cluster security group.</p>
+    /// <p>The specified CIDR block or EC2 security group is already authorized for the specified cluster security group.</p>
     AuthorizationAlreadyExistsFault(String),
-    ///<p>The authorization quota for the cluster security group has been reached.</p>
+    /// <p>The authorization quota for the cluster security group has been reached.</p>
     AuthorizationQuotaExceededFault(String),
-    ///<p>The snapshot identifier does not refer to an existing cluster snapshot.</p>
+    /// <p>The snapshot identifier does not refer to an existing cluster snapshot.</p>
     ClusterSnapshotNotFoundFault(String),
-    ///<p>The request cannot be completed because a dependent service is throttling requests made by Amazon Redshift on your behalf. Wait and retry the request.</p>
+    /// <p>The request cannot be completed because a dependent service is throttling requests made by Amazon Redshift on your behalf. Wait and retry the request.</p>
     DependentServiceRequestThrottlingFault(String),
-    ///<p>The specified cluster snapshot is not in the <code>available</code> state, or other accounts are authorized to access the snapshot. </p>
+    /// <p>The specified cluster snapshot is not in the <code>available</code> state, or other accounts are authorized to access the snapshot. </p>
     InvalidClusterSnapshotStateFault(String),
-    ///<p>The encryption key has exceeded its grant limit in AWS KMS.</p>
+    /// <p>The encryption key has exceeded its grant limit in AWS KMS.</p>
     LimitExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11142,13 +11142,13 @@ impl Error for AuthorizeSnapshotAccessError {
 /// Errors returned by CopyClusterSnapshot
 #[derive(Debug, PartialEq)]
 pub enum CopyClusterSnapshotError {
-    ///<p>The value specified as a snapshot identifier is already used by an existing snapshot.</p>
+    /// <p>The value specified as a snapshot identifier is already used by an existing snapshot.</p>
     ClusterSnapshotAlreadyExistsFault(String),
-    ///<p>The snapshot identifier does not refer to an existing cluster snapshot.</p>
+    /// <p>The snapshot identifier does not refer to an existing cluster snapshot.</p>
     ClusterSnapshotNotFoundFault(String),
-    ///<p>The request would result in the user exceeding the allowed number of cluster snapshots.</p>
+    /// <p>The request would result in the user exceeding the allowed number of cluster snapshots.</p>
     ClusterSnapshotQuotaExceededFault(String),
-    ///<p>The specified cluster snapshot is not in the <code>available</code> state, or other accounts are authorized to access the snapshot. </p>
+    /// <p>The specified cluster snapshot is not in the <code>available</code> state, or other accounts are authorized to access the snapshot. </p>
     InvalidClusterSnapshotStateFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11239,43 +11239,43 @@ impl Error for CopyClusterSnapshotError {
 /// Errors returned by CreateCluster
 #[derive(Debug, PartialEq)]
 pub enum CreateClusterError {
-    ///<p>The account already has a cluster with the given identifier.</p>
+    /// <p>The account already has a cluster with the given identifier.</p>
     ClusterAlreadyExistsFault(String),
-    ///<p>The parameter group name does not refer to an existing parameter group.</p>
+    /// <p>The parameter group name does not refer to an existing parameter group.</p>
     ClusterParameterGroupNotFoundFault(String),
-    ///<p>The request would exceed the allowed number of cluster instances for this account. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
+    /// <p>The request would exceed the allowed number of cluster instances for this account. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     ClusterQuotaExceededFault(String),
-    ///<p>The cluster security group name does not refer to an existing cluster security group.</p>
+    /// <p>The cluster security group name does not refer to an existing cluster security group.</p>
     ClusterSecurityGroupNotFoundFault(String),
-    ///<p>The cluster subnet group name does not refer to an existing cluster subnet group.</p>
+    /// <p>The cluster subnet group name does not refer to an existing cluster subnet group.</p>
     ClusterSubnetGroupNotFoundFault(String),
-    ///<p>The request cannot be completed because a dependent service is throttling requests made by Amazon Redshift on your behalf. Wait and retry the request.</p>
+    /// <p>The request cannot be completed because a dependent service is throttling requests made by Amazon Redshift on your behalf. Wait and retry the request.</p>
     DependentServiceRequestThrottlingFault(String),
-    ///<p>There is no Amazon Redshift HSM client certificate with the specified identifier.</p>
+    /// <p>There is no Amazon Redshift HSM client certificate with the specified identifier.</p>
     HsmClientCertificateNotFoundFault(String),
-    ///<p>There is no Amazon Redshift HSM configuration with the specified identifier.</p>
+    /// <p>There is no Amazon Redshift HSM configuration with the specified identifier.</p>
     HsmConfigurationNotFoundFault(String),
-    ///<p>The number of nodes specified exceeds the allotted capacity of the cluster.</p>
+    /// <p>The number of nodes specified exceeds the allotted capacity of the cluster.</p>
     InsufficientClusterCapacityFault(String),
-    ///<p>The cluster subnet group cannot be deleted because it is in use.</p>
+    /// <p>The cluster subnet group cannot be deleted because it is in use.</p>
     InvalidClusterSubnetGroupStateFault(String),
-    ///<p>The Elastic IP (EIP) is invalid or cannot be found.</p>
+    /// <p>The Elastic IP (EIP) is invalid or cannot be found.</p>
     InvalidElasticIpFault(String),
-    ///<p>The requested subnet is not valid, or not all of the subnets are in the same VPC.</p>
+    /// <p>The requested subnet is not valid, or not all of the subnets are in the same VPC.</p>
     InvalidSubnet(String),
-    ///<p>The tag is invalid.</p>
+    /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
-    ///<p>The cluster subnet group does not cover all Availability Zones.</p>
+    /// <p>The cluster subnet group does not cover all Availability Zones.</p>
     InvalidVPCNetworkStateFault(String),
-    ///<p>The encryption key has exceeded its grant limit in AWS KMS.</p>
+    /// <p>The encryption key has exceeded its grant limit in AWS KMS.</p>
     LimitExceededFault(String),
-    ///<p>The operation would exceed the number of nodes allowed for a cluster.</p>
+    /// <p>The operation would exceed the number of nodes allowed for a cluster.</p>
     NumberOfNodesPerClusterLimitExceededFault(String),
-    ///<p>The operation would exceed the number of nodes allotted to the account. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
+    /// <p>The operation would exceed the number of nodes allotted to the account. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     NumberOfNodesQuotaExceededFault(String),
-    ///<p>The request exceeds the limit of 10 tags for the resource.</p>
+    /// <p>The request exceeds the limit of 10 tags for the resource.</p>
     TagLimitExceededFault(String),
-    ///<p>Your account is not authorized to perform the requested operation.</p>
+    /// <p>Your account is not authorized to perform the requested operation.</p>
     UnauthorizedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11436,13 +11436,13 @@ impl Error for CreateClusterError {
 /// Errors returned by CreateClusterParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateClusterParameterGroupError {
-    ///<p>A cluster parameter group with the same name already exists.</p>
+    /// <p>A cluster parameter group with the same name already exists.</p>
     ClusterParameterGroupAlreadyExistsFault(String),
-    ///<p>The request would result in the user exceeding the allowed number of cluster parameter groups. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
+    /// <p>The request would result in the user exceeding the allowed number of cluster parameter groups. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     ClusterParameterGroupQuotaExceededFault(String),
-    ///<p>The tag is invalid.</p>
+    /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
-    ///<p>The request exceeds the limit of 10 tags for the resource.</p>
+    /// <p>The request exceeds the limit of 10 tags for the resource.</p>
     TagLimitExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11535,13 +11535,13 @@ impl Error for CreateClusterParameterGroupError {
 /// Errors returned by CreateClusterSecurityGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateClusterSecurityGroupError {
-    ///<p>A cluster security group with the same name already exists.</p>
+    /// <p>A cluster security group with the same name already exists.</p>
     ClusterSecurityGroupAlreadyExistsFault(String),
-    ///<p>The request would result in the user exceeding the allowed number of cluster security groups. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
+    /// <p>The request would result in the user exceeding the allowed number of cluster security groups. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     ClusterSecurityGroupQuotaExceededFault(String),
-    ///<p>The tag is invalid.</p>
+    /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
-    ///<p>The request exceeds the limit of 10 tags for the resource.</p>
+    /// <p>The request exceeds the limit of 10 tags for the resource.</p>
     TagLimitExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11632,17 +11632,17 @@ impl Error for CreateClusterSecurityGroupError {
 /// Errors returned by CreateClusterSnapshot
 #[derive(Debug, PartialEq)]
 pub enum CreateClusterSnapshotError {
-    ///<p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
     ClusterNotFoundFault(String),
-    ///<p>The value specified as a snapshot identifier is already used by an existing snapshot.</p>
+    /// <p>The value specified as a snapshot identifier is already used by an existing snapshot.</p>
     ClusterSnapshotAlreadyExistsFault(String),
-    ///<p>The request would result in the user exceeding the allowed number of cluster snapshots.</p>
+    /// <p>The request would result in the user exceeding the allowed number of cluster snapshots.</p>
     ClusterSnapshotQuotaExceededFault(String),
-    ///<p>The specified cluster is not in the <code>available</code> state. </p>
+    /// <p>The specified cluster is not in the <code>available</code> state. </p>
     InvalidClusterStateFault(String),
-    ///<p>The tag is invalid.</p>
+    /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
-    ///<p>The request exceeds the limit of 10 tags for the resource.</p>
+    /// <p>The request exceeds the limit of 10 tags for the resource.</p>
     TagLimitExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11739,21 +11739,21 @@ impl Error for CreateClusterSnapshotError {
 /// Errors returned by CreateClusterSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateClusterSubnetGroupError {
-    ///<p>A <i>ClusterSubnetGroupName</i> is already used by an existing cluster subnet group. </p>
+    /// <p>A <i>ClusterSubnetGroupName</i> is already used by an existing cluster subnet group. </p>
     ClusterSubnetGroupAlreadyExistsFault(String),
-    ///<p>The request would result in user exceeding the allowed number of cluster subnet groups. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
+    /// <p>The request would result in user exceeding the allowed number of cluster subnet groups. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     ClusterSubnetGroupQuotaExceededFault(String),
-    ///<p>The request would result in user exceeding the allowed number of subnets in a cluster subnet groups. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
+    /// <p>The request would result in user exceeding the allowed number of subnets in a cluster subnet groups. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     ClusterSubnetQuotaExceededFault(String),
-    ///<p>The request cannot be completed because a dependent service is throttling requests made by Amazon Redshift on your behalf. Wait and retry the request.</p>
+    /// <p>The request cannot be completed because a dependent service is throttling requests made by Amazon Redshift on your behalf. Wait and retry the request.</p>
     DependentServiceRequestThrottlingFault(String),
-    ///<p>The requested subnet is not valid, or not all of the subnets are in the same VPC.</p>
+    /// <p>The requested subnet is not valid, or not all of the subnets are in the same VPC.</p>
     InvalidSubnet(String),
-    ///<p>The tag is invalid.</p>
+    /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
-    ///<p>The request exceeds the limit of 10 tags for the resource.</p>
+    /// <p>The request exceeds the limit of 10 tags for the resource.</p>
     TagLimitExceededFault(String),
-    ///<p>Your account is not authorized to perform the requested operation.</p>
+    /// <p>Your account is not authorized to perform the requested operation.</p>
     UnauthorizedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11862,27 +11862,27 @@ impl Error for CreateClusterSubnetGroupError {
 /// Errors returned by CreateEventSubscription
 #[derive(Debug, PartialEq)]
 pub enum CreateEventSubscriptionError {
-    ///<p>The request would exceed the allowed number of event subscriptions for this account. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
+    /// <p>The request would exceed the allowed number of event subscriptions for this account. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     EventSubscriptionQuotaExceededFault(String),
-    ///<p>The tag is invalid.</p>
+    /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
-    ///<p>Amazon SNS has responded that there is a problem with the specified Amazon SNS topic.</p>
+    /// <p>Amazon SNS has responded that there is a problem with the specified Amazon SNS topic.</p>
     SNSInvalidTopicFault(String),
-    ///<p>You do not have permission to publish to the specified Amazon SNS topic.</p>
+    /// <p>You do not have permission to publish to the specified Amazon SNS topic.</p>
     SNSNoAuthorizationFault(String),
-    ///<p>An Amazon SNS topic with the specified Amazon Resource Name (ARN) does not exist.</p>
+    /// <p>An Amazon SNS topic with the specified Amazon Resource Name (ARN) does not exist.</p>
     SNSTopicArnNotFoundFault(String),
-    ///<p>The specified Amazon Redshift event source could not be found.</p>
+    /// <p>The specified Amazon Redshift event source could not be found.</p>
     SourceNotFoundFault(String),
-    ///<p>There is already an existing event notification subscription with the specified name.</p>
+    /// <p>There is already an existing event notification subscription with the specified name.</p>
     SubscriptionAlreadyExistFault(String),
-    ///<p>The value specified for the event category was not one of the allowed values, or it specified a category that does not apply to the specified source type. The allowed values are Configuration, Management, Monitoring, and Security.</p>
+    /// <p>The value specified for the event category was not one of the allowed values, or it specified a category that does not apply to the specified source type. The allowed values are Configuration, Management, Monitoring, and Security.</p>
     SubscriptionCategoryNotFoundFault(String),
-    ///<p>An Amazon Redshift event with the specified event ID does not exist.</p>
+    /// <p>An Amazon Redshift event with the specified event ID does not exist.</p>
     SubscriptionEventIdNotFoundFault(String),
-    ///<p>The value specified for the event severity was not one of the allowed values, or it specified a severity that does not apply to the specified source type. The allowed values are ERROR and INFO.</p>
+    /// <p>The value specified for the event severity was not one of the allowed values, or it specified a severity that does not apply to the specified source type. The allowed values are ERROR and INFO.</p>
     SubscriptionSeverityNotFoundFault(String),
-    ///<p>The request exceeds the limit of 10 tags for the resource.</p>
+    /// <p>The request exceeds the limit of 10 tags for the resource.</p>
     TagLimitExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12007,13 +12007,13 @@ impl Error for CreateEventSubscriptionError {
 /// Errors returned by CreateHsmClientCertificate
 #[derive(Debug, PartialEq)]
 pub enum CreateHsmClientCertificateError {
-    ///<p>There is already an existing Amazon Redshift HSM client certificate with the specified identifier.</p>
+    /// <p>There is already an existing Amazon Redshift HSM client certificate with the specified identifier.</p>
     HsmClientCertificateAlreadyExistsFault(String),
-    ///<p>The quota for HSM client certificates has been reached. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
+    /// <p>The quota for HSM client certificates has been reached. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     HsmClientCertificateQuotaExceededFault(String),
-    ///<p>The tag is invalid.</p>
+    /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
-    ///<p>The request exceeds the limit of 10 tags for the resource.</p>
+    /// <p>The request exceeds the limit of 10 tags for the resource.</p>
     TagLimitExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12104,13 +12104,13 @@ impl Error for CreateHsmClientCertificateError {
 /// Errors returned by CreateHsmConfiguration
 #[derive(Debug, PartialEq)]
 pub enum CreateHsmConfigurationError {
-    ///<p>There is already an existing Amazon Redshift HSM configuration with the specified identifier.</p>
+    /// <p>There is already an existing Amazon Redshift HSM configuration with the specified identifier.</p>
     HsmConfigurationAlreadyExistsFault(String),
-    ///<p>The quota for HSM configurations has been reached. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
+    /// <p>The quota for HSM configurations has been reached. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     HsmConfigurationQuotaExceededFault(String),
-    ///<p>The tag is invalid.</p>
+    /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
-    ///<p>The request exceeds the limit of 10 tags for the resource.</p>
+    /// <p>The request exceeds the limit of 10 tags for the resource.</p>
     TagLimitExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12197,17 +12197,17 @@ impl Error for CreateHsmConfigurationError {
 /// Errors returned by CreateSnapshotCopyGrant
 #[derive(Debug, PartialEq)]
 pub enum CreateSnapshotCopyGrantError {
-    ///<p>The request cannot be completed because a dependent service is throttling requests made by Amazon Redshift on your behalf. Wait and retry the request.</p>
+    /// <p>The request cannot be completed because a dependent service is throttling requests made by Amazon Redshift on your behalf. Wait and retry the request.</p>
     DependentServiceRequestThrottlingFault(String),
-    ///<p>The tag is invalid.</p>
+    /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
-    ///<p>The encryption key has exceeded its grant limit in AWS KMS.</p>
+    /// <p>The encryption key has exceeded its grant limit in AWS KMS.</p>
     LimitExceededFault(String),
-    ///<p>The snapshot copy grant can't be created because a grant with the same name already exists.</p>
+    /// <p>The snapshot copy grant can't be created because a grant with the same name already exists.</p>
     SnapshotCopyGrantAlreadyExistsFault(String),
-    ///<p>The AWS account has exceeded the maximum number of snapshot copy grants in this region.</p>
+    /// <p>The AWS account has exceeded the maximum number of snapshot copy grants in this region.</p>
     SnapshotCopyGrantQuotaExceededFault(String),
-    ///<p>The request exceeds the limit of 10 tags for the resource.</p>
+    /// <p>The request exceeds the limit of 10 tags for the resource.</p>
     TagLimitExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12306,11 +12306,11 @@ impl Error for CreateSnapshotCopyGrantError {
 /// Errors returned by CreateTags
 #[derive(Debug, PartialEq)]
 pub enum CreateTagsError {
-    ///<p>The tag is invalid.</p>
+    /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
-    ///<p>The request exceeds the limit of 10 tags for the resource.</p>
+    /// <p>The request exceeds the limit of 10 tags for the resource.</p>
     TagLimitExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12387,13 +12387,13 @@ impl Error for CreateTagsError {
 /// Errors returned by DeleteCluster
 #[derive(Debug, PartialEq)]
 pub enum DeleteClusterError {
-    ///<p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
     ClusterNotFoundFault(String),
-    ///<p>The value specified as a snapshot identifier is already used by an existing snapshot.</p>
+    /// <p>The value specified as a snapshot identifier is already used by an existing snapshot.</p>
     ClusterSnapshotAlreadyExistsFault(String),
-    ///<p>The request would result in the user exceeding the allowed number of cluster snapshots.</p>
+    /// <p>The request would result in the user exceeding the allowed number of cluster snapshots.</p>
     ClusterSnapshotQuotaExceededFault(String),
-    ///<p>The specified cluster is not in the <code>available</code> state. </p>
+    /// <p>The specified cluster is not in the <code>available</code> state. </p>
     InvalidClusterStateFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12478,9 +12478,9 @@ impl Error for DeleteClusterError {
 /// Errors returned by DeleteClusterParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteClusterParameterGroupError {
-    ///<p>The parameter group name does not refer to an existing parameter group.</p>
+    /// <p>The parameter group name does not refer to an existing parameter group.</p>
     ClusterParameterGroupNotFoundFault(String),
-    ///<p>The cluster parameter group action can not be completed because another task is in progress that involves the parameter group. Wait a few moments and try the operation again.</p>
+    /// <p>The cluster parameter group action can not be completed because another task is in progress that involves the parameter group. Wait a few moments and try the operation again.</p>
     InvalidClusterParameterGroupStateFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12563,9 +12563,9 @@ impl Error for DeleteClusterParameterGroupError {
 /// Errors returned by DeleteClusterSecurityGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteClusterSecurityGroupError {
-    ///<p>The cluster security group name does not refer to an existing cluster security group.</p>
+    /// <p>The cluster security group name does not refer to an existing cluster security group.</p>
     ClusterSecurityGroupNotFoundFault(String),
-    ///<p>The state of the cluster security group is not <code>available</code>. </p>
+    /// <p>The state of the cluster security group is not <code>available</code>. </p>
     InvalidClusterSecurityGroupStateFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12646,9 +12646,9 @@ impl Error for DeleteClusterSecurityGroupError {
 /// Errors returned by DeleteClusterSnapshot
 #[derive(Debug, PartialEq)]
 pub enum DeleteClusterSnapshotError {
-    ///<p>The snapshot identifier does not refer to an existing cluster snapshot.</p>
+    /// <p>The snapshot identifier does not refer to an existing cluster snapshot.</p>
     ClusterSnapshotNotFoundFault(String),
-    ///<p>The specified cluster snapshot is not in the <code>available</code> state, or other accounts are authorized to access the snapshot. </p>
+    /// <p>The specified cluster snapshot is not in the <code>available</code> state, or other accounts are authorized to access the snapshot. </p>
     InvalidClusterSnapshotStateFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12727,11 +12727,11 @@ impl Error for DeleteClusterSnapshotError {
 /// Errors returned by DeleteClusterSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteClusterSubnetGroupError {
-    ///<p>The cluster subnet group name does not refer to an existing cluster subnet group.</p>
+    /// <p>The cluster subnet group name does not refer to an existing cluster subnet group.</p>
     ClusterSubnetGroupNotFoundFault(String),
-    ///<p>The cluster subnet group cannot be deleted because it is in use.</p>
+    /// <p>The cluster subnet group cannot be deleted because it is in use.</p>
     InvalidClusterSubnetGroupStateFault(String),
-    ///<p>The state of the subnet is invalid.</p>
+    /// <p>The state of the subnet is invalid.</p>
     InvalidClusterSubnetStateFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12816,9 +12816,9 @@ impl Error for DeleteClusterSubnetGroupError {
 /// Errors returned by DeleteEventSubscription
 #[derive(Debug, PartialEq)]
 pub enum DeleteEventSubscriptionError {
-    ///<p>The subscription request is invalid because it is a duplicate request. This subscription request is already in progress.</p>
+    /// <p>The subscription request is invalid because it is a duplicate request. This subscription request is already in progress.</p>
     InvalidSubscriptionStateFault(String),
-    ///<p>An Amazon Redshift event notification subscription with the specified name does not exist.</p>
+    /// <p>An Amazon Redshift event notification subscription with the specified name does not exist.</p>
     SubscriptionNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12897,9 +12897,9 @@ impl Error for DeleteEventSubscriptionError {
 /// Errors returned by DeleteHsmClientCertificate
 #[derive(Debug, PartialEq)]
 pub enum DeleteHsmClientCertificateError {
-    ///<p>There is no Amazon Redshift HSM client certificate with the specified identifier.</p>
+    /// <p>There is no Amazon Redshift HSM client certificate with the specified identifier.</p>
     HsmClientCertificateNotFoundFault(String),
-    ///<p>The specified HSM client certificate is not in the <code>available</code> state, or it is still in use by one or more Amazon Redshift clusters.</p>
+    /// <p>The specified HSM client certificate is not in the <code>available</code> state, or it is still in use by one or more Amazon Redshift clusters.</p>
     InvalidHsmClientCertificateStateFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12980,9 +12980,9 @@ impl Error for DeleteHsmClientCertificateError {
 /// Errors returned by DeleteHsmConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteHsmConfigurationError {
-    ///<p>There is no Amazon Redshift HSM configuration with the specified identifier.</p>
+    /// <p>There is no Amazon Redshift HSM configuration with the specified identifier.</p>
     HsmConfigurationNotFoundFault(String),
-    ///<p>The specified HSM configuration is not in the <code>available</code> state, or it is still in use by one or more Amazon Redshift clusters.</p>
+    /// <p>The specified HSM configuration is not in the <code>available</code> state, or it is still in use by one or more Amazon Redshift clusters.</p>
     InvalidHsmConfigurationStateFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13061,9 +13061,9 @@ impl Error for DeleteHsmConfigurationError {
 /// Errors returned by DeleteSnapshotCopyGrant
 #[derive(Debug, PartialEq)]
 pub enum DeleteSnapshotCopyGrantError {
-    ///<p>The snapshot copy grant can't be deleted because it is used by one or more clusters.</p>
+    /// <p>The snapshot copy grant can't be deleted because it is used by one or more clusters.</p>
     InvalidSnapshotCopyGrantStateFault(String),
-    ///<p>The specified snapshot copy grant can't be found. Make sure that the name is typed correctly and that the grant exists in the destination region.</p>
+    /// <p>The specified snapshot copy grant can't be found. Make sure that the name is typed correctly and that the grant exists in the destination region.</p>
     SnapshotCopyGrantNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13142,9 +13142,9 @@ impl Error for DeleteSnapshotCopyGrantError {
 /// Errors returned by DeleteTags
 #[derive(Debug, PartialEq)]
 pub enum DeleteTagsError {
-    ///<p>The tag is invalid.</p>
+    /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13217,9 +13217,9 @@ impl Error for DeleteTagsError {
 /// Errors returned by DescribeClusterParameterGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeClusterParameterGroupsError {
-    ///<p>The parameter group name does not refer to an existing parameter group.</p>
+    /// <p>The parameter group name does not refer to an existing parameter group.</p>
     ClusterParameterGroupNotFoundFault(String),
-    ///<p>The tag is invalid.</p>
+    /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13298,7 +13298,7 @@ impl Error for DescribeClusterParameterGroupsError {
 /// Errors returned by DescribeClusterParameters
 #[derive(Debug, PartialEq)]
 pub enum DescribeClusterParametersError {
-    ///<p>The parameter group name does not refer to an existing parameter group.</p>
+    /// <p>The parameter group name does not refer to an existing parameter group.</p>
     ClusterParameterGroupNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13371,9 +13371,9 @@ impl Error for DescribeClusterParametersError {
 /// Errors returned by DescribeClusterSecurityGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeClusterSecurityGroupsError {
-    ///<p>The cluster security group name does not refer to an existing cluster security group.</p>
+    /// <p>The cluster security group name does not refer to an existing cluster security group.</p>
     ClusterSecurityGroupNotFoundFault(String),
-    ///<p>The tag is invalid.</p>
+    /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13452,9 +13452,9 @@ impl Error for DescribeClusterSecurityGroupsError {
 /// Errors returned by DescribeClusterSnapshots
 #[derive(Debug, PartialEq)]
 pub enum DescribeClusterSnapshotsError {
-    ///<p>The snapshot identifier does not refer to an existing cluster snapshot.</p>
+    /// <p>The snapshot identifier does not refer to an existing cluster snapshot.</p>
     ClusterSnapshotNotFoundFault(String),
-    ///<p>The tag is invalid.</p>
+    /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13531,9 +13531,9 @@ impl Error for DescribeClusterSnapshotsError {
 /// Errors returned by DescribeClusterSubnetGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeClusterSubnetGroupsError {
-    ///<p>The cluster subnet group name does not refer to an existing cluster subnet group.</p>
+    /// <p>The cluster subnet group name does not refer to an existing cluster subnet group.</p>
     ClusterSubnetGroupNotFoundFault(String),
-    ///<p>The tag is invalid.</p>
+    /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13675,9 +13675,9 @@ impl Error for DescribeClusterVersionsError {
 /// Errors returned by DescribeClusters
 #[derive(Debug, PartialEq)]
 pub enum DescribeClustersError {
-    ///<p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
     ClusterNotFoundFault(String),
-    ///<p>The tag is invalid.</p>
+    /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13880,7 +13880,7 @@ impl Error for DescribeEventCategoriesError {
 /// Errors returned by DescribeEventSubscriptions
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventSubscriptionsError {
-    ///<p>An Amazon Redshift event notification subscription with the specified name does not exist.</p>
+    /// <p>An Amazon Redshift event notification subscription with the specified name does not exist.</p>
     SubscriptionNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -14016,9 +14016,9 @@ impl Error for DescribeEventsError {
 /// Errors returned by DescribeHsmClientCertificates
 #[derive(Debug, PartialEq)]
 pub enum DescribeHsmClientCertificatesError {
-    ///<p>There is no Amazon Redshift HSM client certificate with the specified identifier.</p>
+    /// <p>There is no Amazon Redshift HSM client certificate with the specified identifier.</p>
     HsmClientCertificateNotFoundFault(String),
-    ///<p>The tag is invalid.</p>
+    /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -14097,9 +14097,9 @@ impl Error for DescribeHsmClientCertificatesError {
 /// Errors returned by DescribeHsmConfigurations
 #[derive(Debug, PartialEq)]
 pub enum DescribeHsmConfigurationsError {
-    ///<p>There is no Amazon Redshift HSM configuration with the specified identifier.</p>
+    /// <p>There is no Amazon Redshift HSM configuration with the specified identifier.</p>
     HsmConfigurationNotFoundFault(String),
-    ///<p>The tag is invalid.</p>
+    /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -14176,7 +14176,7 @@ impl Error for DescribeHsmConfigurationsError {
 /// Errors returned by DescribeLoggingStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeLoggingStatusError {
-    ///<p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
     ClusterNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -14312,11 +14312,11 @@ impl Error for DescribeOrderableClusterOptionsError {
 /// Errors returned by DescribeReservedNodeOfferings
 #[derive(Debug, PartialEq)]
 pub enum DescribeReservedNodeOfferingsError {
-    ///<p>Your request cannot be completed because a dependent internal service is temporarily unavailable. Wait 30 to 60 seconds and try again.</p>
+    /// <p>Your request cannot be completed because a dependent internal service is temporarily unavailable. Wait 30 to 60 seconds and try again.</p>
     DependentServiceUnavailableFault(String),
-    ///<p>Specified offering does not exist.</p>
+    /// <p>Specified offering does not exist.</p>
     ReservedNodeOfferingNotFoundFault(String),
-    ///<p>The requested operation isn't supported.</p>
+    /// <p>The requested operation isn't supported.</p>
     UnsupportedOperationFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -14405,9 +14405,9 @@ impl Error for DescribeReservedNodeOfferingsError {
 /// Errors returned by DescribeReservedNodes
 #[derive(Debug, PartialEq)]
 pub enum DescribeReservedNodesError {
-    ///<p>Your request cannot be completed because a dependent internal service is temporarily unavailable. Wait 30 to 60 seconds and try again.</p>
+    /// <p>Your request cannot be completed because a dependent internal service is temporarily unavailable. Wait 30 to 60 seconds and try again.</p>
     DependentServiceUnavailableFault(String),
-    ///<p>The specified reserved compute node not found.</p>
+    /// <p>The specified reserved compute node not found.</p>
     ReservedNodeNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -14486,9 +14486,9 @@ impl Error for DescribeReservedNodesError {
 /// Errors returned by DescribeResize
 #[derive(Debug, PartialEq)]
 pub enum DescribeResizeError {
-    ///<p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
     ClusterNotFoundFault(String),
-    ///<p>A resize operation for the specified cluster is not found.</p>
+    /// <p>A resize operation for the specified cluster is not found.</p>
     ResizeNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -14561,9 +14561,9 @@ impl Error for DescribeResizeError {
 /// Errors returned by DescribeSnapshotCopyGrants
 #[derive(Debug, PartialEq)]
 pub enum DescribeSnapshotCopyGrantsError {
-    ///<p>The tag is invalid.</p>
+    /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
-    ///<p>The specified snapshot copy grant can't be found. Make sure that the name is typed correctly and that the grant exists in the destination region.</p>
+    /// <p>The specified snapshot copy grant can't be found. Make sure that the name is typed correctly and that the grant exists in the destination region.</p>
     SnapshotCopyGrantNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -14640,9 +14640,9 @@ impl Error for DescribeSnapshotCopyGrantsError {
 /// Errors returned by DescribeTableRestoreStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeTableRestoreStatusError {
-    ///<p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
     ClusterNotFoundFault(String),
-    ///<p>The specified <code>TableRestoreRequestId</code> value was not found.</p>
+    /// <p>The specified <code>TableRestoreRequestId</code> value was not found.</p>
     TableRestoreNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -14719,9 +14719,9 @@ impl Error for DescribeTableRestoreStatusError {
 /// Errors returned by DescribeTags
 #[derive(Debug, PartialEq)]
 pub enum DescribeTagsError {
-    ///<p>The tag is invalid.</p>
+    /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -14794,7 +14794,7 @@ impl Error for DescribeTagsError {
 /// Errors returned by DisableLogging
 #[derive(Debug, PartialEq)]
 pub enum DisableLoggingError {
-    ///<p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
     ClusterNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -14863,13 +14863,13 @@ impl Error for DisableLoggingError {
 /// Errors returned by DisableSnapshotCopy
 #[derive(Debug, PartialEq)]
 pub enum DisableSnapshotCopyError {
-    ///<p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
     ClusterNotFoundFault(String),
-    ///<p>The specified cluster is not in the <code>available</code> state. </p>
+    /// <p>The specified cluster is not in the <code>available</code> state. </p>
     InvalidClusterStateFault(String),
-    ///<p>The cluster already has cross-region snapshot copy disabled.</p>
+    /// <p>The cluster already has cross-region snapshot copy disabled.</p>
     SnapshotCopyAlreadyDisabledFault(String),
-    ///<p>Your account is not authorized to perform the requested operation.</p>
+    /// <p>Your account is not authorized to perform the requested operation.</p>
     UnauthorizedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -14954,15 +14954,15 @@ impl Error for DisableSnapshotCopyError {
 /// Errors returned by EnableLogging
 #[derive(Debug, PartialEq)]
 pub enum EnableLoggingError {
-    ///<p>Could not find the specified S3 bucket.</p>
+    /// <p>Could not find the specified S3 bucket.</p>
     BucketNotFoundFault(String),
-    ///<p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
     ClusterNotFoundFault(String),
-    ///<p>The cluster does not have read bucket or put object permissions on the S3 bucket specified when enabling logging.</p>
+    /// <p>The cluster does not have read bucket or put object permissions on the S3 bucket specified when enabling logging.</p>
     InsufficientS3BucketPolicyFault(String),
-    ///<p>The S3 bucket name is invalid. For more information about naming rules, go to <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html">Bucket Restrictions and Limitations</a> in the Amazon Simple Storage Service (S3) Developer Guide.</p>
+    /// <p>The S3 bucket name is invalid. For more information about naming rules, go to <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html">Bucket Restrictions and Limitations</a> in the Amazon Simple Storage Service (S3) Developer Guide.</p>
     InvalidS3BucketNameFault(String),
-    ///<p>The string specified for the logging S3 key prefix does not comply with the documented constraints.</p>
+    /// <p>The string specified for the logging S3 key prefix does not comply with the documented constraints.</p>
     InvalidS3KeyPrefixFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -15049,25 +15049,25 @@ impl Error for EnableLoggingError {
 /// Errors returned by EnableSnapshotCopy
 #[derive(Debug, PartialEq)]
 pub enum EnableSnapshotCopyError {
-    ///<p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
     ClusterNotFoundFault(String),
-    ///<p>Cross-region snapshot copy was temporarily disabled. Try your request again.</p>
+    /// <p>Cross-region snapshot copy was temporarily disabled. Try your request again.</p>
     CopyToRegionDisabledFault(String),
-    ///<p>The request cannot be completed because a dependent service is throttling requests made by Amazon Redshift on your behalf. Wait and retry the request.</p>
+    /// <p>The request cannot be completed because a dependent service is throttling requests made by Amazon Redshift on your behalf. Wait and retry the request.</p>
     DependentServiceRequestThrottlingFault(String),
-    ///<p>The specified options are incompatible.</p>
+    /// <p>The specified options are incompatible.</p>
     IncompatibleOrderableOptions(String),
-    ///<p>The specified cluster is not in the <code>available</code> state. </p>
+    /// <p>The specified cluster is not in the <code>available</code> state. </p>
     InvalidClusterStateFault(String),
-    ///<p>The encryption key has exceeded its grant limit in AWS KMS.</p>
+    /// <p>The encryption key has exceeded its grant limit in AWS KMS.</p>
     LimitExceededFault(String),
-    ///<p>The cluster already has cross-region snapshot copy enabled.</p>
+    /// <p>The cluster already has cross-region snapshot copy enabled.</p>
     SnapshotCopyAlreadyEnabledFault(String),
-    ///<p>The specified snapshot copy grant can't be found. Make sure that the name is typed correctly and that the grant exists in the destination region.</p>
+    /// <p>The specified snapshot copy grant can't be found. Make sure that the name is typed correctly and that the grant exists in the destination region.</p>
     SnapshotCopyGrantNotFoundFault(String),
-    ///<p>Your account is not authorized to perform the requested operation.</p>
+    /// <p>Your account is not authorized to perform the requested operation.</p>
     UnauthorizedOperation(String),
-    ///<p>The specified region is incorrect or does not exist.</p>
+    /// <p>The specified region is incorrect or does not exist.</p>
     UnknownSnapshotCopyRegionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -15184,9 +15184,9 @@ impl Error for EnableSnapshotCopyError {
 /// Errors returned by GetClusterCredentials
 #[derive(Debug, PartialEq)]
 pub enum GetClusterCredentialsError {
-    ///<p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
     ClusterNotFoundFault(String),
-    ///<p>The requested operation isn't supported.</p>
+    /// <p>The requested operation isn't supported.</p>
     UnsupportedOperationFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -15263,37 +15263,37 @@ impl Error for GetClusterCredentialsError {
 /// Errors returned by ModifyCluster
 #[derive(Debug, PartialEq)]
 pub enum ModifyClusterError {
-    ///<p>The account already has a cluster with the given identifier.</p>
+    /// <p>The account already has a cluster with the given identifier.</p>
     ClusterAlreadyExistsFault(String),
-    ///<p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
     ClusterNotFoundFault(String),
-    ///<p>The parameter group name does not refer to an existing parameter group.</p>
+    /// <p>The parameter group name does not refer to an existing parameter group.</p>
     ClusterParameterGroupNotFoundFault(String),
-    ///<p>The cluster security group name does not refer to an existing cluster security group.</p>
+    /// <p>The cluster security group name does not refer to an existing cluster security group.</p>
     ClusterSecurityGroupNotFoundFault(String),
-    ///<p>The request cannot be completed because a dependent service is throttling requests made by Amazon Redshift on your behalf. Wait and retry the request.</p>
+    /// <p>The request cannot be completed because a dependent service is throttling requests made by Amazon Redshift on your behalf. Wait and retry the request.</p>
     DependentServiceRequestThrottlingFault(String),
-    ///<p>There is no Amazon Redshift HSM client certificate with the specified identifier.</p>
+    /// <p>There is no Amazon Redshift HSM client certificate with the specified identifier.</p>
     HsmClientCertificateNotFoundFault(String),
-    ///<p>There is no Amazon Redshift HSM configuration with the specified identifier.</p>
+    /// <p>There is no Amazon Redshift HSM configuration with the specified identifier.</p>
     HsmConfigurationNotFoundFault(String),
-    ///<p>The number of nodes specified exceeds the allotted capacity of the cluster.</p>
+    /// <p>The number of nodes specified exceeds the allotted capacity of the cluster.</p>
     InsufficientClusterCapacityFault(String),
-    ///<p>The state of the cluster security group is not <code>available</code>. </p>
+    /// <p>The state of the cluster security group is not <code>available</code>. </p>
     InvalidClusterSecurityGroupStateFault(String),
-    ///<p>The specified cluster is not in the <code>available</code> state. </p>
+    /// <p>The specified cluster is not in the <code>available</code> state. </p>
     InvalidClusterStateFault(String),
-    ///<p>The Elastic IP (EIP) is invalid or cannot be found.</p>
+    /// <p>The Elastic IP (EIP) is invalid or cannot be found.</p>
     InvalidElasticIpFault(String),
-    ///<p>The encryption key has exceeded its grant limit in AWS KMS.</p>
+    /// <p>The encryption key has exceeded its grant limit in AWS KMS.</p>
     LimitExceededFault(String),
-    ///<p>The operation would exceed the number of nodes allowed for a cluster.</p>
+    /// <p>The operation would exceed the number of nodes allowed for a cluster.</p>
     NumberOfNodesPerClusterLimitExceededFault(String),
-    ///<p>The operation would exceed the number of nodes allotted to the account. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
+    /// <p>The operation would exceed the number of nodes allotted to the account. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     NumberOfNodesQuotaExceededFault(String),
-    ///<p>Your account is not authorized to perform the requested operation.</p>
+    /// <p>Your account is not authorized to perform the requested operation.</p>
     UnauthorizedOperation(String),
-    ///<p>A request option was specified that is not supported.</p>
+    /// <p>A request option was specified that is not supported.</p>
     UnsupportedOptionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -15440,9 +15440,9 @@ impl Error for ModifyClusterError {
 /// Errors returned by ModifyClusterIamRoles
 #[derive(Debug, PartialEq)]
 pub enum ModifyClusterIamRolesError {
-    ///<p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
     ClusterNotFoundFault(String),
-    ///<p>The specified cluster is not in the <code>available</code> state. </p>
+    /// <p>The specified cluster is not in the <code>available</code> state. </p>
     InvalidClusterStateFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -15519,9 +15519,9 @@ impl Error for ModifyClusterIamRolesError {
 /// Errors returned by ModifyClusterParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum ModifyClusterParameterGroupError {
-    ///<p>The parameter group name does not refer to an existing parameter group.</p>
+    /// <p>The parameter group name does not refer to an existing parameter group.</p>
     ClusterParameterGroupNotFoundFault(String),
-    ///<p>The cluster parameter group action can not be completed because another task is in progress that involves the parameter group. Wait a few moments and try the operation again.</p>
+    /// <p>The cluster parameter group action can not be completed because another task is in progress that involves the parameter group. Wait a few moments and try the operation again.</p>
     InvalidClusterParameterGroupStateFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -15604,17 +15604,17 @@ impl Error for ModifyClusterParameterGroupError {
 /// Errors returned by ModifyClusterSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum ModifyClusterSubnetGroupError {
-    ///<p>The cluster subnet group name does not refer to an existing cluster subnet group.</p>
+    /// <p>The cluster subnet group name does not refer to an existing cluster subnet group.</p>
     ClusterSubnetGroupNotFoundFault(String),
-    ///<p>The request would result in user exceeding the allowed number of subnets in a cluster subnet groups. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
+    /// <p>The request would result in user exceeding the allowed number of subnets in a cluster subnet groups. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     ClusterSubnetQuotaExceededFault(String),
-    ///<p>The request cannot be completed because a dependent service is throttling requests made by Amazon Redshift on your behalf. Wait and retry the request.</p>
+    /// <p>The request cannot be completed because a dependent service is throttling requests made by Amazon Redshift on your behalf. Wait and retry the request.</p>
     DependentServiceRequestThrottlingFault(String),
-    ///<p>The requested subnet is not valid, or not all of the subnets are in the same VPC.</p>
+    /// <p>The requested subnet is not valid, or not all of the subnets are in the same VPC.</p>
     InvalidSubnet(String),
-    ///<p>A specified subnet is already in use by another cluster.</p>
+    /// <p>A specified subnet is already in use by another cluster.</p>
     SubnetAlreadyInUse(String),
-    ///<p>Your account is not authorized to perform the requested operation.</p>
+    /// <p>Your account is not authorized to perform the requested operation.</p>
     UnauthorizedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -15713,23 +15713,23 @@ impl Error for ModifyClusterSubnetGroupError {
 /// Errors returned by ModifyEventSubscription
 #[derive(Debug, PartialEq)]
 pub enum ModifyEventSubscriptionError {
-    ///<p>The subscription request is invalid because it is a duplicate request. This subscription request is already in progress.</p>
+    /// <p>The subscription request is invalid because it is a duplicate request. This subscription request is already in progress.</p>
     InvalidSubscriptionStateFault(String),
-    ///<p>Amazon SNS has responded that there is a problem with the specified Amazon SNS topic.</p>
+    /// <p>Amazon SNS has responded that there is a problem with the specified Amazon SNS topic.</p>
     SNSInvalidTopicFault(String),
-    ///<p>You do not have permission to publish to the specified Amazon SNS topic.</p>
+    /// <p>You do not have permission to publish to the specified Amazon SNS topic.</p>
     SNSNoAuthorizationFault(String),
-    ///<p>An Amazon SNS topic with the specified Amazon Resource Name (ARN) does not exist.</p>
+    /// <p>An Amazon SNS topic with the specified Amazon Resource Name (ARN) does not exist.</p>
     SNSTopicArnNotFoundFault(String),
-    ///<p>The specified Amazon Redshift event source could not be found.</p>
+    /// <p>The specified Amazon Redshift event source could not be found.</p>
     SourceNotFoundFault(String),
-    ///<p>The value specified for the event category was not one of the allowed values, or it specified a category that does not apply to the specified source type. The allowed values are Configuration, Management, Monitoring, and Security.</p>
+    /// <p>The value specified for the event category was not one of the allowed values, or it specified a category that does not apply to the specified source type. The allowed values are Configuration, Management, Monitoring, and Security.</p>
     SubscriptionCategoryNotFoundFault(String),
-    ///<p>An Amazon Redshift event with the specified event ID does not exist.</p>
+    /// <p>An Amazon Redshift event with the specified event ID does not exist.</p>
     SubscriptionEventIdNotFoundFault(String),
-    ///<p>An Amazon Redshift event notification subscription with the specified name does not exist.</p>
+    /// <p>An Amazon Redshift event notification subscription with the specified name does not exist.</p>
     SubscriptionNotFoundFault(String),
-    ///<p>The value specified for the event severity was not one of the allowed values, or it specified a severity that does not apply to the specified source type. The allowed values are ERROR and INFO.</p>
+    /// <p>The value specified for the event severity was not one of the allowed values, or it specified a severity that does not apply to the specified source type. The allowed values are ERROR and INFO.</p>
     SubscriptionSeverityNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -15846,13 +15846,13 @@ impl Error for ModifyEventSubscriptionError {
 /// Errors returned by ModifySnapshotCopyRetentionPeriod
 #[derive(Debug, PartialEq)]
 pub enum ModifySnapshotCopyRetentionPeriodError {
-    ///<p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
     ClusterNotFoundFault(String),
-    ///<p>The specified cluster is not in the <code>available</code> state. </p>
+    /// <p>The specified cluster is not in the <code>available</code> state. </p>
     InvalidClusterStateFault(String),
-    ///<p>Cross-region snapshot copy was temporarily disabled. Try your request again.</p>
+    /// <p>Cross-region snapshot copy was temporarily disabled. Try your request again.</p>
     SnapshotCopyDisabledFault(String),
-    ///<p>Your account is not authorized to perform the requested operation.</p>
+    /// <p>Your account is not authorized to perform the requested operation.</p>
     UnauthorizedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -15943,13 +15943,13 @@ impl Error for ModifySnapshotCopyRetentionPeriodError {
 /// Errors returned by PurchaseReservedNodeOffering
 #[derive(Debug, PartialEq)]
 pub enum PurchaseReservedNodeOfferingError {
-    ///<p>User already has a reservation with the given identifier.</p>
+    /// <p>User already has a reservation with the given identifier.</p>
     ReservedNodeAlreadyExistsFault(String),
-    ///<p>Specified offering does not exist.</p>
+    /// <p>Specified offering does not exist.</p>
     ReservedNodeOfferingNotFoundFault(String),
-    ///<p>Request would exceed the user's compute node quota. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
+    /// <p>Request would exceed the user's compute node quota. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     ReservedNodeQuotaExceededFault(String),
-    ///<p>The requested operation isn't supported.</p>
+    /// <p>The requested operation isn't supported.</p>
     UnsupportedOperationFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -16042,9 +16042,9 @@ impl Error for PurchaseReservedNodeOfferingError {
 /// Errors returned by RebootCluster
 #[derive(Debug, PartialEq)]
 pub enum RebootClusterError {
-    ///<p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
     ClusterNotFoundFault(String),
-    ///<p>The specified cluster is not in the <code>available</code> state. </p>
+    /// <p>The specified cluster is not in the <code>available</code> state. </p>
     InvalidClusterStateFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -16117,9 +16117,9 @@ impl Error for RebootClusterError {
 /// Errors returned by ResetClusterParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum ResetClusterParameterGroupError {
-    ///<p>The parameter group name does not refer to an existing parameter group.</p>
+    /// <p>The parameter group name does not refer to an existing parameter group.</p>
     ClusterParameterGroupNotFoundFault(String),
-    ///<p>The cluster parameter group action can not be completed because another task is in progress that involves the parameter group. Wait a few moments and try the operation again.</p>
+    /// <p>The cluster parameter group action can not be completed because another task is in progress that involves the parameter group. Wait a few moments and try the operation again.</p>
     InvalidClusterParameterGroupStateFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -16200,47 +16200,47 @@ impl Error for ResetClusterParameterGroupError {
 /// Errors returned by RestoreFromClusterSnapshot
 #[derive(Debug, PartialEq)]
 pub enum RestoreFromClusterSnapshotError {
-    ///<p>The owner of the specified snapshot has not authorized your account to access the snapshot.</p>
+    /// <p>The owner of the specified snapshot has not authorized your account to access the snapshot.</p>
     AccessToSnapshotDeniedFault(String),
-    ///<p>The account already has a cluster with the given identifier.</p>
+    /// <p>The account already has a cluster with the given identifier.</p>
     ClusterAlreadyExistsFault(String),
-    ///<p>The parameter group name does not refer to an existing parameter group.</p>
+    /// <p>The parameter group name does not refer to an existing parameter group.</p>
     ClusterParameterGroupNotFoundFault(String),
-    ///<p>The request would exceed the allowed number of cluster instances for this account. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
+    /// <p>The request would exceed the allowed number of cluster instances for this account. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     ClusterQuotaExceededFault(String),
-    ///<p>The cluster security group name does not refer to an existing cluster security group.</p>
+    /// <p>The cluster security group name does not refer to an existing cluster security group.</p>
     ClusterSecurityGroupNotFoundFault(String),
-    ///<p>The snapshot identifier does not refer to an existing cluster snapshot.</p>
+    /// <p>The snapshot identifier does not refer to an existing cluster snapshot.</p>
     ClusterSnapshotNotFoundFault(String),
-    ///<p>The cluster subnet group name does not refer to an existing cluster subnet group.</p>
+    /// <p>The cluster subnet group name does not refer to an existing cluster subnet group.</p>
     ClusterSubnetGroupNotFoundFault(String),
-    ///<p>The request cannot be completed because a dependent service is throttling requests made by Amazon Redshift on your behalf. Wait and retry the request.</p>
+    /// <p>The request cannot be completed because a dependent service is throttling requests made by Amazon Redshift on your behalf. Wait and retry the request.</p>
     DependentServiceRequestThrottlingFault(String),
-    ///<p>There is no Amazon Redshift HSM client certificate with the specified identifier.</p>
+    /// <p>There is no Amazon Redshift HSM client certificate with the specified identifier.</p>
     HsmClientCertificateNotFoundFault(String),
-    ///<p>There is no Amazon Redshift HSM configuration with the specified identifier.</p>
+    /// <p>There is no Amazon Redshift HSM configuration with the specified identifier.</p>
     HsmConfigurationNotFoundFault(String),
-    ///<p>The number of nodes specified exceeds the allotted capacity of the cluster.</p>
+    /// <p>The number of nodes specified exceeds the allotted capacity of the cluster.</p>
     InsufficientClusterCapacityFault(String),
-    ///<p>The specified cluster snapshot is not in the <code>available</code> state, or other accounts are authorized to access the snapshot. </p>
+    /// <p>The specified cluster snapshot is not in the <code>available</code> state, or other accounts are authorized to access the snapshot. </p>
     InvalidClusterSnapshotStateFault(String),
-    ///<p>The cluster subnet group cannot be deleted because it is in use.</p>
+    /// <p>The cluster subnet group cannot be deleted because it is in use.</p>
     InvalidClusterSubnetGroupStateFault(String),
-    ///<p>The Elastic IP (EIP) is invalid or cannot be found.</p>
+    /// <p>The Elastic IP (EIP) is invalid or cannot be found.</p>
     InvalidElasticIpFault(String),
-    ///<p>The restore is invalid.</p>
+    /// <p>The restore is invalid.</p>
     InvalidRestoreFault(String),
-    ///<p>The requested subnet is not valid, or not all of the subnets are in the same VPC.</p>
+    /// <p>The requested subnet is not valid, or not all of the subnets are in the same VPC.</p>
     InvalidSubnet(String),
-    ///<p>The cluster subnet group does not cover all Availability Zones.</p>
+    /// <p>The cluster subnet group does not cover all Availability Zones.</p>
     InvalidVPCNetworkStateFault(String),
-    ///<p>The encryption key has exceeded its grant limit in AWS KMS.</p>
+    /// <p>The encryption key has exceeded its grant limit in AWS KMS.</p>
     LimitExceededFault(String),
-    ///<p>The operation would exceed the number of nodes allowed for a cluster.</p>
+    /// <p>The operation would exceed the number of nodes allowed for a cluster.</p>
     NumberOfNodesPerClusterLimitExceededFault(String),
-    ///<p>The operation would exceed the number of nodes allotted to the account. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
+    /// <p>The operation would exceed the number of nodes allotted to the account. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     NumberOfNodesQuotaExceededFault(String),
-    ///<p>Your account is not authorized to perform the requested operation.</p>
+    /// <p>Your account is not authorized to perform the requested operation.</p>
     UnauthorizedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -16429,19 +16429,19 @@ impl Error for RestoreFromClusterSnapshotError {
 /// Errors returned by RestoreTableFromClusterSnapshot
 #[derive(Debug, PartialEq)]
 pub enum RestoreTableFromClusterSnapshotError {
-    ///<p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
     ClusterNotFoundFault(String),
-    ///<p>The snapshot identifier does not refer to an existing cluster snapshot.</p>
+    /// <p>The snapshot identifier does not refer to an existing cluster snapshot.</p>
     ClusterSnapshotNotFoundFault(String),
-    ///<p>You have exceeded the allowed number of table restore requests. Wait for your current table restore requests to complete before making a new request.</p>
+    /// <p>You have exceeded the allowed number of table restore requests. Wait for your current table restore requests to complete before making a new request.</p>
     InProgressTableRestoreQuotaExceededFault(String),
-    ///<p>The specified cluster snapshot is not in the <code>available</code> state, or other accounts are authorized to access the snapshot. </p>
+    /// <p>The specified cluster snapshot is not in the <code>available</code> state, or other accounts are authorized to access the snapshot. </p>
     InvalidClusterSnapshotStateFault(String),
-    ///<p>The specified cluster is not in the <code>available</code> state. </p>
+    /// <p>The specified cluster is not in the <code>available</code> state. </p>
     InvalidClusterStateFault(String),
-    ///<p>The value specified for the <code>sourceDatabaseName</code>, <code>sourceSchemaName</code>, or <code>sourceTableName</code> parameter, or a combination of these, doesn't exist in the snapshot.</p>
+    /// <p>The value specified for the <code>sourceDatabaseName</code>, <code>sourceSchemaName</code>, or <code>sourceTableName</code> parameter, or a combination of these, doesn't exist in the snapshot.</p>
     InvalidTableRestoreArgumentFault(String),
-    ///<p>The requested operation isn't supported.</p>
+    /// <p>The requested operation isn't supported.</p>
     UnsupportedOperationFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -16556,11 +16556,11 @@ impl Error for RestoreTableFromClusterSnapshotError {
 /// Errors returned by RevokeClusterSecurityGroupIngress
 #[derive(Debug, PartialEq)]
 pub enum RevokeClusterSecurityGroupIngressError {
-    ///<p>The specified CIDR IP range or EC2 security group is not authorized for the specified cluster security group.</p>
+    /// <p>The specified CIDR IP range or EC2 security group is not authorized for the specified cluster security group.</p>
     AuthorizationNotFoundFault(String),
-    ///<p>The cluster security group name does not refer to an existing cluster security group.</p>
+    /// <p>The cluster security group name does not refer to an existing cluster security group.</p>
     ClusterSecurityGroupNotFoundFault(String),
-    ///<p>The state of the cluster security group is not <code>available</code>. </p>
+    /// <p>The state of the cluster security group is not <code>available</code>. </p>
     InvalidClusterSecurityGroupStateFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -16649,11 +16649,11 @@ impl Error for RevokeClusterSecurityGroupIngressError {
 /// Errors returned by RevokeSnapshotAccess
 #[derive(Debug, PartialEq)]
 pub enum RevokeSnapshotAccessError {
-    ///<p>The owner of the specified snapshot has not authorized your account to access the snapshot.</p>
+    /// <p>The owner of the specified snapshot has not authorized your account to access the snapshot.</p>
     AccessToSnapshotDeniedFault(String),
-    ///<p>The specified CIDR IP range or EC2 security group is not authorized for the specified cluster security group.</p>
+    /// <p>The specified CIDR IP range or EC2 security group is not authorized for the specified cluster security group.</p>
     AuthorizationNotFoundFault(String),
-    ///<p>The snapshot identifier does not refer to an existing cluster snapshot.</p>
+    /// <p>The snapshot identifier does not refer to an existing cluster snapshot.</p>
     ClusterSnapshotNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -16738,11 +16738,11 @@ impl Error for RevokeSnapshotAccessError {
 /// Errors returned by RotateEncryptionKey
 #[derive(Debug, PartialEq)]
 pub enum RotateEncryptionKeyError {
-    ///<p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
     ClusterNotFoundFault(String),
-    ///<p>The request cannot be completed because a dependent service is throttling requests made by Amazon Redshift on your behalf. Wait and retry the request.</p>
+    /// <p>The request cannot be completed because a dependent service is throttling requests made by Amazon Redshift on your behalf. Wait and retry the request.</p>
     DependentServiceRequestThrottlingFault(String),
-    ///<p>The specified cluster is not in the <code>available</code> state. </p>
+    /// <p>The specified cluster is not in the <code>available</code> state. </p>
     InvalidClusterStateFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -16822,373 +16822,373 @@ impl Error for RotateEncryptionKeyError {
 }
 /// Trait representing the capabilities of the Amazon Redshift API. Amazon Redshift clients implement this trait.
 pub trait Redshift {
-    #[doc="<p>Adds an inbound (ingress) rule to an Amazon Redshift security group. Depending on whether the application accessing your cluster is running on the Internet or an Amazon EC2 instance, you can authorize inbound access to either a Classless Interdomain Routing (CIDR)/Internet Protocol (IP) range or to an Amazon EC2 security group. You can add as many as 20 ingress rules to an Amazon Redshift security group.</p> <p>If you authorize access to an Amazon EC2 security group, specify <i>EC2SecurityGroupName</i> and <i>EC2SecurityGroupOwnerId</i>. The Amazon EC2 security group and Amazon Redshift cluster must be in the same AWS region. </p> <p>If you authorize access to a CIDR/IP address range, specify <i>CIDRIP</i>. For an overview of CIDR blocks, see the Wikipedia article on <a href=\"http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing\">Classless Inter-Domain Routing</a>. </p> <p>You must also associate the security group with a cluster so that clients running on these IP addresses or the EC2 instance are authorized to connect to the cluster. For information about managing security groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html\">Working with Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Adds an inbound (ingress) rule to an Amazon Redshift security group. Depending on whether the application accessing your cluster is running on the Internet or an Amazon EC2 instance, you can authorize inbound access to either a Classless Interdomain Routing (CIDR)/Internet Protocol (IP) range or to an Amazon EC2 security group. You can add as many as 20 ingress rules to an Amazon Redshift security group.</p> <p>If you authorize access to an Amazon EC2 security group, specify <i>EC2SecurityGroupName</i> and <i>EC2SecurityGroupOwnerId</i>. The Amazon EC2 security group and Amazon Redshift cluster must be in the same AWS region. </p> <p>If you authorize access to a CIDR/IP address range, specify <i>CIDRIP</i>. For an overview of CIDR blocks, see the Wikipedia article on <a href="http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Classless Inter-Domain Routing</a>. </p> <p>You must also associate the security group with a cluster so that clients running on these IP addresses or the EC2 instance are authorized to connect to the cluster. For information about managing security groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Working with Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn authorize_cluster_security_group_ingress(
         &self,
         input: &AuthorizeClusterSecurityGroupIngressMessage,
     ) -> Result<AuthorizeClusterSecurityGroupIngressResult, AuthorizeClusterSecurityGroupIngressError>;
 
-    #[doc="<p>Authorizes the specified AWS customer account to restore the specified snapshot.</p> <p> For more information about working with snapshots, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html\">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Authorizes the specified AWS customer account to restore the specified snapshot.</p> <p> For more information about working with snapshots, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn authorize_snapshot_access(
         &self,
         input: &AuthorizeSnapshotAccessMessage,
     ) -> Result<AuthorizeSnapshotAccessResult, AuthorizeSnapshotAccessError>;
 
-    #[doc="<p>Copies the specified automated cluster snapshot to a new manual cluster snapshot. The source must be an automated snapshot and it must be in the available state.</p> <p>When you delete a cluster, Amazon Redshift deletes any automated snapshots of the cluster. Also, when the retention period of the snapshot expires, Amazon Redshift automatically deletes it. If you want to keep an automated snapshot for a longer period, you can make a manual copy of the snapshot. Manual snapshots are retained until you delete them.</p> <p> For more information about working with snapshots, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html\">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Copies the specified automated cluster snapshot to a new manual cluster snapshot. The source must be an automated snapshot and it must be in the available state.</p> <p>When you delete a cluster, Amazon Redshift deletes any automated snapshots of the cluster. Also, when the retention period of the snapshot expires, Amazon Redshift automatically deletes it. If you want to keep an automated snapshot for a longer period, you can make a manual copy of the snapshot. Manual snapshots are retained until you delete them.</p> <p> For more information about working with snapshots, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn copy_cluster_snapshot(
         &self,
         input: &CopyClusterSnapshotMessage,
     ) -> Result<CopyClusterSnapshotResult, CopyClusterSnapshotError>;
 
-    #[doc="<p>Creates a new cluster.</p> <p>To create the cluster in Virtual Private Cloud (VPC), you must provide a cluster subnet group name. The cluster subnet group identifies the subnets of your VPC that Amazon Redshift uses when creating the cluster. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Creates a new cluster.</p> <p>To create the cluster in Virtual Private Cloud (VPC), you must provide a cluster subnet group name. The cluster subnet group identifies the subnets of your VPC that Amazon Redshift uses when creating the cluster. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn create_cluster(
         &self,
         input: &CreateClusterMessage,
     ) -> Result<CreateClusterResult, CreateClusterError>;
 
-    #[doc="<p>Creates an Amazon Redshift parameter group.</p> <p>Creating parameter groups is independent of creating clusters. You can associate a cluster with a parameter group when you create the cluster. You can also associate an existing cluster with a parameter group after the cluster is created by using <a>ModifyCluster</a>. </p> <p>Parameters in the parameter group define specific behavior that applies to the databases you create on the cluster. For more information about parameters and parameter groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Creates an Amazon Redshift parameter group.</p> <p>Creating parameter groups is independent of creating clusters. You can associate a cluster with a parameter group when you create the cluster. You can also associate an existing cluster with a parameter group after the cluster is created by using <a>ModifyCluster</a>. </p> <p>Parameters in the parameter group define specific behavior that applies to the databases you create on the cluster. For more information about parameters and parameter groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn create_cluster_parameter_group(
         &self,
         input: &CreateClusterParameterGroupMessage,
     ) -> Result<CreateClusterParameterGroupResult, CreateClusterParameterGroupError>;
 
-    #[doc="<p>Creates a new Amazon Redshift security group. You use security groups to control access to non-VPC clusters.</p> <p> For information about managing security groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html\">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Creates a new Amazon Redshift security group. You use security groups to control access to non-VPC clusters.</p> <p> For information about managing security groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn create_cluster_security_group(
         &self,
         input: &CreateClusterSecurityGroupMessage,
     ) -> Result<CreateClusterSecurityGroupResult, CreateClusterSecurityGroupError>;
 
-    #[doc="<p>Creates a manual snapshot of the specified cluster. The cluster must be in the <code>available</code> state. </p> <p> For more information about working with snapshots, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html\">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Creates a manual snapshot of the specified cluster. The cluster must be in the <code>available</code> state. </p> <p> For more information about working with snapshots, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn create_cluster_snapshot(
         &self,
         input: &CreateClusterSnapshotMessage,
     ) -> Result<CreateClusterSnapshotResult, CreateClusterSnapshotError>;
 
-    #[doc="<p>Creates a new Amazon Redshift subnet group. You must provide a list of one or more subnets in your existing Amazon Virtual Private Cloud (Amazon VPC) when creating Amazon Redshift subnet group.</p> <p> For information about subnet groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-cluster-subnet-groups.html\">Amazon Redshift Cluster Subnet Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Creates a new Amazon Redshift subnet group. You must provide a list of one or more subnets in your existing Amazon Virtual Private Cloud (Amazon VPC) when creating Amazon Redshift subnet group.</p> <p> For information about subnet groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-cluster-subnet-groups.html">Amazon Redshift Cluster Subnet Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn create_cluster_subnet_group(
         &self,
         input: &CreateClusterSubnetGroupMessage,
     ) -> Result<CreateClusterSubnetGroupResult, CreateClusterSubnetGroupError>;
 
-    #[doc="<p>Creates an Amazon Redshift event notification subscription. This action requires an ARN (Amazon Resource Name) of an Amazon SNS topic created by either the Amazon Redshift console, the Amazon SNS console, or the Amazon SNS API. To obtain an ARN with Amazon SNS, you must create a topic in Amazon SNS and subscribe to the topic. The ARN is displayed in the SNS console.</p> <p>You can specify the source type, and lists of Amazon Redshift source IDs, event categories, and event severities. Notifications will be sent for all events you want that match those criteria. For example, you can specify source type = cluster, source ID = my-cluster-1 and mycluster2, event categories = Availability, Backup, and severity = ERROR. The subscription will only send notifications for those ERROR events in the Availability and Backup categories for the specified clusters.</p> <p>If you specify both the source type and source IDs, such as source type = cluster and source identifier = my-cluster-1, notifications will be sent for all the cluster events for my-cluster-1. If you specify a source type but do not specify a source identifier, you will receive notice of the events for the objects of that type in your AWS account. If you do not specify either the SourceType nor the SourceIdentifier, you will be notified of events generated from all Amazon Redshift sources belonging to your AWS account. You must specify a source type if you specify a source ID.</p>"]
+    /// <p>Creates an Amazon Redshift event notification subscription. This action requires an ARN (Amazon Resource Name) of an Amazon SNS topic created by either the Amazon Redshift console, the Amazon SNS console, or the Amazon SNS API. To obtain an ARN with Amazon SNS, you must create a topic in Amazon SNS and subscribe to the topic. The ARN is displayed in the SNS console.</p> <p>You can specify the source type, and lists of Amazon Redshift source IDs, event categories, and event severities. Notifications will be sent for all events you want that match those criteria. For example, you can specify source type = cluster, source ID = my-cluster-1 and mycluster2, event categories = Availability, Backup, and severity = ERROR. The subscription will only send notifications for those ERROR events in the Availability and Backup categories for the specified clusters.</p> <p>If you specify both the source type and source IDs, such as source type = cluster and source identifier = my-cluster-1, notifications will be sent for all the cluster events for my-cluster-1. If you specify a source type but do not specify a source identifier, you will receive notice of the events for the objects of that type in your AWS account. If you do not specify either the SourceType nor the SourceIdentifier, you will be notified of events generated from all Amazon Redshift sources belonging to your AWS account. You must specify a source type if you specify a source ID.</p>
     fn create_event_subscription(
         &self,
         input: &CreateEventSubscriptionMessage,
     ) -> Result<CreateEventSubscriptionResult, CreateEventSubscriptionError>;
 
-    #[doc="<p>Creates an HSM client certificate that an Amazon Redshift cluster will use to connect to the client's HSM in order to store and retrieve the keys used to encrypt the cluster databases.</p> <p>The command returns a public key, which you must store in the HSM. In addition to creating the HSM certificate, you must create an Amazon Redshift HSM configuration that provides a cluster the information needed to store and use encryption keys in the HSM. For more information, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-HSM.html\">Hardware Security Modules</a> in the Amazon Redshift Cluster Management Guide.</p>"]
+    /// <p>Creates an HSM client certificate that an Amazon Redshift cluster will use to connect to the client's HSM in order to store and retrieve the keys used to encrypt the cluster databases.</p> <p>The command returns a public key, which you must store in the HSM. In addition to creating the HSM certificate, you must create an Amazon Redshift HSM configuration that provides a cluster the information needed to store and use encryption keys in the HSM. For more information, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-HSM.html">Hardware Security Modules</a> in the Amazon Redshift Cluster Management Guide.</p>
     fn create_hsm_client_certificate(
         &self,
         input: &CreateHsmClientCertificateMessage,
     ) -> Result<CreateHsmClientCertificateResult, CreateHsmClientCertificateError>;
 
-    #[doc="<p>Creates an HSM configuration that contains the information required by an Amazon Redshift cluster to store and use database encryption keys in a Hardware Security Module (HSM). After creating the HSM configuration, you can specify it as a parameter when creating a cluster. The cluster will then store its encryption keys in the HSM.</p> <p>In addition to creating an HSM configuration, you must also create an HSM client certificate. For more information, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-HSM.html\">Hardware Security Modules</a> in the Amazon Redshift Cluster Management Guide.</p>"]
+    /// <p>Creates an HSM configuration that contains the information required by an Amazon Redshift cluster to store and use database encryption keys in a Hardware Security Module (HSM). After creating the HSM configuration, you can specify it as a parameter when creating a cluster. The cluster will then store its encryption keys in the HSM.</p> <p>In addition to creating an HSM configuration, you must also create an HSM client certificate. For more information, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-HSM.html">Hardware Security Modules</a> in the Amazon Redshift Cluster Management Guide.</p>
     fn create_hsm_configuration(
         &self,
         input: &CreateHsmConfigurationMessage,
     ) -> Result<CreateHsmConfigurationResult, CreateHsmConfigurationError>;
 
-    #[doc="<p>Creates a snapshot copy grant that permits Amazon Redshift to use a customer master key (CMK) from AWS Key Management Service (AWS KMS) to encrypt copied snapshots in a destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html\">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>"]
+    /// <p>Creates a snapshot copy grant that permits Amazon Redshift to use a customer master key (CMK) from AWS Key Management Service (AWS KMS) to encrypt copied snapshots in a destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     fn create_snapshot_copy_grant(
         &self,
         input: &CreateSnapshotCopyGrantMessage,
     ) -> Result<CreateSnapshotCopyGrantResult, CreateSnapshotCopyGrantError>;
 
-    #[doc="<p>Adds one or more tags to a specified resource.</p> <p>A resource can have up to 10 tags. If you try to create more than 10 tags for a resource, you will receive an error and the attempt will fail.</p> <p>If you specify a key that already exists for the resource, the value for that key will be updated with the new value.</p>"]
+    /// <p>Adds one or more tags to a specified resource.</p> <p>A resource can have up to 10 tags. If you try to create more than 10 tags for a resource, you will receive an error and the attempt will fail.</p> <p>If you specify a key that already exists for the resource, the value for that key will be updated with the new value.</p>
     fn create_tags(&self, input: &CreateTagsMessage) -> Result<(), CreateTagsError>;
 
-    #[doc="<p>Deletes a previously provisioned cluster. A successful response from the web service indicates that the request was received correctly. Use <a>DescribeClusters</a> to monitor the status of the deletion. The delete operation cannot be canceled or reverted once submitted. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you want to shut down the cluster and retain it for future use, set <i>SkipFinalClusterSnapshot</i> to <code>false</code> and specify a name for <i>FinalClusterSnapshotIdentifier</i>. You can later restore this snapshot to resume using the cluster. If a final cluster snapshot is requested, the status of the cluster will be \"final-snapshot\" while the snapshot is being taken, then it's \"deleting\" once Amazon Redshift begins deleting the cluster. </p> <p> For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Deletes a previously provisioned cluster. A successful response from the web service indicates that the request was received correctly. Use <a>DescribeClusters</a> to monitor the status of the deletion. The delete operation cannot be canceled or reverted once submitted. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you want to shut down the cluster and retain it for future use, set <i>SkipFinalClusterSnapshot</i> to <code>false</code> and specify a name for <i>FinalClusterSnapshotIdentifier</i>. You can later restore this snapshot to resume using the cluster. If a final cluster snapshot is requested, the status of the cluster will be "final-snapshot" while the snapshot is being taken, then it's "deleting" once Amazon Redshift begins deleting the cluster. </p> <p> For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn delete_cluster(
         &self,
         input: &DeleteClusterMessage,
     ) -> Result<DeleteClusterResult, DeleteClusterError>;
 
-    #[doc="<p>Deletes a specified Amazon Redshift parameter group.</p> <note> <p>You cannot delete a parameter group if it is associated with a cluster.</p> </note>"]
+    /// <p><p>Deletes a specified Amazon Redshift parameter group.</p> <note> <p>You cannot delete a parameter group if it is associated with a cluster.</p> </note></p>
     fn delete_cluster_parameter_group(
         &self,
         input: &DeleteClusterParameterGroupMessage,
     ) -> Result<(), DeleteClusterParameterGroupError>;
 
-    #[doc="<p>Deletes an Amazon Redshift security group.</p> <note> <p>You cannot delete a security group that is associated with any clusters. You cannot delete the default security group.</p> </note> <p> For information about managing security groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html\">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Deletes an Amazon Redshift security group.</p> <note> <p>You cannot delete a security group that is associated with any clusters. You cannot delete the default security group.</p> </note> <p> For information about managing security groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn delete_cluster_security_group(
         &self,
         input: &DeleteClusterSecurityGroupMessage,
     ) -> Result<(), DeleteClusterSecurityGroupError>;
 
-    #[doc="<p>Deletes the specified manual snapshot. The snapshot must be in the <code>available</code> state, with no other users authorized to access the snapshot. </p> <p>Unlike automated snapshots, manual snapshots are retained even after you delete your cluster. Amazon Redshift does not delete your manual snapshots. You must delete manual snapshot explicitly to avoid getting charged. If other accounts are authorized to access the snapshot, you must revoke all of the authorizations before you can delete the snapshot.</p>"]
+    /// <p>Deletes the specified manual snapshot. The snapshot must be in the <code>available</code> state, with no other users authorized to access the snapshot. </p> <p>Unlike automated snapshots, manual snapshots are retained even after you delete your cluster. Amazon Redshift does not delete your manual snapshots. You must delete manual snapshot explicitly to avoid getting charged. If other accounts are authorized to access the snapshot, you must revoke all of the authorizations before you can delete the snapshot.</p>
     fn delete_cluster_snapshot(
         &self,
         input: &DeleteClusterSnapshotMessage,
     ) -> Result<DeleteClusterSnapshotResult, DeleteClusterSnapshotError>;
 
-    #[doc = "<p>Deletes the specified cluster subnet group.</p>"]
+    /// <p>Deletes the specified cluster subnet group.</p>
     fn delete_cluster_subnet_group(
         &self,
         input: &DeleteClusterSubnetGroupMessage,
     ) -> Result<(), DeleteClusterSubnetGroupError>;
 
-    #[doc = "<p>Deletes an Amazon Redshift event notification subscription.</p>"]
+    /// <p>Deletes an Amazon Redshift event notification subscription.</p>
     fn delete_event_subscription(
         &self,
         input: &DeleteEventSubscriptionMessage,
     ) -> Result<(), DeleteEventSubscriptionError>;
 
-    #[doc = "<p>Deletes the specified HSM client certificate.</p>"]
+    /// <p>Deletes the specified HSM client certificate.</p>
     fn delete_hsm_client_certificate(
         &self,
         input: &DeleteHsmClientCertificateMessage,
     ) -> Result<(), DeleteHsmClientCertificateError>;
 
-    #[doc = "<p>Deletes the specified Amazon Redshift HSM configuration.</p>"]
+    /// <p>Deletes the specified Amazon Redshift HSM configuration.</p>
     fn delete_hsm_configuration(
         &self,
         input: &DeleteHsmConfigurationMessage,
     ) -> Result<(), DeleteHsmConfigurationError>;
 
-    #[doc = "<p>Deletes the specified snapshot copy grant.</p>"]
+    /// <p>Deletes the specified snapshot copy grant.</p>
     fn delete_snapshot_copy_grant(
         &self,
         input: &DeleteSnapshotCopyGrantMessage,
     ) -> Result<(), DeleteSnapshotCopyGrantError>;
 
-    #[doc="<p>Deletes a tag or tags from a resource. You must provide the ARN of the resource from which you want to delete the tag or tags.</p>"]
+    /// <p>Deletes a tag or tags from a resource. You must provide the ARN of the resource from which you want to delete the tag or tags.</p>
     fn delete_tags(&self, input: &DeleteTagsMessage) -> Result<(), DeleteTagsError>;
 
-    #[doc="<p>Returns a list of Amazon Redshift parameter groups, including parameter groups you created and the default parameter group. For each parameter group, the response includes the parameter group name, description, and parameter group family name. You can optionally specify a name to retrieve the description of a specific parameter group.</p> <p> For more information about parameters and parameter groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all parameter groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all parameter groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, parameter groups are returned regardless of whether they have tag keys or values associated with them.</p>"]
+    /// <p>Returns a list of Amazon Redshift parameter groups, including parameter groups you created and the default parameter group. For each parameter group, the response includes the parameter group name, description, and parameter group family name. You can optionally specify a name to retrieve the description of a specific parameter group.</p> <p> For more information about parameters and parameter groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all parameter groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all parameter groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, parameter groups are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_cluster_parameter_groups(
         &self,
         input: &DescribeClusterParameterGroupsMessage,
     ) -> Result<ClusterParameterGroupsMessage, DescribeClusterParameterGroupsError>;
 
-    #[doc="<p>Returns a detailed list of parameters contained within the specified Amazon Redshift parameter group. For each parameter the response includes information such as parameter name, description, data type, value, whether the parameter value is modifiable, and so on.</p> <p>You can specify <i>source</i> filter to retrieve parameters of only specific type. For example, to retrieve parameters that were modified by a user action such as from <a>ModifyClusterParameterGroup</a>, you can specify <i>source</i> equal to <i>user</i>.</p> <p> For more information about parameters and parameter groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Returns a detailed list of parameters contained within the specified Amazon Redshift parameter group. For each parameter the response includes information such as parameter name, description, data type, value, whether the parameter value is modifiable, and so on.</p> <p>You can specify <i>source</i> filter to retrieve parameters of only specific type. For example, to retrieve parameters that were modified by a user action such as from <a>ModifyClusterParameterGroup</a>, you can specify <i>source</i> equal to <i>user</i>.</p> <p> For more information about parameters and parameter groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn describe_cluster_parameters(
         &self,
         input: &DescribeClusterParametersMessage,
     ) -> Result<ClusterParameterGroupDetails, DescribeClusterParametersError>;
 
-    #[doc="<p>Returns information about Amazon Redshift security groups. If the name of a security group is specified, the response will contain only information about only that security group.</p> <p> For information about managing security groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html\">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all security groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all security groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, security groups are returned regardless of whether they have tag keys or values associated with them.</p>"]
+    /// <p>Returns information about Amazon Redshift security groups. If the name of a security group is specified, the response will contain only information about only that security group.</p> <p> For information about managing security groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all security groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all security groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, security groups are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_cluster_security_groups(
         &self,
         input: &DescribeClusterSecurityGroupsMessage,
     ) -> Result<ClusterSecurityGroupMessage, DescribeClusterSecurityGroupsError>;
 
-    #[doc="<p>Returns one or more snapshot objects, which contain metadata about your cluster snapshots. By default, this operation returns information about all snapshots of all clusters that are owned by you AWS customer account. No information is returned for snapshots owned by inactive AWS customer accounts.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all snapshots that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all snapshots that have any combination of those values are returned. Only snapshots that you own are returned in the response; shared snapshots are not returned with the tag key and tag value request parameters.</p> <p>If both tag keys and values are omitted from the request, snapshots are returned regardless of whether they have tag keys or values associated with them.</p>"]
+    /// <p>Returns one or more snapshot objects, which contain metadata about your cluster snapshots. By default, this operation returns information about all snapshots of all clusters that are owned by you AWS customer account. No information is returned for snapshots owned by inactive AWS customer accounts.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all snapshots that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all snapshots that have any combination of those values are returned. Only snapshots that you own are returned in the response; shared snapshots are not returned with the tag key and tag value request parameters.</p> <p>If both tag keys and values are omitted from the request, snapshots are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_cluster_snapshots(
         &self,
         input: &DescribeClusterSnapshotsMessage,
     ) -> Result<SnapshotMessage, DescribeClusterSnapshotsError>;
 
-    #[doc="<p>Returns one or more cluster subnet group objects, which contain metadata about your cluster subnet groups. By default, this operation returns information about all cluster subnet groups that are defined in you AWS account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all subnet groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all subnet groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, subnet groups are returned regardless of whether they have tag keys or values associated with them.</p>"]
+    /// <p>Returns one or more cluster subnet group objects, which contain metadata about your cluster subnet groups. By default, this operation returns information about all cluster subnet groups that are defined in you AWS account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all subnet groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all subnet groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, subnet groups are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_cluster_subnet_groups(
         &self,
         input: &DescribeClusterSubnetGroupsMessage,
     ) -> Result<ClusterSubnetGroupMessage, DescribeClusterSubnetGroupsError>;
 
-    #[doc="<p>Returns descriptions of the available Amazon Redshift cluster versions. You can call this operation even before creating any clusters to learn more about the Amazon Redshift versions. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Returns descriptions of the available Amazon Redshift cluster versions. You can call this operation even before creating any clusters to learn more about the Amazon Redshift versions. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn describe_cluster_versions(
         &self,
         input: &DescribeClusterVersionsMessage,
     ) -> Result<ClusterVersionsMessage, DescribeClusterVersionsError>;
 
-    #[doc="<p>Returns properties of provisioned clusters including general cluster properties, cluster database properties, maintenance and backup properties, and security and access properties. This operation supports pagination. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all clusters that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all clusters that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, clusters are returned regardless of whether they have tag keys or values associated with them.</p>"]
+    /// <p>Returns properties of provisioned clusters including general cluster properties, cluster database properties, maintenance and backup properties, and security and access properties. This operation supports pagination. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all clusters that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all clusters that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, clusters are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_clusters(
         &self,
         input: &DescribeClustersMessage,
     ) -> Result<ClustersMessage, DescribeClustersError>;
 
-    #[doc="<p>Returns a list of parameter settings for the specified parameter group family.</p> <p> For more information about parameters and parameter groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Returns a list of parameter settings for the specified parameter group family.</p> <p> For more information about parameters and parameter groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn describe_default_cluster_parameters(
         &self,
         input: &DescribeDefaultClusterParametersMessage,
     ) -> Result<DescribeDefaultClusterParametersResult, DescribeDefaultClusterParametersError>;
 
-    #[doc="<p>Displays a list of event categories for all event source types, or for a specified source type. For a list of the event categories and source types, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-event-notifications.html\">Amazon Redshift Event Notifications</a>.</p>"]
+    /// <p>Displays a list of event categories for all event source types, or for a specified source type. For a list of the event categories and source types, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-event-notifications.html">Amazon Redshift Event Notifications</a>.</p>
     fn describe_event_categories(
         &self,
         input: &DescribeEventCategoriesMessage,
     ) -> Result<EventCategoriesMessage, DescribeEventCategoriesError>;
 
-    #[doc="<p>Lists descriptions of all the Amazon Redshift event notifications subscription for a customer account. If you specify a subscription name, lists the description for that subscription.</p>"]
+    /// <p>Lists descriptions of all the Amazon Redshift event notifications subscription for a customer account. If you specify a subscription name, lists the description for that subscription.</p>
     fn describe_event_subscriptions(
         &self,
         input: &DescribeEventSubscriptionsMessage,
     ) -> Result<EventSubscriptionsMessage, DescribeEventSubscriptionsError>;
 
-    #[doc="<p>Returns events related to clusters, security groups, snapshots, and parameter groups for the past 14 days. Events specific to a particular cluster, security group, snapshot or parameter group can be obtained by providing the name as a parameter. By default, the past hour of events are returned.</p>"]
+    /// <p>Returns events related to clusters, security groups, snapshots, and parameter groups for the past 14 days. Events specific to a particular cluster, security group, snapshot or parameter group can be obtained by providing the name as a parameter. By default, the past hour of events are returned.</p>
     fn describe_events(
         &self,
         input: &DescribeEventsMessage,
     ) -> Result<EventsMessage, DescribeEventsError>;
 
-    #[doc="<p>Returns information about the specified HSM client certificate. If no certificate ID is specified, returns information about all the HSM certificates owned by your AWS customer account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all HSM client certificates that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all HSM client certificates that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, HSM client certificates are returned regardless of whether they have tag keys or values associated with them.</p>"]
+    /// <p>Returns information about the specified HSM client certificate. If no certificate ID is specified, returns information about all the HSM certificates owned by your AWS customer account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all HSM client certificates that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all HSM client certificates that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, HSM client certificates are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_hsm_client_certificates(
         &self,
         input: &DescribeHsmClientCertificatesMessage,
     ) -> Result<HsmClientCertificateMessage, DescribeHsmClientCertificatesError>;
 
-    #[doc="<p>Returns information about the specified Amazon Redshift HSM configuration. If no configuration ID is specified, returns information about all the HSM configurations owned by your AWS customer account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all HSM connections that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all HSM connections that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, HSM connections are returned regardless of whether they have tag keys or values associated with them.</p>"]
+    /// <p>Returns information about the specified Amazon Redshift HSM configuration. If no configuration ID is specified, returns information about all the HSM configurations owned by your AWS customer account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all HSM connections that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all HSM connections that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, HSM connections are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_hsm_configurations(
         &self,
         input: &DescribeHsmConfigurationsMessage,
     ) -> Result<HsmConfigurationMessage, DescribeHsmConfigurationsError>;
 
-    #[doc="<p>Describes whether information, such as queries and connection attempts, is being logged for the specified Amazon Redshift cluster.</p>"]
+    /// <p>Describes whether information, such as queries and connection attempts, is being logged for the specified Amazon Redshift cluster.</p>
     fn describe_logging_status(
         &self,
         input: &DescribeLoggingStatusMessage,
     ) -> Result<LoggingStatus, DescribeLoggingStatusError>;
 
-    #[doc="<p>Returns a list of orderable cluster options. Before you create a new cluster you can use this operation to find what options are available, such as the EC2 Availability Zones (AZ) in the specific AWS region that you can specify, and the node types you can request. The node types differ by available storage, memory, CPU and price. With the cost involved you might want to obtain a list of cluster options in the specific region and specify values when creating a cluster. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Returns a list of orderable cluster options. Before you create a new cluster you can use this operation to find what options are available, such as the EC2 Availability Zones (AZ) in the specific AWS region that you can specify, and the node types you can request. The node types differ by available storage, memory, CPU and price. With the cost involved you might want to obtain a list of cluster options in the specific region and specify values when creating a cluster. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn describe_orderable_cluster_options(
         &self,
         input: &DescribeOrderableClusterOptionsMessage,
     ) -> Result<OrderableClusterOptionsMessage, DescribeOrderableClusterOptionsError>;
 
-    #[doc="<p>Returns a list of the available reserved node offerings by Amazon Redshift with their descriptions including the node type, the fixed and recurring costs of reserving the node and duration the node will be reserved for you. These descriptions help you determine which reserve node offering you want to purchase. You then use the unique offering ID in you call to <a>PurchaseReservedNodeOffering</a> to reserve one or more nodes for your Amazon Redshift cluster. </p> <p> For more information about reserved node offerings, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/purchase-reserved-node-instance.html\">Purchasing Reserved Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Returns a list of the available reserved node offerings by Amazon Redshift with their descriptions including the node type, the fixed and recurring costs of reserving the node and duration the node will be reserved for you. These descriptions help you determine which reserve node offering you want to purchase. You then use the unique offering ID in you call to <a>PurchaseReservedNodeOffering</a> to reserve one or more nodes for your Amazon Redshift cluster. </p> <p> For more information about reserved node offerings, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/purchase-reserved-node-instance.html">Purchasing Reserved Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn describe_reserved_node_offerings(
         &self,
         input: &DescribeReservedNodeOfferingsMessage,
     ) -> Result<ReservedNodeOfferingsMessage, DescribeReservedNodeOfferingsError>;
 
-    #[doc = "<p>Returns the descriptions of the reserved nodes.</p>"]
+    /// <p>Returns the descriptions of the reserved nodes.</p>
     fn describe_reserved_nodes(
         &self,
         input: &DescribeReservedNodesMessage,
     ) -> Result<ReservedNodesMessage, DescribeReservedNodesError>;
 
-    #[doc="<p>Returns information about the last resize operation for the specified cluster. If no resize operation has ever been initiated for the specified cluster, a <code>HTTP 404</code> error is returned. If a resize operation was initiated and completed, the status of the resize remains as <code>SUCCEEDED</code> until the next resize. </p> <p>A resize operation can be requested using <a>ModifyCluster</a> and specifying a different number or type of nodes for the cluster. </p>"]
+    /// <p>Returns information about the last resize operation for the specified cluster. If no resize operation has ever been initiated for the specified cluster, a <code>HTTP 404</code> error is returned. If a resize operation was initiated and completed, the status of the resize remains as <code>SUCCEEDED</code> until the next resize. </p> <p>A resize operation can be requested using <a>ModifyCluster</a> and specifying a different number or type of nodes for the cluster. </p>
     fn describe_resize(
         &self,
         input: &DescribeResizeMessage,
     ) -> Result<ResizeProgressMessage, DescribeResizeError>;
 
-    #[doc="<p>Returns a list of snapshot copy grants owned by the AWS account in the destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html\">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>"]
+    /// <p>Returns a list of snapshot copy grants owned by the AWS account in the destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     fn describe_snapshot_copy_grants(
         &self,
         input: &DescribeSnapshotCopyGrantsMessage,
     ) -> Result<SnapshotCopyGrantMessage, DescribeSnapshotCopyGrantsError>;
 
-    #[doc="<p>Lists the status of one or more table restore requests made using the <a>RestoreTableFromClusterSnapshot</a> API action. If you don't specify a value for the <code>TableRestoreRequestId</code> parameter, then <code>DescribeTableRestoreStatus</code> returns the status of all table restore requests ordered by the date and time of the request in ascending order. Otherwise <code>DescribeTableRestoreStatus</code> returns the status of the table specified by <code>TableRestoreRequestId</code>.</p>"]
+    /// <p>Lists the status of one or more table restore requests made using the <a>RestoreTableFromClusterSnapshot</a> API action. If you don't specify a value for the <code>TableRestoreRequestId</code> parameter, then <code>DescribeTableRestoreStatus</code> returns the status of all table restore requests ordered by the date and time of the request in ascending order. Otherwise <code>DescribeTableRestoreStatus</code> returns the status of the table specified by <code>TableRestoreRequestId</code>.</p>
     fn describe_table_restore_status(
         &self,
         input: &DescribeTableRestoreStatusMessage,
     ) -> Result<TableRestoreStatusMessage, DescribeTableRestoreStatusError>;
 
-    #[doc="<p>Returns a list of tags. You can return tags from a specific resource by specifying an ARN, or you can return all tags for a given type of resource, such as clusters, snapshots, and so on.</p> <p>The following are limitations for <code>DescribeTags</code>: </p> <ul> <li> <p>You cannot specify an ARN and a resource-type value together in the same request.</p> </li> <li> <p>You cannot use the <code>MaxRecords</code> and <code>Marker</code> parameters together with the ARN parameter.</p> </li> <li> <p>The <code>MaxRecords</code> parameter can be a range from 10 to 50 results to return in a request.</p> </li> </ul> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all resources that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all resources that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, resources are returned regardless of whether they have tag keys or values associated with them.</p>"]
+    /// <p>Returns a list of tags. You can return tags from a specific resource by specifying an ARN, or you can return all tags for a given type of resource, such as clusters, snapshots, and so on.</p> <p>The following are limitations for <code>DescribeTags</code>: </p> <ul> <li> <p>You cannot specify an ARN and a resource-type value together in the same request.</p> </li> <li> <p>You cannot use the <code>MaxRecords</code> and <code>Marker</code> parameters together with the ARN parameter.</p> </li> <li> <p>The <code>MaxRecords</code> parameter can be a range from 10 to 50 results to return in a request.</p> </li> </ul> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all resources that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all resources that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, resources are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_tags(
         &self,
         input: &DescribeTagsMessage,
     ) -> Result<TaggedResourceListMessage, DescribeTagsError>;
 
-    #[doc="<p>Stops logging information, such as queries and connection attempts, for the specified Amazon Redshift cluster.</p>"]
+    /// <p>Stops logging information, such as queries and connection attempts, for the specified Amazon Redshift cluster.</p>
     fn disable_logging(
         &self,
         input: &DisableLoggingMessage,
     ) -> Result<LoggingStatus, DisableLoggingError>;
 
-    #[doc="<p>Disables the automatic copying of snapshots from one region to another region for a specified cluster.</p> <p>If your cluster and its snapshots are encrypted using a customer master key (CMK) from AWS KMS, use <a>DeleteSnapshotCopyGrant</a> to delete the grant that grants Amazon Redshift permission to the CMK in the destination region. </p>"]
+    /// <p>Disables the automatic copying of snapshots from one region to another region for a specified cluster.</p> <p>If your cluster and its snapshots are encrypted using a customer master key (CMK) from AWS KMS, use <a>DeleteSnapshotCopyGrant</a> to delete the grant that grants Amazon Redshift permission to the CMK in the destination region. </p>
     fn disable_snapshot_copy(
         &self,
         input: &DisableSnapshotCopyMessage,
     ) -> Result<DisableSnapshotCopyResult, DisableSnapshotCopyError>;
 
-    #[doc="<p>Starts logging information, such as queries and connection attempts, for the specified Amazon Redshift cluster.</p>"]
+    /// <p>Starts logging information, such as queries and connection attempts, for the specified Amazon Redshift cluster.</p>
     fn enable_logging(
         &self,
         input: &EnableLoggingMessage,
     ) -> Result<LoggingStatus, EnableLoggingError>;
 
-    #[doc="<p>Enables the automatic copy of snapshots from one region to another region for a specified cluster.</p>"]
+    /// <p>Enables the automatic copy of snapshots from one region to another region for a specified cluster.</p>
     fn enable_snapshot_copy(
         &self,
         input: &EnableSnapshotCopyMessage,
     ) -> Result<EnableSnapshotCopyResult, EnableSnapshotCopyError>;
 
-    #[doc="<p>Returns a database user name and temporary password with temporary authorization to log in to an Amazon Redshift database. The action returns the database user name prefixed with <code>IAM:</code> if <code>AutoCreate</code> is <code>False</code> or <code>IAMA:</code> if <code>AutoCreate</code> is <code>True</code>. You can optionally specify one or more database user groups that the user will join at log in. By default, the temporary credentials expire in 900 seconds. You can optionally specify a duration between 900 seconds (15 minutes) and 3600 seconds (60 minutes). For more information, see Generating IAM Database User Credentials in the Amazon Redshift Cluster Management Guide.</p> <p>The IAM user or role that executes GetClusterCredentials must have an IAM policy attached that allows the <code>redshift:GetClusterCredentials</code> action with access to the <code>dbuser</code> resource on the cluster. The user name specified for <code>dbuser</code> in the IAM policy and the user name specified for the <code>DbUser</code> parameter must match.</p> <p>If the <code>DbGroups</code> parameter is specified, the IAM policy must allow the <code>redshift:JoinGroup</code> action with access to the listed <code>dbgroups</code>. </p> <p>In addition, if the <code>AutoCreate</code> parameter is set to <code>True</code>, then the policy must include the <code>redshift:CreateClusterUser</code> privilege.</p> <p>If the <code>DbName</code> parameter is specified, the IAM policy must allow access to the resource <code>dbname</code> for the specified database name. </p>"]
+    /// <p>Returns a database user name and temporary password with temporary authorization to log in to an Amazon Redshift database. The action returns the database user name prefixed with <code>IAM:</code> if <code>AutoCreate</code> is <code>False</code> or <code>IAMA:</code> if <code>AutoCreate</code> is <code>True</code>. You can optionally specify one or more database user groups that the user will join at log in. By default, the temporary credentials expire in 900 seconds. You can optionally specify a duration between 900 seconds (15 minutes) and 3600 seconds (60 minutes). For more information, see Generating IAM Database User Credentials in the Amazon Redshift Cluster Management Guide.</p> <p>The IAM user or role that executes GetClusterCredentials must have an IAM policy attached that allows the <code>redshift:GetClusterCredentials</code> action with access to the <code>dbuser</code> resource on the cluster. The user name specified for <code>dbuser</code> in the IAM policy and the user name specified for the <code>DbUser</code> parameter must match.</p> <p>If the <code>DbGroups</code> parameter is specified, the IAM policy must allow the <code>redshift:JoinGroup</code> action with access to the listed <code>dbgroups</code>. </p> <p>In addition, if the <code>AutoCreate</code> parameter is set to <code>True</code>, then the policy must include the <code>redshift:CreateClusterUser</code> privilege.</p> <p>If the <code>DbName</code> parameter is specified, the IAM policy must allow access to the resource <code>dbname</code> for the specified database name. </p>
     fn get_cluster_credentials(
         &self,
         input: &GetClusterCredentialsMessage,
     ) -> Result<ClusterCredentials, GetClusterCredentialsError>;
 
-    #[doc="<p>Modifies the settings for a cluster. For example, you can add another security or parameter group, update the preferred maintenance window, or change the master user password. Resetting a cluster password or modifying the security groups associated with a cluster do not need a reboot. However, modifying a parameter group requires a reboot for parameters to take effect. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>You can also change node type and the number of nodes to scale up or down the cluster. When resizing a cluster, you must specify both the number of nodes and the node type even if one of the parameters does not change.</p>"]
+    /// <p>Modifies the settings for a cluster. For example, you can add another security or parameter group, update the preferred maintenance window, or change the master user password. Resetting a cluster password or modifying the security groups associated with a cluster do not need a reboot. However, modifying a parameter group requires a reboot for parameters to take effect. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>You can also change node type and the number of nodes to scale up or down the cluster. When resizing a cluster, you must specify both the number of nodes and the node type even if one of the parameters does not change.</p>
     fn modify_cluster(
         &self,
         input: &ModifyClusterMessage,
     ) -> Result<ModifyClusterResult, ModifyClusterError>;
 
-    #[doc="<p>Modifies the list of AWS Identity and Access Management (IAM) roles that can be used by the cluster to access other AWS services.</p> <p>A cluster can have up to 10 IAM roles associated at any time.</p>"]
+    /// <p>Modifies the list of AWS Identity and Access Management (IAM) roles that can be used by the cluster to access other AWS services.</p> <p>A cluster can have up to 10 IAM roles associated at any time.</p>
     fn modify_cluster_iam_roles(
         &self,
         input: &ModifyClusterIamRolesMessage,
     ) -> Result<ModifyClusterIamRolesResult, ModifyClusterIamRolesError>;
 
-    #[doc="<p>Modifies the parameters of a parameter group.</p> <p> For more information about parameters and parameter groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Modifies the parameters of a parameter group.</p> <p> For more information about parameters and parameter groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn modify_cluster_parameter_group(
         &self,
         input: &ModifyClusterParameterGroupMessage,
     ) -> Result<ClusterParameterGroupNameMessage, ModifyClusterParameterGroupError>;
 
-    #[doc="<p>Modifies a cluster subnet group to include the specified list of VPC subnets. The operation replaces the existing list of subnets with the new list of subnets.</p>"]
+    /// <p>Modifies a cluster subnet group to include the specified list of VPC subnets. The operation replaces the existing list of subnets with the new list of subnets.</p>
     fn modify_cluster_subnet_group(
         &self,
         input: &ModifyClusterSubnetGroupMessage,
     ) -> Result<ModifyClusterSubnetGroupResult, ModifyClusterSubnetGroupError>;
 
-    #[doc = "<p>Modifies an existing Amazon Redshift event notification subscription.</p>"]
+    /// <p>Modifies an existing Amazon Redshift event notification subscription.</p>
     fn modify_event_subscription(
         &self,
         input: &ModifyEventSubscriptionMessage,
     ) -> Result<ModifyEventSubscriptionResult, ModifyEventSubscriptionError>;
 
-    #[doc="<p>Modifies the number of days to retain automated snapshots in the destination region after they are copied from the source region.</p>"]
+    /// <p>Modifies the number of days to retain automated snapshots in the destination region after they are copied from the source region.</p>
     fn modify_snapshot_copy_retention_period(
         &self,
         input: &ModifySnapshotCopyRetentionPeriodMessage,
     ) -> Result<ModifySnapshotCopyRetentionPeriodResult, ModifySnapshotCopyRetentionPeriodError>;
 
-    #[doc="<p>Allows you to purchase reserved nodes. Amazon Redshift offers a predefined set of reserved node offerings. You can purchase one or more of the offerings. You can call the <a>DescribeReservedNodeOfferings</a> API to obtain the available reserved node offerings. You can call this API by providing a specific reserved node offering and the number of nodes you want to reserve. </p> <p> For more information about reserved node offerings, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/purchase-reserved-node-instance.html\">Purchasing Reserved Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Allows you to purchase reserved nodes. Amazon Redshift offers a predefined set of reserved node offerings. You can purchase one or more of the offerings. You can call the <a>DescribeReservedNodeOfferings</a> API to obtain the available reserved node offerings. You can call this API by providing a specific reserved node offering and the number of nodes you want to reserve. </p> <p> For more information about reserved node offerings, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/purchase-reserved-node-instance.html">Purchasing Reserved Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn purchase_reserved_node_offering(
         &self,
         input: &PurchaseReservedNodeOfferingMessage,
     ) -> Result<PurchaseReservedNodeOfferingResult, PurchaseReservedNodeOfferingError>;
 
-    #[doc="<p>Reboots a cluster. This action is taken as soon as possible. It results in a momentary outage to the cluster, during which the cluster status is set to <code>rebooting</code>. A cluster event is created when the reboot is completed. Any pending cluster modifications (see <a>ModifyCluster</a>) are applied at this reboot. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>"]
+    /// <p>Reboots a cluster. This action is taken as soon as possible. It results in a momentary outage to the cluster, during which the cluster status is set to <code>rebooting</code>. A cluster event is created when the reboot is completed. Any pending cluster modifications (see <a>ModifyCluster</a>) are applied at this reboot. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     fn reboot_cluster(
         &self,
         input: &RebootClusterMessage,
     ) -> Result<RebootClusterResult, RebootClusterError>;
 
-    #[doc="<p>Sets one or more parameters of the specified parameter group to their default values and sets the source values of the parameters to \"engine-default\". To reset the entire parameter group specify the <i>ResetAllParameters</i> parameter. For parameter changes to take effect you must reboot any associated clusters. </p>"]
+    /// <p>Sets one or more parameters of the specified parameter group to their default values and sets the source values of the parameters to "engine-default". To reset the entire parameter group specify the <i>ResetAllParameters</i> parameter. For parameter changes to take effect you must reboot any associated clusters. </p>
     fn reset_cluster_parameter_group(
         &self,
         input: &ResetClusterParameterGroupMessage,
     ) -> Result<ClusterParameterGroupNameMessage, ResetClusterParameterGroupError>;
 
-    #[doc="<p>Creates a new cluster from a snapshot. By default, Amazon Redshift creates the resulting cluster with the same configuration as the original cluster from which the snapshot was created, except that the new cluster is created with the default cluster security and parameter groups. After Amazon Redshift creates the cluster, you can use the <a>ModifyCluster</a> API to associate a different security group and different parameter group with the restored cluster. If you are using a DS node type, you can also choose to change to another DS node type of the same size during restore.</p> <p>If you restore a cluster into a VPC, you must provide a cluster subnet group where you want the cluster restored.</p> <p> For more information about working with snapshots, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html\">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Creates a new cluster from a snapshot. By default, Amazon Redshift creates the resulting cluster with the same configuration as the original cluster from which the snapshot was created, except that the new cluster is created with the default cluster security and parameter groups. After Amazon Redshift creates the cluster, you can use the <a>ModifyCluster</a> API to associate a different security group and different parameter group with the restored cluster. If you are using a DS node type, you can also choose to change to another DS node type of the same size during restore.</p> <p>If you restore a cluster into a VPC, you must provide a cluster subnet group where you want the cluster restored.</p> <p> For more information about working with snapshots, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn restore_from_cluster_snapshot(
         &self,
         input: &RestoreFromClusterSnapshotMessage,
     ) -> Result<RestoreFromClusterSnapshotResult, RestoreFromClusterSnapshotError>;
 
-    #[doc="<p>Creates a new table from a table in an Amazon Redshift cluster snapshot. You must create the new table within the Amazon Redshift cluster that the snapshot was taken from.</p> <p>You cannot use <code>RestoreTableFromClusterSnapshot</code> to restore a table with the same name as an existing table in an Amazon Redshift cluster. That is, you cannot overwrite an existing table in a cluster with a restored table. If you want to replace your original table with a new, restored table, then rename or drop your original table before you call <code>RestoreTableFromClusterSnapshot</code>. When you have renamed your original table, then you can pass the original name of the table as the <code>NewTableName</code> parameter value in the call to <code>RestoreTableFromClusterSnapshot</code>. This way, you can replace the original table with the table created from the snapshot.</p>"]
+    /// <p>Creates a new table from a table in an Amazon Redshift cluster snapshot. You must create the new table within the Amazon Redshift cluster that the snapshot was taken from.</p> <p>You cannot use <code>RestoreTableFromClusterSnapshot</code> to restore a table with the same name as an existing table in an Amazon Redshift cluster. That is, you cannot overwrite an existing table in a cluster with a restored table. If you want to replace your original table with a new, restored table, then rename or drop your original table before you call <code>RestoreTableFromClusterSnapshot</code>. When you have renamed your original table, then you can pass the original name of the table as the <code>NewTableName</code> parameter value in the call to <code>RestoreTableFromClusterSnapshot</code>. This way, you can replace the original table with the table created from the snapshot.</p>
     fn restore_table_from_cluster_snapshot(
         &self,
         input: &RestoreTableFromClusterSnapshotMessage,
     ) -> Result<RestoreTableFromClusterSnapshotResult, RestoreTableFromClusterSnapshotError>;
 
-    #[doc="<p>Revokes an ingress rule in an Amazon Redshift security group for a previously authorized IP range or Amazon EC2 security group. To add an ingress rule, see <a>AuthorizeClusterSecurityGroupIngress</a>. For information about managing security groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html\">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>"]
+    /// <p>Revokes an ingress rule in an Amazon Redshift security group for a previously authorized IP range or Amazon EC2 security group. To add an ingress rule, see <a>AuthorizeClusterSecurityGroupIngress</a>. For information about managing security groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     fn revoke_cluster_security_group_ingress(
         &self,
         input: &RevokeClusterSecurityGroupIngressMessage,
     ) -> Result<RevokeClusterSecurityGroupIngressResult, RevokeClusterSecurityGroupIngressError>;
 
-    #[doc="<p>Removes the ability of the specified AWS customer account to restore the specified snapshot. If the account is currently restoring the snapshot, the restore will run to completion.</p> <p> For more information about working with snapshots, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html\">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Removes the ability of the specified AWS customer account to restore the specified snapshot. If the account is currently restoring the snapshot, the restore will run to completion.</p> <p> For more information about working with snapshots, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn revoke_snapshot_access(
         &self,
         input: &RevokeSnapshotAccessMessage,
     ) -> Result<RevokeSnapshotAccessResult, RevokeSnapshotAccessError>;
 
-    #[doc = "<p>Rotates the encryption keys for a cluster.</p>"]
+    /// <p>Rotates the encryption keys for a cluster.</p>
     fn rotate_encryption_key(
         &self,
         input: &RotateEncryptionKeyMessage,
@@ -17224,7 +17224,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Adds an inbound (ingress) rule to an Amazon Redshift security group. Depending on whether the application accessing your cluster is running on the Internet or an Amazon EC2 instance, you can authorize inbound access to either a Classless Interdomain Routing (CIDR)/Internet Protocol (IP) range or to an Amazon EC2 security group. You can add as many as 20 ingress rules to an Amazon Redshift security group.</p> <p>If you authorize access to an Amazon EC2 security group, specify <i>EC2SecurityGroupName</i> and <i>EC2SecurityGroupOwnerId</i>. The Amazon EC2 security group and Amazon Redshift cluster must be in the same AWS region. </p> <p>If you authorize access to a CIDR/IP address range, specify <i>CIDRIP</i>. For an overview of CIDR blocks, see the Wikipedia article on <a href=\"http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing\">Classless Inter-Domain Routing</a>. </p> <p>You must also associate the security group with a cluster so that clients running on these IP addresses or the EC2 instance are authorized to connect to the cluster. For information about managing security groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html\">Working with Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Adds an inbound (ingress) rule to an Amazon Redshift security group. Depending on whether the application accessing your cluster is running on the Internet or an Amazon EC2 instance, you can authorize inbound access to either a Classless Interdomain Routing (CIDR)/Internet Protocol (IP) range or to an Amazon EC2 security group. You can add as many as 20 ingress rules to an Amazon Redshift security group.</p> <p>If you authorize access to an Amazon EC2 security group, specify <i>EC2SecurityGroupName</i> and <i>EC2SecurityGroupOwnerId</i>. The Amazon EC2 security group and Amazon Redshift cluster must be in the same AWS region. </p> <p>If you authorize access to a CIDR/IP address range, specify <i>CIDRIP</i>. For an overview of CIDR blocks, see the Wikipedia article on <a href="http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Classless Inter-Domain Routing</a>. </p> <p>You must also associate the security group with a cluster so that clients running on these IP addresses or the EC2 instance are authorized to connect to the cluster. For information about managing security groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Working with Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn authorize_cluster_security_group_ingress(
         &self,
         input: &AuthorizeClusterSecurityGroupIngressMessage,
@@ -17278,7 +17278,7 @@ where
         }
     }
 
-    #[doc="<p>Authorizes the specified AWS customer account to restore the specified snapshot.</p> <p> For more information about working with snapshots, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html\">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Authorizes the specified AWS customer account to restore the specified snapshot.</p> <p> For more information about working with snapshots, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn authorize_snapshot_access(
         &self,
         input: &AuthorizeSnapshotAccessMessage,
@@ -17329,7 +17329,7 @@ where
         }
     }
 
-    #[doc="<p>Copies the specified automated cluster snapshot to a new manual cluster snapshot. The source must be an automated snapshot and it must be in the available state.</p> <p>When you delete a cluster, Amazon Redshift deletes any automated snapshots of the cluster. Also, when the retention period of the snapshot expires, Amazon Redshift automatically deletes it. If you want to keep an automated snapshot for a longer period, you can make a manual copy of the snapshot. Manual snapshots are retained until you delete them.</p> <p> For more information about working with snapshots, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html\">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Copies the specified automated cluster snapshot to a new manual cluster snapshot. The source must be an automated snapshot and it must be in the available state.</p> <p>When you delete a cluster, Amazon Redshift deletes any automated snapshots of the cluster. Also, when the retention period of the snapshot expires, Amazon Redshift automatically deletes it. If you want to keep an automated snapshot for a longer period, you can make a manual copy of the snapshot. Manual snapshots are retained until you delete them.</p> <p> For more information about working with snapshots, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn copy_cluster_snapshot(
         &self,
         input: &CopyClusterSnapshotMessage,
@@ -17380,7 +17380,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new cluster.</p> <p>To create the cluster in Virtual Private Cloud (VPC), you must provide a cluster subnet group name. The cluster subnet group identifies the subnets of your VPC that Amazon Redshift uses when creating the cluster. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Creates a new cluster.</p> <p>To create the cluster in Virtual Private Cloud (VPC), you must provide a cluster subnet group name. The cluster subnet group identifies the subnets of your VPC that Amazon Redshift uses when creating the cluster. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn create_cluster(
         &self,
         input: &CreateClusterMessage,
@@ -17431,7 +17431,7 @@ where
         }
     }
 
-    #[doc="<p>Creates an Amazon Redshift parameter group.</p> <p>Creating parameter groups is independent of creating clusters. You can associate a cluster with a parameter group when you create the cluster. You can also associate an existing cluster with a parameter group after the cluster is created by using <a>ModifyCluster</a>. </p> <p>Parameters in the parameter group define specific behavior that applies to the databases you create on the cluster. For more information about parameters and parameter groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Creates an Amazon Redshift parameter group.</p> <p>Creating parameter groups is independent of creating clusters. You can associate a cluster with a parameter group when you create the cluster. You can also associate an existing cluster with a parameter group after the cluster is created by using <a>ModifyCluster</a>. </p> <p>Parameters in the parameter group define specific behavior that applies to the databases you create on the cluster. For more information about parameters and parameter groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn create_cluster_parameter_group(
         &self,
         input: &CreateClusterParameterGroupMessage,
@@ -17482,7 +17482,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new Amazon Redshift security group. You use security groups to control access to non-VPC clusters.</p> <p> For information about managing security groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html\">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Creates a new Amazon Redshift security group. You use security groups to control access to non-VPC clusters.</p> <p> For information about managing security groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn create_cluster_security_group(
         &self,
         input: &CreateClusterSecurityGroupMessage,
@@ -17533,7 +17533,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a manual snapshot of the specified cluster. The cluster must be in the <code>available</code> state. </p> <p> For more information about working with snapshots, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html\">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Creates a manual snapshot of the specified cluster. The cluster must be in the <code>available</code> state. </p> <p> For more information about working with snapshots, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn create_cluster_snapshot(
         &self,
         input: &CreateClusterSnapshotMessage,
@@ -17584,7 +17584,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new Amazon Redshift subnet group. You must provide a list of one or more subnets in your existing Amazon Virtual Private Cloud (Amazon VPC) when creating Amazon Redshift subnet group.</p> <p> For information about subnet groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-cluster-subnet-groups.html\">Amazon Redshift Cluster Subnet Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Creates a new Amazon Redshift subnet group. You must provide a list of one or more subnets in your existing Amazon Virtual Private Cloud (Amazon VPC) when creating Amazon Redshift subnet group.</p> <p> For information about subnet groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-cluster-subnet-groups.html">Amazon Redshift Cluster Subnet Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn create_cluster_subnet_group(
         &self,
         input: &CreateClusterSubnetGroupMessage,
@@ -17635,7 +17635,7 @@ where
         }
     }
 
-    #[doc="<p>Creates an Amazon Redshift event notification subscription. This action requires an ARN (Amazon Resource Name) of an Amazon SNS topic created by either the Amazon Redshift console, the Amazon SNS console, or the Amazon SNS API. To obtain an ARN with Amazon SNS, you must create a topic in Amazon SNS and subscribe to the topic. The ARN is displayed in the SNS console.</p> <p>You can specify the source type, and lists of Amazon Redshift source IDs, event categories, and event severities. Notifications will be sent for all events you want that match those criteria. For example, you can specify source type = cluster, source ID = my-cluster-1 and mycluster2, event categories = Availability, Backup, and severity = ERROR. The subscription will only send notifications for those ERROR events in the Availability and Backup categories for the specified clusters.</p> <p>If you specify both the source type and source IDs, such as source type = cluster and source identifier = my-cluster-1, notifications will be sent for all the cluster events for my-cluster-1. If you specify a source type but do not specify a source identifier, you will receive notice of the events for the objects of that type in your AWS account. If you do not specify either the SourceType nor the SourceIdentifier, you will be notified of events generated from all Amazon Redshift sources belonging to your AWS account. You must specify a source type if you specify a source ID.</p>"]
+    /// <p>Creates an Amazon Redshift event notification subscription. This action requires an ARN (Amazon Resource Name) of an Amazon SNS topic created by either the Amazon Redshift console, the Amazon SNS console, or the Amazon SNS API. To obtain an ARN with Amazon SNS, you must create a topic in Amazon SNS and subscribe to the topic. The ARN is displayed in the SNS console.</p> <p>You can specify the source type, and lists of Amazon Redshift source IDs, event categories, and event severities. Notifications will be sent for all events you want that match those criteria. For example, you can specify source type = cluster, source ID = my-cluster-1 and mycluster2, event categories = Availability, Backup, and severity = ERROR. The subscription will only send notifications for those ERROR events in the Availability and Backup categories for the specified clusters.</p> <p>If you specify both the source type and source IDs, such as source type = cluster and source identifier = my-cluster-1, notifications will be sent for all the cluster events for my-cluster-1. If you specify a source type but do not specify a source identifier, you will receive notice of the events for the objects of that type in your AWS account. If you do not specify either the SourceType nor the SourceIdentifier, you will be notified of events generated from all Amazon Redshift sources belonging to your AWS account. You must specify a source type if you specify a source ID.</p>
     fn create_event_subscription(
         &self,
         input: &CreateEventSubscriptionMessage,
@@ -17686,7 +17686,7 @@ where
         }
     }
 
-    #[doc="<p>Creates an HSM client certificate that an Amazon Redshift cluster will use to connect to the client's HSM in order to store and retrieve the keys used to encrypt the cluster databases.</p> <p>The command returns a public key, which you must store in the HSM. In addition to creating the HSM certificate, you must create an Amazon Redshift HSM configuration that provides a cluster the information needed to store and use encryption keys in the HSM. For more information, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-HSM.html\">Hardware Security Modules</a> in the Amazon Redshift Cluster Management Guide.</p>"]
+    /// <p>Creates an HSM client certificate that an Amazon Redshift cluster will use to connect to the client's HSM in order to store and retrieve the keys used to encrypt the cluster databases.</p> <p>The command returns a public key, which you must store in the HSM. In addition to creating the HSM certificate, you must create an Amazon Redshift HSM configuration that provides a cluster the information needed to store and use encryption keys in the HSM. For more information, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-HSM.html">Hardware Security Modules</a> in the Amazon Redshift Cluster Management Guide.</p>
     fn create_hsm_client_certificate(
         &self,
         input: &CreateHsmClientCertificateMessage,
@@ -17737,7 +17737,7 @@ where
         }
     }
 
-    #[doc="<p>Creates an HSM configuration that contains the information required by an Amazon Redshift cluster to store and use database encryption keys in a Hardware Security Module (HSM). After creating the HSM configuration, you can specify it as a parameter when creating a cluster. The cluster will then store its encryption keys in the HSM.</p> <p>In addition to creating an HSM configuration, you must also create an HSM client certificate. For more information, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-HSM.html\">Hardware Security Modules</a> in the Amazon Redshift Cluster Management Guide.</p>"]
+    /// <p>Creates an HSM configuration that contains the information required by an Amazon Redshift cluster to store and use database encryption keys in a Hardware Security Module (HSM). After creating the HSM configuration, you can specify it as a parameter when creating a cluster. The cluster will then store its encryption keys in the HSM.</p> <p>In addition to creating an HSM configuration, you must also create an HSM client certificate. For more information, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-HSM.html">Hardware Security Modules</a> in the Amazon Redshift Cluster Management Guide.</p>
     fn create_hsm_configuration(
         &self,
         input: &CreateHsmConfigurationMessage,
@@ -17788,7 +17788,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a snapshot copy grant that permits Amazon Redshift to use a customer master key (CMK) from AWS Key Management Service (AWS KMS) to encrypt copied snapshots in a destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html\">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>"]
+    /// <p>Creates a snapshot copy grant that permits Amazon Redshift to use a customer master key (CMK) from AWS Key Management Service (AWS KMS) to encrypt copied snapshots in a destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     fn create_snapshot_copy_grant(
         &self,
         input: &CreateSnapshotCopyGrantMessage,
@@ -17839,7 +17839,7 @@ where
         }
     }
 
-    #[doc="<p>Adds one or more tags to a specified resource.</p> <p>A resource can have up to 10 tags. If you try to create more than 10 tags for a resource, you will receive an error and the attempt will fail.</p> <p>If you specify a key that already exists for the resource, the value for that key will be updated with the new value.</p>"]
+    /// <p>Adds one or more tags to a specified resource.</p> <p>A resource can have up to 10 tags. If you try to create more than 10 tags for a resource, you will receive an error and the attempt will fail.</p> <p>If you specify a key that already exists for the resource, the value for that key will be updated with the new value.</p>
     fn create_tags(&self, input: &CreateTagsMessage) -> Result<(), CreateTagsError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
@@ -17866,7 +17866,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a previously provisioned cluster. A successful response from the web service indicates that the request was received correctly. Use <a>DescribeClusters</a> to monitor the status of the deletion. The delete operation cannot be canceled or reverted once submitted. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you want to shut down the cluster and retain it for future use, set <i>SkipFinalClusterSnapshot</i> to <code>false</code> and specify a name for <i>FinalClusterSnapshotIdentifier</i>. You can later restore this snapshot to resume using the cluster. If a final cluster snapshot is requested, the status of the cluster will be \"final-snapshot\" while the snapshot is being taken, then it's \"deleting\" once Amazon Redshift begins deleting the cluster. </p> <p> For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Deletes a previously provisioned cluster. A successful response from the web service indicates that the request was received correctly. Use <a>DescribeClusters</a> to monitor the status of the deletion. The delete operation cannot be canceled or reverted once submitted. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you want to shut down the cluster and retain it for future use, set <i>SkipFinalClusterSnapshot</i> to <code>false</code> and specify a name for <i>FinalClusterSnapshotIdentifier</i>. You can later restore this snapshot to resume using the cluster. If a final cluster snapshot is requested, the status of the cluster will be "final-snapshot" while the snapshot is being taken, then it's "deleting" once Amazon Redshift begins deleting the cluster. </p> <p> For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn delete_cluster(
         &self,
         input: &DeleteClusterMessage,
@@ -17917,7 +17917,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a specified Amazon Redshift parameter group.</p> <note> <p>You cannot delete a parameter group if it is associated with a cluster.</p> </note>"]
+    /// <p><p>Deletes a specified Amazon Redshift parameter group.</p> <note> <p>You cannot delete a parameter group if it is associated with a cluster.</p> </note></p>
     fn delete_cluster_parameter_group(
         &self,
         input: &DeleteClusterParameterGroupMessage,
@@ -17947,7 +17947,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes an Amazon Redshift security group.</p> <note> <p>You cannot delete a security group that is associated with any clusters. You cannot delete the default security group.</p> </note> <p> For information about managing security groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html\">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Deletes an Amazon Redshift security group.</p> <note> <p>You cannot delete a security group that is associated with any clusters. You cannot delete the default security group.</p> </note> <p> For information about managing security groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn delete_cluster_security_group(
         &self,
         input: &DeleteClusterSecurityGroupMessage,
@@ -17977,7 +17977,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified manual snapshot. The snapshot must be in the <code>available</code> state, with no other users authorized to access the snapshot. </p> <p>Unlike automated snapshots, manual snapshots are retained even after you delete your cluster. Amazon Redshift does not delete your manual snapshots. You must delete manual snapshot explicitly to avoid getting charged. If other accounts are authorized to access the snapshot, you must revoke all of the authorizations before you can delete the snapshot.</p>"]
+    /// <p>Deletes the specified manual snapshot. The snapshot must be in the <code>available</code> state, with no other users authorized to access the snapshot. </p> <p>Unlike automated snapshots, manual snapshots are retained even after you delete your cluster. Amazon Redshift does not delete your manual snapshots. You must delete manual snapshot explicitly to avoid getting charged. If other accounts are authorized to access the snapshot, you must revoke all of the authorizations before you can delete the snapshot.</p>
     fn delete_cluster_snapshot(
         &self,
         input: &DeleteClusterSnapshotMessage,
@@ -18028,7 +18028,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the specified cluster subnet group.</p>"]
+    /// <p>Deletes the specified cluster subnet group.</p>
     fn delete_cluster_subnet_group(
         &self,
         input: &DeleteClusterSubnetGroupMessage,
@@ -18058,7 +18058,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes an Amazon Redshift event notification subscription.</p>"]
+    /// <p>Deletes an Amazon Redshift event notification subscription.</p>
     fn delete_event_subscription(
         &self,
         input: &DeleteEventSubscriptionMessage,
@@ -18088,7 +18088,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the specified HSM client certificate.</p>"]
+    /// <p>Deletes the specified HSM client certificate.</p>
     fn delete_hsm_client_certificate(
         &self,
         input: &DeleteHsmClientCertificateMessage,
@@ -18118,7 +18118,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the specified Amazon Redshift HSM configuration.</p>"]
+    /// <p>Deletes the specified Amazon Redshift HSM configuration.</p>
     fn delete_hsm_configuration(
         &self,
         input: &DeleteHsmConfigurationMessage,
@@ -18148,7 +18148,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the specified snapshot copy grant.</p>"]
+    /// <p>Deletes the specified snapshot copy grant.</p>
     fn delete_snapshot_copy_grant(
         &self,
         input: &DeleteSnapshotCopyGrantMessage,
@@ -18178,7 +18178,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a tag or tags from a resource. You must provide the ARN of the resource from which you want to delete the tag or tags.</p>"]
+    /// <p>Deletes a tag or tags from a resource. You must provide the ARN of the resource from which you want to delete the tag or tags.</p>
     fn delete_tags(&self, input: &DeleteTagsMessage) -> Result<(), DeleteTagsError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
@@ -18205,7 +18205,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list of Amazon Redshift parameter groups, including parameter groups you created and the default parameter group. For each parameter group, the response includes the parameter group name, description, and parameter group family name. You can optionally specify a name to retrieve the description of a specific parameter group.</p> <p> For more information about parameters and parameter groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all parameter groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all parameter groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, parameter groups are returned regardless of whether they have tag keys or values associated with them.</p>"]
+    /// <p>Returns a list of Amazon Redshift parameter groups, including parameter groups you created and the default parameter group. For each parameter group, the response includes the parameter group name, description, and parameter group family name. You can optionally specify a name to retrieve the description of a specific parameter group.</p> <p> For more information about parameters and parameter groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all parameter groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all parameter groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, parameter groups are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_cluster_parameter_groups(
         &self,
         input: &DescribeClusterParameterGroupsMessage,
@@ -18256,7 +18256,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a detailed list of parameters contained within the specified Amazon Redshift parameter group. For each parameter the response includes information such as parameter name, description, data type, value, whether the parameter value is modifiable, and so on.</p> <p>You can specify <i>source</i> filter to retrieve parameters of only specific type. For example, to retrieve parameters that were modified by a user action such as from <a>ModifyClusterParameterGroup</a>, you can specify <i>source</i> equal to <i>user</i>.</p> <p> For more information about parameters and parameter groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Returns a detailed list of parameters contained within the specified Amazon Redshift parameter group. For each parameter the response includes information such as parameter name, description, data type, value, whether the parameter value is modifiable, and so on.</p> <p>You can specify <i>source</i> filter to retrieve parameters of only specific type. For example, to retrieve parameters that were modified by a user action such as from <a>ModifyClusterParameterGroup</a>, you can specify <i>source</i> equal to <i>user</i>.</p> <p> For more information about parameters and parameter groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn describe_cluster_parameters(
         &self,
         input: &DescribeClusterParametersMessage,
@@ -18307,7 +18307,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about Amazon Redshift security groups. If the name of a security group is specified, the response will contain only information about only that security group.</p> <p> For information about managing security groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html\">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all security groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all security groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, security groups are returned regardless of whether they have tag keys or values associated with them.</p>"]
+    /// <p>Returns information about Amazon Redshift security groups. If the name of a security group is specified, the response will contain only information about only that security group.</p> <p> For information about managing security groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all security groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all security groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, security groups are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_cluster_security_groups(
         &self,
         input: &DescribeClusterSecurityGroupsMessage,
@@ -18358,7 +18358,7 @@ where
         }
     }
 
-    #[doc="<p>Returns one or more snapshot objects, which contain metadata about your cluster snapshots. By default, this operation returns information about all snapshots of all clusters that are owned by you AWS customer account. No information is returned for snapshots owned by inactive AWS customer accounts.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all snapshots that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all snapshots that have any combination of those values are returned. Only snapshots that you own are returned in the response; shared snapshots are not returned with the tag key and tag value request parameters.</p> <p>If both tag keys and values are omitted from the request, snapshots are returned regardless of whether they have tag keys or values associated with them.</p>"]
+    /// <p>Returns one or more snapshot objects, which contain metadata about your cluster snapshots. By default, this operation returns information about all snapshots of all clusters that are owned by you AWS customer account. No information is returned for snapshots owned by inactive AWS customer accounts.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all snapshots that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all snapshots that have any combination of those values are returned. Only snapshots that you own are returned in the response; shared snapshots are not returned with the tag key and tag value request parameters.</p> <p>If both tag keys and values are omitted from the request, snapshots are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_cluster_snapshots(
         &self,
         input: &DescribeClusterSnapshotsMessage,
@@ -18409,7 +18409,7 @@ where
         }
     }
 
-    #[doc="<p>Returns one or more cluster subnet group objects, which contain metadata about your cluster subnet groups. By default, this operation returns information about all cluster subnet groups that are defined in you AWS account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all subnet groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all subnet groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, subnet groups are returned regardless of whether they have tag keys or values associated with them.</p>"]
+    /// <p>Returns one or more cluster subnet group objects, which contain metadata about your cluster subnet groups. By default, this operation returns information about all cluster subnet groups that are defined in you AWS account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all subnet groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all subnet groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, subnet groups are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_cluster_subnet_groups(
         &self,
         input: &DescribeClusterSubnetGroupsMessage,
@@ -18460,7 +18460,7 @@ where
         }
     }
 
-    #[doc="<p>Returns descriptions of the available Amazon Redshift cluster versions. You can call this operation even before creating any clusters to learn more about the Amazon Redshift versions. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Returns descriptions of the available Amazon Redshift cluster versions. You can call this operation even before creating any clusters to learn more about the Amazon Redshift versions. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn describe_cluster_versions(
         &self,
         input: &DescribeClusterVersionsMessage,
@@ -18511,7 +18511,7 @@ where
         }
     }
 
-    #[doc="<p>Returns properties of provisioned clusters including general cluster properties, cluster database properties, maintenance and backup properties, and security and access properties. This operation supports pagination. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all clusters that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all clusters that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, clusters are returned regardless of whether they have tag keys or values associated with them.</p>"]
+    /// <p>Returns properties of provisioned clusters including general cluster properties, cluster database properties, maintenance and backup properties, and security and access properties. This operation supports pagination. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all clusters that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all clusters that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, clusters are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_clusters(
         &self,
         input: &DescribeClustersMessage,
@@ -18562,7 +18562,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list of parameter settings for the specified parameter group family.</p> <p> For more information about parameters and parameter groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Returns a list of parameter settings for the specified parameter group family.</p> <p> For more information about parameters and parameter groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn describe_default_cluster_parameters(
         &self,
         input: &DescribeDefaultClusterParametersMessage,
@@ -18615,7 +18615,7 @@ where
         }
     }
 
-    #[doc="<p>Displays a list of event categories for all event source types, or for a specified source type. For a list of the event categories and source types, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-event-notifications.html\">Amazon Redshift Event Notifications</a>.</p>"]
+    /// <p>Displays a list of event categories for all event source types, or for a specified source type. For a list of the event categories and source types, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-event-notifications.html">Amazon Redshift Event Notifications</a>.</p>
     fn describe_event_categories(
         &self,
         input: &DescribeEventCategoriesMessage,
@@ -18666,7 +18666,7 @@ where
         }
     }
 
-    #[doc="<p>Lists descriptions of all the Amazon Redshift event notifications subscription for a customer account. If you specify a subscription name, lists the description for that subscription.</p>"]
+    /// <p>Lists descriptions of all the Amazon Redshift event notifications subscription for a customer account. If you specify a subscription name, lists the description for that subscription.</p>
     fn describe_event_subscriptions(
         &self,
         input: &DescribeEventSubscriptionsMessage,
@@ -18717,7 +18717,7 @@ where
         }
     }
 
-    #[doc="<p>Returns events related to clusters, security groups, snapshots, and parameter groups for the past 14 days. Events specific to a particular cluster, security group, snapshot or parameter group can be obtained by providing the name as a parameter. By default, the past hour of events are returned.</p>"]
+    /// <p>Returns events related to clusters, security groups, snapshots, and parameter groups for the past 14 days. Events specific to a particular cluster, security group, snapshot or parameter group can be obtained by providing the name as a parameter. By default, the past hour of events are returned.</p>
     fn describe_events(
         &self,
         input: &DescribeEventsMessage,
@@ -18768,7 +18768,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about the specified HSM client certificate. If no certificate ID is specified, returns information about all the HSM certificates owned by your AWS customer account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all HSM client certificates that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all HSM client certificates that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, HSM client certificates are returned regardless of whether they have tag keys or values associated with them.</p>"]
+    /// <p>Returns information about the specified HSM client certificate. If no certificate ID is specified, returns information about all the HSM certificates owned by your AWS customer account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all HSM client certificates that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all HSM client certificates that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, HSM client certificates are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_hsm_client_certificates(
         &self,
         input: &DescribeHsmClientCertificatesMessage,
@@ -18819,7 +18819,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about the specified Amazon Redshift HSM configuration. If no configuration ID is specified, returns information about all the HSM configurations owned by your AWS customer account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all HSM connections that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all HSM connections that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, HSM connections are returned regardless of whether they have tag keys or values associated with them.</p>"]
+    /// <p>Returns information about the specified Amazon Redshift HSM configuration. If no configuration ID is specified, returns information about all the HSM configurations owned by your AWS customer account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all HSM connections that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all HSM connections that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, HSM connections are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_hsm_configurations(
         &self,
         input: &DescribeHsmConfigurationsMessage,
@@ -18870,7 +18870,7 @@ where
         }
     }
 
-    #[doc="<p>Describes whether information, such as queries and connection attempts, is being logged for the specified Amazon Redshift cluster.</p>"]
+    /// <p>Describes whether information, such as queries and connection attempts, is being logged for the specified Amazon Redshift cluster.</p>
     fn describe_logging_status(
         &self,
         input: &DescribeLoggingStatusMessage,
@@ -18921,7 +18921,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list of orderable cluster options. Before you create a new cluster you can use this operation to find what options are available, such as the EC2 Availability Zones (AZ) in the specific AWS region that you can specify, and the node types you can request. The node types differ by available storage, memory, CPU and price. With the cost involved you might want to obtain a list of cluster options in the specific region and specify values when creating a cluster. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Returns a list of orderable cluster options. Before you create a new cluster you can use this operation to find what options are available, such as the EC2 Availability Zones (AZ) in the specific AWS region that you can specify, and the node types you can request. The node types differ by available storage, memory, CPU and price. With the cost involved you might want to obtain a list of cluster options in the specific region and specify values when creating a cluster. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn describe_orderable_cluster_options(
         &self,
         input: &DescribeOrderableClusterOptionsMessage,
@@ -18972,7 +18972,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list of the available reserved node offerings by Amazon Redshift with their descriptions including the node type, the fixed and recurring costs of reserving the node and duration the node will be reserved for you. These descriptions help you determine which reserve node offering you want to purchase. You then use the unique offering ID in you call to <a>PurchaseReservedNodeOffering</a> to reserve one or more nodes for your Amazon Redshift cluster. </p> <p> For more information about reserved node offerings, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/purchase-reserved-node-instance.html\">Purchasing Reserved Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Returns a list of the available reserved node offerings by Amazon Redshift with their descriptions including the node type, the fixed and recurring costs of reserving the node and duration the node will be reserved for you. These descriptions help you determine which reserve node offering you want to purchase. You then use the unique offering ID in you call to <a>PurchaseReservedNodeOffering</a> to reserve one or more nodes for your Amazon Redshift cluster. </p> <p> For more information about reserved node offerings, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/purchase-reserved-node-instance.html">Purchasing Reserved Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn describe_reserved_node_offerings(
         &self,
         input: &DescribeReservedNodeOfferingsMessage,
@@ -19023,7 +19023,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns the descriptions of the reserved nodes.</p>"]
+    /// <p>Returns the descriptions of the reserved nodes.</p>
     fn describe_reserved_nodes(
         &self,
         input: &DescribeReservedNodesMessage,
@@ -19074,7 +19074,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about the last resize operation for the specified cluster. If no resize operation has ever been initiated for the specified cluster, a <code>HTTP 404</code> error is returned. If a resize operation was initiated and completed, the status of the resize remains as <code>SUCCEEDED</code> until the next resize. </p> <p>A resize operation can be requested using <a>ModifyCluster</a> and specifying a different number or type of nodes for the cluster. </p>"]
+    /// <p>Returns information about the last resize operation for the specified cluster. If no resize operation has ever been initiated for the specified cluster, a <code>HTTP 404</code> error is returned. If a resize operation was initiated and completed, the status of the resize remains as <code>SUCCEEDED</code> until the next resize. </p> <p>A resize operation can be requested using <a>ModifyCluster</a> and specifying a different number or type of nodes for the cluster. </p>
     fn describe_resize(
         &self,
         input: &DescribeResizeMessage,
@@ -19125,7 +19125,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list of snapshot copy grants owned by the AWS account in the destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html\">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>"]
+    /// <p>Returns a list of snapshot copy grants owned by the AWS account in the destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     fn describe_snapshot_copy_grants(
         &self,
         input: &DescribeSnapshotCopyGrantsMessage,
@@ -19176,7 +19176,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the status of one or more table restore requests made using the <a>RestoreTableFromClusterSnapshot</a> API action. If you don't specify a value for the <code>TableRestoreRequestId</code> parameter, then <code>DescribeTableRestoreStatus</code> returns the status of all table restore requests ordered by the date and time of the request in ascending order. Otherwise <code>DescribeTableRestoreStatus</code> returns the status of the table specified by <code>TableRestoreRequestId</code>.</p>"]
+    /// <p>Lists the status of one or more table restore requests made using the <a>RestoreTableFromClusterSnapshot</a> API action. If you don't specify a value for the <code>TableRestoreRequestId</code> parameter, then <code>DescribeTableRestoreStatus</code> returns the status of all table restore requests ordered by the date and time of the request in ascending order. Otherwise <code>DescribeTableRestoreStatus</code> returns the status of the table specified by <code>TableRestoreRequestId</code>.</p>
     fn describe_table_restore_status(
         &self,
         input: &DescribeTableRestoreStatusMessage,
@@ -19227,7 +19227,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list of tags. You can return tags from a specific resource by specifying an ARN, or you can return all tags for a given type of resource, such as clusters, snapshots, and so on.</p> <p>The following are limitations for <code>DescribeTags</code>: </p> <ul> <li> <p>You cannot specify an ARN and a resource-type value together in the same request.</p> </li> <li> <p>You cannot use the <code>MaxRecords</code> and <code>Marker</code> parameters together with the ARN parameter.</p> </li> <li> <p>The <code>MaxRecords</code> parameter can be a range from 10 to 50 results to return in a request.</p> </li> </ul> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all resources that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all resources that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, resources are returned regardless of whether they have tag keys or values associated with them.</p>"]
+    /// <p>Returns a list of tags. You can return tags from a specific resource by specifying an ARN, or you can return all tags for a given type of resource, such as clusters, snapshots, and so on.</p> <p>The following are limitations for <code>DescribeTags</code>: </p> <ul> <li> <p>You cannot specify an ARN and a resource-type value together in the same request.</p> </li> <li> <p>You cannot use the <code>MaxRecords</code> and <code>Marker</code> parameters together with the ARN parameter.</p> </li> <li> <p>The <code>MaxRecords</code> parameter can be a range from 10 to 50 results to return in a request.</p> </li> </ul> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all resources that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all resources that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, resources are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_tags(
         &self,
         input: &DescribeTagsMessage,
@@ -19278,7 +19278,7 @@ where
         }
     }
 
-    #[doc="<p>Stops logging information, such as queries and connection attempts, for the specified Amazon Redshift cluster.</p>"]
+    /// <p>Stops logging information, such as queries and connection attempts, for the specified Amazon Redshift cluster.</p>
     fn disable_logging(
         &self,
         input: &DisableLoggingMessage,
@@ -19329,7 +19329,7 @@ where
         }
     }
 
-    #[doc="<p>Disables the automatic copying of snapshots from one region to another region for a specified cluster.</p> <p>If your cluster and its snapshots are encrypted using a customer master key (CMK) from AWS KMS, use <a>DeleteSnapshotCopyGrant</a> to delete the grant that grants Amazon Redshift permission to the CMK in the destination region. </p>"]
+    /// <p>Disables the automatic copying of snapshots from one region to another region for a specified cluster.</p> <p>If your cluster and its snapshots are encrypted using a customer master key (CMK) from AWS KMS, use <a>DeleteSnapshotCopyGrant</a> to delete the grant that grants Amazon Redshift permission to the CMK in the destination region. </p>
     fn disable_snapshot_copy(
         &self,
         input: &DisableSnapshotCopyMessage,
@@ -19380,7 +19380,7 @@ where
         }
     }
 
-    #[doc="<p>Starts logging information, such as queries and connection attempts, for the specified Amazon Redshift cluster.</p>"]
+    /// <p>Starts logging information, such as queries and connection attempts, for the specified Amazon Redshift cluster.</p>
     fn enable_logging(
         &self,
         input: &EnableLoggingMessage,
@@ -19431,7 +19431,7 @@ where
         }
     }
 
-    #[doc="<p>Enables the automatic copy of snapshots from one region to another region for a specified cluster.</p>"]
+    /// <p>Enables the automatic copy of snapshots from one region to another region for a specified cluster.</p>
     fn enable_snapshot_copy(
         &self,
         input: &EnableSnapshotCopyMessage,
@@ -19482,7 +19482,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a database user name and temporary password with temporary authorization to log in to an Amazon Redshift database. The action returns the database user name prefixed with <code>IAM:</code> if <code>AutoCreate</code> is <code>False</code> or <code>IAMA:</code> if <code>AutoCreate</code> is <code>True</code>. You can optionally specify one or more database user groups that the user will join at log in. By default, the temporary credentials expire in 900 seconds. You can optionally specify a duration between 900 seconds (15 minutes) and 3600 seconds (60 minutes). For more information, see Generating IAM Database User Credentials in the Amazon Redshift Cluster Management Guide.</p> <p>The IAM user or role that executes GetClusterCredentials must have an IAM policy attached that allows the <code>redshift:GetClusterCredentials</code> action with access to the <code>dbuser</code> resource on the cluster. The user name specified for <code>dbuser</code> in the IAM policy and the user name specified for the <code>DbUser</code> parameter must match.</p> <p>If the <code>DbGroups</code> parameter is specified, the IAM policy must allow the <code>redshift:JoinGroup</code> action with access to the listed <code>dbgroups</code>. </p> <p>In addition, if the <code>AutoCreate</code> parameter is set to <code>True</code>, then the policy must include the <code>redshift:CreateClusterUser</code> privilege.</p> <p>If the <code>DbName</code> parameter is specified, the IAM policy must allow access to the resource <code>dbname</code> for the specified database name. </p>"]
+    /// <p>Returns a database user name and temporary password with temporary authorization to log in to an Amazon Redshift database. The action returns the database user name prefixed with <code>IAM:</code> if <code>AutoCreate</code> is <code>False</code> or <code>IAMA:</code> if <code>AutoCreate</code> is <code>True</code>. You can optionally specify one or more database user groups that the user will join at log in. By default, the temporary credentials expire in 900 seconds. You can optionally specify a duration between 900 seconds (15 minutes) and 3600 seconds (60 minutes). For more information, see Generating IAM Database User Credentials in the Amazon Redshift Cluster Management Guide.</p> <p>The IAM user or role that executes GetClusterCredentials must have an IAM policy attached that allows the <code>redshift:GetClusterCredentials</code> action with access to the <code>dbuser</code> resource on the cluster. The user name specified for <code>dbuser</code> in the IAM policy and the user name specified for the <code>DbUser</code> parameter must match.</p> <p>If the <code>DbGroups</code> parameter is specified, the IAM policy must allow the <code>redshift:JoinGroup</code> action with access to the listed <code>dbgroups</code>. </p> <p>In addition, if the <code>AutoCreate</code> parameter is set to <code>True</code>, then the policy must include the <code>redshift:CreateClusterUser</code> privilege.</p> <p>If the <code>DbName</code> parameter is specified, the IAM policy must allow access to the resource <code>dbname</code> for the specified database name. </p>
     fn get_cluster_credentials(
         &self,
         input: &GetClusterCredentialsMessage,
@@ -19533,7 +19533,7 @@ where
         }
     }
 
-    #[doc="<p>Modifies the settings for a cluster. For example, you can add another security or parameter group, update the preferred maintenance window, or change the master user password. Resetting a cluster password or modifying the security groups associated with a cluster do not need a reboot. However, modifying a parameter group requires a reboot for parameters to take effect. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>You can also change node type and the number of nodes to scale up or down the cluster. When resizing a cluster, you must specify both the number of nodes and the node type even if one of the parameters does not change.</p>"]
+    /// <p>Modifies the settings for a cluster. For example, you can add another security or parameter group, update the preferred maintenance window, or change the master user password. Resetting a cluster password or modifying the security groups associated with a cluster do not need a reboot. However, modifying a parameter group requires a reboot for parameters to take effect. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>You can also change node type and the number of nodes to scale up or down the cluster. When resizing a cluster, you must specify both the number of nodes and the node type even if one of the parameters does not change.</p>
     fn modify_cluster(
         &self,
         input: &ModifyClusterMessage,
@@ -19584,7 +19584,7 @@ where
         }
     }
 
-    #[doc="<p>Modifies the list of AWS Identity and Access Management (IAM) roles that can be used by the cluster to access other AWS services.</p> <p>A cluster can have up to 10 IAM roles associated at any time.</p>"]
+    /// <p>Modifies the list of AWS Identity and Access Management (IAM) roles that can be used by the cluster to access other AWS services.</p> <p>A cluster can have up to 10 IAM roles associated at any time.</p>
     fn modify_cluster_iam_roles(
         &self,
         input: &ModifyClusterIamRolesMessage,
@@ -19635,7 +19635,7 @@ where
         }
     }
 
-    #[doc="<p>Modifies the parameters of a parameter group.</p> <p> For more information about parameters and parameter groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Modifies the parameters of a parameter group.</p> <p> For more information about parameters and parameter groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn modify_cluster_parameter_group(
         &self,
         input: &ModifyClusterParameterGroupMessage,
@@ -19686,7 +19686,7 @@ where
         }
     }
 
-    #[doc="<p>Modifies a cluster subnet group to include the specified list of VPC subnets. The operation replaces the existing list of subnets with the new list of subnets.</p>"]
+    /// <p>Modifies a cluster subnet group to include the specified list of VPC subnets. The operation replaces the existing list of subnets with the new list of subnets.</p>
     fn modify_cluster_subnet_group(
         &self,
         input: &ModifyClusterSubnetGroupMessage,
@@ -19737,7 +19737,7 @@ where
         }
     }
 
-    #[doc = "<p>Modifies an existing Amazon Redshift event notification subscription.</p>"]
+    /// <p>Modifies an existing Amazon Redshift event notification subscription.</p>
     fn modify_event_subscription(
         &self,
         input: &ModifyEventSubscriptionMessage,
@@ -19788,7 +19788,7 @@ where
         }
     }
 
-    #[doc="<p>Modifies the number of days to retain automated snapshots in the destination region after they are copied from the source region.</p>"]
+    /// <p>Modifies the number of days to retain automated snapshots in the destination region after they are copied from the source region.</p>
     fn modify_snapshot_copy_retention_period(
         &self,
         input: &ModifySnapshotCopyRetentionPeriodMessage,
@@ -19842,7 +19842,7 @@ where
         }
     }
 
-    #[doc="<p>Allows you to purchase reserved nodes. Amazon Redshift offers a predefined set of reserved node offerings. You can purchase one or more of the offerings. You can call the <a>DescribeReservedNodeOfferings</a> API to obtain the available reserved node offerings. You can call this API by providing a specific reserved node offering and the number of nodes you want to reserve. </p> <p> For more information about reserved node offerings, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/purchase-reserved-node-instance.html\">Purchasing Reserved Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Allows you to purchase reserved nodes. Amazon Redshift offers a predefined set of reserved node offerings. You can purchase one or more of the offerings. You can call the <a>DescribeReservedNodeOfferings</a> API to obtain the available reserved node offerings. You can call this API by providing a specific reserved node offering and the number of nodes you want to reserve. </p> <p> For more information about reserved node offerings, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/purchase-reserved-node-instance.html">Purchasing Reserved Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn purchase_reserved_node_offering(
         &self,
         input: &PurchaseReservedNodeOfferingMessage,
@@ -19895,7 +19895,7 @@ where
         }
     }
 
-    #[doc="<p>Reboots a cluster. This action is taken as soon as possible. It results in a momentary outage to the cluster, during which the cluster status is set to <code>rebooting</code>. A cluster event is created when the reboot is completed. Any pending cluster modifications (see <a>ModifyCluster</a>) are applied at this reboot. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>"]
+    /// <p>Reboots a cluster. This action is taken as soon as possible. It results in a momentary outage to the cluster, during which the cluster status is set to <code>rebooting</code>. A cluster event is created when the reboot is completed. Any pending cluster modifications (see <a>ModifyCluster</a>) are applied at this reboot. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     fn reboot_cluster(
         &self,
         input: &RebootClusterMessage,
@@ -19946,7 +19946,7 @@ where
         }
     }
 
-    #[doc="<p>Sets one or more parameters of the specified parameter group to their default values and sets the source values of the parameters to \"engine-default\". To reset the entire parameter group specify the <i>ResetAllParameters</i> parameter. For parameter changes to take effect you must reboot any associated clusters. </p>"]
+    /// <p>Sets one or more parameters of the specified parameter group to their default values and sets the source values of the parameters to "engine-default". To reset the entire parameter group specify the <i>ResetAllParameters</i> parameter. For parameter changes to take effect you must reboot any associated clusters. </p>
     fn reset_cluster_parameter_group(
         &self,
         input: &ResetClusterParameterGroupMessage,
@@ -19997,7 +19997,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new cluster from a snapshot. By default, Amazon Redshift creates the resulting cluster with the same configuration as the original cluster from which the snapshot was created, except that the new cluster is created with the default cluster security and parameter groups. After Amazon Redshift creates the cluster, you can use the <a>ModifyCluster</a> API to associate a different security group and different parameter group with the restored cluster. If you are using a DS node type, you can also choose to change to another DS node type of the same size during restore.</p> <p>If you restore a cluster into a VPC, you must provide a cluster subnet group where you want the cluster restored.</p> <p> For more information about working with snapshots, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html\">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Creates a new cluster from a snapshot. By default, Amazon Redshift creates the resulting cluster with the same configuration as the original cluster from which the snapshot was created, except that the new cluster is created with the default cluster security and parameter groups. After Amazon Redshift creates the cluster, you can use the <a>ModifyCluster</a> API to associate a different security group and different parameter group with the restored cluster. If you are using a DS node type, you can also choose to change to another DS node type of the same size during restore.</p> <p>If you restore a cluster into a VPC, you must provide a cluster subnet group where you want the cluster restored.</p> <p> For more information about working with snapshots, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn restore_from_cluster_snapshot(
         &self,
         input: &RestoreFromClusterSnapshotMessage,
@@ -20048,7 +20048,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new table from a table in an Amazon Redshift cluster snapshot. You must create the new table within the Amazon Redshift cluster that the snapshot was taken from.</p> <p>You cannot use <code>RestoreTableFromClusterSnapshot</code> to restore a table with the same name as an existing table in an Amazon Redshift cluster. That is, you cannot overwrite an existing table in a cluster with a restored table. If you want to replace your original table with a new, restored table, then rename or drop your original table before you call <code>RestoreTableFromClusterSnapshot</code>. When you have renamed your original table, then you can pass the original name of the table as the <code>NewTableName</code> parameter value in the call to <code>RestoreTableFromClusterSnapshot</code>. This way, you can replace the original table with the table created from the snapshot.</p>"]
+    /// <p>Creates a new table from a table in an Amazon Redshift cluster snapshot. You must create the new table within the Amazon Redshift cluster that the snapshot was taken from.</p> <p>You cannot use <code>RestoreTableFromClusterSnapshot</code> to restore a table with the same name as an existing table in an Amazon Redshift cluster. That is, you cannot overwrite an existing table in a cluster with a restored table. If you want to replace your original table with a new, restored table, then rename or drop your original table before you call <code>RestoreTableFromClusterSnapshot</code>. When you have renamed your original table, then you can pass the original name of the table as the <code>NewTableName</code> parameter value in the call to <code>RestoreTableFromClusterSnapshot</code>. This way, you can replace the original table with the table created from the snapshot.</p>
     fn restore_table_from_cluster_snapshot(
         &self,
         input: &RestoreTableFromClusterSnapshotMessage,
@@ -20101,7 +20101,7 @@ where
         }
     }
 
-    #[doc="<p>Revokes an ingress rule in an Amazon Redshift security group for a previously authorized IP range or Amazon EC2 security group. To add an ingress rule, see <a>AuthorizeClusterSecurityGroupIngress</a>. For information about managing security groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html\">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>"]
+    /// <p>Revokes an ingress rule in an Amazon Redshift security group for a previously authorized IP range or Amazon EC2 security group. To add an ingress rule, see <a>AuthorizeClusterSecurityGroupIngress</a>. For information about managing security groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     fn revoke_cluster_security_group_ingress(
         &self,
         input: &RevokeClusterSecurityGroupIngressMessage,
@@ -20155,7 +20155,7 @@ where
         }
     }
 
-    #[doc="<p>Removes the ability of the specified AWS customer account to restore the specified snapshot. If the account is currently restoring the snapshot, the restore will run to completion.</p> <p> For more information about working with snapshots, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html\">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    /// <p>Removes the ability of the specified AWS customer account to restore the specified snapshot. If the account is currently restoring the snapshot, the restore will run to completion.</p> <p> For more information about working with snapshots, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn revoke_snapshot_access(
         &self,
         input: &RevokeSnapshotAccessMessage,
@@ -20206,7 +20206,7 @@ where
         }
     }
 
-    #[doc = "<p>Rotates the encryption keys for a cluster.</p>"]
+    /// <p>Rotates the encryption keys for a cluster.</p>
     fn rotate_encryption_key(
         &self,
         input: &RotateEncryptionKeyMessage,

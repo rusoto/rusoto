@@ -412,10 +412,10 @@ pub struct BlockerDeclaration {
 /// <p>Represents the input of a create custom action operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateCustomActionTypeInput {
-    /// <p>The category of the custom action, such as a build action or a test action.</p> <note> <p>Although Source and Approval are listed as valid values, they are not currently functional. These values are reserved for future use.</p> </note>
+    /// <p><p>The category of the custom action, such as a build action or a test action.</p> <note> <p>Although Source and Approval are listed as valid values, they are not currently functional. These values are reserved for future use.</p> </note></p>
     #[serde(rename = "category")]
     pub category: String,
-    /// <p>The configuration properties for the custom action.</p> <note> <p>You can refer to a name in the configuration properties of the custom action within the URL templates by following the format of {Config:name}, as long as the configuration property is both required and not secret. For more information, see <a href="http://docs.aws.amazon.com/codepipeline/latest/userguide/how-to-create-custom-action.html">Create a Custom Action for a Pipeline</a>.</p> </note>
+    /// <p><p>The configuration properties for the custom action.</p> <note> <p>You can refer to a name in the configuration properties of the custom action within the URL templates by following the format of {Config:name}, as long as the configuration property is both required and not secret. For more information, see <a href="http://docs.aws.amazon.com/codepipeline/latest/userguide/how-to-create-custom-action.html">Create a Custom Action for a Pipeline</a>.</p> </note></p>
     #[serde(rename = "configurationProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration_properties: Option<Vec<ActionConfigurationProperty>>,
@@ -601,7 +601,7 @@ pub struct GetJobDetailsInput {
 /// <p>Represents the output of a get job details action.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetJobDetailsOutput {
-    /// <p>The details of the job.</p> <note> <p>If AWSSessionCredentials is used, a long-running job can call GetJobDetails again to obtain new credentials.</p> </note>
+    /// <p><p>The details of the job.</p> <note> <p>If AWSSessionCredentials is used, a long-running job can call GetJobDetails again to obtain new credentials.</p> </note></p>
     #[serde(rename = "jobDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_details: Option<JobDetails>,
@@ -667,7 +667,7 @@ pub struct GetPipelineStateOutput {
     #[serde(rename = "pipelineName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pipeline_name: Option<String>,
-    /// <p>The version number of the pipeline.</p> <note> <p>A newly-created pipeline is always assigned a version number of <code>1</code>.</p> </note>
+    /// <p><p>The version number of the pipeline.</p> <note> <p>A newly-created pipeline is always assigned a version number of <code>1</code>.</p> </note></p>
     #[serde(rename = "pipelineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pipeline_version: Option<i64>,
@@ -871,7 +871,7 @@ pub struct OutputArtifact {
 /// <p>Represents information about a pipeline to a job worker.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct PipelineContext {
-    /// <p/>
+    /// <p><p/></p>
     #[serde(rename = "action")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action: Option<ActionContext>,
@@ -925,7 +925,7 @@ pub struct PipelineExecution {
     #[serde(rename = "pipelineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pipeline_version: Option<i64>,
-    /// <p>The status of the pipeline execution.</p> <ul> <li> <p>InProgress: The pipeline execution is currently running.</p> </li> <li> <p>Succeeded: The pipeline execution completed successfully. </p> </li> <li> <p>Superseded: While this pipeline execution was waiting for the next stage to be completed, a newer pipeline execution caught up and continued through the pipeline instead. </p> </li> <li> <p>Failed: The pipeline execution did not complete successfully.</p> </li> </ul>
+    /// <p><p>The status of the pipeline execution.</p> <ul> <li> <p>InProgress: The pipeline execution is currently running.</p> </li> <li> <p>Succeeded: The pipeline execution completed successfully. </p> </li> <li> <p>Superseded: While this pipeline execution was waiting for the next stage to be completed, a newer pipeline execution caught up and continued through the pipeline instead. </p> </li> <li> <p>Failed: The pipeline execution did not complete successfully.</p> </li> </ul></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -946,7 +946,7 @@ pub struct PipelineExecutionSummary {
     #[serde(rename = "startTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
-    /// <p>The status of the pipeline execution.</p> <ul> <li> <p>InProgress: The pipeline execution is currently running.</p> </li> <li> <p>Succeeded: The pipeline execution completed successfully. </p> </li> <li> <p>Superseded: While this pipeline execution was waiting for the next stage to be completed, a newer pipeline execution caught up and continued through the pipeline instead. </p> </li> <li> <p>Failed: The pipeline execution did not complete successfully.</p> </li> </ul>
+    /// <p><p>The status of the pipeline execution.</p> <ul> <li> <p>InProgress: The pipeline execution is currently running.</p> </li> <li> <p>Succeeded: The pipeline execution completed successfully. </p> </li> <li> <p>Superseded: While this pipeline execution was waiting for the next stage to be completed, a newer pipeline execution caught up and continued through the pipeline instead. </p> </li> <li> <p>Failed: The pipeline execution did not complete successfully.</p> </li> </ul></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1364,9 +1364,9 @@ pub struct UpdatePipelineOutput {
 /// Errors returned by AcknowledgeJob
 #[derive(Debug, PartialEq)]
 pub enum AcknowledgeJobError {
-    ///<p>The specified nonce was specified in an invalid format.</p>
+    /// <p>The specified nonce was specified in an invalid format.</p>
     InvalidNonce(String),
-    ///<p>The specified job was specified in an invalid format or cannot be found.</p>
+    /// <p>The specified job was specified in an invalid format or cannot be found.</p>
     JobNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1448,11 +1448,11 @@ impl Error for AcknowledgeJobError {
 /// Errors returned by AcknowledgeThirdPartyJob
 #[derive(Debug, PartialEq)]
 pub enum AcknowledgeThirdPartyJobError {
-    ///<p>The client token was specified in an invalid format</p>
+    /// <p>The client token was specified in an invalid format</p>
     InvalidClientToken(String),
-    ///<p>The specified nonce was specified in an invalid format.</p>
+    /// <p>The specified nonce was specified in an invalid format.</p>
     InvalidNonce(String),
-    ///<p>The specified job was specified in an invalid format or cannot be found.</p>
+    /// <p>The specified job was specified in an invalid format or cannot be found.</p>
     JobNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1542,7 +1542,7 @@ impl Error for AcknowledgeThirdPartyJobError {
 /// Errors returned by CreateCustomActionType
 #[derive(Debug, PartialEq)]
 pub enum CreateCustomActionTypeError {
-    ///<p>The number of pipelines associated with the AWS account has exceeded the limit allowed for the account.</p>
+    /// <p>The number of pipelines associated with the AWS account has exceeded the limit allowed for the account.</p>
     LimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1622,17 +1622,17 @@ impl Error for CreateCustomActionTypeError {
 /// Errors returned by CreatePipeline
 #[derive(Debug, PartialEq)]
 pub enum CreatePipelineError {
-    ///<p>The specified action declaration was specified in an invalid format.</p>
+    /// <p>The specified action declaration was specified in an invalid format.</p>
     InvalidActionDeclaration(String),
-    ///<p>Reserved for future use.</p>
+    /// <p>Reserved for future use.</p>
     InvalidBlockerDeclaration(String),
-    ///<p>The specified stage declaration was specified in an invalid format.</p>
+    /// <p>The specified stage declaration was specified in an invalid format.</p>
     InvalidStageDeclaration(String),
-    ///<p>The specified structure was specified in an invalid format.</p>
+    /// <p>The specified structure was specified in an invalid format.</p>
     InvalidStructure(String),
-    ///<p>The number of pipelines associated with the AWS account has exceeded the limit allowed for the account.</p>
+    /// <p>The number of pipelines associated with the AWS account has exceeded the limit allowed for the account.</p>
     LimitExceeded(String),
-    ///<p>The specified pipeline name is already in use.</p>
+    /// <p>The specified pipeline name is already in use.</p>
     PipelineNameInUse(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1876,9 +1876,9 @@ impl Error for DeletePipelineError {
 /// Errors returned by DisableStageTransition
 #[derive(Debug, PartialEq)]
 pub enum DisableStageTransitionError {
-    ///<p>The specified pipeline was specified in an invalid format or cannot be found.</p>
+    /// <p>The specified pipeline was specified in an invalid format or cannot be found.</p>
     PipelineNotFound(String),
-    ///<p>The specified stage was specified in an invalid format or cannot be found.</p>
+    /// <p>The specified stage was specified in an invalid format or cannot be found.</p>
     StageNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1962,9 +1962,9 @@ impl Error for DisableStageTransitionError {
 /// Errors returned by EnableStageTransition
 #[derive(Debug, PartialEq)]
 pub enum EnableStageTransitionError {
-    ///<p>The specified pipeline was specified in an invalid format or cannot be found.</p>
+    /// <p>The specified pipeline was specified in an invalid format or cannot be found.</p>
     PipelineNotFound(String),
-    ///<p>The specified stage was specified in an invalid format or cannot be found.</p>
+    /// <p>The specified stage was specified in an invalid format or cannot be found.</p>
     StageNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2048,7 +2048,7 @@ impl Error for EnableStageTransitionError {
 /// Errors returned by GetJobDetails
 #[derive(Debug, PartialEq)]
 pub enum GetJobDetailsError {
-    ///<p>The specified job was specified in an invalid format or cannot be found.</p>
+    /// <p>The specified job was specified in an invalid format or cannot be found.</p>
     JobNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2126,9 +2126,9 @@ impl Error for GetJobDetailsError {
 /// Errors returned by GetPipeline
 #[derive(Debug, PartialEq)]
 pub enum GetPipelineError {
-    ///<p>The specified pipeline was specified in an invalid format or cannot be found.</p>
+    /// <p>The specified pipeline was specified in an invalid format or cannot be found.</p>
     PipelineNotFound(String),
-    ///<p>The specified pipeline version was specified in an invalid format or cannot be found.</p>
+    /// <p>The specified pipeline version was specified in an invalid format or cannot be found.</p>
     PipelineVersionNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2210,9 +2210,9 @@ impl Error for GetPipelineError {
 /// Errors returned by GetPipelineExecution
 #[derive(Debug, PartialEq)]
 pub enum GetPipelineExecutionError {
-    ///<p>The pipeline execution was specified in an invalid format or cannot be found, or an execution ID does not belong to the specified pipeline. </p>
+    /// <p>The pipeline execution was specified in an invalid format or cannot be found, or an execution ID does not belong to the specified pipeline. </p>
     PipelineExecutionNotFound(String),
-    ///<p>The specified pipeline was specified in an invalid format or cannot be found.</p>
+    /// <p>The specified pipeline was specified in an invalid format or cannot be found.</p>
     PipelineNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2298,7 +2298,7 @@ impl Error for GetPipelineExecutionError {
 /// Errors returned by GetPipelineState
 #[derive(Debug, PartialEq)]
 pub enum GetPipelineStateError {
-    ///<p>The specified pipeline was specified in an invalid format or cannot be found.</p>
+    /// <p>The specified pipeline was specified in an invalid format or cannot be found.</p>
     PipelineNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2376,11 +2376,11 @@ impl Error for GetPipelineStateError {
 /// Errors returned by GetThirdPartyJobDetails
 #[derive(Debug, PartialEq)]
 pub enum GetThirdPartyJobDetailsError {
-    ///<p>The client token was specified in an invalid format</p>
+    /// <p>The client token was specified in an invalid format</p>
     InvalidClientToken(String),
-    ///<p>The specified job was specified in an invalid format or cannot be found.</p>
+    /// <p>The specified job was specified in an invalid format or cannot be found.</p>
     InvalidJob(String),
-    ///<p>The specified job was specified in an invalid format or cannot be found.</p>
+    /// <p>The specified job was specified in an invalid format or cannot be found.</p>
     JobNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2470,7 +2470,7 @@ impl Error for GetThirdPartyJobDetailsError {
 /// Errors returned by ListActionTypes
 #[derive(Debug, PartialEq)]
 pub enum ListActionTypesError {
-    ///<p>The next token was specified in an invalid format. Make sure that the next token you provided is the token returned by a previous call.</p>
+    /// <p>The next token was specified in an invalid format. Make sure that the next token you provided is the token returned by a previous call.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2548,9 +2548,9 @@ impl Error for ListActionTypesError {
 /// Errors returned by ListPipelineExecutions
 #[derive(Debug, PartialEq)]
 pub enum ListPipelineExecutionsError {
-    ///<p>The next token was specified in an invalid format. Make sure that the next token you provided is the token returned by a previous call.</p>
+    /// <p>The next token was specified in an invalid format. Make sure that the next token you provided is the token returned by a previous call.</p>
     InvalidNextToken(String),
-    ///<p>The specified pipeline was specified in an invalid format or cannot be found.</p>
+    /// <p>The specified pipeline was specified in an invalid format or cannot be found.</p>
     PipelineNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2634,7 +2634,7 @@ impl Error for ListPipelineExecutionsError {
 /// Errors returned by ListPipelines
 #[derive(Debug, PartialEq)]
 pub enum ListPipelinesError {
-    ///<p>The next token was specified in an invalid format. Make sure that the next token you provided is the token returned by a previous call.</p>
+    /// <p>The next token was specified in an invalid format. Make sure that the next token you provided is the token returned by a previous call.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2712,7 +2712,7 @@ impl Error for ListPipelinesError {
 /// Errors returned by PollForJobs
 #[derive(Debug, PartialEq)]
 pub enum PollForJobsError {
-    ///<p>The specified action type cannot be found.</p>
+    /// <p>The specified action type cannot be found.</p>
     ActionTypeNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2790,7 +2790,7 @@ impl Error for PollForJobsError {
 /// Errors returned by PollForThirdPartyJobs
 #[derive(Debug, PartialEq)]
 pub enum PollForThirdPartyJobsError {
-    ///<p>The specified action type cannot be found.</p>
+    /// <p>The specified action type cannot be found.</p>
     ActionTypeNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2870,11 +2870,11 @@ impl Error for PollForThirdPartyJobsError {
 /// Errors returned by PutActionRevision
 #[derive(Debug, PartialEq)]
 pub enum PutActionRevisionError {
-    ///<p>The specified action cannot be found.</p>
+    /// <p>The specified action cannot be found.</p>
     ActionNotFound(String),
-    ///<p>The specified pipeline was specified in an invalid format or cannot be found.</p>
+    /// <p>The specified pipeline was specified in an invalid format or cannot be found.</p>
     PipelineNotFound(String),
-    ///<p>The specified stage was specified in an invalid format or cannot be found.</p>
+    /// <p>The specified stage was specified in an invalid format or cannot be found.</p>
     StageNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2962,15 +2962,15 @@ impl Error for PutActionRevisionError {
 /// Errors returned by PutApprovalResult
 #[derive(Debug, PartialEq)]
 pub enum PutApprovalResultError {
-    ///<p>The specified action cannot be found.</p>
+    /// <p>The specified action cannot be found.</p>
     ActionNotFound(String),
-    ///<p>The approval action has already been approved or rejected.</p>
+    /// <p>The approval action has already been approved or rejected.</p>
     ApprovalAlreadyCompleted(String),
-    ///<p>The approval request already received a response or has expired.</p>
+    /// <p>The approval request already received a response or has expired.</p>
     InvalidApprovalToken(String),
-    ///<p>The specified pipeline was specified in an invalid format or cannot be found.</p>
+    /// <p>The specified pipeline was specified in an invalid format or cannot be found.</p>
     PipelineNotFound(String),
-    ///<p>The specified stage was specified in an invalid format or cannot be found.</p>
+    /// <p>The specified stage was specified in an invalid format or cannot be found.</p>
     StageNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3068,9 +3068,9 @@ impl Error for PutApprovalResultError {
 /// Errors returned by PutJobFailureResult
 #[derive(Debug, PartialEq)]
 pub enum PutJobFailureResultError {
-    ///<p>The specified job state was specified in an invalid format.</p>
+    /// <p>The specified job state was specified in an invalid format.</p>
     InvalidJobState(String),
-    ///<p>The specified job was specified in an invalid format or cannot be found.</p>
+    /// <p>The specified job was specified in an invalid format or cannot be found.</p>
     JobNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3154,9 +3154,9 @@ impl Error for PutJobFailureResultError {
 /// Errors returned by PutJobSuccessResult
 #[derive(Debug, PartialEq)]
 pub enum PutJobSuccessResultError {
-    ///<p>The specified job state was specified in an invalid format.</p>
+    /// <p>The specified job state was specified in an invalid format.</p>
     InvalidJobState(String),
-    ///<p>The specified job was specified in an invalid format or cannot be found.</p>
+    /// <p>The specified job was specified in an invalid format or cannot be found.</p>
     JobNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3240,11 +3240,11 @@ impl Error for PutJobSuccessResultError {
 /// Errors returned by PutThirdPartyJobFailureResult
 #[derive(Debug, PartialEq)]
 pub enum PutThirdPartyJobFailureResultError {
-    ///<p>The client token was specified in an invalid format</p>
+    /// <p>The client token was specified in an invalid format</p>
     InvalidClientToken(String),
-    ///<p>The specified job state was specified in an invalid format.</p>
+    /// <p>The specified job state was specified in an invalid format.</p>
     InvalidJobState(String),
-    ///<p>The specified job was specified in an invalid format or cannot be found.</p>
+    /// <p>The specified job was specified in an invalid format or cannot be found.</p>
     JobNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3336,11 +3336,11 @@ impl Error for PutThirdPartyJobFailureResultError {
 /// Errors returned by PutThirdPartyJobSuccessResult
 #[derive(Debug, PartialEq)]
 pub enum PutThirdPartyJobSuccessResultError {
-    ///<p>The client token was specified in an invalid format</p>
+    /// <p>The client token was specified in an invalid format</p>
     InvalidClientToken(String),
-    ///<p>The specified job state was specified in an invalid format.</p>
+    /// <p>The specified job state was specified in an invalid format.</p>
     InvalidJobState(String),
-    ///<p>The specified job was specified in an invalid format or cannot be found.</p>
+    /// <p>The specified job was specified in an invalid format or cannot be found.</p>
     JobNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3432,13 +3432,13 @@ impl Error for PutThirdPartyJobSuccessResultError {
 /// Errors returned by RetryStageExecution
 #[derive(Debug, PartialEq)]
 pub enum RetryStageExecutionError {
-    ///<p>The stage has failed in a later run of the pipeline and the pipelineExecutionId associated with the request is out of date.</p>
+    /// <p>The stage has failed in a later run of the pipeline and the pipelineExecutionId associated with the request is out of date.</p>
     NotLatestPipelineExecution(String),
-    ///<p>The specified pipeline was specified in an invalid format or cannot be found.</p>
+    /// <p>The specified pipeline was specified in an invalid format or cannot be found.</p>
     PipelineNotFound(String),
-    ///<p>The specified stage was specified in an invalid format or cannot be found.</p>
+    /// <p>The specified stage was specified in an invalid format or cannot be found.</p>
     StageNotFound(String),
-    ///<p>The specified stage can't be retried because the pipeline structure or stage state changed after the stage was not completed; the stage contains no failed actions; one or more actions are still in progress; or another retry attempt is already in progress. </p>
+    /// <p>The specified stage can't be retried because the pipeline structure or stage state changed after the stage was not completed; the stage contains no failed actions; one or more actions are still in progress; or another retry attempt is already in progress. </p>
     StageNotRetryable(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3532,7 +3532,7 @@ impl Error for RetryStageExecutionError {
 /// Errors returned by StartPipelineExecution
 #[derive(Debug, PartialEq)]
 pub enum StartPipelineExecutionError {
-    ///<p>The specified pipeline was specified in an invalid format or cannot be found.</p>
+    /// <p>The specified pipeline was specified in an invalid format or cannot be found.</p>
     PipelineNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3612,13 +3612,13 @@ impl Error for StartPipelineExecutionError {
 /// Errors returned by UpdatePipeline
 #[derive(Debug, PartialEq)]
 pub enum UpdatePipelineError {
-    ///<p>The specified action declaration was specified in an invalid format.</p>
+    /// <p>The specified action declaration was specified in an invalid format.</p>
     InvalidActionDeclaration(String),
-    ///<p>Reserved for future use.</p>
+    /// <p>Reserved for future use.</p>
     InvalidBlockerDeclaration(String),
-    ///<p>The specified stage declaration was specified in an invalid format.</p>
+    /// <p>The specified stage declaration was specified in an invalid format.</p>
     InvalidStageDeclaration(String),
-    ///<p>The specified structure was specified in an invalid format.</p>
+    /// <p>The specified structure was specified in an invalid format.</p>
     InvalidStructure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3707,158 +3707,158 @@ impl Error for UpdatePipelineError {
 }
 /// Trait representing the capabilities of the CodePipeline API. CodePipeline clients implement this trait.
 pub trait CodePipeline {
-    #[doc="<p>Returns information about a specified job and whether that job has been received by the job worker. Only used for custom actions.</p>"]
+    /// <p>Returns information about a specified job and whether that job has been received by the job worker. Only used for custom actions.</p>
     fn acknowledge_job(
         &self,
         input: &AcknowledgeJobInput,
     ) -> Result<AcknowledgeJobOutput, AcknowledgeJobError>;
 
-    #[doc="<p>Confirms a job worker has received the specified job. Only used for partner actions.</p>"]
+    /// <p>Confirms a job worker has received the specified job. Only used for partner actions.</p>
     fn acknowledge_third_party_job(
         &self,
         input: &AcknowledgeThirdPartyJobInput,
     ) -> Result<AcknowledgeThirdPartyJobOutput, AcknowledgeThirdPartyJobError>;
 
-    #[doc="<p>Creates a new custom action that can be used in all pipelines associated with the AWS account. Only used for custom actions.</p>"]
+    /// <p>Creates a new custom action that can be used in all pipelines associated with the AWS account. Only used for custom actions.</p>
     fn create_custom_action_type(
         &self,
         input: &CreateCustomActionTypeInput,
     ) -> Result<CreateCustomActionTypeOutput, CreateCustomActionTypeError>;
 
-    #[doc = "<p>Creates a pipeline.</p>"]
+    /// <p>Creates a pipeline.</p>
     fn create_pipeline(
         &self,
         input: &CreatePipelineInput,
     ) -> Result<CreatePipelineOutput, CreatePipelineError>;
 
-    #[doc="<p>Marks a custom action as deleted. PollForJobs for the custom action will fail after the action is marked for deletion. Only used for custom actions.</p> <important> <p>You cannot recreate a custom action after it has been deleted unless you increase the version number of the action.</p> </important>"]
+    /// <p><p>Marks a custom action as deleted. PollForJobs for the custom action will fail after the action is marked for deletion. Only used for custom actions.</p> <important> <p>You cannot recreate a custom action after it has been deleted unless you increase the version number of the action.</p> </important></p>
     fn delete_custom_action_type(
         &self,
         input: &DeleteCustomActionTypeInput,
     ) -> Result<(), DeleteCustomActionTypeError>;
 
-    #[doc = "<p>Deletes the specified pipeline.</p>"]
+    /// <p>Deletes the specified pipeline.</p>
     fn delete_pipeline(&self, input: &DeletePipelineInput) -> Result<(), DeletePipelineError>;
 
-    #[doc="<p>Prevents artifacts in a pipeline from transitioning to the next stage in the pipeline.</p>"]
+    /// <p>Prevents artifacts in a pipeline from transitioning to the next stage in the pipeline.</p>
     fn disable_stage_transition(
         &self,
         input: &DisableStageTransitionInput,
     ) -> Result<(), DisableStageTransitionError>;
 
-    #[doc = "<p>Enables artifacts in a pipeline to transition to a stage in a pipeline.</p>"]
+    /// <p>Enables artifacts in a pipeline to transition to a stage in a pipeline.</p>
     fn enable_stage_transition(
         &self,
         input: &EnableStageTransitionInput,
     ) -> Result<(), EnableStageTransitionError>;
 
-    #[doc="<p>Returns information about a job. Only used for custom actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important>"]
+    /// <p><p>Returns information about a job. Only used for custom actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
     fn get_job_details(
         &self,
         input: &GetJobDetailsInput,
     ) -> Result<GetJobDetailsOutput, GetJobDetailsError>;
 
-    #[doc="<p>Returns the metadata, structure, stages, and actions of a pipeline. Can be used to return the entire structure of a pipeline in JSON format, which can then be modified and used to update the pipeline structure with <a>UpdatePipeline</a>.</p>"]
+    /// <p>Returns the metadata, structure, stages, and actions of a pipeline. Can be used to return the entire structure of a pipeline in JSON format, which can then be modified and used to update the pipeline structure with <a>UpdatePipeline</a>.</p>
     fn get_pipeline(&self, input: &GetPipelineInput)
         -> Result<GetPipelineOutput, GetPipelineError>;
 
-    #[doc="<p>Returns information about an execution of a pipeline, including details about artifacts, the pipeline execution ID, and the name, version, and status of the pipeline.</p>"]
+    /// <p>Returns information about an execution of a pipeline, including details about artifacts, the pipeline execution ID, and the name, version, and status of the pipeline.</p>
     fn get_pipeline_execution(
         &self,
         input: &GetPipelineExecutionInput,
     ) -> Result<GetPipelineExecutionOutput, GetPipelineExecutionError>;
 
-    #[doc="<p>Returns information about the state of a pipeline, including the stages and actions.</p>"]
+    /// <p>Returns information about the state of a pipeline, including the stages and actions.</p>
     fn get_pipeline_state(
         &self,
         input: &GetPipelineStateInput,
     ) -> Result<GetPipelineStateOutput, GetPipelineStateError>;
 
-    #[doc="<p>Requests the details of a job for a third party action. Only used for partner actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important>"]
+    /// <p><p>Requests the details of a job for a third party action. Only used for partner actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
     fn get_third_party_job_details(
         &self,
         input: &GetThirdPartyJobDetailsInput,
     ) -> Result<GetThirdPartyJobDetailsOutput, GetThirdPartyJobDetailsError>;
 
-    #[doc="<p>Gets a summary of all AWS CodePipeline action types associated with your account.</p>"]
+    /// <p>Gets a summary of all AWS CodePipeline action types associated with your account.</p>
     fn list_action_types(
         &self,
         input: &ListActionTypesInput,
     ) -> Result<ListActionTypesOutput, ListActionTypesError>;
 
-    #[doc = "<p>Gets a summary of the most recent executions for a pipeline.</p>"]
+    /// <p>Gets a summary of the most recent executions for a pipeline.</p>
     fn list_pipeline_executions(
         &self,
         input: &ListPipelineExecutionsInput,
     ) -> Result<ListPipelineExecutionsOutput, ListPipelineExecutionsError>;
 
-    #[doc = "<p>Gets a summary of all of the pipelines associated with your account.</p>"]
+    /// <p>Gets a summary of all of the pipelines associated with your account.</p>
     fn list_pipelines(
         &self,
         input: &ListPipelinesInput,
     ) -> Result<ListPipelinesOutput, ListPipelinesError>;
 
-    #[doc="<p>Returns information about any jobs for AWS CodePipeline to act upon.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important>"]
+    /// <p><p>Returns information about any jobs for AWS CodePipeline to act upon.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
     fn poll_for_jobs(
         &self,
         input: &PollForJobsInput,
     ) -> Result<PollForJobsOutput, PollForJobsError>;
 
-    #[doc="<p>Determines whether there are any third party jobs for a job worker to act on. Only used for partner actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts.</p> </important>"]
+    /// <p><p>Determines whether there are any third party jobs for a job worker to act on. Only used for partner actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts.</p> </important></p>
     fn poll_for_third_party_jobs(
         &self,
         input: &PollForThirdPartyJobsInput,
     ) -> Result<PollForThirdPartyJobsOutput, PollForThirdPartyJobsError>;
 
-    #[doc = "<p>Provides information to AWS CodePipeline about new revisions to a source.</p>"]
+    /// <p>Provides information to AWS CodePipeline about new revisions to a source.</p>
     fn put_action_revision(
         &self,
         input: &PutActionRevisionInput,
     ) -> Result<PutActionRevisionOutput, PutActionRevisionError>;
 
-    #[doc="<p>Provides the response to a manual approval request to AWS CodePipeline. Valid responses include Approved and Rejected.</p>"]
+    /// <p>Provides the response to a manual approval request to AWS CodePipeline. Valid responses include Approved and Rejected.</p>
     fn put_approval_result(
         &self,
         input: &PutApprovalResultInput,
     ) -> Result<PutApprovalResultOutput, PutApprovalResultError>;
 
-    #[doc="<p>Represents the failure of a job as returned to the pipeline by a job worker. Only used for custom actions.</p>"]
+    /// <p>Represents the failure of a job as returned to the pipeline by a job worker. Only used for custom actions.</p>
     fn put_job_failure_result(
         &self,
         input: &PutJobFailureResultInput,
     ) -> Result<(), PutJobFailureResultError>;
 
-    #[doc="<p>Represents the success of a job as returned to the pipeline by a job worker. Only used for custom actions.</p>"]
+    /// <p>Represents the success of a job as returned to the pipeline by a job worker. Only used for custom actions.</p>
     fn put_job_success_result(
         &self,
         input: &PutJobSuccessResultInput,
     ) -> Result<(), PutJobSuccessResultError>;
 
-    #[doc="<p>Represents the failure of a third party job as returned to the pipeline by a job worker. Only used for partner actions.</p>"]
+    /// <p>Represents the failure of a third party job as returned to the pipeline by a job worker. Only used for partner actions.</p>
     fn put_third_party_job_failure_result(
         &self,
         input: &PutThirdPartyJobFailureResultInput,
     ) -> Result<(), PutThirdPartyJobFailureResultError>;
 
-    #[doc="<p>Represents the success of a third party job as returned to the pipeline by a job worker. Only used for partner actions.</p>"]
+    /// <p>Represents the success of a third party job as returned to the pipeline by a job worker. Only used for partner actions.</p>
     fn put_third_party_job_success_result(
         &self,
         input: &PutThirdPartyJobSuccessResultInput,
     ) -> Result<(), PutThirdPartyJobSuccessResultError>;
 
-    #[doc = "<p>Resumes the pipeline execution by retrying the last failed actions in a stage.</p>"]
+    /// <p>Resumes the pipeline execution by retrying the last failed actions in a stage.</p>
     fn retry_stage_execution(
         &self,
         input: &RetryStageExecutionInput,
     ) -> Result<RetryStageExecutionOutput, RetryStageExecutionError>;
 
-    #[doc="<p>Starts the specified pipeline. Specifically, it begins processing the latest commit to the source location specified as part of the pipeline.</p>"]
+    /// <p>Starts the specified pipeline. Specifically, it begins processing the latest commit to the source location specified as part of the pipeline.</p>
     fn start_pipeline_execution(
         &self,
         input: &StartPipelineExecutionInput,
     ) -> Result<StartPipelineExecutionOutput, StartPipelineExecutionError>;
 
-    #[doc="<p>Updates a specified pipeline with edits or changes to its structure. Use a JSON file with the pipeline structure in conjunction with UpdatePipeline to provide the full structure of the pipeline. Updating the pipeline increases the version number of the pipeline by 1.</p>"]
+    /// <p>Updates a specified pipeline with edits or changes to its structure. Use a JSON file with the pipeline structure in conjunction with UpdatePipeline to provide the full structure of the pipeline. Updating the pipeline increases the version number of the pipeline by 1.</p>
     fn update_pipeline(
         &self,
         input: &UpdatePipelineInput,
@@ -3894,7 +3894,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Returns information about a specified job and whether that job has been received by the job worker. Only used for custom actions.</p>"]
+    /// <p>Returns information about a specified job and whether that job has been received by the job worker. Only used for custom actions.</p>
     fn acknowledge_job(
         &self,
         input: &AcknowledgeJobInput,
@@ -3928,7 +3928,7 @@ where
         }
     }
 
-    #[doc="<p>Confirms a job worker has received the specified job. Only used for partner actions.</p>"]
+    /// <p>Confirms a job worker has received the specified job. Only used for partner actions.</p>
     fn acknowledge_third_party_job(
         &self,
         input: &AcknowledgeThirdPartyJobInput,
@@ -3965,7 +3965,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new custom action that can be used in all pipelines associated with the AWS account. Only used for custom actions.</p>"]
+    /// <p>Creates a new custom action that can be used in all pipelines associated with the AWS account. Only used for custom actions.</p>
     fn create_custom_action_type(
         &self,
         input: &CreateCustomActionTypeInput,
@@ -4002,7 +4002,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a pipeline.</p>"]
+    /// <p>Creates a pipeline.</p>
     fn create_pipeline(
         &self,
         input: &CreatePipelineInput,
@@ -4036,7 +4036,7 @@ where
         }
     }
 
-    #[doc="<p>Marks a custom action as deleted. PollForJobs for the custom action will fail after the action is marked for deletion. Only used for custom actions.</p> <important> <p>You cannot recreate a custom action after it has been deleted unless you increase the version number of the action.</p> </important>"]
+    /// <p><p>Marks a custom action as deleted. PollForJobs for the custom action will fail after the action is marked for deletion. Only used for custom actions.</p> <important> <p>You cannot recreate a custom action after it has been deleted unless you increase the version number of the action.</p> </important></p>
     fn delete_custom_action_type(
         &self,
         input: &DeleteCustomActionTypeInput,
@@ -4067,7 +4067,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the specified pipeline.</p>"]
+    /// <p>Deletes the specified pipeline.</p>
     fn delete_pipeline(&self, input: &DeletePipelineInput) -> Result<(), DeletePipelineError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
@@ -4092,7 +4092,7 @@ where
         }
     }
 
-    #[doc="<p>Prevents artifacts in a pipeline from transitioning to the next stage in the pipeline.</p>"]
+    /// <p>Prevents artifacts in a pipeline from transitioning to the next stage in the pipeline.</p>
     fn disable_stage_transition(
         &self,
         input: &DisableStageTransitionInput,
@@ -4123,7 +4123,7 @@ where
         }
     }
 
-    #[doc = "<p>Enables artifacts in a pipeline to transition to a stage in a pipeline.</p>"]
+    /// <p>Enables artifacts in a pipeline to transition to a stage in a pipeline.</p>
     fn enable_stage_transition(
         &self,
         input: &EnableStageTransitionInput,
@@ -4154,7 +4154,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about a job. Only used for custom actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important>"]
+    /// <p><p>Returns information about a job. Only used for custom actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
     fn get_job_details(
         &self,
         input: &GetJobDetailsInput,
@@ -4188,7 +4188,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the metadata, structure, stages, and actions of a pipeline. Can be used to return the entire structure of a pipeline in JSON format, which can then be modified and used to update the pipeline structure with <a>UpdatePipeline</a>.</p>"]
+    /// <p>Returns the metadata, structure, stages, and actions of a pipeline. Can be used to return the entire structure of a pipeline in JSON format, which can then be modified and used to update the pipeline structure with <a>UpdatePipeline</a>.</p>
     fn get_pipeline(
         &self,
         input: &GetPipelineInput,
@@ -4222,7 +4222,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about an execution of a pipeline, including details about artifacts, the pipeline execution ID, and the name, version, and status of the pipeline.</p>"]
+    /// <p>Returns information about an execution of a pipeline, including details about artifacts, the pipeline execution ID, and the name, version, and status of the pipeline.</p>
     fn get_pipeline_execution(
         &self,
         input: &GetPipelineExecutionInput,
@@ -4256,7 +4256,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about the state of a pipeline, including the stages and actions.</p>"]
+    /// <p>Returns information about the state of a pipeline, including the stages and actions.</p>
     fn get_pipeline_state(
         &self,
         input: &GetPipelineStateInput,
@@ -4290,7 +4290,7 @@ where
         }
     }
 
-    #[doc="<p>Requests the details of a job for a third party action. Only used for partner actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important>"]
+    /// <p><p>Requests the details of a job for a third party action. Only used for partner actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
     fn get_third_party_job_details(
         &self,
         input: &GetThirdPartyJobDetailsInput,
@@ -4327,7 +4327,7 @@ where
         }
     }
 
-    #[doc="<p>Gets a summary of all AWS CodePipeline action types associated with your account.</p>"]
+    /// <p>Gets a summary of all AWS CodePipeline action types associated with your account.</p>
     fn list_action_types(
         &self,
         input: &ListActionTypesInput,
@@ -4361,7 +4361,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets a summary of the most recent executions for a pipeline.</p>"]
+    /// <p>Gets a summary of the most recent executions for a pipeline.</p>
     fn list_pipeline_executions(
         &self,
         input: &ListPipelineExecutionsInput,
@@ -4398,7 +4398,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets a summary of all of the pipelines associated with your account.</p>"]
+    /// <p>Gets a summary of all of the pipelines associated with your account.</p>
     fn list_pipelines(
         &self,
         input: &ListPipelinesInput,
@@ -4432,7 +4432,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about any jobs for AWS CodePipeline to act upon.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important>"]
+    /// <p><p>Returns information about any jobs for AWS CodePipeline to act upon.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
     fn poll_for_jobs(
         &self,
         input: &PollForJobsInput,
@@ -4466,7 +4466,7 @@ where
         }
     }
 
-    #[doc="<p>Determines whether there are any third party jobs for a job worker to act on. Only used for partner actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts.</p> </important>"]
+    /// <p><p>Determines whether there are any third party jobs for a job worker to act on. Only used for partner actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts.</p> </important></p>
     fn poll_for_third_party_jobs(
         &self,
         input: &PollForThirdPartyJobsInput,
@@ -4503,7 +4503,7 @@ where
         }
     }
 
-    #[doc = "<p>Provides information to AWS CodePipeline about new revisions to a source.</p>"]
+    /// <p>Provides information to AWS CodePipeline about new revisions to a source.</p>
     fn put_action_revision(
         &self,
         input: &PutActionRevisionInput,
@@ -4537,7 +4537,7 @@ where
         }
     }
 
-    #[doc="<p>Provides the response to a manual approval request to AWS CodePipeline. Valid responses include Approved and Rejected.</p>"]
+    /// <p>Provides the response to a manual approval request to AWS CodePipeline. Valid responses include Approved and Rejected.</p>
     fn put_approval_result(
         &self,
         input: &PutApprovalResultInput,
@@ -4571,7 +4571,7 @@ where
         }
     }
 
-    #[doc="<p>Represents the failure of a job as returned to the pipeline by a job worker. Only used for custom actions.</p>"]
+    /// <p>Represents the failure of a job as returned to the pipeline by a job worker. Only used for custom actions.</p>
     fn put_job_failure_result(
         &self,
         input: &PutJobFailureResultInput,
@@ -4599,7 +4599,7 @@ where
         }
     }
 
-    #[doc="<p>Represents the success of a job as returned to the pipeline by a job worker. Only used for custom actions.</p>"]
+    /// <p>Represents the success of a job as returned to the pipeline by a job worker. Only used for custom actions.</p>
     fn put_job_success_result(
         &self,
         input: &PutJobSuccessResultInput,
@@ -4627,7 +4627,7 @@ where
         }
     }
 
-    #[doc="<p>Represents the failure of a third party job as returned to the pipeline by a job worker. Only used for partner actions.</p>"]
+    /// <p>Represents the failure of a third party job as returned to the pipeline by a job worker. Only used for partner actions.</p>
     fn put_third_party_job_failure_result(
         &self,
         input: &PutThirdPartyJobFailureResultInput,
@@ -4658,7 +4658,7 @@ where
         }
     }
 
-    #[doc="<p>Represents the success of a third party job as returned to the pipeline by a job worker. Only used for partner actions.</p>"]
+    /// <p>Represents the success of a third party job as returned to the pipeline by a job worker. Only used for partner actions.</p>
     fn put_third_party_job_success_result(
         &self,
         input: &PutThirdPartyJobSuccessResultInput,
@@ -4689,7 +4689,7 @@ where
         }
     }
 
-    #[doc = "<p>Resumes the pipeline execution by retrying the last failed actions in a stage.</p>"]
+    /// <p>Resumes the pipeline execution by retrying the last failed actions in a stage.</p>
     fn retry_stage_execution(
         &self,
         input: &RetryStageExecutionInput,
@@ -4723,7 +4723,7 @@ where
         }
     }
 
-    #[doc="<p>Starts the specified pipeline. Specifically, it begins processing the latest commit to the source location specified as part of the pipeline.</p>"]
+    /// <p>Starts the specified pipeline. Specifically, it begins processing the latest commit to the source location specified as part of the pipeline.</p>
     fn start_pipeline_execution(
         &self,
         input: &StartPipelineExecutionInput,
@@ -4760,7 +4760,7 @@ where
         }
     }
 
-    #[doc="<p>Updates a specified pipeline with edits or changes to its structure. Use a JSON file with the pipeline structure in conjunction with UpdatePipeline to provide the full structure of the pipeline. Updating the pipeline increases the version number of the pipeline by 1.</p>"]
+    /// <p>Updates a specified pipeline with edits or changes to its structure. Use a JSON file with the pipeline structure in conjunction with UpdatePipeline to provide the full structure of the pipeline. Updating the pipeline increases the version number of the pipeline by 1.</p>
     fn update_pipeline(
         &self,
         input: &UpdatePipelineInput,

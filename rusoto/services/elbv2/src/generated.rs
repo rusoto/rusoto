@@ -816,7 +816,7 @@ impl CreateLoadBalancerOutputDeserializer {
 pub struct CreateRuleInput {
     /// <p>An action. Each action has the type <code>forward</code> and specifies a target group.</p>
     pub actions: Vec<Action>,
-    /// <p>A condition. Each condition specifies a field name and a single value.</p> <p>If the field name is <code>host-header</code>, you can specify a single host name (for example, my.example.com). A host name is case insensitive, can be up to 128 characters in length, and can contain any of the following characters. Note that you can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>- .</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul> <p>If the field name is <code>path-pattern</code>, you can specify a single path pattern. A path pattern is case sensitive, can be up to 128 characters in length, and can contain any of the following characters. Note that you can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>_ - . $ / ~ " ' @ : +</p> </li> <li> <p>&amp; (using &amp;amp;)</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul>
+    /// <p><p>A condition. Each condition specifies a field name and a single value.</p> <p>If the field name is <code>host-header</code>, you can specify a single host name (for example, my.example.com). A host name is case insensitive, can be up to 128 characters in length, and can contain any of the following characters. Note that you can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>- .</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul> <p>If the field name is <code>path-pattern</code>, you can specify a single path pattern. A path pattern is case sensitive, can be up to 128 characters in length, and can contain any of the following characters. Note that you can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>_ - . $ / ~ &quot; &#39; @ : +</p> </li> <li> <p>&amp; (using &amp;amp;)</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul></p>
     pub conditions: Vec<RuleCondition>,
     /// <p>The Amazon Resource Name (ARN) of the listener.</p>
     pub listener_arn: String,
@@ -2284,7 +2284,7 @@ impl IsDefaultDeserializer {
 pub struct Limit {
     /// <p>The maximum value of the limit.</p>
     pub max: Option<String>,
-    /// <p>The name of the limit. The possible values are:</p> <ul> <li> <p>application-load-balancers</p> </li> <li> <p>listeners-per-application-load-balancer</p> </li> <li> <p>rules-per-application-load-balancer</p> </li> <li> <p>target-groups</p> </li> <li> <p>targets-per-application-load-balancer</p> </li> </ul>
+    /// <p><p>The name of the limit. The possible values are:</p> <ul> <li> <p>application-load-balancers</p> </li> <li> <p>listeners-per-application-load-balancer</p> </li> <li> <p>rules-per-application-load-balancer</p> </li> <li> <p>target-groups</p> </li> <li> <p>targets-per-application-load-balancer</p> </li> </ul></p>
     pub name: Option<String>,
 }
 
@@ -2783,7 +2783,7 @@ impl LoadBalancerArnsSerializer {
 /// <p>Information about a load balancer attribute.</p>
 #[derive(Default, Debug, Clone)]
 pub struct LoadBalancerAttribute {
-    /// <p>The name of the attribute.</p> <ul> <li> <p> <code>access_logs.s3.enabled</code> - Indicates whether access logs stored in Amazon S3 are enabled. The value is <code>true</code> or <code>false</code>.</p> </li> <li> <p> <code>access_logs.s3.bucket</code> - The name of the S3 bucket for the access logs. This attribute is required if access logs in Amazon S3 are enabled. The bucket must exist in the same region as the load balancer and have a bucket policy that grants Elastic Load Balancing permission to write to the bucket.</p> </li> <li> <p> <code>access_logs.s3.prefix</code> - The prefix for the location in the S3 bucket. If you don't specify a prefix, the access logs are stored in the root of the bucket.</p> </li> <li> <p> <code>deletion_protection.enabled</code> - Indicates whether deletion protection is enabled. The value is <code>true</code> or <code>false</code>.</p> </li> <li> <p> <code>idle_timeout.timeout_seconds</code> - The idle timeout value, in seconds. The valid range is 1-3600. The default is 60 seconds.</p> </li> </ul>
+    /// <p><p>The name of the attribute.</p> <ul> <li> <p> <code>access<em>logs.s3.enabled</code> - Indicates whether access logs stored in Amazon S3 are enabled. The value is <code>true</code> or <code>false</code>.</p> </li> <li> <p> <code>access</em>logs.s3.bucket</code> - The name of the S3 bucket for the access logs. This attribute is required if access logs in Amazon S3 are enabled. The bucket must exist in the same region as the load balancer and have a bucket policy that grants Elastic Load Balancing permission to write to the bucket.</p> </li> <li> <p> <code>access<em>logs.s3.prefix</code> - The prefix for the location in the S3 bucket. If you don&#39;t specify a prefix, the access logs are stored in the root of the bucket.</p> </li> <li> <p> <code>deletion</em>protection.enabled</code> - Indicates whether deletion protection is enabled. The value is <code>true</code> or <code>false</code>.</p> </li> <li> <p> <code>idle<em>timeout.timeout</em>seconds</code> - The idle timeout value, in seconds. The valid range is 1-3600. The default is 60 seconds.</p> </li> </ul></p>
     pub key: Option<String>,
     /// <p>The value of the attribute.</p>
     pub value: Option<String>,
@@ -3951,7 +3951,7 @@ impl RuleArnsSerializer {
 pub struct RuleCondition {
     /// <p>The name of the field. The possible values are <code>host-header</code> and <code>path-pattern</code>.</p>
     pub field: Option<String>,
-    /// <p>The condition value.</p> <p>If the field name is <code>host-header</code>, you can specify a single host name (for example, my.example.com). A host name is case insensitive, can be up to 128 characters in length, and can contain any of the following characters. Note that you can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>- .</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul> <p>If the field name is <code>path-pattern</code>, you can specify a single path pattern (for example, /img/*). A path pattern is case sensitive, can be up to 128 characters in length, and can contain any of the following characters. Note that you can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>_ - . $ / ~ " ' @ : +</p> </li> <li> <p>&amp; (using &amp;amp;)</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul>
+    /// <p><p>The condition value.</p> <p>If the field name is <code>host-header</code>, you can specify a single host name (for example, my.example.com). A host name is case insensitive, can be up to 128 characters in length, and can contain any of the following characters. Note that you can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>- .</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul> <p>If the field name is <code>path-pattern</code>, you can specify a single path pattern (for example, /img/<em>). A path pattern is case sensitive, can be up to 128 characters in length, and can contain any of the following characters. Note that you can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>_ - . $ / ~ &quot; &#39; @ : +</p> </li> <li> <p>&amp; (using &amp;amp;)</p> </li> <li> <p></em> (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul></p>
     pub values: Option<Vec<String>>,
 }
 
@@ -5294,7 +5294,7 @@ impl TargetGroupArnsSerializer {
 /// <p>Information about a target group attribute.</p>
 #[derive(Default, Debug, Clone)]
 pub struct TargetGroupAttribute {
-    /// <p>The name of the attribute.</p> <ul> <li> <p> <code>deregistration_delay.timeout_seconds</code> - The amount time for Elastic Load Balancing to wait before changing the state of a deregistering target from <code>draining</code> to <code>unused</code>. The range is 0-3600 seconds. The default value is 300 seconds.</p> </li> <li> <p> <code>stickiness.enabled</code> - Indicates whether sticky sessions are enabled. The value is <code>true</code> or <code>false</code>.</p> </li> <li> <p> <code>stickiness.type</code> - The type of sticky sessions. The possible value is <code>lb_cookie</code>.</p> </li> <li> <p> <code>stickiness.lb_cookie.duration_seconds</code> - The time period, in seconds, during which requests from a client should be routed to the same target. After this time period expires, the load balancer-generated cookie is considered stale. The range is 1 second to 1 week (604800 seconds). The default value is 1 day (86400 seconds).</p> </li> </ul>
+    /// <p><p>The name of the attribute.</p> <ul> <li> <p> <code>deregistration<em>delay.timeout</em>seconds</code> - The amount time for Elastic Load Balancing to wait before changing the state of a deregistering target from <code>draining</code> to <code>unused</code>. The range is 0-3600 seconds. The default value is 300 seconds.</p> </li> <li> <p> <code>stickiness.enabled</code> - Indicates whether sticky sessions are enabled. The value is <code>true</code> or <code>false</code>.</p> </li> <li> <p> <code>stickiness.type</code> - The type of sticky sessions. The possible value is <code>lb<em>cookie</code>.</p> </li> <li> <p> <code>stickiness.lb</em>cookie.duration_seconds</code> - The time period, in seconds, during which requests from a client should be routed to the same target. After this time period expires, the load balancer-generated cookie is considered stale. The range is 1 second to 1 week (604800 seconds). The default value is 1 day (86400 seconds).</p> </li> </ul></p>
     pub key: Option<String>,
     /// <p>The value of the attribute.</p>
     pub value: Option<String>,
@@ -5526,7 +5526,7 @@ impl TargetGroupsDeserializer {
 pub struct TargetHealth {
     /// <p>A description of the target health that provides additional details. If the state is <code>healthy</code>, a description is not provided.</p>
     pub description: Option<String>,
-    /// <p>The reason code. If the target state is <code>healthy</code>, a reason code is not provided.</p> <p>If the target state is <code>initial</code>, the reason code can be one of the following values:</p> <ul> <li> <p> <code>Elb.RegistrationInProgress</code> - The target is in the process of being registered with the load balancer.</p> </li> <li> <p> <code>Elb.InitialHealthChecking</code> - The load balancer is still sending the target the minimum number of health checks required to determine its health status.</p> </li> </ul> <p>If the target state is <code>unhealthy</code>, the reason code can be one of the following values:</p> <ul> <li> <p> <code>Target.ResponseCodeMismatch</code> - The health checks did not return an expected HTTP code.</p> </li> <li> <p> <code>Target.Timeout</code> - The health check requests timed out.</p> </li> <li> <p> <code>Target.FailedHealthChecks</code> - The health checks failed because the connection to the target timed out, the target response was malformed, or the target failed the health check for an unknown reason.</p> </li> <li> <p> <code>Elb.InternalError</code> - The health checks failed due to an internal error.</p> </li> </ul> <p>If the target state is <code>unused</code>, the reason code can be one of the following values:</p> <ul> <li> <p> <code>Target.NotRegistered</code> - The target is not registered with the target group.</p> </li> <li> <p> <code>Target.NotInUse</code> - The target group is not used by any load balancer or the target is in an Availability Zone that is not enabled for its load balancer.</p> </li> <li> <p> <code>Target.InvalidState</code> - The target is in the stopped or terminated state.</p> </li> </ul> <p>If the target state is <code>draining</code>, the reason code can be the following value:</p> <ul> <li> <p> <code>Target.DeregistrationInProgress</code> - The target is in the process of being deregistered and the deregistration delay period has not expired.</p> </li> </ul>
+    /// <p><p>The reason code. If the target state is <code>healthy</code>, a reason code is not provided.</p> <p>If the target state is <code>initial</code>, the reason code can be one of the following values:</p> <ul> <li> <p> <code>Elb.RegistrationInProgress</code> - The target is in the process of being registered with the load balancer.</p> </li> <li> <p> <code>Elb.InitialHealthChecking</code> - The load balancer is still sending the target the minimum number of health checks required to determine its health status.</p> </li> </ul> <p>If the target state is <code>unhealthy</code>, the reason code can be one of the following values:</p> <ul> <li> <p> <code>Target.ResponseCodeMismatch</code> - The health checks did not return an expected HTTP code.</p> </li> <li> <p> <code>Target.Timeout</code> - The health check requests timed out.</p> </li> <li> <p> <code>Target.FailedHealthChecks</code> - The health checks failed because the connection to the target timed out, the target response was malformed, or the target failed the health check for an unknown reason.</p> </li> <li> <p> <code>Elb.InternalError</code> - The health checks failed due to an internal error.</p> </li> </ul> <p>If the target state is <code>unused</code>, the reason code can be one of the following values:</p> <ul> <li> <p> <code>Target.NotRegistered</code> - The target is not registered with the target group.</p> </li> <li> <p> <code>Target.NotInUse</code> - The target group is not used by any load balancer or the target is in an Availability Zone that is not enabled for its load balancer.</p> </li> <li> <p> <code>Target.InvalidState</code> - The target is in the stopped or terminated state.</p> </li> </ul> <p>If the target state is <code>draining</code>, the reason code can be the following value:</p> <ul> <li> <p> <code>Target.DeregistrationInProgress</code> - The target is in the process of being deregistered and the deregistration delay period has not expired.</p> </li> </ul></p>
     pub reason: Option<String>,
     /// <p>The state of the target.</p>
     pub state: Option<String>,
@@ -5766,13 +5766,13 @@ impl ZoneNameDeserializer {
 /// Errors returned by AddTags
 #[derive(Debug, PartialEq)]
 pub enum AddTagsError {
-    ///<p>A tag key was specified more than once.</p>
+    /// <p>A tag key was specified more than once.</p>
     DuplicateTagKeys(String),
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     LoadBalancerNotFound(String),
-    ///<p>The specified target group does not exist.</p>
+    /// <p>The specified target group does not exist.</p>
     TargetGroupNotFound(String),
-    ///<p>You've reached the limit on the number of tags per load balancer.</p>
+    /// <p>You've reached the limit on the number of tags per load balancer.</p>
     TooManyTags(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5853,29 +5853,29 @@ impl Error for AddTagsError {
 /// Errors returned by CreateListener
 #[derive(Debug, PartialEq)]
 pub enum CreateListenerError {
-    ///<p>The specified certificate does not exist.</p>
+    /// <p>The specified certificate does not exist.</p>
     CertificateNotFound(String),
-    ///<p>A listener with the specified port already exists.</p>
+    /// <p>A listener with the specified port already exists.</p>
     DuplicateListener(String),
-    ///<p>The specified configuration is not valid with this protocol.</p>
+    /// <p>The specified configuration is not valid with this protocol.</p>
     IncompatibleProtocols(String),
-    ///<p>The requested configuration is not valid.</p>
+    /// <p>The requested configuration is not valid.</p>
     InvalidConfigurationRequest(String),
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     LoadBalancerNotFound(String),
-    ///<p>The specified SSL policy does not exist.</p>
+    /// <p>The specified SSL policy does not exist.</p>
     SSLPolicyNotFound(String),
-    ///<p>You've reached the limit on the number of load balancers per target group.</p>
+    /// <p>You've reached the limit on the number of load balancers per target group.</p>
     TargetGroupAssociationLimit(String),
-    ///<p>The specified target group does not exist.</p>
+    /// <p>The specified target group does not exist.</p>
     TargetGroupNotFound(String),
-    ///<p>You've reached the limit on the number of certificates per listener.</p>
+    /// <p>You've reached the limit on the number of certificates per listener.</p>
     TooManyCertificates(String),
-    ///<p>You've reached the limit on the number of listeners per load balancer.</p>
+    /// <p>You've reached the limit on the number of listeners per load balancer.</p>
     TooManyListeners(String),
-    ///<p>You've reached the limit on the number of times a target can be registered with a load balancer.</p>
+    /// <p>You've reached the limit on the number of times a target can be registered with a load balancer.</p>
     TooManyRegistrationsForTargetId(String),
-    ///<p>The specified protocol is not supported.</p>
+    /// <p>The specified protocol is not supported.</p>
     UnsupportedProtocol(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5994,23 +5994,23 @@ impl Error for CreateListenerError {
 /// Errors returned by CreateLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum CreateLoadBalancerError {
-    ///<p>A load balancer with the specified name already exists.</p>
+    /// <p>A load balancer with the specified name already exists.</p>
     DuplicateLoadBalancerName(String),
-    ///<p>A tag key was specified more than once.</p>
+    /// <p>A tag key was specified more than once.</p>
     DuplicateTagKeys(String),
-    ///<p>The requested configuration is not valid.</p>
+    /// <p>The requested configuration is not valid.</p>
     InvalidConfigurationRequest(String),
-    ///<p>The requested scheme is not valid.</p>
+    /// <p>The requested scheme is not valid.</p>
     InvalidScheme(String),
-    ///<p>The specified security group does not exist.</p>
+    /// <p>The specified security group does not exist.</p>
     InvalidSecurityGroup(String),
-    ///<p>The specified subnet is out of available addresses.</p>
+    /// <p>The specified subnet is out of available addresses.</p>
     InvalidSubnet(String),
-    ///<p>The specified subnet does not exist.</p>
+    /// <p>The specified subnet does not exist.</p>
     SubnetNotFound(String),
-    ///<p>You've reached the limit on the number of load balancers for your AWS account.</p>
+    /// <p>You've reached the limit on the number of load balancers for your AWS account.</p>
     TooManyLoadBalancers(String),
-    ///<p>You've reached the limit on the number of tags per load balancer.</p>
+    /// <p>You've reached the limit on the number of tags per load balancer.</p>
     TooManyTags(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6117,21 +6117,21 @@ impl Error for CreateLoadBalancerError {
 /// Errors returned by CreateRule
 #[derive(Debug, PartialEq)]
 pub enum CreateRuleError {
-    ///<p>The requested configuration is not valid.</p>
+    /// <p>The requested configuration is not valid.</p>
     InvalidConfigurationRequest(String),
-    ///<p>The specified listener does not exist.</p>
+    /// <p>The specified listener does not exist.</p>
     ListenerNotFound(String),
-    ///<p>The specified priority is in use.</p>
+    /// <p>The specified priority is in use.</p>
     PriorityInUse(String),
-    ///<p>You've reached the limit on the number of load balancers per target group.</p>
+    /// <p>You've reached the limit on the number of load balancers per target group.</p>
     TargetGroupAssociationLimit(String),
-    ///<p>The specified target group does not exist.</p>
+    /// <p>The specified target group does not exist.</p>
     TargetGroupNotFound(String),
-    ///<p>You've reached the limit on the number of times a target can be registered with a load balancer.</p>
+    /// <p>You've reached the limit on the number of times a target can be registered with a load balancer.</p>
     TooManyRegistrationsForTargetId(String),
-    ///<p>You've reached the limit on the number of rules per load balancer.</p>
+    /// <p>You've reached the limit on the number of rules per load balancer.</p>
     TooManyRules(String),
-    ///<p>You've reached the limit on the number of target groups for your AWS account.</p>
+    /// <p>You've reached the limit on the number of target groups for your AWS account.</p>
     TooManyTargetGroups(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6230,9 +6230,9 @@ impl Error for CreateRuleError {
 /// Errors returned by CreateTargetGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateTargetGroupError {
-    ///<p>A target group with the specified name already exists.</p>
+    /// <p>A target group with the specified name already exists.</p>
     DuplicateTargetGroupName(String),
-    ///<p>You've reached the limit on the number of target groups for your AWS account.</p>
+    /// <p>You've reached the limit on the number of target groups for your AWS account.</p>
     TooManyTargetGroups(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6309,7 +6309,7 @@ impl Error for CreateTargetGroupError {
 /// Errors returned by DeleteListener
 #[derive(Debug, PartialEq)]
 pub enum DeleteListenerError {
-    ///<p>The specified listener does not exist.</p>
+    /// <p>The specified listener does not exist.</p>
     ListenerNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6378,9 +6378,9 @@ impl Error for DeleteListenerError {
 /// Errors returned by DeleteLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum DeleteLoadBalancerError {
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     LoadBalancerNotFound(String),
-    ///<p>This operation is not allowed.</p>
+    /// <p>This operation is not allowed.</p>
     OperationNotPermitted(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6457,9 +6457,9 @@ impl Error for DeleteLoadBalancerError {
 /// Errors returned by DeleteRule
 #[derive(Debug, PartialEq)]
 pub enum DeleteRuleError {
-    ///<p>This operation is not allowed.</p>
+    /// <p>This operation is not allowed.</p>
     OperationNotPermitted(String),
-    ///<p>The specified rule does not exist.</p>
+    /// <p>The specified rule does not exist.</p>
     RuleNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6532,7 +6532,7 @@ impl Error for DeleteRuleError {
 /// Errors returned by DeleteTargetGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteTargetGroupError {
-    ///<p>A specified resource is in use.</p>
+    /// <p>A specified resource is in use.</p>
     ResourceInUse(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6603,9 +6603,9 @@ impl Error for DeleteTargetGroupError {
 /// Errors returned by DeregisterTargets
 #[derive(Debug, PartialEq)]
 pub enum DeregisterTargetsError {
-    ///<p>The specified target does not exist or is not in the same VPC as the target group.</p>
+    /// <p>The specified target does not exist or is not in the same VPC as the target group.</p>
     InvalidTarget(String),
-    ///<p>The specified target group does not exist.</p>
+    /// <p>The specified target group does not exist.</p>
     TargetGroupNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6745,9 +6745,9 @@ impl Error for DescribeAccountLimitsError {
 /// Errors returned by DescribeListeners
 #[derive(Debug, PartialEq)]
 pub enum DescribeListenersError {
-    ///<p>The specified listener does not exist.</p>
+    /// <p>The specified listener does not exist.</p>
     ListenerNotFound(String),
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     LoadBalancerNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6822,7 +6822,7 @@ impl Error for DescribeListenersError {
 /// Errors returned by DescribeLoadBalancerAttributes
 #[derive(Debug, PartialEq)]
 pub enum DescribeLoadBalancerAttributesError {
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     LoadBalancerNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6895,7 +6895,7 @@ impl Error for DescribeLoadBalancerAttributesError {
 /// Errors returned by DescribeLoadBalancers
 #[derive(Debug, PartialEq)]
 pub enum DescribeLoadBalancersError {
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     LoadBalancerNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6968,9 +6968,9 @@ impl Error for DescribeLoadBalancersError {
 /// Errors returned by DescribeRules
 #[derive(Debug, PartialEq)]
 pub enum DescribeRulesError {
-    ///<p>The specified listener does not exist.</p>
+    /// <p>The specified listener does not exist.</p>
     ListenerNotFound(String),
-    ///<p>The specified rule does not exist.</p>
+    /// <p>The specified rule does not exist.</p>
     RuleNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7043,7 +7043,7 @@ impl Error for DescribeRulesError {
 /// Errors returned by DescribeSSLPolicies
 #[derive(Debug, PartialEq)]
 pub enum DescribeSSLPoliciesError {
-    ///<p>The specified SSL policy does not exist.</p>
+    /// <p>The specified SSL policy does not exist.</p>
     SSLPolicyNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7114,13 +7114,13 @@ impl Error for DescribeSSLPoliciesError {
 /// Errors returned by DescribeTags
 #[derive(Debug, PartialEq)]
 pub enum DescribeTagsError {
-    ///<p>The specified listener does not exist.</p>
+    /// <p>The specified listener does not exist.</p>
     ListenerNotFound(String),
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     LoadBalancerNotFound(String),
-    ///<p>The specified rule does not exist.</p>
+    /// <p>The specified rule does not exist.</p>
     RuleNotFound(String),
-    ///<p>The specified target group does not exist.</p>
+    /// <p>The specified target group does not exist.</p>
     TargetGroupNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7201,7 +7201,7 @@ impl Error for DescribeTagsError {
 /// Errors returned by DescribeTargetGroupAttributes
 #[derive(Debug, PartialEq)]
 pub enum DescribeTargetGroupAttributesError {
-    ///<p>The specified target group does not exist.</p>
+    /// <p>The specified target group does not exist.</p>
     TargetGroupNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7274,9 +7274,9 @@ impl Error for DescribeTargetGroupAttributesError {
 /// Errors returned by DescribeTargetGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeTargetGroupsError {
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     LoadBalancerNotFound(String),
-    ///<p>The specified target group does not exist.</p>
+    /// <p>The specified target group does not exist.</p>
     TargetGroupNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7353,11 +7353,11 @@ impl Error for DescribeTargetGroupsError {
 /// Errors returned by DescribeTargetHealth
 #[derive(Debug, PartialEq)]
 pub enum DescribeTargetHealthError {
-    ///<p>The health of the specified targets could not be retrieved due to an internal error.</p>
+    /// <p>The health of the specified targets could not be retrieved due to an internal error.</p>
     HealthUnavailable(String),
-    ///<p>The specified target does not exist or is not in the same VPC as the target group.</p>
+    /// <p>The specified target does not exist or is not in the same VPC as the target group.</p>
     InvalidTarget(String),
-    ///<p>The specified target group does not exist.</p>
+    /// <p>The specified target group does not exist.</p>
     TargetGroupNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7436,29 +7436,29 @@ impl Error for DescribeTargetHealthError {
 /// Errors returned by ModifyListener
 #[derive(Debug, PartialEq)]
 pub enum ModifyListenerError {
-    ///<p>The specified certificate does not exist.</p>
+    /// <p>The specified certificate does not exist.</p>
     CertificateNotFound(String),
-    ///<p>A listener with the specified port already exists.</p>
+    /// <p>A listener with the specified port already exists.</p>
     DuplicateListener(String),
-    ///<p>The specified configuration is not valid with this protocol.</p>
+    /// <p>The specified configuration is not valid with this protocol.</p>
     IncompatibleProtocols(String),
-    ///<p>The requested configuration is not valid.</p>
+    /// <p>The requested configuration is not valid.</p>
     InvalidConfigurationRequest(String),
-    ///<p>The specified listener does not exist.</p>
+    /// <p>The specified listener does not exist.</p>
     ListenerNotFound(String),
-    ///<p>The specified SSL policy does not exist.</p>
+    /// <p>The specified SSL policy does not exist.</p>
     SSLPolicyNotFound(String),
-    ///<p>You've reached the limit on the number of load balancers per target group.</p>
+    /// <p>You've reached the limit on the number of load balancers per target group.</p>
     TargetGroupAssociationLimit(String),
-    ///<p>The specified target group does not exist.</p>
+    /// <p>The specified target group does not exist.</p>
     TargetGroupNotFound(String),
-    ///<p>You've reached the limit on the number of certificates per listener.</p>
+    /// <p>You've reached the limit on the number of certificates per listener.</p>
     TooManyCertificates(String),
-    ///<p>You've reached the limit on the number of listeners per load balancer.</p>
+    /// <p>You've reached the limit on the number of listeners per load balancer.</p>
     TooManyListeners(String),
-    ///<p>You've reached the limit on the number of times a target can be registered with a load balancer.</p>
+    /// <p>You've reached the limit on the number of times a target can be registered with a load balancer.</p>
     TooManyRegistrationsForTargetId(String),
-    ///<p>The specified protocol is not supported.</p>
+    /// <p>The specified protocol is not supported.</p>
     UnsupportedProtocol(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7577,9 +7577,9 @@ impl Error for ModifyListenerError {
 /// Errors returned by ModifyLoadBalancerAttributes
 #[derive(Debug, PartialEq)]
 pub enum ModifyLoadBalancerAttributesError {
-    ///<p>The requested configuration is not valid.</p>
+    /// <p>The requested configuration is not valid.</p>
     InvalidConfigurationRequest(String),
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     LoadBalancerNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7658,17 +7658,17 @@ impl Error for ModifyLoadBalancerAttributesError {
 /// Errors returned by ModifyRule
 #[derive(Debug, PartialEq)]
 pub enum ModifyRuleError {
-    ///<p>This operation is not allowed.</p>
+    /// <p>This operation is not allowed.</p>
     OperationNotPermitted(String),
-    ///<p>The specified rule does not exist.</p>
+    /// <p>The specified rule does not exist.</p>
     RuleNotFound(String),
-    ///<p>You've reached the limit on the number of load balancers per target group.</p>
+    /// <p>You've reached the limit on the number of load balancers per target group.</p>
     TargetGroupAssociationLimit(String),
-    ///<p>The specified target group does not exist.</p>
+    /// <p>The specified target group does not exist.</p>
     TargetGroupNotFound(String),
-    ///<p>You've reached the limit on the number of times a target can be registered with a load balancer.</p>
+    /// <p>You've reached the limit on the number of times a target can be registered with a load balancer.</p>
     TooManyRegistrationsForTargetId(String),
-    ///<p>You've reached the limit on the number of targets.</p>
+    /// <p>You've reached the limit on the number of targets.</p>
     TooManyTargets(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7759,7 +7759,7 @@ impl Error for ModifyRuleError {
 /// Errors returned by ModifyTargetGroup
 #[derive(Debug, PartialEq)]
 pub enum ModifyTargetGroupError {
-    ///<p>The specified target group does not exist.</p>
+    /// <p>The specified target group does not exist.</p>
     TargetGroupNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7830,7 +7830,7 @@ impl Error for ModifyTargetGroupError {
 /// Errors returned by ModifyTargetGroupAttributes
 #[derive(Debug, PartialEq)]
 pub enum ModifyTargetGroupAttributesError {
-    ///<p>The specified target group does not exist.</p>
+    /// <p>The specified target group does not exist.</p>
     TargetGroupNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7903,13 +7903,13 @@ impl Error for ModifyTargetGroupAttributesError {
 /// Errors returned by RegisterTargets
 #[derive(Debug, PartialEq)]
 pub enum RegisterTargetsError {
-    ///<p>The specified target does not exist or is not in the same VPC as the target group.</p>
+    /// <p>The specified target does not exist or is not in the same VPC as the target group.</p>
     InvalidTarget(String),
-    ///<p>The specified target group does not exist.</p>
+    /// <p>The specified target group does not exist.</p>
     TargetGroupNotFound(String),
-    ///<p>You've reached the limit on the number of times a target can be registered with a load balancer.</p>
+    /// <p>You've reached the limit on the number of times a target can be registered with a load balancer.</p>
     TooManyRegistrationsForTargetId(String),
-    ///<p>You've reached the limit on the number of targets.</p>
+    /// <p>You've reached the limit on the number of targets.</p>
     TooManyTargets(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7992,15 +7992,15 @@ impl Error for RegisterTargetsError {
 /// Errors returned by RemoveTags
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsError {
-    ///<p>The specified listener does not exist.</p>
+    /// <p>The specified listener does not exist.</p>
     ListenerNotFound(String),
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     LoadBalancerNotFound(String),
-    ///<p>The specified rule does not exist.</p>
+    /// <p>The specified rule does not exist.</p>
     RuleNotFound(String),
-    ///<p>The specified target group does not exist.</p>
+    /// <p>The specified target group does not exist.</p>
     TargetGroupNotFound(String),
-    ///<p>You've reached the limit on the number of tags per load balancer.</p>
+    /// <p>You've reached the limit on the number of tags per load balancer.</p>
     TooManyTags(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8085,11 +8085,11 @@ impl Error for RemoveTagsError {
 /// Errors returned by SetIpAddressType
 #[derive(Debug, PartialEq)]
 pub enum SetIpAddressTypeError {
-    ///<p>The requested configuration is not valid.</p>
+    /// <p>The requested configuration is not valid.</p>
     InvalidConfigurationRequest(String),
-    ///<p>The specified subnet is out of available addresses.</p>
+    /// <p>The specified subnet is out of available addresses.</p>
     InvalidSubnet(String),
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     LoadBalancerNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8168,11 +8168,11 @@ impl Error for SetIpAddressTypeError {
 /// Errors returned by SetRulePriorities
 #[derive(Debug, PartialEq)]
 pub enum SetRulePrioritiesError {
-    ///<p>This operation is not allowed.</p>
+    /// <p>This operation is not allowed.</p>
     OperationNotPermitted(String),
-    ///<p>The specified priority is in use.</p>
+    /// <p>The specified priority is in use.</p>
     PriorityInUse(String),
-    ///<p>The specified rule does not exist.</p>
+    /// <p>The specified rule does not exist.</p>
     RuleNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8251,11 +8251,11 @@ impl Error for SetRulePrioritiesError {
 /// Errors returned by SetSecurityGroups
 #[derive(Debug, PartialEq)]
 pub enum SetSecurityGroupsError {
-    ///<p>The requested configuration is not valid.</p>
+    /// <p>The requested configuration is not valid.</p>
     InvalidConfigurationRequest(String),
-    ///<p>The specified security group does not exist.</p>
+    /// <p>The specified security group does not exist.</p>
     InvalidSecurityGroup(String),
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     LoadBalancerNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8336,13 +8336,13 @@ impl Error for SetSecurityGroupsError {
 /// Errors returned by SetSubnets
 #[derive(Debug, PartialEq)]
 pub enum SetSubnetsError {
-    ///<p>The requested configuration is not valid.</p>
+    /// <p>The requested configuration is not valid.</p>
     InvalidConfigurationRequest(String),
-    ///<p>The specified subnet is out of available addresses.</p>
+    /// <p>The specified subnet is out of available addresses.</p>
     InvalidSubnet(String),
-    ///<p>The specified load balancer does not exist.</p>
+    /// <p>The specified load balancer does not exist.</p>
     LoadBalancerNotFound(String),
-    ///<p>The specified subnet does not exist.</p>
+    /// <p>The specified subnet does not exist.</p>
     SubnetNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8422,172 +8422,172 @@ impl Error for SetSubnetsError {
 }
 /// Trait representing the capabilities of the Elastic Load Balancing v2 API. Elastic Load Balancing v2 clients implement this trait.
 pub trait Elb {
-    #[doc="<p>Adds the specified tags to the specified resource. You can tag your Application Load Balancers and your target groups.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, <code>AddTags</code> updates its value.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>. To remove tags from your resources, use <a>RemoveTags</a>.</p>"]
+    /// <p>Adds the specified tags to the specified resource. You can tag your Application Load Balancers and your target groups.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, <code>AddTags</code> updates its value.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>. To remove tags from your resources, use <a>RemoveTags</a>.</p>
     fn add_tags(&self, input: &AddTagsInput) -> Result<AddTagsOutput, AddTagsError>;
 
-    #[doc="<p>Creates a listener for the specified Application Load Balancer.</p> <p>You can create up to 10 listeners per load balancer.</p> <p>To update a listener, use <a>ModifyListener</a>. When you are finished with a listener, you can delete it using <a>DeleteListener</a>. If you are finished with both the listener and the load balancer, you can delete them both using <a>DeleteLoadBalancer</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html\">Listeners for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i>.</p>"]
+    /// <p>Creates a listener for the specified Application Load Balancer.</p> <p>You can create up to 10 listeners per load balancer.</p> <p>To update a listener, use <a>ModifyListener</a>. When you are finished with a listener, you can delete it using <a>DeleteListener</a>. If you are finished with both the listener and the load balancer, you can delete them both using <a>DeleteLoadBalancer</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html">Listeners for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i>.</p>
     fn create_listener(
         &self,
         input: &CreateListenerInput,
     ) -> Result<CreateListenerOutput, CreateListenerError>;
 
-    #[doc="<p>Creates an Application Load Balancer.</p> <p>When you create a load balancer, you can specify security groups, subnets, IP address type, and tags. Otherwise, you could do so later using <a>SetSecurityGroups</a>, <a>SetSubnets</a>, <a>SetIpAddressType</a>, and <a>AddTags</a>.</p> <p>To create listeners for your load balancer, use <a>CreateListener</a>. To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>You can create up to 20 load balancers per region per account. You can request an increase for the number of load balancers for your account. For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html\">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancers Guide</i>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html\">Application Load Balancers</a> in the <i>Application Load Balancers Guide</i>.</p>"]
+    /// <p>Creates an Application Load Balancer.</p> <p>When you create a load balancer, you can specify security groups, subnets, IP address type, and tags. Otherwise, you could do so later using <a>SetSecurityGroups</a>, <a>SetSubnets</a>, <a>SetIpAddressType</a>, and <a>AddTags</a>.</p> <p>To create listeners for your load balancer, use <a>CreateListener</a>. To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>You can create up to 20 load balancers per region per account. You can request an increase for the number of load balancers for your account. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancers Guide</i>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html">Application Load Balancers</a> in the <i>Application Load Balancers Guide</i>.</p>
     fn create_load_balancer(
         &self,
         input: &CreateLoadBalancerInput,
     ) -> Result<CreateLoadBalancerOutput, CreateLoadBalancerError>;
 
-    #[doc="<p>Creates a rule for the specified listener.</p> <p>Each rule can have one action and one condition. Rules are evaluated in priority order, from the lowest value to the highest value. When the condition for a rule is met, the specified action is taken. If no conditions are met, the default action for the default rule is taken. For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html#listener-rules\">Listener Rules</a> in the <i>Application Load Balancers Guide</i>.</p> <p>To view your current rules, use <a>DescribeRules</a>. To update a rule, use <a>ModifyRule</a>. To set the priorities of your rules, use <a>SetRulePriorities</a>. To delete a rule, use <a>DeleteRule</a>.</p>"]
+    /// <p>Creates a rule for the specified listener.</p> <p>Each rule can have one action and one condition. Rules are evaluated in priority order, from the lowest value to the highest value. When the condition for a rule is met, the specified action is taken. If no conditions are met, the default action for the default rule is taken. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html#listener-rules">Listener Rules</a> in the <i>Application Load Balancers Guide</i>.</p> <p>To view your current rules, use <a>DescribeRules</a>. To update a rule, use <a>ModifyRule</a>. To set the priorities of your rules, use <a>SetRulePriorities</a>. To delete a rule, use <a>DeleteRule</a>.</p>
     fn create_rule(&self, input: &CreateRuleInput) -> Result<CreateRuleOutput, CreateRuleError>;
 
-    #[doc="<p>Creates a target group.</p> <p>To register targets with the target group, use <a>RegisterTargets</a>. To update the health check settings for the target group, use <a>ModifyTargetGroup</a>. To monitor the health of targets in the target group, use <a>DescribeTargetHealth</a>.</p> <p>To route traffic to the targets in a target group, specify the target group in an action using <a>CreateListener</a> or <a>CreateRule</a>.</p> <p>To delete a target group, use <a>DeleteTargetGroup</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html\">Target Groups for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i>.</p>"]
+    /// <p>Creates a target group.</p> <p>To register targets with the target group, use <a>RegisterTargets</a>. To update the health check settings for the target group, use <a>ModifyTargetGroup</a>. To monitor the health of targets in the target group, use <a>DescribeTargetHealth</a>.</p> <p>To route traffic to the targets in a target group, specify the target group in an action using <a>CreateListener</a> or <a>CreateRule</a>.</p> <p>To delete a target group, use <a>DeleteTargetGroup</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html">Target Groups for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i>.</p>
     fn create_target_group(
         &self,
         input: &CreateTargetGroupInput,
     ) -> Result<CreateTargetGroupOutput, CreateTargetGroupError>;
 
-    #[doc="<p>Deletes the specified listener.</p> <p>Alternatively, your listener is deleted when you delete the load balancer it is attached to using <a>DeleteLoadBalancer</a>.</p>"]
+    /// <p>Deletes the specified listener.</p> <p>Alternatively, your listener is deleted when you delete the load balancer it is attached to using <a>DeleteLoadBalancer</a>.</p>
     fn delete_listener(
         &self,
         input: &DeleteListenerInput,
     ) -> Result<DeleteListenerOutput, DeleteListenerError>;
 
-    #[doc="<p>Deletes the specified Application Load Balancer and its attached listeners.</p> <p>You can't delete a load balancer if deletion protection is enabled. If the load balancer does not exist or has already been deleted, the call succeeds.</p> <p>Deleting a load balancer does not affect its registered targets. For example, your EC2 instances continue to run and are still registered to their target groups. If you no longer need these EC2 instances, you can stop or terminate them.</p>"]
+    /// <p>Deletes the specified Application Load Balancer and its attached listeners.</p> <p>You can't delete a load balancer if deletion protection is enabled. If the load balancer does not exist or has already been deleted, the call succeeds.</p> <p>Deleting a load balancer does not affect its registered targets. For example, your EC2 instances continue to run and are still registered to their target groups. If you no longer need these EC2 instances, you can stop or terminate them.</p>
     fn delete_load_balancer(
         &self,
         input: &DeleteLoadBalancerInput,
     ) -> Result<DeleteLoadBalancerOutput, DeleteLoadBalancerError>;
 
-    #[doc = "<p>Deletes the specified rule.</p>"]
+    /// <p>Deletes the specified rule.</p>
     fn delete_rule(&self, input: &DeleteRuleInput) -> Result<DeleteRuleOutput, DeleteRuleError>;
 
-    #[doc="<p>Deletes the specified target group.</p> <p>You can delete a target group if it is not referenced by any actions. Deleting a target group also deletes any associated health checks.</p>"]
+    /// <p>Deletes the specified target group.</p> <p>You can delete a target group if it is not referenced by any actions. Deleting a target group also deletes any associated health checks.</p>
     fn delete_target_group(
         &self,
         input: &DeleteTargetGroupInput,
     ) -> Result<DeleteTargetGroupOutput, DeleteTargetGroupError>;
 
-    #[doc="<p>Deregisters the specified targets from the specified target group. After the targets are deregistered, they no longer receive traffic from the load balancer.</p>"]
+    /// <p>Deregisters the specified targets from the specified target group. After the targets are deregistered, they no longer receive traffic from the load balancer.</p>
     fn deregister_targets(
         &self,
         input: &DeregisterTargetsInput,
     ) -> Result<DeregisterTargetsOutput, DeregisterTargetsError>;
 
-    #[doc="<p>Describes the current Elastic Load Balancing resource limits for your AWS account.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html\">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancer Guide</i>.</p>"]
+    /// <p>Describes the current Elastic Load Balancing resource limits for your AWS account.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancer Guide</i>.</p>
     fn describe_account_limits(
         &self,
         input: &DescribeAccountLimitsInput,
     ) -> Result<DescribeAccountLimitsOutput, DescribeAccountLimitsError>;
 
-    #[doc="<p>Describes the specified listeners or the listeners for the specified Application Load Balancer. You must specify either a load balancer or one or more listeners.</p>"]
+    /// <p>Describes the specified listeners or the listeners for the specified Application Load Balancer. You must specify either a load balancer or one or more listeners.</p>
     fn describe_listeners(
         &self,
         input: &DescribeListenersInput,
     ) -> Result<DescribeListenersOutput, DescribeListenersError>;
 
-    #[doc = "<p>Describes the attributes for the specified Application Load Balancer.</p>"]
+    /// <p>Describes the attributes for the specified Application Load Balancer.</p>
     fn describe_load_balancer_attributes(
         &self,
         input: &DescribeLoadBalancerAttributesInput,
     ) -> Result<DescribeLoadBalancerAttributesOutput, DescribeLoadBalancerAttributesError>;
 
-    #[doc="<p>Describes the specified Application Load Balancers or all of your Application Load Balancers.</p> <p>To describe the listeners for a load balancer, use <a>DescribeListeners</a>. To describe the attributes for a load balancer, use <a>DescribeLoadBalancerAttributes</a>.</p>"]
+    /// <p>Describes the specified Application Load Balancers or all of your Application Load Balancers.</p> <p>To describe the listeners for a load balancer, use <a>DescribeListeners</a>. To describe the attributes for a load balancer, use <a>DescribeLoadBalancerAttributes</a>.</p>
     fn describe_load_balancers(
         &self,
         input: &DescribeLoadBalancersInput,
     ) -> Result<DescribeLoadBalancersOutput, DescribeLoadBalancersError>;
 
-    #[doc="<p>Describes the specified rules or the rules for the specified listener. You must specify either a listener or one or more rules.</p>"]
+    /// <p>Describes the specified rules or the rules for the specified listener. You must specify either a listener or one or more rules.</p>
     fn describe_rules(
         &self,
         input: &DescribeRulesInput,
     ) -> Result<DescribeRulesOutput, DescribeRulesError>;
 
-    #[doc="<p>Describes the specified policies or all policies used for SSL negotiation.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies\">Security Policies</a> in the <i>Application Load Balancers Guide</i>.</p>"]
+    /// <p>Describes the specified policies or all policies used for SSL negotiation.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies">Security Policies</a> in the <i>Application Load Balancers Guide</i>.</p>
     fn describe_ssl_policies(
         &self,
         input: &DescribeSSLPoliciesInput,
     ) -> Result<DescribeSSLPoliciesOutput, DescribeSSLPoliciesError>;
 
-    #[doc="<p>Describes the tags for the specified resources. You can describe the tags for one or more Application Load Balancers and target groups.</p>"]
+    /// <p>Describes the tags for the specified resources. You can describe the tags for one or more Application Load Balancers and target groups.</p>
     fn describe_tags(
         &self,
         input: &DescribeTagsInput,
     ) -> Result<DescribeTagsOutput, DescribeTagsError>;
 
-    #[doc = "<p>Describes the attributes for the specified target group.</p>"]
+    /// <p>Describes the attributes for the specified target group.</p>
     fn describe_target_group_attributes(
         &self,
         input: &DescribeTargetGroupAttributesInput,
     ) -> Result<DescribeTargetGroupAttributesOutput, DescribeTargetGroupAttributesError>;
 
-    #[doc="<p>Describes the specified target groups or all of your target groups. By default, all target groups are described. Alternatively, you can specify one of the following to filter the results: the ARN of the load balancer, the names of one or more target groups, or the ARNs of one or more target groups.</p> <p>To describe the targets for a target group, use <a>DescribeTargetHealth</a>. To describe the attributes of a target group, use <a>DescribeTargetGroupAttributes</a>.</p>"]
+    /// <p>Describes the specified target groups or all of your target groups. By default, all target groups are described. Alternatively, you can specify one of the following to filter the results: the ARN of the load balancer, the names of one or more target groups, or the ARNs of one or more target groups.</p> <p>To describe the targets for a target group, use <a>DescribeTargetHealth</a>. To describe the attributes of a target group, use <a>DescribeTargetGroupAttributes</a>.</p>
     fn describe_target_groups(
         &self,
         input: &DescribeTargetGroupsInput,
     ) -> Result<DescribeTargetGroupsOutput, DescribeTargetGroupsError>;
 
-    #[doc = "<p>Describes the health of the specified targets or all of your targets.</p>"]
+    /// <p>Describes the health of the specified targets or all of your targets.</p>
     fn describe_target_health(
         &self,
         input: &DescribeTargetHealthInput,
     ) -> Result<DescribeTargetHealthOutput, DescribeTargetHealthError>;
 
-    #[doc="<p>Modifies the specified properties of the specified listener.</p> <p>Any properties that you do not specify retain their current values. However, changing the protocol from HTTPS to HTTP removes the security policy and SSL certificate properties. If you change the protocol from HTTP to HTTPS, you must add the security policy and server certificate.</p>"]
+    /// <p>Modifies the specified properties of the specified listener.</p> <p>Any properties that you do not specify retain their current values. However, changing the protocol from HTTPS to HTTP removes the security policy and SSL certificate properties. If you change the protocol from HTTP to HTTPS, you must add the security policy and server certificate.</p>
     fn modify_listener(
         &self,
         input: &ModifyListenerInput,
     ) -> Result<ModifyListenerOutput, ModifyListenerError>;
 
-    #[doc="<p>Modifies the specified attributes of the specified Application Load Balancer.</p> <p>If any of the specified attributes can't be modified as requested, the call fails. Any existing attributes that you do not modify retain their current values.</p>"]
+    /// <p>Modifies the specified attributes of the specified Application Load Balancer.</p> <p>If any of the specified attributes can't be modified as requested, the call fails. Any existing attributes that you do not modify retain their current values.</p>
     fn modify_load_balancer_attributes(
         &self,
         input: &ModifyLoadBalancerAttributesInput,
     ) -> Result<ModifyLoadBalancerAttributesOutput, ModifyLoadBalancerAttributesError>;
 
-    #[doc="<p>Modifies the specified rule.</p> <p>Any existing properties that you do not modify retain their current values.</p> <p>To modify the default action, use <a>ModifyListener</a>.</p>"]
+    /// <p>Modifies the specified rule.</p> <p>Any existing properties that you do not modify retain their current values.</p> <p>To modify the default action, use <a>ModifyListener</a>.</p>
     fn modify_rule(&self, input: &ModifyRuleInput) -> Result<ModifyRuleOutput, ModifyRuleError>;
 
-    #[doc="<p>Modifies the health checks used when evaluating the health state of the targets in the specified target group.</p> <p>To monitor the health of the targets, use <a>DescribeTargetHealth</a>.</p>"]
+    /// <p>Modifies the health checks used when evaluating the health state of the targets in the specified target group.</p> <p>To monitor the health of the targets, use <a>DescribeTargetHealth</a>.</p>
     fn modify_target_group(
         &self,
         input: &ModifyTargetGroupInput,
     ) -> Result<ModifyTargetGroupOutput, ModifyTargetGroupError>;
 
-    #[doc = "<p>Modifies the specified attributes of the specified target group.</p>"]
+    /// <p>Modifies the specified attributes of the specified target group.</p>
     fn modify_target_group_attributes(
         &self,
         input: &ModifyTargetGroupAttributesInput,
     ) -> Result<ModifyTargetGroupAttributesOutput, ModifyTargetGroupAttributesError>;
 
-    #[doc="<p>Registers the specified targets with the specified target group.</p> <p>By default, the load balancer routes requests to registered targets using the protocol and port number for the target group. Alternatively, you can override the port for a target when you register it.</p> <p>The target must be in the virtual private cloud (VPC) that you specified for the target group. If the target is an EC2 instance, it must be in the <code>running</code> state when you register it.</p> <p>To remove a target from a target group, use <a>DeregisterTargets</a>.</p>"]
+    /// <p>Registers the specified targets with the specified target group.</p> <p>By default, the load balancer routes requests to registered targets using the protocol and port number for the target group. Alternatively, you can override the port for a target when you register it.</p> <p>The target must be in the virtual private cloud (VPC) that you specified for the target group. If the target is an EC2 instance, it must be in the <code>running</code> state when you register it.</p> <p>To remove a target from a target group, use <a>DeregisterTargets</a>.</p>
     fn register_targets(
         &self,
         input: &RegisterTargetsInput,
     ) -> Result<RegisterTargetsOutput, RegisterTargetsError>;
 
-    #[doc="<p>Removes the specified tags from the specified resource.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>.</p>"]
+    /// <p>Removes the specified tags from the specified resource.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>.</p>
     fn remove_tags(&self, input: &RemoveTagsInput) -> Result<RemoveTagsOutput, RemoveTagsError>;
 
-    #[doc="<p>Sets the type of IP addresses used by the subnets of the specified Application Load Balancer.</p>"]
+    /// <p>Sets the type of IP addresses used by the subnets of the specified Application Load Balancer.</p>
     fn set_ip_address_type(
         &self,
         input: &SetIpAddressTypeInput,
     ) -> Result<SetIpAddressTypeOutput, SetIpAddressTypeError>;
 
-    #[doc="<p>Sets the priorities of the specified rules.</p> <p>You can reorder the rules as long as there are no priority conflicts in the new order. Any existing rules that you do not specify retain their current priority.</p>"]
+    /// <p>Sets the priorities of the specified rules.</p> <p>You can reorder the rules as long as there are no priority conflicts in the new order. Any existing rules that you do not specify retain their current priority.</p>
     fn set_rule_priorities(
         &self,
         input: &SetRulePrioritiesInput,
     ) -> Result<SetRulePrioritiesOutput, SetRulePrioritiesError>;
 
-    #[doc="<p>Associates the specified security groups with the specified load balancer. The specified security groups override the previously associated security groups.</p>"]
+    /// <p>Associates the specified security groups with the specified load balancer. The specified security groups override the previously associated security groups.</p>
     fn set_security_groups(
         &self,
         input: &SetSecurityGroupsInput,
     ) -> Result<SetSecurityGroupsOutput, SetSecurityGroupsError>;
 
-    #[doc="<p>Enables the Availability Zone for the specified subnets for the specified load balancer. The specified subnets replace the previously enabled subnets.</p>"]
+    /// <p>Enables the Availability Zone for the specified subnets for the specified load balancer. The specified subnets replace the previously enabled subnets.</p>
     fn set_subnets(&self, input: &SetSubnetsInput) -> Result<SetSubnetsOutput, SetSubnetsError>;
 }
 /// A client for the Elastic Load Balancing v2 API.
@@ -8620,7 +8620,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Adds the specified tags to the specified resource. You can tag your Application Load Balancers and your target groups.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, <code>AddTags</code> updates its value.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>. To remove tags from your resources, use <a>RemoveTags</a>.</p>"]
+    /// <p>Adds the specified tags to the specified resource. You can tag your Application Load Balancers and your target groups.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, <code>AddTags</code> updates its value.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>. To remove tags from your resources, use <a>RemoveTags</a>.</p>
     fn add_tags(&self, input: &AddTagsInput) -> Result<AddTagsOutput, AddTagsError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -8668,7 +8668,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a listener for the specified Application Load Balancer.</p> <p>You can create up to 10 listeners per load balancer.</p> <p>To update a listener, use <a>ModifyListener</a>. When you are finished with a listener, you can delete it using <a>DeleteListener</a>. If you are finished with both the listener and the load balancer, you can delete them both using <a>DeleteLoadBalancer</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html\">Listeners for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i>.</p>"]
+    /// <p>Creates a listener for the specified Application Load Balancer.</p> <p>You can create up to 10 listeners per load balancer.</p> <p>To update a listener, use <a>ModifyListener</a>. When you are finished with a listener, you can delete it using <a>DeleteListener</a>. If you are finished with both the listener and the load balancer, you can delete them both using <a>DeleteLoadBalancer</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html">Listeners for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i>.</p>
     fn create_listener(
         &self,
         input: &CreateListenerInput,
@@ -8719,7 +8719,7 @@ where
         }
     }
 
-    #[doc="<p>Creates an Application Load Balancer.</p> <p>When you create a load balancer, you can specify security groups, subnets, IP address type, and tags. Otherwise, you could do so later using <a>SetSecurityGroups</a>, <a>SetSubnets</a>, <a>SetIpAddressType</a>, and <a>AddTags</a>.</p> <p>To create listeners for your load balancer, use <a>CreateListener</a>. To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>You can create up to 20 load balancers per region per account. You can request an increase for the number of load balancers for your account. For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html\">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancers Guide</i>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html\">Application Load Balancers</a> in the <i>Application Load Balancers Guide</i>.</p>"]
+    /// <p>Creates an Application Load Balancer.</p> <p>When you create a load balancer, you can specify security groups, subnets, IP address type, and tags. Otherwise, you could do so later using <a>SetSecurityGroups</a>, <a>SetSubnets</a>, <a>SetIpAddressType</a>, and <a>AddTags</a>.</p> <p>To create listeners for your load balancer, use <a>CreateListener</a>. To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>You can create up to 20 load balancers per region per account. You can request an increase for the number of load balancers for your account. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancers Guide</i>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html">Application Load Balancers</a> in the <i>Application Load Balancers Guide</i>.</p>
     fn create_load_balancer(
         &self,
         input: &CreateLoadBalancerInput,
@@ -8770,7 +8770,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a rule for the specified listener.</p> <p>Each rule can have one action and one condition. Rules are evaluated in priority order, from the lowest value to the highest value. When the condition for a rule is met, the specified action is taken. If no conditions are met, the default action for the default rule is taken. For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html#listener-rules\">Listener Rules</a> in the <i>Application Load Balancers Guide</i>.</p> <p>To view your current rules, use <a>DescribeRules</a>. To update a rule, use <a>ModifyRule</a>. To set the priorities of your rules, use <a>SetRulePriorities</a>. To delete a rule, use <a>DeleteRule</a>.</p>"]
+    /// <p>Creates a rule for the specified listener.</p> <p>Each rule can have one action and one condition. Rules are evaluated in priority order, from the lowest value to the highest value. When the condition for a rule is met, the specified action is taken. If no conditions are met, the default action for the default rule is taken. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html#listener-rules">Listener Rules</a> in the <i>Application Load Balancers Guide</i>.</p> <p>To view your current rules, use <a>DescribeRules</a>. To update a rule, use <a>ModifyRule</a>. To set the priorities of your rules, use <a>SetRulePriorities</a>. To delete a rule, use <a>DeleteRule</a>.</p>
     fn create_rule(&self, input: &CreateRuleInput) -> Result<CreateRuleOutput, CreateRuleError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -8818,7 +8818,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a target group.</p> <p>To register targets with the target group, use <a>RegisterTargets</a>. To update the health check settings for the target group, use <a>ModifyTargetGroup</a>. To monitor the health of targets in the target group, use <a>DescribeTargetHealth</a>.</p> <p>To route traffic to the targets in a target group, specify the target group in an action using <a>CreateListener</a> or <a>CreateRule</a>.</p> <p>To delete a target group, use <a>DeleteTargetGroup</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html\">Target Groups for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i>.</p>"]
+    /// <p>Creates a target group.</p> <p>To register targets with the target group, use <a>RegisterTargets</a>. To update the health check settings for the target group, use <a>ModifyTargetGroup</a>. To monitor the health of targets in the target group, use <a>DescribeTargetHealth</a>.</p> <p>To route traffic to the targets in a target group, specify the target group in an action using <a>CreateListener</a> or <a>CreateRule</a>.</p> <p>To delete a target group, use <a>DeleteTargetGroup</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html">Target Groups for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i>.</p>
     fn create_target_group(
         &self,
         input: &CreateTargetGroupInput,
@@ -8869,7 +8869,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified listener.</p> <p>Alternatively, your listener is deleted when you delete the load balancer it is attached to using <a>DeleteLoadBalancer</a>.</p>"]
+    /// <p>Deletes the specified listener.</p> <p>Alternatively, your listener is deleted when you delete the load balancer it is attached to using <a>DeleteLoadBalancer</a>.</p>
     fn delete_listener(
         &self,
         input: &DeleteListenerInput,
@@ -8920,7 +8920,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified Application Load Balancer and its attached listeners.</p> <p>You can't delete a load balancer if deletion protection is enabled. If the load balancer does not exist or has already been deleted, the call succeeds.</p> <p>Deleting a load balancer does not affect its registered targets. For example, your EC2 instances continue to run and are still registered to their target groups. If you no longer need these EC2 instances, you can stop or terminate them.</p>"]
+    /// <p>Deletes the specified Application Load Balancer and its attached listeners.</p> <p>You can't delete a load balancer if deletion protection is enabled. If the load balancer does not exist or has already been deleted, the call succeeds.</p> <p>Deleting a load balancer does not affect its registered targets. For example, your EC2 instances continue to run and are still registered to their target groups. If you no longer need these EC2 instances, you can stop or terminate them.</p>
     fn delete_load_balancer(
         &self,
         input: &DeleteLoadBalancerInput,
@@ -8971,7 +8971,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the specified rule.</p>"]
+    /// <p>Deletes the specified rule.</p>
     fn delete_rule(&self, input: &DeleteRuleInput) -> Result<DeleteRuleOutput, DeleteRuleError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -9019,7 +9019,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified target group.</p> <p>You can delete a target group if it is not referenced by any actions. Deleting a target group also deletes any associated health checks.</p>"]
+    /// <p>Deletes the specified target group.</p> <p>You can delete a target group if it is not referenced by any actions. Deleting a target group also deletes any associated health checks.</p>
     fn delete_target_group(
         &self,
         input: &DeleteTargetGroupInput,
@@ -9070,7 +9070,7 @@ where
         }
     }
 
-    #[doc="<p>Deregisters the specified targets from the specified target group. After the targets are deregistered, they no longer receive traffic from the load balancer.</p>"]
+    /// <p>Deregisters the specified targets from the specified target group. After the targets are deregistered, they no longer receive traffic from the load balancer.</p>
     fn deregister_targets(
         &self,
         input: &DeregisterTargetsInput,
@@ -9121,7 +9121,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the current Elastic Load Balancing resource limits for your AWS account.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html\">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancer Guide</i>.</p>"]
+    /// <p>Describes the current Elastic Load Balancing resource limits for your AWS account.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancer Guide</i>.</p>
     fn describe_account_limits(
         &self,
         input: &DescribeAccountLimitsInput,
@@ -9172,7 +9172,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the specified listeners or the listeners for the specified Application Load Balancer. You must specify either a load balancer or one or more listeners.</p>"]
+    /// <p>Describes the specified listeners or the listeners for the specified Application Load Balancer. You must specify either a load balancer or one or more listeners.</p>
     fn describe_listeners(
         &self,
         input: &DescribeListenersInput,
@@ -9223,7 +9223,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes the attributes for the specified Application Load Balancer.</p>"]
+    /// <p>Describes the attributes for the specified Application Load Balancer.</p>
     fn describe_load_balancer_attributes(
         &self,
         input: &DescribeLoadBalancerAttributesInput,
@@ -9276,7 +9276,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the specified Application Load Balancers or all of your Application Load Balancers.</p> <p>To describe the listeners for a load balancer, use <a>DescribeListeners</a>. To describe the attributes for a load balancer, use <a>DescribeLoadBalancerAttributes</a>.</p>"]
+    /// <p>Describes the specified Application Load Balancers or all of your Application Load Balancers.</p> <p>To describe the listeners for a load balancer, use <a>DescribeListeners</a>. To describe the attributes for a load balancer, use <a>DescribeLoadBalancerAttributes</a>.</p>
     fn describe_load_balancers(
         &self,
         input: &DescribeLoadBalancersInput,
@@ -9327,7 +9327,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the specified rules or the rules for the specified listener. You must specify either a listener or one or more rules.</p>"]
+    /// <p>Describes the specified rules or the rules for the specified listener. You must specify either a listener or one or more rules.</p>
     fn describe_rules(
         &self,
         input: &DescribeRulesInput,
@@ -9378,7 +9378,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the specified policies or all policies used for SSL negotiation.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies\">Security Policies</a> in the <i>Application Load Balancers Guide</i>.</p>"]
+    /// <p>Describes the specified policies or all policies used for SSL negotiation.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies">Security Policies</a> in the <i>Application Load Balancers Guide</i>.</p>
     fn describe_ssl_policies(
         &self,
         input: &DescribeSSLPoliciesInput,
@@ -9429,7 +9429,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the tags for the specified resources. You can describe the tags for one or more Application Load Balancers and target groups.</p>"]
+    /// <p>Describes the tags for the specified resources. You can describe the tags for one or more Application Load Balancers and target groups.</p>
     fn describe_tags(
         &self,
         input: &DescribeTagsInput,
@@ -9480,7 +9480,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes the attributes for the specified target group.</p>"]
+    /// <p>Describes the attributes for the specified target group.</p>
     fn describe_target_group_attributes(
         &self,
         input: &DescribeTargetGroupAttributesInput,
@@ -9533,7 +9533,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the specified target groups or all of your target groups. By default, all target groups are described. Alternatively, you can specify one of the following to filter the results: the ARN of the load balancer, the names of one or more target groups, or the ARNs of one or more target groups.</p> <p>To describe the targets for a target group, use <a>DescribeTargetHealth</a>. To describe the attributes of a target group, use <a>DescribeTargetGroupAttributes</a>.</p>"]
+    /// <p>Describes the specified target groups or all of your target groups. By default, all target groups are described. Alternatively, you can specify one of the following to filter the results: the ARN of the load balancer, the names of one or more target groups, or the ARNs of one or more target groups.</p> <p>To describe the targets for a target group, use <a>DescribeTargetHealth</a>. To describe the attributes of a target group, use <a>DescribeTargetGroupAttributes</a>.</p>
     fn describe_target_groups(
         &self,
         input: &DescribeTargetGroupsInput,
@@ -9584,7 +9584,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes the health of the specified targets or all of your targets.</p>"]
+    /// <p>Describes the health of the specified targets or all of your targets.</p>
     fn describe_target_health(
         &self,
         input: &DescribeTargetHealthInput,
@@ -9635,7 +9635,7 @@ where
         }
     }
 
-    #[doc="<p>Modifies the specified properties of the specified listener.</p> <p>Any properties that you do not specify retain their current values. However, changing the protocol from HTTPS to HTTP removes the security policy and SSL certificate properties. If you change the protocol from HTTP to HTTPS, you must add the security policy and server certificate.</p>"]
+    /// <p>Modifies the specified properties of the specified listener.</p> <p>Any properties that you do not specify retain their current values. However, changing the protocol from HTTPS to HTTP removes the security policy and SSL certificate properties. If you change the protocol from HTTP to HTTPS, you must add the security policy and server certificate.</p>
     fn modify_listener(
         &self,
         input: &ModifyListenerInput,
@@ -9686,7 +9686,7 @@ where
         }
     }
 
-    #[doc="<p>Modifies the specified attributes of the specified Application Load Balancer.</p> <p>If any of the specified attributes can't be modified as requested, the call fails. Any existing attributes that you do not modify retain their current values.</p>"]
+    /// <p>Modifies the specified attributes of the specified Application Load Balancer.</p> <p>If any of the specified attributes can't be modified as requested, the call fails. Any existing attributes that you do not modify retain their current values.</p>
     fn modify_load_balancer_attributes(
         &self,
         input: &ModifyLoadBalancerAttributesInput,
@@ -9739,7 +9739,7 @@ where
         }
     }
 
-    #[doc="<p>Modifies the specified rule.</p> <p>Any existing properties that you do not modify retain their current values.</p> <p>To modify the default action, use <a>ModifyListener</a>.</p>"]
+    /// <p>Modifies the specified rule.</p> <p>Any existing properties that you do not modify retain their current values.</p> <p>To modify the default action, use <a>ModifyListener</a>.</p>
     fn modify_rule(&self, input: &ModifyRuleInput) -> Result<ModifyRuleOutput, ModifyRuleError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -9787,7 +9787,7 @@ where
         }
     }
 
-    #[doc="<p>Modifies the health checks used when evaluating the health state of the targets in the specified target group.</p> <p>To monitor the health of the targets, use <a>DescribeTargetHealth</a>.</p>"]
+    /// <p>Modifies the health checks used when evaluating the health state of the targets in the specified target group.</p> <p>To monitor the health of the targets, use <a>DescribeTargetHealth</a>.</p>
     fn modify_target_group(
         &self,
         input: &ModifyTargetGroupInput,
@@ -9838,7 +9838,7 @@ where
         }
     }
 
-    #[doc = "<p>Modifies the specified attributes of the specified target group.</p>"]
+    /// <p>Modifies the specified attributes of the specified target group.</p>
     fn modify_target_group_attributes(
         &self,
         input: &ModifyTargetGroupAttributesInput,
@@ -9889,7 +9889,7 @@ where
         }
     }
 
-    #[doc="<p>Registers the specified targets with the specified target group.</p> <p>By default, the load balancer routes requests to registered targets using the protocol and port number for the target group. Alternatively, you can override the port for a target when you register it.</p> <p>The target must be in the virtual private cloud (VPC) that you specified for the target group. If the target is an EC2 instance, it must be in the <code>running</code> state when you register it.</p> <p>To remove a target from a target group, use <a>DeregisterTargets</a>.</p>"]
+    /// <p>Registers the specified targets with the specified target group.</p> <p>By default, the load balancer routes requests to registered targets using the protocol and port number for the target group. Alternatively, you can override the port for a target when you register it.</p> <p>The target must be in the virtual private cloud (VPC) that you specified for the target group. If the target is an EC2 instance, it must be in the <code>running</code> state when you register it.</p> <p>To remove a target from a target group, use <a>DeregisterTargets</a>.</p>
     fn register_targets(
         &self,
         input: &RegisterTargetsInput,
@@ -9940,7 +9940,7 @@ where
         }
     }
 
-    #[doc="<p>Removes the specified tags from the specified resource.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>.</p>"]
+    /// <p>Removes the specified tags from the specified resource.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>.</p>
     fn remove_tags(&self, input: &RemoveTagsInput) -> Result<RemoveTagsOutput, RemoveTagsError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -9988,7 +9988,7 @@ where
         }
     }
 
-    #[doc="<p>Sets the type of IP addresses used by the subnets of the specified Application Load Balancer.</p>"]
+    /// <p>Sets the type of IP addresses used by the subnets of the specified Application Load Balancer.</p>
     fn set_ip_address_type(
         &self,
         input: &SetIpAddressTypeInput,
@@ -10039,7 +10039,7 @@ where
         }
     }
 
-    #[doc="<p>Sets the priorities of the specified rules.</p> <p>You can reorder the rules as long as there are no priority conflicts in the new order. Any existing rules that you do not specify retain their current priority.</p>"]
+    /// <p>Sets the priorities of the specified rules.</p> <p>You can reorder the rules as long as there are no priority conflicts in the new order. Any existing rules that you do not specify retain their current priority.</p>
     fn set_rule_priorities(
         &self,
         input: &SetRulePrioritiesInput,
@@ -10090,7 +10090,7 @@ where
         }
     }
 
-    #[doc="<p>Associates the specified security groups with the specified load balancer. The specified security groups override the previously associated security groups.</p>"]
+    /// <p>Associates the specified security groups with the specified load balancer. The specified security groups override the previously associated security groups.</p>
     fn set_security_groups(
         &self,
         input: &SetSecurityGroupsInput,
@@ -10141,7 +10141,7 @@ where
         }
     }
 
-    #[doc="<p>Enables the Availability Zone for the specified subnets for the specified load balancer. The specified subnets replace the previously enabled subnets.</p>"]
+    /// <p>Enables the Availability Zone for the specified subnets for the specified load balancer. The specified subnets replace the previously enabled subnets.</p>
     fn set_subnets(&self, input: &SetSubnetsInput) -> Result<SetSubnetsOutput, SetSubnetsError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();

@@ -187,7 +187,7 @@ pub struct DomainValidationOption {
     /// <p>A fully qualified domain name (FQDN) in the certificate request.</p>
     #[serde(rename = "DomainName")]
     pub domain_name: String,
-    /// <p>The domain name that you want ACM to use to send you validation emails. This domain name is the suffix of the email addresses that you want ACM to use. This must be the same as the <code>DomainName</code> value or a superdomain of the <code>DomainName</code> value. For example, if you request a certificate for <code>testing.example.com</code>, you can specify <code>example.com</code> for this value. In that case, ACM sends domain validation emails to the following five addresses:</p> <ul> <li> <p>admin@example.com</p> </li> <li> <p>administrator@example.com</p> </li> <li> <p>hostmaster@example.com</p> </li> <li> <p>postmaster@example.com</p> </li> <li> <p>webmaster@example.com</p> </li> </ul>
+    /// <p><p>The domain name that you want ACM to use to send you validation emails. This domain name is the suffix of the email addresses that you want ACM to use. This must be the same as the <code>DomainName</code> value or a superdomain of the <code>DomainName</code> value. For example, if you request a certificate for <code>testing.example.com</code>, you can specify <code>example.com</code> for this value. In that case, ACM sends domain validation emails to the following five addresses:</p> <ul> <li> <p>admin@example.com</p> </li> <li> <p>administrator@example.com</p> </li> <li> <p>hostmaster@example.com</p> </li> <li> <p>postmaster@example.com</p> </li> <li> <p>webmaster@example.com</p> </li> </ul></p>
     #[serde(rename = "ValidationDomain")]
     pub validation_domain: String,
 }
@@ -213,7 +213,7 @@ pub struct GetCertificateResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ImportCertificateRequest {
-    /// <p>The certificate to import. It must meet the following requirements:</p> <ul> <li> <p>Must be PEM-encoded.</p> </li> <li> <p>Must contain a 1024-bit or 2048-bit RSA public key.</p> </li> <li> <p>Must be valid at the time of import. You cannot import a certificate before its validity period begins (the certificate's <code>NotBefore</code> date) or after it expires (the certificate's <code>NotAfter</code> date).</p> </li> </ul>
+    /// <p><p>The certificate to import. It must meet the following requirements:</p> <ul> <li> <p>Must be PEM-encoded.</p> </li> <li> <p>Must contain a 1024-bit or 2048-bit RSA public key.</p> </li> <li> <p>Must be valid at the time of import. You cannot import a certificate before its validity period begins (the certificate&#39;s <code>NotBefore</code> date) or after it expires (the certificate&#39;s <code>NotAfter</code> date).</p> </li> </ul></p>
     #[serde(rename = "Certificate")]
     #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
             serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
@@ -227,7 +227,7 @@ pub struct ImportCertificateRequest {
     #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
             serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
     pub certificate_chain: Option<Vec<u8>>,
-    /// <p>The private key that matches the public key in the certificate. It must meet the following requirements:</p> <ul> <li> <p>Must be PEM-encoded.</p> </li> <li> <p>Must be unencrypted. You cannot import a private key that is protected by a password or passphrase.</p> </li> </ul>
+    /// <p><p>The private key that matches the public key in the certificate. It must meet the following requirements:</p> <ul> <li> <p>Must be PEM-encoded.</p> </li> <li> <p>Must be unencrypted. You cannot import a private key that is protected by a password or passphrase.</p> </li> </ul></p>
     #[serde(rename = "PrivateKey")]
     #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
             serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
@@ -341,7 +341,7 @@ pub struct ResendValidationEmailRequest {
     /// <p>The fully qualified domain name (FQDN) of the certificate that needs to be validated.</p>
     #[serde(rename = "Domain")]
     pub domain: String,
-    /// <p>The base validation domain that will act as the suffix of the email addresses that are used to send the emails. This must be the same as the <code>Domain</code> value or a superdomain of the <code>Domain</code> value. For example, if you requested a certificate for <code>site.subdomain.example.com</code> and specify a <b>ValidationDomain</b> of <code>subdomain.example.com</code>, ACM sends email to the domain registrant, technical contact, and administrative contact in WHOIS and the following five addresses:</p> <ul> <li> <p>admin@subdomain.example.com</p> </li> <li> <p>administrator@subdomain.example.com</p> </li> <li> <p>hostmaster@subdomain.example.com</p> </li> <li> <p>postmaster@subdomain.example.com</p> </li> <li> <p>webmaster@subdomain.example.com</p> </li> </ul>
+    /// <p><p>The base validation domain that will act as the suffix of the email addresses that are used to send the emails. This must be the same as the <code>Domain</code> value or a superdomain of the <code>Domain</code> value. For example, if you requested a certificate for <code>site.subdomain.example.com</code> and specify a <b>ValidationDomain</b> of <code>subdomain.example.com</code>, ACM sends email to the domain registrant, technical contact, and administrative contact in WHOIS and the following five addresses:</p> <ul> <li> <p>admin@subdomain.example.com</p> </li> <li> <p>administrator@subdomain.example.com</p> </li> <li> <p>hostmaster@subdomain.example.com</p> </li> <li> <p>postmaster@subdomain.example.com</p> </li> <li> <p>webmaster@subdomain.example.com</p> </li> </ul></p>
     #[serde(rename = "ValidationDomain")]
     pub validation_domain: String,
 }
@@ -361,13 +361,13 @@ pub struct Tag {
 /// Errors returned by AddTagsToCertificate
 #[derive(Debug, PartialEq)]
 pub enum AddTagsToCertificateError {
-    ///<p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
+    /// <p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
     InvalidArn(String),
-    ///<p>One or both of the values that make up the key-value pair is not valid. For example, you cannot specify a tag value that begins with <code>aws:</code>.</p>
+    /// <p>One or both of the values that make up the key-value pair is not valid. For example, you cannot specify a tag value that begins with <code>aws:</code>.</p>
     InvalidTag(String),
-    ///<p>The specified certificate cannot be found in the caller's account, or the caller's account cannot be found.</p>
+    /// <p>The specified certificate cannot be found in the caller's account, or the caller's account cannot be found.</p>
     ResourceNotFound(String),
-    ///<p>The request contains too many tags. Try the request again with fewer tags.</p>
+    /// <p>The request contains too many tags. Try the request again with fewer tags.</p>
     TooManyTags(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -459,11 +459,11 @@ impl Error for AddTagsToCertificateError {
 /// Errors returned by DeleteCertificate
 #[derive(Debug, PartialEq)]
 pub enum DeleteCertificateError {
-    ///<p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
+    /// <p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
     InvalidArn(String),
-    ///<p>The certificate is in use by another AWS service in the caller's account. Remove the association and try again.</p>
+    /// <p>The certificate is in use by another AWS service in the caller's account. Remove the association and try again.</p>
     ResourceInUse(String),
-    ///<p>The specified certificate cannot be found in the caller's account, or the caller's account cannot be found.</p>
+    /// <p>The specified certificate cannot be found in the caller's account, or the caller's account cannot be found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -551,9 +551,9 @@ impl Error for DeleteCertificateError {
 /// Errors returned by DescribeCertificate
 #[derive(Debug, PartialEq)]
 pub enum DescribeCertificateError {
-    ///<p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
+    /// <p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
     InvalidArn(String),
-    ///<p>The specified certificate cannot be found in the caller's account, or the caller's account cannot be found.</p>
+    /// <p>The specified certificate cannot be found in the caller's account, or the caller's account cannot be found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -637,11 +637,11 @@ impl Error for DescribeCertificateError {
 /// Errors returned by GetCertificate
 #[derive(Debug, PartialEq)]
 pub enum GetCertificateError {
-    ///<p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
+    /// <p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
     InvalidArn(String),
-    ///<p>The certificate request is in process and the certificate in your account has not yet been issued.</p>
+    /// <p>The certificate request is in process and the certificate in your account has not yet been issued.</p>
     RequestInProgress(String),
-    ///<p>The specified certificate cannot be found in the caller's account, or the caller's account cannot be found.</p>
+    /// <p>The specified certificate cannot be found in the caller's account, or the caller's account cannot be found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -727,9 +727,9 @@ impl Error for GetCertificateError {
 /// Errors returned by ImportCertificate
 #[derive(Debug, PartialEq)]
 pub enum ImportCertificateError {
-    ///<p>An ACM limit has been exceeded. For example, you may have input more domains than are allowed or you've requested too many certificates for your account. See the exception message returned by ACM to determine which limit you have violated. For more information about ACM limits, see the <a href="http://docs.aws.amazon.com/acm/latest/userguide/acm-limits.html">Limits</a> topic.</p>
+    /// <p>An ACM limit has been exceeded. For example, you may have input more domains than are allowed or you've requested too many certificates for your account. See the exception message returned by ACM to determine which limit you have violated. For more information about ACM limits, see the <a href="http://docs.aws.amazon.com/acm/latest/userguide/acm-limits.html">Limits</a> topic.</p>
     LimitExceeded(String),
-    ///<p>The specified certificate cannot be found in the caller's account, or the caller's account cannot be found.</p>
+    /// <p>The specified certificate cannot be found in the caller's account, or the caller's account cannot be found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -885,9 +885,9 @@ impl Error for ListCertificatesError {
 /// Errors returned by ListTagsForCertificate
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForCertificateError {
-    ///<p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
+    /// <p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
     InvalidArn(String),
-    ///<p>The specified certificate cannot be found in the caller's account, or the caller's account cannot be found.</p>
+    /// <p>The specified certificate cannot be found in the caller's account, or the caller's account cannot be found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -971,11 +971,11 @@ impl Error for ListTagsForCertificateError {
 /// Errors returned by RemoveTagsFromCertificate
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsFromCertificateError {
-    ///<p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
+    /// <p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
     InvalidArn(String),
-    ///<p>One or both of the values that make up the key-value pair is not valid. For example, you cannot specify a tag value that begins with <code>aws:</code>.</p>
+    /// <p>One or both of the values that make up the key-value pair is not valid. For example, you cannot specify a tag value that begins with <code>aws:</code>.</p>
     InvalidTag(String),
-    ///<p>The specified certificate cannot be found in the caller's account, or the caller's account cannot be found.</p>
+    /// <p>The specified certificate cannot be found in the caller's account, or the caller's account cannot be found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1065,9 +1065,9 @@ impl Error for RemoveTagsFromCertificateError {
 /// Errors returned by RequestCertificate
 #[derive(Debug, PartialEq)]
 pub enum RequestCertificateError {
-    ///<p>One or more values in the <a>DomainValidationOption</a> structure is incorrect.</p>
+    /// <p>One or more values in the <a>DomainValidationOption</a> structure is incorrect.</p>
     InvalidDomainValidationOptions(String),
-    ///<p>An ACM limit has been exceeded. For example, you may have input more domains than are allowed or you've requested too many certificates for your account. See the exception message returned by ACM to determine which limit you have violated. For more information about ACM limits, see the <a href="http://docs.aws.amazon.com/acm/latest/userguide/acm-limits.html">Limits</a> topic.</p>
+    /// <p>An ACM limit has been exceeded. For example, you may have input more domains than are allowed or you've requested too many certificates for your account. See the exception message returned by ACM to determine which limit you have violated. For more information about ACM limits, see the <a href="http://docs.aws.amazon.com/acm/latest/userguide/acm-limits.html">Limits</a> topic.</p>
     LimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1153,13 +1153,13 @@ impl Error for RequestCertificateError {
 /// Errors returned by ResendValidationEmail
 #[derive(Debug, PartialEq)]
 pub enum ResendValidationEmailError {
-    ///<p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
+    /// <p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
     InvalidArn(String),
-    ///<p>One or more values in the <a>DomainValidationOption</a> structure is incorrect.</p>
+    /// <p>One or more values in the <a>DomainValidationOption</a> structure is incorrect.</p>
     InvalidDomainValidationOptions(String),
-    ///<p>Processing has reached an invalid state. For example, this exception can occur if the specified domain is not using email validation, or the current certificate status does not permit the requested operation. See the exception message returned by ACM to determine which state is not valid.</p>
+    /// <p>Processing has reached an invalid state. For example, this exception can occur if the specified domain is not using email validation, or the current certificate status does not permit the requested operation. See the exception message returned by ACM to determine which state is not valid.</p>
     InvalidState(String),
-    ///<p>The specified certificate cannot be found in the caller's account, or the caller's account cannot be found.</p>
+    /// <p>The specified certificate cannot be found in the caller's account, or the caller's account cannot be found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1252,61 +1252,61 @@ impl Error for ResendValidationEmailError {
 }
 /// Trait representing the capabilities of the ACM API. ACM clients implement this trait.
 pub trait Acm {
-    #[doc="<p>Adds one or more tags to an ACM Certificate. Tags are labels that you can use to identify and organize your AWS resources. Each tag consists of a <code>key</code> and an optional <code>value</code>. You specify the certificate on input by its Amazon Resource Name (ARN). You specify the tag by using a key-value pair.</p> <p>You can apply a tag to just one certificate if you want to identify a specific characteristic of that certificate, or you can apply the same tag to multiple certificates if you want to filter for a common relationship among those certificates. Similarly, you can apply the same tag to multiple resources if you want to specify a relationship among those resources. For example, you can add the same tag to an ACM Certificate and an Elastic Load Balancing load balancer to indicate that they are both used by the same website. For more information, see <a href=\"http://docs.aws.amazon.com/acm/latest/userguide/tags.html\">Tagging ACM Certificates</a>.</p> <p>To remove one or more tags, use the <a>RemoveTagsFromCertificate</a> action. To view all of the tags that have been applied to the certificate, use the <a>ListTagsForCertificate</a> action.</p>"]
+    /// <p>Adds one or more tags to an ACM Certificate. Tags are labels that you can use to identify and organize your AWS resources. Each tag consists of a <code>key</code> and an optional <code>value</code>. You specify the certificate on input by its Amazon Resource Name (ARN). You specify the tag by using a key-value pair.</p> <p>You can apply a tag to just one certificate if you want to identify a specific characteristic of that certificate, or you can apply the same tag to multiple certificates if you want to filter for a common relationship among those certificates. Similarly, you can apply the same tag to multiple resources if you want to specify a relationship among those resources. For example, you can add the same tag to an ACM Certificate and an Elastic Load Balancing load balancer to indicate that they are both used by the same website. For more information, see <a href="http://docs.aws.amazon.com/acm/latest/userguide/tags.html">Tagging ACM Certificates</a>.</p> <p>To remove one or more tags, use the <a>RemoveTagsFromCertificate</a> action. To view all of the tags that have been applied to the certificate, use the <a>ListTagsForCertificate</a> action.</p>
     fn add_tags_to_certificate(
         &self,
         input: &AddTagsToCertificateRequest,
     ) -> Result<(), AddTagsToCertificateError>;
 
-    #[doc="<p>Deletes an ACM Certificate and its associated private key. If this action succeeds, the certificate no longer appears in the list of ACM Certificates that can be displayed by calling the <a>ListCertificates</a> action or be retrieved by calling the <a>GetCertificate</a> action. The certificate will not be available for use by other AWS services.</p> <note> <p>You cannot delete an ACM Certificate that is being used by another AWS service. To delete a certificate that is in use, the certificate association must first be removed.</p> </note>"]
+    /// <p><p>Deletes an ACM Certificate and its associated private key. If this action succeeds, the certificate no longer appears in the list of ACM Certificates that can be displayed by calling the <a>ListCertificates</a> action or be retrieved by calling the <a>GetCertificate</a> action. The certificate will not be available for use by other AWS services.</p> <note> <p>You cannot delete an ACM Certificate that is being used by another AWS service. To delete a certificate that is in use, the certificate association must first be removed.</p> </note></p>
     fn delete_certificate(
         &self,
         input: &DeleteCertificateRequest,
     ) -> Result<(), DeleteCertificateError>;
 
-    #[doc = "<p>Returns detailed metadata about the specified ACM Certificate.</p>"]
+    /// <p>Returns detailed metadata about the specified ACM Certificate.</p>
     fn describe_certificate(
         &self,
         input: &DescribeCertificateRequest,
     ) -> Result<DescribeCertificateResponse, DescribeCertificateError>;
 
-    #[doc="<p>Retrieves an ACM Certificate and certificate chain for the certificate specified by an ARN. The chain is an ordered list of certificates that contains the root certificate, intermediate certificates of subordinate CAs, and the ACM Certificate. The certificate and certificate chain are base64 encoded. If you want to decode the certificate chain to see the individual certificate fields, you can use OpenSSL.</p> <note> <p>Currently, ACM Certificates can be used only with Elastic Load Balancing and Amazon CloudFront.</p> </note>"]
+    /// <p><p>Retrieves an ACM Certificate and certificate chain for the certificate specified by an ARN. The chain is an ordered list of certificates that contains the root certificate, intermediate certificates of subordinate CAs, and the ACM Certificate. The certificate and certificate chain are base64 encoded. If you want to decode the certificate chain to see the individual certificate fields, you can use OpenSSL.</p> <note> <p>Currently, ACM Certificates can be used only with Elastic Load Balancing and Amazon CloudFront.</p> </note></p>
     fn get_certificate(
         &self,
         input: &GetCertificateRequest,
     ) -> Result<GetCertificateResponse, GetCertificateError>;
 
-    #[doc="<p>Imports an SSL/TLS certificate into AWS Certificate Manager (ACM) to use with <a href=\"http://docs.aws.amazon.com/acm/latest/userguide/acm-services.html\">ACM's integrated AWS services</a>.</p> <note> <p>ACM does not provide <a href=\"http://docs.aws.amazon.com/acm/latest/userguide/acm-renewal.html\">managed renewal</a> for certificates that you import.</p> </note> <p>For more information about importing certificates into ACM, including the differences between certificates that you import and those that ACM provides, see <a href=\"http://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html\">Importing Certificates</a> in the <i>AWS Certificate Manager User Guide</i>.</p> <p>To import a certificate, you must provide the certificate and the matching private key. When the certificate is not self-signed, you must also provide a certificate chain. You can omit the certificate chain when importing a self-signed certificate.</p> <p>The certificate, private key, and certificate chain must be PEM-encoded. For more information about converting these items to PEM format, see <a href=\"http://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html#import-certificate-troubleshooting\">Importing Certificates Troubleshooting</a> in the <i>AWS Certificate Manager User Guide</i>.</p> <p>To import a new certificate, omit the <code>CertificateArn</code> field. Include this field only when you want to replace a previously imported certificate.</p> <p>This operation returns the <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Name (ARN)</a> of the imported certificate.</p>"]
+    /// <p>Imports an SSL/TLS certificate into AWS Certificate Manager (ACM) to use with <a href="http://docs.aws.amazon.com/acm/latest/userguide/acm-services.html">ACM's integrated AWS services</a>.</p> <note> <p>ACM does not provide <a href="http://docs.aws.amazon.com/acm/latest/userguide/acm-renewal.html">managed renewal</a> for certificates that you import.</p> </note> <p>For more information about importing certificates into ACM, including the differences between certificates that you import and those that ACM provides, see <a href="http://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html">Importing Certificates</a> in the <i>AWS Certificate Manager User Guide</i>.</p> <p>To import a certificate, you must provide the certificate and the matching private key. When the certificate is not self-signed, you must also provide a certificate chain. You can omit the certificate chain when importing a self-signed certificate.</p> <p>The certificate, private key, and certificate chain must be PEM-encoded. For more information about converting these items to PEM format, see <a href="http://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html#import-certificate-troubleshooting">Importing Certificates Troubleshooting</a> in the <i>AWS Certificate Manager User Guide</i>.</p> <p>To import a new certificate, omit the <code>CertificateArn</code> field. Include this field only when you want to replace a previously imported certificate.</p> <p>This operation returns the <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Name (ARN)</a> of the imported certificate.</p>
     fn import_certificate(
         &self,
         input: &ImportCertificateRequest,
     ) -> Result<ImportCertificateResponse, ImportCertificateError>;
 
-    #[doc="<p>Retrieves a list of ACM Certificates and the domain name for each. You can optionally filter the list to return only the certificates that match the specified status.</p>"]
+    /// <p>Retrieves a list of ACM Certificates and the domain name for each. You can optionally filter the list to return only the certificates that match the specified status.</p>
     fn list_certificates(
         &self,
         input: &ListCertificatesRequest,
     ) -> Result<ListCertificatesResponse, ListCertificatesError>;
 
-    #[doc="<p>Lists the tags that have been applied to the ACM Certificate. Use the certificate's Amazon Resource Name (ARN) to specify the certificate. To add a tag to an ACM Certificate, use the <a>AddTagsToCertificate</a> action. To delete a tag, use the <a>RemoveTagsFromCertificate</a> action.</p>"]
+    /// <p>Lists the tags that have been applied to the ACM Certificate. Use the certificate's Amazon Resource Name (ARN) to specify the certificate. To add a tag to an ACM Certificate, use the <a>AddTagsToCertificate</a> action. To delete a tag, use the <a>RemoveTagsFromCertificate</a> action.</p>
     fn list_tags_for_certificate(
         &self,
         input: &ListTagsForCertificateRequest,
     ) -> Result<ListTagsForCertificateResponse, ListTagsForCertificateError>;
 
-    #[doc="<p>Remove one or more tags from an ACM Certificate. A tag consists of a key-value pair. If you do not specify the value portion of the tag when calling this function, the tag will be removed regardless of value. If you specify a value, the tag is removed only if it is associated with the specified value.</p> <p>To add tags to a certificate, use the <a>AddTagsToCertificate</a> action. To view all of the tags that have been applied to a specific ACM Certificate, use the <a>ListTagsForCertificate</a> action.</p>"]
+    /// <p>Remove one or more tags from an ACM Certificate. A tag consists of a key-value pair. If you do not specify the value portion of the tag when calling this function, the tag will be removed regardless of value. If you specify a value, the tag is removed only if it is associated with the specified value.</p> <p>To add tags to a certificate, use the <a>AddTagsToCertificate</a> action. To view all of the tags that have been applied to a specific ACM Certificate, use the <a>ListTagsForCertificate</a> action.</p>
     fn remove_tags_from_certificate(
         &self,
         input: &RemoveTagsFromCertificateRequest,
     ) -> Result<(), RemoveTagsFromCertificateError>;
 
-    #[doc="<p>Requests an ACM Certificate for use with other AWS services. To request an ACM Certificate, you must specify the fully qualified domain name (FQDN) for your site. You can also specify additional FQDNs if users can reach your site by using other names. For each domain name you specify, email is sent to the domain owner to request approval to issue the certificate. After receiving approval from the domain owner, the ACM Certificate is issued. For more information, see the <a href=\"http://docs.aws.amazon.com/acm/latest/userguide/\">AWS Certificate Manager User Guide</a>.</p>"]
+    /// <p>Requests an ACM Certificate for use with other AWS services. To request an ACM Certificate, you must specify the fully qualified domain name (FQDN) for your site. You can also specify additional FQDNs if users can reach your site by using other names. For each domain name you specify, email is sent to the domain owner to request approval to issue the certificate. After receiving approval from the domain owner, the ACM Certificate is issued. For more information, see the <a href="http://docs.aws.amazon.com/acm/latest/userguide/">AWS Certificate Manager User Guide</a>.</p>
     fn request_certificate(
         &self,
         input: &RequestCertificateRequest,
     ) -> Result<RequestCertificateResponse, RequestCertificateError>;
 
-    #[doc="<p>Resends the email that requests domain ownership validation. The domain owner or an authorized representative must approve the ACM Certificate before it can be issued. The certificate can be approved by clicking a link in the mail to navigate to the Amazon certificate approval website and then clicking <b>I Approve</b>. However, the validation email can be blocked by spam filters. Therefore, if you do not receive the original mail, you can request that the mail be resent within 72 hours of requesting the ACM Certificate. If more than 72 hours have elapsed since your original request or since your last attempt to resend validation mail, you must request a new certificate. For more information about setting up your contact email addresses, see <a href=\"http://docs.aws.amazon.com/acm/latest/userguide/setup-email.html\">Configure Email for your Domain</a>. </p>"]
+    /// <p>Resends the email that requests domain ownership validation. The domain owner or an authorized representative must approve the ACM Certificate before it can be issued. The certificate can be approved by clicking a link in the mail to navigate to the Amazon certificate approval website and then clicking <b>I Approve</b>. However, the validation email can be blocked by spam filters. Therefore, if you do not receive the original mail, you can request that the mail be resent within 72 hours of requesting the ACM Certificate. If more than 72 hours have elapsed since your original request or since your last attempt to resend validation mail, you must request a new certificate. For more information about setting up your contact email addresses, see <a href="http://docs.aws.amazon.com/acm/latest/userguide/setup-email.html">Configure Email for your Domain</a>. </p>
     fn resend_validation_email(
         &self,
         input: &ResendValidationEmailRequest,
@@ -1342,7 +1342,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Adds one or more tags to an ACM Certificate. Tags are labels that you can use to identify and organize your AWS resources. Each tag consists of a <code>key</code> and an optional <code>value</code>. You specify the certificate on input by its Amazon Resource Name (ARN). You specify the tag by using a key-value pair.</p> <p>You can apply a tag to just one certificate if you want to identify a specific characteristic of that certificate, or you can apply the same tag to multiple certificates if you want to filter for a common relationship among those certificates. Similarly, you can apply the same tag to multiple resources if you want to specify a relationship among those resources. For example, you can add the same tag to an ACM Certificate and an Elastic Load Balancing load balancer to indicate that they are both used by the same website. For more information, see <a href=\"http://docs.aws.amazon.com/acm/latest/userguide/tags.html\">Tagging ACM Certificates</a>.</p> <p>To remove one or more tags, use the <a>RemoveTagsFromCertificate</a> action. To view all of the tags that have been applied to the certificate, use the <a>ListTagsForCertificate</a> action.</p>"]
+    /// <p>Adds one or more tags to an ACM Certificate. Tags are labels that you can use to identify and organize your AWS resources. Each tag consists of a <code>key</code> and an optional <code>value</code>. You specify the certificate on input by its Amazon Resource Name (ARN). You specify the tag by using a key-value pair.</p> <p>You can apply a tag to just one certificate if you want to identify a specific characteristic of that certificate, or you can apply the same tag to multiple certificates if you want to filter for a common relationship among those certificates. Similarly, you can apply the same tag to multiple resources if you want to specify a relationship among those resources. For example, you can add the same tag to an ACM Certificate and an Elastic Load Balancing load balancer to indicate that they are both used by the same website. For more information, see <a href="http://docs.aws.amazon.com/acm/latest/userguide/tags.html">Tagging ACM Certificates</a>.</p> <p>To remove one or more tags, use the <a>RemoveTagsFromCertificate</a> action. To view all of the tags that have been applied to the certificate, use the <a>ListTagsForCertificate</a> action.</p>
     fn add_tags_to_certificate(
         &self,
         input: &AddTagsToCertificateRequest,
@@ -1370,7 +1370,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes an ACM Certificate and its associated private key. If this action succeeds, the certificate no longer appears in the list of ACM Certificates that can be displayed by calling the <a>ListCertificates</a> action or be retrieved by calling the <a>GetCertificate</a> action. The certificate will not be available for use by other AWS services.</p> <note> <p>You cannot delete an ACM Certificate that is being used by another AWS service. To delete a certificate that is in use, the certificate association must first be removed.</p> </note>"]
+    /// <p><p>Deletes an ACM Certificate and its associated private key. If this action succeeds, the certificate no longer appears in the list of ACM Certificates that can be displayed by calling the <a>ListCertificates</a> action or be retrieved by calling the <a>GetCertificate</a> action. The certificate will not be available for use by other AWS services.</p> <note> <p>You cannot delete an ACM Certificate that is being used by another AWS service. To delete a certificate that is in use, the certificate association must first be removed.</p> </note></p>
     fn delete_certificate(
         &self,
         input: &DeleteCertificateRequest,
@@ -1398,7 +1398,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns detailed metadata about the specified ACM Certificate.</p>"]
+    /// <p>Returns detailed metadata about the specified ACM Certificate.</p>
     fn describe_certificate(
         &self,
         input: &DescribeCertificateRequest,
@@ -1432,7 +1432,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves an ACM Certificate and certificate chain for the certificate specified by an ARN. The chain is an ordered list of certificates that contains the root certificate, intermediate certificates of subordinate CAs, and the ACM Certificate. The certificate and certificate chain are base64 encoded. If you want to decode the certificate chain to see the individual certificate fields, you can use OpenSSL.</p> <note> <p>Currently, ACM Certificates can be used only with Elastic Load Balancing and Amazon CloudFront.</p> </note>"]
+    /// <p><p>Retrieves an ACM Certificate and certificate chain for the certificate specified by an ARN. The chain is an ordered list of certificates that contains the root certificate, intermediate certificates of subordinate CAs, and the ACM Certificate. The certificate and certificate chain are base64 encoded. If you want to decode the certificate chain to see the individual certificate fields, you can use OpenSSL.</p> <note> <p>Currently, ACM Certificates can be used only with Elastic Load Balancing and Amazon CloudFront.</p> </note></p>
     fn get_certificate(
         &self,
         input: &GetCertificateRequest,
@@ -1466,7 +1466,7 @@ where
         }
     }
 
-    #[doc="<p>Imports an SSL/TLS certificate into AWS Certificate Manager (ACM) to use with <a href=\"http://docs.aws.amazon.com/acm/latest/userguide/acm-services.html\">ACM's integrated AWS services</a>.</p> <note> <p>ACM does not provide <a href=\"http://docs.aws.amazon.com/acm/latest/userguide/acm-renewal.html\">managed renewal</a> for certificates that you import.</p> </note> <p>For more information about importing certificates into ACM, including the differences between certificates that you import and those that ACM provides, see <a href=\"http://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html\">Importing Certificates</a> in the <i>AWS Certificate Manager User Guide</i>.</p> <p>To import a certificate, you must provide the certificate and the matching private key. When the certificate is not self-signed, you must also provide a certificate chain. You can omit the certificate chain when importing a self-signed certificate.</p> <p>The certificate, private key, and certificate chain must be PEM-encoded. For more information about converting these items to PEM format, see <a href=\"http://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html#import-certificate-troubleshooting\">Importing Certificates Troubleshooting</a> in the <i>AWS Certificate Manager User Guide</i>.</p> <p>To import a new certificate, omit the <code>CertificateArn</code> field. Include this field only when you want to replace a previously imported certificate.</p> <p>This operation returns the <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Name (ARN)</a> of the imported certificate.</p>"]
+    /// <p>Imports an SSL/TLS certificate into AWS Certificate Manager (ACM) to use with <a href="http://docs.aws.amazon.com/acm/latest/userguide/acm-services.html">ACM's integrated AWS services</a>.</p> <note> <p>ACM does not provide <a href="http://docs.aws.amazon.com/acm/latest/userguide/acm-renewal.html">managed renewal</a> for certificates that you import.</p> </note> <p>For more information about importing certificates into ACM, including the differences between certificates that you import and those that ACM provides, see <a href="http://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html">Importing Certificates</a> in the <i>AWS Certificate Manager User Guide</i>.</p> <p>To import a certificate, you must provide the certificate and the matching private key. When the certificate is not self-signed, you must also provide a certificate chain. You can omit the certificate chain when importing a self-signed certificate.</p> <p>The certificate, private key, and certificate chain must be PEM-encoded. For more information about converting these items to PEM format, see <a href="http://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html#import-certificate-troubleshooting">Importing Certificates Troubleshooting</a> in the <i>AWS Certificate Manager User Guide</i>.</p> <p>To import a new certificate, omit the <code>CertificateArn</code> field. Include this field only when you want to replace a previously imported certificate.</p> <p>This operation returns the <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Name (ARN)</a> of the imported certificate.</p>
     fn import_certificate(
         &self,
         input: &ImportCertificateRequest,
@@ -1500,7 +1500,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves a list of ACM Certificates and the domain name for each. You can optionally filter the list to return only the certificates that match the specified status.</p>"]
+    /// <p>Retrieves a list of ACM Certificates and the domain name for each. You can optionally filter the list to return only the certificates that match the specified status.</p>
     fn list_certificates(
         &self,
         input: &ListCertificatesRequest,
@@ -1534,7 +1534,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the tags that have been applied to the ACM Certificate. Use the certificate's Amazon Resource Name (ARN) to specify the certificate. To add a tag to an ACM Certificate, use the <a>AddTagsToCertificate</a> action. To delete a tag, use the <a>RemoveTagsFromCertificate</a> action.</p>"]
+    /// <p>Lists the tags that have been applied to the ACM Certificate. Use the certificate's Amazon Resource Name (ARN) to specify the certificate. To add a tag to an ACM Certificate, use the <a>AddTagsToCertificate</a> action. To delete a tag, use the <a>RemoveTagsFromCertificate</a> action.</p>
     fn list_tags_for_certificate(
         &self,
         input: &ListTagsForCertificateRequest,
@@ -1568,7 +1568,7 @@ where
         }
     }
 
-    #[doc="<p>Remove one or more tags from an ACM Certificate. A tag consists of a key-value pair. If you do not specify the value portion of the tag when calling this function, the tag will be removed regardless of value. If you specify a value, the tag is removed only if it is associated with the specified value.</p> <p>To add tags to a certificate, use the <a>AddTagsToCertificate</a> action. To view all of the tags that have been applied to a specific ACM Certificate, use the <a>ListTagsForCertificate</a> action.</p>"]
+    /// <p>Remove one or more tags from an ACM Certificate. A tag consists of a key-value pair. If you do not specify the value portion of the tag when calling this function, the tag will be removed regardless of value. If you specify a value, the tag is removed only if it is associated with the specified value.</p> <p>To add tags to a certificate, use the <a>AddTagsToCertificate</a> action. To view all of the tags that have been applied to a specific ACM Certificate, use the <a>ListTagsForCertificate</a> action.</p>
     fn remove_tags_from_certificate(
         &self,
         input: &RemoveTagsFromCertificateRequest,
@@ -1599,7 +1599,7 @@ where
         }
     }
 
-    #[doc="<p>Requests an ACM Certificate for use with other AWS services. To request an ACM Certificate, you must specify the fully qualified domain name (FQDN) for your site. You can also specify additional FQDNs if users can reach your site by using other names. For each domain name you specify, email is sent to the domain owner to request approval to issue the certificate. After receiving approval from the domain owner, the ACM Certificate is issued. For more information, see the <a href=\"http://docs.aws.amazon.com/acm/latest/userguide/\">AWS Certificate Manager User Guide</a>.</p>"]
+    /// <p>Requests an ACM Certificate for use with other AWS services. To request an ACM Certificate, you must specify the fully qualified domain name (FQDN) for your site. You can also specify additional FQDNs if users can reach your site by using other names. For each domain name you specify, email is sent to the domain owner to request approval to issue the certificate. After receiving approval from the domain owner, the ACM Certificate is issued. For more information, see the <a href="http://docs.aws.amazon.com/acm/latest/userguide/">AWS Certificate Manager User Guide</a>.</p>
     fn request_certificate(
         &self,
         input: &RequestCertificateRequest,
@@ -1633,7 +1633,7 @@ where
         }
     }
 
-    #[doc="<p>Resends the email that requests domain ownership validation. The domain owner or an authorized representative must approve the ACM Certificate before it can be issued. The certificate can be approved by clicking a link in the mail to navigate to the Amazon certificate approval website and then clicking <b>I Approve</b>. However, the validation email can be blocked by spam filters. Therefore, if you do not receive the original mail, you can request that the mail be resent within 72 hours of requesting the ACM Certificate. If more than 72 hours have elapsed since your original request or since your last attempt to resend validation mail, you must request a new certificate. For more information about setting up your contact email addresses, see <a href=\"http://docs.aws.amazon.com/acm/latest/userguide/setup-email.html\">Configure Email for your Domain</a>. </p>"]
+    /// <p>Resends the email that requests domain ownership validation. The domain owner or an authorized representative must approve the ACM Certificate before it can be issued. The certificate can be approved by clicking a link in the mail to navigate to the Amazon certificate approval website and then clicking <b>I Approve</b>. However, the validation email can be blocked by spam filters. Therefore, if you do not receive the original mail, you can request that the mail be resent within 72 hours of requesting the ACM Certificate. If more than 72 hours have elapsed since your original request or since your last attempt to resend validation mail, you must request a new certificate. For more information about setting up your contact email addresses, see <a href="http://docs.aws.amazon.com/acm/latest/userguide/setup-email.html">Configure Email for your Domain</a>. </p>
     fn resend_validation_email(
         &self,
         input: &ResendValidationEmailRequest,

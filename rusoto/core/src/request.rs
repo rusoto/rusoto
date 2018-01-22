@@ -81,7 +81,7 @@ pub struct HttpResponse {
     pub status: StatusCode,
     /// Contents of Response
     pub body: Box<Read>,
-    /// Headers stored as <key(string):value(string)>
+    /// Response headers
     pub headers: Headers,
 }
 

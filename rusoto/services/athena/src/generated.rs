@@ -110,7 +110,7 @@ pub struct ColumnInfo {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateNamedQueryInput {
-    /// <p>A unique case-sensitive string used to ensure the request to create the query is idempotent (executes only once). If another <code>CreateNamedQuery</code> request is received, the same response is returned and another query is not created. If a parameter has changed, for example, the <code>QueryString</code>, an error is returned.</p> <important> <p>This token is listed as not required because AWS SDKs (for example the AWS SDK for Java) auto-generate the token for users. If you are not using the AWS SDK or the AWS CLI, you must provide this token or the action will fail.</p> </important>
+    /// <p><p>A unique case-sensitive string used to ensure the request to create the query is idempotent (executes only once). If another <code>CreateNamedQuery</code> request is received, the same response is returned and another query is not created. If a parameter has changed, for example, the <code>QueryString</code>, an error is returned.</p> <important> <p>This token is listed as not required because AWS SDKs (for example the AWS SDK for Java) auto-generate the token for users. If you are not using the AWS SDK or the AWS CLI, you must provide this token or the action will fail.</p> </important></p>
     #[serde(rename = "ClientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_request_token: Option<String>,
@@ -412,7 +412,7 @@ pub struct Row {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct StartQueryExecutionInput {
-    /// <p>A unique case-sensitive string used to ensure the request to create the query is idempotent (executes only once). If another <code>StartQueryExecution</code> request is received, the same response is returned and another query is not created. If a parameter has changed, for example, the <code>QueryString</code>, an error is returned.</p> <important> <p>This token is listed as not required because AWS SDKs (for example the AWS SDK for Java) auto-generate the token for users. If you are not using the AWS SDK or the AWS CLI, you must provide this token or the action will fail.</p> </important>
+    /// <p><p>A unique case-sensitive string used to ensure the request to create the query is idempotent (executes only once). If another <code>StartQueryExecution</code> request is received, the same response is returned and another query is not created. If a parameter has changed, for example, the <code>QueryString</code>, an error is returned.</p> <important> <p>This token is listed as not required because AWS SDKs (for example the AWS SDK for Java) auto-generate the token for users. If you are not using the AWS SDK or the AWS CLI, you must provide this token or the action will fail.</p> </important></p>
     #[serde(rename = "ClientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_request_token: Option<String>,
@@ -483,9 +483,9 @@ pub struct UnprocessedQueryExecutionId {
 /// Errors returned by BatchGetNamedQuery
 #[derive(Debug, PartialEq)]
 pub enum BatchGetNamedQueryError {
-    ///<p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
     InternalServer(String),
-    ///<p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -569,9 +569,9 @@ impl Error for BatchGetNamedQueryError {
 /// Errors returned by BatchGetQueryExecution
 #[derive(Debug, PartialEq)]
 pub enum BatchGetQueryExecutionError {
-    ///<p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
     InternalServer(String),
-    ///<p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -655,9 +655,9 @@ impl Error for BatchGetQueryExecutionError {
 /// Errors returned by CreateNamedQuery
 #[derive(Debug, PartialEq)]
 pub enum CreateNamedQueryError {
-    ///<p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
     InternalServer(String),
-    ///<p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -739,9 +739,9 @@ impl Error for CreateNamedQueryError {
 /// Errors returned by DeleteNamedQuery
 #[derive(Debug, PartialEq)]
 pub enum DeleteNamedQueryError {
-    ///<p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
     InternalServer(String),
-    ///<p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -823,9 +823,9 @@ impl Error for DeleteNamedQueryError {
 /// Errors returned by GetNamedQuery
 #[derive(Debug, PartialEq)]
 pub enum GetNamedQueryError {
-    ///<p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
     InternalServer(String),
-    ///<p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -907,9 +907,9 @@ impl Error for GetNamedQueryError {
 /// Errors returned by GetQueryExecution
 #[derive(Debug, PartialEq)]
 pub enum GetQueryExecutionError {
-    ///<p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
     InternalServer(String),
-    ///<p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -993,9 +993,9 @@ impl Error for GetQueryExecutionError {
 /// Errors returned by GetQueryResults
 #[derive(Debug, PartialEq)]
 pub enum GetQueryResultsError {
-    ///<p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
     InternalServer(String),
-    ///<p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1077,9 +1077,9 @@ impl Error for GetQueryResultsError {
 /// Errors returned by ListNamedQueries
 #[derive(Debug, PartialEq)]
 pub enum ListNamedQueriesError {
-    ///<p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
     InternalServer(String),
-    ///<p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1161,9 +1161,9 @@ impl Error for ListNamedQueriesError {
 /// Errors returned by ListQueryExecutions
 #[derive(Debug, PartialEq)]
 pub enum ListQueryExecutionsError {
-    ///<p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
     InternalServer(String),
-    ///<p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1247,11 +1247,11 @@ impl Error for ListQueryExecutionsError {
 /// Errors returned by StartQueryExecution
 #[derive(Debug, PartialEq)]
 pub enum StartQueryExecutionError {
-    ///<p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
     InternalServer(String),
-    ///<p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
     InvalidRequest(String),
-    ///<p>Indicates that the request was throttled.</p>
+    /// <p>Indicates that the request was throttled.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1339,9 +1339,9 @@ impl Error for StartQueryExecutionError {
 /// Errors returned by StopQueryExecution
 #[derive(Debug, PartialEq)]
 pub enum StopQueryExecutionError {
-    ///<p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
     InternalServer(String),
-    ///<p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1424,67 +1424,67 @@ impl Error for StopQueryExecutionError {
 }
 /// Trait representing the capabilities of the Amazon Athena API. Amazon Athena clients implement this trait.
 pub trait Athena {
-    #[doc="<p>Returns the details of a single named query or a list of up to 50 queries, which you provide as an array of query ID strings. Use <a>ListNamedQueries</a> to get the list of named query IDs. If information could not be retrieved for a submitted query ID, information about the query ID submitted is listed under <a>UnprocessedNamedQueryId</a>. Named queries are different from executed queries. Use <a>BatchGetQueryExecution</a> to get details about each unique query execution, and <a>ListQueryExecutions</a> to get a list of query execution IDs.</p>"]
+    /// <p>Returns the details of a single named query or a list of up to 50 queries, which you provide as an array of query ID strings. Use <a>ListNamedQueries</a> to get the list of named query IDs. If information could not be retrieved for a submitted query ID, information about the query ID submitted is listed under <a>UnprocessedNamedQueryId</a>. Named queries are different from executed queries. Use <a>BatchGetQueryExecution</a> to get details about each unique query execution, and <a>ListQueryExecutions</a> to get a list of query execution IDs.</p>
     fn batch_get_named_query(
         &self,
         input: &BatchGetNamedQueryInput,
     ) -> Result<BatchGetNamedQueryOutput, BatchGetNamedQueryError>;
 
-    #[doc="<p>Returns the details of a single query execution or a list of up to 50 query executions, which you provide as an array of query execution ID strings. To get a list of query execution IDs, use <a>ListQueryExecutions</a>. Query executions are different from named (saved) queries. Use <a>BatchGetNamedQuery</a> to get details about named queries.</p>"]
+    /// <p>Returns the details of a single query execution or a list of up to 50 query executions, which you provide as an array of query execution ID strings. To get a list of query execution IDs, use <a>ListQueryExecutions</a>. Query executions are different from named (saved) queries. Use <a>BatchGetNamedQuery</a> to get details about named queries.</p>
     fn batch_get_query_execution(
         &self,
         input: &BatchGetQueryExecutionInput,
     ) -> Result<BatchGetQueryExecutionOutput, BatchGetQueryExecutionError>;
 
-    #[doc="<p>Creates a named query.</p> <p>For code samples using the AWS SDK for Java, see <a href=\"http://docs.aws.amazon.com/athena/latest/ug/code-samples.html\">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>"]
+    /// <p>Creates a named query.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn create_named_query(
         &self,
         input: &CreateNamedQueryInput,
     ) -> Result<CreateNamedQueryOutput, CreateNamedQueryError>;
 
-    #[doc="<p>Deletes a named query.</p> <p>For code samples using the AWS SDK for Java, see <a href=\"http://docs.aws.amazon.com/athena/latest/ug/code-samples.html\">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>"]
+    /// <p>Deletes a named query.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn delete_named_query(
         &self,
         input: &DeleteNamedQueryInput,
     ) -> Result<DeleteNamedQueryOutput, DeleteNamedQueryError>;
 
-    #[doc = "<p>Returns information about a single query.</p>"]
+    /// <p>Returns information about a single query.</p>
     fn get_named_query(
         &self,
         input: &GetNamedQueryInput,
     ) -> Result<GetNamedQueryOutput, GetNamedQueryError>;
 
-    #[doc="<p>Returns information about a single execution of a query. Each time a query executes, information about the query execution is saved with a unique ID.</p>"]
+    /// <p>Returns information about a single execution of a query. Each time a query executes, information about the query execution is saved with a unique ID.</p>
     fn get_query_execution(
         &self,
         input: &GetQueryExecutionInput,
     ) -> Result<GetQueryExecutionOutput, GetQueryExecutionError>;
 
-    #[doc="<p>Returns the results of a single query execution specified by <code>QueryExecutionId</code>. This request does not execute the query but returns results. Use <a>StartQueryExecution</a> to run a query.</p>"]
+    /// <p>Returns the results of a single query execution specified by <code>QueryExecutionId</code>. This request does not execute the query but returns results. Use <a>StartQueryExecution</a> to run a query.</p>
     fn get_query_results(
         &self,
         input: &GetQueryResultsInput,
     ) -> Result<GetQueryResultsOutput, GetQueryResultsError>;
 
-    #[doc="<p>Provides a list of all available query IDs.</p> <p>For code samples using the AWS SDK for Java, see <a href=\"http://docs.aws.amazon.com/athena/latest/ug/code-samples.html\">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>"]
+    /// <p>Provides a list of all available query IDs.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn list_named_queries(
         &self,
         input: &ListNamedQueriesInput,
     ) -> Result<ListNamedQueriesOutput, ListNamedQueriesError>;
 
-    #[doc="<p>Provides a list of all available query execution IDs.</p> <p>For code samples using the AWS SDK for Java, see <a href=\"http://docs.aws.amazon.com/athena/latest/ug/code-samples.html\">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>"]
+    /// <p>Provides a list of all available query execution IDs.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn list_query_executions(
         &self,
         input: &ListQueryExecutionsInput,
     ) -> Result<ListQueryExecutionsOutput, ListQueryExecutionsError>;
 
-    #[doc="<p>Runs (executes) the SQL query statements contained in the <code>Query</code> string.</p> <p>For code samples using the AWS SDK for Java, see <a href=\"http://docs.aws.amazon.com/athena/latest/ug/code-samples.html\">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>"]
+    /// <p>Runs (executes) the SQL query statements contained in the <code>Query</code> string.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn start_query_execution(
         &self,
         input: &StartQueryExecutionInput,
     ) -> Result<StartQueryExecutionOutput, StartQueryExecutionError>;
 
-    #[doc="<p>Stops a query execution.</p> <p>For code samples using the AWS SDK for Java, see <a href=\"http://docs.aws.amazon.com/athena/latest/ug/code-samples.html\">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>"]
+    /// <p>Stops a query execution.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn stop_query_execution(
         &self,
         input: &StopQueryExecutionInput,
@@ -1520,7 +1520,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Returns the details of a single named query or a list of up to 50 queries, which you provide as an array of query ID strings. Use <a>ListNamedQueries</a> to get the list of named query IDs. If information could not be retrieved for a submitted query ID, information about the query ID submitted is listed under <a>UnprocessedNamedQueryId</a>. Named queries are different from executed queries. Use <a>BatchGetQueryExecution</a> to get details about each unique query execution, and <a>ListQueryExecutions</a> to get a list of query execution IDs.</p>"]
+    /// <p>Returns the details of a single named query or a list of up to 50 queries, which you provide as an array of query ID strings. Use <a>ListNamedQueries</a> to get the list of named query IDs. If information could not be retrieved for a submitted query ID, information about the query ID submitted is listed under <a>UnprocessedNamedQueryId</a>. Named queries are different from executed queries. Use <a>BatchGetQueryExecution</a> to get details about each unique query execution, and <a>ListQueryExecutions</a> to get a list of query execution IDs.</p>
     fn batch_get_named_query(
         &self,
         input: &BatchGetNamedQueryInput,
@@ -1554,7 +1554,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the details of a single query execution or a list of up to 50 query executions, which you provide as an array of query execution ID strings. To get a list of query execution IDs, use <a>ListQueryExecutions</a>. Query executions are different from named (saved) queries. Use <a>BatchGetNamedQuery</a> to get details about named queries.</p>"]
+    /// <p>Returns the details of a single query execution or a list of up to 50 query executions, which you provide as an array of query execution ID strings. To get a list of query execution IDs, use <a>ListQueryExecutions</a>. Query executions are different from named (saved) queries. Use <a>BatchGetNamedQuery</a> to get details about named queries.</p>
     fn batch_get_query_execution(
         &self,
         input: &BatchGetQueryExecutionInput,
@@ -1588,7 +1588,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a named query.</p> <p>For code samples using the AWS SDK for Java, see <a href=\"http://docs.aws.amazon.com/athena/latest/ug/code-samples.html\">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>"]
+    /// <p>Creates a named query.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn create_named_query(
         &self,
         input: &CreateNamedQueryInput,
@@ -1622,7 +1622,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a named query.</p> <p>For code samples using the AWS SDK for Java, see <a href=\"http://docs.aws.amazon.com/athena/latest/ug/code-samples.html\">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>"]
+    /// <p>Deletes a named query.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn delete_named_query(
         &self,
         input: &DeleteNamedQueryInput,
@@ -1656,7 +1656,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns information about a single query.</p>"]
+    /// <p>Returns information about a single query.</p>
     fn get_named_query(
         &self,
         input: &GetNamedQueryInput,
@@ -1690,7 +1690,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about a single execution of a query. Each time a query executes, information about the query execution is saved with a unique ID.</p>"]
+    /// <p>Returns information about a single execution of a query. Each time a query executes, information about the query execution is saved with a unique ID.</p>
     fn get_query_execution(
         &self,
         input: &GetQueryExecutionInput,
@@ -1724,7 +1724,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the results of a single query execution specified by <code>QueryExecutionId</code>. This request does not execute the query but returns results. Use <a>StartQueryExecution</a> to run a query.</p>"]
+    /// <p>Returns the results of a single query execution specified by <code>QueryExecutionId</code>. This request does not execute the query but returns results. Use <a>StartQueryExecution</a> to run a query.</p>
     fn get_query_results(
         &self,
         input: &GetQueryResultsInput,
@@ -1758,7 +1758,7 @@ where
         }
     }
 
-    #[doc="<p>Provides a list of all available query IDs.</p> <p>For code samples using the AWS SDK for Java, see <a href=\"http://docs.aws.amazon.com/athena/latest/ug/code-samples.html\">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>"]
+    /// <p>Provides a list of all available query IDs.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn list_named_queries(
         &self,
         input: &ListNamedQueriesInput,
@@ -1792,7 +1792,7 @@ where
         }
     }
 
-    #[doc="<p>Provides a list of all available query execution IDs.</p> <p>For code samples using the AWS SDK for Java, see <a href=\"http://docs.aws.amazon.com/athena/latest/ug/code-samples.html\">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>"]
+    /// <p>Provides a list of all available query execution IDs.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn list_query_executions(
         &self,
         input: &ListQueryExecutionsInput,
@@ -1826,7 +1826,7 @@ where
         }
     }
 
-    #[doc="<p>Runs (executes) the SQL query statements contained in the <code>Query</code> string.</p> <p>For code samples using the AWS SDK for Java, see <a href=\"http://docs.aws.amazon.com/athena/latest/ug/code-samples.html\">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>"]
+    /// <p>Runs (executes) the SQL query statements contained in the <code>Query</code> string.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn start_query_execution(
         &self,
         input: &StartQueryExecutionInput,
@@ -1860,7 +1860,7 @@ where
         }
     }
 
-    #[doc="<p>Stops a query execution.</p> <p>For code samples using the AWS SDK for Java, see <a href=\"http://docs.aws.amazon.com/athena/latest/ug/code-samples.html\">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>"]
+    /// <p>Stops a query execution.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn stop_query_execution(
         &self,
         input: &StopQueryExecutionInput,

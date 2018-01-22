@@ -106,7 +106,7 @@ pub struct AdminCreateUserRequest {
     #[serde(rename = "TemporaryPassword")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub temporary_password: Option<String>,
-    /// <p>An array of name-value pairs that contain user attributes and attribute values to be set for the user to be created. You can create a user without specifying any attributes other than <code>Username</code>. However, any attributes that you specify as required (in <a href="API_CreateUserPool.html">CreateUserPool</a> or in the <b>Attributes</b> tab of the console) must be supplied either by you (in your call to <code>AdminCreateUser</code>) or by the user (when he or she signs up in response to your welcome message).</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p> <p>To send a message inviting the user to sign up, you must specify the user's email address or phone number. This can be done in your call to AdminCreateUser or in the <b>Users</b> tab of the Amazon Cognito console for managing your user pools.</p> <p>In your call to <code>AdminCreateUser</code>, you can set the <code>email_verified</code> attribute to <code>True</code>, and you can set the <code>phone_number_verified</code> attribute to <code>True</code>. (You can also do this by calling <a href="API_AdminUpdateUserAttributes.html">AdminUpdateUserAttributes</a>.)</p> <ul> <li> <p> <b>email</b>: The email address of the user to whom the message that contains the code and username will be sent. Required if the <code>email_verified</code> attribute is set to <code>True</code>, or if <code>"EMAIL"</code> is specified in the <code>DesiredDeliveryMediums</code> parameter.</p> </li> <li> <p> <b>phone_number</b>: The phone number of the user to whom the message that contains the code and username will be sent. Required if the <code>phone_number_verified</code> attribute is set to <code>True</code>, or if <code>"SMS"</code> is specified in the <code>DesiredDeliveryMediums</code> parameter.</p> </li> </ul>
+    /// <p><p>An array of name-value pairs that contain user attributes and attribute values to be set for the user to be created. You can create a user without specifying any attributes other than <code>Username</code>. However, any attributes that you specify as required (in <a href="API_CreateUserPool.html">CreateUserPool</a> or in the <b>Attributes</b> tab of the console) must be supplied either by you (in your call to <code>AdminCreateUser</code>) or by the user (when he or she signs up in response to your welcome message).</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p> <p>To send a message inviting the user to sign up, you must specify the user&#39;s email address or phone number. This can be done in your call to AdminCreateUser or in the <b>Users</b> tab of the Amazon Cognito console for managing your user pools.</p> <p>In your call to <code>AdminCreateUser</code>, you can set the <code>email<em>verified</code> attribute to <code>True</code>, and you can set the <code>phone</em>number<em>verified</code> attribute to <code>True</code>. (You can also do this by calling &lt;a href=&quot;API</em>AdminUpdateUserAttributes.html&quot;&gt;AdminUpdateUserAttributes</a>.)</p> <ul> <li> <p> <b>email</b>: The email address of the user to whom the message that contains the code and username will be sent. Required if the <code>email<em>verified</code> attribute is set to <code>True</code>, or if <code>&quot;EMAIL&quot;</code> is specified in the <code>DesiredDeliveryMediums</code> parameter.</p> </li> <li> <p> <b>phone</em>number</b>: The phone number of the user to whom the message that contains the code and username will be sent. Required if the <code>phone<em>number</em>verified</code> attribute is set to <code>True</code>, or if <code>&quot;SMS&quot;</code> is specified in the <code>DesiredDeliveryMediums</code> parameter.</p> </li> </ul></p>
     #[serde(rename = "UserAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_attributes: Option<Vec<AttributeType>>,
@@ -273,7 +273,7 @@ pub struct AdminGetUserResponse {
     #[serde(rename = "UserLastModifiedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_last_modified_date: Option<f64>,
-    /// <p>The user status. Can be one of the following:</p> <ul> <li> <p>UNCONFIRMED - User has been created but not confirmed.</p> </li> <li> <p>CONFIRMED - User has been confirmed.</p> </li> <li> <p>ARCHIVED - User is no longer active.</p> </li> <li> <p>COMPROMISED - User is disabled due to a potential security threat.</p> </li> <li> <p>UNKNOWN - User status is not known.</p> </li> </ul>
+    /// <p><p>The user status. Can be one of the following:</p> <ul> <li> <p>UNCONFIRMED - User has been created but not confirmed.</p> </li> <li> <p>CONFIRMED - User has been confirmed.</p> </li> <li> <p>ARCHIVED - User is no longer active.</p> </li> <li> <p>COMPROMISED - User is disabled due to a potential security threat.</p> </li> <li> <p>UNKNOWN - User status is not known.</p> </li> </ul></p>
     #[serde(rename = "UserStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_status: Option<String>,
@@ -285,10 +285,10 @@ pub struct AdminGetUserResponse {
 /// <p>Initiates the authorization request, as an administrator.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AdminInitiateAuthRequest {
-    /// <p>The authentication flow for this call to execute. The API action will depend on this value. For example:</p> <ul> <li> <p> <code>REFRESH_TOKEN_AUTH</code> will take in a valid refresh token and return new tokens.</p> </li> <li> <p> <code>USER_SRP_AUTH</code> will take in <code>USERNAME</code> and <code>SRP_A</code> and return the SRP variables to be used for next challenge execution.</p> </li> </ul> <p>Valid values include:</p> <ul> <li> <p> <code>USER_SRP_AUTH</code>: Authentication flow for the Secure Remote Password (SRP) protocol.</p> </li> <li> <p> <code>REFRESH_TOKEN_AUTH</code>/<code>REFRESH_TOKEN</code>: Authentication flow for refreshing the access token and ID token by supplying a valid refresh token.</p> </li> <li> <p> <code>CUSTOM_AUTH</code>: Custom authentication flow.</p> </li> <li> <p> <code>ADMIN_NO_SRP_AUTH</code>: Non-SRP authentication flow; you can pass in the USERNAME and PASSWORD directly if the flow is enabled for calling the app client.</p> </li> </ul>
+    /// <p><p>The authentication flow for this call to execute. The API action will depend on this value. For example:</p> <ul> <li> <p> <code>REFRESH<em>TOKEN</em>AUTH</code> will take in a valid refresh token and return new tokens.</p> </li> <li> <p> <code>USER<em>SRP</em>AUTH</code> will take in <code>USERNAME</code> and <code>SRP<em>A</code> and return the SRP variables to be used for next challenge execution.</p> </li> </ul> <p>Valid values include:</p> <ul> <li> <p> <code>USER</em>SRP<em>AUTH</code>: Authentication flow for the Secure Remote Password (SRP) protocol.</p> </li> <li> <p> <code>REFRESH</em>TOKEN<em>AUTH</code>/<code>REFRESH</em>TOKEN</code>: Authentication flow for refreshing the access token and ID token by supplying a valid refresh token.</p> </li> <li> <p> <code>CUSTOM<em>AUTH</code>: Custom authentication flow.</p> </li> <li> <p> <code>ADMIN</em>NO<em>SRP</em>AUTH</code>: Non-SRP authentication flow; you can pass in the USERNAME and PASSWORD directly if the flow is enabled for calling the app client.</p> </li> </ul></p>
     #[serde(rename = "AuthFlow")]
     pub auth_flow: String,
-    /// <p>The authentication parameters. These are inputs corresponding to the <code>AuthFlow</code> that you are invoking. The required values depend on the value of <code>AuthFlow</code>:</p> <ul> <li> <p>For <code>USER_SRP_AUTH</code>: <code>USERNAME</code> (required), <code>SRP_A</code> (required), <code>SECRET_HASH</code> (required if the app client is configured with a client secret), <code>DEVICE_KEY</code> </p> </li> <li> <p>For <code>REFRESH_TOKEN_AUTH/REFRESH_TOKEN</code>: <code>USERNAME</code> (required), <code>SECRET_HASH</code> (required if the app client is configured with a client secret), <code>REFRESH_TOKEN</code> (required), <code>DEVICE_KEY</code> </p> </li> <li> <p>For <code>ADMIN_NO_SRP_AUTH</code>: <code>USERNAME</code> (required), <code>SECRET_HASH</code> (if app client is configured with client secret), <code>PASSWORD</code> (required), <code>DEVICE_KEY</code> </p> </li> <li> <p>For <code>CUSTOM_AUTH</code>: <code>USERNAME</code> (required), <code>SECRET_HASH</code> (if app client is configured with client secret), <code>DEVICE_KEY</code> </p> </li> </ul>
+    /// <p><p>The authentication parameters. These are inputs corresponding to the <code>AuthFlow</code> that you are invoking. The required values depend on the value of <code>AuthFlow</code>:</p> <ul> <li> <p>For <code>USER<em>SRP</em>AUTH</code>: <code>USERNAME</code> (required), <code>SRP<em>A</code> (required), <code>SECRET</em>HASH</code> (required if the app client is configured with a client secret), <code>DEVICE<em>KEY</code> </p> </li> <li> <p>For <code>REFRESH</em>TOKEN<em>AUTH/REFRESH</em>TOKEN</code>: <code>USERNAME</code> (required), <code>SECRET<em>HASH</code> (required if the app client is configured with a client secret), <code>REFRESH</em>TOKEN</code> (required), <code>DEVICE<em>KEY</code> </p> </li> <li> <p>For <code>ADMIN</em>NO<em>SRP</em>AUTH</code>: <code>USERNAME</code> (required), <code>SECRET<em>HASH</code> (if app client is configured with client secret), <code>PASSWORD</code> (required), <code>DEVICE</em>KEY</code> </p> </li> <li> <p>For <code>CUSTOM<em>AUTH</code>: <code>USERNAME</code> (required), <code>SECRET</em>HASH</code> (if app client is configured with client secret), <code>DEVICE_KEY</code> </p> </li> </ul></p>
     #[serde(rename = "AuthParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_parameters: Option<::std::collections::HashMap<String, String>>,
@@ -311,7 +311,7 @@ pub struct AdminInitiateAuthResponse {
     #[serde(rename = "AuthenticationResult")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_result: Option<AuthenticationResultType>,
-    /// <p>The name of the challenge which you are responding to with this call. This is returned to you in the <code>AdminInitiateAuth</code> response if you need to pass another challenge.</p> <ul> <li> <p> <code>SMS_MFA</code>: Next challenge is to supply an <code>SMS_MFA_CODE</code>, delivered via SMS.</p> </li> <li> <p> <code>PASSWORD_VERIFIER</code>: Next challenge is to supply <code>PASSWORD_CLAIM_SIGNATURE</code>, <code>PASSWORD_CLAIM_SECRET_BLOCK</code>, and <code>TIMESTAMP</code> after the client-side SRP calculations.</p> </li> <li> <p> <code>CUSTOM_CHALLENGE</code>: This is returned if your custom authentication flow determines that the user should pass another challenge before tokens are issued.</p> </li> <li> <p> <code>DEVICE_SRP_AUTH</code>: If device tracking was enabled on your user pool and the previous challenges were passed, this challenge is returned so that Amazon Cognito can start tracking this device.</p> </li> <li> <p> <code>DEVICE_PASSWORD_VERIFIER</code>: Similar to <code>PASSWORD_VERIFIER</code>, but for devices only.</p> </li> <li> <p> <code>ADMIN_NO_SRP_AUTH</code>: This is returned if you need to authenticate with <code>USERNAME</code> and <code>PASSWORD</code> directly. An app client must be enabled to use this flow.</p> </li> <li> <p> <code>NEW_PASSWORD_REQUIRED</code>: For users which are required to change their passwords after successful first login. This challenge should be passed with <code>NEW_PASSWORD</code> and any other required attributes.</p> </li> </ul>
+    /// <p><p>The name of the challenge which you are responding to with this call. This is returned to you in the <code>AdminInitiateAuth</code> response if you need to pass another challenge.</p> <ul> <li> <p> <code>SMS<em>MFA</code>: Next challenge is to supply an <code>SMS</em>MFA<em>CODE</code>, delivered via SMS.</p> </li> <li> <p> <code>PASSWORD</em>VERIFIER</code>: Next challenge is to supply <code>PASSWORD<em>CLAIM</em>SIGNATURE</code>, <code>PASSWORD<em>CLAIM</em>SECRET<em>BLOCK</code>, and <code>TIMESTAMP</code> after the client-side SRP calculations.</p> </li> <li> <p> <code>CUSTOM</em>CHALLENGE</code>: This is returned if your custom authentication flow determines that the user should pass another challenge before tokens are issued.</p> </li> <li> <p> <code>DEVICE<em>SRP</em>AUTH</code>: If device tracking was enabled on your user pool and the previous challenges were passed, this challenge is returned so that Amazon Cognito can start tracking this device.</p> </li> <li> <p> <code>DEVICE<em>PASSWORD</em>VERIFIER</code>: Similar to <code>PASSWORD<em>VERIFIER</code>, but for devices only.</p> </li> <li> <p> <code>ADMIN</em>NO<em>SRP</em>AUTH</code>: This is returned if you need to authenticate with <code>USERNAME</code> and <code>PASSWORD</code> directly. An app client must be enabled to use this flow.</p> </li> <li> <p> <code>NEW<em>PASSWORD</em>REQUIRED</code>: For users which are required to change their passwords after successful first login. This challenge should be passed with <code>NEW_PASSWORD</code> and any other required attributes.</p> </li> </ul></p>
     #[serde(rename = "ChallengeName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub challenge_name: Option<String>,
@@ -1525,7 +1525,7 @@ pub struct InitiateAuthRequest {
     /// <p>The authentication flow for this call to execute. The API action will depend on this value. For example: </p> <ul> <li> <p> <code>REFRESH_TOKEN_AUTH</code> will take in a valid refresh token and return new tokens.</p> </li> <li> <p> <code>USER_SRP_AUTH</code> will take in <code>USERNAME</code> and <code>SRP_A</code> and return the SRP variables to be used for next challenge execution.</p> </li> </ul> <p>Valid values include:</p> <ul> <li> <p> <code>USER_SRP_AUTH</code>: Authentication flow for the Secure Remote Password (SRP) protocol.</p> </li> <li> <p> <code>REFRESH_TOKEN_AUTH</code>/<code>REFRESH_TOKEN</code>: Authentication flow for refreshing the access token and ID token by supplying a valid refresh token.</p> </li> <li> <p> <code>CUSTOM_AUTH</code>: Custom authentication flow.</p> </li> </ul> <p> <code>ADMIN_NO_SRP_AUTH</code> is not a valid value.</p>
     #[serde(rename = "AuthFlow")]
     pub auth_flow: String,
-    /// <p>The authentication parameters. These are inputs corresponding to the <code>AuthFlow</code> that you are invoking. The required values depend on the value of <code>AuthFlow</code>:</p> <ul> <li> <p>For <code>USER_SRP_AUTH</code>: <code>USERNAME</code> (required), <code>SRP_A</code> (required), <code>SECRET_HASH</code> (required if the app client is configured with a client secret), <code>DEVICE_KEY</code> </p> </li> <li> <p>For <code>REFRESH_TOKEN_AUTH/REFRESH_TOKEN</code>: <code>USERNAME</code> (required), <code>SECRET_HASH</code> (required if the app client is configured with a client secret), <code>REFRESH_TOKEN</code> (required), <code>DEVICE_KEY</code> </p> </li> <li> <p>For <code>CUSTOM_AUTH</code>: <code>USERNAME</code> (required), <code>SECRET_HASH</code> (if app client is configured with client secret), <code>DEVICE_KEY</code> </p> </li> </ul>
+    /// <p><p>The authentication parameters. These are inputs corresponding to the <code>AuthFlow</code> that you are invoking. The required values depend on the value of <code>AuthFlow</code>:</p> <ul> <li> <p>For <code>USER<em>SRP</em>AUTH</code>: <code>USERNAME</code> (required), <code>SRP<em>A</code> (required), <code>SECRET</em>HASH</code> (required if the app client is configured with a client secret), <code>DEVICE<em>KEY</code> </p> </li> <li> <p>For <code>REFRESH</em>TOKEN<em>AUTH/REFRESH</em>TOKEN</code>: <code>USERNAME</code> (required), <code>SECRET<em>HASH</code> (required if the app client is configured with a client secret), <code>REFRESH</em>TOKEN</code> (required), <code>DEVICE<em>KEY</code> </p> </li> <li> <p>For <code>CUSTOM</em>AUTH</code>: <code>USERNAME</code> (required), <code>SECRET<em>HASH</code> (if app client is configured with client secret), <code>DEVICE</em>KEY</code> </p> </li> </ul></p>
     #[serde(rename = "AuthParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_parameters: Option<::std::collections::HashMap<String, String>>,
@@ -1545,7 +1545,7 @@ pub struct InitiateAuthResponse {
     #[serde(rename = "AuthenticationResult")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_result: Option<AuthenticationResultType>,
-    /// <p>The name of the challenge which you are responding to with this call. This is returned to you in the <code>AdminInitiateAuth</code> response if you need to pass another challenge.</p> <p>Valid values include the following. Note that all of these challenges require <code>USERNAME</code> and <code>SECRET_HASH</code> (if applicable) in the parameters.</p> <ul> <li> <p> <code>SMS_MFA</code>: Next challenge is to supply an <code>SMS_MFA_CODE</code>, delivered via SMS.</p> </li> <li> <p> <code>PASSWORD_VERIFIER</code>: Next challenge is to supply <code>PASSWORD_CLAIM_SIGNATURE</code>, <code>PASSWORD_CLAIM_SECRET_BLOCK</code>, and <code>TIMESTAMP</code> after the client-side SRP calculations.</p> </li> <li> <p> <code>CUSTOM_CHALLENGE</code>: This is returned if your custom authentication flow determines that the user should pass another challenge before tokens are issued.</p> </li> <li> <p> <code>DEVICE_SRP_AUTH</code>: If device tracking was enabled on your user pool and the previous challenges were passed, this challenge is returned so that Amazon Cognito can start tracking this device.</p> </li> <li> <p> <code>DEVICE_PASSWORD_VERIFIER</code>: Similar to <code>PASSWORD_VERIFIER</code>, but for devices only.</p> </li> <li> <p> <code>NEW_PASSWORD_REQUIRED</code>: For users which are required to change their passwords after successful first login. This challenge should be passed with <code>NEW_PASSWORD</code> and any other required attributes.</p> </li> </ul>
+    /// <p><p>The name of the challenge which you are responding to with this call. This is returned to you in the <code>AdminInitiateAuth</code> response if you need to pass another challenge.</p> <p>Valid values include the following. Note that all of these challenges require <code>USERNAME</code> and <code>SECRET<em>HASH</code> (if applicable) in the parameters.</p> <ul> <li> <p> <code>SMS</em>MFA</code>: Next challenge is to supply an <code>SMS<em>MFA</em>CODE</code>, delivered via SMS.</p> </li> <li> <p> <code>PASSWORD<em>VERIFIER</code>: Next challenge is to supply <code>PASSWORD</em>CLAIM<em>SIGNATURE</code>, <code>PASSWORD</em>CLAIM<em>SECRET</em>BLOCK</code>, and <code>TIMESTAMP</code> after the client-side SRP calculations.</p> </li> <li> <p> <code>CUSTOM<em>CHALLENGE</code>: This is returned if your custom authentication flow determines that the user should pass another challenge before tokens are issued.</p> </li> <li> <p> <code>DEVICE</em>SRP<em>AUTH</code>: If device tracking was enabled on your user pool and the previous challenges were passed, this challenge is returned so that Amazon Cognito can start tracking this device.</p> </li> <li> <p> <code>DEVICE</em>PASSWORD<em>VERIFIER</code>: Similar to <code>PASSWORD</em>VERIFIER</code>, but for devices only.</p> </li> <li> <p> <code>NEW<em>PASSWORD</em>REQUIRED</code>: For users which are required to change their passwords after successful first login. This challenge should be passed with <code>NEW_PASSWORD</code> and any other required attributes.</p> </li> </ul></p>
     #[serde(rename = "ChallengeName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub challenge_name: Option<String>,
@@ -2034,7 +2034,7 @@ pub struct RespondToAuthChallengeRequest {
     /// <p>The challenge name. For more information, see <a href="API_InitiateAuth.html">InitiateAuth</a>.</p> <p> <code>ADMIN_NO_SRP_AUTH</code> is not a valid value.</p>
     #[serde(rename = "ChallengeName")]
     pub challenge_name: String,
-    /// <p>The challenge responses. These are inputs corresponding to the value of <code>ChallengeName</code>, for example:</p> <ul> <li> <p> <code>SMS_MFA</code>: <code>SMS_MFA_CODE</code>, <code>USERNAME</code>, <code>SECRET_HASH</code> (if app client is configured with client secret).</p> </li> <li> <p> <code>PASSWORD_VERIFIER</code>: <code>PASSWORD_CLAIM_SIGNATURE</code>, <code>PASSWORD_CLAIM_SECRET_BLOCK</code>, <code>TIMESTAMP</code>, <code>USERNAME</code>, <code>SECRET_HASH</code> (if app client is configured with client secret).</p> </li> <li> <p> <code>NEW_PASSWORD_REQUIRED</code>: <code>NEW_PASSWORD</code>, any other required attributes, <code>USERNAME</code>, <code>SECRET_HASH</code> (if app client is configured with client secret). </p> </li> </ul>
+    /// <p><p>The challenge responses. These are inputs corresponding to the value of <code>ChallengeName</code>, for example:</p> <ul> <li> <p> <code>SMS<em>MFA</code>: <code>SMS</em>MFA<em>CODE</code>, <code>USERNAME</code>, <code>SECRET</em>HASH</code> (if app client is configured with client secret).</p> </li> <li> <p> <code>PASSWORD<em>VERIFIER</code>: <code>PASSWORD</em>CLAIM<em>SIGNATURE</code>, <code>PASSWORD</em>CLAIM<em>SECRET</em>BLOCK</code>, <code>TIMESTAMP</code>, <code>USERNAME</code>, <code>SECRET<em>HASH</code> (if app client is configured with client secret).</p> </li> <li> <p> <code>NEW</em>PASSWORD<em>REQUIRED</code>: <code>NEW</em>PASSWORD</code>, any other required attributes, <code>USERNAME</code>, <code>SECRET_HASH</code> (if app client is configured with client secret). </p> </li> </ul></p>
     #[serde(rename = "ChallengeResponses")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub challenge_responses: Option<::std::collections::HashMap<String, String>>,
@@ -2503,7 +2503,7 @@ pub struct UpdateUserPoolRequest {
     #[serde(rename = "LambdaConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lambda_config: Option<LambdaConfigType>,
-    /// <p>Can be one of the following values:</p> <ul> <li> <p> <code>OFF</code> - MFA tokens are not required and cannot be specified during user registration.</p> </li> <li> <p> <code>ON</code> - MFA tokens are required for all user registrations. You can only specify required when you are initially creating a user pool.</p> </li> <li> <p> <code>OPTIONAL</code> - Users have the option when registering to create an MFA token.</p> </li> </ul>
+    /// <p><p>Can be one of the following values:</p> <ul> <li> <p> <code>OFF</code> - MFA tokens are not required and cannot be specified during user registration.</p> </li> <li> <p> <code>ON</code> - MFA tokens are required for all user registrations. You can only specify required when you are initially creating a user pool.</p> </li> <li> <p> <code>OPTIONAL</code> - Users have the option when registering to create an MFA token.</p> </li> </ul></p>
     #[serde(rename = "MfaConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mfa_configuration: Option<String>,
@@ -2587,7 +2587,7 @@ pub struct UserImportJobType {
     #[serde(rename = "StartDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_date: Option<f64>,
-    /// <p>The status of the user import job. One of the following:</p> <ul> <li> <p> <code>Created</code> - The job was created but not started.</p> </li> <li> <p> <code>Pending</code> - A transition state. You have started the job, but it has not begun importing users yet.</p> </li> <li> <p> <code>InProgress</code> - The job has started, and users are being imported.</p> </li> <li> <p> <code>Stopping</code> - You have stopped the job, but the job has not stopped importing users yet.</p> </li> <li> <p> <code>Stopped</code> - You have stopped the job, and the job has stopped importing users.</p> </li> <li> <p> <code>Succeeded</code> - The job has completed successfully.</p> </li> <li> <p> <code>Failed</code> - The job has stopped due to an error.</p> </li> <li> <p> <code>Expired</code> - You created a job, but did not start the job within 24-48 hours. All data associated with the job was deleted, and the job cannot be started.</p> </li> </ul>
+    /// <p><p>The status of the user import job. One of the following:</p> <ul> <li> <p> <code>Created</code> - The job was created but not started.</p> </li> <li> <p> <code>Pending</code> - A transition state. You have started the job, but it has not begun importing users yet.</p> </li> <li> <p> <code>InProgress</code> - The job has started, and users are being imported.</p> </li> <li> <p> <code>Stopping</code> - You have stopped the job, but the job has not stopped importing users yet.</p> </li> <li> <p> <code>Stopped</code> - You have stopped the job, and the job has stopped importing users.</p> </li> <li> <p> <code>Succeeded</code> - The job has completed successfully.</p> </li> <li> <p> <code>Failed</code> - The job has stopped due to an error.</p> </li> <li> <p> <code>Expired</code> - You created a job, but did not start the job within 24-48 hours. All data associated with the job was deleted, and the job cannot be started.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -2780,7 +2780,7 @@ pub struct UserPoolType {
     #[serde(rename = "LastModifiedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_date: Option<f64>,
-    /// <p>Can be one of the following values:</p> <ul> <li> <p> <code>OFF</code> - MFA tokens are not required and cannot be specified during user registration.</p> </li> <li> <p> <code>ON</code> - MFA tokens are required for all user registrations. You can only specify required when you are initially creating a user pool.</p> </li> <li> <p> <code>OPTIONAL</code> - Users have the option when registering to create an MFA token.</p> </li> </ul>
+    /// <p><p>Can be one of the following values:</p> <ul> <li> <p> <code>OFF</code> - MFA tokens are not required and cannot be specified during user registration.</p> </li> <li> <p> <code>ON</code> - MFA tokens are required for all user registrations. You can only specify required when you are initially creating a user pool.</p> </li> <li> <p> <code>OPTIONAL</code> - Users have the option when registering to create an MFA token.</p> </li> </ul></p>
     #[serde(rename = "MfaConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mfa_configuration: Option<String>,
@@ -2853,7 +2853,7 @@ pub struct UserType {
     #[serde(rename = "UserLastModifiedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_last_modified_date: Option<f64>,
-    /// <p>The user status. Can be one of the following:</p> <ul> <li> <p>UNCONFIRMED - User has been created but not confirmed.</p> </li> <li> <p>CONFIRMED - User has been confirmed.</p> </li> <li> <p>ARCHIVED - User is no longer active.</p> </li> <li> <p>COMPROMISED - User is disabled due to a potential security threat.</p> </li> <li> <p>UNKNOWN - User status is not known.</p> </li> </ul>
+    /// <p><p>The user status. Can be one of the following:</p> <ul> <li> <p>UNCONFIRMED - User has been created but not confirmed.</p> </li> <li> <p>CONFIRMED - User has been confirmed.</p> </li> <li> <p>ARCHIVED - User is no longer active.</p> </li> <li> <p>COMPROMISED - User is disabled due to a potential security threat.</p> </li> <li> <p>UNKNOWN - User status is not known.</p> </li> </ul></p>
     #[serde(rename = "UserStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_status: Option<String>,
@@ -2913,17 +2913,17 @@ pub struct VerifyUserAttributeResponse;
 /// Errors returned by AddCustomAttributes
 #[derive(Debug, PartialEq)]
 pub enum AddCustomAttributesError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when you are trying to modify a user pool while a user import job is in progress for that pool.</p>
+    /// <p>This exception is thrown when you are trying to modify a user pool while a user import job is in progress for that pool.</p>
     UserImportInProgress(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3023,17 +3023,17 @@ impl Error for AddCustomAttributesError {
 /// Errors returned by AdminAddUserToGroup
 #[derive(Debug, PartialEq)]
 pub enum AdminAddUserToGroupError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3133,27 +3133,27 @@ impl Error for AdminAddUserToGroupError {
 /// Errors returned by AdminConfirmSignUp
 #[derive(Debug, PartialEq)]
 pub enum AdminConfirmSignUpError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
     InvalidLambdaResponse(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
+    /// <p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
     LimitExceeded(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many failed attempts for a given action (e.g., sign in).</p>
+    /// <p>This exception is thrown when the user has made too many failed attempts for a given action (e.g., sign in).</p>
     TooManyFailedAttempts(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>
     UnexpectedLambda(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters a user validation exception with the AWS Lambda service.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters a user validation exception with the AWS Lambda service.</p>
     UserLambdaValidation(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3273,37 +3273,37 @@ impl Error for AdminConfirmSignUpError {
 /// Errors returned by AdminCreateUser
 #[derive(Debug, PartialEq)]
 pub enum AdminCreateUserError {
-    ///<p>This exception is thrown when a verification code fails to deliver successfully.</p>
+    /// <p>This exception is thrown when a verification code fails to deliver successfully.</p>
     CodeDeliveryFailure(String),
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
     InvalidLambdaResponse(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid password.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid password.</p>
     InvalidPassword(String),
-    ///<p>This exception is returned when the role provided for SMS configuration does not have permission to publish using Amazon SNS.</p>
+    /// <p>This exception is returned when the role provided for SMS configuration does not have permission to publish using Amazon SNS.</p>
     InvalidSmsRoleAccessPolicy(String),
-    ///<p>This exception is thrown when the trust relationship is invalid for the role provided for SMS configuration. This can happen if you do not trust <b>cognito-idp.amazonaws.com</b> or the external ID provided in the role does not match what is provided in the SMS configuration for the user pool.</p>
+    /// <p>This exception is thrown when the trust relationship is invalid for the role provided for SMS configuration. This can happen if you do not trust <b>cognito-idp.amazonaws.com</b> or the external ID provided in the role does not match what is provided in the SMS configuration for the user pool.</p>
     InvalidSmsRoleTrustRelationship(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when a precondition is not met.</p>
+    /// <p>This exception is thrown when a precondition is not met.</p>
     PreconditionNotMet(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>
     UnexpectedLambda(String),
-    ///<p>The request failed because the user is in an unsupported state.</p>
+    /// <p>The request failed because the user is in an unsupported state.</p>
     UnsupportedUserState(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters a user validation exception with the AWS Lambda service.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters a user validation exception with the AWS Lambda service.</p>
     UserLambdaValidation(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    ///<p>This exception is thrown when Amazon Cognito encounters a user name that already exists in the user pool.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters a user name that already exists in the user pool.</p>
     UsernameExists(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3445,17 +3445,17 @@ impl Error for AdminCreateUserError {
 /// Errors returned by AdminDeleteUser
 #[derive(Debug, PartialEq)]
 pub enum AdminDeleteUserError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3553,17 +3553,17 @@ impl Error for AdminDeleteUserError {
 /// Errors returned by AdminDeleteUserAttributes
 #[derive(Debug, PartialEq)]
 pub enum AdminDeleteUserAttributesError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3667,19 +3667,19 @@ impl Error for AdminDeleteUserAttributesError {
 /// Errors returned by AdminDisableProviderForUser
 #[derive(Debug, PartialEq)]
 pub enum AdminDisableProviderForUserError {
-    ///<p>This exception is thrown when a user tries to confirm the account with an email or phone number that has already been supplied as an alias from a different account. This exception tells user that an account with this email or phone already exists.</p>
+    /// <p>This exception is thrown when a user tries to confirm the account with an email or phone number that has already been supplied as an alias from a different account. This exception tells user that an account with this email or phone already exists.</p>
     AliasExists(String),
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3789,17 +3789,17 @@ impl Error for AdminDisableProviderForUserError {
 /// Errors returned by AdminDisableUser
 #[derive(Debug, PartialEq)]
 pub enum AdminDisableUserError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3897,17 +3897,17 @@ impl Error for AdminDisableUserError {
 /// Errors returned by AdminEnableUser
 #[derive(Debug, PartialEq)]
 pub enum AdminEnableUserError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4005,19 +4005,19 @@ impl Error for AdminEnableUserError {
 /// Errors returned by AdminForgetDevice
 #[derive(Debug, PartialEq)]
 pub enum AdminForgetDeviceError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when the user pool configuration is invalid.</p>
+    /// <p>This exception is thrown when the user pool configuration is invalid.</p>
     InvalidUserPoolConfiguration(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4123,17 +4123,17 @@ impl Error for AdminForgetDeviceError {
 /// Errors returned by AdminGetDevice
 #[derive(Debug, PartialEq)]
 pub enum AdminGetDeviceError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when the user pool configuration is invalid.</p>
+    /// <p>This exception is thrown when the user pool configuration is invalid.</p>
     InvalidUserPoolConfiguration(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4233,17 +4233,17 @@ impl Error for AdminGetDeviceError {
 /// Errors returned by AdminGetUser
 #[derive(Debug, PartialEq)]
 pub enum AdminGetUserError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4341,35 +4341,35 @@ impl Error for AdminGetUserError {
 /// Errors returned by AdminInitiateAuth
 #[derive(Debug, PartialEq)]
 pub enum AdminInitiateAuthError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
     InvalidLambdaResponse(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is returned when the role provided for SMS configuration does not have permission to publish using Amazon SNS.</p>
+    /// <p>This exception is returned when the role provided for SMS configuration does not have permission to publish using Amazon SNS.</p>
     InvalidSmsRoleAccessPolicy(String),
-    ///<p>This exception is thrown when the trust relationship is invalid for the role provided for SMS configuration. This can happen if you do not trust <b>cognito-idp.amazonaws.com</b> or the external ID provided in the role does not match what is provided in the SMS configuration for the user pool.</p>
+    /// <p>This exception is thrown when the trust relationship is invalid for the role provided for SMS configuration. This can happen if you do not trust <b>cognito-idp.amazonaws.com</b> or the external ID provided in the role does not match what is provided in the SMS configuration for the user pool.</p>
     InvalidSmsRoleTrustRelationship(String),
-    ///<p>This exception is thrown when the user pool configuration is invalid.</p>
+    /// <p>This exception is thrown when the user pool configuration is invalid.</p>
     InvalidUserPoolConfiguration(String),
-    ///<p>This exception is thrown when Amazon Cognito cannot find a multi-factor authentication (MFA) method.</p>
+    /// <p>This exception is thrown when Amazon Cognito cannot find a multi-factor authentication (MFA) method.</p>
     MFAMethodNotFound(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when a password reset is required.</p>
+    /// <p>This exception is thrown when a password reset is required.</p>
     PasswordResetRequired(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>
     UnexpectedLambda(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters a user validation exception with the AWS Lambda service.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters a user validation exception with the AWS Lambda service.</p>
     UserLambdaValidation(String),
-    ///<p>This exception is thrown when a user is not confirmed successfully.</p>
+    /// <p>This exception is thrown when a user is not confirmed successfully.</p>
     UserNotConfirmed(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4511,19 +4511,19 @@ impl Error for AdminInitiateAuthError {
 /// Errors returned by AdminLinkProviderForUser
 #[derive(Debug, PartialEq)]
 pub enum AdminLinkProviderForUserError {
-    ///<p>This exception is thrown when a user tries to confirm the account with an email or phone number that has already been supplied as an alias from a different account. This exception tells user that an account with this email or phone already exists.</p>
+    /// <p>This exception is thrown when a user tries to confirm the account with an email or phone number that has already been supplied as an alias from a different account. This exception tells user that an account with this email or phone already exists.</p>
     AliasExists(String),
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4627,17 +4627,17 @@ impl Error for AdminLinkProviderForUserError {
 /// Errors returned by AdminListDevices
 #[derive(Debug, PartialEq)]
 pub enum AdminListDevicesError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when the user pool configuration is invalid.</p>
+    /// <p>This exception is thrown when the user pool configuration is invalid.</p>
     InvalidUserPoolConfiguration(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4737,17 +4737,17 @@ impl Error for AdminListDevicesError {
 /// Errors returned by AdminListGroupsForUser
 #[derive(Debug, PartialEq)]
 pub enum AdminListGroupsForUserError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4847,17 +4847,17 @@ impl Error for AdminListGroupsForUserError {
 /// Errors returned by AdminRemoveUserFromGroup
 #[derive(Debug, PartialEq)]
 pub enum AdminRemoveUserFromGroupError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4957,31 +4957,31 @@ impl Error for AdminRemoveUserFromGroupError {
 /// Errors returned by AdminResetUserPassword
 #[derive(Debug, PartialEq)]
 pub enum AdminResetUserPasswordError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when Amazon Cognito is not allowed to use your email identity. HTTP status code: 400.</p>
+    /// <p>This exception is thrown when Amazon Cognito is not allowed to use your email identity. HTTP status code: 400.</p>
     InvalidEmailRoleAccessPolicy(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
     InvalidLambdaResponse(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is returned when the role provided for SMS configuration does not have permission to publish using Amazon SNS.</p>
+    /// <p>This exception is returned when the role provided for SMS configuration does not have permission to publish using Amazon SNS.</p>
     InvalidSmsRoleAccessPolicy(String),
-    ///<p>This exception is thrown when the trust relationship is invalid for the role provided for SMS configuration. This can happen if you do not trust <b>cognito-idp.amazonaws.com</b> or the external ID provided in the role does not match what is provided in the SMS configuration for the user pool.</p>
+    /// <p>This exception is thrown when the trust relationship is invalid for the role provided for SMS configuration. This can happen if you do not trust <b>cognito-idp.amazonaws.com</b> or the external ID provided in the role does not match what is provided in the SMS configuration for the user pool.</p>
     InvalidSmsRoleTrustRelationship(String),
-    ///<p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
+    /// <p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
     LimitExceeded(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>
     UnexpectedLambda(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters a user validation exception with the AWS Lambda service.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters a user validation exception with the AWS Lambda service.</p>
     UserLambdaValidation(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5119,43 +5119,43 @@ impl Error for AdminResetUserPasswordError {
 /// Errors returned by AdminRespondToAuthChallenge
 #[derive(Debug, PartialEq)]
 pub enum AdminRespondToAuthChallengeError {
-    ///<p>This exception is thrown when a user tries to confirm the account with an email or phone number that has already been supplied as an alias from a different account. This exception tells user that an account with this email or phone already exists.</p>
+    /// <p>This exception is thrown when a user tries to confirm the account with an email or phone number that has already been supplied as an alias from a different account. This exception tells user that an account with this email or phone already exists.</p>
     AliasExists(String),
-    ///<p>This exception is thrown if the provided code does not match what the server was expecting.</p>
+    /// <p>This exception is thrown if the provided code does not match what the server was expecting.</p>
     CodeMismatch(String),
-    ///<p>This exception is thrown if a code has expired.</p>
+    /// <p>This exception is thrown if a code has expired.</p>
     ExpiredCode(String),
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
     InvalidLambdaResponse(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid password.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid password.</p>
     InvalidPassword(String),
-    ///<p>This exception is returned when the role provided for SMS configuration does not have permission to publish using Amazon SNS.</p>
+    /// <p>This exception is returned when the role provided for SMS configuration does not have permission to publish using Amazon SNS.</p>
     InvalidSmsRoleAccessPolicy(String),
-    ///<p>This exception is thrown when the trust relationship is invalid for the role provided for SMS configuration. This can happen if you do not trust <b>cognito-idp.amazonaws.com</b> or the external ID provided in the role does not match what is provided in the SMS configuration for the user pool.</p>
+    /// <p>This exception is thrown when the trust relationship is invalid for the role provided for SMS configuration. This can happen if you do not trust <b>cognito-idp.amazonaws.com</b> or the external ID provided in the role does not match what is provided in the SMS configuration for the user pool.</p>
     InvalidSmsRoleTrustRelationship(String),
-    ///<p>This exception is thrown when the user pool configuration is invalid.</p>
+    /// <p>This exception is thrown when the user pool configuration is invalid.</p>
     InvalidUserPoolConfiguration(String),
-    ///<p>This exception is thrown when Amazon Cognito cannot find a multi-factor authentication (MFA) method.</p>
+    /// <p>This exception is thrown when Amazon Cognito cannot find a multi-factor authentication (MFA) method.</p>
     MFAMethodNotFound(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when a password reset is required.</p>
+    /// <p>This exception is thrown when a password reset is required.</p>
     PasswordResetRequired(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>
     UnexpectedLambda(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters a user validation exception with the AWS Lambda service.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters a user validation exception with the AWS Lambda service.</p>
     UserLambdaValidation(String),
-    ///<p>This exception is thrown when a user is not confirmed successfully.</p>
+    /// <p>This exception is thrown when a user is not confirmed successfully.</p>
     UserNotConfirmed(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5333,15 +5333,15 @@ impl Error for AdminRespondToAuthChallengeError {
 /// Errors returned by AdminSetUserSettings
 #[derive(Debug, PartialEq)]
 pub enum AdminSetUserSettingsError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5437,19 +5437,19 @@ impl Error for AdminSetUserSettingsError {
 /// Errors returned by AdminUpdateDeviceStatus
 #[derive(Debug, PartialEq)]
 pub enum AdminUpdateDeviceStatusError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when the user pool configuration is invalid.</p>
+    /// <p>This exception is thrown when the user pool configuration is invalid.</p>
     InvalidUserPoolConfiguration(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5555,25 +5555,25 @@ impl Error for AdminUpdateDeviceStatusError {
 /// Errors returned by AdminUpdateUserAttributes
 #[derive(Debug, PartialEq)]
 pub enum AdminUpdateUserAttributesError {
-    ///<p>This exception is thrown when a user tries to confirm the account with an email or phone number that has already been supplied as an alias from a different account. This exception tells user that an account with this email or phone already exists.</p>
+    /// <p>This exception is thrown when a user tries to confirm the account with an email or phone number that has already been supplied as an alias from a different account. This exception tells user that an account with this email or phone already exists.</p>
     AliasExists(String),
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
     InvalidLambdaResponse(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>
     UnexpectedLambda(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters a user validation exception with the AWS Lambda service.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters a user validation exception with the AWS Lambda service.</p>
     UserLambdaValidation(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5699,17 +5699,17 @@ impl Error for AdminUpdateUserAttributesError {
 /// Errors returned by AdminUserGlobalSignOut
 #[derive(Debug, PartialEq)]
 pub enum AdminUserGlobalSignOutError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5809,25 +5809,25 @@ impl Error for AdminUserGlobalSignOutError {
 /// Errors returned by ChangePassword
 #[derive(Debug, PartialEq)]
 pub enum ChangePasswordError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid password.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid password.</p>
     InvalidPassword(String),
-    ///<p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
+    /// <p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
     LimitExceeded(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when a password reset is required.</p>
+    /// <p>This exception is thrown when a password reset is required.</p>
     PasswordResetRequired(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when a user is not confirmed successfully.</p>
+    /// <p>This exception is thrown when a user is not confirmed successfully.</p>
     UserNotConfirmed(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5941,29 +5941,29 @@ impl Error for ChangePasswordError {
 /// Errors returned by ConfirmDevice
 #[derive(Debug, PartialEq)]
 pub enum ConfirmDeviceError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
     InvalidLambdaResponse(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid password.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid password.</p>
     InvalidPassword(String),
-    ///<p>This exception is thrown when the user pool configuration is invalid.</p>
+    /// <p>This exception is thrown when the user pool configuration is invalid.</p>
     InvalidUserPoolConfiguration(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when a password reset is required.</p>
+    /// <p>This exception is thrown when a password reset is required.</p>
     PasswordResetRequired(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when a user is not confirmed successfully.</p>
+    /// <p>This exception is thrown when a user is not confirmed successfully.</p>
     UserNotConfirmed(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    ///<p>This exception is thrown when Amazon Cognito encounters a user name that already exists in the user pool.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters a user name that already exists in the user pool.</p>
     UsernameExists(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6087,35 +6087,35 @@ impl Error for ConfirmDeviceError {
 /// Errors returned by ConfirmForgotPassword
 #[derive(Debug, PartialEq)]
 pub enum ConfirmForgotPasswordError {
-    ///<p>This exception is thrown if the provided code does not match what the server was expecting.</p>
+    /// <p>This exception is thrown if the provided code does not match what the server was expecting.</p>
     CodeMismatch(String),
-    ///<p>This exception is thrown if a code has expired.</p>
+    /// <p>This exception is thrown if a code has expired.</p>
     ExpiredCode(String),
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
     InvalidLambdaResponse(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid password.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid password.</p>
     InvalidPassword(String),
-    ///<p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
+    /// <p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
     LimitExceeded(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many failed attempts for a given action (e.g., sign in).</p>
+    /// <p>This exception is thrown when the user has made too many failed attempts for a given action (e.g., sign in).</p>
     TooManyFailedAttempts(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>
     UnexpectedLambda(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters a user validation exception with the AWS Lambda service.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters a user validation exception with the AWS Lambda service.</p>
     UserLambdaValidation(String),
-    ///<p>This exception is thrown when a user is not confirmed successfully.</p>
+    /// <p>This exception is thrown when a user is not confirmed successfully.</p>
     UserNotConfirmed(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6257,33 +6257,33 @@ impl Error for ConfirmForgotPasswordError {
 /// Errors returned by ConfirmSignUp
 #[derive(Debug, PartialEq)]
 pub enum ConfirmSignUpError {
-    ///<p>This exception is thrown when a user tries to confirm the account with an email or phone number that has already been supplied as an alias from a different account. This exception tells user that an account with this email or phone already exists.</p>
+    /// <p>This exception is thrown when a user tries to confirm the account with an email or phone number that has already been supplied as an alias from a different account. This exception tells user that an account with this email or phone already exists.</p>
     AliasExists(String),
-    ///<p>This exception is thrown if the provided code does not match what the server was expecting.</p>
+    /// <p>This exception is thrown if the provided code does not match what the server was expecting.</p>
     CodeMismatch(String),
-    ///<p>This exception is thrown if a code has expired.</p>
+    /// <p>This exception is thrown if a code has expired.</p>
     ExpiredCode(String),
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
     InvalidLambdaResponse(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
+    /// <p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
     LimitExceeded(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many failed attempts for a given action (e.g., sign in).</p>
+    /// <p>This exception is thrown when the user has made too many failed attempts for a given action (e.g., sign in).</p>
     TooManyFailedAttempts(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>
     UnexpectedLambda(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters a user validation exception with the AWS Lambda service.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters a user validation exception with the AWS Lambda service.</p>
     UserLambdaValidation(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6413,19 +6413,19 @@ impl Error for ConfirmSignUpError {
 /// Errors returned by CreateGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateGroupError {
-    ///<p>This exception is thrown when Amazon Cognito encounters a group that already exists in the user pool.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters a group that already exists in the user pool.</p>
     GroupExists(String),
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
+    /// <p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
     LimitExceeded(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6527,19 +6527,19 @@ impl Error for CreateGroupError {
 /// Errors returned by CreateIdentityProvider
 #[derive(Debug, PartialEq)]
 pub enum CreateIdentityProviderError {
-    ///<p>This exception is thrown when the provider is already supported by the user pool.</p>
+    /// <p>This exception is thrown when the provider is already supported by the user pool.</p>
     DuplicateProvider(String),
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
+    /// <p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
     LimitExceeded(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6643,17 +6643,17 @@ impl Error for CreateIdentityProviderError {
 /// Errors returned by CreateResourceServer
 #[derive(Debug, PartialEq)]
 pub enum CreateResourceServerError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
+    /// <p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
     LimitExceeded(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6753,19 +6753,19 @@ impl Error for CreateResourceServerError {
 /// Errors returned by CreateUserImportJob
 #[derive(Debug, PartialEq)]
 pub enum CreateUserImportJobError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
+    /// <p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
     LimitExceeded(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when a precondition is not met.</p>
+    /// <p>This exception is thrown when a precondition is not met.</p>
     PreconditionNotMet(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6869,23 +6869,23 @@ impl Error for CreateUserImportJobError {
 /// Errors returned by CreateUserPool
 #[derive(Debug, PartialEq)]
 pub enum CreateUserPoolError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when Amazon Cognito is not allowed to use your email identity. HTTP status code: 400.</p>
+    /// <p>This exception is thrown when Amazon Cognito is not allowed to use your email identity. HTTP status code: 400.</p>
     InvalidEmailRoleAccessPolicy(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is returned when the role provided for SMS configuration does not have permission to publish using Amazon SNS.</p>
+    /// <p>This exception is returned when the role provided for SMS configuration does not have permission to publish using Amazon SNS.</p>
     InvalidSmsRoleAccessPolicy(String),
-    ///<p>This exception is thrown when the trust relationship is invalid for the role provided for SMS configuration. This can happen if you do not trust <b>cognito-idp.amazonaws.com</b> or the external ID provided in the role does not match what is provided in the SMS configuration for the user pool.</p>
+    /// <p>This exception is thrown when the trust relationship is invalid for the role provided for SMS configuration. This can happen if you do not trust <b>cognito-idp.amazonaws.com</b> or the external ID provided in the role does not match what is provided in the SMS configuration for the user pool.</p>
     InvalidSmsRoleTrustRelationship(String),
-    ///<p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
+    /// <p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
     LimitExceeded(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when a user pool tag cannot be set or updated.</p>
+    /// <p>This exception is thrown when a user pool tag cannot be set or updated.</p>
     UserPoolTagging(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6999,21 +6999,21 @@ impl Error for CreateUserPoolError {
 /// Errors returned by CreateUserPoolClient
 #[derive(Debug, PartialEq)]
 pub enum CreateUserPoolClientError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the specified OAuth flow is invalid.</p>
+    /// <p>This exception is thrown when the specified OAuth flow is invalid.</p>
     InvalidOAuthFlow(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
+    /// <p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
     LimitExceeded(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the specified scope does not exist.</p>
+    /// <p>This exception is thrown when the specified scope does not exist.</p>
     ScopeDoesNotExist(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7121,13 +7121,13 @@ impl Error for CreateUserPoolClientError {
 /// Errors returned by CreateUserPoolDomain
 #[derive(Debug, PartialEq)]
 pub enum CreateUserPoolDomainError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7219,15 +7219,15 @@ impl Error for CreateUserPoolDomainError {
 /// Errors returned by DeleteGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteGroupError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7321,17 +7321,17 @@ impl Error for DeleteGroupError {
 /// Errors returned by DeleteIdentityProvider
 #[derive(Debug, PartialEq)]
 pub enum DeleteIdentityProviderError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when the specified identifier is not supported.</p>
+    /// <p>This exception is thrown when the specified identifier is not supported.</p>
     UnsupportedIdentityProvider(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7433,15 +7433,15 @@ impl Error for DeleteIdentityProviderError {
 /// Errors returned by DeleteResourceServer
 #[derive(Debug, PartialEq)]
 pub enum DeleteResourceServerError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7537,21 +7537,21 @@ impl Error for DeleteResourceServerError {
 /// Errors returned by DeleteUser
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when a password reset is required.</p>
+    /// <p>This exception is thrown when a password reset is required.</p>
     PasswordResetRequired(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when a user is not confirmed successfully.</p>
+    /// <p>This exception is thrown when a user is not confirmed successfully.</p>
     UserNotConfirmed(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7655,21 +7655,21 @@ impl Error for DeleteUserError {
 /// Errors returned by DeleteUserAttributes
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserAttributesError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when a password reset is required.</p>
+    /// <p>This exception is thrown when a password reset is required.</p>
     PasswordResetRequired(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when a user is not confirmed successfully.</p>
+    /// <p>This exception is thrown when a user is not confirmed successfully.</p>
     UserNotConfirmed(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7779,17 +7779,17 @@ impl Error for DeleteUserAttributesError {
 /// Errors returned by DeleteUserPool
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserPoolError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when you are trying to modify a user pool while a user import job is in progress for that pool.</p>
+    /// <p>This exception is thrown when you are trying to modify a user pool while a user import job is in progress for that pool.</p>
     UserImportInProgress(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7887,15 +7887,15 @@ impl Error for DeleteUserPoolError {
 /// Errors returned by DeleteUserPoolClient
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserPoolClientError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7991,13 +7991,13 @@ impl Error for DeleteUserPoolClientError {
 /// Errors returned by DeleteUserPoolDomain
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserPoolDomainError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8089,15 +8089,15 @@ impl Error for DeleteUserPoolDomainError {
 /// Errors returned by DescribeIdentityProvider
 #[derive(Debug, PartialEq)]
 pub enum DescribeIdentityProviderError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8193,15 +8193,15 @@ impl Error for DescribeIdentityProviderError {
 /// Errors returned by DescribeResourceServer
 #[derive(Debug, PartialEq)]
 pub enum DescribeResourceServerError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8297,15 +8297,15 @@ impl Error for DescribeResourceServerError {
 /// Errors returned by DescribeUserImportJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeUserImportJobError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8401,17 +8401,17 @@ impl Error for DescribeUserImportJobError {
 /// Errors returned by DescribeUserPool
 #[derive(Debug, PartialEq)]
 pub enum DescribeUserPoolError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when a user pool tag cannot be set or updated.</p>
+    /// <p>This exception is thrown when a user pool tag cannot be set or updated.</p>
     UserPoolTagging(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8509,15 +8509,15 @@ impl Error for DescribeUserPoolError {
 /// Errors returned by DescribeUserPoolClient
 #[derive(Debug, PartialEq)]
 pub enum DescribeUserPoolClientError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8613,13 +8613,13 @@ impl Error for DescribeUserPoolClientError {
 /// Errors returned by DescribeUserPoolDomain
 #[derive(Debug, PartialEq)]
 pub enum DescribeUserPoolDomainError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8711,23 +8711,23 @@ impl Error for DescribeUserPoolDomainError {
 /// Errors returned by ForgetDevice
 #[derive(Debug, PartialEq)]
 pub enum ForgetDeviceError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when the user pool configuration is invalid.</p>
+    /// <p>This exception is thrown when the user pool configuration is invalid.</p>
     InvalidUserPoolConfiguration(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when a password reset is required.</p>
+    /// <p>This exception is thrown when a password reset is required.</p>
     PasswordResetRequired(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when a user is not confirmed successfully.</p>
+    /// <p>This exception is thrown when a user is not confirmed successfully.</p>
     UserNotConfirmed(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8837,35 +8837,35 @@ impl Error for ForgetDeviceError {
 /// Errors returned by ForgotPassword
 #[derive(Debug, PartialEq)]
 pub enum ForgotPasswordError {
-    ///<p>This exception is thrown when a verification code fails to deliver successfully.</p>
+    /// <p>This exception is thrown when a verification code fails to deliver successfully.</p>
     CodeDeliveryFailure(String),
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when Amazon Cognito is not allowed to use your email identity. HTTP status code: 400.</p>
+    /// <p>This exception is thrown when Amazon Cognito is not allowed to use your email identity. HTTP status code: 400.</p>
     InvalidEmailRoleAccessPolicy(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
     InvalidLambdaResponse(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is returned when the role provided for SMS configuration does not have permission to publish using Amazon SNS.</p>
+    /// <p>This exception is returned when the role provided for SMS configuration does not have permission to publish using Amazon SNS.</p>
     InvalidSmsRoleAccessPolicy(String),
-    ///<p>This exception is thrown when the trust relationship is invalid for the role provided for SMS configuration. This can happen if you do not trust <b>cognito-idp.amazonaws.com</b> or the external ID provided in the role does not match what is provided in the SMS configuration for the user pool.</p>
+    /// <p>This exception is thrown when the trust relationship is invalid for the role provided for SMS configuration. This can happen if you do not trust <b>cognito-idp.amazonaws.com</b> or the external ID provided in the role does not match what is provided in the SMS configuration for the user pool.</p>
     InvalidSmsRoleTrustRelationship(String),
-    ///<p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
+    /// <p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
     LimitExceeded(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>
     UnexpectedLambda(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters a user validation exception with the AWS Lambda service.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters a user validation exception with the AWS Lambda service.</p>
     UserLambdaValidation(String),
-    ///<p>This exception is thrown when a user is not confirmed successfully.</p>
+    /// <p>This exception is thrown when a user is not confirmed successfully.</p>
     UserNotConfirmed(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9003,15 +9003,15 @@ impl Error for ForgotPasswordError {
 /// Errors returned by GetCSVHeader
 #[derive(Debug, PartialEq)]
 pub enum GetCSVHeaderError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9105,23 +9105,23 @@ impl Error for GetCSVHeaderError {
 /// Errors returned by GetDevice
 #[derive(Debug, PartialEq)]
 pub enum GetDeviceError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when the user pool configuration is invalid.</p>
+    /// <p>This exception is thrown when the user pool configuration is invalid.</p>
     InvalidUserPoolConfiguration(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when a password reset is required.</p>
+    /// <p>This exception is thrown when a password reset is required.</p>
     PasswordResetRequired(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when a user is not confirmed successfully.</p>
+    /// <p>This exception is thrown when a user is not confirmed successfully.</p>
     UserNotConfirmed(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9229,15 +9229,15 @@ impl Error for GetDeviceError {
 /// Errors returned by GetGroup
 #[derive(Debug, PartialEq)]
 pub enum GetGroupError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9329,15 +9329,15 @@ impl Error for GetGroupError {
 /// Errors returned by GetIdentityProviderByIdentifier
 #[derive(Debug, PartialEq)]
 pub enum GetIdentityProviderByIdentifierError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9443,15 +9443,15 @@ impl Error for GetIdentityProviderByIdentifierError {
 /// Errors returned by GetUICustomization
 #[derive(Debug, PartialEq)]
 pub enum GetUICustomizationError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9547,21 +9547,21 @@ impl Error for GetUICustomizationError {
 /// Errors returned by GetUser
 #[derive(Debug, PartialEq)]
 pub enum GetUserError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when a password reset is required.</p>
+    /// <p>This exception is thrown when a password reset is required.</p>
     PasswordResetRequired(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when a user is not confirmed successfully.</p>
+    /// <p>This exception is thrown when a user is not confirmed successfully.</p>
     UserNotConfirmed(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9665,37 +9665,37 @@ impl Error for GetUserError {
 /// Errors returned by GetUserAttributeVerificationCode
 #[derive(Debug, PartialEq)]
 pub enum GetUserAttributeVerificationCodeError {
-    ///<p>This exception is thrown when a verification code fails to deliver successfully.</p>
+    /// <p>This exception is thrown when a verification code fails to deliver successfully.</p>
     CodeDeliveryFailure(String),
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when Amazon Cognito is not allowed to use your email identity. HTTP status code: 400.</p>
+    /// <p>This exception is thrown when Amazon Cognito is not allowed to use your email identity. HTTP status code: 400.</p>
     InvalidEmailRoleAccessPolicy(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
     InvalidLambdaResponse(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is returned when the role provided for SMS configuration does not have permission to publish using Amazon SNS.</p>
+    /// <p>This exception is returned when the role provided for SMS configuration does not have permission to publish using Amazon SNS.</p>
     InvalidSmsRoleAccessPolicy(String),
-    ///<p>This exception is thrown when the trust relationship is invalid for the role provided for SMS configuration. This can happen if you do not trust <b>cognito-idp.amazonaws.com</b> or the external ID provided in the role does not match what is provided in the SMS configuration for the user pool.</p>
+    /// <p>This exception is thrown when the trust relationship is invalid for the role provided for SMS configuration. This can happen if you do not trust <b>cognito-idp.amazonaws.com</b> or the external ID provided in the role does not match what is provided in the SMS configuration for the user pool.</p>
     InvalidSmsRoleTrustRelationship(String),
-    ///<p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
+    /// <p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
     LimitExceeded(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when a password reset is required.</p>
+    /// <p>This exception is thrown when a password reset is required.</p>
     PasswordResetRequired(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>
     UnexpectedLambda(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters a user validation exception with the AWS Lambda service.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters a user validation exception with the AWS Lambda service.</p>
     UserLambdaValidation(String),
-    ///<p>This exception is thrown when a user is not confirmed successfully.</p>
+    /// <p>This exception is thrown when a user is not confirmed successfully.</p>
     UserNotConfirmed(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9869,19 +9869,19 @@ impl Error for GetUserAttributeVerificationCodeError {
 /// Errors returned by GlobalSignOut
 #[derive(Debug, PartialEq)]
 pub enum GlobalSignOutError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when a password reset is required.</p>
+    /// <p>This exception is thrown when a password reset is required.</p>
     PasswordResetRequired(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when a user is not confirmed successfully.</p>
+    /// <p>This exception is thrown when a user is not confirmed successfully.</p>
     UserNotConfirmed(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9983,29 +9983,29 @@ impl Error for GlobalSignOutError {
 /// Errors returned by InitiateAuth
 #[derive(Debug, PartialEq)]
 pub enum InitiateAuthError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
     InvalidLambdaResponse(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when the user pool configuration is invalid.</p>
+    /// <p>This exception is thrown when the user pool configuration is invalid.</p>
     InvalidUserPoolConfiguration(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when a password reset is required.</p>
+    /// <p>This exception is thrown when a password reset is required.</p>
     PasswordResetRequired(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>
     UnexpectedLambda(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters a user validation exception with the AWS Lambda service.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters a user validation exception with the AWS Lambda service.</p>
     UserLambdaValidation(String),
-    ///<p>This exception is thrown when a user is not confirmed successfully.</p>
+    /// <p>This exception is thrown when a user is not confirmed successfully.</p>
     UserNotConfirmed(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10127,23 +10127,23 @@ impl Error for InitiateAuthError {
 /// Errors returned by ListDevices
 #[derive(Debug, PartialEq)]
 pub enum ListDevicesError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when the user pool configuration is invalid.</p>
+    /// <p>This exception is thrown when the user pool configuration is invalid.</p>
     InvalidUserPoolConfiguration(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when a password reset is required.</p>
+    /// <p>This exception is thrown when a password reset is required.</p>
     PasswordResetRequired(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when a user is not confirmed successfully.</p>
+    /// <p>This exception is thrown when a user is not confirmed successfully.</p>
     UserNotConfirmed(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10253,15 +10253,15 @@ impl Error for ListDevicesError {
 /// Errors returned by ListGroups
 #[derive(Debug, PartialEq)]
 pub enum ListGroupsError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10353,15 +10353,15 @@ impl Error for ListGroupsError {
 /// Errors returned by ListIdentityProviders
 #[derive(Debug, PartialEq)]
 pub enum ListIdentityProvidersError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10457,15 +10457,15 @@ impl Error for ListIdentityProvidersError {
 /// Errors returned by ListResourceServers
 #[derive(Debug, PartialEq)]
 pub enum ListResourceServersError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10561,15 +10561,15 @@ impl Error for ListResourceServersError {
 /// Errors returned by ListUserImportJobs
 #[derive(Debug, PartialEq)]
 pub enum ListUserImportJobsError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10665,15 +10665,15 @@ impl Error for ListUserImportJobsError {
 /// Errors returned by ListUserPoolClients
 #[derive(Debug, PartialEq)]
 pub enum ListUserPoolClientsError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10769,13 +10769,13 @@ impl Error for ListUserPoolClientsError {
 /// Errors returned by ListUserPools
 #[derive(Debug, PartialEq)]
 pub enum ListUserPoolsError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10865,15 +10865,15 @@ impl Error for ListUserPoolsError {
 /// Errors returned by ListUsers
 #[derive(Debug, PartialEq)]
 pub enum ListUsersError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10965,15 +10965,15 @@ impl Error for ListUsersError {
 /// Errors returned by ListUsersInGroup
 #[derive(Debug, PartialEq)]
 pub enum ListUsersInGroupError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11067,33 +11067,33 @@ impl Error for ListUsersInGroupError {
 /// Errors returned by ResendConfirmationCode
 #[derive(Debug, PartialEq)]
 pub enum ResendConfirmationCodeError {
-    ///<p>This exception is thrown when a verification code fails to deliver successfully.</p>
+    /// <p>This exception is thrown when a verification code fails to deliver successfully.</p>
     CodeDeliveryFailure(String),
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when Amazon Cognito is not allowed to use your email identity. HTTP status code: 400.</p>
+    /// <p>This exception is thrown when Amazon Cognito is not allowed to use your email identity. HTTP status code: 400.</p>
     InvalidEmailRoleAccessPolicy(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
     InvalidLambdaResponse(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is returned when the role provided for SMS configuration does not have permission to publish using Amazon SNS.</p>
+    /// <p>This exception is returned when the role provided for SMS configuration does not have permission to publish using Amazon SNS.</p>
     InvalidSmsRoleAccessPolicy(String),
-    ///<p>This exception is thrown when the trust relationship is invalid for the role provided for SMS configuration. This can happen if you do not trust <b>cognito-idp.amazonaws.com</b> or the external ID provided in the role does not match what is provided in the SMS configuration for the user pool.</p>
+    /// <p>This exception is thrown when the trust relationship is invalid for the role provided for SMS configuration. This can happen if you do not trust <b>cognito-idp.amazonaws.com</b> or the external ID provided in the role does not match what is provided in the SMS configuration for the user pool.</p>
     InvalidSmsRoleTrustRelationship(String),
-    ///<p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
+    /// <p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
     LimitExceeded(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>
     UnexpectedLambda(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters a user validation exception with the AWS Lambda service.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters a user validation exception with the AWS Lambda service.</p>
     UserLambdaValidation(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11237,43 +11237,43 @@ impl Error for ResendConfirmationCodeError {
 /// Errors returned by RespondToAuthChallenge
 #[derive(Debug, PartialEq)]
 pub enum RespondToAuthChallengeError {
-    ///<p>This exception is thrown when a user tries to confirm the account with an email or phone number that has already been supplied as an alias from a different account. This exception tells user that an account with this email or phone already exists.</p>
+    /// <p>This exception is thrown when a user tries to confirm the account with an email or phone number that has already been supplied as an alias from a different account. This exception tells user that an account with this email or phone already exists.</p>
     AliasExists(String),
-    ///<p>This exception is thrown if the provided code does not match what the server was expecting.</p>
+    /// <p>This exception is thrown if the provided code does not match what the server was expecting.</p>
     CodeMismatch(String),
-    ///<p>This exception is thrown if a code has expired.</p>
+    /// <p>This exception is thrown if a code has expired.</p>
     ExpiredCode(String),
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
     InvalidLambdaResponse(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid password.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid password.</p>
     InvalidPassword(String),
-    ///<p>This exception is returned when the role provided for SMS configuration does not have permission to publish using Amazon SNS.</p>
+    /// <p>This exception is returned when the role provided for SMS configuration does not have permission to publish using Amazon SNS.</p>
     InvalidSmsRoleAccessPolicy(String),
-    ///<p>This exception is thrown when the trust relationship is invalid for the role provided for SMS configuration. This can happen if you do not trust <b>cognito-idp.amazonaws.com</b> or the external ID provided in the role does not match what is provided in the SMS configuration for the user pool.</p>
+    /// <p>This exception is thrown when the trust relationship is invalid for the role provided for SMS configuration. This can happen if you do not trust <b>cognito-idp.amazonaws.com</b> or the external ID provided in the role does not match what is provided in the SMS configuration for the user pool.</p>
     InvalidSmsRoleTrustRelationship(String),
-    ///<p>This exception is thrown when the user pool configuration is invalid.</p>
+    /// <p>This exception is thrown when the user pool configuration is invalid.</p>
     InvalidUserPoolConfiguration(String),
-    ///<p>This exception is thrown when Amazon Cognito cannot find a multi-factor authentication (MFA) method.</p>
+    /// <p>This exception is thrown when Amazon Cognito cannot find a multi-factor authentication (MFA) method.</p>
     MFAMethodNotFound(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when a password reset is required.</p>
+    /// <p>This exception is thrown when a password reset is required.</p>
     PasswordResetRequired(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>
     UnexpectedLambda(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters a user validation exception with the AWS Lambda service.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters a user validation exception with the AWS Lambda service.</p>
     UserLambdaValidation(String),
-    ///<p>This exception is thrown when a user is not confirmed successfully.</p>
+    /// <p>This exception is thrown when a user is not confirmed successfully.</p>
     UserNotConfirmed(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11437,15 +11437,15 @@ impl Error for RespondToAuthChallengeError {
 /// Errors returned by SetUICustomization
 #[derive(Debug, PartialEq)]
 pub enum SetUICustomizationError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11541,19 +11541,19 @@ impl Error for SetUICustomizationError {
 /// Errors returned by SetUserSettings
 #[derive(Debug, PartialEq)]
 pub enum SetUserSettingsError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when a password reset is required.</p>
+    /// <p>This exception is thrown when a password reset is required.</p>
     PasswordResetRequired(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when a user is not confirmed successfully.</p>
+    /// <p>This exception is thrown when a user is not confirmed successfully.</p>
     UserNotConfirmed(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11655,33 +11655,33 @@ impl Error for SetUserSettingsError {
 /// Errors returned by SignUp
 #[derive(Debug, PartialEq)]
 pub enum SignUpError {
-    ///<p>This exception is thrown when a verification code fails to deliver successfully.</p>
+    /// <p>This exception is thrown when a verification code fails to deliver successfully.</p>
     CodeDeliveryFailure(String),
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when Amazon Cognito is not allowed to use your email identity. HTTP status code: 400.</p>
+    /// <p>This exception is thrown when Amazon Cognito is not allowed to use your email identity. HTTP status code: 400.</p>
     InvalidEmailRoleAccessPolicy(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
     InvalidLambdaResponse(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid password.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid password.</p>
     InvalidPassword(String),
-    ///<p>This exception is returned when the role provided for SMS configuration does not have permission to publish using Amazon SNS.</p>
+    /// <p>This exception is returned when the role provided for SMS configuration does not have permission to publish using Amazon SNS.</p>
     InvalidSmsRoleAccessPolicy(String),
-    ///<p>This exception is thrown when the trust relationship is invalid for the role provided for SMS configuration. This can happen if you do not trust <b>cognito-idp.amazonaws.com</b> or the external ID provided in the role does not match what is provided in the SMS configuration for the user pool.</p>
+    /// <p>This exception is thrown when the trust relationship is invalid for the role provided for SMS configuration. This can happen if you do not trust <b>cognito-idp.amazonaws.com</b> or the external ID provided in the role does not match what is provided in the SMS configuration for the user pool.</p>
     InvalidSmsRoleTrustRelationship(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>
     UnexpectedLambda(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters a user validation exception with the AWS Lambda service.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters a user validation exception with the AWS Lambda service.</p>
     UserLambdaValidation(String),
-    ///<p>This exception is thrown when Amazon Cognito encounters a user name that already exists in the user pool.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters a user name that already exists in the user pool.</p>
     UsernameExists(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11809,17 +11809,17 @@ impl Error for SignUpError {
 /// Errors returned by StartUserImportJob
 #[derive(Debug, PartialEq)]
 pub enum StartUserImportJobError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when a precondition is not met.</p>
+    /// <p>This exception is thrown when a precondition is not met.</p>
     PreconditionNotMet(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11919,17 +11919,17 @@ impl Error for StartUserImportJobError {
 /// Errors returned by StopUserImportJob
 #[derive(Debug, PartialEq)]
 pub enum StopUserImportJobError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when a precondition is not met.</p>
+    /// <p>This exception is thrown when a precondition is not met.</p>
     PreconditionNotMet(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12029,23 +12029,23 @@ impl Error for StopUserImportJobError {
 /// Errors returned by UpdateDeviceStatus
 #[derive(Debug, PartialEq)]
 pub enum UpdateDeviceStatusError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when the user pool configuration is invalid.</p>
+    /// <p>This exception is thrown when the user pool configuration is invalid.</p>
     InvalidUserPoolConfiguration(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when a password reset is required.</p>
+    /// <p>This exception is thrown when a password reset is required.</p>
     PasswordResetRequired(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when a user is not confirmed successfully.</p>
+    /// <p>This exception is thrown when a user is not confirmed successfully.</p>
     UserNotConfirmed(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12159,15 +12159,15 @@ impl Error for UpdateDeviceStatusError {
 /// Errors returned by UpdateGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateGroupError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12261,17 +12261,17 @@ impl Error for UpdateGroupError {
 /// Errors returned by UpdateIdentityProvider
 #[derive(Debug, PartialEq)]
 pub enum UpdateIdentityProviderError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when the specified identifier is not supported.</p>
+    /// <p>This exception is thrown when the specified identifier is not supported.</p>
     UnsupportedIdentityProvider(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12373,15 +12373,15 @@ impl Error for UpdateIdentityProviderError {
 /// Errors returned by UpdateResourceServer
 #[derive(Debug, PartialEq)]
 pub enum UpdateResourceServerError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12477,41 +12477,41 @@ impl Error for UpdateResourceServerError {
 /// Errors returned by UpdateUserAttributes
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserAttributesError {
-    ///<p>This exception is thrown when a user tries to confirm the account with an email or phone number that has already been supplied as an alias from a different account. This exception tells user that an account with this email or phone already exists.</p>
+    /// <p>This exception is thrown when a user tries to confirm the account with an email or phone number that has already been supplied as an alias from a different account. This exception tells user that an account with this email or phone already exists.</p>
     AliasExists(String),
-    ///<p>This exception is thrown when a verification code fails to deliver successfully.</p>
+    /// <p>This exception is thrown when a verification code fails to deliver successfully.</p>
     CodeDeliveryFailure(String),
-    ///<p>This exception is thrown if the provided code does not match what the server was expecting.</p>
+    /// <p>This exception is thrown if the provided code does not match what the server was expecting.</p>
     CodeMismatch(String),
-    ///<p>This exception is thrown if a code has expired.</p>
+    /// <p>This exception is thrown if a code has expired.</p>
     ExpiredCode(String),
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when Amazon Cognito is not allowed to use your email identity. HTTP status code: 400.</p>
+    /// <p>This exception is thrown when Amazon Cognito is not allowed to use your email identity. HTTP status code: 400.</p>
     InvalidEmailRoleAccessPolicy(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
     InvalidLambdaResponse(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is returned when the role provided for SMS configuration does not have permission to publish using Amazon SNS.</p>
+    /// <p>This exception is returned when the role provided for SMS configuration does not have permission to publish using Amazon SNS.</p>
     InvalidSmsRoleAccessPolicy(String),
-    ///<p>This exception is thrown when the trust relationship is invalid for the role provided for SMS configuration. This can happen if you do not trust <b>cognito-idp.amazonaws.com</b> or the external ID provided in the role does not match what is provided in the SMS configuration for the user pool.</p>
+    /// <p>This exception is thrown when the trust relationship is invalid for the role provided for SMS configuration. This can happen if you do not trust <b>cognito-idp.amazonaws.com</b> or the external ID provided in the role does not match what is provided in the SMS configuration for the user pool.</p>
     InvalidSmsRoleTrustRelationship(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when a password reset is required.</p>
+    /// <p>This exception is thrown when a password reset is required.</p>
     PasswordResetRequired(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>
     UnexpectedLambda(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters a user validation exception with the AWS Lambda service.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters a user validation exception with the AWS Lambda service.</p>
     UserLambdaValidation(String),
-    ///<p>This exception is thrown when a user is not confirmed successfully.</p>
+    /// <p>This exception is thrown when a user is not confirmed successfully.</p>
     UserNotConfirmed(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12669,27 +12669,27 @@ impl Error for UpdateUserAttributesError {
 /// Errors returned by UpdateUserPool
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserPoolError {
-    ///<p>This exception is thrown if two or more modifications are happening concurrently.</p>
+    /// <p>This exception is thrown if two or more modifications are happening concurrently.</p>
     ConcurrentModification(String),
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when Amazon Cognito is not allowed to use your email identity. HTTP status code: 400.</p>
+    /// <p>This exception is thrown when Amazon Cognito is not allowed to use your email identity. HTTP status code: 400.</p>
     InvalidEmailRoleAccessPolicy(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is returned when the role provided for SMS configuration does not have permission to publish using Amazon SNS.</p>
+    /// <p>This exception is returned when the role provided for SMS configuration does not have permission to publish using Amazon SNS.</p>
     InvalidSmsRoleAccessPolicy(String),
-    ///<p>This exception is thrown when the trust relationship is invalid for the role provided for SMS configuration. This can happen if you do not trust <b>cognito-idp.amazonaws.com</b> or the external ID provided in the role does not match what is provided in the SMS configuration for the user pool.</p>
+    /// <p>This exception is thrown when the trust relationship is invalid for the role provided for SMS configuration. This can happen if you do not trust <b>cognito-idp.amazonaws.com</b> or the external ID provided in the role does not match what is provided in the SMS configuration for the user pool.</p>
     InvalidSmsRoleTrustRelationship(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when you are trying to modify a user pool while a user import job is in progress for that pool.</p>
+    /// <p>This exception is thrown when you are trying to modify a user pool while a user import job is in progress for that pool.</p>
     UserImportInProgress(String),
-    ///<p>This exception is thrown when a user pool tag cannot be set or updated.</p>
+    /// <p>This exception is thrown when a user pool tag cannot be set or updated.</p>
     UserPoolTagging(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12811,19 +12811,19 @@ impl Error for UpdateUserPoolError {
 /// Errors returned by UpdateUserPoolClient
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserPoolClientError {
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the specified OAuth flow is invalid.</p>
+    /// <p>This exception is thrown when the specified OAuth flow is invalid.</p>
     InvalidOAuthFlow(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the specified scope does not exist.</p>
+    /// <p>This exception is thrown when the specified scope does not exist.</p>
     ScopeDoesNotExist(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12927,27 +12927,27 @@ impl Error for UpdateUserPoolClientError {
 /// Errors returned by VerifyUserAttribute
 #[derive(Debug, PartialEq)]
 pub enum VerifyUserAttributeError {
-    ///<p>This exception is thrown if the provided code does not match what the server was expecting.</p>
+    /// <p>This exception is thrown if the provided code does not match what the server was expecting.</p>
     CodeMismatch(String),
-    ///<p>This exception is thrown if a code has expired.</p>
+    /// <p>This exception is thrown if a code has expired.</p>
     ExpiredCode(String),
-    ///<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
-    ///<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
-    ///<p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
+    /// <p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
     LimitExceeded(String),
-    ///<p>This exception is thrown when a user is not authorized.</p>
+    /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
-    ///<p>This exception is thrown when a password reset is required.</p>
+    /// <p>This exception is thrown when a password reset is required.</p>
     PasswordResetRequired(String),
-    ///<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    ///<p>This exception is thrown when a user is not confirmed successfully.</p>
+    /// <p>This exception is thrown when a user is not confirmed successfully.</p>
     UserNotConfirmed(String),
-    ///<p>This exception is thrown when a user is not found.</p>
+    /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13066,468 +13066,468 @@ impl Error for VerifyUserAttributeError {
 }
 /// Trait representing the capabilities of the Amazon Cognito Identity Provider API. Amazon Cognito Identity Provider clients implement this trait.
 pub trait CognitoIdentityProvider {
-    #[doc = "<p>Adds additional user attributes to the user pool schema.</p>"]
+    /// <p>Adds additional user attributes to the user pool schema.</p>
     fn add_custom_attributes(
         &self,
         input: &AddCustomAttributesRequest,
     ) -> Result<AddCustomAttributesResponse, AddCustomAttributesError>;
 
-    #[doc="<p>Adds the specified user to the specified group.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Adds the specified user to the specified group.</p> <p>Requires developer credentials.</p>
     fn admin_add_user_to_group(
         &self,
         input: &AdminAddUserToGroupRequest,
     ) -> Result<(), AdminAddUserToGroupError>;
 
-    #[doc="<p>Confirms user registration as an admin without using a confirmation code. Works on any user.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Confirms user registration as an admin without using a confirmation code. Works on any user.</p> <p>Requires developer credentials.</p>
     fn admin_confirm_sign_up(
         &self,
         input: &AdminConfirmSignUpRequest,
     ) -> Result<AdminConfirmSignUpResponse, AdminConfirmSignUpError>;
 
-    #[doc="<p>Creates a new user in the specified user pool and sends a welcome message via email or phone (SMS). This message is based on a template that you configured in your call to <a href=\"API_CreateUserPool.html\">CreateUserPool</a> or <a href=\"API_UpdateUserPool.html\">UpdateUserPool</a>. This template includes your custom sign-up instructions and placeholders for user name and temporary password.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Creates a new user in the specified user pool and sends a welcome message via email or phone (SMS). This message is based on a template that you configured in your call to <a href="API_CreateUserPool.html">CreateUserPool</a> or <a href="API_UpdateUserPool.html">UpdateUserPool</a>. This template includes your custom sign-up instructions and placeholders for user name and temporary password.</p> <p>Requires developer credentials.</p>
     fn admin_create_user(
         &self,
         input: &AdminCreateUserRequest,
     ) -> Result<AdminCreateUserResponse, AdminCreateUserError>;
 
-    #[doc="<p>Deletes a user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Deletes a user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
     fn admin_delete_user(&self, input: &AdminDeleteUserRequest)
         -> Result<(), AdminDeleteUserError>;
 
-    #[doc="<p>Deletes the user attributes in a user pool as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Deletes the user attributes in a user pool as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
     fn admin_delete_user_attributes(
         &self,
         input: &AdminDeleteUserAttributesRequest,
     ) -> Result<AdminDeleteUserAttributesResponse, AdminDeleteUserAttributesError>;
 
-    #[doc="<p>Disables the user from signing in with the specified external (SAML or social) identity provider. If the user to disable is a Cognito User Pools native username + password user, they are not permitted to use their password to sign-in. If the user to disable is a linked external IdP user, any link between that user and an existing user is removed. The next time the external user (no longer attached to the previously linked <code>DestinationUser</code>) signs in, they must create a new user account. See <a href=\"API_AdminLinkProviderForUser.html\">AdminLinkProviderForUser</a>.</p> <p>This action is enabled only for admin access and requires developer credentials.</p> <p>The <code>ProviderName</code> must match the value specified when creating an IdP for the pool. </p> <p>To disable a native username + password user, the <code>ProviderName</code> value must be <code>Cognito</code> and the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code>, with the <code>ProviderAttributeValue</code> being the name that is used in the user pool for the user.</p> <p>The <code>ProviderAttributeName</code> must always be <code>Cognito_Subject</code> for social identity providers. The <code>ProviderAttributeValue</code> must always be the exact subject that was used when the user was originally linked as a source user.</p> <p>For de-linking a SAML identity, there are two scenarios. If the linked identity has not yet been used to sign-in, the <code>ProviderAttributeName</code> and <code>ProviderAttributeValue</code> must be the same values that were used for the <code>SourceUser</code> when the identities were originally linked in the <a href=\"API_AdminLinkProviderForUser.html\">AdminLinkProviderForUser</a> call. (If the linking was done with <code>ProviderAttributeName</code> set to <code>Cognito_Subject</code>, the same applies here). However, if the user has already signed in, the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code> and <code>ProviderAttributeValue</code> must be the subject of the SAML assertion.</p>"]
+    /// <p>Disables the user from signing in with the specified external (SAML or social) identity provider. If the user to disable is a Cognito User Pools native username + password user, they are not permitted to use their password to sign-in. If the user to disable is a linked external IdP user, any link between that user and an existing user is removed. The next time the external user (no longer attached to the previously linked <code>DestinationUser</code>) signs in, they must create a new user account. See <a href="API_AdminLinkProviderForUser.html">AdminLinkProviderForUser</a>.</p> <p>This action is enabled only for admin access and requires developer credentials.</p> <p>The <code>ProviderName</code> must match the value specified when creating an IdP for the pool. </p> <p>To disable a native username + password user, the <code>ProviderName</code> value must be <code>Cognito</code> and the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code>, with the <code>ProviderAttributeValue</code> being the name that is used in the user pool for the user.</p> <p>The <code>ProviderAttributeName</code> must always be <code>Cognito_Subject</code> for social identity providers. The <code>ProviderAttributeValue</code> must always be the exact subject that was used when the user was originally linked as a source user.</p> <p>For de-linking a SAML identity, there are two scenarios. If the linked identity has not yet been used to sign-in, the <code>ProviderAttributeName</code> and <code>ProviderAttributeValue</code> must be the same values that were used for the <code>SourceUser</code> when the identities were originally linked in the <a href="API_AdminLinkProviderForUser.html">AdminLinkProviderForUser</a> call. (If the linking was done with <code>ProviderAttributeName</code> set to <code>Cognito_Subject</code>, the same applies here). However, if the user has already signed in, the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code> and <code>ProviderAttributeValue</code> must be the subject of the SAML assertion.</p>
     fn admin_disable_provider_for_user(
         &self,
         input: &AdminDisableProviderForUserRequest,
     ) -> Result<AdminDisableProviderForUserResponse, AdminDisableProviderForUserError>;
 
-    #[doc="<p>Disables the specified user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Disables the specified user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
     fn admin_disable_user(
         &self,
         input: &AdminDisableUserRequest,
     ) -> Result<AdminDisableUserResponse, AdminDisableUserError>;
 
-    #[doc="<p>Enables the specified user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Enables the specified user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
     fn admin_enable_user(
         &self,
         input: &AdminEnableUserRequest,
     ) -> Result<AdminEnableUserResponse, AdminEnableUserError>;
 
-    #[doc = "<p>Forgets the device, as an administrator.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Forgets the device, as an administrator.</p> <p>Requires developer credentials.</p>
     fn admin_forget_device(
         &self,
         input: &AdminForgetDeviceRequest,
     ) -> Result<(), AdminForgetDeviceError>;
 
-    #[doc = "<p>Gets the device, as an administrator.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Gets the device, as an administrator.</p> <p>Requires developer credentials.</p>
     fn admin_get_device(
         &self,
         input: &AdminGetDeviceRequest,
     ) -> Result<AdminGetDeviceResponse, AdminGetDeviceError>;
 
-    #[doc="<p>Gets the specified user by user name in a user pool as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Gets the specified user by user name in a user pool as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
     fn admin_get_user(
         &self,
         input: &AdminGetUserRequest,
     ) -> Result<AdminGetUserResponse, AdminGetUserError>;
 
-    #[doc="<p>Initiates the authentication flow, as an administrator.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Initiates the authentication flow, as an administrator.</p> <p>Requires developer credentials.</p>
     fn admin_initiate_auth(
         &self,
         input: &AdminInitiateAuthRequest,
     ) -> Result<AdminInitiateAuthResponse, AdminInitiateAuthError>;
 
-    #[doc="<p>Links an existing user account in a user pool (<code>DestinationUser</code>) to an identity from an external identity provider (<code>SourceUser</code>) based on a specified attribute name and value from the external identity provider. This allows you to create a link from the existing user account to an external federated user identity that has not yet been used to sign in, so that the federated user identity can be used to sign in as the existing user account. </p> <p> For example, if there is an existing user with a username and password, this API links that user to a federated user identity, so that when the federated user identity is used, the user signs in as the existing user account. </p> <important> <p>Because this API allows a user with an external federated identity to sign in as an existing user in the user pool, it is critical that it only be used with external identity providers and provider attributes that have been trusted by the application owner.</p> </important> <p>See also <a href=\"API_AdminDisableProviderForUser.html\">AdminDisableProviderForUser</a>.</p> <p>This action is enabled only for admin access and requires developer credentials.</p>"]
+    /// <p>Links an existing user account in a user pool (<code>DestinationUser</code>) to an identity from an external identity provider (<code>SourceUser</code>) based on a specified attribute name and value from the external identity provider. This allows you to create a link from the existing user account to an external federated user identity that has not yet been used to sign in, so that the federated user identity can be used to sign in as the existing user account. </p> <p> For example, if there is an existing user with a username and password, this API links that user to a federated user identity, so that when the federated user identity is used, the user signs in as the existing user account. </p> <important> <p>Because this API allows a user with an external federated identity to sign in as an existing user in the user pool, it is critical that it only be used with external identity providers and provider attributes that have been trusted by the application owner.</p> </important> <p>See also <a href="API_AdminDisableProviderForUser.html">AdminDisableProviderForUser</a>.</p> <p>This action is enabled only for admin access and requires developer credentials.</p>
     fn admin_link_provider_for_user(
         &self,
         input: &AdminLinkProviderForUserRequest,
     ) -> Result<AdminLinkProviderForUserResponse, AdminLinkProviderForUserError>;
 
-    #[doc = "<p>Lists devices, as an administrator.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Lists devices, as an administrator.</p> <p>Requires developer credentials.</p>
     fn admin_list_devices(
         &self,
         input: &AdminListDevicesRequest,
     ) -> Result<AdminListDevicesResponse, AdminListDevicesError>;
 
-    #[doc="<p>Lists the groups that the user belongs to.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Lists the groups that the user belongs to.</p> <p>Requires developer credentials.</p>
     fn admin_list_groups_for_user(
         &self,
         input: &AdminListGroupsForUserRequest,
     ) -> Result<AdminListGroupsForUserResponse, AdminListGroupsForUserError>;
 
-    #[doc="<p>Removes the specified user from the specified group.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Removes the specified user from the specified group.</p> <p>Requires developer credentials.</p>
     fn admin_remove_user_from_group(
         &self,
         input: &AdminRemoveUserFromGroupRequest,
     ) -> Result<(), AdminRemoveUserFromGroupError>;
 
-    #[doc="<p>Resets the specified user's password in a user pool as an administrator. Works on any user.</p> <p>When a developer calls this API, the current password is invalidated, so it must be changed. If a user tries to sign in after the API is called, the app will get a PasswordResetRequiredException exception back and should direct the user down the flow to reset the password, which is the same as the forgot password flow. In addition, if the user pool has phone verification selected and a verified phone number exists for the user, or if email verification is selected and a verified email exists for the user, calling this API will also result in sending a message to the end user with the code to change their password.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Resets the specified user's password in a user pool as an administrator. Works on any user.</p> <p>When a developer calls this API, the current password is invalidated, so it must be changed. If a user tries to sign in after the API is called, the app will get a PasswordResetRequiredException exception back and should direct the user down the flow to reset the password, which is the same as the forgot password flow. In addition, if the user pool has phone verification selected and a verified phone number exists for the user, or if email verification is selected and a verified email exists for the user, calling this API will also result in sending a message to the end user with the code to change their password.</p> <p>Requires developer credentials.</p>
     fn admin_reset_user_password(
         &self,
         input: &AdminResetUserPasswordRequest,
     ) -> Result<AdminResetUserPasswordResponse, AdminResetUserPasswordError>;
 
-    #[doc="<p>Responds to an authentication challenge, as an administrator.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Responds to an authentication challenge, as an administrator.</p> <p>Requires developer credentials.</p>
     fn admin_respond_to_auth_challenge(
         &self,
         input: &AdminRespondToAuthChallengeRequest,
     ) -> Result<AdminRespondToAuthChallengeResponse, AdminRespondToAuthChallengeError>;
 
-    #[doc="<p>Sets all the user settings for a specified user name. Works on any user.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Sets all the user settings for a specified user name. Works on any user.</p> <p>Requires developer credentials.</p>
     fn admin_set_user_settings(
         &self,
         input: &AdminSetUserSettingsRequest,
     ) -> Result<AdminSetUserSettingsResponse, AdminSetUserSettingsError>;
 
-    #[doc="<p>Updates the device status as an administrator.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Updates the device status as an administrator.</p> <p>Requires developer credentials.</p>
     fn admin_update_device_status(
         &self,
         input: &AdminUpdateDeviceStatusRequest,
     ) -> Result<AdminUpdateDeviceStatusResponse, AdminUpdateDeviceStatusError>;
 
-    #[doc="<p>Updates the specified user's attributes, including developer attributes, as an administrator. Works on any user.</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p> <p>In addition to updating user attributes, this API can also be used to mark phone and email as verified.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Updates the specified user's attributes, including developer attributes, as an administrator. Works on any user.</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p> <p>In addition to updating user attributes, this API can also be used to mark phone and email as verified.</p> <p>Requires developer credentials.</p>
     fn admin_update_user_attributes(
         &self,
         input: &AdminUpdateUserAttributesRequest,
     ) -> Result<AdminUpdateUserAttributesResponse, AdminUpdateUserAttributesError>;
 
-    #[doc="<p>Signs out users from all devices, as an administrator.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Signs out users from all devices, as an administrator.</p> <p>Requires developer credentials.</p>
     fn admin_user_global_sign_out(
         &self,
         input: &AdminUserGlobalSignOutRequest,
     ) -> Result<AdminUserGlobalSignOutResponse, AdminUserGlobalSignOutError>;
 
-    #[doc = "<p>Changes the password for a specified user in a user pool.</p>"]
+    /// <p>Changes the password for a specified user in a user pool.</p>
     fn change_password(
         &self,
         input: &ChangePasswordRequest,
     ) -> Result<ChangePasswordResponse, ChangePasswordError>;
 
-    #[doc="<p>Confirms tracking of the device. This API call is the call that begins device tracking.</p>"]
+    /// <p>Confirms tracking of the device. This API call is the call that begins device tracking.</p>
     fn confirm_device(
         &self,
         input: &ConfirmDeviceRequest,
     ) -> Result<ConfirmDeviceResponse, ConfirmDeviceError>;
 
-    #[doc = "<p>Allows a user to enter a confirmation code to reset a forgotten password.</p>"]
+    /// <p>Allows a user to enter a confirmation code to reset a forgotten password.</p>
     fn confirm_forgot_password(
         &self,
         input: &ConfirmForgotPasswordRequest,
     ) -> Result<ConfirmForgotPasswordResponse, ConfirmForgotPasswordError>;
 
-    #[doc="<p>Confirms registration of a user and handles the existing alias from a previous user.</p>"]
+    /// <p>Confirms registration of a user and handles the existing alias from a previous user.</p>
     fn confirm_sign_up(
         &self,
         input: &ConfirmSignUpRequest,
     ) -> Result<ConfirmSignUpResponse, ConfirmSignUpError>;
 
-    #[doc="<p>Creates a new group in the specified user pool.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Creates a new group in the specified user pool.</p> <p>Requires developer credentials.</p>
     fn create_group(
         &self,
         input: &CreateGroupRequest,
     ) -> Result<CreateGroupResponse, CreateGroupError>;
 
-    #[doc = "<p>Creates an identity provider for a user pool.</p>"]
+    /// <p>Creates an identity provider for a user pool.</p>
     fn create_identity_provider(
         &self,
         input: &CreateIdentityProviderRequest,
     ) -> Result<CreateIdentityProviderResponse, CreateIdentityProviderError>;
 
-    #[doc = "<p>Creates a new OAuth2.0 resource server and defines custom scopes in it.</p>"]
+    /// <p>Creates a new OAuth2.0 resource server and defines custom scopes in it.</p>
     fn create_resource_server(
         &self,
         input: &CreateResourceServerRequest,
     ) -> Result<CreateResourceServerResponse, CreateResourceServerError>;
 
-    #[doc = "<p>Creates the user import job.</p>"]
+    /// <p>Creates the user import job.</p>
     fn create_user_import_job(
         &self,
         input: &CreateUserImportJobRequest,
     ) -> Result<CreateUserImportJobResponse, CreateUserImportJobError>;
 
-    #[doc="<p>Creates a new Amazon Cognito user pool and sets the password policy for the pool.</p>"]
+    /// <p>Creates a new Amazon Cognito user pool and sets the password policy for the pool.</p>
     fn create_user_pool(
         &self,
         input: &CreateUserPoolRequest,
     ) -> Result<CreateUserPoolResponse, CreateUserPoolError>;
 
-    #[doc = "<p>Creates the user pool client.</p>"]
+    /// <p>Creates the user pool client.</p>
     fn create_user_pool_client(
         &self,
         input: &CreateUserPoolClientRequest,
     ) -> Result<CreateUserPoolClientResponse, CreateUserPoolClientError>;
 
-    #[doc = "<p>Creates a new domain for a user pool.</p>"]
+    /// <p>Creates a new domain for a user pool.</p>
     fn create_user_pool_domain(
         &self,
         input: &CreateUserPoolDomainRequest,
     ) -> Result<CreateUserPoolDomainResponse, CreateUserPoolDomainError>;
 
-    #[doc="<p>Deletes a group. Currently only groups with no members can be deleted.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Deletes a group. Currently only groups with no members can be deleted.</p> <p>Requires developer credentials.</p>
     fn delete_group(&self, input: &DeleteGroupRequest) -> Result<(), DeleteGroupError>;
 
-    #[doc = "<p>Deletes an identity provider for a user pool.</p>"]
+    /// <p>Deletes an identity provider for a user pool.</p>
     fn delete_identity_provider(
         &self,
         input: &DeleteIdentityProviderRequest,
     ) -> Result<(), DeleteIdentityProviderError>;
 
-    #[doc = "<p>Deletes a resource server.</p>"]
+    /// <p>Deletes a resource server.</p>
     fn delete_resource_server(
         &self,
         input: &DeleteResourceServerRequest,
     ) -> Result<(), DeleteResourceServerError>;
 
-    #[doc = "<p>Allows a user to delete himself or herself.</p>"]
+    /// <p>Allows a user to delete himself or herself.</p>
     fn delete_user(&self, input: &DeleteUserRequest) -> Result<(), DeleteUserError>;
 
-    #[doc = "<p>Deletes the attributes for a user.</p>"]
+    /// <p>Deletes the attributes for a user.</p>
     fn delete_user_attributes(
         &self,
         input: &DeleteUserAttributesRequest,
     ) -> Result<DeleteUserAttributesResponse, DeleteUserAttributesError>;
 
-    #[doc = "<p>Deletes the specified Amazon Cognito user pool.</p>"]
+    /// <p>Deletes the specified Amazon Cognito user pool.</p>
     fn delete_user_pool(&self, input: &DeleteUserPoolRequest) -> Result<(), DeleteUserPoolError>;
 
-    #[doc = "<p>Allows the developer to delete the user pool client.</p>"]
+    /// <p>Allows the developer to delete the user pool client.</p>
     fn delete_user_pool_client(
         &self,
         input: &DeleteUserPoolClientRequest,
     ) -> Result<(), DeleteUserPoolClientError>;
 
-    #[doc = "<p>Deletes a domain for a user pool.</p>"]
+    /// <p>Deletes a domain for a user pool.</p>
     fn delete_user_pool_domain(
         &self,
         input: &DeleteUserPoolDomainRequest,
     ) -> Result<DeleteUserPoolDomainResponse, DeleteUserPoolDomainError>;
 
-    #[doc = "<p>Gets information about a specific identity provider.</p>"]
+    /// <p>Gets information about a specific identity provider.</p>
     fn describe_identity_provider(
         &self,
         input: &DescribeIdentityProviderRequest,
     ) -> Result<DescribeIdentityProviderResponse, DescribeIdentityProviderError>;
 
-    #[doc = "<p>Describes a resource server.</p>"]
+    /// <p>Describes a resource server.</p>
     fn describe_resource_server(
         &self,
         input: &DescribeResourceServerRequest,
     ) -> Result<DescribeResourceServerResponse, DescribeResourceServerError>;
 
-    #[doc = "<p>Describes the user import job.</p>"]
+    /// <p>Describes the user import job.</p>
     fn describe_user_import_job(
         &self,
         input: &DescribeUserImportJobRequest,
     ) -> Result<DescribeUserImportJobResponse, DescribeUserImportJobError>;
 
-    #[doc = "<p>Returns the configuration information and metadata of the specified user pool.</p>"]
+    /// <p>Returns the configuration information and metadata of the specified user pool.</p>
     fn describe_user_pool(
         &self,
         input: &DescribeUserPoolRequest,
     ) -> Result<DescribeUserPoolResponse, DescribeUserPoolError>;
 
-    #[doc="<p>Client method for returning the configuration information and metadata of the specified user pool client.</p>"]
+    /// <p>Client method for returning the configuration information and metadata of the specified user pool client.</p>
     fn describe_user_pool_client(
         &self,
         input: &DescribeUserPoolClientRequest,
     ) -> Result<DescribeUserPoolClientResponse, DescribeUserPoolClientError>;
 
-    #[doc = "<p>Gets information about a domain.</p>"]
+    /// <p>Gets information about a domain.</p>
     fn describe_user_pool_domain(
         &self,
         input: &DescribeUserPoolDomainRequest,
     ) -> Result<DescribeUserPoolDomainResponse, DescribeUserPoolDomainError>;
 
-    #[doc = "<p>Forgets the specified device.</p>"]
+    /// <p>Forgets the specified device.</p>
     fn forget_device(&self, input: &ForgetDeviceRequest) -> Result<(), ForgetDeviceError>;
 
-    #[doc="<p>Calling this API causes a message to be sent to the end user with a confirmation code that is required to change the user's password. For the <code>Username</code> parameter, you can use the username or user alias. If a verified phone number exists for the user, the confirmation code is sent to the phone number. Otherwise, if a verified email exists, the confirmation code is sent to the email. If neither a verified phone number nor a verified email exists, <code>InvalidParameterException</code> is thrown. To use the confirmation code for resetting the password, call <a href=\"API_ConfirmForgotPassword.html\">ConfirmForgotPassword</a>.</p>"]
+    /// <p>Calling this API causes a message to be sent to the end user with a confirmation code that is required to change the user's password. For the <code>Username</code> parameter, you can use the username or user alias. If a verified phone number exists for the user, the confirmation code is sent to the phone number. Otherwise, if a verified email exists, the confirmation code is sent to the email. If neither a verified phone number nor a verified email exists, <code>InvalidParameterException</code> is thrown. To use the confirmation code for resetting the password, call <a href="API_ConfirmForgotPassword.html">ConfirmForgotPassword</a>.</p>
     fn forgot_password(
         &self,
         input: &ForgotPasswordRequest,
     ) -> Result<ForgotPasswordResponse, ForgotPasswordError>;
 
-    #[doc="<p>Gets the header information for the .csv file to be used as input for the user import job.</p>"]
+    /// <p>Gets the header information for the .csv file to be used as input for the user import job.</p>
     fn get_csv_header(
         &self,
         input: &GetCSVHeaderRequest,
     ) -> Result<GetCSVHeaderResponse, GetCSVHeaderError>;
 
-    #[doc = "<p>Gets the device.</p>"]
+    /// <p>Gets the device.</p>
     fn get_device(&self, input: &GetDeviceRequest) -> Result<GetDeviceResponse, GetDeviceError>;
 
-    #[doc = "<p>Gets a group.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Gets a group.</p> <p>Requires developer credentials.</p>
     fn get_group(&self, input: &GetGroupRequest) -> Result<GetGroupResponse, GetGroupError>;
 
-    #[doc = "<p>Gets the specified identity provider.</p>"]
+    /// <p>Gets the specified identity provider.</p>
     fn get_identity_provider_by_identifier(
         &self,
         input: &GetIdentityProviderByIdentifierRequest,
     ) -> Result<GetIdentityProviderByIdentifierResponse, GetIdentityProviderByIdentifierError>;
 
-    #[doc="<p>Gets the UI Customization information for a particular app client's app UI, if there is something set. If nothing is set for the particular client, but there is an existing pool level customization (app <code>clientId</code> will be <code>ALL</code>), then that is returned. If nothing is present, then an empty shape is returned.</p>"]
+    /// <p>Gets the UI Customization information for a particular app client's app UI, if there is something set. If nothing is set for the particular client, but there is an existing pool level customization (app <code>clientId</code> will be <code>ALL</code>), then that is returned. If nothing is present, then an empty shape is returned.</p>
     fn get_ui_customization(
         &self,
         input: &GetUICustomizationRequest,
     ) -> Result<GetUICustomizationResponse, GetUICustomizationError>;
 
-    #[doc = "<p>Gets the user attributes and metadata for a user.</p>"]
+    /// <p>Gets the user attributes and metadata for a user.</p>
     fn get_user(&self, input: &GetUserRequest) -> Result<GetUserResponse, GetUserError>;
 
-    #[doc = "<p>Gets the user attribute verification code for the specified attribute name.</p>"]
+    /// <p>Gets the user attribute verification code for the specified attribute name.</p>
     fn get_user_attribute_verification_code(
         &self,
         input: &GetUserAttributeVerificationCodeRequest,
     ) -> Result<GetUserAttributeVerificationCodeResponse, GetUserAttributeVerificationCodeError>;
 
-    #[doc = "<p>Signs out users from all devices.</p>"]
+    /// <p>Signs out users from all devices.</p>
     fn global_sign_out(
         &self,
         input: &GlobalSignOutRequest,
     ) -> Result<GlobalSignOutResponse, GlobalSignOutError>;
 
-    #[doc = "<p>Initiates the authentication flow.</p>"]
+    /// <p>Initiates the authentication flow.</p>
     fn initiate_auth(
         &self,
         input: &InitiateAuthRequest,
     ) -> Result<InitiateAuthResponse, InitiateAuthError>;
 
-    #[doc = "<p>Lists the devices.</p>"]
+    /// <p>Lists the devices.</p>
     fn list_devices(
         &self,
         input: &ListDevicesRequest,
     ) -> Result<ListDevicesResponse, ListDevicesError>;
 
-    #[doc="<p>Lists the groups associated with a user pool.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Lists the groups associated with a user pool.</p> <p>Requires developer credentials.</p>
     fn list_groups(&self, input: &ListGroupsRequest)
         -> Result<ListGroupsResponse, ListGroupsError>;
 
-    #[doc = "<p>Lists information about all identity providers for a user pool.</p>"]
+    /// <p>Lists information about all identity providers for a user pool.</p>
     fn list_identity_providers(
         &self,
         input: &ListIdentityProvidersRequest,
     ) -> Result<ListIdentityProvidersResponse, ListIdentityProvidersError>;
 
-    #[doc = "<p>Lists the resource servers for a user pool.</p>"]
+    /// <p>Lists the resource servers for a user pool.</p>
     fn list_resource_servers(
         &self,
         input: &ListResourceServersRequest,
     ) -> Result<ListResourceServersResponse, ListResourceServersError>;
 
-    #[doc = "<p>Lists the user import jobs.</p>"]
+    /// <p>Lists the user import jobs.</p>
     fn list_user_import_jobs(
         &self,
         input: &ListUserImportJobsRequest,
     ) -> Result<ListUserImportJobsResponse, ListUserImportJobsError>;
 
-    #[doc = "<p>Lists the clients that have been created for the specified user pool.</p>"]
+    /// <p>Lists the clients that have been created for the specified user pool.</p>
     fn list_user_pool_clients(
         &self,
         input: &ListUserPoolClientsRequest,
     ) -> Result<ListUserPoolClientsResponse, ListUserPoolClientsError>;
 
-    #[doc = "<p>Lists the user pools associated with an AWS account.</p>"]
+    /// <p>Lists the user pools associated with an AWS account.</p>
     fn list_user_pools(
         &self,
         input: &ListUserPoolsRequest,
     ) -> Result<ListUserPoolsResponse, ListUserPoolsError>;
 
-    #[doc = "<p>Lists the users in the Amazon Cognito user pool.</p>"]
+    /// <p>Lists the users in the Amazon Cognito user pool.</p>
     fn list_users(&self, input: &ListUsersRequest) -> Result<ListUsersResponse, ListUsersError>;
 
-    #[doc = "<p>Lists the users in the specified group.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Lists the users in the specified group.</p> <p>Requires developer credentials.</p>
     fn list_users_in_group(
         &self,
         input: &ListUsersInGroupRequest,
     ) -> Result<ListUsersInGroupResponse, ListUsersInGroupError>;
 
-    #[doc="<p>Resends the confirmation (for confirmation of registration) to a specific user in the user pool.</p>"]
+    /// <p>Resends the confirmation (for confirmation of registration) to a specific user in the user pool.</p>
     fn resend_confirmation_code(
         &self,
         input: &ResendConfirmationCodeRequest,
     ) -> Result<ResendConfirmationCodeResponse, ResendConfirmationCodeError>;
 
-    #[doc = "<p>Responds to the authentication challenge.</p>"]
+    /// <p>Responds to the authentication challenge.</p>
     fn respond_to_auth_challenge(
         &self,
         input: &RespondToAuthChallengeRequest,
     ) -> Result<RespondToAuthChallengeResponse, RespondToAuthChallengeError>;
 
-    #[doc="<p>Sets the UI customization information for a user pool's built-in app UI.</p> <p>You can specify app UI customization settings for a single client (with a specific <code>clientId</code>) or for all clients (by setting the <code>clientId</code> to <code>ALL</code>). If you specify <code>ALL</code>, the default configuration will be used for every client that has no UI customization set previously. If you specify UI customization settings for a particular client, it will no longer fall back to the <code>ALL</code> configuration. </p> <note> <p>To use this API, your user pool must have a domain associated with it. Otherwise, there is no place to host the app's pages, and the service will throw an error.</p> </note>"]
+    /// <p><p>Sets the UI customization information for a user pool&#39;s built-in app UI.</p> <p>You can specify app UI customization settings for a single client (with a specific <code>clientId</code>) or for all clients (by setting the <code>clientId</code> to <code>ALL</code>). If you specify <code>ALL</code>, the default configuration will be used for every client that has no UI customization set previously. If you specify UI customization settings for a particular client, it will no longer fall back to the <code>ALL</code> configuration. </p> <note> <p>To use this API, your user pool must have a domain associated with it. Otherwise, there is no place to host the app&#39;s pages, and the service will throw an error.</p> </note></p>
     fn set_ui_customization(
         &self,
         input: &SetUICustomizationRequest,
     ) -> Result<SetUICustomizationResponse, SetUICustomizationError>;
 
-    #[doc="<p>Sets the user settings like multi-factor authentication (MFA). If MFA is to be removed for a particular attribute pass the attribute with code delivery as null. If null list is passed, all MFA options are removed.</p>"]
+    /// <p>Sets the user settings like multi-factor authentication (MFA). If MFA is to be removed for a particular attribute pass the attribute with code delivery as null. If null list is passed, all MFA options are removed.</p>
     fn set_user_settings(
         &self,
         input: &SetUserSettingsRequest,
     ) -> Result<SetUserSettingsResponse, SetUserSettingsError>;
 
-    #[doc="<p>Registers the user in the specified user pool and creates a user name, password, and user attributes.</p>"]
+    /// <p>Registers the user in the specified user pool and creates a user name, password, and user attributes.</p>
     fn sign_up(&self, input: &SignUpRequest) -> Result<SignUpResponse, SignUpError>;
 
-    #[doc = "<p>Starts the user import.</p>"]
+    /// <p>Starts the user import.</p>
     fn start_user_import_job(
         &self,
         input: &StartUserImportJobRequest,
     ) -> Result<StartUserImportJobResponse, StartUserImportJobError>;
 
-    #[doc = "<p>Stops the user import job.</p>"]
+    /// <p>Stops the user import job.</p>
     fn stop_user_import_job(
         &self,
         input: &StopUserImportJobRequest,
     ) -> Result<StopUserImportJobResponse, StopUserImportJobError>;
 
-    #[doc = "<p>Updates the device status.</p>"]
+    /// <p>Updates the device status.</p>
     fn update_device_status(
         &self,
         input: &UpdateDeviceStatusRequest,
     ) -> Result<UpdateDeviceStatusResponse, UpdateDeviceStatusError>;
 
-    #[doc="<p>Updates the specified group with the specified attributes.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Updates the specified group with the specified attributes.</p> <p>Requires developer credentials.</p>
     fn update_group(
         &self,
         input: &UpdateGroupRequest,
     ) -> Result<UpdateGroupResponse, UpdateGroupError>;
 
-    #[doc = "<p>Updates identity provider information for a user pool.</p>"]
+    /// <p>Updates identity provider information for a user pool.</p>
     fn update_identity_provider(
         &self,
         input: &UpdateIdentityProviderRequest,
     ) -> Result<UpdateIdentityProviderResponse, UpdateIdentityProviderError>;
 
-    #[doc = "<p>Updates the name and scopes of resource server. All other fields are read-only.</p>"]
+    /// <p>Updates the name and scopes of resource server. All other fields are read-only.</p>
     fn update_resource_server(
         &self,
         input: &UpdateResourceServerRequest,
     ) -> Result<UpdateResourceServerResponse, UpdateResourceServerError>;
 
-    #[doc = "<p>Allows a user to update a specific attribute (one at a time).</p>"]
+    /// <p>Allows a user to update a specific attribute (one at a time).</p>
     fn update_user_attributes(
         &self,
         input: &UpdateUserAttributesRequest,
     ) -> Result<UpdateUserAttributesResponse, UpdateUserAttributesError>;
 
-    #[doc = "<p>Updates the specified user pool with the specified attributes.</p>"]
+    /// <p>Updates the specified user pool with the specified attributes.</p>
     fn update_user_pool(
         &self,
         input: &UpdateUserPoolRequest,
     ) -> Result<UpdateUserPoolResponse, UpdateUserPoolError>;
 
-    #[doc="<p>Allows the developer to update the specified user pool client and password policy.</p>"]
+    /// <p>Allows the developer to update the specified user pool client and password policy.</p>
     fn update_user_pool_client(
         &self,
         input: &UpdateUserPoolClientRequest,
     ) -> Result<UpdateUserPoolClientResponse, UpdateUserPoolClientError>;
 
-    #[doc = "<p>Verifies the specified user attributes in the user pool.</p>"]
+    /// <p>Verifies the specified user attributes in the user pool.</p>
     fn verify_user_attribute(
         &self,
         input: &VerifyUserAttributeRequest,
@@ -13563,7 +13563,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc = "<p>Adds additional user attributes to the user pool schema.</p>"]
+    /// <p>Adds additional user attributes to the user pool schema.</p>
     fn add_custom_attributes(
         &self,
         input: &AddCustomAttributesRequest,
@@ -13600,7 +13600,7 @@ where
         }
     }
 
-    #[doc="<p>Adds the specified user to the specified group.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Adds the specified user to the specified group.</p> <p>Requires developer credentials.</p>
     fn admin_add_user_to_group(
         &self,
         input: &AdminAddUserToGroupRequest,
@@ -13631,7 +13631,7 @@ where
         }
     }
 
-    #[doc="<p>Confirms user registration as an admin without using a confirmation code. Works on any user.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Confirms user registration as an admin without using a confirmation code. Works on any user.</p> <p>Requires developer credentials.</p>
     fn admin_confirm_sign_up(
         &self,
         input: &AdminConfirmSignUpRequest,
@@ -13668,7 +13668,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new user in the specified user pool and sends a welcome message via email or phone (SMS). This message is based on a template that you configured in your call to <a href=\"API_CreateUserPool.html\">CreateUserPool</a> or <a href=\"API_UpdateUserPool.html\">UpdateUserPool</a>. This template includes your custom sign-up instructions and placeholders for user name and temporary password.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Creates a new user in the specified user pool and sends a welcome message via email or phone (SMS). This message is based on a template that you configured in your call to <a href="API_CreateUserPool.html">CreateUserPool</a> or <a href="API_UpdateUserPool.html">UpdateUserPool</a>. This template includes your custom sign-up instructions and placeholders for user name and temporary password.</p> <p>Requires developer credentials.</p>
     fn admin_create_user(
         &self,
         input: &AdminCreateUserRequest,
@@ -13705,7 +13705,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Deletes a user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
     fn admin_delete_user(
         &self,
         input: &AdminDeleteUserRequest,
@@ -13736,7 +13736,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the user attributes in a user pool as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Deletes the user attributes in a user pool as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
     fn admin_delete_user_attributes(
         &self,
         input: &AdminDeleteUserAttributesRequest,
@@ -13773,7 +13773,7 @@ where
         }
     }
 
-    #[doc="<p>Disables the user from signing in with the specified external (SAML or social) identity provider. If the user to disable is a Cognito User Pools native username + password user, they are not permitted to use their password to sign-in. If the user to disable is a linked external IdP user, any link between that user and an existing user is removed. The next time the external user (no longer attached to the previously linked <code>DestinationUser</code>) signs in, they must create a new user account. See <a href=\"API_AdminLinkProviderForUser.html\">AdminLinkProviderForUser</a>.</p> <p>This action is enabled only for admin access and requires developer credentials.</p> <p>The <code>ProviderName</code> must match the value specified when creating an IdP for the pool. </p> <p>To disable a native username + password user, the <code>ProviderName</code> value must be <code>Cognito</code> and the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code>, with the <code>ProviderAttributeValue</code> being the name that is used in the user pool for the user.</p> <p>The <code>ProviderAttributeName</code> must always be <code>Cognito_Subject</code> for social identity providers. The <code>ProviderAttributeValue</code> must always be the exact subject that was used when the user was originally linked as a source user.</p> <p>For de-linking a SAML identity, there are two scenarios. If the linked identity has not yet been used to sign-in, the <code>ProviderAttributeName</code> and <code>ProviderAttributeValue</code> must be the same values that were used for the <code>SourceUser</code> when the identities were originally linked in the <a href=\"API_AdminLinkProviderForUser.html\">AdminLinkProviderForUser</a> call. (If the linking was done with <code>ProviderAttributeName</code> set to <code>Cognito_Subject</code>, the same applies here). However, if the user has already signed in, the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code> and <code>ProviderAttributeValue</code> must be the subject of the SAML assertion.</p>"]
+    /// <p>Disables the user from signing in with the specified external (SAML or social) identity provider. If the user to disable is a Cognito User Pools native username + password user, they are not permitted to use their password to sign-in. If the user to disable is a linked external IdP user, any link between that user and an existing user is removed. The next time the external user (no longer attached to the previously linked <code>DestinationUser</code>) signs in, they must create a new user account. See <a href="API_AdminLinkProviderForUser.html">AdminLinkProviderForUser</a>.</p> <p>This action is enabled only for admin access and requires developer credentials.</p> <p>The <code>ProviderName</code> must match the value specified when creating an IdP for the pool. </p> <p>To disable a native username + password user, the <code>ProviderName</code> value must be <code>Cognito</code> and the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code>, with the <code>ProviderAttributeValue</code> being the name that is used in the user pool for the user.</p> <p>The <code>ProviderAttributeName</code> must always be <code>Cognito_Subject</code> for social identity providers. The <code>ProviderAttributeValue</code> must always be the exact subject that was used when the user was originally linked as a source user.</p> <p>For de-linking a SAML identity, there are two scenarios. If the linked identity has not yet been used to sign-in, the <code>ProviderAttributeName</code> and <code>ProviderAttributeValue</code> must be the same values that were used for the <code>SourceUser</code> when the identities were originally linked in the <a href="API_AdminLinkProviderForUser.html">AdminLinkProviderForUser</a> call. (If the linking was done with <code>ProviderAttributeName</code> set to <code>Cognito_Subject</code>, the same applies here). However, if the user has already signed in, the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code> and <code>ProviderAttributeValue</code> must be the subject of the SAML assertion.</p>
     fn admin_disable_provider_for_user(
         &self,
         input: &AdminDisableProviderForUserRequest,
@@ -13810,7 +13810,7 @@ where
         }
     }
 
-    #[doc="<p>Disables the specified user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Disables the specified user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
     fn admin_disable_user(
         &self,
         input: &AdminDisableUserRequest,
@@ -13847,7 +13847,7 @@ where
         }
     }
 
-    #[doc="<p>Enables the specified user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Enables the specified user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
     fn admin_enable_user(
         &self,
         input: &AdminEnableUserRequest,
@@ -13884,7 +13884,7 @@ where
         }
     }
 
-    #[doc = "<p>Forgets the device, as an administrator.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Forgets the device, as an administrator.</p> <p>Requires developer credentials.</p>
     fn admin_forget_device(
         &self,
         input: &AdminForgetDeviceRequest,
@@ -13915,7 +13915,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets the device, as an administrator.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Gets the device, as an administrator.</p> <p>Requires developer credentials.</p>
     fn admin_get_device(
         &self,
         input: &AdminGetDeviceRequest,
@@ -13952,7 +13952,7 @@ where
         }
     }
 
-    #[doc="<p>Gets the specified user by user name in a user pool as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Gets the specified user by user name in a user pool as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
     fn admin_get_user(
         &self,
         input: &AdminGetUserRequest,
@@ -13989,7 +13989,7 @@ where
         }
     }
 
-    #[doc="<p>Initiates the authentication flow, as an administrator.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Initiates the authentication flow, as an administrator.</p> <p>Requires developer credentials.</p>
     fn admin_initiate_auth(
         &self,
         input: &AdminInitiateAuthRequest,
@@ -14026,7 +14026,7 @@ where
         }
     }
 
-    #[doc="<p>Links an existing user account in a user pool (<code>DestinationUser</code>) to an identity from an external identity provider (<code>SourceUser</code>) based on a specified attribute name and value from the external identity provider. This allows you to create a link from the existing user account to an external federated user identity that has not yet been used to sign in, so that the federated user identity can be used to sign in as the existing user account. </p> <p> For example, if there is an existing user with a username and password, this API links that user to a federated user identity, so that when the federated user identity is used, the user signs in as the existing user account. </p> <important> <p>Because this API allows a user with an external federated identity to sign in as an existing user in the user pool, it is critical that it only be used with external identity providers and provider attributes that have been trusted by the application owner.</p> </important> <p>See also <a href=\"API_AdminDisableProviderForUser.html\">AdminDisableProviderForUser</a>.</p> <p>This action is enabled only for admin access and requires developer credentials.</p>"]
+    /// <p>Links an existing user account in a user pool (<code>DestinationUser</code>) to an identity from an external identity provider (<code>SourceUser</code>) based on a specified attribute name and value from the external identity provider. This allows you to create a link from the existing user account to an external federated user identity that has not yet been used to sign in, so that the federated user identity can be used to sign in as the existing user account. </p> <p> For example, if there is an existing user with a username and password, this API links that user to a federated user identity, so that when the federated user identity is used, the user signs in as the existing user account. </p> <important> <p>Because this API allows a user with an external federated identity to sign in as an existing user in the user pool, it is critical that it only be used with external identity providers and provider attributes that have been trusted by the application owner.</p> </important> <p>See also <a href="API_AdminDisableProviderForUser.html">AdminDisableProviderForUser</a>.</p> <p>This action is enabled only for admin access and requires developer credentials.</p>
     fn admin_link_provider_for_user(
         &self,
         input: &AdminLinkProviderForUserRequest,
@@ -14063,7 +14063,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists devices, as an administrator.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Lists devices, as an administrator.</p> <p>Requires developer credentials.</p>
     fn admin_list_devices(
         &self,
         input: &AdminListDevicesRequest,
@@ -14100,7 +14100,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the groups that the user belongs to.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Lists the groups that the user belongs to.</p> <p>Requires developer credentials.</p>
     fn admin_list_groups_for_user(
         &self,
         input: &AdminListGroupsForUserRequest,
@@ -14137,7 +14137,7 @@ where
         }
     }
 
-    #[doc="<p>Removes the specified user from the specified group.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Removes the specified user from the specified group.</p> <p>Requires developer credentials.</p>
     fn admin_remove_user_from_group(
         &self,
         input: &AdminRemoveUserFromGroupRequest,
@@ -14168,7 +14168,7 @@ where
         }
     }
 
-    #[doc="<p>Resets the specified user's password in a user pool as an administrator. Works on any user.</p> <p>When a developer calls this API, the current password is invalidated, so it must be changed. If a user tries to sign in after the API is called, the app will get a PasswordResetRequiredException exception back and should direct the user down the flow to reset the password, which is the same as the forgot password flow. In addition, if the user pool has phone verification selected and a verified phone number exists for the user, or if email verification is selected and a verified email exists for the user, calling this API will also result in sending a message to the end user with the code to change their password.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Resets the specified user's password in a user pool as an administrator. Works on any user.</p> <p>When a developer calls this API, the current password is invalidated, so it must be changed. If a user tries to sign in after the API is called, the app will get a PasswordResetRequiredException exception back and should direct the user down the flow to reset the password, which is the same as the forgot password flow. In addition, if the user pool has phone verification selected and a verified phone number exists for the user, or if email verification is selected and a verified email exists for the user, calling this API will also result in sending a message to the end user with the code to change their password.</p> <p>Requires developer credentials.</p>
     fn admin_reset_user_password(
         &self,
         input: &AdminResetUserPasswordRequest,
@@ -14205,7 +14205,7 @@ where
         }
     }
 
-    #[doc="<p>Responds to an authentication challenge, as an administrator.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Responds to an authentication challenge, as an administrator.</p> <p>Requires developer credentials.</p>
     fn admin_respond_to_auth_challenge(
         &self,
         input: &AdminRespondToAuthChallengeRequest,
@@ -14242,7 +14242,7 @@ where
         }
     }
 
-    #[doc="<p>Sets all the user settings for a specified user name. Works on any user.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Sets all the user settings for a specified user name. Works on any user.</p> <p>Requires developer credentials.</p>
     fn admin_set_user_settings(
         &self,
         input: &AdminSetUserSettingsRequest,
@@ -14279,7 +14279,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the device status as an administrator.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Updates the device status as an administrator.</p> <p>Requires developer credentials.</p>
     fn admin_update_device_status(
         &self,
         input: &AdminUpdateDeviceStatusRequest,
@@ -14316,7 +14316,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the specified user's attributes, including developer attributes, as an administrator. Works on any user.</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p> <p>In addition to updating user attributes, this API can also be used to mark phone and email as verified.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Updates the specified user's attributes, including developer attributes, as an administrator. Works on any user.</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p> <p>In addition to updating user attributes, this API can also be used to mark phone and email as verified.</p> <p>Requires developer credentials.</p>
     fn admin_update_user_attributes(
         &self,
         input: &AdminUpdateUserAttributesRequest,
@@ -14353,7 +14353,7 @@ where
         }
     }
 
-    #[doc="<p>Signs out users from all devices, as an administrator.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Signs out users from all devices, as an administrator.</p> <p>Requires developer credentials.</p>
     fn admin_user_global_sign_out(
         &self,
         input: &AdminUserGlobalSignOutRequest,
@@ -14390,7 +14390,7 @@ where
         }
     }
 
-    #[doc = "<p>Changes the password for a specified user in a user pool.</p>"]
+    /// <p>Changes the password for a specified user in a user pool.</p>
     fn change_password(
         &self,
         input: &ChangePasswordRequest,
@@ -14427,7 +14427,7 @@ where
         }
     }
 
-    #[doc="<p>Confirms tracking of the device. This API call is the call that begins device tracking.</p>"]
+    /// <p>Confirms tracking of the device. This API call is the call that begins device tracking.</p>
     fn confirm_device(
         &self,
         input: &ConfirmDeviceRequest,
@@ -14464,7 +14464,7 @@ where
         }
     }
 
-    #[doc = "<p>Allows a user to enter a confirmation code to reset a forgotten password.</p>"]
+    /// <p>Allows a user to enter a confirmation code to reset a forgotten password.</p>
     fn confirm_forgot_password(
         &self,
         input: &ConfirmForgotPasswordRequest,
@@ -14501,7 +14501,7 @@ where
         }
     }
 
-    #[doc="<p>Confirms registration of a user and handles the existing alias from a previous user.</p>"]
+    /// <p>Confirms registration of a user and handles the existing alias from a previous user.</p>
     fn confirm_sign_up(
         &self,
         input: &ConfirmSignUpRequest,
@@ -14538,7 +14538,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new group in the specified user pool.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Creates a new group in the specified user pool.</p> <p>Requires developer credentials.</p>
     fn create_group(
         &self,
         input: &CreateGroupRequest,
@@ -14575,7 +14575,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates an identity provider for a user pool.</p>"]
+    /// <p>Creates an identity provider for a user pool.</p>
     fn create_identity_provider(
         &self,
         input: &CreateIdentityProviderRequest,
@@ -14612,7 +14612,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a new OAuth2.0 resource server and defines custom scopes in it.</p>"]
+    /// <p>Creates a new OAuth2.0 resource server and defines custom scopes in it.</p>
     fn create_resource_server(
         &self,
         input: &CreateResourceServerRequest,
@@ -14649,7 +14649,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates the user import job.</p>"]
+    /// <p>Creates the user import job.</p>
     fn create_user_import_job(
         &self,
         input: &CreateUserImportJobRequest,
@@ -14686,7 +14686,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new Amazon Cognito user pool and sets the password policy for the pool.</p>"]
+    /// <p>Creates a new Amazon Cognito user pool and sets the password policy for the pool.</p>
     fn create_user_pool(
         &self,
         input: &CreateUserPoolRequest,
@@ -14723,7 +14723,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates the user pool client.</p>"]
+    /// <p>Creates the user pool client.</p>
     fn create_user_pool_client(
         &self,
         input: &CreateUserPoolClientRequest,
@@ -14760,7 +14760,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a new domain for a user pool.</p>"]
+    /// <p>Creates a new domain for a user pool.</p>
     fn create_user_pool_domain(
         &self,
         input: &CreateUserPoolDomainRequest,
@@ -14797,7 +14797,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a group. Currently only groups with no members can be deleted.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Deletes a group. Currently only groups with no members can be deleted.</p> <p>Requires developer credentials.</p>
     fn delete_group(&self, input: &DeleteGroupRequest) -> Result<(), DeleteGroupError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
@@ -14825,7 +14825,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes an identity provider for a user pool.</p>"]
+    /// <p>Deletes an identity provider for a user pool.</p>
     fn delete_identity_provider(
         &self,
         input: &DeleteIdentityProviderRequest,
@@ -14856,7 +14856,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a resource server.</p>"]
+    /// <p>Deletes a resource server.</p>
     fn delete_resource_server(
         &self,
         input: &DeleteResourceServerRequest,
@@ -14887,7 +14887,7 @@ where
         }
     }
 
-    #[doc = "<p>Allows a user to delete himself or herself.</p>"]
+    /// <p>Allows a user to delete himself or herself.</p>
     fn delete_user(&self, input: &DeleteUserRequest) -> Result<(), DeleteUserError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
@@ -14915,7 +14915,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the attributes for a user.</p>"]
+    /// <p>Deletes the attributes for a user.</p>
     fn delete_user_attributes(
         &self,
         input: &DeleteUserAttributesRequest,
@@ -14952,7 +14952,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the specified Amazon Cognito user pool.</p>"]
+    /// <p>Deletes the specified Amazon Cognito user pool.</p>
     fn delete_user_pool(&self, input: &DeleteUserPoolRequest) -> Result<(), DeleteUserPoolError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
@@ -14980,7 +14980,7 @@ where
         }
     }
 
-    #[doc = "<p>Allows the developer to delete the user pool client.</p>"]
+    /// <p>Allows the developer to delete the user pool client.</p>
     fn delete_user_pool_client(
         &self,
         input: &DeleteUserPoolClientRequest,
@@ -15011,7 +15011,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a domain for a user pool.</p>"]
+    /// <p>Deletes a domain for a user pool.</p>
     fn delete_user_pool_domain(
         &self,
         input: &DeleteUserPoolDomainRequest,
@@ -15048,7 +15048,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets information about a specific identity provider.</p>"]
+    /// <p>Gets information about a specific identity provider.</p>
     fn describe_identity_provider(
         &self,
         input: &DescribeIdentityProviderRequest,
@@ -15085,7 +15085,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes a resource server.</p>"]
+    /// <p>Describes a resource server.</p>
     fn describe_resource_server(
         &self,
         input: &DescribeResourceServerRequest,
@@ -15122,7 +15122,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes the user import job.</p>"]
+    /// <p>Describes the user import job.</p>
     fn describe_user_import_job(
         &self,
         input: &DescribeUserImportJobRequest,
@@ -15159,7 +15159,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns the configuration information and metadata of the specified user pool.</p>"]
+    /// <p>Returns the configuration information and metadata of the specified user pool.</p>
     fn describe_user_pool(
         &self,
         input: &DescribeUserPoolRequest,
@@ -15196,7 +15196,7 @@ where
         }
     }
 
-    #[doc="<p>Client method for returning the configuration information and metadata of the specified user pool client.</p>"]
+    /// <p>Client method for returning the configuration information and metadata of the specified user pool client.</p>
     fn describe_user_pool_client(
         &self,
         input: &DescribeUserPoolClientRequest,
@@ -15233,7 +15233,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets information about a domain.</p>"]
+    /// <p>Gets information about a domain.</p>
     fn describe_user_pool_domain(
         &self,
         input: &DescribeUserPoolDomainRequest,
@@ -15270,7 +15270,7 @@ where
         }
     }
 
-    #[doc = "<p>Forgets the specified device.</p>"]
+    /// <p>Forgets the specified device.</p>
     fn forget_device(&self, input: &ForgetDeviceRequest) -> Result<(), ForgetDeviceError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
@@ -15298,7 +15298,7 @@ where
         }
     }
 
-    #[doc="<p>Calling this API causes a message to be sent to the end user with a confirmation code that is required to change the user's password. For the <code>Username</code> parameter, you can use the username or user alias. If a verified phone number exists for the user, the confirmation code is sent to the phone number. Otherwise, if a verified email exists, the confirmation code is sent to the email. If neither a verified phone number nor a verified email exists, <code>InvalidParameterException</code> is thrown. To use the confirmation code for resetting the password, call <a href=\"API_ConfirmForgotPassword.html\">ConfirmForgotPassword</a>.</p>"]
+    /// <p>Calling this API causes a message to be sent to the end user with a confirmation code that is required to change the user's password. For the <code>Username</code> parameter, you can use the username or user alias. If a verified phone number exists for the user, the confirmation code is sent to the phone number. Otherwise, if a verified email exists, the confirmation code is sent to the email. If neither a verified phone number nor a verified email exists, <code>InvalidParameterException</code> is thrown. To use the confirmation code for resetting the password, call <a href="API_ConfirmForgotPassword.html">ConfirmForgotPassword</a>.</p>
     fn forgot_password(
         &self,
         input: &ForgotPasswordRequest,
@@ -15335,7 +15335,7 @@ where
         }
     }
 
-    #[doc="<p>Gets the header information for the .csv file to be used as input for the user import job.</p>"]
+    /// <p>Gets the header information for the .csv file to be used as input for the user import job.</p>
     fn get_csv_header(
         &self,
         input: &GetCSVHeaderRequest,
@@ -15372,7 +15372,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets the device.</p>"]
+    /// <p>Gets the device.</p>
     fn get_device(&self, input: &GetDeviceRequest) -> Result<GetDeviceResponse, GetDeviceError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
@@ -15406,7 +15406,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets a group.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Gets a group.</p> <p>Requires developer credentials.</p>
     fn get_group(&self, input: &GetGroupRequest) -> Result<GetGroupResponse, GetGroupError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
@@ -15437,7 +15437,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets the specified identity provider.</p>"]
+    /// <p>Gets the specified identity provider.</p>
     fn get_identity_provider_by_identifier(
         &self,
         input: &GetIdentityProviderByIdentifierRequest,
@@ -15476,7 +15476,7 @@ where
         }
     }
 
-    #[doc="<p>Gets the UI Customization information for a particular app client's app UI, if there is something set. If nothing is set for the particular client, but there is an existing pool level customization (app <code>clientId</code> will be <code>ALL</code>), then that is returned. If nothing is present, then an empty shape is returned.</p>"]
+    /// <p>Gets the UI Customization information for a particular app client's app UI, if there is something set. If nothing is set for the particular client, but there is an existing pool level customization (app <code>clientId</code> will be <code>ALL</code>), then that is returned. If nothing is present, then an empty shape is returned.</p>
     fn get_ui_customization(
         &self,
         input: &GetUICustomizationRequest,
@@ -15513,7 +15513,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets the user attributes and metadata for a user.</p>"]
+    /// <p>Gets the user attributes and metadata for a user.</p>
     fn get_user(&self, input: &GetUserRequest) -> Result<GetUserResponse, GetUserError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
@@ -15546,7 +15546,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets the user attribute verification code for the specified attribute name.</p>"]
+    /// <p>Gets the user attribute verification code for the specified attribute name.</p>
     fn get_user_attribute_verification_code(
         &self,
         input: &GetUserAttributeVerificationCodeRequest,
@@ -15586,7 +15586,7 @@ where
         }
     }
 
-    #[doc = "<p>Signs out users from all devices.</p>"]
+    /// <p>Signs out users from all devices.</p>
     fn global_sign_out(
         &self,
         input: &GlobalSignOutRequest,
@@ -15623,7 +15623,7 @@ where
         }
     }
 
-    #[doc = "<p>Initiates the authentication flow.</p>"]
+    /// <p>Initiates the authentication flow.</p>
     fn initiate_auth(
         &self,
         input: &InitiateAuthRequest,
@@ -15660,7 +15660,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists the devices.</p>"]
+    /// <p>Lists the devices.</p>
     fn list_devices(
         &self,
         input: &ListDevicesRequest,
@@ -15697,7 +15697,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the groups associated with a user pool.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Lists the groups associated with a user pool.</p> <p>Requires developer credentials.</p>
     fn list_groups(
         &self,
         input: &ListGroupsRequest,
@@ -15734,7 +15734,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists information about all identity providers for a user pool.</p>"]
+    /// <p>Lists information about all identity providers for a user pool.</p>
     fn list_identity_providers(
         &self,
         input: &ListIdentityProvidersRequest,
@@ -15771,7 +15771,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists the resource servers for a user pool.</p>"]
+    /// <p>Lists the resource servers for a user pool.</p>
     fn list_resource_servers(
         &self,
         input: &ListResourceServersRequest,
@@ -15808,7 +15808,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists the user import jobs.</p>"]
+    /// <p>Lists the user import jobs.</p>
     fn list_user_import_jobs(
         &self,
         input: &ListUserImportJobsRequest,
@@ -15845,7 +15845,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists the clients that have been created for the specified user pool.</p>"]
+    /// <p>Lists the clients that have been created for the specified user pool.</p>
     fn list_user_pool_clients(
         &self,
         input: &ListUserPoolClientsRequest,
@@ -15882,7 +15882,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists the user pools associated with an AWS account.</p>"]
+    /// <p>Lists the user pools associated with an AWS account.</p>
     fn list_user_pools(
         &self,
         input: &ListUserPoolsRequest,
@@ -15919,7 +15919,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists the users in the Amazon Cognito user pool.</p>"]
+    /// <p>Lists the users in the Amazon Cognito user pool.</p>
     fn list_users(&self, input: &ListUsersRequest) -> Result<ListUsersResponse, ListUsersError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
@@ -15953,7 +15953,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists the users in the specified group.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Lists the users in the specified group.</p> <p>Requires developer credentials.</p>
     fn list_users_in_group(
         &self,
         input: &ListUsersInGroupRequest,
@@ -15990,7 +15990,7 @@ where
         }
     }
 
-    #[doc="<p>Resends the confirmation (for confirmation of registration) to a specific user in the user pool.</p>"]
+    /// <p>Resends the confirmation (for confirmation of registration) to a specific user in the user pool.</p>
     fn resend_confirmation_code(
         &self,
         input: &ResendConfirmationCodeRequest,
@@ -16027,7 +16027,7 @@ where
         }
     }
 
-    #[doc = "<p>Responds to the authentication challenge.</p>"]
+    /// <p>Responds to the authentication challenge.</p>
     fn respond_to_auth_challenge(
         &self,
         input: &RespondToAuthChallengeRequest,
@@ -16064,7 +16064,7 @@ where
         }
     }
 
-    #[doc="<p>Sets the UI customization information for a user pool's built-in app UI.</p> <p>You can specify app UI customization settings for a single client (with a specific <code>clientId</code>) or for all clients (by setting the <code>clientId</code> to <code>ALL</code>). If you specify <code>ALL</code>, the default configuration will be used for every client that has no UI customization set previously. If you specify UI customization settings for a particular client, it will no longer fall back to the <code>ALL</code> configuration. </p> <note> <p>To use this API, your user pool must have a domain associated with it. Otherwise, there is no place to host the app's pages, and the service will throw an error.</p> </note>"]
+    /// <p><p>Sets the UI customization information for a user pool&#39;s built-in app UI.</p> <p>You can specify app UI customization settings for a single client (with a specific <code>clientId</code>) or for all clients (by setting the <code>clientId</code> to <code>ALL</code>). If you specify <code>ALL</code>, the default configuration will be used for every client that has no UI customization set previously. If you specify UI customization settings for a particular client, it will no longer fall back to the <code>ALL</code> configuration. </p> <note> <p>To use this API, your user pool must have a domain associated with it. Otherwise, there is no place to host the app&#39;s pages, and the service will throw an error.</p> </note></p>
     fn set_ui_customization(
         &self,
         input: &SetUICustomizationRequest,
@@ -16101,7 +16101,7 @@ where
         }
     }
 
-    #[doc="<p>Sets the user settings like multi-factor authentication (MFA). If MFA is to be removed for a particular attribute pass the attribute with code delivery as null. If null list is passed, all MFA options are removed.</p>"]
+    /// <p>Sets the user settings like multi-factor authentication (MFA). If MFA is to be removed for a particular attribute pass the attribute with code delivery as null. If null list is passed, all MFA options are removed.</p>
     fn set_user_settings(
         &self,
         input: &SetUserSettingsRequest,
@@ -16138,7 +16138,7 @@ where
         }
     }
 
-    #[doc="<p>Registers the user in the specified user pool and creates a user name, password, and user attributes.</p>"]
+    /// <p>Registers the user in the specified user pool and creates a user name, password, and user attributes.</p>
     fn sign_up(&self, input: &SignUpRequest) -> Result<SignUpResponse, SignUpError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
@@ -16170,7 +16170,7 @@ where
         }
     }
 
-    #[doc = "<p>Starts the user import.</p>"]
+    /// <p>Starts the user import.</p>
     fn start_user_import_job(
         &self,
         input: &StartUserImportJobRequest,
@@ -16207,7 +16207,7 @@ where
         }
     }
 
-    #[doc = "<p>Stops the user import job.</p>"]
+    /// <p>Stops the user import job.</p>
     fn stop_user_import_job(
         &self,
         input: &StopUserImportJobRequest,
@@ -16244,7 +16244,7 @@ where
         }
     }
 
-    #[doc = "<p>Updates the device status.</p>"]
+    /// <p>Updates the device status.</p>
     fn update_device_status(
         &self,
         input: &UpdateDeviceStatusRequest,
@@ -16281,7 +16281,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the specified group with the specified attributes.</p> <p>Requires developer credentials.</p>"]
+    /// <p>Updates the specified group with the specified attributes.</p> <p>Requires developer credentials.</p>
     fn update_group(
         &self,
         input: &UpdateGroupRequest,
@@ -16318,7 +16318,7 @@ where
         }
     }
 
-    #[doc = "<p>Updates identity provider information for a user pool.</p>"]
+    /// <p>Updates identity provider information for a user pool.</p>
     fn update_identity_provider(
         &self,
         input: &UpdateIdentityProviderRequest,
@@ -16355,7 +16355,7 @@ where
         }
     }
 
-    #[doc = "<p>Updates the name and scopes of resource server. All other fields are read-only.</p>"]
+    /// <p>Updates the name and scopes of resource server. All other fields are read-only.</p>
     fn update_resource_server(
         &self,
         input: &UpdateResourceServerRequest,
@@ -16392,7 +16392,7 @@ where
         }
     }
 
-    #[doc = "<p>Allows a user to update a specific attribute (one at a time).</p>"]
+    /// <p>Allows a user to update a specific attribute (one at a time).</p>
     fn update_user_attributes(
         &self,
         input: &UpdateUserAttributesRequest,
@@ -16429,7 +16429,7 @@ where
         }
     }
 
-    #[doc = "<p>Updates the specified user pool with the specified attributes.</p>"]
+    /// <p>Updates the specified user pool with the specified attributes.</p>
     fn update_user_pool(
         &self,
         input: &UpdateUserPoolRequest,
@@ -16466,7 +16466,7 @@ where
         }
     }
 
-    #[doc="<p>Allows the developer to update the specified user pool client and password policy.</p>"]
+    /// <p>Allows the developer to update the specified user pool client and password policy.</p>
     fn update_user_pool_client(
         &self,
         input: &UpdateUserPoolClientRequest,
@@ -16503,7 +16503,7 @@ where
         }
     }
 
-    #[doc = "<p>Verifies the specified user attributes in the user pool.</p>"]
+    /// <p>Verifies the specified user attributes in the user pool.</p>
     fn verify_user_attribute(
         &self,
         input: &VerifyUserAttributeRequest,

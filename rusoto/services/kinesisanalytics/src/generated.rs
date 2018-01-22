@@ -43,7 +43,7 @@ pub struct AddApplicationCloudWatchLoggingOptionRequest {
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct AddApplicationCloudWatchLoggingOptionResponse;
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AddApplicationInputRequest {
     /// <p>Name of your existing Amazon Kinesis Analytics application to which you want to add the streaming source.</p>
@@ -52,16 +52,16 @@ pub struct AddApplicationInputRequest {
     /// <p>Current version of your Amazon Kinesis Analytics application. You can use the <a>DescribeApplication</a> operation to find the current application version.</p>
     #[serde(rename = "CurrentApplicationVersionId")]
     pub current_application_version_id: i64,
-    /// <p/>
+    /// <p><p/></p>
     #[serde(rename = "Input")]
     pub input: Input,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct AddApplicationInputResponse;
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AddApplicationOutputRequest {
     /// <p>Name of the application to which you want to add the output configuration.</p>
@@ -75,11 +75,11 @@ pub struct AddApplicationOutputRequest {
     pub output: Output,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct AddApplicationOutputResponse;
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AddApplicationReferenceDataSourceRequest {
     /// <p>Name of an existing application.</p>
@@ -93,7 +93,7 @@ pub struct AddApplicationReferenceDataSourceRequest {
     pub reference_data_source: ReferenceDataSource,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct AddApplicationReferenceDataSourceResponse;
 
@@ -290,7 +290,7 @@ pub struct DeleteApplicationCloudWatchLoggingOptionRequest {
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteApplicationCloudWatchLoggingOptionResponse;
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteApplicationOutputRequest {
     /// <p>Amazon Kinesis Analytics application name.</p>
@@ -304,7 +304,7 @@ pub struct DeleteApplicationOutputRequest {
     pub output_id: String,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteApplicationOutputResponse;
 
@@ -324,7 +324,7 @@ pub struct DeleteApplicationReferenceDataSourceRequest {
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteApplicationReferenceDataSourceResponse;
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteApplicationRequest {
     /// <p>Name of the Amazon Kinesis Analytics application to delete.</p>
@@ -335,11 +335,11 @@ pub struct DeleteApplicationRequest {
     pub create_timestamp: f64,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteApplicationResponse;
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeApplicationRequest {
     /// <p>Name of the application.</p>
@@ -347,7 +347,7 @@ pub struct DescribeApplicationRequest {
     pub application_name: String,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeApplicationResponse {
     /// <p>Provides a description of the application, such as the application Amazon Resource Name (ARN), status, latest version, and input and output configuration details.</p>
@@ -364,7 +364,7 @@ pub struct DestinationSchema {
     pub record_format_type: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DiscoverInputSchemaRequest {
     /// <p>Point at which you want Amazon Kinesis Analytics to start reading records from the specified streaming source discovery purposes.</p>
@@ -378,7 +378,7 @@ pub struct DiscoverInputSchemaRequest {
     pub role_arn: String,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DiscoverInputSchemaResponse {
     /// <p>Schema inferred from the streaming source. It identifies the format of the data in the streaming source and how each data element maps to corresponding columns in the in-application stream that you can create.</p>
@@ -503,7 +503,7 @@ pub struct InputSchemaUpdate {
 /// <p>Describes the point at which the application reads from the streaming source.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct InputStartingPositionConfiguration {
-    /// <p>The starting position on the stream.</p> <ul> <li> <p> <code>NOW</code> - Start reading just after the most recent record in the stream, start at the request timestamp that the customer issued.</p> </li> <li> <p> <code>TRIM_HORIZON</code> - Start reading at the last untrimmed record in the stream, which is the oldest record available in the stream. This option is not available for an Amazon Kinesis Firehose delivery stream.</p> </li> <li> <p> <code>LAST_STOPPED_POINT</code> - Resume reading from where the application last stopped reading.</p> </li> </ul>
+    /// <p><p>The starting position on the stream.</p> <ul> <li> <p> <code>NOW</code> - Start reading just after the most recent record in the stream, start at the request timestamp that the customer issued.</p> </li> <li> <p> <code>TRIM<em>HORIZON</code> - Start reading at the last untrimmed record in the stream, which is the oldest record available in the stream. This option is not available for an Amazon Kinesis Firehose delivery stream.</p> </li> <li> <p> <code>LAST</em>STOPPED_POINT</code> - Resume reading from where the application last stopped reading.</p> </li> </ul></p>
     #[serde(rename = "InputStartingPosition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_starting_position: Option<String>,
@@ -693,7 +693,7 @@ pub struct KinesisStreamsOutputUpdate {
     pub role_arn_update: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListApplicationsRequest {
     /// <p>Name of the application to start the list with. When using pagination to retrieve the list, you don't need to specify this parameter in the first request. However, in subsequent requests, you add the last application name from the previous response to get the next page of applications.</p>
@@ -706,7 +706,7 @@ pub struct ListApplicationsRequest {
     pub limit: Option<i64>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListApplicationsResponse {
     /// <p>List of <code>ApplicationSummary</code> objects. </p>
@@ -929,7 +929,7 @@ pub struct SourceSchema {
     pub record_format: RecordFormat,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct StartApplicationRequest {
     /// <p>Name of the application.</p>
@@ -940,11 +940,11 @@ pub struct StartApplicationRequest {
     pub input_configurations: Vec<InputConfiguration>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct StartApplicationResponse;
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct StopApplicationRequest {
     /// <p>Name of the running application to stop.</p>
@@ -952,7 +952,7 @@ pub struct StopApplicationRequest {
     pub application_name: String,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct StopApplicationResponse;
 
@@ -975,13 +975,13 @@ pub struct UpdateApplicationResponse;
 /// Errors returned by AddApplicationCloudWatchLoggingOption
 #[derive(Debug, PartialEq)]
 pub enum AddApplicationCloudWatchLoggingOptionError {
-    ///<p>Exception thrown as a result of concurrent modification to an application. For example, two individuals attempting to edit the same application at the same time.</p>
+    /// <p>Exception thrown as a result of concurrent modification to an application. For example, two individuals attempting to edit the same application at the same time.</p>
     ConcurrentModification(String),
-    ///<p>Specified input parameter value is invalid.</p>
+    /// <p>Specified input parameter value is invalid.</p>
     InvalidArgument(String),
-    ///<p>Application is not available for this operation.</p>
+    /// <p>Application is not available for this operation.</p>
     ResourceInUse(String),
-    ///<p>Specified application can't be found.</p>
+    /// <p>Specified application can't be found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1083,15 +1083,15 @@ impl Error for AddApplicationCloudWatchLoggingOptionError {
 /// Errors returned by AddApplicationInput
 #[derive(Debug, PartialEq)]
 pub enum AddApplicationInputError {
-    ///<p>User-provided application code (query) is invalid. This can be a simple syntax error.</p>
+    /// <p>User-provided application code (query) is invalid. This can be a simple syntax error.</p>
     CodeValidation(String),
-    ///<p>Exception thrown as a result of concurrent modification to an application. For example, two individuals attempting to edit the same application at the same time.</p>
+    /// <p>Exception thrown as a result of concurrent modification to an application. For example, two individuals attempting to edit the same application at the same time.</p>
     ConcurrentModification(String),
-    ///<p>Specified input parameter value is invalid.</p>
+    /// <p>Specified input parameter value is invalid.</p>
     InvalidArgument(String),
-    ///<p>Application is not available for this operation.</p>
+    /// <p>Application is not available for this operation.</p>
     ResourceInUse(String),
-    ///<p>Specified application can't be found.</p>
+    /// <p>Specified application can't be found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1189,13 +1189,13 @@ impl Error for AddApplicationInputError {
 /// Errors returned by AddApplicationOutput
 #[derive(Debug, PartialEq)]
 pub enum AddApplicationOutputError {
-    ///<p>Exception thrown as a result of concurrent modification to an application. For example, two individuals attempting to edit the same application at the same time.</p>
+    /// <p>Exception thrown as a result of concurrent modification to an application. For example, two individuals attempting to edit the same application at the same time.</p>
     ConcurrentModification(String),
-    ///<p>Specified input parameter value is invalid.</p>
+    /// <p>Specified input parameter value is invalid.</p>
     InvalidArgument(String),
-    ///<p>Application is not available for this operation.</p>
+    /// <p>Application is not available for this operation.</p>
     ResourceInUse(String),
-    ///<p>Specified application can't be found.</p>
+    /// <p>Specified application can't be found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1289,13 +1289,13 @@ impl Error for AddApplicationOutputError {
 /// Errors returned by AddApplicationReferenceDataSource
 #[derive(Debug, PartialEq)]
 pub enum AddApplicationReferenceDataSourceError {
-    ///<p>Exception thrown as a result of concurrent modification to an application. For example, two individuals attempting to edit the same application at the same time.</p>
+    /// <p>Exception thrown as a result of concurrent modification to an application. For example, two individuals attempting to edit the same application at the same time.</p>
     ConcurrentModification(String),
-    ///<p>Specified input parameter value is invalid.</p>
+    /// <p>Specified input parameter value is invalid.</p>
     InvalidArgument(String),
-    ///<p>Application is not available for this operation.</p>
+    /// <p>Application is not available for this operation.</p>
     ResourceInUse(String),
-    ///<p>Specified application can't be found.</p>
+    /// <p>Specified application can't be found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1395,13 +1395,13 @@ impl Error for AddApplicationReferenceDataSourceError {
 /// Errors returned by CreateApplication
 #[derive(Debug, PartialEq)]
 pub enum CreateApplicationError {
-    ///<p>User-provided application code (query) is invalid. This can be a simple syntax error.</p>
+    /// <p>User-provided application code (query) is invalid. This can be a simple syntax error.</p>
     CodeValidation(String),
-    ///<p>Specified input parameter value is invalid.</p>
+    /// <p>Specified input parameter value is invalid.</p>
     InvalidArgument(String),
-    ///<p>Exceeded the number of applications allowed.</p>
+    /// <p>Exceeded the number of applications allowed.</p>
     LimitExceeded(String),
-    ///<p>Application is not available for this operation.</p>
+    /// <p>Application is not available for this operation.</p>
     ResourceInUse(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1493,11 +1493,11 @@ impl Error for CreateApplicationError {
 /// Errors returned by DeleteApplication
 #[derive(Debug, PartialEq)]
 pub enum DeleteApplicationError {
-    ///<p>Exception thrown as a result of concurrent modification to an application. For example, two individuals attempting to edit the same application at the same time.</p>
+    /// <p>Exception thrown as a result of concurrent modification to an application. For example, two individuals attempting to edit the same application at the same time.</p>
     ConcurrentModification(String),
-    ///<p>Application is not available for this operation.</p>
+    /// <p>Application is not available for this operation.</p>
     ResourceInUse(String),
-    ///<p>Specified application can't be found.</p>
+    /// <p>Specified application can't be found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1585,13 +1585,13 @@ impl Error for DeleteApplicationError {
 /// Errors returned by DeleteApplicationCloudWatchLoggingOption
 #[derive(Debug, PartialEq)]
 pub enum DeleteApplicationCloudWatchLoggingOptionError {
-    ///<p>Exception thrown as a result of concurrent modification to an application. For example, two individuals attempting to edit the same application at the same time.</p>
+    /// <p>Exception thrown as a result of concurrent modification to an application. For example, two individuals attempting to edit the same application at the same time.</p>
     ConcurrentModification(String),
-    ///<p>Specified input parameter value is invalid.</p>
+    /// <p>Specified input parameter value is invalid.</p>
     InvalidArgument(String),
-    ///<p>Application is not available for this operation.</p>
+    /// <p>Application is not available for this operation.</p>
     ResourceInUse(String),
-    ///<p>Specified application can't be found.</p>
+    /// <p>Specified application can't be found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1697,13 +1697,13 @@ impl Error for DeleteApplicationCloudWatchLoggingOptionError {
 /// Errors returned by DeleteApplicationOutput
 #[derive(Debug, PartialEq)]
 pub enum DeleteApplicationOutputError {
-    ///<p>Exception thrown as a result of concurrent modification to an application. For example, two individuals attempting to edit the same application at the same time.</p>
+    /// <p>Exception thrown as a result of concurrent modification to an application. For example, two individuals attempting to edit the same application at the same time.</p>
     ConcurrentModification(String),
-    ///<p>Specified input parameter value is invalid.</p>
+    /// <p>Specified input parameter value is invalid.</p>
     InvalidArgument(String),
-    ///<p>Application is not available for this operation.</p>
+    /// <p>Application is not available for this operation.</p>
     ResourceInUse(String),
-    ///<p>Specified application can't be found.</p>
+    /// <p>Specified application can't be found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1797,13 +1797,13 @@ impl Error for DeleteApplicationOutputError {
 /// Errors returned by DeleteApplicationReferenceDataSource
 #[derive(Debug, PartialEq)]
 pub enum DeleteApplicationReferenceDataSourceError {
-    ///<p>Exception thrown as a result of concurrent modification to an application. For example, two individuals attempting to edit the same application at the same time.</p>
+    /// <p>Exception thrown as a result of concurrent modification to an application. For example, two individuals attempting to edit the same application at the same time.</p>
     ConcurrentModification(String),
-    ///<p>Specified input parameter value is invalid.</p>
+    /// <p>Specified input parameter value is invalid.</p>
     InvalidArgument(String),
-    ///<p>Application is not available for this operation.</p>
+    /// <p>Application is not available for this operation.</p>
     ResourceInUse(String),
-    ///<p>Specified application can't be found.</p>
+    /// <p>Specified application can't be found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1905,7 +1905,7 @@ impl Error for DeleteApplicationReferenceDataSourceError {
 /// Errors returned by DescribeApplication
 #[derive(Debug, PartialEq)]
 pub enum DescribeApplicationError {
-    ///<p>Specified application can't be found.</p>
+    /// <p>Specified application can't be found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1985,13 +1985,13 @@ impl Error for DescribeApplicationError {
 /// Errors returned by DiscoverInputSchema
 #[derive(Debug, PartialEq)]
 pub enum DiscoverInputSchemaError {
-    ///<p>Specified input parameter value is invalid.</p>
+    /// <p>Specified input parameter value is invalid.</p>
     InvalidArgument(String),
-    ///<p>Discovery failed to get a record from the streaming source because of the Amazon Kinesis Streams ProvisionedThroughputExceededException. For more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/APIReference/API_GetRecords.html">GetRecords</a> in the Amazon Kinesis Streams API Reference.</p>
+    /// <p>Discovery failed to get a record from the streaming source because of the Amazon Kinesis Streams ProvisionedThroughputExceededException. For more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/APIReference/API_GetRecords.html">GetRecords</a> in the Amazon Kinesis Streams API Reference.</p>
     ResourceProvisionedThroughputExceeded(String),
-    ///<p>The service is unavailable, back off and retry the operation. </p>
+    /// <p>The service is unavailable, back off and retry the operation. </p>
     ServiceUnavailable(String),
-    ///<p>Data format is not valid, Amazon Kinesis Analytics is not able to detect schema for the given streaming source.</p>
+    /// <p>Data format is not valid, Amazon Kinesis Analytics is not able to detect schema for the given streaming source.</p>
     UnableToDetectSchema(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2157,13 +2157,13 @@ impl Error for ListApplicationsError {
 /// Errors returned by StartApplication
 #[derive(Debug, PartialEq)]
 pub enum StartApplicationError {
-    ///<p>User-provided application configuration is not valid.</p>
+    /// <p>User-provided application configuration is not valid.</p>
     InvalidApplicationConfiguration(String),
-    ///<p>Specified input parameter value is invalid.</p>
+    /// <p>Specified input parameter value is invalid.</p>
     InvalidArgument(String),
-    ///<p>Application is not available for this operation.</p>
+    /// <p>Application is not available for this operation.</p>
     ResourceInUse(String),
-    ///<p>Specified application can't be found.</p>
+    /// <p>Specified application can't be found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2255,9 +2255,9 @@ impl Error for StartApplicationError {
 /// Errors returned by StopApplication
 #[derive(Debug, PartialEq)]
 pub enum StopApplicationError {
-    ///<p>Application is not available for this operation.</p>
+    /// <p>Application is not available for this operation.</p>
     ResourceInUse(String),
-    ///<p>Specified application can't be found.</p>
+    /// <p>Specified application can't be found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2339,15 +2339,15 @@ impl Error for StopApplicationError {
 /// Errors returned by UpdateApplication
 #[derive(Debug, PartialEq)]
 pub enum UpdateApplicationError {
-    ///<p>User-provided application code (query) is invalid. This can be a simple syntax error.</p>
+    /// <p>User-provided application code (query) is invalid. This can be a simple syntax error.</p>
     CodeValidation(String),
-    ///<p>Exception thrown as a result of concurrent modification to an application. For example, two individuals attempting to edit the same application at the same time.</p>
+    /// <p>Exception thrown as a result of concurrent modification to an application. For example, two individuals attempting to edit the same application at the same time.</p>
     ConcurrentModification(String),
-    ///<p>Specified input parameter value is invalid.</p>
+    /// <p>Specified input parameter value is invalid.</p>
     InvalidArgument(String),
-    ///<p>Application is not available for this operation.</p>
+    /// <p>Application is not available for this operation.</p>
     ResourceInUse(String),
-    ///<p>Specified application can't be found.</p>
+    /// <p>Specified application can't be found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2442,7 +2442,7 @@ impl Error for UpdateApplicationError {
 }
 /// Trait representing the capabilities of the Kinesis Analytics API. Kinesis Analytics clients implement this trait.
 pub trait KinesisAnalytics {
-    #[doc="<p>Adds a CloudWatch log stream to monitor application configuration errors. For more information about using CloudWatch log streams with Amazon Kinesis Analytics applications, see <a href=\"http://docs.aws.amazon.com/kinesisanalytics/latest/dev/cloudwatch-logs.html\">Working with Amazon CloudWatch Logs</a>.</p>"]
+    /// <p>Adds a CloudWatch log stream to monitor application configuration errors. For more information about using CloudWatch log streams with Amazon Kinesis Analytics applications, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/cloudwatch-logs.html">Working with Amazon CloudWatch Logs</a>.</p>
     fn add_application_cloud_watch_logging_option(
         &self,
         input: &AddApplicationCloudWatchLoggingOptionRequest,
@@ -2451,37 +2451,37 @@ pub trait KinesisAnalytics {
         AddApplicationCloudWatchLoggingOptionError,
     >;
 
-    #[doc="<p> Adds a streaming source to your Amazon Kinesis application. For conceptual information, see <a href=\"http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-input.html\">Configuring Application Input</a>. </p> <p>You can add a streaming source either when you create an application or you can use this operation to add a streaming source after you create an application. For more information, see <a>CreateApplication</a>.</p> <p>Any configuration update, including adding a streaming source using this operation, results in a new version of the application. You can use the <a>DescribeApplication</a> operation to find the current application version. </p> <p>This operation requires permissions to perform the <code>kinesisanalytics:AddApplicationInput</code> action.</p>"]
+    /// <p> Adds a streaming source to your Amazon Kinesis application. For conceptual information, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-input.html">Configuring Application Input</a>. </p> <p>You can add a streaming source either when you create an application or you can use this operation to add a streaming source after you create an application. For more information, see <a>CreateApplication</a>.</p> <p>Any configuration update, including adding a streaming source using this operation, results in a new version of the application. You can use the <a>DescribeApplication</a> operation to find the current application version. </p> <p>This operation requires permissions to perform the <code>kinesisanalytics:AddApplicationInput</code> action.</p>
     fn add_application_input(
         &self,
         input: &AddApplicationInputRequest,
     ) -> Result<AddApplicationInputResponse, AddApplicationInputError>;
 
-    #[doc="<p>Adds an external destination to your Amazon Kinesis Analytics application.</p> <p>If you want Amazon Kinesis Analytics to deliver data from an in-application stream within your application to an external destination (such as an Amazon Kinesis stream or a Firehose delivery stream), you add the relevant configuration to your application using this operation. You can configure one or more outputs for your application. Each output configuration maps an in-application stream and an external destination.</p> <p> You can use one of the output configurations to deliver data from your in-application error stream to an external destination so that you can analyze the errors. For conceptual information, see <a href=\"http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-output.html\">Understanding Application Output (Destination)</a>. </p> <p> Note that any configuration update, including adding a streaming source using this operation, results in a new version of the application. You can use the <a>DescribeApplication</a> operation to find the current application version.</p> <p>For the limits on the number of application inputs and outputs you can configure, see <a href=\"http://docs.aws.amazon.com/kinesisanalytics/latest/dev/limits.html\">Limits</a>.</p> <p>This operation requires permissions to perform the <code>kinesisanalytics:AddApplicationOutput</code> action.</p>"]
+    /// <p>Adds an external destination to your Amazon Kinesis Analytics application.</p> <p>If you want Amazon Kinesis Analytics to deliver data from an in-application stream within your application to an external destination (such as an Amazon Kinesis stream or a Firehose delivery stream), you add the relevant configuration to your application using this operation. You can configure one or more outputs for your application. Each output configuration maps an in-application stream and an external destination.</p> <p> You can use one of the output configurations to deliver data from your in-application error stream to an external destination so that you can analyze the errors. For conceptual information, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-output.html">Understanding Application Output (Destination)</a>. </p> <p> Note that any configuration update, including adding a streaming source using this operation, results in a new version of the application. You can use the <a>DescribeApplication</a> operation to find the current application version.</p> <p>For the limits on the number of application inputs and outputs you can configure, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/limits.html">Limits</a>.</p> <p>This operation requires permissions to perform the <code>kinesisanalytics:AddApplicationOutput</code> action.</p>
     fn add_application_output(
         &self,
         input: &AddApplicationOutputRequest,
     ) -> Result<AddApplicationOutputResponse, AddApplicationOutputError>;
 
-    #[doc="<p>Adds a reference data source to an existing application.</p> <p>Amazon Kinesis Analytics reads reference data (that is, an Amazon S3 object) and creates an in-application table within your application. In the request, you provide the source (S3 bucket name and object key name), name of the in-application table to create, and the necessary mapping information that describes how data in Amazon S3 object maps to columns in the resulting in-application table.</p> <p> For conceptual information, see <a href=\"http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-input.html\">Configuring Application Input</a>. For the limits on data sources you can add to your application, see <a href=\"http://docs.aws.amazon.com/kinesisanalytics/latest/dev/limits.html\">Limits</a>. </p> <p> This operation requires permissions to perform the <code>kinesisanalytics:AddApplicationOutput</code> action. </p>"]
+    /// <p>Adds a reference data source to an existing application.</p> <p>Amazon Kinesis Analytics reads reference data (that is, an Amazon S3 object) and creates an in-application table within your application. In the request, you provide the source (S3 bucket name and object key name), name of the in-application table to create, and the necessary mapping information that describes how data in Amazon S3 object maps to columns in the resulting in-application table.</p> <p> For conceptual information, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-input.html">Configuring Application Input</a>. For the limits on data sources you can add to your application, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/limits.html">Limits</a>. </p> <p> This operation requires permissions to perform the <code>kinesisanalytics:AddApplicationOutput</code> action. </p>
     fn add_application_reference_data_source(
         &self,
         input: &AddApplicationReferenceDataSourceRequest,
     ) -> Result<AddApplicationReferenceDataSourceResponse, AddApplicationReferenceDataSourceError>;
 
-    #[doc="<p> Creates an Amazon Kinesis Analytics application. You can configure each application with one streaming source as input, application code to process the input, and up to five streaming destinations where you want Amazon Kinesis Analytics to write the output data from your application. For an overview, see <a href=\"http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works.html\">How it Works</a>. </p> <p>In the input configuration, you map the streaming source to an in-application stream, which you can think of as a constantly updating table. In the mapping, you must provide a schema for the in-application stream and map each data column in the in-application stream to a data element in the streaming source.</p> <p>Your application code is one or more SQL statements that read input data, transform it, and generate output. Your application code can create one or more SQL artifacts like SQL streams or pumps.</p> <p>In the output configuration, you can configure the application to write data from in-application streams created in your applications to up to five streaming destinations.</p> <p> To read data from your source stream or write data to destination streams, Amazon Kinesis Analytics needs your permissions. You grant these permissions by creating IAM roles. This operation requires permissions to perform the <code>kinesisanalytics:CreateApplication</code> action. </p> <p> For introductory exercises to create an Amazon Kinesis Analytics application, see <a href=\"http://docs.aws.amazon.com/kinesisanalytics/latest/dev/getting-started.html\">Getting Started</a>. </p>"]
+    /// <p> Creates an Amazon Kinesis Analytics application. You can configure each application with one streaming source as input, application code to process the input, and up to five streaming destinations where you want Amazon Kinesis Analytics to write the output data from your application. For an overview, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works.html">How it Works</a>. </p> <p>In the input configuration, you map the streaming source to an in-application stream, which you can think of as a constantly updating table. In the mapping, you must provide a schema for the in-application stream and map each data column in the in-application stream to a data element in the streaming source.</p> <p>Your application code is one or more SQL statements that read input data, transform it, and generate output. Your application code can create one or more SQL artifacts like SQL streams or pumps.</p> <p>In the output configuration, you can configure the application to write data from in-application streams created in your applications to up to five streaming destinations.</p> <p> To read data from your source stream or write data to destination streams, Amazon Kinesis Analytics needs your permissions. You grant these permissions by creating IAM roles. This operation requires permissions to perform the <code>kinesisanalytics:CreateApplication</code> action. </p> <p> For introductory exercises to create an Amazon Kinesis Analytics application, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/getting-started.html">Getting Started</a>. </p>
     fn create_application(
         &self,
         input: &CreateApplicationRequest,
     ) -> Result<CreateApplicationResponse, CreateApplicationError>;
 
-    #[doc="<p>Deletes the specified application. Amazon Kinesis Analytics halts application execution and deletes the application, including any application artifacts (such as in-application streams, reference table, and application code).</p> <p>This operation requires permissions to perform the <code>kinesisanalytics:DeleteApplication</code> action.</p>"]
+    /// <p>Deletes the specified application. Amazon Kinesis Analytics halts application execution and deletes the application, including any application artifacts (such as in-application streams, reference table, and application code).</p> <p>This operation requires permissions to perform the <code>kinesisanalytics:DeleteApplication</code> action.</p>
     fn delete_application(
         &self,
         input: &DeleteApplicationRequest,
     ) -> Result<DeleteApplicationResponse, DeleteApplicationError>;
 
-    #[doc="<p>Deletes a CloudWatch log stream from an application. For more information about using CloudWatch log streams with Amazon Kinesis Analytics applications, see <a href=\"http://docs.aws.amazon.com/kinesisanalytics/latest/dev/cloudwatch-logs.html\">Working with Amazon CloudWatch Logs</a>.</p>"]
+    /// <p>Deletes a CloudWatch log stream from an application. For more information about using CloudWatch log streams with Amazon Kinesis Analytics applications, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/cloudwatch-logs.html">Working with Amazon CloudWatch Logs</a>.</p>
     fn delete_application_cloud_watch_logging_option(
         &self,
         input: &DeleteApplicationCloudWatchLoggingOptionRequest,
@@ -2490,13 +2490,13 @@ pub trait KinesisAnalytics {
         DeleteApplicationCloudWatchLoggingOptionError,
     >;
 
-    #[doc="<p>Deletes output destination configuration from your application configuration. Amazon Kinesis Analytics will no longer write data from the corresponding in-application stream to the external output destination.</p> <p>This operation requires permissions to perform the <code>kinesisanalytics:DeleteApplicationOutput</code> action.</p>"]
+    /// <p>Deletes output destination configuration from your application configuration. Amazon Kinesis Analytics will no longer write data from the corresponding in-application stream to the external output destination.</p> <p>This operation requires permissions to perform the <code>kinesisanalytics:DeleteApplicationOutput</code> action.</p>
     fn delete_application_output(
         &self,
         input: &DeleteApplicationOutputRequest,
     ) -> Result<DeleteApplicationOutputResponse, DeleteApplicationOutputError>;
 
-    #[doc="<p>Deletes a reference data source configuration from the specified application configuration.</p> <p>If the application is running, Amazon Kinesis Analytics immediately removes the in-application table that you created using the <a>AddApplicationReferenceDataSource</a> operation. </p> <p>This operation requires permissions to perform the <code>kinesisanalytics.DeleteApplicationReferenceDataSource</code> action.</p>"]
+    /// <p>Deletes a reference data source configuration from the specified application configuration.</p> <p>If the application is running, Amazon Kinesis Analytics immediately removes the in-application table that you created using the <a>AddApplicationReferenceDataSource</a> operation. </p> <p>This operation requires permissions to perform the <code>kinesisanalytics.DeleteApplicationReferenceDataSource</code> action.</p>
     fn delete_application_reference_data_source(
         &self,
         input: &DeleteApplicationReferenceDataSourceRequest,
@@ -2505,37 +2505,37 @@ pub trait KinesisAnalytics {
         DeleteApplicationReferenceDataSourceError,
     >;
 
-    #[doc="<p>Returns information about a specific Amazon Kinesis Analytics application.</p> <p>If you want to retrieve a list of all applications in your account, use the <a>ListApplications</a> operation.</p> <p>This operation requires permissions to perform the <code>kinesisanalytics:DescribeApplication</code> action. You can use <code>DescribeApplication</code> to get the current application versionId, which you need to call other operations such as <code>Update</code>. </p>"]
+    /// <p>Returns information about a specific Amazon Kinesis Analytics application.</p> <p>If you want to retrieve a list of all applications in your account, use the <a>ListApplications</a> operation.</p> <p>This operation requires permissions to perform the <code>kinesisanalytics:DescribeApplication</code> action. You can use <code>DescribeApplication</code> to get the current application versionId, which you need to call other operations such as <code>Update</code>. </p>
     fn describe_application(
         &self,
         input: &DescribeApplicationRequest,
     ) -> Result<DescribeApplicationResponse, DescribeApplicationError>;
 
-    #[doc="<p>Infers a schema by evaluating sample records on the specified streaming source (Amazon Kinesis stream or Amazon Kinesis Firehose delivery stream). In the response, the operation returns the inferred schema and also the sample records that the operation used to infer the schema.</p> <p> You can use the inferred schema when configuring a streaming source for your application. For conceptual information, see <a href=\"http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-input.html\">Configuring Application Input</a>. Note that when you create an application using the Amazon Kinesis Analytics console, the console uses this operation to infer a schema and show it in the console user interface. </p> <p> This operation requires permissions to perform the <code>kinesisanalytics:DiscoverInputSchema</code> action. </p>"]
+    /// <p>Infers a schema by evaluating sample records on the specified streaming source (Amazon Kinesis stream or Amazon Kinesis Firehose delivery stream). In the response, the operation returns the inferred schema and also the sample records that the operation used to infer the schema.</p> <p> You can use the inferred schema when configuring a streaming source for your application. For conceptual information, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-input.html">Configuring Application Input</a>. Note that when you create an application using the Amazon Kinesis Analytics console, the console uses this operation to infer a schema and show it in the console user interface. </p> <p> This operation requires permissions to perform the <code>kinesisanalytics:DiscoverInputSchema</code> action. </p>
     fn discover_input_schema(
         &self,
         input: &DiscoverInputSchemaRequest,
     ) -> Result<DiscoverInputSchemaResponse, DiscoverInputSchemaError>;
 
-    #[doc="<p>Returns a list of Amazon Kinesis Analytics applications in your account. For each application, the response includes the application name, Amazon Resource Name (ARN), and status. If the response returns the <code>HasMoreApplications</code> value as true, you can send another request by adding the <code>ExclusiveStartApplicationName</code> in the request body, and set the value of this to the last application name from the previous response. </p> <p>If you want detailed information about a specific application, use <a>DescribeApplication</a>.</p> <p>This operation requires permissions to perform the <code>kinesisanalytics:ListApplications</code> action.</p>"]
+    /// <p>Returns a list of Amazon Kinesis Analytics applications in your account. For each application, the response includes the application name, Amazon Resource Name (ARN), and status. If the response returns the <code>HasMoreApplications</code> value as true, you can send another request by adding the <code>ExclusiveStartApplicationName</code> in the request body, and set the value of this to the last application name from the previous response. </p> <p>If you want detailed information about a specific application, use <a>DescribeApplication</a>.</p> <p>This operation requires permissions to perform the <code>kinesisanalytics:ListApplications</code> action.</p>
     fn list_applications(
         &self,
         input: &ListApplicationsRequest,
     ) -> Result<ListApplicationsResponse, ListApplicationsError>;
 
-    #[doc="<p>Starts the specified Amazon Kinesis Analytics application. After creating an application, you must exclusively call this operation to start your application.</p> <p>After the application starts, it begins consuming the input data, processes it, and writes the output to the configured destination.</p> <p> The application status must be <code>READY</code> for you to start an application. You can get the application status in the console or using the <a>DescribeApplication</a> operation.</p> <p>After you start the application, you can stop the application from processing the input by calling the <a>StopApplication</a> operation.</p> <p>This operation requires permissions to perform the <code>kinesisanalytics:StartApplication</code> action.</p>"]
+    /// <p>Starts the specified Amazon Kinesis Analytics application. After creating an application, you must exclusively call this operation to start your application.</p> <p>After the application starts, it begins consuming the input data, processes it, and writes the output to the configured destination.</p> <p> The application status must be <code>READY</code> for you to start an application. You can get the application status in the console or using the <a>DescribeApplication</a> operation.</p> <p>After you start the application, you can stop the application from processing the input by calling the <a>StopApplication</a> operation.</p> <p>This operation requires permissions to perform the <code>kinesisanalytics:StartApplication</code> action.</p>
     fn start_application(
         &self,
         input: &StartApplicationRequest,
     ) -> Result<StartApplicationResponse, StartApplicationError>;
 
-    #[doc="<p>Stops the application from processing input data. You can stop an application only if it is in the running state. You can use the <a>DescribeApplication</a> operation to find the application state. After the application is stopped, Amazon Kinesis Analytics stops reading data from the input, the application stops processing data, and there is no output written to the destination. </p> <p>This operation requires permissions to perform the <code>kinesisanalytics:StopApplication</code> action.</p>"]
+    /// <p>Stops the application from processing input data. You can stop an application only if it is in the running state. You can use the <a>DescribeApplication</a> operation to find the application state. After the application is stopped, Amazon Kinesis Analytics stops reading data from the input, the application stops processing data, and there is no output written to the destination. </p> <p>This operation requires permissions to perform the <code>kinesisanalytics:StopApplication</code> action.</p>
     fn stop_application(
         &self,
         input: &StopApplicationRequest,
     ) -> Result<StopApplicationResponse, StopApplicationError>;
 
-    #[doc="<p>Updates an existing Amazon Kinesis Analytics application. Using this API, you can update application code, input configuration, and output configuration. </p> <p>Note that Amazon Kinesis Analytics updates the <code>CurrentApplicationVersionId</code> each time you update your application. </p> <p>This operation requires permission for the <code>kinesisanalytics:UpdateApplication</code> action.</p>"]
+    /// <p>Updates an existing Amazon Kinesis Analytics application. Using this API, you can update application code, input configuration, and output configuration. </p> <p>Note that Amazon Kinesis Analytics updates the <code>CurrentApplicationVersionId</code> each time you update your application. </p> <p>This operation requires permission for the <code>kinesisanalytics:UpdateApplication</code> action.</p>
     fn update_application(
         &self,
         input: &UpdateApplicationRequest,
@@ -2571,7 +2571,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Adds a CloudWatch log stream to monitor application configuration errors. For more information about using CloudWatch log streams with Amazon Kinesis Analytics applications, see <a href=\"http://docs.aws.amazon.com/kinesisanalytics/latest/dev/cloudwatch-logs.html\">Working with Amazon CloudWatch Logs</a>.</p>"]
+    /// <p>Adds a CloudWatch log stream to monitor application configuration errors. For more information about using CloudWatch log streams with Amazon Kinesis Analytics applications, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/cloudwatch-logs.html">Working with Amazon CloudWatch Logs</a>.</p>
     fn add_application_cloud_watch_logging_option(
         &self,
         input: &AddApplicationCloudWatchLoggingOptionRequest,
@@ -2613,7 +2613,7 @@ where
         }
     }
 
-    #[doc="<p> Adds a streaming source to your Amazon Kinesis application. For conceptual information, see <a href=\"http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-input.html\">Configuring Application Input</a>. </p> <p>You can add a streaming source either when you create an application or you can use this operation to add a streaming source after you create an application. For more information, see <a>CreateApplication</a>.</p> <p>Any configuration update, including adding a streaming source using this operation, results in a new version of the application. You can use the <a>DescribeApplication</a> operation to find the current application version. </p> <p>This operation requires permissions to perform the <code>kinesisanalytics:AddApplicationInput</code> action.</p>"]
+    /// <p> Adds a streaming source to your Amazon Kinesis application. For conceptual information, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-input.html">Configuring Application Input</a>. </p> <p>You can add a streaming source either when you create an application or you can use this operation to add a streaming source after you create an application. For more information, see <a>CreateApplication</a>.</p> <p>Any configuration update, including adding a streaming source using this operation, results in a new version of the application. You can use the <a>DescribeApplication</a> operation to find the current application version. </p> <p>This operation requires permissions to perform the <code>kinesisanalytics:AddApplicationInput</code> action.</p>
     fn add_application_input(
         &self,
         input: &AddApplicationInputRequest,
@@ -2650,7 +2650,7 @@ where
         }
     }
 
-    #[doc="<p>Adds an external destination to your Amazon Kinesis Analytics application.</p> <p>If you want Amazon Kinesis Analytics to deliver data from an in-application stream within your application to an external destination (such as an Amazon Kinesis stream or a Firehose delivery stream), you add the relevant configuration to your application using this operation. You can configure one or more outputs for your application. Each output configuration maps an in-application stream and an external destination.</p> <p> You can use one of the output configurations to deliver data from your in-application error stream to an external destination so that you can analyze the errors. For conceptual information, see <a href=\"http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-output.html\">Understanding Application Output (Destination)</a>. </p> <p> Note that any configuration update, including adding a streaming source using this operation, results in a new version of the application. You can use the <a>DescribeApplication</a> operation to find the current application version.</p> <p>For the limits on the number of application inputs and outputs you can configure, see <a href=\"http://docs.aws.amazon.com/kinesisanalytics/latest/dev/limits.html\">Limits</a>.</p> <p>This operation requires permissions to perform the <code>kinesisanalytics:AddApplicationOutput</code> action.</p>"]
+    /// <p>Adds an external destination to your Amazon Kinesis Analytics application.</p> <p>If you want Amazon Kinesis Analytics to deliver data from an in-application stream within your application to an external destination (such as an Amazon Kinesis stream or a Firehose delivery stream), you add the relevant configuration to your application using this operation. You can configure one or more outputs for your application. Each output configuration maps an in-application stream and an external destination.</p> <p> You can use one of the output configurations to deliver data from your in-application error stream to an external destination so that you can analyze the errors. For conceptual information, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-output.html">Understanding Application Output (Destination)</a>. </p> <p> Note that any configuration update, including adding a streaming source using this operation, results in a new version of the application. You can use the <a>DescribeApplication</a> operation to find the current application version.</p> <p>For the limits on the number of application inputs and outputs you can configure, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/limits.html">Limits</a>.</p> <p>This operation requires permissions to perform the <code>kinesisanalytics:AddApplicationOutput</code> action.</p>
     fn add_application_output(
         &self,
         input: &AddApplicationOutputRequest,
@@ -2687,7 +2687,7 @@ where
         }
     }
 
-    #[doc="<p>Adds a reference data source to an existing application.</p> <p>Amazon Kinesis Analytics reads reference data (that is, an Amazon S3 object) and creates an in-application table within your application. In the request, you provide the source (S3 bucket name and object key name), name of the in-application table to create, and the necessary mapping information that describes how data in Amazon S3 object maps to columns in the resulting in-application table.</p> <p> For conceptual information, see <a href=\"http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-input.html\">Configuring Application Input</a>. For the limits on data sources you can add to your application, see <a href=\"http://docs.aws.amazon.com/kinesisanalytics/latest/dev/limits.html\">Limits</a>. </p> <p> This operation requires permissions to perform the <code>kinesisanalytics:AddApplicationOutput</code> action. </p>"]
+    /// <p>Adds a reference data source to an existing application.</p> <p>Amazon Kinesis Analytics reads reference data (that is, an Amazon S3 object) and creates an in-application table within your application. In the request, you provide the source (S3 bucket name and object key name), name of the in-application table to create, and the necessary mapping information that describes how data in Amazon S3 object maps to columns in the resulting in-application table.</p> <p> For conceptual information, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-input.html">Configuring Application Input</a>. For the limits on data sources you can add to your application, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/limits.html">Limits</a>. </p> <p> This operation requires permissions to perform the <code>kinesisanalytics:AddApplicationOutput</code> action. </p>
     fn add_application_reference_data_source(
         &self,
         input: &AddApplicationReferenceDataSourceRequest,
@@ -2727,7 +2727,7 @@ where
         }
     }
 
-    #[doc="<p> Creates an Amazon Kinesis Analytics application. You can configure each application with one streaming source as input, application code to process the input, and up to five streaming destinations where you want Amazon Kinesis Analytics to write the output data from your application. For an overview, see <a href=\"http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works.html\">How it Works</a>. </p> <p>In the input configuration, you map the streaming source to an in-application stream, which you can think of as a constantly updating table. In the mapping, you must provide a schema for the in-application stream and map each data column in the in-application stream to a data element in the streaming source.</p> <p>Your application code is one or more SQL statements that read input data, transform it, and generate output. Your application code can create one or more SQL artifacts like SQL streams or pumps.</p> <p>In the output configuration, you can configure the application to write data from in-application streams created in your applications to up to five streaming destinations.</p> <p> To read data from your source stream or write data to destination streams, Amazon Kinesis Analytics needs your permissions. You grant these permissions by creating IAM roles. This operation requires permissions to perform the <code>kinesisanalytics:CreateApplication</code> action. </p> <p> For introductory exercises to create an Amazon Kinesis Analytics application, see <a href=\"http://docs.aws.amazon.com/kinesisanalytics/latest/dev/getting-started.html\">Getting Started</a>. </p>"]
+    /// <p> Creates an Amazon Kinesis Analytics application. You can configure each application with one streaming source as input, application code to process the input, and up to five streaming destinations where you want Amazon Kinesis Analytics to write the output data from your application. For an overview, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works.html">How it Works</a>. </p> <p>In the input configuration, you map the streaming source to an in-application stream, which you can think of as a constantly updating table. In the mapping, you must provide a schema for the in-application stream and map each data column in the in-application stream to a data element in the streaming source.</p> <p>Your application code is one or more SQL statements that read input data, transform it, and generate output. Your application code can create one or more SQL artifacts like SQL streams or pumps.</p> <p>In the output configuration, you can configure the application to write data from in-application streams created in your applications to up to five streaming destinations.</p> <p> To read data from your source stream or write data to destination streams, Amazon Kinesis Analytics needs your permissions. You grant these permissions by creating IAM roles. This operation requires permissions to perform the <code>kinesisanalytics:CreateApplication</code> action. </p> <p> For introductory exercises to create an Amazon Kinesis Analytics application, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/getting-started.html">Getting Started</a>. </p>
     fn create_application(
         &self,
         input: &CreateApplicationRequest,
@@ -2764,7 +2764,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified application. Amazon Kinesis Analytics halts application execution and deletes the application, including any application artifacts (such as in-application streams, reference table, and application code).</p> <p>This operation requires permissions to perform the <code>kinesisanalytics:DeleteApplication</code> action.</p>"]
+    /// <p>Deletes the specified application. Amazon Kinesis Analytics halts application execution and deletes the application, including any application artifacts (such as in-application streams, reference table, and application code).</p> <p>This operation requires permissions to perform the <code>kinesisanalytics:DeleteApplication</code> action.</p>
     fn delete_application(
         &self,
         input: &DeleteApplicationRequest,
@@ -2801,7 +2801,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a CloudWatch log stream from an application. For more information about using CloudWatch log streams with Amazon Kinesis Analytics applications, see <a href=\"http://docs.aws.amazon.com/kinesisanalytics/latest/dev/cloudwatch-logs.html\">Working with Amazon CloudWatch Logs</a>.</p>"]
+    /// <p>Deletes a CloudWatch log stream from an application. For more information about using CloudWatch log streams with Amazon Kinesis Analytics applications, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/cloudwatch-logs.html">Working with Amazon CloudWatch Logs</a>.</p>
     fn delete_application_cloud_watch_logging_option(
         &self,
         input: &DeleteApplicationCloudWatchLoggingOptionRequest,
@@ -2843,7 +2843,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes output destination configuration from your application configuration. Amazon Kinesis Analytics will no longer write data from the corresponding in-application stream to the external output destination.</p> <p>This operation requires permissions to perform the <code>kinesisanalytics:DeleteApplicationOutput</code> action.</p>"]
+    /// <p>Deletes output destination configuration from your application configuration. Amazon Kinesis Analytics will no longer write data from the corresponding in-application stream to the external output destination.</p> <p>This operation requires permissions to perform the <code>kinesisanalytics:DeleteApplicationOutput</code> action.</p>
     fn delete_application_output(
         &self,
         input: &DeleteApplicationOutputRequest,
@@ -2880,7 +2880,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a reference data source configuration from the specified application configuration.</p> <p>If the application is running, Amazon Kinesis Analytics immediately removes the in-application table that you created using the <a>AddApplicationReferenceDataSource</a> operation. </p> <p>This operation requires permissions to perform the <code>kinesisanalytics.DeleteApplicationReferenceDataSource</code> action.</p>"]
+    /// <p>Deletes a reference data source configuration from the specified application configuration.</p> <p>If the application is running, Amazon Kinesis Analytics immediately removes the in-application table that you created using the <a>AddApplicationReferenceDataSource</a> operation. </p> <p>This operation requires permissions to perform the <code>kinesisanalytics.DeleteApplicationReferenceDataSource</code> action.</p>
     fn delete_application_reference_data_source(
         &self,
         input: &DeleteApplicationReferenceDataSourceRequest,
@@ -2922,7 +2922,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about a specific Amazon Kinesis Analytics application.</p> <p>If you want to retrieve a list of all applications in your account, use the <a>ListApplications</a> operation.</p> <p>This operation requires permissions to perform the <code>kinesisanalytics:DescribeApplication</code> action. You can use <code>DescribeApplication</code> to get the current application versionId, which you need to call other operations such as <code>Update</code>. </p>"]
+    /// <p>Returns information about a specific Amazon Kinesis Analytics application.</p> <p>If you want to retrieve a list of all applications in your account, use the <a>ListApplications</a> operation.</p> <p>This operation requires permissions to perform the <code>kinesisanalytics:DescribeApplication</code> action. You can use <code>DescribeApplication</code> to get the current application versionId, which you need to call other operations such as <code>Update</code>. </p>
     fn describe_application(
         &self,
         input: &DescribeApplicationRequest,
@@ -2959,7 +2959,7 @@ where
         }
     }
 
-    #[doc="<p>Infers a schema by evaluating sample records on the specified streaming source (Amazon Kinesis stream or Amazon Kinesis Firehose delivery stream). In the response, the operation returns the inferred schema and also the sample records that the operation used to infer the schema.</p> <p> You can use the inferred schema when configuring a streaming source for your application. For conceptual information, see <a href=\"http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-input.html\">Configuring Application Input</a>. Note that when you create an application using the Amazon Kinesis Analytics console, the console uses this operation to infer a schema and show it in the console user interface. </p> <p> This operation requires permissions to perform the <code>kinesisanalytics:DiscoverInputSchema</code> action. </p>"]
+    /// <p>Infers a schema by evaluating sample records on the specified streaming source (Amazon Kinesis stream or Amazon Kinesis Firehose delivery stream). In the response, the operation returns the inferred schema and also the sample records that the operation used to infer the schema.</p> <p> You can use the inferred schema when configuring a streaming source for your application. For conceptual information, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-input.html">Configuring Application Input</a>. Note that when you create an application using the Amazon Kinesis Analytics console, the console uses this operation to infer a schema and show it in the console user interface. </p> <p> This operation requires permissions to perform the <code>kinesisanalytics:DiscoverInputSchema</code> action. </p>
     fn discover_input_schema(
         &self,
         input: &DiscoverInputSchemaRequest,
@@ -2996,7 +2996,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list of Amazon Kinesis Analytics applications in your account. For each application, the response includes the application name, Amazon Resource Name (ARN), and status. If the response returns the <code>HasMoreApplications</code> value as true, you can send another request by adding the <code>ExclusiveStartApplicationName</code> in the request body, and set the value of this to the last application name from the previous response. </p> <p>If you want detailed information about a specific application, use <a>DescribeApplication</a>.</p> <p>This operation requires permissions to perform the <code>kinesisanalytics:ListApplications</code> action.</p>"]
+    /// <p>Returns a list of Amazon Kinesis Analytics applications in your account. For each application, the response includes the application name, Amazon Resource Name (ARN), and status. If the response returns the <code>HasMoreApplications</code> value as true, you can send another request by adding the <code>ExclusiveStartApplicationName</code> in the request body, and set the value of this to the last application name from the previous response. </p> <p>If you want detailed information about a specific application, use <a>DescribeApplication</a>.</p> <p>This operation requires permissions to perform the <code>kinesisanalytics:ListApplications</code> action.</p>
     fn list_applications(
         &self,
         input: &ListApplicationsRequest,
@@ -3030,7 +3030,7 @@ where
         }
     }
 
-    #[doc="<p>Starts the specified Amazon Kinesis Analytics application. After creating an application, you must exclusively call this operation to start your application.</p> <p>After the application starts, it begins consuming the input data, processes it, and writes the output to the configured destination.</p> <p> The application status must be <code>READY</code> for you to start an application. You can get the application status in the console or using the <a>DescribeApplication</a> operation.</p> <p>After you start the application, you can stop the application from processing the input by calling the <a>StopApplication</a> operation.</p> <p>This operation requires permissions to perform the <code>kinesisanalytics:StartApplication</code> action.</p>"]
+    /// <p>Starts the specified Amazon Kinesis Analytics application. After creating an application, you must exclusively call this operation to start your application.</p> <p>After the application starts, it begins consuming the input data, processes it, and writes the output to the configured destination.</p> <p> The application status must be <code>READY</code> for you to start an application. You can get the application status in the console or using the <a>DescribeApplication</a> operation.</p> <p>After you start the application, you can stop the application from processing the input by calling the <a>StopApplication</a> operation.</p> <p>This operation requires permissions to perform the <code>kinesisanalytics:StartApplication</code> action.</p>
     fn start_application(
         &self,
         input: &StartApplicationRequest,
@@ -3064,7 +3064,7 @@ where
         }
     }
 
-    #[doc="<p>Stops the application from processing input data. You can stop an application only if it is in the running state. You can use the <a>DescribeApplication</a> operation to find the application state. After the application is stopped, Amazon Kinesis Analytics stops reading data from the input, the application stops processing data, and there is no output written to the destination. </p> <p>This operation requires permissions to perform the <code>kinesisanalytics:StopApplication</code> action.</p>"]
+    /// <p>Stops the application from processing input data. You can stop an application only if it is in the running state. You can use the <a>DescribeApplication</a> operation to find the application state. After the application is stopped, Amazon Kinesis Analytics stops reading data from the input, the application stops processing data, and there is no output written to the destination. </p> <p>This operation requires permissions to perform the <code>kinesisanalytics:StopApplication</code> action.</p>
     fn stop_application(
         &self,
         input: &StopApplicationRequest,
@@ -3098,7 +3098,7 @@ where
         }
     }
 
-    #[doc="<p>Updates an existing Amazon Kinesis Analytics application. Using this API, you can update application code, input configuration, and output configuration. </p> <p>Note that Amazon Kinesis Analytics updates the <code>CurrentApplicationVersionId</code> each time you update your application. </p> <p>This operation requires permission for the <code>kinesisanalytics:UpdateApplication</code> action.</p>"]
+    /// <p>Updates an existing Amazon Kinesis Analytics application. Using this API, you can update application code, input configuration, and output configuration. </p> <p>Note that Amazon Kinesis Analytics updates the <code>CurrentApplicationVersionId</code> each time you update your application. </p> <p>This operation requires permission for the <code>kinesisanalytics:UpdateApplication</code> action.</p>
     fn update_application(
         &self,
         input: &UpdateApplicationRequest,

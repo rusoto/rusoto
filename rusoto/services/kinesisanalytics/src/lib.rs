@@ -11,7 +11,7 @@
 //
 // =================================================================
 
-//! Amazon Kinesis Analytics
+//! <p>Amazon Kinesis Analytics</p>
 //!
 //! If you're using the service, you're probably looking for [KinesisAnalyticsClient](struct.KinesisAnalyticsClient.html) and [KinesisAnalytics](trait.KinesisAnalytics.html).
 

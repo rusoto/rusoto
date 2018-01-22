@@ -130,7 +130,7 @@ pub struct AttributePayload {
     #[serde(rename = "attributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attributes: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Specifies whether the list of attributes provided in the <code>AttributePayload</code> is merged with the attributes stored in the registry, instead of overwriting them.</p> <p>To remove an attribute, call <code>UpdateThing</code> with an empty attribute value.</p> <note> <p>The <code>merge</code> attribute is only valid when calling <code>UpdateThing</code>.</p> </note>
+    /// <p><p>Specifies whether the list of attributes provided in the <code>AttributePayload</code> is merged with the attributes stored in the registry, instead of overwriting them.</p> <p>To remove an attribute, call <code>UpdateThing</code> with an empty attribute value.</p> <note> <p>The <code>merge</code> attribute is only valid when calling <code>UpdateThing</code>.</p> </note></p>
     #[serde(rename = "merge")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub merge: Option<bool>,
@@ -670,7 +670,7 @@ pub struct DescribeThingResponse {
     #[serde(rename = "thingTypeName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_type_name: Option<String>,
-    /// <p>The current version of the thing record in the registry.</p> <note> <p>To avoid unintentional changes to the information in the registry, you can pass the version information in the <code>expectedVersion</code> parameter of the <code>UpdateThing</code> and <code>DeleteThing</code> calls.</p> </note>
+    /// <p><p>The current version of the thing record in the registry.</p> <note> <p>To avoid unintentional changes to the information in the registry, you can pass the version information in the <code>expectedVersion</code> parameter of the <code>UpdateThing</code> and <code>DeleteThing</code> calls.</p> </note></p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<i64>,
@@ -1876,19 +1876,19 @@ pub struct UpdateThingResponse;
 /// Errors returned by AcceptCertificateTransfer
 #[derive(Debug, PartialEq)]
 pub enum AcceptCertificateTransferError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The specified resource does not exist.</p>
+    /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You can't revert the certificate transfer because the transfer is already complete.</p>
+    /// <p>You can't revert the certificate transfer because the transfer is already complete.</p>
     TransferAlreadyCompleted(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1998,19 +1998,19 @@ impl Error for AcceptCertificateTransferError {
 /// Errors returned by AttachPrincipalPolicy
 #[derive(Debug, PartialEq)]
 pub enum AttachPrincipalPolicyError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The number of attached entities exceeds the limit.</p>
+    /// <p>The number of attached entities exceeds the limit.</p>
     LimitExceeded(String),
-    ///<p>The specified resource does not exist.</p>
+    /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2114,17 +2114,17 @@ impl Error for AttachPrincipalPolicyError {
 /// Errors returned by AttachThingPrincipal
 #[derive(Debug, PartialEq)]
 pub enum AttachThingPrincipalError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The specified resource does not exist.</p>
+    /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2224,19 +2224,19 @@ impl Error for AttachThingPrincipalError {
 /// Errors returned by CancelCertificateTransfer
 #[derive(Debug, PartialEq)]
 pub enum CancelCertificateTransferError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The specified resource does not exist.</p>
+    /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You can't revert the certificate transfer because the transfer is already complete.</p>
+    /// <p>You can't revert the certificate transfer because the transfer is already complete.</p>
     TransferAlreadyCompleted(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2346,15 +2346,15 @@ impl Error for CancelCertificateTransferError {
 /// Errors returned by CreateCertificateFromCsr
 #[derive(Debug, PartialEq)]
 pub enum CreateCertificateFromCsrError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2452,15 +2452,15 @@ impl Error for CreateCertificateFromCsrError {
 /// Errors returned by CreateKeysAndCertificate
 #[derive(Debug, PartialEq)]
 pub enum CreateKeysAndCertificateError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2558,19 +2558,19 @@ impl Error for CreateKeysAndCertificateError {
 /// Errors returned by CreatePolicy
 #[derive(Debug, PartialEq)]
 pub enum CreatePolicyError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The policy documentation is not valid.</p>
+    /// <p>The policy documentation is not valid.</p>
     MalformedPolicy(String),
-    ///<p>The resource already exists.</p>
+    /// <p>The resource already exists.</p>
     ResourceAlreadyExists(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2672,21 +2672,21 @@ impl Error for CreatePolicyError {
 /// Errors returned by CreatePolicyVersion
 #[derive(Debug, PartialEq)]
 pub enum CreatePolicyVersionError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The policy documentation is not valid.</p>
+    /// <p>The policy documentation is not valid.</p>
     MalformedPolicy(String),
-    ///<p>The specified resource does not exist.</p>
+    /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
-    ///<p>The number of policy versions exceeds the limit.</p>
+    /// <p>The number of policy versions exceeds the limit.</p>
     VersionsLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2794,19 +2794,19 @@ impl Error for CreatePolicyVersionError {
 /// Errors returned by CreateThing
 #[derive(Debug, PartialEq)]
 pub enum CreateThingError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The resource already exists.</p>
+    /// <p>The resource already exists.</p>
     ResourceAlreadyExists(String),
-    ///<p>The specified resource does not exist.</p>
+    /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2908,17 +2908,17 @@ impl Error for CreateThingError {
 /// Errors returned by CreateThingType
 #[derive(Debug, PartialEq)]
 pub enum CreateThingTypeError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The resource already exists.</p>
+    /// <p>The resource already exists.</p>
     ResourceAlreadyExists(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3016,15 +3016,15 @@ impl Error for CreateThingTypeError {
 /// Errors returned by CreateTopicRule
 #[derive(Debug, PartialEq)]
 pub enum CreateTopicRuleError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     Internal(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The resource already exists.</p>
+    /// <p>The resource already exists.</p>
     ResourceAlreadyExists(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The Rule-SQL expression can't be parsed correctly.</p>
+    /// <p>The Rule-SQL expression can't be parsed correctly.</p>
     SqlParse(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3118,19 +3118,19 @@ impl Error for CreateTopicRuleError {
 /// Errors returned by DeleteCACertificate
 #[derive(Debug, PartialEq)]
 pub enum DeleteCACertificateError {
-    ///<p>The certificate operation is not allowed.</p>
+    /// <p>The certificate operation is not allowed.</p>
     CertificateState(String),
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The specified resource does not exist.</p>
+    /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3234,21 +3234,21 @@ impl Error for DeleteCACertificateError {
 /// Errors returned by DeleteCertificate
 #[derive(Debug, PartialEq)]
 pub enum DeleteCertificateError {
-    ///<p>The certificate operation is not allowed.</p>
+    /// <p>The certificate operation is not allowed.</p>
     CertificateState(String),
-    ///<p>You can't delete the resource because it is attached to one or more resources.</p>
+    /// <p>You can't delete the resource because it is attached to one or more resources.</p>
     DeleteConflict(String),
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The specified resource does not exist.</p>
+    /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3356,19 +3356,19 @@ impl Error for DeleteCertificateError {
 /// Errors returned by DeletePolicy
 #[derive(Debug, PartialEq)]
 pub enum DeletePolicyError {
-    ///<p>You can't delete the resource because it is attached to one or more resources.</p>
+    /// <p>You can't delete the resource because it is attached to one or more resources.</p>
     DeleteConflict(String),
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The specified resource does not exist.</p>
+    /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3470,19 +3470,19 @@ impl Error for DeletePolicyError {
 /// Errors returned by DeletePolicyVersion
 #[derive(Debug, PartialEq)]
 pub enum DeletePolicyVersionError {
-    ///<p>You can't delete the resource because it is attached to one or more resources.</p>
+    /// <p>You can't delete the resource because it is attached to one or more resources.</p>
     DeleteConflict(String),
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The specified resource does not exist.</p>
+    /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3586,15 +3586,15 @@ impl Error for DeletePolicyVersionError {
 /// Errors returned by DeleteRegistrationCode
 #[derive(Debug, PartialEq)]
 pub enum DeleteRegistrationCodeError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The specified resource does not exist.</p>
+    /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3690,19 +3690,19 @@ impl Error for DeleteRegistrationCodeError {
 /// Errors returned by DeleteThing
 #[derive(Debug, PartialEq)]
 pub enum DeleteThingError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The specified resource does not exist.</p>
+    /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
-    ///<p>An exception thrown when the version of a thing passed to a command is different than the version specified with the --version parameter.</p>
+    /// <p>An exception thrown when the version of a thing passed to a command is different than the version specified with the --version parameter.</p>
     VersionConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3804,17 +3804,17 @@ impl Error for DeleteThingError {
 /// Errors returned by DeleteThingType
 #[derive(Debug, PartialEq)]
 pub enum DeleteThingTypeError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The specified resource does not exist.</p>
+    /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3912,13 +3912,13 @@ impl Error for DeleteThingTypeError {
 /// Errors returned by DeleteTopicRule
 #[derive(Debug, PartialEq)]
 pub enum DeleteTopicRuleError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     Internal(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4008,17 +4008,17 @@ impl Error for DeleteTopicRuleError {
 /// Errors returned by DeprecateThingType
 #[derive(Debug, PartialEq)]
 pub enum DeprecateThingTypeError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The specified resource does not exist.</p>
+    /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4118,17 +4118,17 @@ impl Error for DeprecateThingTypeError {
 /// Errors returned by DescribeCACertificate
 #[derive(Debug, PartialEq)]
 pub enum DescribeCACertificateError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The specified resource does not exist.</p>
+    /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4228,17 +4228,17 @@ impl Error for DescribeCACertificateError {
 /// Errors returned by DescribeCertificate
 #[derive(Debug, PartialEq)]
 pub enum DescribeCertificateError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The specified resource does not exist.</p>
+    /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4338,11 +4338,11 @@ impl Error for DescribeCertificateError {
 /// Errors returned by DescribeEndpoint
 #[derive(Debug, PartialEq)]
 pub enum DescribeEndpointError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4428,17 +4428,17 @@ impl Error for DescribeEndpointError {
 /// Errors returned by DescribeThing
 #[derive(Debug, PartialEq)]
 pub enum DescribeThingError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The specified resource does not exist.</p>
+    /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4536,17 +4536,17 @@ impl Error for DescribeThingError {
 /// Errors returned by DescribeThingType
 #[derive(Debug, PartialEq)]
 pub enum DescribeThingTypeError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The specified resource does not exist.</p>
+    /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4646,17 +4646,17 @@ impl Error for DescribeThingTypeError {
 /// Errors returned by DetachPrincipalPolicy
 #[derive(Debug, PartialEq)]
 pub enum DetachPrincipalPolicyError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The specified resource does not exist.</p>
+    /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4756,17 +4756,17 @@ impl Error for DetachPrincipalPolicyError {
 /// Errors returned by DetachThingPrincipal
 #[derive(Debug, PartialEq)]
 pub enum DetachThingPrincipalError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The specified resource does not exist.</p>
+    /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4866,13 +4866,13 @@ impl Error for DetachThingPrincipalError {
 /// Errors returned by DisableTopicRule
 #[derive(Debug, PartialEq)]
 pub enum DisableTopicRuleError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     Internal(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4962,13 +4962,13 @@ impl Error for DisableTopicRuleError {
 /// Errors returned by EnableTopicRule
 #[derive(Debug, PartialEq)]
 pub enum EnableTopicRuleError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     Internal(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5058,11 +5058,11 @@ impl Error for EnableTopicRuleError {
 /// Errors returned by GetLoggingOptions
 #[derive(Debug, PartialEq)]
 pub enum GetLoggingOptionsError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     Internal(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5150,17 +5150,17 @@ impl Error for GetLoggingOptionsError {
 /// Errors returned by GetPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetPolicyError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The specified resource does not exist.</p>
+    /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5256,17 +5256,17 @@ impl Error for GetPolicyError {
 /// Errors returned by GetPolicyVersion
 #[derive(Debug, PartialEq)]
 pub enum GetPolicyVersionError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The specified resource does not exist.</p>
+    /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5364,15 +5364,15 @@ impl Error for GetPolicyVersionError {
 /// Errors returned by GetRegistrationCode
 #[derive(Debug, PartialEq)]
 pub enum GetRegistrationCodeError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5468,13 +5468,13 @@ impl Error for GetRegistrationCodeError {
 /// Errors returned by GetTopicRule
 #[derive(Debug, PartialEq)]
 pub enum GetTopicRuleError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     Internal(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5562,15 +5562,15 @@ impl Error for GetTopicRuleError {
 /// Errors returned by ListCACertificates
 #[derive(Debug, PartialEq)]
 pub enum ListCACertificatesError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5666,15 +5666,15 @@ impl Error for ListCACertificatesError {
 /// Errors returned by ListCertificates
 #[derive(Debug, PartialEq)]
 pub enum ListCertificatesError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5768,15 +5768,15 @@ impl Error for ListCertificatesError {
 /// Errors returned by ListCertificatesByCA
 #[derive(Debug, PartialEq)]
 pub enum ListCertificatesByCAError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5872,15 +5872,15 @@ impl Error for ListCertificatesByCAError {
 /// Errors returned by ListOutgoingCertificates
 #[derive(Debug, PartialEq)]
 pub enum ListOutgoingCertificatesError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5978,15 +5978,15 @@ impl Error for ListOutgoingCertificatesError {
 /// Errors returned by ListPolicies
 #[derive(Debug, PartialEq)]
 pub enum ListPoliciesError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6080,17 +6080,17 @@ impl Error for ListPoliciesError {
 /// Errors returned by ListPolicyPrincipals
 #[derive(Debug, PartialEq)]
 pub enum ListPolicyPrincipalsError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The specified resource does not exist.</p>
+    /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6190,17 +6190,17 @@ impl Error for ListPolicyPrincipalsError {
 /// Errors returned by ListPolicyVersions
 #[derive(Debug, PartialEq)]
 pub enum ListPolicyVersionsError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The specified resource does not exist.</p>
+    /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6300,17 +6300,17 @@ impl Error for ListPolicyVersionsError {
 /// Errors returned by ListPrincipalPolicies
 #[derive(Debug, PartialEq)]
 pub enum ListPrincipalPoliciesError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The specified resource does not exist.</p>
+    /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6410,17 +6410,17 @@ impl Error for ListPrincipalPoliciesError {
 /// Errors returned by ListPrincipalThings
 #[derive(Debug, PartialEq)]
 pub enum ListPrincipalThingsError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The specified resource does not exist.</p>
+    /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6520,17 +6520,17 @@ impl Error for ListPrincipalThingsError {
 /// Errors returned by ListThingPrincipals
 #[derive(Debug, PartialEq)]
 pub enum ListThingPrincipalsError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The specified resource does not exist.</p>
+    /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6630,15 +6630,15 @@ impl Error for ListThingPrincipalsError {
 /// Errors returned by ListThingTypes
 #[derive(Debug, PartialEq)]
 pub enum ListThingTypesError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6732,15 +6732,15 @@ impl Error for ListThingTypesError {
 /// Errors returned by ListThings
 #[derive(Debug, PartialEq)]
 pub enum ListThingsError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6832,11 +6832,11 @@ impl Error for ListThingsError {
 /// Errors returned by ListTopicRules
 #[derive(Debug, PartialEq)]
 pub enum ListTopicRulesError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     Internal(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6922,23 +6922,23 @@ impl Error for ListTopicRulesError {
 /// Errors returned by RegisterCACertificate
 #[derive(Debug, PartialEq)]
 pub enum RegisterCACertificateError {
-    ///<p>The certificate is invalid.</p>
+    /// <p>The certificate is invalid.</p>
     CertificateValidation(String),
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The number of attached entities exceeds the limit.</p>
+    /// <p>The number of attached entities exceeds the limit.</p>
     LimitExceeded(String),
-    ///<p>The registration code is invalid.</p>
+    /// <p>The registration code is invalid.</p>
     RegistrationCodeValidation(String),
-    ///<p>The resource already exists.</p>
+    /// <p>The resource already exists.</p>
     ResourceAlreadyExists(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7056,23 +7056,23 @@ impl Error for RegisterCACertificateError {
 /// Errors returned by RegisterCertificate
 #[derive(Debug, PartialEq)]
 pub enum RegisterCertificateError {
-    ///<p>Unable to verify the CA certificate used to sign the device certificate you are attempting to register. This is happens when you have registered more than one CA certificate that has the same subject field and public key.</p>
+    /// <p>Unable to verify the CA certificate used to sign the device certificate you are attempting to register. This is happens when you have registered more than one CA certificate that has the same subject field and public key.</p>
     CertificateConflict(String),
-    ///<p>The certificate operation is not allowed.</p>
+    /// <p>The certificate operation is not allowed.</p>
     CertificateState(String),
-    ///<p>The certificate is invalid.</p>
+    /// <p>The certificate is invalid.</p>
     CertificateValidation(String),
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The resource already exists.</p>
+    /// <p>The resource already exists.</p>
     ResourceAlreadyExists(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7184,19 +7184,19 @@ impl Error for RegisterCertificateError {
 /// Errors returned by RejectCertificateTransfer
 #[derive(Debug, PartialEq)]
 pub enum RejectCertificateTransferError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The specified resource does not exist.</p>
+    /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You can't revert the certificate transfer because the transfer is already complete.</p>
+    /// <p>You can't revert the certificate transfer because the transfer is already complete.</p>
     TransferAlreadyCompleted(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7306,15 +7306,15 @@ impl Error for RejectCertificateTransferError {
 /// Errors returned by ReplaceTopicRule
 #[derive(Debug, PartialEq)]
 pub enum ReplaceTopicRuleError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     Internal(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The Rule-SQL expression can't be parsed correctly.</p>
+    /// <p>The Rule-SQL expression can't be parsed correctly.</p>
     SqlParse(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7408,17 +7408,17 @@ impl Error for ReplaceTopicRuleError {
 /// Errors returned by SetDefaultPolicyVersion
 #[derive(Debug, PartialEq)]
 pub enum SetDefaultPolicyVersionError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The specified resource does not exist.</p>
+    /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7520,11 +7520,11 @@ impl Error for SetDefaultPolicyVersionError {
 /// Errors returned by SetLoggingOptions
 #[derive(Debug, PartialEq)]
 pub enum SetLoggingOptionsError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     Internal(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7612,21 +7612,21 @@ impl Error for SetLoggingOptionsError {
 /// Errors returned by TransferCertificate
 #[derive(Debug, PartialEq)]
 pub enum TransferCertificateError {
-    ///<p>The certificate operation is not allowed.</p>
+    /// <p>The certificate operation is not allowed.</p>
     CertificateState(String),
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The specified resource does not exist.</p>
+    /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You can't transfer the certificate because authorization policies are still attached.</p>
+    /// <p>You can't transfer the certificate because authorization policies are still attached.</p>
     TransferConflict(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7734,17 +7734,17 @@ impl Error for TransferCertificateError {
 /// Errors returned by UpdateCACertificate
 #[derive(Debug, PartialEq)]
 pub enum UpdateCACertificateError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The specified resource does not exist.</p>
+    /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7844,19 +7844,19 @@ impl Error for UpdateCACertificateError {
 /// Errors returned by UpdateCertificate
 #[derive(Debug, PartialEq)]
 pub enum UpdateCertificateError {
-    ///<p>The certificate operation is not allowed.</p>
+    /// <p>The certificate operation is not allowed.</p>
     CertificateState(String),
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The specified resource does not exist.</p>
+    /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7960,19 +7960,19 @@ impl Error for UpdateCertificateError {
 /// Errors returned by UpdateThing
 #[derive(Debug, PartialEq)]
 pub enum UpdateThingError {
-    ///<p>An unexpected error has occurred.</p>
+    /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The request is not valid.</p>
+    /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The specified resource does not exist.</p>
+    /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>The service is temporarily unavailable.</p>
+    /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>The rate exceeds the limit.</p>
+    /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    ///<p>You are not authorized to perform this operation.</p>
+    /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
-    ///<p>An exception thrown when the version of a thing passed to a command is different than the version specified with the --version parameter.</p>
+    /// <p>An exception thrown when the version of a thing passed to a command is different than the version specified with the --version parameter.</p>
     VersionConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8073,321 +8073,321 @@ impl Error for UpdateThingError {
 }
 /// Trait representing the capabilities of the AWS IoT API. AWS IoT clients implement this trait.
 pub trait Iot {
-    #[doc="<p>Accepts a pending certificate transfer. The default state of the certificate is INACTIVE.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p>"]
+    /// <p>Accepts a pending certificate transfer. The default state of the certificate is INACTIVE.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p>
     fn accept_certificate_transfer(
         &self,
         input: &AcceptCertificateTransferRequest,
     ) -> Result<(), AcceptCertificateTransferError>;
 
-    #[doc="<p>Attaches the specified policy to the specified principal (certificate or other credential).</p>"]
+    /// <p>Attaches the specified policy to the specified principal (certificate or other credential).</p>
     fn attach_principal_policy(
         &self,
         input: &AttachPrincipalPolicyRequest,
     ) -> Result<(), AttachPrincipalPolicyError>;
 
-    #[doc = "<p>Attaches the specified principal to the specified thing.</p>"]
+    /// <p>Attaches the specified principal to the specified thing.</p>
     fn attach_thing_principal(
         &self,
         input: &AttachThingPrincipalRequest,
     ) -> Result<AttachThingPrincipalResponse, AttachThingPrincipalError>;
 
-    #[doc="<p>Cancels a pending transfer for the specified certificate.</p> <p> <b>Note</b> Only the transfer source account can use this operation to cancel a transfer. (Transfer destinations can use <a>RejectCertificateTransfer</a> instead.) After transfer, AWS IoT returns the certificate to the source account in the INACTIVE state. After the destination account has accepted the transfer, the transfer cannot be cancelled.</p> <p>After a certificate transfer is cancelled, the status of the certificate changes from PENDING_TRANSFER to INACTIVE.</p>"]
+    /// <p>Cancels a pending transfer for the specified certificate.</p> <p> <b>Note</b> Only the transfer source account can use this operation to cancel a transfer. (Transfer destinations can use <a>RejectCertificateTransfer</a> instead.) After transfer, AWS IoT returns the certificate to the source account in the INACTIVE state. After the destination account has accepted the transfer, the transfer cannot be cancelled.</p> <p>After a certificate transfer is cancelled, the status of the certificate changes from PENDING_TRANSFER to INACTIVE.</p>
     fn cancel_certificate_transfer(
         &self,
         input: &CancelCertificateTransferRequest,
     ) -> Result<(), CancelCertificateTransferError>;
 
-    #[doc="<p>Creates an X.509 certificate using the specified certificate signing request.</p> <p> <b>Note:</b> The CSR must include a public key that is either an RSA key with a length of at least 2048 bits or an ECC key from NIST P-256 or NIST P-384 curves. </p> <p> <b>Note:</b> Reusing the same certificate signing request (CSR) results in a distinct certificate.</p> <p>You can create multiple certificates in a batch by creating a directory, copying multiple .csr files into that directory, and then specifying that directory on the command line. The following commands show how to create a batch of certificates given a batch of CSRs.</p> <p>Assuming a set of CSRs are located inside of the directory my-csr-directory:</p> <p>On Linux and OS X, the command is:</p> <p>$ ls my-csr-directory/ | xargs -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>This command lists all of the CSRs in my-csr-directory and pipes each CSR file name to the aws iot create-certificate-from-csr AWS CLI command to create a certificate for the corresponding CSR.</p> <p>The aws iot create-certificate-from-csr part of the command can also be run in parallel to speed up the certificate creation process:</p> <p>$ ls my-csr-directory/ | xargs -P 10 -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>On Windows PowerShell, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; ls -Name my-csr-directory | %{aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/$_}</p> <p>On a Windows command prompt, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; forfiles /p my-csr-directory /c \"cmd /c aws iot create-certificate-from-csr --certificate-signing-request file://@path\"</p>"]
+    /// <p>Creates an X.509 certificate using the specified certificate signing request.</p> <p> <b>Note:</b> The CSR must include a public key that is either an RSA key with a length of at least 2048 bits or an ECC key from NIST P-256 or NIST P-384 curves. </p> <p> <b>Note:</b> Reusing the same certificate signing request (CSR) results in a distinct certificate.</p> <p>You can create multiple certificates in a batch by creating a directory, copying multiple .csr files into that directory, and then specifying that directory on the command line. The following commands show how to create a batch of certificates given a batch of CSRs.</p> <p>Assuming a set of CSRs are located inside of the directory my-csr-directory:</p> <p>On Linux and OS X, the command is:</p> <p>$ ls my-csr-directory/ | xargs -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>This command lists all of the CSRs in my-csr-directory and pipes each CSR file name to the aws iot create-certificate-from-csr AWS CLI command to create a certificate for the corresponding CSR.</p> <p>The aws iot create-certificate-from-csr part of the command can also be run in parallel to speed up the certificate creation process:</p> <p>$ ls my-csr-directory/ | xargs -P 10 -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>On Windows PowerShell, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; ls -Name my-csr-directory | %{aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/$_}</p> <p>On a Windows command prompt, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; forfiles /p my-csr-directory /c "cmd /c aws iot create-certificate-from-csr --certificate-signing-request file://@path"</p>
     fn create_certificate_from_csr(
         &self,
         input: &CreateCertificateFromCsrRequest,
     ) -> Result<CreateCertificateFromCsrResponse, CreateCertificateFromCsrError>;
 
-    #[doc="<p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key.</p> <p> <b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>"]
+    /// <p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key.</p> <p> <b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>
     fn create_keys_and_certificate(
         &self,
         input: &CreateKeysAndCertificateRequest,
     ) -> Result<CreateKeysAndCertificateResponse, CreateKeysAndCertificateError>;
 
-    #[doc="<p>Creates an AWS IoT policy.</p> <p>The created policy is the default version for the policy. This operation creates a policy version with a version identifier of <b>1</b> and sets <b>1</b> as the policy's default version.</p>"]
+    /// <p>Creates an AWS IoT policy.</p> <p>The created policy is the default version for the policy. This operation creates a policy version with a version identifier of <b>1</b> and sets <b>1</b> as the policy's default version.</p>
     fn create_policy(
         &self,
         input: &CreatePolicyRequest,
     ) -> Result<CreatePolicyResponse, CreatePolicyError>;
 
-    #[doc="<p>Creates a new version of the specified AWS IoT policy. To update a policy, create a new policy version. A managed policy can have up to five versions. If the policy has five versions, you must use <a>DeletePolicyVersion</a> to delete an existing version before you create a new one.</p> <p>Optionally, you can set the new version as the policy's default version. The default version is the operative version (that is, the version that is in effect for the certificates to which the policy is attached).</p>"]
+    /// <p>Creates a new version of the specified AWS IoT policy. To update a policy, create a new policy version. A managed policy can have up to five versions. If the policy has five versions, you must use <a>DeletePolicyVersion</a> to delete an existing version before you create a new one.</p> <p>Optionally, you can set the new version as the policy's default version. The default version is the operative version (that is, the version that is in effect for the certificates to which the policy is attached).</p>
     fn create_policy_version(
         &self,
         input: &CreatePolicyVersionRequest,
     ) -> Result<CreatePolicyVersionResponse, CreatePolicyVersionError>;
 
-    #[doc = "<p>Creates a thing record in the thing registry.</p>"]
+    /// <p>Creates a thing record in the thing registry.</p>
     fn create_thing(
         &self,
         input: &CreateThingRequest,
     ) -> Result<CreateThingResponse, CreateThingError>;
 
-    #[doc = "<p>Creates a new thing type.</p>"]
+    /// <p>Creates a new thing type.</p>
     fn create_thing_type(
         &self,
         input: &CreateThingTypeRequest,
     ) -> Result<CreateThingTypeResponse, CreateThingTypeError>;
 
-    #[doc="<p>Creates a rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>"]
+    /// <p>Creates a rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>
     fn create_topic_rule(&self, input: &CreateTopicRuleRequest)
         -> Result<(), CreateTopicRuleError>;
 
-    #[doc = "<p>Deletes a registered CA certificate.</p>"]
+    /// <p>Deletes a registered CA certificate.</p>
     fn delete_ca_certificate(
         &self,
         input: &DeleteCACertificateRequest,
     ) -> Result<DeleteCACertificateResponse, DeleteCACertificateError>;
 
-    #[doc="<p>Deletes the specified certificate.</p> <p>A certificate cannot be deleted if it has a policy attached to it or if its status is set to ACTIVE. To delete a certificate, first use the <a>DetachPrincipalPolicy</a> API to detach all policies. Next, use the <a>UpdateCertificate</a> API to set the certificate to the INACTIVE status.</p>"]
+    /// <p>Deletes the specified certificate.</p> <p>A certificate cannot be deleted if it has a policy attached to it or if its status is set to ACTIVE. To delete a certificate, first use the <a>DetachPrincipalPolicy</a> API to detach all policies. Next, use the <a>UpdateCertificate</a> API to set the certificate to the INACTIVE status.</p>
     fn delete_certificate(
         &self,
         input: &DeleteCertificateRequest,
     ) -> Result<(), DeleteCertificateError>;
 
-    #[doc="<p>Deletes the specified policy.</p> <p>A policy cannot be deleted if it has non-default versions or it is attached to any certificate.</p> <p>To delete a policy, use the DeletePolicyVersion API to delete all non-default versions of the policy; use the DetachPrincipalPolicy API to detach the policy from any certificate; and then use the DeletePolicy API to delete the policy.</p> <p>When a policy is deleted using DeletePolicy, its default version is deleted with it.</p>"]
+    /// <p>Deletes the specified policy.</p> <p>A policy cannot be deleted if it has non-default versions or it is attached to any certificate.</p> <p>To delete a policy, use the DeletePolicyVersion API to delete all non-default versions of the policy; use the DetachPrincipalPolicy API to detach the policy from any certificate; and then use the DeletePolicy API to delete the policy.</p> <p>When a policy is deleted using DeletePolicy, its default version is deleted with it.</p>
     fn delete_policy(&self, input: &DeletePolicyRequest) -> Result<(), DeletePolicyError>;
 
-    #[doc="<p>Deletes the specified version of the specified policy. You cannot delete the default version of a policy using this API. To delete the default version of a policy, use <a>DeletePolicy</a>. To find out which version of a policy is marked as the default version, use ListPolicyVersions.</p>"]
+    /// <p>Deletes the specified version of the specified policy. You cannot delete the default version of a policy using this API. To delete the default version of a policy, use <a>DeletePolicy</a>. To find out which version of a policy is marked as the default version, use ListPolicyVersions.</p>
     fn delete_policy_version(
         &self,
         input: &DeletePolicyVersionRequest,
     ) -> Result<(), DeletePolicyVersionError>;
 
-    #[doc = "<p>Deletes a CA certificate registration code.</p>"]
+    /// <p>Deletes a CA certificate registration code.</p>
     fn delete_registration_code(
         &self,
     ) -> Result<DeleteRegistrationCodeResponse, DeleteRegistrationCodeError>;
 
-    #[doc = "<p>Deletes the specified thing.</p>"]
+    /// <p>Deletes the specified thing.</p>
     fn delete_thing(
         &self,
         input: &DeleteThingRequest,
     ) -> Result<DeleteThingResponse, DeleteThingError>;
 
-    #[doc="<p>Deletes the specified thing type . You cannot delete a thing type if it has things associated with it. To delete a thing type, first mark it as deprecated by calling <a>DeprecateThingType</a>, then remove any associated things by calling <a>UpdateThing</a> to change the thing type on any associated thing, and finally use <a>DeleteThingType</a> to delete the thing type.</p>"]
+    /// <p>Deletes the specified thing type . You cannot delete a thing type if it has things associated with it. To delete a thing type, first mark it as deprecated by calling <a>DeprecateThingType</a>, then remove any associated things by calling <a>UpdateThing</a> to change the thing type on any associated thing, and finally use <a>DeleteThingType</a> to delete the thing type.</p>
     fn delete_thing_type(
         &self,
         input: &DeleteThingTypeRequest,
     ) -> Result<DeleteThingTypeResponse, DeleteThingTypeError>;
 
-    #[doc = "<p>Deletes the specified rule.</p>"]
+    /// <p>Deletes the specified rule.</p>
     fn delete_topic_rule(&self, input: &DeleteTopicRuleRequest)
         -> Result<(), DeleteTopicRuleError>;
 
-    #[doc="<p>Deprecates a thing type. You can not associate new things with deprecated thing type.</p>"]
+    /// <p>Deprecates a thing type. You can not associate new things with deprecated thing type.</p>
     fn deprecate_thing_type(
         &self,
         input: &DeprecateThingTypeRequest,
     ) -> Result<DeprecateThingTypeResponse, DeprecateThingTypeError>;
 
-    #[doc = "<p>Describes a registered CA certificate.</p>"]
+    /// <p>Describes a registered CA certificate.</p>
     fn describe_ca_certificate(
         &self,
         input: &DescribeCACertificateRequest,
     ) -> Result<DescribeCACertificateResponse, DescribeCACertificateError>;
 
-    #[doc = "<p>Gets information about the specified certificate.</p>"]
+    /// <p>Gets information about the specified certificate.</p>
     fn describe_certificate(
         &self,
         input: &DescribeCertificateRequest,
     ) -> Result<DescribeCertificateResponse, DescribeCertificateError>;
 
-    #[doc = "<p>Returns a unique endpoint specific to the AWS account making the call.</p>"]
+    /// <p>Returns a unique endpoint specific to the AWS account making the call.</p>
     fn describe_endpoint(&self) -> Result<DescribeEndpointResponse, DescribeEndpointError>;
 
-    #[doc = "<p>Gets information about the specified thing.</p>"]
+    /// <p>Gets information about the specified thing.</p>
     fn describe_thing(
         &self,
         input: &DescribeThingRequest,
     ) -> Result<DescribeThingResponse, DescribeThingError>;
 
-    #[doc = "<p>Gets information about the specified thing type.</p>"]
+    /// <p>Gets information about the specified thing type.</p>
     fn describe_thing_type(
         &self,
         input: &DescribeThingTypeRequest,
     ) -> Result<DescribeThingTypeResponse, DescribeThingTypeError>;
 
-    #[doc = "<p>Removes the specified policy from the specified certificate.</p>"]
+    /// <p>Removes the specified policy from the specified certificate.</p>
     fn detach_principal_policy(
         &self,
         input: &DetachPrincipalPolicyRequest,
     ) -> Result<(), DetachPrincipalPolicyError>;
 
-    #[doc = "<p>Detaches the specified principal from the specified thing.</p>"]
+    /// <p>Detaches the specified principal from the specified thing.</p>
     fn detach_thing_principal(
         &self,
         input: &DetachThingPrincipalRequest,
     ) -> Result<DetachThingPrincipalResponse, DetachThingPrincipalError>;
 
-    #[doc = "<p>Disables the specified rule.</p>"]
+    /// <p>Disables the specified rule.</p>
     fn disable_topic_rule(
         &self,
         input: &DisableTopicRuleRequest,
     ) -> Result<(), DisableTopicRuleError>;
 
-    #[doc = "<p>Enables the specified rule.</p>"]
+    /// <p>Enables the specified rule.</p>
     fn enable_topic_rule(&self, input: &EnableTopicRuleRequest)
         -> Result<(), EnableTopicRuleError>;
 
-    #[doc = "<p>Gets the logging options.</p>"]
+    /// <p>Gets the logging options.</p>
     fn get_logging_options(&self) -> Result<GetLoggingOptionsResponse, GetLoggingOptionsError>;
 
-    #[doc="<p>Gets information about the specified policy with the policy document of the default version.</p>"]
+    /// <p>Gets information about the specified policy with the policy document of the default version.</p>
     fn get_policy(&self, input: &GetPolicyRequest) -> Result<GetPolicyResponse, GetPolicyError>;
 
-    #[doc = "<p>Gets information about the specified policy version.</p>"]
+    /// <p>Gets information about the specified policy version.</p>
     fn get_policy_version(
         &self,
         input: &GetPolicyVersionRequest,
     ) -> Result<GetPolicyVersionResponse, GetPolicyVersionError>;
 
-    #[doc = "<p>Gets a registration code used to register a CA certificate with AWS IoT.</p>"]
+    /// <p>Gets a registration code used to register a CA certificate with AWS IoT.</p>
     fn get_registration_code(
         &self,
     ) -> Result<GetRegistrationCodeResponse, GetRegistrationCodeError>;
 
-    #[doc = "<p>Gets information about the specified rule.</p>"]
+    /// <p>Gets information about the specified rule.</p>
     fn get_topic_rule(
         &self,
         input: &GetTopicRuleRequest,
     ) -> Result<GetTopicRuleResponse, GetTopicRuleError>;
 
-    #[doc="<p>Lists the CA certificates registered for your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>"]
+    /// <p>Lists the CA certificates registered for your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>
     fn list_ca_certificates(
         &self,
         input: &ListCACertificatesRequest,
     ) -> Result<ListCACertificatesResponse, ListCACertificatesError>;
 
-    #[doc="<p>Lists the certificates registered in your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>"]
+    /// <p>Lists the certificates registered in your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>
     fn list_certificates(
         &self,
         input: &ListCertificatesRequest,
     ) -> Result<ListCertificatesResponse, ListCertificatesError>;
 
-    #[doc = "<p>List the device certificates signed by the specified CA certificate.</p>"]
+    /// <p>List the device certificates signed by the specified CA certificate.</p>
     fn list_certificates_by_ca(
         &self,
         input: &ListCertificatesByCARequest,
     ) -> Result<ListCertificatesByCAResponse, ListCertificatesByCAError>;
 
-    #[doc = "<p>Lists certificates that are being transfered but not yet accepted.</p>"]
+    /// <p>Lists certificates that are being transfered but not yet accepted.</p>
     fn list_outgoing_certificates(
         &self,
         input: &ListOutgoingCertificatesRequest,
     ) -> Result<ListOutgoingCertificatesResponse, ListOutgoingCertificatesError>;
 
-    #[doc = "<p>Lists your policies.</p>"]
+    /// <p>Lists your policies.</p>
     fn list_policies(
         &self,
         input: &ListPoliciesRequest,
     ) -> Result<ListPoliciesResponse, ListPoliciesError>;
 
-    #[doc = "<p>Lists the principals associated with the specified policy.</p>"]
+    /// <p>Lists the principals associated with the specified policy.</p>
     fn list_policy_principals(
         &self,
         input: &ListPolicyPrincipalsRequest,
     ) -> Result<ListPolicyPrincipalsResponse, ListPolicyPrincipalsError>;
 
-    #[doc = "<p>Lists the versions of the specified policy and identifies the default version.</p>"]
+    /// <p>Lists the versions of the specified policy and identifies the default version.</p>
     fn list_policy_versions(
         &self,
         input: &ListPolicyVersionsRequest,
     ) -> Result<ListPolicyVersionsResponse, ListPolicyVersionsError>;
 
-    #[doc="<p>Lists the policies attached to the specified principal. If you use an Cognito identity, the ID must be in <a href=\"http://docs.aws.amazon.com/cognitoidentity/latest/APIReference/API_GetCredentialsForIdentity.html#API_GetCredentialsForIdentity_RequestSyntax\">AmazonCognito Identity format</a>.</p>"]
+    /// <p>Lists the policies attached to the specified principal. If you use an Cognito identity, the ID must be in <a href="http://docs.aws.amazon.com/cognitoidentity/latest/APIReference/API_GetCredentialsForIdentity.html#API_GetCredentialsForIdentity_RequestSyntax">AmazonCognito Identity format</a>.</p>
     fn list_principal_policies(
         &self,
         input: &ListPrincipalPoliciesRequest,
     ) -> Result<ListPrincipalPoliciesResponse, ListPrincipalPoliciesError>;
 
-    #[doc = "<p>Lists the things associated with the specified principal.</p>"]
+    /// <p>Lists the things associated with the specified principal.</p>
     fn list_principal_things(
         &self,
         input: &ListPrincipalThingsRequest,
     ) -> Result<ListPrincipalThingsResponse, ListPrincipalThingsError>;
 
-    #[doc = "<p>Lists the principals associated with the specified thing.</p>"]
+    /// <p>Lists the principals associated with the specified thing.</p>
     fn list_thing_principals(
         &self,
         input: &ListThingPrincipalsRequest,
     ) -> Result<ListThingPrincipalsResponse, ListThingPrincipalsError>;
 
-    #[doc = "<p>Lists the existing thing types.</p>"]
+    /// <p>Lists the existing thing types.</p>
     fn list_thing_types(
         &self,
         input: &ListThingTypesRequest,
     ) -> Result<ListThingTypesResponse, ListThingTypesError>;
 
-    #[doc="<p>Lists your things. Use the <b>attributeName</b> and <b>attributeValue</b> parameters to filter your things. For example, calling <code>ListThings</code> with attributeName=Color and attributeValue=Red retrieves all things in the registry that contain an attribute <b>Color</b> with the value <b>Red</b>. </p>"]
+    /// <p>Lists your things. Use the <b>attributeName</b> and <b>attributeValue</b> parameters to filter your things. For example, calling <code>ListThings</code> with attributeName=Color and attributeValue=Red retrieves all things in the registry that contain an attribute <b>Color</b> with the value <b>Red</b>. </p>
     fn list_things(&self, input: &ListThingsRequest)
         -> Result<ListThingsResponse, ListThingsError>;
 
-    #[doc = "<p>Lists the rules for the specific topic.</p>"]
+    /// <p>Lists the rules for the specific topic.</p>
     fn list_topic_rules(
         &self,
         input: &ListTopicRulesRequest,
     ) -> Result<ListTopicRulesResponse, ListTopicRulesError>;
 
-    #[doc="<p>Registers a CA certificate with AWS IoT. This CA certificate can then be used to sign device certificates, which can be then registered with AWS IoT. You can register up to 10 CA certificates per AWS account that have the same subject field. This enables you to have up to 10 certificate authorities sign your device certificates. If you have more than one CA certificate registered, make sure you pass the CA certificate when you register your device certificates with the RegisterCertificate API.</p>"]
+    /// <p>Registers a CA certificate with AWS IoT. This CA certificate can then be used to sign device certificates, which can be then registered with AWS IoT. You can register up to 10 CA certificates per AWS account that have the same subject field. This enables you to have up to 10 certificate authorities sign your device certificates. If you have more than one CA certificate registered, make sure you pass the CA certificate when you register your device certificates with the RegisterCertificate API.</p>
     fn register_ca_certificate(
         &self,
         input: &RegisterCACertificateRequest,
     ) -> Result<RegisterCACertificateResponse, RegisterCACertificateError>;
 
-    #[doc="<p>Registers a device certificate with AWS IoT. If you have more than one CA certificate that has the same subject field, you must specify the CA certificate that was used to sign the device certificate being registered.</p>"]
+    /// <p>Registers a device certificate with AWS IoT. If you have more than one CA certificate that has the same subject field, you must specify the CA certificate that was used to sign the device certificate being registered.</p>
     fn register_certificate(
         &self,
         input: &RegisterCertificateRequest,
     ) -> Result<RegisterCertificateResponse, RegisterCertificateError>;
 
-    #[doc="<p>Rejects a pending certificate transfer. After AWS IoT rejects a certificate transfer, the certificate status changes from <b>PENDING_TRANSFER</b> to <b>INACTIVE</b>.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p> <p>This operation can only be called by the transfer destination. After it is called, the certificate will be returned to the source's account in the INACTIVE state.</p>"]
+    /// <p>Rejects a pending certificate transfer. After AWS IoT rejects a certificate transfer, the certificate status changes from <b>PENDING_TRANSFER</b> to <b>INACTIVE</b>.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p> <p>This operation can only be called by the transfer destination. After it is called, the certificate will be returned to the source's account in the INACTIVE state.</p>
     fn reject_certificate_transfer(
         &self,
         input: &RejectCertificateTransferRequest,
     ) -> Result<(), RejectCertificateTransferError>;
 
-    #[doc="<p>Replaces the specified rule. You must specify all parameters for the new rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>"]
+    /// <p>Replaces the specified rule. You must specify all parameters for the new rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>
     fn replace_topic_rule(
         &self,
         input: &ReplaceTopicRuleRequest,
     ) -> Result<(), ReplaceTopicRuleError>;
 
-    #[doc="<p>Sets the specified version of the specified policy as the policy's default (operative) version. This action affects all certificates to which the policy is attached. To list the principals the policy is attached to, use the ListPrincipalPolicy API.</p>"]
+    /// <p>Sets the specified version of the specified policy as the policy's default (operative) version. This action affects all certificates to which the policy is attached. To list the principals the policy is attached to, use the ListPrincipalPolicy API.</p>
     fn set_default_policy_version(
         &self,
         input: &SetDefaultPolicyVersionRequest,
     ) -> Result<(), SetDefaultPolicyVersionError>;
 
-    #[doc = "<p>Sets the logging options.</p>"]
+    /// <p>Sets the logging options.</p>
     fn set_logging_options(
         &self,
         input: &SetLoggingOptionsRequest,
     ) -> Result<(), SetLoggingOptionsError>;
 
-    #[doc="<p>Transfers the specified certificate to the specified AWS account.</p> <p>You can cancel the transfer until it is acknowledged by the recipient.</p> <p>No notification is sent to the transfer destination's account. It is up to the caller to notify the transfer target.</p> <p>The certificate being transferred must not be in the ACTIVE state. You can use the UpdateCertificate API to deactivate it.</p> <p>The certificate must not have any policies attached to it. You can use the DetachPrincipalPolicy API to detach them.</p>"]
+    /// <p>Transfers the specified certificate to the specified AWS account.</p> <p>You can cancel the transfer until it is acknowledged by the recipient.</p> <p>No notification is sent to the transfer destination's account. It is up to the caller to notify the transfer target.</p> <p>The certificate being transferred must not be in the ACTIVE state. You can use the UpdateCertificate API to deactivate it.</p> <p>The certificate must not have any policies attached to it. You can use the DetachPrincipalPolicy API to detach them.</p>
     fn transfer_certificate(
         &self,
         input: &TransferCertificateRequest,
     ) -> Result<TransferCertificateResponse, TransferCertificateError>;
 
-    #[doc = "<p>Updates a registered CA certificate.</p>"]
+    /// <p>Updates a registered CA certificate.</p>
     fn update_ca_certificate(
         &self,
         input: &UpdateCACertificateRequest,
     ) -> Result<(), UpdateCACertificateError>;
 
-    #[doc="<p>Updates the status of the specified certificate. This operation is idempotent.</p> <p>Moving a certificate from the ACTIVE state (including REVOKED) will not disconnect currently connected devices, but these devices will be unable to reconnect.</p> <p>The ACTIVE state is required to authenticate devices connecting to AWS IoT using a certificate.</p>"]
+    /// <p>Updates the status of the specified certificate. This operation is idempotent.</p> <p>Moving a certificate from the ACTIVE state (including REVOKED) will not disconnect currently connected devices, but these devices will be unable to reconnect.</p> <p>The ACTIVE state is required to authenticate devices connecting to AWS IoT using a certificate.</p>
     fn update_certificate(
         &self,
         input: &UpdateCertificateRequest,
     ) -> Result<(), UpdateCertificateError>;
 
-    #[doc = "<p>Updates the data for a thing.</p>"]
+    /// <p>Updates the data for a thing.</p>
     fn update_thing(
         &self,
         input: &UpdateThingRequest,
@@ -8423,7 +8423,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Accepts a pending certificate transfer. The default state of the certificate is INACTIVE.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p>"]
+    /// <p>Accepts a pending certificate transfer. The default state of the certificate is INACTIVE.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p>
     fn accept_certificate_transfer(
         &self,
         input: &AcceptCertificateTransferRequest,
@@ -8463,7 +8463,7 @@ where
         }
     }
 
-    #[doc="<p>Attaches the specified policy to the specified principal (certificate or other credential).</p>"]
+    /// <p>Attaches the specified policy to the specified principal (certificate or other credential).</p>
     fn attach_principal_policy(
         &self,
         input: &AttachPrincipalPolicyRequest,
@@ -8499,7 +8499,7 @@ where
         }
     }
 
-    #[doc = "<p>Attaches the specified principal to the specified thing.</p>"]
+    /// <p>Attaches the specified principal to the specified thing.</p>
     fn attach_thing_principal(
         &self,
         input: &AttachThingPrincipalRequest,
@@ -8544,7 +8544,7 @@ where
         }
     }
 
-    #[doc="<p>Cancels a pending transfer for the specified certificate.</p> <p> <b>Note</b> Only the transfer source account can use this operation to cancel a transfer. (Transfer destinations can use <a>RejectCertificateTransfer</a> instead.) After transfer, AWS IoT returns the certificate to the source account in the INACTIVE state. After the destination account has accepted the transfer, the transfer cannot be cancelled.</p> <p>After a certificate transfer is cancelled, the status of the certificate changes from PENDING_TRANSFER to INACTIVE.</p>"]
+    /// <p>Cancels a pending transfer for the specified certificate.</p> <p> <b>Note</b> Only the transfer source account can use this operation to cancel a transfer. (Transfer destinations can use <a>RejectCertificateTransfer</a> instead.) After transfer, AWS IoT returns the certificate to the source account in the INACTIVE state. After the destination account has accepted the transfer, the transfer cannot be cancelled.</p> <p>After a certificate transfer is cancelled, the status of the certificate changes from PENDING_TRANSFER to INACTIVE.</p>
     fn cancel_certificate_transfer(
         &self,
         input: &CancelCertificateTransferRequest,
@@ -8578,7 +8578,7 @@ where
         }
     }
 
-    #[doc="<p>Creates an X.509 certificate using the specified certificate signing request.</p> <p> <b>Note:</b> The CSR must include a public key that is either an RSA key with a length of at least 2048 bits or an ECC key from NIST P-256 or NIST P-384 curves. </p> <p> <b>Note:</b> Reusing the same certificate signing request (CSR) results in a distinct certificate.</p> <p>You can create multiple certificates in a batch by creating a directory, copying multiple .csr files into that directory, and then specifying that directory on the command line. The following commands show how to create a batch of certificates given a batch of CSRs.</p> <p>Assuming a set of CSRs are located inside of the directory my-csr-directory:</p> <p>On Linux and OS X, the command is:</p> <p>$ ls my-csr-directory/ | xargs -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>This command lists all of the CSRs in my-csr-directory and pipes each CSR file name to the aws iot create-certificate-from-csr AWS CLI command to create a certificate for the corresponding CSR.</p> <p>The aws iot create-certificate-from-csr part of the command can also be run in parallel to speed up the certificate creation process:</p> <p>$ ls my-csr-directory/ | xargs -P 10 -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>On Windows PowerShell, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; ls -Name my-csr-directory | %{aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/$_}</p> <p>On a Windows command prompt, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; forfiles /p my-csr-directory /c \"cmd /c aws iot create-certificate-from-csr --certificate-signing-request file://@path\"</p>"]
+    /// <p>Creates an X.509 certificate using the specified certificate signing request.</p> <p> <b>Note:</b> The CSR must include a public key that is either an RSA key with a length of at least 2048 bits or an ECC key from NIST P-256 or NIST P-384 curves. </p> <p> <b>Note:</b> Reusing the same certificate signing request (CSR) results in a distinct certificate.</p> <p>You can create multiple certificates in a batch by creating a directory, copying multiple .csr files into that directory, and then specifying that directory on the command line. The following commands show how to create a batch of certificates given a batch of CSRs.</p> <p>Assuming a set of CSRs are located inside of the directory my-csr-directory:</p> <p>On Linux and OS X, the command is:</p> <p>$ ls my-csr-directory/ | xargs -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>This command lists all of the CSRs in my-csr-directory and pipes each CSR file name to the aws iot create-certificate-from-csr AWS CLI command to create a certificate for the corresponding CSR.</p> <p>The aws iot create-certificate-from-csr part of the command can also be run in parallel to speed up the certificate creation process:</p> <p>$ ls my-csr-directory/ | xargs -P 10 -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>On Windows PowerShell, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; ls -Name my-csr-directory | %{aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/$_}</p> <p>On a Windows command prompt, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; forfiles /p my-csr-directory /c "cmd /c aws iot create-certificate-from-csr --certificate-signing-request file://@path"</p>
     fn create_certificate_from_csr(
         &self,
         input: &CreateCertificateFromCsrRequest,
@@ -8627,7 +8627,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key.</p> <p> <b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>"]
+    /// <p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key.</p> <p> <b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>
     fn create_keys_and_certificate(
         &self,
         input: &CreateKeysAndCertificateRequest,
@@ -8674,7 +8674,7 @@ where
         }
     }
 
-    #[doc="<p>Creates an AWS IoT policy.</p> <p>The created policy is the default version for the policy. This operation creates a policy version with a version identifier of <b>1</b> and sets <b>1</b> as the policy's default version.</p>"]
+    /// <p>Creates an AWS IoT policy.</p> <p>The created policy is the default version for the policy. This operation creates a policy version with a version identifier of <b>1</b> and sets <b>1</b> as the policy's default version.</p>
     fn create_policy(
         &self,
         input: &CreatePolicyRequest,
@@ -8716,7 +8716,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new version of the specified AWS IoT policy. To update a policy, create a new policy version. A managed policy can have up to five versions. If the policy has five versions, you must use <a>DeletePolicyVersion</a> to delete an existing version before you create a new one.</p> <p>Optionally, you can set the new version as the policy's default version. The default version is the operative version (that is, the version that is in effect for the certificates to which the policy is attached).</p>"]
+    /// <p>Creates a new version of the specified AWS IoT policy. To update a policy, create a new policy version. A managed policy can have up to five versions. If the policy has five versions, you must use <a>DeletePolicyVersion</a> to delete an existing version before you create a new one.</p> <p>Optionally, you can set the new version as the policy's default version. The default version is the operative version (that is, the version that is in effect for the certificates to which the policy is attached).</p>
     fn create_policy_version(
         &self,
         input: &CreatePolicyVersionRequest,
@@ -8767,7 +8767,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a thing record in the thing registry.</p>"]
+    /// <p>Creates a thing record in the thing registry.</p>
     fn create_thing(
         &self,
         input: &CreateThingRequest,
@@ -8809,7 +8809,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a new thing type.</p>"]
+    /// <p>Creates a new thing type.</p>
     fn create_thing_type(
         &self,
         input: &CreateThingTypeRequest,
@@ -8854,7 +8854,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>"]
+    /// <p>Creates a rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>
     fn create_topic_rule(
         &self,
         input: &CreateTopicRuleRequest,
@@ -8887,7 +8887,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a registered CA certificate.</p>"]
+    /// <p>Deletes a registered CA certificate.</p>
     fn delete_ca_certificate(
         &self,
         input: &DeleteCACertificateRequest,
@@ -8930,7 +8930,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified certificate.</p> <p>A certificate cannot be deleted if it has a policy attached to it or if its status is set to ACTIVE. To delete a certificate, first use the <a>DetachPrincipalPolicy</a> API to detach all policies. Next, use the <a>UpdateCertificate</a> API to set the certificate to the INACTIVE status.</p>"]
+    /// <p>Deletes the specified certificate.</p> <p>A certificate cannot be deleted if it has a policy attached to it or if its status is set to ACTIVE. To delete a certificate, first use the <a>DetachPrincipalPolicy</a> API to detach all policies. Next, use the <a>UpdateCertificate</a> API to set the certificate to the INACTIVE status.</p>
     fn delete_certificate(
         &self,
         input: &DeleteCertificateRequest,
@@ -8964,7 +8964,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified policy.</p> <p>A policy cannot be deleted if it has non-default versions or it is attached to any certificate.</p> <p>To delete a policy, use the DeletePolicyVersion API to delete all non-default versions of the policy; use the DetachPrincipalPolicy API to detach the policy from any certificate; and then use the DeletePolicy API to delete the policy.</p> <p>When a policy is deleted using DeletePolicy, its default version is deleted with it.</p>"]
+    /// <p>Deletes the specified policy.</p> <p>A policy cannot be deleted if it has non-default versions or it is attached to any certificate.</p> <p>To delete a policy, use the DeletePolicyVersion API to delete all non-default versions of the policy; use the DetachPrincipalPolicy API to detach the policy from any certificate; and then use the DeletePolicy API to delete the policy.</p> <p>When a policy is deleted using DeletePolicy, its default version is deleted with it.</p>
     fn delete_policy(&self, input: &DeletePolicyRequest) -> Result<(), DeletePolicyError> {
         let request_uri = format!("/policies/{policy_name}", policy_name = input.policy_name);
 
@@ -8992,7 +8992,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified version of the specified policy. You cannot delete the default version of a policy using this API. To delete the default version of a policy, use <a>DeletePolicy</a>. To find out which version of a policy is marked as the default version, use ListPolicyVersions.</p>"]
+    /// <p>Deletes the specified version of the specified policy. You cannot delete the default version of a policy using this API. To delete the default version of a policy, use <a>DeletePolicy</a>. To find out which version of a policy is marked as the default version, use ListPolicyVersions.</p>
     fn delete_policy_version(
         &self,
         input: &DeletePolicyVersionRequest,
@@ -9027,7 +9027,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a CA certificate registration code.</p>"]
+    /// <p>Deletes a CA certificate registration code.</p>
     fn delete_registration_code(
         &self,
     ) -> Result<DeleteRegistrationCodeResponse, DeleteRegistrationCodeError> {
@@ -9067,7 +9067,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the specified thing.</p>"]
+    /// <p>Deletes the specified thing.</p>
     fn delete_thing(
         &self,
         input: &DeleteThingRequest,
@@ -9113,7 +9113,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified thing type . You cannot delete a thing type if it has things associated with it. To delete a thing type, first mark it as deprecated by calling <a>DeprecateThingType</a>, then remove any associated things by calling <a>UpdateThing</a> to change the thing type on any associated thing, and finally use <a>DeleteThingType</a> to delete the thing type.</p>"]
+    /// <p>Deletes the specified thing type . You cannot delete a thing type if it has things associated with it. To delete a thing type, first mark it as deprecated by calling <a>DeprecateThingType</a>, then remove any associated things by calling <a>UpdateThing</a> to change the thing type on any associated thing, and finally use <a>DeleteThingType</a> to delete the thing type.</p>
     fn delete_thing_type(
         &self,
         input: &DeleteThingTypeRequest,
@@ -9156,7 +9156,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the specified rule.</p>"]
+    /// <p>Deletes the specified rule.</p>
     fn delete_topic_rule(
         &self,
         input: &DeleteTopicRuleRequest,
@@ -9187,7 +9187,7 @@ where
         }
     }
 
-    #[doc="<p>Deprecates a thing type. You can not associate new things with deprecated thing type.</p>"]
+    /// <p>Deprecates a thing type. You can not associate new things with deprecated thing type.</p>
     fn deprecate_thing_type(
         &self,
         input: &DeprecateThingTypeRequest,
@@ -9232,7 +9232,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes a registered CA certificate.</p>"]
+    /// <p>Describes a registered CA certificate.</p>
     fn describe_ca_certificate(
         &self,
         input: &DescribeCACertificateRequest,
@@ -9276,7 +9276,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets information about the specified certificate.</p>"]
+    /// <p>Gets information about the specified certificate.</p>
     fn describe_certificate(
         &self,
         input: &DescribeCertificateRequest,
@@ -9319,7 +9319,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns a unique endpoint specific to the AWS account making the call.</p>"]
+    /// <p>Returns a unique endpoint specific to the AWS account making the call.</p>
     fn describe_endpoint(&self) -> Result<DescribeEndpointResponse, DescribeEndpointError> {
         let request_uri = "/endpoint";
 
@@ -9356,7 +9356,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets information about the specified thing.</p>"]
+    /// <p>Gets information about the specified thing.</p>
     fn describe_thing(
         &self,
         input: &DescribeThingRequest,
@@ -9396,7 +9396,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets information about the specified thing type.</p>"]
+    /// <p>Gets information about the specified thing type.</p>
     fn describe_thing_type(
         &self,
         input: &DescribeThingTypeRequest,
@@ -9439,7 +9439,7 @@ where
         }
     }
 
-    #[doc = "<p>Removes the specified policy from the specified certificate.</p>"]
+    /// <p>Removes the specified policy from the specified certificate.</p>
     fn detach_principal_policy(
         &self,
         input: &DetachPrincipalPolicyRequest,
@@ -9475,7 +9475,7 @@ where
         }
     }
 
-    #[doc = "<p>Detaches the specified principal from the specified thing.</p>"]
+    /// <p>Detaches the specified principal from the specified thing.</p>
     fn detach_thing_principal(
         &self,
         input: &DetachThingPrincipalRequest,
@@ -9520,7 +9520,7 @@ where
         }
     }
 
-    #[doc = "<p>Disables the specified rule.</p>"]
+    /// <p>Disables the specified rule.</p>
     fn disable_topic_rule(
         &self,
         input: &DisableTopicRuleRequest,
@@ -9551,7 +9551,7 @@ where
         }
     }
 
-    #[doc = "<p>Enables the specified rule.</p>"]
+    /// <p>Enables the specified rule.</p>
     fn enable_topic_rule(
         &self,
         input: &EnableTopicRuleRequest,
@@ -9582,7 +9582,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets the logging options.</p>"]
+    /// <p>Gets the logging options.</p>
     fn get_logging_options(&self) -> Result<GetLoggingOptionsResponse, GetLoggingOptionsError> {
         let request_uri = "/loggingOptions";
 
@@ -9619,7 +9619,7 @@ where
         }
     }
 
-    #[doc="<p>Gets information about the specified policy with the policy document of the default version.</p>"]
+    /// <p>Gets information about the specified policy with the policy document of the default version.</p>
     fn get_policy(&self, input: &GetPolicyRequest) -> Result<GetPolicyResponse, GetPolicyError> {
         let request_uri = format!("/policies/{policy_name}", policy_name = input.policy_name);
 
@@ -9656,7 +9656,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets information about the specified policy version.</p>"]
+    /// <p>Gets information about the specified policy version.</p>
     fn get_policy_version(
         &self,
         input: &GetPolicyVersionRequest,
@@ -9700,7 +9700,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets a registration code used to register a CA certificate with AWS IoT.</p>"]
+    /// <p>Gets a registration code used to register a CA certificate with AWS IoT.</p>
     fn get_registration_code(
         &self,
     ) -> Result<GetRegistrationCodeResponse, GetRegistrationCodeError> {
@@ -9739,7 +9739,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets information about the specified rule.</p>"]
+    /// <p>Gets information about the specified rule.</p>
     fn get_topic_rule(
         &self,
         input: &GetTopicRuleRequest,
@@ -9779,7 +9779,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the CA certificates registered for your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>"]
+    /// <p>Lists the CA certificates registered for your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>
     fn list_ca_certificates(
         &self,
         input: &ListCACertificatesRequest,
@@ -9831,7 +9831,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the certificates registered in your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>"]
+    /// <p>Lists the certificates registered in your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>
     fn list_certificates(
         &self,
         input: &ListCertificatesRequest,
@@ -9883,7 +9883,7 @@ where
         }
     }
 
-    #[doc = "<p>List the device certificates signed by the specified CA certificate.</p>"]
+    /// <p>List the device certificates signed by the specified CA certificate.</p>
     fn list_certificates_by_ca(
         &self,
         input: &ListCertificatesByCARequest,
@@ -9938,7 +9938,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists certificates that are being transfered but not yet accepted.</p>"]
+    /// <p>Lists certificates that are being transfered but not yet accepted.</p>
     fn list_outgoing_certificates(
         &self,
         input: &ListOutgoingCertificatesRequest,
@@ -9991,7 +9991,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists your policies.</p>"]
+    /// <p>Lists your policies.</p>
     fn list_policies(
         &self,
         input: &ListPoliciesRequest,
@@ -10043,7 +10043,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists the principals associated with the specified policy.</p>"]
+    /// <p>Lists the principals associated with the specified policy.</p>
     fn list_policy_principals(
         &self,
         input: &ListPolicyPrincipalsRequest,
@@ -10096,7 +10096,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists the versions of the specified policy and identifies the default version.</p>"]
+    /// <p>Lists the versions of the specified policy and identifies the default version.</p>
     fn list_policy_versions(
         &self,
         input: &ListPolicyVersionsRequest,
@@ -10139,7 +10139,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the policies attached to the specified principal. If you use an Cognito identity, the ID must be in <a href=\"http://docs.aws.amazon.com/cognitoidentity/latest/APIReference/API_GetCredentialsForIdentity.html#API_GetCredentialsForIdentity_RequestSyntax\">AmazonCognito Identity format</a>.</p>"]
+    /// <p>Lists the policies attached to the specified principal. If you use an Cognito identity, the ID must be in <a href="http://docs.aws.amazon.com/cognitoidentity/latest/APIReference/API_GetCredentialsForIdentity.html#API_GetCredentialsForIdentity_RequestSyntax">AmazonCognito Identity format</a>.</p>
     fn list_principal_policies(
         &self,
         input: &ListPrincipalPoliciesRequest,
@@ -10193,7 +10193,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists the things associated with the specified principal.</p>"]
+    /// <p>Lists the things associated with the specified principal.</p>
     fn list_principal_things(
         &self,
         input: &ListPrincipalThingsRequest,
@@ -10243,7 +10243,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists the principals associated with the specified thing.</p>"]
+    /// <p>Lists the principals associated with the specified thing.</p>
     fn list_thing_principals(
         &self,
         input: &ListThingPrincipalsRequest,
@@ -10286,7 +10286,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists the existing thing types.</p>"]
+    /// <p>Lists the existing thing types.</p>
     fn list_thing_types(
         &self,
         input: &ListThingTypesRequest,
@@ -10338,7 +10338,7 @@ where
         }
     }
 
-    #[doc="<p>Lists your things. Use the <b>attributeName</b> and <b>attributeValue</b> parameters to filter your things. For example, calling <code>ListThings</code> with attributeName=Color and attributeValue=Red retrieves all things in the registry that contain an attribute <b>Color</b> with the value <b>Red</b>. </p>"]
+    /// <p>Lists your things. Use the <b>attributeName</b> and <b>attributeValue</b> parameters to filter your things. For example, calling <code>ListThings</code> with attributeName=Color and attributeValue=Red retrieves all things in the registry that contain an attribute <b>Color</b> with the value <b>Red</b>. </p>
     fn list_things(
         &self,
         input: &ListThingsRequest,
@@ -10396,7 +10396,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists the rules for the specific topic.</p>"]
+    /// <p>Lists the rules for the specific topic.</p>
     fn list_topic_rules(
         &self,
         input: &ListTopicRulesRequest,
@@ -10451,7 +10451,7 @@ where
         }
     }
 
-    #[doc="<p>Registers a CA certificate with AWS IoT. This CA certificate can then be used to sign device certificates, which can be then registered with AWS IoT. You can register up to 10 CA certificates per AWS account that have the same subject field. This enables you to have up to 10 certificate authorities sign your device certificates. If you have more than one CA certificate registered, make sure you pass the CA certificate when you register your device certificates with the RegisterCertificate API.</p>"]
+    /// <p>Registers a CA certificate with AWS IoT. This CA certificate can then be used to sign device certificates, which can be then registered with AWS IoT. You can register up to 10 CA certificates per AWS account that have the same subject field. This enables you to have up to 10 certificate authorities sign your device certificates. If you have more than one CA certificate registered, make sure you pass the CA certificate when you register your device certificates with the RegisterCertificate API.</p>
     fn register_ca_certificate(
         &self,
         input: &RegisterCACertificateRequest,
@@ -10503,7 +10503,7 @@ where
         }
     }
 
-    #[doc="<p>Registers a device certificate with AWS IoT. If you have more than one CA certificate that has the same subject field, you must specify the CA certificate that was used to sign the device certificate being registered.</p>"]
+    /// <p>Registers a device certificate with AWS IoT. If you have more than one CA certificate that has the same subject field, you must specify the CA certificate that was used to sign the device certificate being registered.</p>
     fn register_certificate(
         &self,
         input: &RegisterCertificateRequest,
@@ -10545,7 +10545,7 @@ where
         }
     }
 
-    #[doc="<p>Rejects a pending certificate transfer. After AWS IoT rejects a certificate transfer, the certificate status changes from <b>PENDING_TRANSFER</b> to <b>INACTIVE</b>.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p> <p>This operation can only be called by the transfer destination. After it is called, the certificate will be returned to the source's account in the INACTIVE state.</p>"]
+    /// <p>Rejects a pending certificate transfer. After AWS IoT rejects a certificate transfer, the certificate status changes from <b>PENDING_TRANSFER</b> to <b>INACTIVE</b>.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p> <p>This operation can only be called by the transfer destination. After it is called, the certificate will be returned to the source's account in the INACTIVE state.</p>
     fn reject_certificate_transfer(
         &self,
         input: &RejectCertificateTransferRequest,
@@ -10581,7 +10581,7 @@ where
         }
     }
 
-    #[doc="<p>Replaces the specified rule. You must specify all parameters for the new rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>"]
+    /// <p>Replaces the specified rule. You must specify all parameters for the new rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>
     fn replace_topic_rule(
         &self,
         input: &ReplaceTopicRuleRequest,
@@ -10614,7 +10614,7 @@ where
         }
     }
 
-    #[doc="<p>Sets the specified version of the specified policy as the policy's default (operative) version. This action affects all certificates to which the policy is attached. To list the principals the policy is attached to, use the ListPrincipalPolicy API.</p>"]
+    /// <p>Sets the specified version of the specified policy as the policy's default (operative) version. This action affects all certificates to which the policy is attached. To list the principals the policy is attached to, use the ListPrincipalPolicy API.</p>
     fn set_default_policy_version(
         &self,
         input: &SetDefaultPolicyVersionRequest,
@@ -10649,7 +10649,7 @@ where
         }
     }
 
-    #[doc = "<p>Sets the logging options.</p>"]
+    /// <p>Sets the logging options.</p>
     fn set_logging_options(
         &self,
         input: &SetLoggingOptionsRequest,
@@ -10682,7 +10682,7 @@ where
         }
     }
 
-    #[doc="<p>Transfers the specified certificate to the specified AWS account.</p> <p>You can cancel the transfer until it is acknowledged by the recipient.</p> <p>No notification is sent to the transfer destination's account. It is up to the caller to notify the transfer target.</p> <p>The certificate being transferred must not be in the ACTIVE state. You can use the UpdateCertificate API to deactivate it.</p> <p>The certificate must not have any policies attached to it. You can use the DetachPrincipalPolicy API to detach them.</p>"]
+    /// <p>Transfers the specified certificate to the specified AWS account.</p> <p>You can cancel the transfer until it is acknowledged by the recipient.</p> <p>No notification is sent to the transfer destination's account. It is up to the caller to notify the transfer target.</p> <p>The certificate being transferred must not be in the ACTIVE state. You can use the UpdateCertificate API to deactivate it.</p> <p>The certificate must not have any policies attached to it. You can use the DetachPrincipalPolicy API to detach them.</p>
     fn transfer_certificate(
         &self,
         input: &TransferCertificateRequest,
@@ -10731,7 +10731,7 @@ where
         }
     }
 
-    #[doc = "<p>Updates a registered CA certificate.</p>"]
+    /// <p>Updates a registered CA certificate.</p>
     fn update_ca_certificate(
         &self,
         input: &UpdateCACertificateRequest,
@@ -10774,7 +10774,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the status of the specified certificate. This operation is idempotent.</p> <p>Moving a certificate from the ACTIVE state (including REVOKED) will not disconnect currently connected devices, but these devices will be unable to reconnect.</p> <p>The ACTIVE state is required to authenticate devices connecting to AWS IoT using a certificate.</p>"]
+    /// <p>Updates the status of the specified certificate. This operation is idempotent.</p> <p>Moving a certificate from the ACTIVE state (including REVOKED) will not disconnect currently connected devices, but these devices will be unable to reconnect.</p> <p>The ACTIVE state is required to authenticate devices connecting to AWS IoT using a certificate.</p>
     fn update_certificate(
         &self,
         input: &UpdateCertificateRequest,
@@ -10812,7 +10812,7 @@ where
         }
     }
 
-    #[doc = "<p>Updates the data for a thing.</p>"]
+    /// <p>Updates the data for a thing.</p>
     fn update_thing(
         &self,
         input: &UpdateThingRequest,

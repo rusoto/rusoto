@@ -522,17 +522,17 @@ pub struct UserProfileSummary {
 /// Errors returned by AssociateTeamMember
 #[derive(Debug, PartialEq)]
 pub enum AssociateTeamMemberError {
-    ///<p>Another modification is being made. That modification must complete before you can make your change.</p>
+    /// <p>Another modification is being made. That modification must complete before you can make your change.</p>
     ConcurrentModification(String),
-    ///<p>The service role is not valid.</p>
+    /// <p>The service role is not valid.</p>
     InvalidServiceRole(String),
-    ///<p>A resource limit has been exceeded.</p>
+    /// <p>A resource limit has been exceeded.</p>
     LimitExceeded(String),
-    ///<p>Project configuration information is required but not specified.</p>
+    /// <p>Project configuration information is required but not specified.</p>
     ProjectConfiguration(String),
-    ///<p>The specified AWS CodeStar project was not found.</p>
+    /// <p>The specified AWS CodeStar project was not found.</p>
     ProjectNotFound(String),
-    ///<p>The team member is already associated with a role in this project.</p>
+    /// <p>The team member is already associated with a role in this project.</p>
     TeamMemberAlreadyAssociated(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -636,17 +636,17 @@ impl Error for AssociateTeamMemberError {
 /// Errors returned by CreateProject
 #[derive(Debug, PartialEq)]
 pub enum CreateProjectError {
-    ///<p>Another modification is being made. That modification must complete before you can make your change.</p>
+    /// <p>Another modification is being made. That modification must complete before you can make your change.</p>
     ConcurrentModification(String),
-    ///<p>The service role is not valid.</p>
+    /// <p>The service role is not valid.</p>
     InvalidServiceRole(String),
-    ///<p>A resource limit has been exceeded.</p>
+    /// <p>A resource limit has been exceeded.</p>
     LimitExceeded(String),
-    ///<p>An AWS CodeStar project with the same ID already exists in this region for the AWS account. AWS CodeStar project IDs must be unique within a region for the AWS account.</p>
+    /// <p>An AWS CodeStar project with the same ID already exists in this region for the AWS account. AWS CodeStar project IDs must be unique within a region for the AWS account.</p>
     ProjectAlreadyExists(String),
-    ///<p>Project configuration information is required but not specified.</p>
+    /// <p>Project configuration information is required but not specified.</p>
     ProjectConfiguration(String),
-    ///<p>The project creation request was valid, but a nonspecific exception or error occurred during project creation. The project could not be created in AWS CodeStar.</p>
+    /// <p>The project creation request was valid, but a nonspecific exception or error occurred during project creation. The project could not be created in AWS CodeStar.</p>
     ProjectCreationFailed(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -744,7 +744,7 @@ impl Error for CreateProjectError {
 /// Errors returned by CreateUserProfile
 #[derive(Debug, PartialEq)]
 pub enum CreateUserProfileError {
-    ///<p>A user profile with that name already exists in this region for the AWS account. AWS CodeStar user profile names must be unique within a region for the AWS account. </p>
+    /// <p>A user profile with that name already exists in this region for the AWS account. AWS CodeStar user profile names must be unique within a region for the AWS account. </p>
     UserProfileAlreadyExists(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -826,9 +826,9 @@ impl Error for CreateUserProfileError {
 /// Errors returned by DeleteProject
 #[derive(Debug, PartialEq)]
 pub enum DeleteProjectError {
-    ///<p>Another modification is being made. That modification must complete before you can make your change.</p>
+    /// <p>Another modification is being made. That modification must complete before you can make your change.</p>
     ConcurrentModification(String),
-    ///<p>The service role is not valid.</p>
+    /// <p>The service role is not valid.</p>
     InvalidServiceRole(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -984,13 +984,13 @@ impl Error for DeleteUserProfileError {
 /// Errors returned by DescribeProject
 #[derive(Debug, PartialEq)]
 pub enum DescribeProjectError {
-    ///<p>Another modification is being made. That modification must complete before you can make your change.</p>
+    /// <p>Another modification is being made. That modification must complete before you can make your change.</p>
     ConcurrentModification(String),
-    ///<p>The service role is not valid.</p>
+    /// <p>The service role is not valid.</p>
     InvalidServiceRole(String),
-    ///<p>Project configuration information is required but not specified.</p>
+    /// <p>Project configuration information is required but not specified.</p>
     ProjectConfiguration(String),
-    ///<p>The specified AWS CodeStar project was not found.</p>
+    /// <p>The specified AWS CodeStar project was not found.</p>
     ProjectNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1080,7 +1080,7 @@ impl Error for DescribeProjectError {
 /// Errors returned by DescribeUserProfile
 #[derive(Debug, PartialEq)]
 pub enum DescribeUserProfileError {
-    ///<p>The user profile was not found.</p>
+    /// <p>The user profile was not found.</p>
     UserProfileNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1160,11 +1160,11 @@ impl Error for DescribeUserProfileError {
 /// Errors returned by DisassociateTeamMember
 #[derive(Debug, PartialEq)]
 pub enum DisassociateTeamMemberError {
-    ///<p>Another modification is being made. That modification must complete before you can make your change.</p>
+    /// <p>Another modification is being made. That modification must complete before you can make your change.</p>
     ConcurrentModification(String),
-    ///<p>The service role is not valid.</p>
+    /// <p>The service role is not valid.</p>
     InvalidServiceRole(String),
-    ///<p>The specified AWS CodeStar project was not found.</p>
+    /// <p>The specified AWS CodeStar project was not found.</p>
     ProjectNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1254,7 +1254,7 @@ impl Error for DisassociateTeamMemberError {
 /// Errors returned by ListProjects
 #[derive(Debug, PartialEq)]
 pub enum ListProjectsError {
-    ///<p>The next token is not valid.</p>
+    /// <p>The next token is not valid.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1332,9 +1332,9 @@ impl Error for ListProjectsError {
 /// Errors returned by ListResources
 #[derive(Debug, PartialEq)]
 pub enum ListResourcesError {
-    ///<p>The next token is not valid.</p>
+    /// <p>The next token is not valid.</p>
     InvalidNextToken(String),
-    ///<p>The specified AWS CodeStar project was not found.</p>
+    /// <p>The specified AWS CodeStar project was not found.</p>
     ProjectNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1416,9 +1416,9 @@ impl Error for ListResourcesError {
 /// Errors returned by ListTeamMembers
 #[derive(Debug, PartialEq)]
 pub enum ListTeamMembersError {
-    ///<p>The next token is not valid.</p>
+    /// <p>The next token is not valid.</p>
     InvalidNextToken(String),
-    ///<p>The specified AWS CodeStar project was not found.</p>
+    /// <p>The specified AWS CodeStar project was not found.</p>
     ProjectNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1500,7 +1500,7 @@ impl Error for ListTeamMembersError {
 /// Errors returned by ListUserProfiles
 #[derive(Debug, PartialEq)]
 pub enum ListUserProfilesError {
-    ///<p>The next token is not valid.</p>
+    /// <p>The next token is not valid.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1578,7 +1578,7 @@ impl Error for ListUserProfilesError {
 /// Errors returned by UpdateProject
 #[derive(Debug, PartialEq)]
 pub enum UpdateProjectError {
-    ///<p>The specified AWS CodeStar project was not found.</p>
+    /// <p>The specified AWS CodeStar project was not found.</p>
     ProjectNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1656,17 +1656,17 @@ impl Error for UpdateProjectError {
 /// Errors returned by UpdateTeamMember
 #[derive(Debug, PartialEq)]
 pub enum UpdateTeamMemberError {
-    ///<p>Another modification is being made. That modification must complete before you can make your change.</p>
+    /// <p>Another modification is being made. That modification must complete before you can make your change.</p>
     ConcurrentModification(String),
-    ///<p>The service role is not valid.</p>
+    /// <p>The service role is not valid.</p>
     InvalidServiceRole(String),
-    ///<p>A resource limit has been exceeded.</p>
+    /// <p>A resource limit has been exceeded.</p>
     LimitExceeded(String),
-    ///<p>Project configuration information is required but not specified.</p>
+    /// <p>Project configuration information is required but not specified.</p>
     ProjectConfiguration(String),
-    ///<p>The specified AWS CodeStar project was not found.</p>
+    /// <p>The specified AWS CodeStar project was not found.</p>
     ProjectNotFound(String),
-    ///<p>The specified team member was not found.</p>
+    /// <p>The specified team member was not found.</p>
     TeamMemberNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1764,7 +1764,7 @@ impl Error for UpdateTeamMemberError {
 /// Errors returned by UpdateUserProfile
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserProfileError {
-    ///<p>The user profile was not found.</p>
+    /// <p>The user profile was not found.</p>
     UserProfileNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1843,91 +1843,91 @@ impl Error for UpdateUserProfileError {
 }
 /// Trait representing the capabilities of the CodeStar API. CodeStar clients implement this trait.
 pub trait CodeStar {
-    #[doc = "<p>Adds an IAM user to the team for an AWS CodeStar project.</p>"]
+    /// <p>Adds an IAM user to the team for an AWS CodeStar project.</p>
     fn associate_team_member(
         &self,
         input: &AssociateTeamMemberRequest,
     ) -> Result<AssociateTeamMemberResult, AssociateTeamMemberError>;
 
-    #[doc = "<p>Reserved for future use. To create a project, use the AWS CodeStar console.</p>"]
+    /// <p>Reserved for future use. To create a project, use the AWS CodeStar console.</p>
     fn create_project(
         &self,
         input: &CreateProjectRequest,
     ) -> Result<CreateProjectResult, CreateProjectError>;
 
-    #[doc="<p>Creates a profile for a user that includes user preferences, such as the display name and email address assocciated with the user, in AWS CodeStar. The user profile is not project-specific. Information in the user profile is displayed wherever the user's information appears to other users in AWS CodeStar.</p>"]
+    /// <p>Creates a profile for a user that includes user preferences, such as the display name and email address assocciated with the user, in AWS CodeStar. The user profile is not project-specific. Information in the user profile is displayed wherever the user's information appears to other users in AWS CodeStar.</p>
     fn create_user_profile(
         &self,
         input: &CreateUserProfileRequest,
     ) -> Result<CreateUserProfileResult, CreateUserProfileError>;
 
-    #[doc="<p>Deletes a project, including project resources. Does not delete users associated with the project, but does delete the IAM roles that allowed access to the project.</p>"]
+    /// <p>Deletes a project, including project resources. Does not delete users associated with the project, but does delete the IAM roles that allowed access to the project.</p>
     fn delete_project(
         &self,
         input: &DeleteProjectRequest,
     ) -> Result<DeleteProjectResult, DeleteProjectError>;
 
-    #[doc="<p>Deletes a user profile in AWS CodeStar, including all personal preference data associated with that profile, such as display name and email address. It does not delete the history of that user, for example the history of commits made by that user.</p>"]
+    /// <p>Deletes a user profile in AWS CodeStar, including all personal preference data associated with that profile, such as display name and email address. It does not delete the history of that user, for example the history of commits made by that user.</p>
     fn delete_user_profile(
         &self,
         input: &DeleteUserProfileRequest,
     ) -> Result<DeleteUserProfileResult, DeleteUserProfileError>;
 
-    #[doc = "<p>Describes a project and its resources.</p>"]
+    /// <p>Describes a project and its resources.</p>
     fn describe_project(
         &self,
         input: &DescribeProjectRequest,
     ) -> Result<DescribeProjectResult, DescribeProjectError>;
 
-    #[doc = "<p>Describes a user in AWS CodeStar and the user attributes across all projects.</p>"]
+    /// <p>Describes a user in AWS CodeStar and the user attributes across all projects.</p>
     fn describe_user_profile(
         &self,
         input: &DescribeUserProfileRequest,
     ) -> Result<DescribeUserProfileResult, DescribeUserProfileError>;
 
-    #[doc="<p>Removes a user from a project. Removing a user from a project also removes the IAM policies from that user that allowed access to the project and its resources. Disassociating a team member does not remove that user's profile from AWS CodeStar. It does not remove the user from IAM.</p>"]
+    /// <p>Removes a user from a project. Removing a user from a project also removes the IAM policies from that user that allowed access to the project and its resources. Disassociating a team member does not remove that user's profile from AWS CodeStar. It does not remove the user from IAM.</p>
     fn disassociate_team_member(
         &self,
         input: &DisassociateTeamMemberRequest,
     ) -> Result<DisassociateTeamMemberResult, DisassociateTeamMemberError>;
 
-    #[doc = "<p>Lists all projects in AWS CodeStar associated with your AWS account.</p>"]
+    /// <p>Lists all projects in AWS CodeStar associated with your AWS account.</p>
     fn list_projects(
         &self,
         input: &ListProjectsRequest,
     ) -> Result<ListProjectsResult, ListProjectsError>;
 
-    #[doc = "<p>Lists resources associated with a project in AWS CodeStar.</p>"]
+    /// <p>Lists resources associated with a project in AWS CodeStar.</p>
     fn list_resources(
         &self,
         input: &ListResourcesRequest,
     ) -> Result<ListResourcesResult, ListResourcesError>;
 
-    #[doc = "<p>Lists all team members associated with a project.</p>"]
+    /// <p>Lists all team members associated with a project.</p>
     fn list_team_members(
         &self,
         input: &ListTeamMembersRequest,
     ) -> Result<ListTeamMembersResult, ListTeamMembersError>;
 
-    #[doc = "<p>Lists all the user profiles configured for your AWS account in AWS CodeStar.</p>"]
+    /// <p>Lists all the user profiles configured for your AWS account in AWS CodeStar.</p>
     fn list_user_profiles(
         &self,
         input: &ListUserProfilesRequest,
     ) -> Result<ListUserProfilesResult, ListUserProfilesError>;
 
-    #[doc = "<p>Updates a project in AWS CodeStar.</p>"]
+    /// <p>Updates a project in AWS CodeStar.</p>
     fn update_project(
         &self,
         input: &UpdateProjectRequest,
     ) -> Result<UpdateProjectResult, UpdateProjectError>;
 
-    #[doc="<p>Updates a team member's attributes in an AWS CodeStar project. For example, you can change a team member's role in the project, or change whether they have remote access to project resources.</p>"]
+    /// <p>Updates a team member's attributes in an AWS CodeStar project. For example, you can change a team member's role in the project, or change whether they have remote access to project resources.</p>
     fn update_team_member(
         &self,
         input: &UpdateTeamMemberRequest,
     ) -> Result<UpdateTeamMemberResult, UpdateTeamMemberError>;
 
-    #[doc="<p>Updates a user's profile in AWS CodeStar. The user profile is not project-specific. Information in the user profile is displayed wherever the user's information appears to other users in AWS CodeStar. </p>"]
+    /// <p>Updates a user's profile in AWS CodeStar. The user profile is not project-specific. Information in the user profile is displayed wherever the user's information appears to other users in AWS CodeStar. </p>
     fn update_user_profile(
         &self,
         input: &UpdateUserProfileRequest,
@@ -1963,7 +1963,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc = "<p>Adds an IAM user to the team for an AWS CodeStar project.</p>"]
+    /// <p>Adds an IAM user to the team for an AWS CodeStar project.</p>
     fn associate_team_member(
         &self,
         input: &AssociateTeamMemberRequest,
@@ -1997,7 +1997,7 @@ where
         }
     }
 
-    #[doc = "<p>Reserved for future use. To create a project, use the AWS CodeStar console.</p>"]
+    /// <p>Reserved for future use. To create a project, use the AWS CodeStar console.</p>
     fn create_project(
         &self,
         input: &CreateProjectRequest,
@@ -2031,7 +2031,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a profile for a user that includes user preferences, such as the display name and email address assocciated with the user, in AWS CodeStar. The user profile is not project-specific. Information in the user profile is displayed wherever the user's information appears to other users in AWS CodeStar.</p>"]
+    /// <p>Creates a profile for a user that includes user preferences, such as the display name and email address assocciated with the user, in AWS CodeStar. The user profile is not project-specific. Information in the user profile is displayed wherever the user's information appears to other users in AWS CodeStar.</p>
     fn create_user_profile(
         &self,
         input: &CreateUserProfileRequest,
@@ -2065,7 +2065,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a project, including project resources. Does not delete users associated with the project, but does delete the IAM roles that allowed access to the project.</p>"]
+    /// <p>Deletes a project, including project resources. Does not delete users associated with the project, but does delete the IAM roles that allowed access to the project.</p>
     fn delete_project(
         &self,
         input: &DeleteProjectRequest,
@@ -2099,7 +2099,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a user profile in AWS CodeStar, including all personal preference data associated with that profile, such as display name and email address. It does not delete the history of that user, for example the history of commits made by that user.</p>"]
+    /// <p>Deletes a user profile in AWS CodeStar, including all personal preference data associated with that profile, such as display name and email address. It does not delete the history of that user, for example the history of commits made by that user.</p>
     fn delete_user_profile(
         &self,
         input: &DeleteUserProfileRequest,
@@ -2133,7 +2133,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes a project and its resources.</p>"]
+    /// <p>Describes a project and its resources.</p>
     fn describe_project(
         &self,
         input: &DescribeProjectRequest,
@@ -2167,7 +2167,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes a user in AWS CodeStar and the user attributes across all projects.</p>"]
+    /// <p>Describes a user in AWS CodeStar and the user attributes across all projects.</p>
     fn describe_user_profile(
         &self,
         input: &DescribeUserProfileRequest,
@@ -2201,7 +2201,7 @@ where
         }
     }
 
-    #[doc="<p>Removes a user from a project. Removing a user from a project also removes the IAM policies from that user that allowed access to the project and its resources. Disassociating a team member does not remove that user's profile from AWS CodeStar. It does not remove the user from IAM.</p>"]
+    /// <p>Removes a user from a project. Removing a user from a project also removes the IAM policies from that user that allowed access to the project and its resources. Disassociating a team member does not remove that user's profile from AWS CodeStar. It does not remove the user from IAM.</p>
     fn disassociate_team_member(
         &self,
         input: &DisassociateTeamMemberRequest,
@@ -2235,7 +2235,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists all projects in AWS CodeStar associated with your AWS account.</p>"]
+    /// <p>Lists all projects in AWS CodeStar associated with your AWS account.</p>
     fn list_projects(
         &self,
         input: &ListProjectsRequest,
@@ -2269,7 +2269,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists resources associated with a project in AWS CodeStar.</p>"]
+    /// <p>Lists resources associated with a project in AWS CodeStar.</p>
     fn list_resources(
         &self,
         input: &ListResourcesRequest,
@@ -2303,7 +2303,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists all team members associated with a project.</p>"]
+    /// <p>Lists all team members associated with a project.</p>
     fn list_team_members(
         &self,
         input: &ListTeamMembersRequest,
@@ -2337,7 +2337,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists all the user profiles configured for your AWS account in AWS CodeStar.</p>"]
+    /// <p>Lists all the user profiles configured for your AWS account in AWS CodeStar.</p>
     fn list_user_profiles(
         &self,
         input: &ListUserProfilesRequest,
@@ -2371,7 +2371,7 @@ where
         }
     }
 
-    #[doc = "<p>Updates a project in AWS CodeStar.</p>"]
+    /// <p>Updates a project in AWS CodeStar.</p>
     fn update_project(
         &self,
         input: &UpdateProjectRequest,
@@ -2405,7 +2405,7 @@ where
         }
     }
 
-    #[doc="<p>Updates a team member's attributes in an AWS CodeStar project. For example, you can change a team member's role in the project, or change whether they have remote access to project resources.</p>"]
+    /// <p>Updates a team member's attributes in an AWS CodeStar project. For example, you can change a team member's role in the project, or change whether they have remote access to project resources.</p>
     fn update_team_member(
         &self,
         input: &UpdateTeamMemberRequest,
@@ -2439,7 +2439,7 @@ where
         }
     }
 
-    #[doc="<p>Updates a user's profile in AWS CodeStar. The user profile is not project-specific. Information in the user profile is displayed wherever the user's information appears to other users in AWS CodeStar. </p>"]
+    /// <p>Updates a user's profile in AWS CodeStar. The user profile is not project-specific. Information in the user profile is displayed wherever the user's information appears to other users in AWS CodeStar. </p>
     fn update_user_profile(
         &self,
         input: &UpdateUserProfileRequest,

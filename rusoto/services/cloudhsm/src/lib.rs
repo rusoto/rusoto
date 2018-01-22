@@ -11,7 +11,7 @@
 //
 // =================================================================
 
-//! <fullname>AWS CloudHSM Service</fullname>
+//! <p><fullname>AWS CloudHSM Service</fullname></p>
 //!
 //! If you're using the service, you're probably looking for [CloudHsmClient](struct.CloudHsmClient.html) and [CloudHsm](trait.CloudHsm.html).
 

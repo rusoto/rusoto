@@ -263,7 +263,7 @@ fn service_has_query_parameters(service: &Service) -> bool {
 fn generate_documentation(operation: &Operation) -> Option<String> {
     operation.documentation
         .as_ref()
-        .map(|docs| format!("#[doc=\"{}\"]", docs.replace("\"", "\\\"")))
+        .map(|docs| ::doco::Item(docs).to_string())
 }
 
 /// Generate code to plumb the response status code into any fields

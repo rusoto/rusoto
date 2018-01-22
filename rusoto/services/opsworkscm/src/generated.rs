@@ -34,7 +34,7 @@ pub struct AccountAttribute {
     #[serde(rename = "Maximum")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum: Option<i64>,
-    /// <p> The attribute name. The following are supported attribute names. </p> <ul> <li> <p> <i>ServerLimit:</i> The number of current servers/maximum number of servers allowed. By default, you can have a maximum of 10 servers. </p> </li> <li> <p> <i>ManualBackupLimit:</i> The number of current manual backups/maximum number of backups allowed. By default, you can have a maximum of 50 manual backups saved. </p> </li> </ul>
+    /// <p><p> The attribute name. The following are supported attribute names. </p> <ul> <li> <p> <i>ServerLimit:</i> The number of current servers/maximum number of servers allowed. By default, you can have a maximum of 10 servers. </p> </li> <li> <p> <i>ManualBackupLimit:</i> The number of current manual backups/maximum number of backups allowed. By default, you can have a maximum of 50 manual backups saved. </p> </li> </ul></p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -46,7 +46,7 @@ pub struct AccountAttribute {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AssociateNodeRequest {
-    /// <p>Engine attributes used for associating the node. </p> <p class="title"> <b>Attributes accepted in a AssociateNode request:</b> </p> <ul> <li> <p> <code>CHEF_ORGANIZATION</code>: The Chef organization with which the node is associated. By default only one organization named <code>default</code> can exist. </p> </li> <li> <p> <code>CHEF_NODE_PUBLIC_KEY</code>: A PEM-formatted public key. This key is required for the <code>chef-client</code> agent to access the Chef API. </p> </li> </ul>
+    /// <p><p>Engine attributes used for associating the node. </p> <p class="title"> <b>Attributes accepted in a AssociateNode request:</b> </p> <ul> <li> <p> <code>CHEF<em>ORGANIZATION</code>: The Chef organization with which the node is associated. By default only one organization named <code>default</code> can exist. </p> </li> <li> <p> <code>CHEF</em>NODE<em>PUBLIC</em>KEY</code>: A PEM-formatted public key. This key is required for the <code>chef-client</code> agent to access the Chef API. </p> </li> </ul></p>
     #[serde(rename = "EngineAttributes")]
     pub engine_attributes: Vec<EngineAttribute>,
     /// <p>The name of the Chef client node. </p>
@@ -199,7 +199,7 @@ pub struct CreateServerRequest {
     #[serde(rename = "Engine")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine: Option<String>,
-    /// <p>Optional engine attributes on a specified server. </p> <p class="title"> <b>Attributes accepted in a createServer request:</b> </p> <ul> <li> <p> <code>CHEF_PIVOTAL_KEY</code>: A base64-encoded RSA private key that is not stored by AWS OpsWorks for Chef. This private key is required to access the Chef API. When no CHEF_PIVOTAL_KEY is set, one is generated and returned in the response. </p> </li> <li> <p> <code>CHEF_DELIVERY_ADMIN_PASSWORD</code>: The password for the administrative user in the Chef Automate GUI. The password length is a minimum of eight characters, and a maximum of 32. The password can contain letters, numbers, and special characters (!/@#$%^&amp;+=_). The password must contain at least one lower case letter, one upper case letter, one number, and one special character. When no CHEF_DELIVERY_ADMIN_PASSWORD is set, one is generated and returned in the response.</p> </li> </ul>
+    /// <p><p>Optional engine attributes on a specified server. </p> <p class="title"> <b>Attributes accepted in a createServer request:</b> </p> <ul> <li> <p> <code>CHEF<em>PIVOTAL</em>KEY</code>: A base64-encoded RSA private key that is not stored by AWS OpsWorks for Chef. This private key is required to access the Chef API. When no CHEF<em>PIVOTAL</em>KEY is set, one is generated and returned in the response. </p> </li> <li> <p> <code>CHEF<em>DELIVERY</em>ADMIN<em>PASSWORD</code>: The password for the administrative user in the Chef Automate GUI. The password length is a minimum of eight characters, and a maximum of 32. The password can contain letters, numbers, and special characters (!/@#$%^&amp;+=</em>). The password must contain at least one lower case letter, one upper case letter, one number, and one special character. When no CHEF<em>DELIVERY</em>ADMIN_PASSWORD is set, one is generated and returned in the response.</p> </li> </ul></p>
     #[serde(rename = "EngineAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_attributes: Option<Vec<EngineAttribute>>,
@@ -353,7 +353,7 @@ pub struct DescribeNodeAssociationStatusRequest {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeNodeAssociationStatusResponse {
-    /// <p>The status of the association or disassociation request. </p> <p class="title"> <b>Possible values:</b> </p> <ul> <li> <p> <code>SUCCESS</code>: The association or disassociation succeeded. </p> </li> <li> <p> <code>FAILED</code>: The association or disassociation failed. </p> </li> <li> <p> <code>IN_PROGRESS</code>: The association or disassociation is still in progress. </p> </li> </ul>
+    /// <p><p>The status of the association or disassociation request. </p> <p class="title"> <b>Possible values:</b> </p> <ul> <li> <p> <code>SUCCESS</code>: The association or disassociation succeeded. </p> </li> <li> <p> <code>FAILED</code>: The association or disassociation failed. </p> </li> <li> <p> <code>IN_PROGRESS</code>: The association or disassociation is still in progress. </p> </li> </ul></p>
     #[serde(rename = "NodeAssociationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub node_association_status: Option<String>,
@@ -389,7 +389,7 @@ pub struct DescribeServersResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DisassociateNodeRequest {
-    /// <p>Engine attributes used for disassociating the node. </p> <p class="title"> <b>Attributes accepted in a DisassociateNode request:</b> </p> <ul> <li> <p> <code>CHEF_ORGANIZATION</code>: The Chef organization with which the node was associated. By default only one organization named <code>default</code> can exist. </p> </li> </ul>
+    /// <p><p>Engine attributes used for disassociating the node. </p> <p class="title"> <b>Attributes accepted in a DisassociateNode request:</b> </p> <ul> <li> <p> <code>CHEF_ORGANIZATION</code>: The Chef organization with which the node was associated. By default only one organization named <code>default</code> can exist. </p> </li> </ul></p>
     #[serde(rename = "EngineAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_attributes: Option<Vec<EngineAttribute>>,
@@ -474,7 +474,7 @@ pub struct Server {
     #[serde(rename = "Engine")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine: Option<String>,
-    /// <p>The response of a createServer() request returns the master credential to access the server in EngineAttributes. These credentials are not stored by AWS OpsWorks for Chef Automate; they are returned only as part of the result of createServer(). </p> <p class="title"> <b>Attributes returned in a createServer response:</b> </p> <ul> <li> <p> <code>CHEF_PIVOTAL_KEY</code>: A base64-encoded RSA private key that is generated by AWS OpsWorks for Chef Automate. This private key is required to access the Chef API.</p> </li> <li> <p> <code>CHEF_STARTER_KIT</code>: A base64-encoded ZIP file. The ZIP file contains a Chef starter kit, which includes a README, a configuration file, and the required RSA private key. Save this file, unzip it, and then change to the directory where you've unzipped the file contents. From this directory, you can run Knife commands.</p> </li> </ul>
+    /// <p><p>The response of a createServer() request returns the master credential to access the server in EngineAttributes. These credentials are not stored by AWS OpsWorks for Chef Automate; they are returned only as part of the result of createServer(). </p> <p class="title"> <b>Attributes returned in a createServer response:</b> </p> <ul> <li> <p> <code>CHEF<em>PIVOTAL</em>KEY</code>: A base64-encoded RSA private key that is generated by AWS OpsWorks for Chef Automate. This private key is required to access the Chef API.</p> </li> <li> <p> <code>CHEF<em>STARTER</em>KIT</code>: A base64-encoded ZIP file. The ZIP file contains a Chef starter kit, which includes a README, a configuration file, and the required RSA private key. Save this file, unzip it, and then change to the directory where you&#39;ve unzipped the file contents. From this directory, you can run Knife commands.</p> </li> </ul></p>
     #[serde(rename = "EngineAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_attributes: Option<Vec<EngineAttribute>>,
@@ -630,9 +630,9 @@ pub struct UpdateServerResponse {
 /// Errors returned by AssociateNode
 #[derive(Debug, PartialEq)]
 pub enum AssociateNodeError {
-    ///<p>The resource is in a state that does not allow you to perform a specified action. </p>
+    /// <p>The resource is in a state that does not allow you to perform a specified action. </p>
     InvalidState(String),
-    ///<p>The requested resource does not exist, or access was denied. </p>
+    /// <p>The requested resource does not exist, or access was denied. </p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -714,11 +714,11 @@ impl Error for AssociateNodeError {
 /// Errors returned by CreateBackup
 #[derive(Debug, PartialEq)]
 pub enum CreateBackupError {
-    ///<p>The resource is in a state that does not allow you to perform a specified action. </p>
+    /// <p>The resource is in a state that does not allow you to perform a specified action. </p>
     InvalidState(String),
-    ///<p>The limit of servers or backups has been reached. </p>
+    /// <p>The limit of servers or backups has been reached. </p>
     LimitExceeded(String),
-    ///<p>The requested resource does not exist, or access was denied. </p>
+    /// <p>The requested resource does not exist, or access was denied. </p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -804,11 +804,11 @@ impl Error for CreateBackupError {
 /// Errors returned by CreateServer
 #[derive(Debug, PartialEq)]
 pub enum CreateServerError {
-    ///<p>The limit of servers or backups has been reached. </p>
+    /// <p>The limit of servers or backups has been reached. </p>
     LimitExceeded(String),
-    ///<p>The requested resource cannot be created because it already exists. </p>
+    /// <p>The requested resource cannot be created because it already exists. </p>
     ResourceAlreadyExists(String),
-    ///<p>The requested resource does not exist, or access was denied. </p>
+    /// <p>The requested resource does not exist, or access was denied. </p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -894,9 +894,9 @@ impl Error for CreateServerError {
 /// Errors returned by DeleteBackup
 #[derive(Debug, PartialEq)]
 pub enum DeleteBackupError {
-    ///<p>The resource is in a state that does not allow you to perform a specified action. </p>
+    /// <p>The resource is in a state that does not allow you to perform a specified action. </p>
     InvalidState(String),
-    ///<p>The requested resource does not exist, or access was denied. </p>
+    /// <p>The requested resource does not exist, or access was denied. </p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -978,9 +978,9 @@ impl Error for DeleteBackupError {
 /// Errors returned by DeleteServer
 #[derive(Debug, PartialEq)]
 pub enum DeleteServerError {
-    ///<p>The resource is in a state that does not allow you to perform a specified action. </p>
+    /// <p>The resource is in a state that does not allow you to perform a specified action. </p>
     InvalidState(String),
-    ///<p>The requested resource does not exist, or access was denied. </p>
+    /// <p>The requested resource does not exist, or access was denied. </p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1136,9 +1136,9 @@ impl Error for DescribeAccountAttributesError {
 /// Errors returned by DescribeBackups
 #[derive(Debug, PartialEq)]
 pub enum DescribeBackupsError {
-    ///<p>This occurs when the provided nextToken is not valid. </p>
+    /// <p>This occurs when the provided nextToken is not valid. </p>
     InvalidNextToken(String),
-    ///<p>The requested resource does not exist, or access was denied. </p>
+    /// <p>The requested resource does not exist, or access was denied. </p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1220,9 +1220,9 @@ impl Error for DescribeBackupsError {
 /// Errors returned by DescribeEvents
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventsError {
-    ///<p>This occurs when the provided nextToken is not valid. </p>
+    /// <p>This occurs when the provided nextToken is not valid. </p>
     InvalidNextToken(String),
-    ///<p>The requested resource does not exist, or access was denied. </p>
+    /// <p>The requested resource does not exist, or access was denied. </p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1304,7 +1304,7 @@ impl Error for DescribeEventsError {
 /// Errors returned by DescribeNodeAssociationStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeNodeAssociationStatusError {
-    ///<p>The requested resource does not exist, or access was denied. </p>
+    /// <p>The requested resource does not exist, or access was denied. </p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1386,9 +1386,9 @@ impl Error for DescribeNodeAssociationStatusError {
 /// Errors returned by DescribeServers
 #[derive(Debug, PartialEq)]
 pub enum DescribeServersError {
-    ///<p>This occurs when the provided nextToken is not valid. </p>
+    /// <p>This occurs when the provided nextToken is not valid. </p>
     InvalidNextToken(String),
-    ///<p>The requested resource does not exist, or access was denied. </p>
+    /// <p>The requested resource does not exist, or access was denied. </p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1470,9 +1470,9 @@ impl Error for DescribeServersError {
 /// Errors returned by DisassociateNode
 #[derive(Debug, PartialEq)]
 pub enum DisassociateNodeError {
-    ///<p>The resource is in a state that does not allow you to perform a specified action. </p>
+    /// <p>The resource is in a state that does not allow you to perform a specified action. </p>
     InvalidState(String),
-    ///<p>The requested resource does not exist, or access was denied. </p>
+    /// <p>The requested resource does not exist, or access was denied. </p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1554,9 +1554,9 @@ impl Error for DisassociateNodeError {
 /// Errors returned by RestoreServer
 #[derive(Debug, PartialEq)]
 pub enum RestoreServerError {
-    ///<p>The resource is in a state that does not allow you to perform a specified action. </p>
+    /// <p>The resource is in a state that does not allow you to perform a specified action. </p>
     InvalidState(String),
-    ///<p>The requested resource does not exist, or access was denied. </p>
+    /// <p>The requested resource does not exist, or access was denied. </p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1638,9 +1638,9 @@ impl Error for RestoreServerError {
 /// Errors returned by StartMaintenance
 #[derive(Debug, PartialEq)]
 pub enum StartMaintenanceError {
-    ///<p>The resource is in a state that does not allow you to perform a specified action. </p>
+    /// <p>The resource is in a state that does not allow you to perform a specified action. </p>
     InvalidState(String),
-    ///<p>The requested resource does not exist, or access was denied. </p>
+    /// <p>The requested resource does not exist, or access was denied. </p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1722,9 +1722,9 @@ impl Error for StartMaintenanceError {
 /// Errors returned by UpdateServer
 #[derive(Debug, PartialEq)]
 pub enum UpdateServerError {
-    ///<p>The resource is in a state that does not allow you to perform a specified action. </p>
+    /// <p>The resource is in a state that does not allow you to perform a specified action. </p>
     InvalidState(String),
-    ///<p>The requested resource does not exist, or access was denied. </p>
+    /// <p>The requested resource does not exist, or access was denied. </p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1806,9 +1806,9 @@ impl Error for UpdateServerError {
 /// Errors returned by UpdateServerEngineAttributes
 #[derive(Debug, PartialEq)]
 pub enum UpdateServerEngineAttributesError {
-    ///<p>The resource is in a state that does not allow you to perform a specified action. </p>
+    /// <p>The resource is in a state that does not allow you to perform a specified action. </p>
     InvalidState(String),
-    ///<p>The requested resource does not exist, or access was denied. </p>
+    /// <p>The requested resource does not exist, or access was denied. </p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1893,90 +1893,90 @@ impl Error for UpdateServerEngineAttributesError {
 }
 /// Trait representing the capabilities of the OpsWorksCM API. OpsWorksCM clients implement this trait.
 pub trait OpsWorksCM {
-    #[doc="<p> Associates a new node with the Chef server. This command is an alternative to <code>knife bootstrap</code>. For more information about how to disassociate a node, see <a>DisassociateNode</a>.</p> <p> A node can can only be associated with servers that are in a <code>HEALTHY</code> state. Otherwise, an <code>InvalidStateException</code> is thrown. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. The AssociateNode API call can be integrated into Auto Scaling configurations, AWS Cloudformation templates, or the user data of a server's instance. </p> <p> Example: <code>aws opsworks-cm associate-node --server-name <i>MyServer</i> --node-name <i>MyManagedNode</i> --engine-attributes \"Name=<i>MyOrganization</i>,Value=default\" \"Name=<i>Chef_node_public_key</i>,Value=<i>Public_key_contents</i>\"</code> </p>"]
+    /// <p> Associates a new node with the Chef server. This command is an alternative to <code>knife bootstrap</code>. For more information about how to disassociate a node, see <a>DisassociateNode</a>.</p> <p> A node can can only be associated with servers that are in a <code>HEALTHY</code> state. Otherwise, an <code>InvalidStateException</code> is thrown. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. The AssociateNode API call can be integrated into Auto Scaling configurations, AWS Cloudformation templates, or the user data of a server's instance. </p> <p> Example: <code>aws opsworks-cm associate-node --server-name <i>MyServer</i> --node-name <i>MyManagedNode</i> --engine-attributes "Name=<i>MyOrganization</i>,Value=default" "Name=<i>Chef_node_public_key</i>,Value=<i>Public_key_contents</i>"</code> </p>
     fn associate_node(
         &self,
         input: &AssociateNodeRequest,
     ) -> Result<AssociateNodeResponse, AssociateNodeError>;
 
-    #[doc="<p> Creates an application-level backup of a server. While the server is in the <code>BACKING_UP</code> state, the server cannot be changed, and no additional backup can be created. </p> <p> Backups can be created for servers in <code>RUNNING</code>, <code>HEALTHY</code>, and <code>UNHEALTHY</code> states. By default, you can create a maximum of 50 manual backups. </p> <p> This operation is asynchronous. </p> <p> A <code>LimitExceededException</code> is thrown when the maximum number of manual backups is reached. An <code>InvalidStateException</code> is thrown when the server is not in any of the following states: RUNNING, HEALTHY, or UNHEALTHY. A <code>ResourceNotFoundException</code> is thrown when the server is not found. A <code>ValidationException</code> is thrown when parameters of the request are not valid. </p>"]
+    /// <p> Creates an application-level backup of a server. While the server is in the <code>BACKING_UP</code> state, the server cannot be changed, and no additional backup can be created. </p> <p> Backups can be created for servers in <code>RUNNING</code>, <code>HEALTHY</code>, and <code>UNHEALTHY</code> states. By default, you can create a maximum of 50 manual backups. </p> <p> This operation is asynchronous. </p> <p> A <code>LimitExceededException</code> is thrown when the maximum number of manual backups is reached. An <code>InvalidStateException</code> is thrown when the server is not in any of the following states: RUNNING, HEALTHY, or UNHEALTHY. A <code>ResourceNotFoundException</code> is thrown when the server is not found. A <code>ValidationException</code> is thrown when parameters of the request are not valid. </p>
     fn create_backup(
         &self,
         input: &CreateBackupRequest,
     ) -> Result<CreateBackupResponse, CreateBackupError>;
 
-    #[doc="<p> Creates and immedately starts a new server. The server is ready to use when it is in the <code>HEALTHY</code> state. By default, you can create a maximum of 10 servers. </p> <p> This operation is asynchronous. </p> <p> A <code>LimitExceededException</code> is thrown when you have created the maximum number of servers (10). A <code>ResourceAlreadyExistsException</code> is thrown when a server with the same name already exists in the account. A <code>ResourceNotFoundException</code> is thrown when you specify a backup ID that is not valid or is for a backup that does not exist. A <code>ValidationException</code> is thrown when parameters of the request are not valid. </p> <p> If you do not specify a security group by adding the <code>SecurityGroupIds</code> parameter, AWS OpsWorks creates a new security group. The default security group opens the Chef server to the world on TCP port 443. If a KeyName is present, AWS OpsWorks enables SSH access. SSH is also open to the world on TCP port 22. </p> <p>By default, the Chef Server is accessible from any IP address. We recommend that you update your security group rules to allow access from known IP addresses and address ranges only. To edit security group rules, open Security Groups in the navigation pane of the EC2 management console. </p>"]
+    /// <p> Creates and immedately starts a new server. The server is ready to use when it is in the <code>HEALTHY</code> state. By default, you can create a maximum of 10 servers. </p> <p> This operation is asynchronous. </p> <p> A <code>LimitExceededException</code> is thrown when you have created the maximum number of servers (10). A <code>ResourceAlreadyExistsException</code> is thrown when a server with the same name already exists in the account. A <code>ResourceNotFoundException</code> is thrown when you specify a backup ID that is not valid or is for a backup that does not exist. A <code>ValidationException</code> is thrown when parameters of the request are not valid. </p> <p> If you do not specify a security group by adding the <code>SecurityGroupIds</code> parameter, AWS OpsWorks creates a new security group. The default security group opens the Chef server to the world on TCP port 443. If a KeyName is present, AWS OpsWorks enables SSH access. SSH is also open to the world on TCP port 22. </p> <p>By default, the Chef Server is accessible from any IP address. We recommend that you update your security group rules to allow access from known IP addresses and address ranges only. To edit security group rules, open Security Groups in the navigation pane of the EC2 management console. </p>
     fn create_server(
         &self,
         input: &CreateServerRequest,
     ) -> Result<CreateServerResponse, CreateServerError>;
 
-    #[doc="<p> Deletes a backup. You can delete both manual and automated backups. This operation is asynchronous. </p> <p> An <code>InvalidStateException</code> is thrown when a backup deletion is already in progress. A <code>ResourceNotFoundException</code> is thrown when the backup does not exist. A <code>ValidationException</code> is thrown when parameters of the request are not valid. </p>"]
+    /// <p> Deletes a backup. You can delete both manual and automated backups. This operation is asynchronous. </p> <p> An <code>InvalidStateException</code> is thrown when a backup deletion is already in progress. A <code>ResourceNotFoundException</code> is thrown when the backup does not exist. A <code>ValidationException</code> is thrown when parameters of the request are not valid. </p>
     fn delete_backup(
         &self,
         input: &DeleteBackupRequest,
     ) -> Result<DeleteBackupResponse, DeleteBackupError>;
 
-    #[doc="<p> Deletes the server and the underlying AWS CloudFormation stack (including the server's EC2 instance). When you run this command, the server state is updated to <code>DELETING</code>. After the server is deleted, it is no longer returned by <code>DescribeServer</code> requests. If the AWS CloudFormation stack cannot be deleted, the server cannot be deleted. </p> <p> This operation is asynchronous. </p> <p> An <code>InvalidStateException</code> is thrown when a server deletion is already in progress. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p> <p> </p>"]
+    /// <p> Deletes the server and the underlying AWS CloudFormation stack (including the server's EC2 instance). When you run this command, the server state is updated to <code>DELETING</code>. After the server is deleted, it is no longer returned by <code>DescribeServer</code> requests. If the AWS CloudFormation stack cannot be deleted, the server cannot be deleted. </p> <p> This operation is asynchronous. </p> <p> An <code>InvalidStateException</code> is thrown when a server deletion is already in progress. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p> <p> </p>
     fn delete_server(
         &self,
         input: &DeleteServerRequest,
     ) -> Result<DeleteServerResponse, DeleteServerError>;
 
-    #[doc="<p> Describes your account attributes, and creates requests to increase limits before they are reached or exceeded. </p> <p> This operation is synchronous. </p>"]
+    /// <p> Describes your account attributes, and creates requests to increase limits before they are reached or exceeded. </p> <p> This operation is synchronous. </p>
     fn describe_account_attributes(
         &self,
     ) -> Result<DescribeAccountAttributesResponse, DescribeAccountAttributesError>;
 
-    #[doc="<p> Describes backups. The results are ordered by time, with newest backups first. If you do not specify a BackupId or ServerName, the command returns all backups. </p> <p> This operation is synchronous. </p> <p> A <code>ResourceNotFoundException</code> is thrown when the backup does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>"]
+    /// <p> Describes backups. The results are ordered by time, with newest backups first. If you do not specify a BackupId or ServerName, the command returns all backups. </p> <p> This operation is synchronous. </p> <p> A <code>ResourceNotFoundException</code> is thrown when the backup does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>
     fn describe_backups(
         &self,
         input: &DescribeBackupsRequest,
     ) -> Result<DescribeBackupsResponse, DescribeBackupsError>;
 
-    #[doc="<p> Describes events for a specified server. Results are ordered by time, with newest events first. </p> <p> This operation is synchronous. </p> <p> A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>"]
+    /// <p> Describes events for a specified server. Results are ordered by time, with newest events first. </p> <p> This operation is synchronous. </p> <p> A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>
     fn describe_events(
         &self,
         input: &DescribeEventsRequest,
     ) -> Result<DescribeEventsResponse, DescribeEventsError>;
 
-    #[doc="<p> Returns the current status of an existing association or disassociation request. </p> <p> A <code>ResourceNotFoundException</code> is thrown when no recent association or disassociation request with the specified token is found, or when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>"]
+    /// <p> Returns the current status of an existing association or disassociation request. </p> <p> A <code>ResourceNotFoundException</code> is thrown when no recent association or disassociation request with the specified token is found, or when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>
     fn describe_node_association_status(
         &self,
         input: &DescribeNodeAssociationStatusRequest,
     ) -> Result<DescribeNodeAssociationStatusResponse, DescribeNodeAssociationStatusError>;
 
-    #[doc="<p> Lists all configuration management servers that are identified with your account. Only the stored results from Amazon DynamoDB are returned. AWS OpsWorks for Chef Automate does not query other services. </p> <p> This operation is synchronous. </p> <p> A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>"]
+    /// <p> Lists all configuration management servers that are identified with your account. Only the stored results from Amazon DynamoDB are returned. AWS OpsWorks for Chef Automate does not query other services. </p> <p> This operation is synchronous. </p> <p> A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>
     fn describe_servers(
         &self,
         input: &DescribeServersRequest,
     ) -> Result<DescribeServersResponse, DescribeServersError>;
 
-    #[doc="<p> Disassociates a node from a Chef server, and removes the node from the Chef server's managed nodes. After a node is disassociated, the node key pair is no longer valid for accessing the Chef API. For more information about how to associate a node, see <a>AssociateNode</a>. </p> <p>A node can can only be disassociated from a server that is in a <code>HEALTHY</code> state. Otherwise, an <code>InvalidStateException</code> is thrown. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>"]
+    /// <p> Disassociates a node from a Chef server, and removes the node from the Chef server's managed nodes. After a node is disassociated, the node key pair is no longer valid for accessing the Chef API. For more information about how to associate a node, see <a>AssociateNode</a>. </p> <p>A node can can only be disassociated from a server that is in a <code>HEALTHY</code> state. Otherwise, an <code>InvalidStateException</code> is thrown. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>
     fn disassociate_node(
         &self,
         input: &DisassociateNodeRequest,
     ) -> Result<DisassociateNodeResponse, DisassociateNodeError>;
 
-    #[doc="<p> Restores a backup to a server that is in a <code>CONNECTION_LOST</code>, <code>HEALTHY</code>, <code>RUNNING</code>, <code>UNHEALTHY</code>, or <code>TERMINATED</code> state. When you run RestoreServer, the server's EC2 instance is deleted, and a new EC2 instance is configured. RestoreServer maintains the existing server endpoint, so configuration management of the server's client devices (nodes) should continue to work. </p> <p> This operation is asynchronous. </p> <p> An <code>InvalidStateException</code> is thrown when the server is not in a valid state. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>"]
+    /// <p> Restores a backup to a server that is in a <code>CONNECTION_LOST</code>, <code>HEALTHY</code>, <code>RUNNING</code>, <code>UNHEALTHY</code>, or <code>TERMINATED</code> state. When you run RestoreServer, the server's EC2 instance is deleted, and a new EC2 instance is configured. RestoreServer maintains the existing server endpoint, so configuration management of the server's client devices (nodes) should continue to work. </p> <p> This operation is asynchronous. </p> <p> An <code>InvalidStateException</code> is thrown when the server is not in a valid state. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>
     fn restore_server(
         &self,
         input: &RestoreServerRequest,
     ) -> Result<RestoreServerResponse, RestoreServerError>;
 
-    #[doc="<p> Manually starts server maintenance. This command can be useful if an earlier maintenance attempt failed, and the underlying cause of maintenance failure has been resolved. The server is in an <code>UNDER_MAINTENANCE</code> state while maintenance is in progress. </p> <p> Maintenance can only be started on servers in <code>HEALTHY</code> and <code>UNHEALTHY</code> states. Otherwise, an <code>InvalidStateException</code> is thrown. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>"]
+    /// <p> Manually starts server maintenance. This command can be useful if an earlier maintenance attempt failed, and the underlying cause of maintenance failure has been resolved. The server is in an <code>UNDER_MAINTENANCE</code> state while maintenance is in progress. </p> <p> Maintenance can only be started on servers in <code>HEALTHY</code> and <code>UNHEALTHY</code> states. Otherwise, an <code>InvalidStateException</code> is thrown. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>
     fn start_maintenance(
         &self,
         input: &StartMaintenanceRequest,
     ) -> Result<StartMaintenanceResponse, StartMaintenanceError>;
 
-    #[doc = "<p> Updates settings for a server. </p> <p> This operation is synchronous. </p>"]
+    /// <p> Updates settings for a server. </p> <p> This operation is synchronous. </p>
     fn update_server(
         &self,
         input: &UpdateServerRequest,
     ) -> Result<UpdateServerResponse, UpdateServerError>;
 
-    #[doc="<p> Updates engine-specific attributes on a specified server. The server enters the <code>MODIFYING</code> state when this operation is in progress. Only one update can occur at a time. You can use this command to reset the Chef server's private key (<code>CHEF_PIVOTAL_KEY</code>). </p> <p> This operation is asynchronous. </p> <p> This operation can only be called for servers in <code>HEALTHY</code> or <code>UNHEALTHY</code> states. Otherwise, an <code>InvalidStateException</code> is raised. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>"]
+    /// <p> Updates engine-specific attributes on a specified server. The server enters the <code>MODIFYING</code> state when this operation is in progress. Only one update can occur at a time. You can use this command to reset the Chef server's private key (<code>CHEF_PIVOTAL_KEY</code>). </p> <p> This operation is asynchronous. </p> <p> This operation can only be called for servers in <code>HEALTHY</code> or <code>UNHEALTHY</code> states. Otherwise, an <code>InvalidStateException</code> is raised. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>
     fn update_server_engine_attributes(
         &self,
         input: &UpdateServerEngineAttributesRequest,
@@ -2012,7 +2012,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p> Associates a new node with the Chef server. This command is an alternative to <code>knife bootstrap</code>. For more information about how to disassociate a node, see <a>DisassociateNode</a>.</p> <p> A node can can only be associated with servers that are in a <code>HEALTHY</code> state. Otherwise, an <code>InvalidStateException</code> is thrown. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. The AssociateNode API call can be integrated into Auto Scaling configurations, AWS Cloudformation templates, or the user data of a server's instance. </p> <p> Example: <code>aws opsworks-cm associate-node --server-name <i>MyServer</i> --node-name <i>MyManagedNode</i> --engine-attributes \"Name=<i>MyOrganization</i>,Value=default\" \"Name=<i>Chef_node_public_key</i>,Value=<i>Public_key_contents</i>\"</code> </p>"]
+    /// <p> Associates a new node with the Chef server. This command is an alternative to <code>knife bootstrap</code>. For more information about how to disassociate a node, see <a>DisassociateNode</a>.</p> <p> A node can can only be associated with servers that are in a <code>HEALTHY</code> state. Otherwise, an <code>InvalidStateException</code> is thrown. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. The AssociateNode API call can be integrated into Auto Scaling configurations, AWS Cloudformation templates, or the user data of a server's instance. </p> <p> Example: <code>aws opsworks-cm associate-node --server-name <i>MyServer</i> --node-name <i>MyManagedNode</i> --engine-attributes "Name=<i>MyOrganization</i>,Value=default" "Name=<i>Chef_node_public_key</i>,Value=<i>Public_key_contents</i>"</code> </p>
     fn associate_node(
         &self,
         input: &AssociateNodeRequest,
@@ -2046,7 +2046,7 @@ where
         }
     }
 
-    #[doc="<p> Creates an application-level backup of a server. While the server is in the <code>BACKING_UP</code> state, the server cannot be changed, and no additional backup can be created. </p> <p> Backups can be created for servers in <code>RUNNING</code>, <code>HEALTHY</code>, and <code>UNHEALTHY</code> states. By default, you can create a maximum of 50 manual backups. </p> <p> This operation is asynchronous. </p> <p> A <code>LimitExceededException</code> is thrown when the maximum number of manual backups is reached. An <code>InvalidStateException</code> is thrown when the server is not in any of the following states: RUNNING, HEALTHY, or UNHEALTHY. A <code>ResourceNotFoundException</code> is thrown when the server is not found. A <code>ValidationException</code> is thrown when parameters of the request are not valid. </p>"]
+    /// <p> Creates an application-level backup of a server. While the server is in the <code>BACKING_UP</code> state, the server cannot be changed, and no additional backup can be created. </p> <p> Backups can be created for servers in <code>RUNNING</code>, <code>HEALTHY</code>, and <code>UNHEALTHY</code> states. By default, you can create a maximum of 50 manual backups. </p> <p> This operation is asynchronous. </p> <p> A <code>LimitExceededException</code> is thrown when the maximum number of manual backups is reached. An <code>InvalidStateException</code> is thrown when the server is not in any of the following states: RUNNING, HEALTHY, or UNHEALTHY. A <code>ResourceNotFoundException</code> is thrown when the server is not found. A <code>ValidationException</code> is thrown when parameters of the request are not valid. </p>
     fn create_backup(
         &self,
         input: &CreateBackupRequest,
@@ -2080,7 +2080,7 @@ where
         }
     }
 
-    #[doc="<p> Creates and immedately starts a new server. The server is ready to use when it is in the <code>HEALTHY</code> state. By default, you can create a maximum of 10 servers. </p> <p> This operation is asynchronous. </p> <p> A <code>LimitExceededException</code> is thrown when you have created the maximum number of servers (10). A <code>ResourceAlreadyExistsException</code> is thrown when a server with the same name already exists in the account. A <code>ResourceNotFoundException</code> is thrown when you specify a backup ID that is not valid or is for a backup that does not exist. A <code>ValidationException</code> is thrown when parameters of the request are not valid. </p> <p> If you do not specify a security group by adding the <code>SecurityGroupIds</code> parameter, AWS OpsWorks creates a new security group. The default security group opens the Chef server to the world on TCP port 443. If a KeyName is present, AWS OpsWorks enables SSH access. SSH is also open to the world on TCP port 22. </p> <p>By default, the Chef Server is accessible from any IP address. We recommend that you update your security group rules to allow access from known IP addresses and address ranges only. To edit security group rules, open Security Groups in the navigation pane of the EC2 management console. </p>"]
+    /// <p> Creates and immedately starts a new server. The server is ready to use when it is in the <code>HEALTHY</code> state. By default, you can create a maximum of 10 servers. </p> <p> This operation is asynchronous. </p> <p> A <code>LimitExceededException</code> is thrown when you have created the maximum number of servers (10). A <code>ResourceAlreadyExistsException</code> is thrown when a server with the same name already exists in the account. A <code>ResourceNotFoundException</code> is thrown when you specify a backup ID that is not valid or is for a backup that does not exist. A <code>ValidationException</code> is thrown when parameters of the request are not valid. </p> <p> If you do not specify a security group by adding the <code>SecurityGroupIds</code> parameter, AWS OpsWorks creates a new security group. The default security group opens the Chef server to the world on TCP port 443. If a KeyName is present, AWS OpsWorks enables SSH access. SSH is also open to the world on TCP port 22. </p> <p>By default, the Chef Server is accessible from any IP address. We recommend that you update your security group rules to allow access from known IP addresses and address ranges only. To edit security group rules, open Security Groups in the navigation pane of the EC2 management console. </p>
     fn create_server(
         &self,
         input: &CreateServerRequest,
@@ -2114,7 +2114,7 @@ where
         }
     }
 
-    #[doc="<p> Deletes a backup. You can delete both manual and automated backups. This operation is asynchronous. </p> <p> An <code>InvalidStateException</code> is thrown when a backup deletion is already in progress. A <code>ResourceNotFoundException</code> is thrown when the backup does not exist. A <code>ValidationException</code> is thrown when parameters of the request are not valid. </p>"]
+    /// <p> Deletes a backup. You can delete both manual and automated backups. This operation is asynchronous. </p> <p> An <code>InvalidStateException</code> is thrown when a backup deletion is already in progress. A <code>ResourceNotFoundException</code> is thrown when the backup does not exist. A <code>ValidationException</code> is thrown when parameters of the request are not valid. </p>
     fn delete_backup(
         &self,
         input: &DeleteBackupRequest,
@@ -2148,7 +2148,7 @@ where
         }
     }
 
-    #[doc="<p> Deletes the server and the underlying AWS CloudFormation stack (including the server's EC2 instance). When you run this command, the server state is updated to <code>DELETING</code>. After the server is deleted, it is no longer returned by <code>DescribeServer</code> requests. If the AWS CloudFormation stack cannot be deleted, the server cannot be deleted. </p> <p> This operation is asynchronous. </p> <p> An <code>InvalidStateException</code> is thrown when a server deletion is already in progress. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p> <p> </p>"]
+    /// <p> Deletes the server and the underlying AWS CloudFormation stack (including the server's EC2 instance). When you run this command, the server state is updated to <code>DELETING</code>. After the server is deleted, it is no longer returned by <code>DescribeServer</code> requests. If the AWS CloudFormation stack cannot be deleted, the server cannot be deleted. </p> <p> This operation is asynchronous. </p> <p> An <code>InvalidStateException</code> is thrown when a server deletion is already in progress. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p> <p> </p>
     fn delete_server(
         &self,
         input: &DeleteServerRequest,
@@ -2182,7 +2182,7 @@ where
         }
     }
 
-    #[doc="<p> Describes your account attributes, and creates requests to increase limits before they are reached or exceeded. </p> <p> This operation is synchronous. </p>"]
+    /// <p> Describes your account attributes, and creates requests to increase limits before they are reached or exceeded. </p> <p> This operation is synchronous. </p>
     fn describe_account_attributes(
         &self,
     ) -> Result<DescribeAccountAttributesResponse, DescribeAccountAttributesError> {
@@ -2217,7 +2217,7 @@ where
         }
     }
 
-    #[doc="<p> Describes backups. The results are ordered by time, with newest backups first. If you do not specify a BackupId or ServerName, the command returns all backups. </p> <p> This operation is synchronous. </p> <p> A <code>ResourceNotFoundException</code> is thrown when the backup does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>"]
+    /// <p> Describes backups. The results are ordered by time, with newest backups first. If you do not specify a BackupId or ServerName, the command returns all backups. </p> <p> This operation is synchronous. </p> <p> A <code>ResourceNotFoundException</code> is thrown when the backup does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>
     fn describe_backups(
         &self,
         input: &DescribeBackupsRequest,
@@ -2251,7 +2251,7 @@ where
         }
     }
 
-    #[doc="<p> Describes events for a specified server. Results are ordered by time, with newest events first. </p> <p> This operation is synchronous. </p> <p> A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>"]
+    /// <p> Describes events for a specified server. Results are ordered by time, with newest events first. </p> <p> This operation is synchronous. </p> <p> A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>
     fn describe_events(
         &self,
         input: &DescribeEventsRequest,
@@ -2285,7 +2285,7 @@ where
         }
     }
 
-    #[doc="<p> Returns the current status of an existing association or disassociation request. </p> <p> A <code>ResourceNotFoundException</code> is thrown when no recent association or disassociation request with the specified token is found, or when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>"]
+    /// <p> Returns the current status of an existing association or disassociation request. </p> <p> A <code>ResourceNotFoundException</code> is thrown when no recent association or disassociation request with the specified token is found, or when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>
     fn describe_node_association_status(
         &self,
         input: &DescribeNodeAssociationStatusRequest,
@@ -2324,7 +2324,7 @@ where
         }
     }
 
-    #[doc="<p> Lists all configuration management servers that are identified with your account. Only the stored results from Amazon DynamoDB are returned. AWS OpsWorks for Chef Automate does not query other services. </p> <p> This operation is synchronous. </p> <p> A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>"]
+    /// <p> Lists all configuration management servers that are identified with your account. Only the stored results from Amazon DynamoDB are returned. AWS OpsWorks for Chef Automate does not query other services. </p> <p> This operation is synchronous. </p> <p> A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>
     fn describe_servers(
         &self,
         input: &DescribeServersRequest,
@@ -2358,7 +2358,7 @@ where
         }
     }
 
-    #[doc="<p> Disassociates a node from a Chef server, and removes the node from the Chef server's managed nodes. After a node is disassociated, the node key pair is no longer valid for accessing the Chef API. For more information about how to associate a node, see <a>AssociateNode</a>. </p> <p>A node can can only be disassociated from a server that is in a <code>HEALTHY</code> state. Otherwise, an <code>InvalidStateException</code> is thrown. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>"]
+    /// <p> Disassociates a node from a Chef server, and removes the node from the Chef server's managed nodes. After a node is disassociated, the node key pair is no longer valid for accessing the Chef API. For more information about how to associate a node, see <a>AssociateNode</a>. </p> <p>A node can can only be disassociated from a server that is in a <code>HEALTHY</code> state. Otherwise, an <code>InvalidStateException</code> is thrown. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>
     fn disassociate_node(
         &self,
         input: &DisassociateNodeRequest,
@@ -2392,7 +2392,7 @@ where
         }
     }
 
-    #[doc="<p> Restores a backup to a server that is in a <code>CONNECTION_LOST</code>, <code>HEALTHY</code>, <code>RUNNING</code>, <code>UNHEALTHY</code>, or <code>TERMINATED</code> state. When you run RestoreServer, the server's EC2 instance is deleted, and a new EC2 instance is configured. RestoreServer maintains the existing server endpoint, so configuration management of the server's client devices (nodes) should continue to work. </p> <p> This operation is asynchronous. </p> <p> An <code>InvalidStateException</code> is thrown when the server is not in a valid state. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>"]
+    /// <p> Restores a backup to a server that is in a <code>CONNECTION_LOST</code>, <code>HEALTHY</code>, <code>RUNNING</code>, <code>UNHEALTHY</code>, or <code>TERMINATED</code> state. When you run RestoreServer, the server's EC2 instance is deleted, and a new EC2 instance is configured. RestoreServer maintains the existing server endpoint, so configuration management of the server's client devices (nodes) should continue to work. </p> <p> This operation is asynchronous. </p> <p> An <code>InvalidStateException</code> is thrown when the server is not in a valid state. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>
     fn restore_server(
         &self,
         input: &RestoreServerRequest,
@@ -2426,7 +2426,7 @@ where
         }
     }
 
-    #[doc="<p> Manually starts server maintenance. This command can be useful if an earlier maintenance attempt failed, and the underlying cause of maintenance failure has been resolved. The server is in an <code>UNDER_MAINTENANCE</code> state while maintenance is in progress. </p> <p> Maintenance can only be started on servers in <code>HEALTHY</code> and <code>UNHEALTHY</code> states. Otherwise, an <code>InvalidStateException</code> is thrown. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>"]
+    /// <p> Manually starts server maintenance. This command can be useful if an earlier maintenance attempt failed, and the underlying cause of maintenance failure has been resolved. The server is in an <code>UNDER_MAINTENANCE</code> state while maintenance is in progress. </p> <p> Maintenance can only be started on servers in <code>HEALTHY</code> and <code>UNHEALTHY</code> states. Otherwise, an <code>InvalidStateException</code> is thrown. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>
     fn start_maintenance(
         &self,
         input: &StartMaintenanceRequest,
@@ -2460,7 +2460,7 @@ where
         }
     }
 
-    #[doc = "<p> Updates settings for a server. </p> <p> This operation is synchronous. </p>"]
+    /// <p> Updates settings for a server. </p> <p> This operation is synchronous. </p>
     fn update_server(
         &self,
         input: &UpdateServerRequest,
@@ -2494,7 +2494,7 @@ where
         }
     }
 
-    #[doc="<p> Updates engine-specific attributes on a specified server. The server enters the <code>MODIFYING</code> state when this operation is in progress. Only one update can occur at a time. You can use this command to reset the Chef server's private key (<code>CHEF_PIVOTAL_KEY</code>). </p> <p> This operation is asynchronous. </p> <p> This operation can only be called for servers in <code>HEALTHY</code> or <code>UNHEALTHY</code> states. Otherwise, an <code>InvalidStateException</code> is raised. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>"]
+    /// <p> Updates engine-specific attributes on a specified server. The server enters the <code>MODIFYING</code> state when this operation is in progress. Only one update can occur at a time. You can use this command to reset the Chef server's private key (<code>CHEF_PIVOTAL_KEY</code>). </p> <p> This operation is asynchronous. </p> <p> This operation can only be called for servers in <code>HEALTHY</code> or <code>UNHEALTHY</code> states. Otherwise, an <code>InvalidStateException</code> is raised. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>
     fn update_server_engine_attributes(
         &self,
         input: &UpdateServerEngineAttributesRequest,

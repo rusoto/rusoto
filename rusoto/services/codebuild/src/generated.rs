@@ -80,7 +80,7 @@ pub struct Build {
     #[serde(rename = "buildComplete")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub build_complete: Option<bool>,
-    /// <p>The current status of the build. Valid values include:</p> <ul> <li> <p> <code>FAILED</code>: The build failed.</p> </li> <li> <p> <code>FAULT</code>: The build faulted.</p> </li> <li> <p> <code>IN_PROGRESS</code>: The build is still in progress.</p> </li> <li> <p> <code>STOPPED</code>: The build stopped.</p> </li> <li> <p> <code>SUCCEEDED</code>: The build succeeded.</p> </li> <li> <p> <code>TIMED_OUT</code>: The build timed out.</p> </li> </ul>
+    /// <p><p>The current status of the build. Valid values include:</p> <ul> <li> <p> <code>FAILED</code>: The build failed.</p> </li> <li> <p> <code>FAULT</code>: The build faulted.</p> </li> <li> <p> <code>IN<em>PROGRESS</code>: The build is still in progress.</p> </li> <li> <p> <code>STOPPED</code>: The build stopped.</p> </li> <li> <p> <code>SUCCEEDED</code>: The build succeeded.</p> </li> <li> <p> <code>TIMED</em>OUT</code>: The build timed out.</p> </li> </ul></p>
     #[serde(rename = "buildStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub build_status: Option<String>,
@@ -100,7 +100,7 @@ pub struct Build {
     #[serde(rename = "id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The entity that started the build. Valid values include:</p> <ul> <li> <p>If AWS CodePipeline started the build, the pipeline's name (for example, <code>codepipeline/my-demo-pipeline</code>).</p> </li> <li> <p>If an AWS Identity and Access Management (IAM) user started the build, the user's name (for example <code>MyUserName</code>).</p> </li> <li> <p>If the Jenkins plugin for AWS CodeBuild started the build, the string <code>CodeBuild-Jenkins-Plugin</code>.</p> </li> </ul>
+    /// <p><p>The entity that started the build. Valid values include:</p> <ul> <li> <p>If AWS CodePipeline started the build, the pipeline&#39;s name (for example, <code>codepipeline/my-demo-pipeline</code>).</p> </li> <li> <p>If an AWS Identity and Access Management (IAM) user started the build, the user&#39;s name (for example <code>MyUserName</code>).</p> </li> <li> <p>If the Jenkins plugin for AWS CodeBuild started the build, the string <code>CodeBuild-Jenkins-Plugin</code>.</p> </li> </ul></p>
     #[serde(rename = "initiator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub initiator: Option<String>,
@@ -141,11 +141,11 @@ pub struct BuildArtifacts {
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
-    /// <p>The MD5 hash of the build artifact.</p> <p>You can use this hash along with a checksum tool to confirm both file integrity and authenticity.</p> <note> <p>This value is available only if the build project's <code>packaging</code> value is set to <code>ZIP</code>.</p> </note>
+    /// <p><p>The MD5 hash of the build artifact.</p> <p>You can use this hash along with a checksum tool to confirm both file integrity and authenticity.</p> <note> <p>This value is available only if the build project&#39;s <code>packaging</code> value is set to <code>ZIP</code>.</p> </note></p>
     #[serde(rename = "md5sum")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub md_5sum: Option<String>,
-    /// <p>The SHA-256 hash of the build artifact.</p> <p>You can use this hash along with a checksum tool to confirm both file integrity and authenticity.</p> <note> <p>This value is available only if the build project's <code>packaging</code> value is set to <code>ZIP</code>.</p> </note>
+    /// <p><p>The SHA-256 hash of the build artifact.</p> <p>You can use this hash along with a checksum tool to confirm both file integrity and authenticity.</p> <note> <p>This value is available only if the build project&#39;s <code>packaging</code> value is set to <code>ZIP</code>.</p> </note></p>
     #[serde(rename = "sha256sum")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sha_25_6sum: Option<String>,
@@ -166,11 +166,11 @@ pub struct BuildPhase {
     #[serde(rename = "endTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
-    /// <p>The current status of the build phase. Valid values include:</p> <ul> <li> <p> <code>FAILED</code>: The build phase failed.</p> </li> <li> <p> <code>FAULT</code>: The build phase faulted.</p> </li> <li> <p> <code>IN_PROGRESS</code>: The build phase is still in progress.</p> </li> <li> <p> <code>STOPPED</code>: The build phase stopped.</p> </li> <li> <p> <code>SUCCEEDED</code>: The build phase succeeded.</p> </li> <li> <p> <code>TIMED_OUT</code>: The build phase timed out.</p> </li> </ul>
+    /// <p><p>The current status of the build phase. Valid values include:</p> <ul> <li> <p> <code>FAILED</code>: The build phase failed.</p> </li> <li> <p> <code>FAULT</code>: The build phase faulted.</p> </li> <li> <p> <code>IN<em>PROGRESS</code>: The build phase is still in progress.</p> </li> <li> <p> <code>STOPPED</code>: The build phase stopped.</p> </li> <li> <p> <code>SUCCEEDED</code>: The build phase succeeded.</p> </li> <li> <p> <code>TIMED</em>OUT</code>: The build phase timed out.</p> </li> </ul></p>
     #[serde(rename = "phaseStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub phase_status: Option<String>,
-    /// <p>The name of the build phase. Valid values include:</p> <ul> <li> <p> <code>BUILD</code>: Core build activities typically occur in this build phase.</p> </li> <li> <p> <code>COMPLETED</code>: The build has been completed.</p> </li> <li> <p> <code>DOWNLOAD_SOURCE</code>: Source code is being downloaded in this build phase.</p> </li> <li> <p> <code>FINALIZING</code>: The build process is completing in this build phase.</p> </li> <li> <p> <code>INSTALL</code>: Installation activities typically occur in this build phase.</p> </li> <li> <p> <code>POST_BUILD</code>: Post-build activities typically occur in this build phase.</p> </li> <li> <p> <code>PRE_BUILD</code>: Pre-build activities typically occur in this build phase.</p> </li> <li> <p> <code>PROVISIONING</code>: The build environment is being set up.</p> </li> <li> <p> <code>SUBMITTED</code>: The build has been submitted.</p> </li> <li> <p> <code>UPLOAD_ARTIFACTS</code>: Build output artifacts are being uploaded to the output location.</p> </li> </ul>
+    /// <p><p>The name of the build phase. Valid values include:</p> <ul> <li> <p> <code>BUILD</code>: Core build activities typically occur in this build phase.</p> </li> <li> <p> <code>COMPLETED</code>: The build has been completed.</p> </li> <li> <p> <code>DOWNLOAD<em>SOURCE</code>: Source code is being downloaded in this build phase.</p> </li> <li> <p> <code>FINALIZING</code>: The build process is completing in this build phase.</p> </li> <li> <p> <code>INSTALL</code>: Installation activities typically occur in this build phase.</p> </li> <li> <p> <code>POST</em>BUILD</code>: Post-build activities typically occur in this build phase.</p> </li> <li> <p> <code>PRE<em>BUILD</code>: Pre-build activities typically occur in this build phase.</p> </li> <li> <p> <code>PROVISIONING</code>: The build environment is being set up.</p> </li> <li> <p> <code>SUBMITTED</code>: The build has been submitted.</p> </li> <li> <p> <code>UPLOAD</em>ARTIFACTS</code>: Build output artifacts are being uploaded to the output location.</p> </li> </ul></p>
     #[serde(rename = "phaseType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub phase_type: Option<String>,
@@ -279,7 +279,7 @@ pub struct EnvironmentVariable {
     /// <p>The name or key of the environment variable.</p>
     #[serde(rename = "name")]
     pub name: String,
-    /// <p>The value of the environment variable.</p> <important> <p>We strongly discourage using environment variables to store sensitive values, especially AWS secret key IDs and secret access keys. Environment variables can be displayed in plain text using tools such as the AWS CodeBuild console and the AWS Command Line Interface (AWS CLI).</p> </important>
+    /// <p><p>The value of the environment variable.</p> <important> <p>We strongly discourage using environment variables to store sensitive values, especially AWS secret key IDs and secret access keys. Environment variables can be displayed in plain text using tools such as the AWS CodeBuild console and the AWS Command Line Interface (AWS CLI).</p> </important></p>
     #[serde(rename = "value")]
     pub value: String,
 }
@@ -293,7 +293,7 @@ pub struct ListBuildsForProjectInput {
     /// <p>The name of the build project.</p>
     #[serde(rename = "projectName")]
     pub project_name: String,
-    /// <p>The order to list build IDs. Valid values include:</p> <ul> <li> <p> <code>ASCENDING</code>: List the build IDs in ascending order by build ID.</p> </li> <li> <p> <code>DESCENDING</code>: List the build IDs in descending order by build ID.</p> </li> </ul>
+    /// <p><p>The order to list build IDs. Valid values include:</p> <ul> <li> <p> <code>ASCENDING</code>: List the build IDs in ascending order by build ID.</p> </li> <li> <p> <code>DESCENDING</code>: List the build IDs in descending order by build ID.</p> </li> </ul></p>
     #[serde(rename = "sortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sort_order: Option<String>,
@@ -317,7 +317,7 @@ pub struct ListBuildsInput {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The order to list build IDs. Valid values include:</p> <ul> <li> <p> <code>ASCENDING</code>: List the build IDs in ascending order by build ID.</p> </li> <li> <p> <code>DESCENDING</code>: List the build IDs in descending order by build ID.</p> </li> </ul>
+    /// <p><p>The order to list build IDs. Valid values include:</p> <ul> <li> <p> <code>ASCENDING</code>: List the build IDs in ascending order by build ID.</p> </li> <li> <p> <code>DESCENDING</code>: List the build IDs in descending order by build ID.</p> </li> </ul></p>
     #[serde(rename = "sortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sort_order: Option<String>,
@@ -460,7 +460,7 @@ pub struct Project {
 /// <p>Information about the build output artifacts for the build project.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ProjectArtifacts {
-    /// <p>Information about the build output artifact location, as follows:</p> <ul> <li> <p>If <code>type</code> is set to <code>CODEPIPELINE</code>, then AWS CodePipeline will ignore this value if specified. This is because AWS CodePipeline manages its build output locations instead of AWS CodeBuild.</p> </li> <li> <p>If <code>type</code> is set to <code>NO_ARTIFACTS</code>, then this value will be ignored if specified, because no build output will be produced.</p> </li> <li> <p>If <code>type</code> is set to <code>S3</code>, this is the name of the output bucket.</p> </li> </ul>
+    /// <p><p>Information about the build output artifact location, as follows:</p> <ul> <li> <p>If <code>type</code> is set to <code>CODEPIPELINE</code>, then AWS CodePipeline will ignore this value if specified. This is because AWS CodePipeline manages its build output locations instead of AWS CodeBuild.</p> </li> <li> <p>If <code>type</code> is set to <code>NO_ARTIFACTS</code>, then this value will be ignored if specified, because no build output will be produced.</p> </li> <li> <p>If <code>type</code> is set to <code>S3</code>, this is the name of the output bucket.</p> </li> </ul></p>
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
@@ -472,7 +472,7 @@ pub struct ProjectArtifacts {
     #[serde(rename = "namespaceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub namespace_type: Option<String>,
-    /// <p>The type of build output artifact to create, as follows:</p> <ul> <li> <p>If <code>type</code> is set to <code>CODEPIPELINE</code>, then AWS CodePipeline will ignore this value if specified. This is because AWS CodePipeline manages its build output artifacts instead of AWS CodeBuild.</p> </li> <li> <p>If <code>type</code> is set to <code>NO_ARTIFACTS</code>, then this value will be ignored if specified, because no build output will be produced.</p> </li> <li> <p>If <code>type</code> is set to <code>S3</code>, valid values include:</p> <ul> <li> <p> <code>NONE</code>: AWS CodeBuild will create in the output bucket a folder containing the build output. This is the default if <code>packaging</code> is not specified.</p> </li> <li> <p> <code>ZIP</code>: AWS CodeBuild will create in the output bucket a ZIP file containing the build output.</p> </li> </ul> </li> </ul>
+    /// <p><p>The type of build output artifact to create, as follows:</p> <ul> <li> <p>If <code>type</code> is set to <code>CODEPIPELINE</code>, then AWS CodePipeline will ignore this value if specified. This is because AWS CodePipeline manages its build output artifacts instead of AWS CodeBuild.</p> </li> <li> <p>If <code>type</code> is set to <code>NO_ARTIFACTS</code>, then this value will be ignored if specified, because no build output will be produced.</p> </li> <li> <p>If <code>type</code> is set to <code>S3</code>, valid values include:</p> <ul> <li> <p> <code>NONE</code>: AWS CodeBuild will create in the output bucket a folder containing the build output. This is the default if <code>packaging</code> is not specified.</p> </li> <li> <p> <code>ZIP</code>: AWS CodeBuild will create in the output bucket a ZIP file containing the build output.</p> </li> </ul> </li> </ul></p>
     #[serde(rename = "packaging")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub packaging: Option<String>,
@@ -480,7 +480,7 @@ pub struct ProjectArtifacts {
     #[serde(rename = "path")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub path: Option<String>,
-    /// <p>The type of build output artifact. Valid values include:</p> <ul> <li> <p> <code>CODEPIPELINE</code>: The build project will have build output generated through AWS CodePipeline.</p> </li> <li> <p> <code>NO_ARTIFACTS</code>: The build project will not produce any build output.</p> </li> <li> <p> <code>S3</code>: The build project will store build output in Amazon Simple Storage Service (Amazon S3).</p> </li> </ul>
+    /// <p><p>The type of build output artifact. Valid values include:</p> <ul> <li> <p> <code>CODEPIPELINE</code>: The build project will have build output generated through AWS CodePipeline.</p> </li> <li> <p> <code>NO_ARTIFACTS</code>: The build project will not produce any build output.</p> </li> <li> <p> <code>S3</code>: The build project will store build output in Amazon Simple Storage Service (Amazon S3).</p> </li> </ul></p>
     #[serde(rename = "type")]
     pub type_: String,
 }
@@ -488,7 +488,7 @@ pub struct ProjectArtifacts {
 /// <p>Information about the build environment of the build project.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ProjectEnvironment {
-    /// <p>Information about the compute resources the build project will use. Available values include:</p> <ul> <li> <p> <code>BUILD_GENERAL1_SMALL</code>: Use up to 3 GB memory and 2 vCPUs for builds.</p> </li> <li> <p> <code>BUILD_GENERAL1_MEDIUM</code>: Use up to 7 GB memory and 4 vCPUs for builds.</p> </li> <li> <p> <code>BUILD_GENERAL1_LARGE</code>: Use up to 15 GB memory and 8 vCPUs for builds.</p> </li> </ul>
+    /// <p><p>Information about the compute resources the build project will use. Available values include:</p> <ul> <li> <p> <code>BUILD<em>GENERAL1</em>SMALL</code>: Use up to 3 GB memory and 2 vCPUs for builds.</p> </li> <li> <p> <code>BUILD<em>GENERAL1</em>MEDIUM</code>: Use up to 7 GB memory and 4 vCPUs for builds.</p> </li> <li> <p> <code>BUILD<em>GENERAL1</em>LARGE</code>: Use up to 15 GB memory and 8 vCPUs for builds.</p> </li> </ul></p>
     #[serde(rename = "computeType")]
     pub compute_type: String,
     /// <p>A set of environment variables to make available to builds for this build project.</p>
@@ -518,11 +518,11 @@ pub struct ProjectSource {
     #[serde(rename = "buildspec")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub buildspec: Option<String>,
-    /// <p>Information about the location of the source code to be built. Valid values include:</p> <ul> <li> <p>For source code settings that are specified in the source action of a pipeline in AWS CodePipeline, <code>location</code> should not be specified. If it is specified, AWS CodePipeline will ignore it. This is because AWS CodePipeline uses the settings in a pipeline's source action instead of this value.</p> </li> <li> <p>For source code in an AWS CodeCommit repository, the HTTPS clone URL to the repository that contains the source code and the build spec (for example, <code>https://git-codecommit.<i>region-ID</i>.amazonaws.com/v1/repos/<i>repo-name</i> </code>).</p> </li> <li> <p>For source code in an Amazon Simple Storage Service (Amazon S3) input bucket, the path to the ZIP file that contains the source code (for example, <code> <i>bucket-name</i>/<i>path</i>/<i>to</i>/<i>object-name</i>.zip</code>)</p> </li> <li> <p>For source code in a GitHub repository, the HTTPS clone URL to the repository that contains the source and the build spec. Also, you must connect your AWS account to your GitHub account. To do this, use the AWS CodeBuild console to begin creating a build project. When you use the console to connect (or reconnect) with GitHub, on the GitHub <b>Authorize application</b> page that displays, for <b>Organization access</b>, choose <b>Request access</b> next to each repository you want to allow AWS CodeBuild to have access to. Then choose <b>Authorize application</b>. (After you have connected to your GitHub account, you do not need to finish creating the build project, and you may then leave the AWS CodeBuild console.) To instruct AWS CodeBuild to then use this connection, in the <code>source</code> object, set the <code>auth</code> object's <code>type</code> value to <code>OAUTH</code>.</p> </li> </ul>
+    /// <p><p>Information about the location of the source code to be built. Valid values include:</p> <ul> <li> <p>For source code settings that are specified in the source action of a pipeline in AWS CodePipeline, <code>location</code> should not be specified. If it is specified, AWS CodePipeline will ignore it. This is because AWS CodePipeline uses the settings in a pipeline&#39;s source action instead of this value.</p> </li> <li> <p>For source code in an AWS CodeCommit repository, the HTTPS clone URL to the repository that contains the source code and the build spec (for example, <code>https://git-codecommit.<i>region-ID</i>.amazonaws.com/v1/repos/<i>repo-name</i> </code>).</p> </li> <li> <p>For source code in an Amazon Simple Storage Service (Amazon S3) input bucket, the path to the ZIP file that contains the source code (for example, <code> <i>bucket-name</i>/<i>path</i>/<i>to</i>/<i>object-name</i>.zip</code>)</p> </li> <li> <p>For source code in a GitHub repository, the HTTPS clone URL to the repository that contains the source and the build spec. Also, you must connect your AWS account to your GitHub account. To do this, use the AWS CodeBuild console to begin creating a build project. When you use the console to connect (or reconnect) with GitHub, on the GitHub <b>Authorize application</b> page that displays, for <b>Organization access</b>, choose <b>Request access</b> next to each repository you want to allow AWS CodeBuild to have access to. Then choose <b>Authorize application</b>. (After you have connected to your GitHub account, you do not need to finish creating the build project, and you may then leave the AWS CodeBuild console.) To instruct AWS CodeBuild to then use this connection, in the <code>source</code> object, set the <code>auth</code> object&#39;s <code>type</code> value to <code>OAUTH</code>.</p> </li> </ul></p>
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
-    /// <p>The type of repository that contains the source code to be built. Valid values include:</p> <ul> <li> <p> <code>CODECOMMIT</code>: The source code is in an AWS CodeCommit repository.</p> </li> <li> <p> <code>CODEPIPELINE</code>: The source code settings are specified in the source action of a pipeline in AWS CodePipeline.</p> </li> <li> <p> <code>GITHUB</code>: The source code is in a GitHub repository.</p> </li> <li> <p> <code>S3</code>: The source code is in an Amazon Simple Storage Service (Amazon S3) input bucket.</p> </li> </ul>
+    /// <p><p>The type of repository that contains the source code to be built. Valid values include:</p> <ul> <li> <p> <code>CODECOMMIT</code>: The source code is in an AWS CodeCommit repository.</p> </li> <li> <p> <code>CODEPIPELINE</code>: The source code settings are specified in the source action of a pipeline in AWS CodePipeline.</p> </li> <li> <p> <code>GITHUB</code>: The source code is in a GitHub repository.</p> </li> <li> <p> <code>S3</code>: The source code is in an Amazon Simple Storage Service (Amazon S3) input bucket.</p> </li> </ul></p>
     #[serde(rename = "type")]
     pub type_: String,
 }
@@ -556,7 +556,7 @@ pub struct StartBuildInput {
     /// <p>The name of the build project to start running a build.</p>
     #[serde(rename = "projectName")]
     pub project_name: String,
-    /// <p>A version of the build input to be built, for this build only. If not specified, the latest version will be used. If specified, must be one of:</p> <ul> <li> <p>For AWS CodeCommit or GitHub: the commit ID to use.</p> </li> <li> <p>For Amazon Simple Storage Service (Amazon S3): the version ID of the object representing the build input ZIP file to use.</p> </li> </ul>
+    /// <p><p>A version of the build input to be built, for this build only. If not specified, the latest version will be used. If specified, must be one of:</p> <ul> <li> <p>For AWS CodeCommit or GitHub: the commit ID to use.</p> </li> <li> <p>For Amazon Simple Storage Service (Amazon S3): the version ID of the object representing the build input ZIP file to use.</p> </li> </ul></p>
     #[serde(rename = "sourceVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_version: Option<String>,
@@ -620,7 +620,7 @@ pub struct UpdateProjectInput {
     #[serde(rename = "environment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub environment: Option<ProjectEnvironment>,
-    /// <p>The name of the build project.</p> <note> <p>You cannot change a build project's name.</p> </note>
+    /// <p><p>The name of the build project.</p> <note> <p>You cannot change a build project&#39;s name.</p> </note></p>
     #[serde(rename = "name")]
     pub name: String,
     /// <p>The replacement ARN of the AWS Identity and Access Management (IAM) role that enables AWS CodeBuild to interact with dependent AWS services on behalf of the AWS account.</p>
@@ -652,7 +652,7 @@ pub struct UpdateProjectOutput {
 /// Errors returned by BatchGetBuilds
 #[derive(Debug, PartialEq)]
 pub enum BatchGetBuildsError {
-    ///<p>The input value that was provided is not valid.</p>
+    /// <p>The input value that was provided is not valid.</p>
     InvalidInput(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -730,7 +730,7 @@ impl Error for BatchGetBuildsError {
 /// Errors returned by BatchGetProjects
 #[derive(Debug, PartialEq)]
 pub enum BatchGetProjectsError {
-    ///<p>The input value that was provided is not valid.</p>
+    /// <p>The input value that was provided is not valid.</p>
     InvalidInput(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -808,11 +808,11 @@ impl Error for BatchGetProjectsError {
 /// Errors returned by CreateProject
 #[derive(Debug, PartialEq)]
 pub enum CreateProjectError {
-    ///<p>An AWS service limit was exceeded for the calling AWS account.</p>
+    /// <p>An AWS service limit was exceeded for the calling AWS account.</p>
     AccountLimitExceeded(String),
-    ///<p>The input value that was provided is not valid.</p>
+    /// <p>The input value that was provided is not valid.</p>
     InvalidInput(String),
-    ///<p>The specified AWS resource cannot be created, because an AWS resource with the same settings already exists.</p>
+    /// <p>The specified AWS resource cannot be created, because an AWS resource with the same settings already exists.</p>
     ResourceAlreadyExists(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -898,7 +898,7 @@ impl Error for CreateProjectError {
 /// Errors returned by DeleteProject
 #[derive(Debug, PartialEq)]
 pub enum DeleteProjectError {
-    ///<p>The input value that was provided is not valid.</p>
+    /// <p>The input value that was provided is not valid.</p>
     InvalidInput(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -976,7 +976,7 @@ impl Error for DeleteProjectError {
 /// Errors returned by ListBuilds
 #[derive(Debug, PartialEq)]
 pub enum ListBuildsError {
-    ///<p>The input value that was provided is not valid.</p>
+    /// <p>The input value that was provided is not valid.</p>
     InvalidInput(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1052,9 +1052,9 @@ impl Error for ListBuildsError {
 /// Errors returned by ListBuildsForProject
 #[derive(Debug, PartialEq)]
 pub enum ListBuildsForProjectError {
-    ///<p>The input value that was provided is not valid.</p>
+    /// <p>The input value that was provided is not valid.</p>
     InvalidInput(String),
-    ///<p>The specified AWS resource cannot be found.</p>
+    /// <p>The specified AWS resource cannot be found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1212,7 +1212,7 @@ impl Error for ListCuratedEnvironmentImagesError {
 /// Errors returned by ListProjects
 #[derive(Debug, PartialEq)]
 pub enum ListProjectsError {
-    ///<p>The input value that was provided is not valid.</p>
+    /// <p>The input value that was provided is not valid.</p>
     InvalidInput(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1290,11 +1290,11 @@ impl Error for ListProjectsError {
 /// Errors returned by StartBuild
 #[derive(Debug, PartialEq)]
 pub enum StartBuildError {
-    ///<p>An AWS service limit was exceeded for the calling AWS account.</p>
+    /// <p>An AWS service limit was exceeded for the calling AWS account.</p>
     AccountLimitExceeded(String),
-    ///<p>The input value that was provided is not valid.</p>
+    /// <p>The input value that was provided is not valid.</p>
     InvalidInput(String),
-    ///<p>The specified AWS resource cannot be found.</p>
+    /// <p>The specified AWS resource cannot be found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1378,9 +1378,9 @@ impl Error for StartBuildError {
 /// Errors returned by StopBuild
 #[derive(Debug, PartialEq)]
 pub enum StopBuildError {
-    ///<p>The input value that was provided is not valid.</p>
+    /// <p>The input value that was provided is not valid.</p>
     InvalidInput(String),
-    ///<p>The specified AWS resource cannot be found.</p>
+    /// <p>The specified AWS resource cannot be found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1460,9 +1460,9 @@ impl Error for StopBuildError {
 /// Errors returned by UpdateProject
 #[derive(Debug, PartialEq)]
 pub enum UpdateProjectError {
-    ///<p>The input value that was provided is not valid.</p>
+    /// <p>The input value that was provided is not valid.</p>
     InvalidInput(String),
-    ///<p>The specified AWS resource cannot be found.</p>
+    /// <p>The specified AWS resource cannot be found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1543,57 +1543,57 @@ impl Error for UpdateProjectError {
 }
 /// Trait representing the capabilities of the AWS CodeBuild API. AWS CodeBuild clients implement this trait.
 pub trait CodeBuild {
-    #[doc = "<p>Gets information about builds.</p>"]
+    /// <p>Gets information about builds.</p>
     fn batch_get_builds(
         &self,
         input: &BatchGetBuildsInput,
     ) -> Result<BatchGetBuildsOutput, BatchGetBuildsError>;
 
-    #[doc = "<p>Gets information about build projects.</p>"]
+    /// <p>Gets information about build projects.</p>
     fn batch_get_projects(
         &self,
         input: &BatchGetProjectsInput,
     ) -> Result<BatchGetProjectsOutput, BatchGetProjectsError>;
 
-    #[doc = "<p>Creates a build project.</p>"]
+    /// <p>Creates a build project.</p>
     fn create_project(
         &self,
         input: &CreateProjectInput,
     ) -> Result<CreateProjectOutput, CreateProjectError>;
 
-    #[doc = "<p>Deletes a build project.</p>"]
+    /// <p>Deletes a build project.</p>
     fn delete_project(
         &self,
         input: &DeleteProjectInput,
     ) -> Result<DeleteProjectOutput, DeleteProjectError>;
 
-    #[doc = "<p>Gets a list of build IDs, with each build ID representing a single build.</p>"]
+    /// <p>Gets a list of build IDs, with each build ID representing a single build.</p>
     fn list_builds(&self, input: &ListBuildsInput) -> Result<ListBuildsOutput, ListBuildsError>;
 
-    #[doc="<p>Gets a list of build IDs for the specified build project, with each build ID representing a single build.</p>"]
+    /// <p>Gets a list of build IDs for the specified build project, with each build ID representing a single build.</p>
     fn list_builds_for_project(
         &self,
         input: &ListBuildsForProjectInput,
     ) -> Result<ListBuildsForProjectOutput, ListBuildsForProjectError>;
 
-    #[doc = "<p>Gets information about Docker images that are managed by AWS CodeBuild.</p>"]
+    /// <p>Gets information about Docker images that are managed by AWS CodeBuild.</p>
     fn list_curated_environment_images(
         &self,
     ) -> Result<ListCuratedEnvironmentImagesOutput, ListCuratedEnvironmentImagesError>;
 
-    #[doc="<p>Gets a list of build project names, with each build project name representing a single build project.</p>"]
+    /// <p>Gets a list of build project names, with each build project name representing a single build project.</p>
     fn list_projects(
         &self,
         input: &ListProjectsInput,
     ) -> Result<ListProjectsOutput, ListProjectsError>;
 
-    #[doc = "<p>Starts running a build.</p>"]
+    /// <p>Starts running a build.</p>
     fn start_build(&self, input: &StartBuildInput) -> Result<StartBuildOutput, StartBuildError>;
 
-    #[doc = "<p>Attempts to stop running a build.</p>"]
+    /// <p>Attempts to stop running a build.</p>
     fn stop_build(&self, input: &StopBuildInput) -> Result<StopBuildOutput, StopBuildError>;
 
-    #[doc = "<p>Changes the settings of a build project.</p>"]
+    /// <p>Changes the settings of a build project.</p>
     fn update_project(
         &self,
         input: &UpdateProjectInput,
@@ -1629,7 +1629,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc = "<p>Gets information about builds.</p>"]
+    /// <p>Gets information about builds.</p>
     fn batch_get_builds(
         &self,
         input: &BatchGetBuildsInput,
@@ -1663,7 +1663,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets information about build projects.</p>"]
+    /// <p>Gets information about build projects.</p>
     fn batch_get_projects(
         &self,
         input: &BatchGetProjectsInput,
@@ -1697,7 +1697,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a build project.</p>"]
+    /// <p>Creates a build project.</p>
     fn create_project(
         &self,
         input: &CreateProjectInput,
@@ -1731,7 +1731,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a build project.</p>"]
+    /// <p>Deletes a build project.</p>
     fn delete_project(
         &self,
         input: &DeleteProjectInput,
@@ -1765,7 +1765,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets a list of build IDs, with each build ID representing a single build.</p>"]
+    /// <p>Gets a list of build IDs, with each build ID representing a single build.</p>
     fn list_builds(&self, input: &ListBuildsInput) -> Result<ListBuildsOutput, ListBuildsError> {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
@@ -1796,7 +1796,7 @@ where
         }
     }
 
-    #[doc="<p>Gets a list of build IDs for the specified build project, with each build ID representing a single build.</p>"]
+    /// <p>Gets a list of build IDs for the specified build project, with each build ID representing a single build.</p>
     fn list_builds_for_project(
         &self,
         input: &ListBuildsForProjectInput,
@@ -1830,7 +1830,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets information about Docker images that are managed by AWS CodeBuild.</p>"]
+    /// <p>Gets information about Docker images that are managed by AWS CodeBuild.</p>
     fn list_curated_environment_images(
         &self,
     ) -> Result<ListCuratedEnvironmentImagesOutput, ListCuratedEnvironmentImagesError> {
@@ -1865,7 +1865,7 @@ where
         }
     }
 
-    #[doc="<p>Gets a list of build project names, with each build project name representing a single build project.</p>"]
+    /// <p>Gets a list of build project names, with each build project name representing a single build project.</p>
     fn list_projects(
         &self,
         input: &ListProjectsInput,
@@ -1899,7 +1899,7 @@ where
         }
     }
 
-    #[doc = "<p>Starts running a build.</p>"]
+    /// <p>Starts running a build.</p>
     fn start_build(&self, input: &StartBuildInput) -> Result<StartBuildOutput, StartBuildError> {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
@@ -1930,7 +1930,7 @@ where
         }
     }
 
-    #[doc = "<p>Attempts to stop running a build.</p>"]
+    /// <p>Attempts to stop running a build.</p>
     fn stop_build(&self, input: &StopBuildInput) -> Result<StopBuildOutput, StopBuildError> {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
@@ -1963,7 +1963,7 @@ where
         }
     }
 
-    #[doc = "<p>Changes the settings of a build project.</p>"]
+    /// <p>Changes the settings of a build project.</p>
     fn update_project(
         &self,
         input: &UpdateProjectInput,

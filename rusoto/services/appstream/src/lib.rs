@@ -11,7 +11,7 @@
 //
 // =================================================================
 
-//! <fullname>Amazon AppStream 2.0</fullname> <p>API documentation for Amazon AppStream 2.0.</p>
+//! <p><fullname>Amazon AppStream 2.0</fullname> <p>API documentation for Amazon AppStream 2.0.</p></p>
 //!
 //! If you're using the service, you're probably looking for [AppStreamClient](struct.AppStreamClient.html) and [AppStream](trait.AppStream.html).
 

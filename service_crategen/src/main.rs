@@ -3,6 +3,7 @@
 
 #[macro_use]
 extern crate clap;
+extern crate hoedown;
 extern crate rayon;
 extern crate rustfmt_nightly;
 extern crate serde;
@@ -25,6 +26,7 @@ mod commands;
 mod config;
 mod service;
 mod util;
+mod doco;
 
 use std::path::Path;
 

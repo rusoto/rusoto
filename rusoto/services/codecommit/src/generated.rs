@@ -55,7 +55,7 @@ pub struct BlobMetadata {
     #[serde(rename = "blobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub blob_id: Option<String>,
-    /// <p>The file mode permissions of the blob. File mode permission codes include:</p> <ul> <li> <p> <code>100644</code> indicates read/write</p> </li> <li> <p> <code>100755</code> indicates read/write/execute</p> </li> <li> <p> <code>160000</code> indicates a submodule</p> </li> <li> <p> <code>120000</code> indicates a symlink</p> </li> </ul>
+    /// <p><p>The file mode permissions of the blob. File mode permission codes include:</p> <ul> <li> <p> <code>100644</code> indicates read/write</p> </li> <li> <p> <code>100755</code> indicates read/write/execute</p> </li> <li> <p> <code>160000</code> indicates a submodule</p> </li> <li> <p> <code>120000</code> indicates a symlink</p> </li> </ul></p>
     #[serde(rename = "mode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mode: Option<String>,
@@ -124,11 +124,11 @@ pub struct CreateBranchInput {
 /// <p>Represents the input of a create repository operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateRepositoryInput {
-    /// <p>A comment or description about the new repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note>
+    /// <p><p>A comment or description about the new repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note></p>
     #[serde(rename = "repositoryDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub repository_description: Option<String>,
-    /// <p>The name of the new repository to be created.</p> <note> <p>The repository name must be unique across the calling AWS account. In addition, repository names are limited to 100 alphanumeric, dash, and underscore characters, and cannot include certain characters. For a full description of the limits on repository names, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/limits.html">Limits</a> in the AWS CodeCommit User Guide. The suffix ".git" is prohibited.</p> </note>
+    /// <p><p>The name of the new repository to be created.</p> <note> <p>The repository name must be unique across the calling AWS account. In addition, repository names are limited to 100 alphanumeric, dash, and underscore characters, and cannot include certain characters. For a full description of the limits on repository names, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/limits.html">Limits</a> in the AWS CodeCommit User Guide. The suffix &quot;.git&quot; is prohibited.</p> </note></p>
     #[serde(rename = "repositoryName")]
     pub repository_name: String,
 }
@@ -465,7 +465,7 @@ pub struct RepositoryTrigger {
     /// <p>The ARN of the resource that is the target for a trigger. For example, the ARN of a topic in Amazon Simple Notification Service (SNS).</p>
     #[serde(rename = "destinationArn")]
     pub destination_arn: String,
-    /// <p>The repository events that will cause the trigger to run actions in another service, such as sending a notification through Amazon Simple Notification Service (SNS). </p> <note> <p>The valid value "all" cannot be used with any other values.</p> </note>
+    /// <p><p>The repository events that will cause the trigger to run actions in another service, such as sending a notification through Amazon Simple Notification Service (SNS). </p> <note> <p>The valid value &quot;all&quot; cannot be used with any other values.</p> </note></p>
     #[serde(rename = "events")]
     pub events: Vec<String>,
     /// <p>The name of the trigger.</p>
@@ -564,21 +564,21 @@ pub struct UserInfo {
 /// Errors returned by BatchGetRepositories
 #[derive(Debug, PartialEq)]
 pub enum BatchGetRepositoriesError {
-    ///<p>An encryption integrity check failed.</p>
+    /// <p>An encryption integrity check failed.</p>
     EncryptionIntegrityChecksFailed(String),
-    ///<p>An encryption key could not be accessed.</p>
+    /// <p>An encryption key could not be accessed.</p>
     EncryptionKeyAccessDenied(String),
-    ///<p>The encryption key is disabled.</p>
+    /// <p>The encryption key is disabled.</p>
     EncryptionKeyDisabled(String),
-    ///<p>No encryption key was found.</p>
+    /// <p>No encryption key was found.</p>
     EncryptionKeyNotFound(String),
-    ///<p>The encryption key is not available.</p>
+    /// <p>The encryption key is not available.</p>
     EncryptionKeyUnavailable(String),
-    ///<p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note>
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
     InvalidRepositoryName(String),
-    ///<p>The maximum number of allowed repository names was exceeded. Currently, this number is 25.</p>
+    /// <p>The maximum number of allowed repository names was exceeded. Currently, this number is 25.</p>
     MaximumRepositoryNamesExceeded(String),
-    ///<p>A repository names object is required but was not specified.</p>
+    /// <p>A repository names object is required but was not specified.</p>
     RepositoryNamesRequired(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -702,33 +702,33 @@ impl Error for BatchGetRepositoriesError {
 /// Errors returned by CreateBranch
 #[derive(Debug, PartialEq)]
 pub enum CreateBranchError {
-    ///<p>The specified branch name already exists.</p>
+    /// <p>The specified branch name already exists.</p>
     BranchNameExists(String),
-    ///<p>A branch name is required but was not specified.</p>
+    /// <p>A branch name is required but was not specified.</p>
     BranchNameRequired(String),
-    ///<p>The specified commit does not exist or no commit was specified, and the specified repository has no default branch.</p>
+    /// <p>The specified commit does not exist or no commit was specified, and the specified repository has no default branch.</p>
     CommitDoesNotExist(String),
-    ///<p>A commit ID was not specified.</p>
+    /// <p>A commit ID was not specified.</p>
     CommitIdRequired(String),
-    ///<p>An encryption integrity check failed.</p>
+    /// <p>An encryption integrity check failed.</p>
     EncryptionIntegrityChecksFailed(String),
-    ///<p>An encryption key could not be accessed.</p>
+    /// <p>An encryption key could not be accessed.</p>
     EncryptionKeyAccessDenied(String),
-    ///<p>The encryption key is disabled.</p>
+    /// <p>The encryption key is disabled.</p>
     EncryptionKeyDisabled(String),
-    ///<p>No encryption key was found.</p>
+    /// <p>No encryption key was found.</p>
     EncryptionKeyNotFound(String),
-    ///<p>The encryption key is not available.</p>
+    /// <p>The encryption key is not available.</p>
     EncryptionKeyUnavailable(String),
-    ///<p>The specified branch name is not valid.</p>
+    /// <p>The specified branch name is not valid.</p>
     InvalidBranchName(String),
-    ///<p>The specified commit ID is not valid.</p>
+    /// <p>The specified commit ID is not valid.</p>
     InvalidCommitId(String),
-    ///<p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note>
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
     InvalidRepositoryName(String),
-    ///<p>The specified repository does not exist.</p>
+    /// <p>The specified repository does not exist.</p>
     RepositoryDoesNotExist(String),
-    ///<p>A repository name is required but was not specified.</p>
+    /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -860,25 +860,25 @@ impl Error for CreateBranchError {
 /// Errors returned by CreateRepository
 #[derive(Debug, PartialEq)]
 pub enum CreateRepositoryError {
-    ///<p>An encryption integrity check failed.</p>
+    /// <p>An encryption integrity check failed.</p>
     EncryptionIntegrityChecksFailed(String),
-    ///<p>An encryption key could not be accessed.</p>
+    /// <p>An encryption key could not be accessed.</p>
     EncryptionKeyAccessDenied(String),
-    ///<p>The encryption key is disabled.</p>
+    /// <p>The encryption key is disabled.</p>
     EncryptionKeyDisabled(String),
-    ///<p>No encryption key was found.</p>
+    /// <p>No encryption key was found.</p>
     EncryptionKeyNotFound(String),
-    ///<p>The encryption key is not available.</p>
+    /// <p>The encryption key is not available.</p>
     EncryptionKeyUnavailable(String),
-    ///<p>The specified repository description is not valid.</p>
+    /// <p>The specified repository description is not valid.</p>
     InvalidRepositoryDescription(String),
-    ///<p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note>
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
     InvalidRepositoryName(String),
-    ///<p>A repository resource limit was exceeded.</p>
+    /// <p>A repository resource limit was exceeded.</p>
     RepositoryLimitExceeded(String),
-    ///<p>The specified repository name already exists.</p>
+    /// <p>The specified repository name already exists.</p>
     RepositoryNameExists(String),
-    ///<p>A repository name is required but was not specified.</p>
+    /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -998,19 +998,19 @@ impl Error for CreateRepositoryError {
 /// Errors returned by DeleteRepository
 #[derive(Debug, PartialEq)]
 pub enum DeleteRepositoryError {
-    ///<p>An encryption integrity check failed.</p>
+    /// <p>An encryption integrity check failed.</p>
     EncryptionIntegrityChecksFailed(String),
-    ///<p>An encryption key could not be accessed.</p>
+    /// <p>An encryption key could not be accessed.</p>
     EncryptionKeyAccessDenied(String),
-    ///<p>The encryption key is disabled.</p>
+    /// <p>The encryption key is disabled.</p>
     EncryptionKeyDisabled(String),
-    ///<p>No encryption key was found.</p>
+    /// <p>No encryption key was found.</p>
     EncryptionKeyNotFound(String),
-    ///<p>The encryption key is not available.</p>
+    /// <p>The encryption key is not available.</p>
     EncryptionKeyUnavailable(String),
-    ///<p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note>
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
     InvalidRepositoryName(String),
-    ///<p>A repository name is required but was not specified.</p>
+    /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1116,29 +1116,29 @@ impl Error for DeleteRepositoryError {
 /// Errors returned by GetBlob
 #[derive(Debug, PartialEq)]
 pub enum GetBlobError {
-    ///<p>The specified blob does not exist.</p>
+    /// <p>The specified blob does not exist.</p>
     BlobIdDoesNotExist(String),
-    ///<p>A blob ID is required but was not specified.</p>
+    /// <p>A blob ID is required but was not specified.</p>
     BlobIdRequired(String),
-    ///<p>An encryption integrity check failed.</p>
+    /// <p>An encryption integrity check failed.</p>
     EncryptionIntegrityChecksFailed(String),
-    ///<p>An encryption key could not be accessed.</p>
+    /// <p>An encryption key could not be accessed.</p>
     EncryptionKeyAccessDenied(String),
-    ///<p>The encryption key is disabled.</p>
+    /// <p>The encryption key is disabled.</p>
     EncryptionKeyDisabled(String),
-    ///<p>No encryption key was found.</p>
+    /// <p>No encryption key was found.</p>
     EncryptionKeyNotFound(String),
-    ///<p>The encryption key is not available.</p>
+    /// <p>The encryption key is not available.</p>
     EncryptionKeyUnavailable(String),
-    ///<p>The specified file exceeds the file size limit for AWS CodeCommit. For more information about limits in AWS CodeCommit, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/limits.html">AWS CodeCommit User Guide</a>.</p>
+    /// <p>The specified file exceeds the file size limit for AWS CodeCommit. For more information about limits in AWS CodeCommit, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/limits.html">AWS CodeCommit User Guide</a>.</p>
     FileTooLarge(String),
-    ///<p>The specified blob is not valid.</p>
+    /// <p>The specified blob is not valid.</p>
     InvalidBlobId(String),
-    ///<p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note>
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
     InvalidRepositoryName(String),
-    ///<p>The specified repository does not exist.</p>
+    /// <p>The specified repository does not exist.</p>
     RepositoryDoesNotExist(String),
-    ///<p>A repository name is required but was not specified.</p>
+    /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1258,27 +1258,27 @@ impl Error for GetBlobError {
 /// Errors returned by GetBranch
 #[derive(Debug, PartialEq)]
 pub enum GetBranchError {
-    ///<p>The specified branch does not exist.</p>
+    /// <p>The specified branch does not exist.</p>
     BranchDoesNotExist(String),
-    ///<p>A branch name is required but was not specified.</p>
+    /// <p>A branch name is required but was not specified.</p>
     BranchNameRequired(String),
-    ///<p>An encryption integrity check failed.</p>
+    /// <p>An encryption integrity check failed.</p>
     EncryptionIntegrityChecksFailed(String),
-    ///<p>An encryption key could not be accessed.</p>
+    /// <p>An encryption key could not be accessed.</p>
     EncryptionKeyAccessDenied(String),
-    ///<p>The encryption key is disabled.</p>
+    /// <p>The encryption key is disabled.</p>
     EncryptionKeyDisabled(String),
-    ///<p>No encryption key was found.</p>
+    /// <p>No encryption key was found.</p>
     EncryptionKeyNotFound(String),
-    ///<p>The encryption key is not available.</p>
+    /// <p>The encryption key is not available.</p>
     EncryptionKeyUnavailable(String),
-    ///<p>The specified branch name is not valid.</p>
+    /// <p>The specified branch name is not valid.</p>
     InvalidBranchName(String),
-    ///<p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note>
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
     InvalidRepositoryName(String),
-    ///<p>The specified repository does not exist.</p>
+    /// <p>The specified repository does not exist.</p>
     RepositoryDoesNotExist(String),
-    ///<p>A repository name is required but was not specified.</p>
+    /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1394,27 +1394,27 @@ impl Error for GetBranchError {
 /// Errors returned by GetCommit
 #[derive(Debug, PartialEq)]
 pub enum GetCommitError {
-    ///<p>The specified commit ID does not exist.</p>
+    /// <p>The specified commit ID does not exist.</p>
     CommitIdDoesNotExist(String),
-    ///<p>A commit ID was not specified.</p>
+    /// <p>A commit ID was not specified.</p>
     CommitIdRequired(String),
-    ///<p>An encryption integrity check failed.</p>
+    /// <p>An encryption integrity check failed.</p>
     EncryptionIntegrityChecksFailed(String),
-    ///<p>An encryption key could not be accessed.</p>
+    /// <p>An encryption key could not be accessed.</p>
     EncryptionKeyAccessDenied(String),
-    ///<p>The encryption key is disabled.</p>
+    /// <p>The encryption key is disabled.</p>
     EncryptionKeyDisabled(String),
-    ///<p>No encryption key was found.</p>
+    /// <p>No encryption key was found.</p>
     EncryptionKeyNotFound(String),
-    ///<p>The encryption key is not available.</p>
+    /// <p>The encryption key is not available.</p>
     EncryptionKeyUnavailable(String),
-    ///<p>The specified commit ID is not valid.</p>
+    /// <p>The specified commit ID is not valid.</p>
     InvalidCommitId(String),
-    ///<p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note>
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
     InvalidRepositoryName(String),
-    ///<p>The specified repository does not exist.</p>
+    /// <p>The specified repository does not exist.</p>
     RepositoryDoesNotExist(String),
-    ///<p>A repository name is required but was not specified.</p>
+    /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1530,37 +1530,37 @@ impl Error for GetCommitError {
 /// Errors returned by GetDifferences
 #[derive(Debug, PartialEq)]
 pub enum GetDifferencesError {
-    ///<p>The specified commit does not exist or no commit was specified, and the specified repository has no default branch.</p>
+    /// <p>The specified commit does not exist or no commit was specified, and the specified repository has no default branch.</p>
     CommitDoesNotExist(String),
-    ///<p>A commit was not specified.</p>
+    /// <p>A commit was not specified.</p>
     CommitRequired(String),
-    ///<p>An encryption integrity check failed.</p>
+    /// <p>An encryption integrity check failed.</p>
     EncryptionIntegrityChecksFailed(String),
-    ///<p>An encryption key could not be accessed.</p>
+    /// <p>An encryption key could not be accessed.</p>
     EncryptionKeyAccessDenied(String),
-    ///<p>The encryption key is disabled.</p>
+    /// <p>The encryption key is disabled.</p>
     EncryptionKeyDisabled(String),
-    ///<p>No encryption key was found.</p>
+    /// <p>No encryption key was found.</p>
     EncryptionKeyNotFound(String),
-    ///<p>The encryption key is not available.</p>
+    /// <p>The encryption key is not available.</p>
     EncryptionKeyUnavailable(String),
-    ///<p>The specified commit is not valid.</p>
+    /// <p>The specified commit is not valid.</p>
     InvalidCommit(String),
-    ///<p>The specified commit ID is not valid.</p>
+    /// <p>The specified commit ID is not valid.</p>
     InvalidCommitId(String),
-    ///<p>The specified continuation token is not valid.</p>
+    /// <p>The specified continuation token is not valid.</p>
     InvalidContinuationToken(String),
-    ///<p>The specified number of maximum results is not valid.</p>
+    /// <p>The specified number of maximum results is not valid.</p>
     InvalidMaxResults(String),
-    ///<p>The specified path is not valid.</p>
+    /// <p>The specified path is not valid.</p>
     InvalidPath(String),
-    ///<p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note>
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
     InvalidRepositoryName(String),
-    ///<p>The specified path does not exist.</p>
+    /// <p>The specified path does not exist.</p>
     PathDoesNotExist(String),
-    ///<p>The specified repository does not exist.</p>
+    /// <p>The specified repository does not exist.</p>
     RepositoryDoesNotExist(String),
-    ///<p>A repository name is required but was not specified.</p>
+    /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1700,21 +1700,21 @@ impl Error for GetDifferencesError {
 /// Errors returned by GetRepository
 #[derive(Debug, PartialEq)]
 pub enum GetRepositoryError {
-    ///<p>An encryption integrity check failed.</p>
+    /// <p>An encryption integrity check failed.</p>
     EncryptionIntegrityChecksFailed(String),
-    ///<p>An encryption key could not be accessed.</p>
+    /// <p>An encryption key could not be accessed.</p>
     EncryptionKeyAccessDenied(String),
-    ///<p>The encryption key is disabled.</p>
+    /// <p>The encryption key is disabled.</p>
     EncryptionKeyDisabled(String),
-    ///<p>No encryption key was found.</p>
+    /// <p>No encryption key was found.</p>
     EncryptionKeyNotFound(String),
-    ///<p>The encryption key is not available.</p>
+    /// <p>The encryption key is not available.</p>
     EncryptionKeyUnavailable(String),
-    ///<p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note>
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
     InvalidRepositoryName(String),
-    ///<p>The specified repository does not exist.</p>
+    /// <p>The specified repository does not exist.</p>
     RepositoryDoesNotExist(String),
-    ///<p>A repository name is required but was not specified.</p>
+    /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1822,21 +1822,21 @@ impl Error for GetRepositoryError {
 /// Errors returned by GetRepositoryTriggers
 #[derive(Debug, PartialEq)]
 pub enum GetRepositoryTriggersError {
-    ///<p>An encryption integrity check failed.</p>
+    /// <p>An encryption integrity check failed.</p>
     EncryptionIntegrityChecksFailed(String),
-    ///<p>An encryption key could not be accessed.</p>
+    /// <p>An encryption key could not be accessed.</p>
     EncryptionKeyAccessDenied(String),
-    ///<p>The encryption key is disabled.</p>
+    /// <p>The encryption key is disabled.</p>
     EncryptionKeyDisabled(String),
-    ///<p>No encryption key was found.</p>
+    /// <p>No encryption key was found.</p>
     EncryptionKeyNotFound(String),
-    ///<p>The encryption key is not available.</p>
+    /// <p>The encryption key is not available.</p>
     EncryptionKeyUnavailable(String),
-    ///<p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note>
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
     InvalidRepositoryName(String),
-    ///<p>The specified repository does not exist.</p>
+    /// <p>The specified repository does not exist.</p>
     RepositoryDoesNotExist(String),
-    ///<p>A repository name is required but was not specified.</p>
+    /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1960,23 +1960,23 @@ impl Error for GetRepositoryTriggersError {
 /// Errors returned by ListBranches
 #[derive(Debug, PartialEq)]
 pub enum ListBranchesError {
-    ///<p>An encryption integrity check failed.</p>
+    /// <p>An encryption integrity check failed.</p>
     EncryptionIntegrityChecksFailed(String),
-    ///<p>An encryption key could not be accessed.</p>
+    /// <p>An encryption key could not be accessed.</p>
     EncryptionKeyAccessDenied(String),
-    ///<p>The encryption key is disabled.</p>
+    /// <p>The encryption key is disabled.</p>
     EncryptionKeyDisabled(String),
-    ///<p>No encryption key was found.</p>
+    /// <p>No encryption key was found.</p>
     EncryptionKeyNotFound(String),
-    ///<p>The encryption key is not available.</p>
+    /// <p>The encryption key is not available.</p>
     EncryptionKeyUnavailable(String),
-    ///<p>The specified continuation token is not valid.</p>
+    /// <p>The specified continuation token is not valid.</p>
     InvalidContinuationToken(String),
-    ///<p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note>
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
     InvalidRepositoryName(String),
-    ///<p>The specified repository does not exist.</p>
+    /// <p>The specified repository does not exist.</p>
     RepositoryDoesNotExist(String),
-    ///<p>A repository name is required but was not specified.</p>
+    /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2088,11 +2088,11 @@ impl Error for ListBranchesError {
 /// Errors returned by ListRepositories
 #[derive(Debug, PartialEq)]
 pub enum ListRepositoriesError {
-    ///<p>The specified continuation token is not valid.</p>
+    /// <p>The specified continuation token is not valid.</p>
     InvalidContinuationToken(String),
-    ///<p>The specified sort order is not valid.</p>
+    /// <p>The specified sort order is not valid.</p>
     InvalidOrder(String),
-    ///<p>The specified sort by value is not valid.</p>
+    /// <p>The specified sort by value is not valid.</p>
     InvalidSortBy(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2178,47 +2178,47 @@ impl Error for ListRepositoriesError {
 /// Errors returned by PutRepositoryTriggers
 #[derive(Debug, PartialEq)]
 pub enum PutRepositoryTriggersError {
-    ///<p>An encryption integrity check failed.</p>
+    /// <p>An encryption integrity check failed.</p>
     EncryptionIntegrityChecksFailed(String),
-    ///<p>An encryption key could not be accessed.</p>
+    /// <p>An encryption key could not be accessed.</p>
     EncryptionKeyAccessDenied(String),
-    ///<p>The encryption key is disabled.</p>
+    /// <p>The encryption key is disabled.</p>
     EncryptionKeyDisabled(String),
-    ///<p>No encryption key was found.</p>
+    /// <p>No encryption key was found.</p>
     EncryptionKeyNotFound(String),
-    ///<p>The encryption key is not available.</p>
+    /// <p>The encryption key is not available.</p>
     EncryptionKeyUnavailable(String),
-    ///<p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note>
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
     InvalidRepositoryName(String),
-    ///<p>One or more branch names specified for the trigger is not valid.</p>
+    /// <p>One or more branch names specified for the trigger is not valid.</p>
     InvalidRepositoryTriggerBranchName(String),
-    ///<p>The custom data provided for the trigger is not valid.</p>
+    /// <p>The custom data provided for the trigger is not valid.</p>
     InvalidRepositoryTriggerCustomData(String),
-    ///<p>The Amazon Resource Name (ARN) for the trigger is not valid for the specified destination. The most common reason for this error is that the ARN does not meet the requirements for the service type.</p>
+    /// <p>The Amazon Resource Name (ARN) for the trigger is not valid for the specified destination. The most common reason for this error is that the ARN does not meet the requirements for the service type.</p>
     InvalidRepositoryTriggerDestinationArn(String),
-    ///<p>One or more events specified for the trigger is not valid. Check to make sure that all events specified match the requirements for allowed events.</p>
+    /// <p>One or more events specified for the trigger is not valid. Check to make sure that all events specified match the requirements for allowed events.</p>
     InvalidRepositoryTriggerEvents(String),
-    ///<p>The name of the trigger is not valid.</p>
+    /// <p>The name of the trigger is not valid.</p>
     InvalidRepositoryTriggerName(String),
-    ///<p>The region for the trigger target does not match the region for the repository. Triggers must be created in the same region as the target for the trigger.</p>
+    /// <p>The region for the trigger target does not match the region for the repository. Triggers must be created in the same region as the target for the trigger.</p>
     InvalidRepositoryTriggerRegion(String),
-    ///<p>The number of branches for the trigger was exceeded.</p>
+    /// <p>The number of branches for the trigger was exceeded.</p>
     MaximumBranchesExceeded(String),
-    ///<p>The number of triggers allowed for the repository was exceeded.</p>
+    /// <p>The number of triggers allowed for the repository was exceeded.</p>
     MaximumRepositoryTriggersExceeded(String),
-    ///<p>The specified repository does not exist.</p>
+    /// <p>The specified repository does not exist.</p>
     RepositoryDoesNotExist(String),
-    ///<p>A repository name is required but was not specified.</p>
+    /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
-    ///<p>At least one branch name is required but was not specified in the trigger configuration.</p>
+    /// <p>At least one branch name is required but was not specified in the trigger configuration.</p>
     RepositoryTriggerBranchNameListRequired(String),
-    ///<p>A destination ARN for the target service for the trigger is required but was not specified.</p>
+    /// <p>A destination ARN for the target service for the trigger is required but was not specified.</p>
     RepositoryTriggerDestinationArnRequired(String),
-    ///<p>At least one event for the trigger is required but was not specified.</p>
+    /// <p>At least one event for the trigger is required but was not specified.</p>
     RepositoryTriggerEventsListRequired(String),
-    ///<p>A name for the trigger is required but was not specified.</p>
+    /// <p>A name for the trigger is required but was not specified.</p>
     RepositoryTriggerNameRequired(String),
-    ///<p>The list of triggers for the repository is required but was not specified.</p>
+    /// <p>The list of triggers for the repository is required but was not specified.</p>
     RepositoryTriggersListRequired(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2420,47 +2420,47 @@ impl Error for PutRepositoryTriggersError {
 /// Errors returned by TestRepositoryTriggers
 #[derive(Debug, PartialEq)]
 pub enum TestRepositoryTriggersError {
-    ///<p>An encryption integrity check failed.</p>
+    /// <p>An encryption integrity check failed.</p>
     EncryptionIntegrityChecksFailed(String),
-    ///<p>An encryption key could not be accessed.</p>
+    /// <p>An encryption key could not be accessed.</p>
     EncryptionKeyAccessDenied(String),
-    ///<p>The encryption key is disabled.</p>
+    /// <p>The encryption key is disabled.</p>
     EncryptionKeyDisabled(String),
-    ///<p>No encryption key was found.</p>
+    /// <p>No encryption key was found.</p>
     EncryptionKeyNotFound(String),
-    ///<p>The encryption key is not available.</p>
+    /// <p>The encryption key is not available.</p>
     EncryptionKeyUnavailable(String),
-    ///<p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note>
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
     InvalidRepositoryName(String),
-    ///<p>One or more branch names specified for the trigger is not valid.</p>
+    /// <p>One or more branch names specified for the trigger is not valid.</p>
     InvalidRepositoryTriggerBranchName(String),
-    ///<p>The custom data provided for the trigger is not valid.</p>
+    /// <p>The custom data provided for the trigger is not valid.</p>
     InvalidRepositoryTriggerCustomData(String),
-    ///<p>The Amazon Resource Name (ARN) for the trigger is not valid for the specified destination. The most common reason for this error is that the ARN does not meet the requirements for the service type.</p>
+    /// <p>The Amazon Resource Name (ARN) for the trigger is not valid for the specified destination. The most common reason for this error is that the ARN does not meet the requirements for the service type.</p>
     InvalidRepositoryTriggerDestinationArn(String),
-    ///<p>One or more events specified for the trigger is not valid. Check to make sure that all events specified match the requirements for allowed events.</p>
+    /// <p>One or more events specified for the trigger is not valid. Check to make sure that all events specified match the requirements for allowed events.</p>
     InvalidRepositoryTriggerEvents(String),
-    ///<p>The name of the trigger is not valid.</p>
+    /// <p>The name of the trigger is not valid.</p>
     InvalidRepositoryTriggerName(String),
-    ///<p>The region for the trigger target does not match the region for the repository. Triggers must be created in the same region as the target for the trigger.</p>
+    /// <p>The region for the trigger target does not match the region for the repository. Triggers must be created in the same region as the target for the trigger.</p>
     InvalidRepositoryTriggerRegion(String),
-    ///<p>The number of branches for the trigger was exceeded.</p>
+    /// <p>The number of branches for the trigger was exceeded.</p>
     MaximumBranchesExceeded(String),
-    ///<p>The number of triggers allowed for the repository was exceeded.</p>
+    /// <p>The number of triggers allowed for the repository was exceeded.</p>
     MaximumRepositoryTriggersExceeded(String),
-    ///<p>The specified repository does not exist.</p>
+    /// <p>The specified repository does not exist.</p>
     RepositoryDoesNotExist(String),
-    ///<p>A repository name is required but was not specified.</p>
+    /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
-    ///<p>At least one branch name is required but was not specified in the trigger configuration.</p>
+    /// <p>At least one branch name is required but was not specified in the trigger configuration.</p>
     RepositoryTriggerBranchNameListRequired(String),
-    ///<p>A destination ARN for the target service for the trigger is required but was not specified.</p>
+    /// <p>A destination ARN for the target service for the trigger is required but was not specified.</p>
     RepositoryTriggerDestinationArnRequired(String),
-    ///<p>At least one event for the trigger is required but was not specified.</p>
+    /// <p>At least one event for the trigger is required but was not specified.</p>
     RepositoryTriggerEventsListRequired(String),
-    ///<p>A name for the trigger is required but was not specified.</p>
+    /// <p>A name for the trigger is required but was not specified.</p>
     RepositoryTriggerNameRequired(String),
-    ///<p>The list of triggers for the repository is required but was not specified.</p>
+    /// <p>The list of triggers for the repository is required but was not specified.</p>
     RepositoryTriggersListRequired(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2666,27 +2666,27 @@ impl Error for TestRepositoryTriggersError {
 /// Errors returned by UpdateDefaultBranch
 #[derive(Debug, PartialEq)]
 pub enum UpdateDefaultBranchError {
-    ///<p>The specified branch does not exist.</p>
+    /// <p>The specified branch does not exist.</p>
     BranchDoesNotExist(String),
-    ///<p>A branch name is required but was not specified.</p>
+    /// <p>A branch name is required but was not specified.</p>
     BranchNameRequired(String),
-    ///<p>An encryption integrity check failed.</p>
+    /// <p>An encryption integrity check failed.</p>
     EncryptionIntegrityChecksFailed(String),
-    ///<p>An encryption key could not be accessed.</p>
+    /// <p>An encryption key could not be accessed.</p>
     EncryptionKeyAccessDenied(String),
-    ///<p>The encryption key is disabled.</p>
+    /// <p>The encryption key is disabled.</p>
     EncryptionKeyDisabled(String),
-    ///<p>No encryption key was found.</p>
+    /// <p>No encryption key was found.</p>
     EncryptionKeyNotFound(String),
-    ///<p>The encryption key is not available.</p>
+    /// <p>The encryption key is not available.</p>
     EncryptionKeyUnavailable(String),
-    ///<p>The specified branch name is not valid.</p>
+    /// <p>The specified branch name is not valid.</p>
     InvalidBranchName(String),
-    ///<p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note>
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
     InvalidRepositoryName(String),
-    ///<p>The specified repository does not exist.</p>
+    /// <p>The specified repository does not exist.</p>
     RepositoryDoesNotExist(String),
-    ///<p>A repository name is required but was not specified.</p>
+    /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2816,23 +2816,23 @@ impl Error for UpdateDefaultBranchError {
 /// Errors returned by UpdateRepositoryDescription
 #[derive(Debug, PartialEq)]
 pub enum UpdateRepositoryDescriptionError {
-    ///<p>An encryption integrity check failed.</p>
+    /// <p>An encryption integrity check failed.</p>
     EncryptionIntegrityChecksFailed(String),
-    ///<p>An encryption key could not be accessed.</p>
+    /// <p>An encryption key could not be accessed.</p>
     EncryptionKeyAccessDenied(String),
-    ///<p>The encryption key is disabled.</p>
+    /// <p>The encryption key is disabled.</p>
     EncryptionKeyDisabled(String),
-    ///<p>No encryption key was found.</p>
+    /// <p>No encryption key was found.</p>
     EncryptionKeyNotFound(String),
-    ///<p>The encryption key is not available.</p>
+    /// <p>The encryption key is not available.</p>
     EncryptionKeyUnavailable(String),
-    ///<p>The specified repository description is not valid.</p>
+    /// <p>The specified repository description is not valid.</p>
     InvalidRepositoryDescription(String),
-    ///<p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note>
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
     InvalidRepositoryName(String),
-    ///<p>The specified repository does not exist.</p>
+    /// <p>The specified repository does not exist.</p>
     RepositoryDoesNotExist(String),
-    ///<p>A repository name is required but was not specified.</p>
+    /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2962,13 +2962,13 @@ impl Error for UpdateRepositoryDescriptionError {
 /// Errors returned by UpdateRepositoryName
 #[derive(Debug, PartialEq)]
 pub enum UpdateRepositoryNameError {
-    ///<p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note>
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
     InvalidRepositoryName(String),
-    ///<p>The specified repository does not exist.</p>
+    /// <p>The specified repository does not exist.</p>
     RepositoryDoesNotExist(String),
-    ///<p>The specified repository name already exists.</p>
+    /// <p>The specified repository name already exists.</p>
     RepositoryNameExists(String),
-    ///<p>A repository name is required but was not specified.</p>
+    /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3065,91 +3065,91 @@ impl Error for UpdateRepositoryNameError {
 }
 /// Trait representing the capabilities of the CodeCommit API. CodeCommit clients implement this trait.
 pub trait CodeCommit {
-    #[doc="<p>Returns information about one or more repositories.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note>"]
+    /// <p><p>Returns information about one or more repositories.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note></p>
     fn batch_get_repositories(
         &self,
         input: &BatchGetRepositoriesInput,
     ) -> Result<BatchGetRepositoriesOutput, BatchGetRepositoriesError>;
 
-    #[doc="<p>Creates a new branch in a repository and points the branch to a commit.</p> <note> <p>Calling the create branch operation does not set a repository's default branch. To do this, call the update default branch operation.</p> </note>"]
+    /// <p><p>Creates a new branch in a repository and points the branch to a commit.</p> <note> <p>Calling the create branch operation does not set a repository&#39;s default branch. To do this, call the update default branch operation.</p> </note></p>
     fn create_branch(&self, input: &CreateBranchInput) -> Result<(), CreateBranchError>;
 
-    #[doc = "<p>Creates a new, empty repository.</p>"]
+    /// <p>Creates a new, empty repository.</p>
     fn create_repository(
         &self,
         input: &CreateRepositoryInput,
     ) -> Result<CreateRepositoryOutput, CreateRepositoryError>;
 
-    #[doc="<p>Deletes a repository. If a specified repository was already deleted, a null repository ID will be returned.</p> <important><p>Deleting a repository also deletes all associated objects and metadata. After a repository is deleted, all future push calls to the deleted repository will fail.</p> </important>"]
+    /// <p><p>Deletes a repository. If a specified repository was already deleted, a null repository ID will be returned.</p> <important><p>Deleting a repository also deletes all associated objects and metadata. After a repository is deleted, all future push calls to the deleted repository will fail.</p> </important></p>
     fn delete_repository(
         &self,
         input: &DeleteRepositoryInput,
     ) -> Result<DeleteRepositoryOutput, DeleteRepositoryError>;
 
-    #[doc = "<p>Returns the base-64 encoded content of an individual blob within a repository.</p>"]
+    /// <p>Returns the base-64 encoded content of an individual blob within a repository.</p>
     fn get_blob(&self, input: &GetBlobInput) -> Result<GetBlobOutput, GetBlobError>;
 
-    #[doc="<p>Returns information about a repository branch, including its name and the last commit ID.</p>"]
+    /// <p>Returns information about a repository branch, including its name and the last commit ID.</p>
     fn get_branch(&self, input: &GetBranchInput) -> Result<GetBranchOutput, GetBranchError>;
 
-    #[doc="<p>Returns information about a commit, including commit message and committer information.</p>"]
+    /// <p>Returns information about a commit, including commit message and committer information.</p>
     fn get_commit(&self, input: &GetCommitInput) -> Result<GetCommitOutput, GetCommitError>;
 
-    #[doc="<p>Returns information about the differences in a valid commit specifier (such as a branch, tag, HEAD, commit ID or other fully qualified reference). Results can be limited to a specified path.</p>"]
+    /// <p>Returns information about the differences in a valid commit specifier (such as a branch, tag, HEAD, commit ID or other fully qualified reference). Results can be limited to a specified path.</p>
     fn get_differences(
         &self,
         input: &GetDifferencesInput,
     ) -> Result<GetDifferencesOutput, GetDifferencesError>;
 
-    #[doc="<p>Returns information about a repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note>"]
+    /// <p><p>Returns information about a repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note></p>
     fn get_repository(
         &self,
         input: &GetRepositoryInput,
     ) -> Result<GetRepositoryOutput, GetRepositoryError>;
 
-    #[doc = "<p>Gets information about triggers configured for a repository.</p>"]
+    /// <p>Gets information about triggers configured for a repository.</p>
     fn get_repository_triggers(
         &self,
         input: &GetRepositoryTriggersInput,
     ) -> Result<GetRepositoryTriggersOutput, GetRepositoryTriggersError>;
 
-    #[doc = "<p>Gets information about one or more branches in a repository.</p>"]
+    /// <p>Gets information about one or more branches in a repository.</p>
     fn list_branches(
         &self,
         input: &ListBranchesInput,
     ) -> Result<ListBranchesOutput, ListBranchesError>;
 
-    #[doc = "<p>Gets information about one or more repositories.</p>"]
+    /// <p>Gets information about one or more repositories.</p>
     fn list_repositories(
         &self,
         input: &ListRepositoriesInput,
     ) -> Result<ListRepositoriesOutput, ListRepositoriesError>;
 
-    #[doc="<p>Replaces all triggers for a repository. This can be used to create or delete triggers.</p>"]
+    /// <p>Replaces all triggers for a repository. This can be used to create or delete triggers.</p>
     fn put_repository_triggers(
         &self,
         input: &PutRepositoryTriggersInput,
     ) -> Result<PutRepositoryTriggersOutput, PutRepositoryTriggersError>;
 
-    #[doc="<p>Tests the functionality of repository triggers by sending information to the trigger target. If real data is available in the repository, the test will send data from the last commit. If no data is available, sample data will be generated.</p>"]
+    /// <p>Tests the functionality of repository triggers by sending information to the trigger target. If real data is available in the repository, the test will send data from the last commit. If no data is available, sample data will be generated.</p>
     fn test_repository_triggers(
         &self,
         input: &TestRepositoryTriggersInput,
     ) -> Result<TestRepositoryTriggersOutput, TestRepositoryTriggersError>;
 
-    #[doc="<p>Sets or changes the default branch name for the specified repository.</p> <note> <p>If you use this operation to change the default branch name to the current default branch name, a success message is returned even though the default branch did not change.</p> </note>"]
+    /// <p><p>Sets or changes the default branch name for the specified repository.</p> <note> <p>If you use this operation to change the default branch name to the current default branch name, a success message is returned even though the default branch did not change.</p> </note></p>
     fn update_default_branch(
         &self,
         input: &UpdateDefaultBranchInput,
     ) -> Result<(), UpdateDefaultBranchError>;
 
-    #[doc="<p>Sets or changes the comment or description for a repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note>"]
+    /// <p><p>Sets or changes the comment or description for a repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note></p>
     fn update_repository_description(
         &self,
         input: &UpdateRepositoryDescriptionInput,
     ) -> Result<(), UpdateRepositoryDescriptionError>;
 
-    #[doc="<p>Renames a repository. The repository name must be unique across the calling AWS account. In addition, repository names are limited to 100 alphanumeric, dash, and underscore characters, and cannot include certain characters. The suffix \".git\" is prohibited. For a full description of the limits on repository names, see <a href=\"http://docs.aws.amazon.com/codecommit/latest/userguide/limits.html\">Limits</a> in the AWS CodeCommit User Guide.</p>"]
+    /// <p>Renames a repository. The repository name must be unique across the calling AWS account. In addition, repository names are limited to 100 alphanumeric, dash, and underscore characters, and cannot include certain characters. The suffix ".git" is prohibited. For a full description of the limits on repository names, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/limits.html">Limits</a> in the AWS CodeCommit User Guide.</p>
     fn update_repository_name(
         &self,
         input: &UpdateRepositoryNameInput,
@@ -3185,7 +3185,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Returns information about one or more repositories.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note>"]
+    /// <p><p>Returns information about one or more repositories.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note></p>
     fn batch_get_repositories(
         &self,
         input: &BatchGetRepositoriesInput,
@@ -3219,7 +3219,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new branch in a repository and points the branch to a commit.</p> <note> <p>Calling the create branch operation does not set a repository's default branch. To do this, call the update default branch operation.</p> </note>"]
+    /// <p><p>Creates a new branch in a repository and points the branch to a commit.</p> <note> <p>Calling the create branch operation does not set a repository&#39;s default branch. To do this, call the update default branch operation.</p> </note></p>
     fn create_branch(&self, input: &CreateBranchInput) -> Result<(), CreateBranchError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
@@ -3244,7 +3244,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a new, empty repository.</p>"]
+    /// <p>Creates a new, empty repository.</p>
     fn create_repository(
         &self,
         input: &CreateRepositoryInput,
@@ -3278,7 +3278,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a repository. If a specified repository was already deleted, a null repository ID will be returned.</p> <important><p>Deleting a repository also deletes all associated objects and metadata. After a repository is deleted, all future push calls to the deleted repository will fail.</p> </important>"]
+    /// <p><p>Deletes a repository. If a specified repository was already deleted, a null repository ID will be returned.</p> <important><p>Deleting a repository also deletes all associated objects and metadata. After a repository is deleted, all future push calls to the deleted repository will fail.</p> </important></p>
     fn delete_repository(
         &self,
         input: &DeleteRepositoryInput,
@@ -3312,7 +3312,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns the base-64 encoded content of an individual blob within a repository.</p>"]
+    /// <p>Returns the base-64 encoded content of an individual blob within a repository.</p>
     fn get_blob(&self, input: &GetBlobInput) -> Result<GetBlobOutput, GetBlobError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
@@ -3344,7 +3344,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about a repository branch, including its name and the last commit ID.</p>"]
+    /// <p>Returns information about a repository branch, including its name and the last commit ID.</p>
     fn get_branch(&self, input: &GetBranchInput) -> Result<GetBranchOutput, GetBranchError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
@@ -3377,7 +3377,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about a commit, including commit message and committer information.</p>"]
+    /// <p>Returns information about a commit, including commit message and committer information.</p>
     fn get_commit(&self, input: &GetCommitInput) -> Result<GetCommitOutput, GetCommitError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
@@ -3410,7 +3410,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about the differences in a valid commit specifier (such as a branch, tag, HEAD, commit ID or other fully qualified reference). Results can be limited to a specified path.</p>"]
+    /// <p>Returns information about the differences in a valid commit specifier (such as a branch, tag, HEAD, commit ID or other fully qualified reference). Results can be limited to a specified path.</p>
     fn get_differences(
         &self,
         input: &GetDifferencesInput,
@@ -3444,7 +3444,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about a repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note>"]
+    /// <p><p>Returns information about a repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note></p>
     fn get_repository(
         &self,
         input: &GetRepositoryInput,
@@ -3478,7 +3478,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets information about triggers configured for a repository.</p>"]
+    /// <p>Gets information about triggers configured for a repository.</p>
     fn get_repository_triggers(
         &self,
         input: &GetRepositoryTriggersInput,
@@ -3512,7 +3512,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets information about one or more branches in a repository.</p>"]
+    /// <p>Gets information about one or more branches in a repository.</p>
     fn list_branches(
         &self,
         input: &ListBranchesInput,
@@ -3546,7 +3546,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets information about one or more repositories.</p>"]
+    /// <p>Gets information about one or more repositories.</p>
     fn list_repositories(
         &self,
         input: &ListRepositoriesInput,
@@ -3580,7 +3580,7 @@ where
         }
     }
 
-    #[doc="<p>Replaces all triggers for a repository. This can be used to create or delete triggers.</p>"]
+    /// <p>Replaces all triggers for a repository. This can be used to create or delete triggers.</p>
     fn put_repository_triggers(
         &self,
         input: &PutRepositoryTriggersInput,
@@ -3614,7 +3614,7 @@ where
         }
     }
 
-    #[doc="<p>Tests the functionality of repository triggers by sending information to the trigger target. If real data is available in the repository, the test will send data from the last commit. If no data is available, sample data will be generated.</p>"]
+    /// <p>Tests the functionality of repository triggers by sending information to the trigger target. If real data is available in the repository, the test will send data from the last commit. If no data is available, sample data will be generated.</p>
     fn test_repository_triggers(
         &self,
         input: &TestRepositoryTriggersInput,
@@ -3648,7 +3648,7 @@ where
         }
     }
 
-    #[doc="<p>Sets or changes the default branch name for the specified repository.</p> <note> <p>If you use this operation to change the default branch name to the current default branch name, a success message is returned even though the default branch did not change.</p> </note>"]
+    /// <p><p>Sets or changes the default branch name for the specified repository.</p> <note> <p>If you use this operation to change the default branch name to the current default branch name, a success message is returned even though the default branch did not change.</p> </note></p>
     fn update_default_branch(
         &self,
         input: &UpdateDefaultBranchInput,
@@ -3676,7 +3676,7 @@ where
         }
     }
 
-    #[doc="<p>Sets or changes the comment or description for a repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note>"]
+    /// <p><p>Sets or changes the comment or description for a repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note></p>
     fn update_repository_description(
         &self,
         input: &UpdateRepositoryDescriptionInput,
@@ -3707,7 +3707,7 @@ where
         }
     }
 
-    #[doc="<p>Renames a repository. The repository name must be unique across the calling AWS account. In addition, repository names are limited to 100 alphanumeric, dash, and underscore characters, and cannot include certain characters. The suffix \".git\" is prohibited. For a full description of the limits on repository names, see <a href=\"http://docs.aws.amazon.com/codecommit/latest/userguide/limits.html\">Limits</a> in the AWS CodeCommit User Guide.</p>"]
+    /// <p>Renames a repository. The repository name must be unique across the calling AWS account. In addition, repository names are limited to 100 alphanumeric, dash, and underscore characters, and cannot include certain characters. The suffix ".git" is prohibited. For a full description of the limits on repository names, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/limits.html">Limits</a> in the AWS CodeCommit User Guide.</p>
     fn update_repository_name(
         &self,
         input: &UpdateRepositoryNameInput,

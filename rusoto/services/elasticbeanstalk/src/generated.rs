@@ -53,7 +53,7 @@ impl ARNDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct AbortEnvironmentUpdateMessage {
     /// <p>This specifies the ID of the environment with the in-progress update that you want to cancel.</p>
@@ -1295,7 +1295,7 @@ pub struct BuildConfiguration {
     pub artifact_name: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that enables AWS CodeBuild to interact with dependent AWS services on behalf of the AWS account.</p>
     pub code_build_service_role: String,
-    /// <p>Information about the compute resources the build project will use.</p> <ul> <li> <p> <code>BUILD_GENERAL1_SMALL: Use up to 3 GB memory and 2 vCPUs for builds</code> </p> </li> <li> <p> <code>BUILD_GENERAL1_MEDIUM: Use up to 7 GB memory and 4 vCPUs for builds</code> </p> </li> <li> <p> <code>BUILD_GENERAL1_LARGE: Use up to 15 GB memory and 8 vCPUs for builds</code> </p> </li> </ul>
+    /// <p><p>Information about the compute resources the build project will use.</p> <ul> <li> <p> <code>BUILD<em>GENERAL1</em>SMALL: Use up to 3 GB memory and 2 vCPUs for builds</code> </p> </li> <li> <p> <code>BUILD<em>GENERAL1</em>MEDIUM: Use up to 7 GB memory and 4 vCPUs for builds</code> </p> </li> <li> <p> <code>BUILD<em>GENERAL1</em>LARGE: Use up to 15 GB memory and 8 vCPUs for builds</code> </p> </li> </ul></p>
     pub compute_type: Option<String>,
     /// <p>The ID of the Docker image to use for this build project.</p>
     pub image: String,
@@ -1555,7 +1555,7 @@ impl CheckDNSAvailabilityMessageSerializer {
 /// <p>Indicates if the specified CNAME is available.</p>
 #[derive(Default, Debug, Clone)]
 pub struct CheckDNSAvailabilityResultMessage {
-    /// <p>Indicates if the specified CNAME is available:</p> <ul> <li> <p> <code>true</code> : The CNAME is available.</p> </li> <li> <p> <code>false</code> : The CNAME is not available.</p> </li> </ul>
+    /// <p><p>Indicates if the specified CNAME is available:</p> <ul> <li> <p> <code>true</code> : The CNAME is available.</p> </li> <li> <p> <code>false</code> : The CNAME is not available.</p> </li> </ul></p>
     pub available: Option<bool>,
     /// <p>The fully qualified CNAME to reserve when <a>CreateEnvironment</a> is called with the provided prefix.</p>
     pub fully_qualified_cname: Option<String>,
@@ -1696,7 +1696,7 @@ impl ConfigurationOptionDefaultValueDeserializer {
 /// <p>Describes the possible values for a configuration option.</p>
 #[derive(Default, Debug, Clone)]
 pub struct ConfigurationOptionDescription {
-    /// <p>An indication of which action is required if the value for this configuration option changes:</p> <ul> <li> <p> <code>NoInterruption</code> : There is no interruption to the environment or application availability.</p> </li> <li> <p> <code>RestartEnvironment</code> : The environment is entirely restarted, all AWS resources are deleted and recreated, and the environment is unavailable during the process.</p> </li> <li> <p> <code>RestartApplicationServer</code> : The environment is available the entire time. However, a short application outage occurs when the application servers on the running Amazon EC2 instances are restarted.</p> </li> </ul>
+    /// <p><p>An indication of which action is required if the value for this configuration option changes:</p> <ul> <li> <p> <code>NoInterruption</code> : There is no interruption to the environment or application availability.</p> </li> <li> <p> <code>RestartEnvironment</code> : The environment is entirely restarted, all AWS resources are deleted and recreated, and the environment is unavailable during the process.</p> </li> <li> <p> <code>RestartApplicationServer</code> : The environment is available the entire time. However, a short application outage occurs when the application servers on the running Amazon EC2 instances are restarted.</p> </li> </ul></p>
     pub change_severity: Option<String>,
     /// <p>The default value for this configuration option.</p>
     pub default_value: Option<String>,
@@ -1716,7 +1716,7 @@ pub struct ConfigurationOptionDescription {
     pub user_defined: Option<bool>,
     /// <p>If specified, values for the configuration option are selected from this list.</p>
     pub value_options: Option<Vec<String>>,
-    /// <p>An indication of which type of values this option has and whether it is allowable to select one or more than one of the possible values:</p> <ul> <li> <p> <code>Scalar</code> : Values for this option are a single selection from the possible values, or an unformatted string, or numeric value governed by the <code>MIN/MAX/Regex</code> constraints.</p> </li> <li> <p> <code>List</code> : Values for this option are multiple selections from the possible values.</p> </li> <li> <p> <code>Boolean</code> : Values for this option are either <code>true</code> or <code>false</code> .</p> </li> <li> <p> <code>Json</code> : Values for this option are a JSON representation of a <code>ConfigDocument</code>.</p> </li> </ul>
+    /// <p><p>An indication of which type of values this option has and whether it is allowable to select one or more than one of the possible values:</p> <ul> <li> <p> <code>Scalar</code> : Values for this option are a single selection from the possible values, or an unformatted string, or numeric value governed by the <code>MIN/MAX/Regex</code> constraints.</p> </li> <li> <p> <code>List</code> : Values for this option are multiple selections from the possible values.</p> </li> <li> <p> <code>Boolean</code> : Values for this option are either <code>true</code> or <code>false</code> .</p> </li> <li> <p> <code>Json</code> : Values for this option are a JSON representation of a <code>ConfigDocument</code>.</p> </li> </ul></p>
     pub value_type: Option<String>,
 }
 
@@ -2225,7 +2225,7 @@ pub struct ConfigurationSettingsDescription {
     pub date_created: Option<String>,
     /// <p>The date (in UTC time) when this configuration set was last modified.</p>
     pub date_updated: Option<String>,
-    /// <p> If this configuration set is associated with an environment, the <code>DeploymentStatus</code> parameter indicates the deployment status of this configuration set: </p> <ul> <li> <p> <code>null</code>: This configuration is not associated with a running environment.</p> </li> <li> <p> <code>pending</code>: This is a draft configuration that is not deployed to the associated environment but is in the process of deploying.</p> </li> <li> <p> <code>deployed</code>: This is the configuration that is currently deployed to the associated running environment.</p> </li> <li> <p> <code>failed</code>: This is a draft configuration that failed to successfully deploy.</p> </li> </ul>
+    /// <p><p> If this configuration set is associated with an environment, the <code>DeploymentStatus</code> parameter indicates the deployment status of this configuration set: </p> <ul> <li> <p> <code>null</code>: This configuration is not associated with a running environment.</p> </li> <li> <p> <code>pending</code>: This is a draft configuration that is not deployed to the associated environment but is in the process of deploying.</p> </li> <li> <p> <code>deployed</code>: This is the configuration that is currently deployed to the associated running environment.</p> </li> <li> <p> <code>failed</code>: This is a draft configuration that failed to successfully deploy.</p> </li> </ul></p>
     pub deployment_status: Option<String>,
     /// <p>Describes this configuration set.</p>
     pub description: Option<String>,
@@ -2580,7 +2580,7 @@ impl CreateApplicationMessageSerializer {
     }
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct CreateApplicationVersionMessage {
     /// <p> The name of the application. If no application is found with this name, and <code>AutoCreateApplication</code> is <code>false</code>, returns an <code>InvalidParameterValue</code> error. </p>
@@ -2739,7 +2739,7 @@ impl CreateConfigurationTemplateMessageSerializer {
     }
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct CreateEnvironmentMessage {
     /// <p>The name of the application that contains the version to be deployed.</p> <p> If no application is found with this name, <code>CreateEnvironment</code> returns an <code>InvalidParameterValue</code> error. </p>
@@ -3339,7 +3339,7 @@ pub struct Deployment {
     pub deployment_id: Option<i64>,
     /// <p>For in-progress deployments, the time that the deployment started.</p> <p>For completed deployments, the time that the deployment ended.</p>
     pub deployment_time: Option<String>,
-    /// <p>The status of the deployment:</p> <ul> <li> <p> <code>In Progress</code> : The deployment is in progress.</p> </li> <li> <p> <code>Deployed</code> : The deployment succeeded.</p> </li> <li> <p> <code>Failed</code> : The deployment failed.</p> </li> </ul>
+    /// <p><p>The status of the deployment:</p> <ul> <li> <p> <code>In Progress</code> : The deployment is in progress.</p> </li> <li> <p> <code>Deployed</code> : The deployment succeeded.</p> </li> <li> <p> <code>Failed</code> : The deployment failed.</p> </li> </ul></p>
     pub status: Option<String>,
     /// <p>The version label of the application version in the deployment.</p>
     pub version_label: Option<String>,
@@ -4440,7 +4440,7 @@ pub struct EnvironmentDescription {
     pub resources: Option<EnvironmentResourcesDescription>,
     /// <p> The name of the <code>SolutionStack</code> deployed with this environment. </p>
     pub solution_stack_name: Option<String>,
-    /// <p>The current operational status of the environment:</p> <ul> <li> <p> <code>Launching</code>: Environment is in the process of initial deployment.</p> </li> <li> <p> <code>Updating</code>: Environment is in the process of updating its configuration settings or application version.</p> </li> <li> <p> <code>Ready</code>: Environment is available to have an action performed on it, such as update or terminate.</p> </li> <li> <p> <code>Terminating</code>: Environment is in the shut-down process.</p> </li> <li> <p> <code>Terminated</code>: Environment is not running.</p> </li> </ul>
+    /// <p><p>The current operational status of the environment:</p> <ul> <li> <p> <code>Launching</code>: Environment is in the process of initial deployment.</p> </li> <li> <p> <code>Updating</code>: Environment is in the process of updating its configuration settings or application version.</p> </li> <li> <p> <code>Ready</code>: Environment is available to have an action performed on it, such as update or terminate.</p> </li> <li> <p> <code>Terminating</code>: Environment is in the shut-down process.</p> </li> <li> <p> <code>Terminated</code>: Environment is not running.</p> </li> </ul></p>
     pub status: Option<String>,
     /// <p>The name of the configuration template used to originally launch this environment.</p>
     pub template_name: Option<String>,
@@ -7996,7 +7996,7 @@ impl QueueListDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct RebuildEnvironmentMessage {
     /// <p>The ID of the environment to rebuild.</p> <p> Condition: You must specify either this or an EnvironmentName, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>
@@ -8166,7 +8166,7 @@ impl ResourceNameDeserializer {
         Ok(obj)
     }
 }
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct RestartAppServerMessage {
     /// <p>The ID of the environment to restart the server for.</p> <p> Condition: You must specify either this or an EnvironmentName, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>
@@ -8635,11 +8635,11 @@ impl SolutionStackNameDeserializer {
 /// <p>Location of the source code for an application version.</p>
 #[derive(Default, Debug, Clone)]
 pub struct SourceBuildInformation {
-    /// <p>The location of the source code, as a formatted string, depending on the value of <code>SourceRepository</code> </p> <ul> <li> <p>For <code>CodeCommit</code>, the format is the repository name and commit ID, separated by a forward slash. For example, <code>my-git-repo/265cfa0cf6af46153527f55d6503ec030551f57a</code>.</p> </li> <li> <p>For <code>S3</code>, the format is the S3 bucket name and object key, separated by a forward slash. For example, <code>my-s3-bucket/Folders/my-source-file</code>.</p> </li> </ul>
+    /// <p><p>The location of the source code, as a formatted string, depending on the value of <code>SourceRepository</code> </p> <ul> <li> <p>For <code>CodeCommit</code>, the format is the repository name and commit ID, separated by a forward slash. For example, <code>my-git-repo/265cfa0cf6af46153527f55d6503ec030551f57a</code>.</p> </li> <li> <p>For <code>S3</code>, the format is the S3 bucket name and object key, separated by a forward slash. For example, <code>my-s3-bucket/Folders/my-source-file</code>.</p> </li> </ul></p>
     pub source_location: String,
-    /// <p>Location where the repository is stored.</p> <ul> <li> <p> <code>CodeCommit</code> </p> </li> <li> <p> <code>S3</code> </p> </li> </ul>
+    /// <p><p>Location where the repository is stored.</p> <ul> <li> <p> <code>CodeCommit</code> </p> </li> <li> <p> <code>S3</code> </p> </li> </ul></p>
     pub source_repository: String,
-    /// <p>The type of repository.</p> <ul> <li> <p> <code>Git</code> </p> </li> <li> <p> <code>Zip</code> </p> </li> </ul>
+    /// <p><p>The type of repository.</p> <ul> <li> <p> <code>Git</code> </p> </li> <li> <p> <code>Zip</code> </p> </li> </ul></p>
     pub source_type: String,
 }
 
@@ -9369,7 +9369,7 @@ impl UpdateApplicationResourceLifecycleMessageSerializer {
     }
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct UpdateApplicationVersionMessage {
     /// <p>The name of the application associated with this version.</p> <p> If no application is found with this name, <code>UpdateApplication</code> returns an <code>InvalidParameterValue</code> error.</p>
@@ -9660,7 +9660,7 @@ pub struct ValidationMessage {
     pub namespace: Option<String>,
     /// <p>The name of the option.</p>
     pub option_name: Option<String>,
-    /// <p>An indication of the severity of this message:</p> <ul> <li> <p> <code>error</code>: This message indicates that this is not a valid setting for an option.</p> </li> <li> <p> <code>warning</code>: This message is providing information you should take into account.</p> </li> </ul>
+    /// <p><p>An indication of the severity of this message:</p> <ul> <li> <p> <code>error</code>: This message indicates that this is not a valid setting for an option.</p> </li> <li> <p> <code>warning</code>: This message is providing information you should take into account.</p> </li> </ul></p>
     pub severity: Option<String>,
 }
 
@@ -9888,7 +9888,7 @@ impl VirtualizationTypeDeserializer {
 /// Errors returned by AbortEnvironmentUpdate
 #[derive(Debug, PartialEq)]
 pub enum AbortEnvironmentUpdateError {
-    ///<p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
     InsufficientPrivileges(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9961,9 +9961,9 @@ impl Error for AbortEnvironmentUpdateError {
 /// Errors returned by ApplyEnvironmentManagedAction
 #[derive(Debug, PartialEq)]
 pub enum ApplyEnvironmentManagedActionError {
-    ///<p>A generic service exception has occurred.</p>
+    /// <p>A generic service exception has occurred.</p>
     ElasticBeanstalkService(String),
-    ///<p>Cannot modify the managed action in its current state.</p>
+    /// <p>Cannot modify the managed action in its current state.</p>
     ManagedActionInvalidState(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10107,9 +10107,9 @@ impl Error for CheckDNSAvailabilityError {
 /// Errors returned by ComposeEnvironments
 #[derive(Debug, PartialEq)]
 pub enum ComposeEnvironmentsError {
-    ///<p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
     InsufficientPrivileges(String),
-    ///<p>The specified account has reached its limit of environments.</p>
+    /// <p>The specified account has reached its limit of environments.</p>
     TooManyEnvironments(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10186,7 +10186,7 @@ impl Error for ComposeEnvironmentsError {
 /// Errors returned by CreateApplication
 #[derive(Debug, PartialEq)]
 pub enum CreateApplicationError {
-    ///<p>The specified account has reached its limit of applications.</p>
+    /// <p>The specified account has reached its limit of applications.</p>
     TooManyApplications(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10257,15 +10257,15 @@ impl Error for CreateApplicationError {
 /// Errors returned by CreateApplicationVersion
 #[derive(Debug, PartialEq)]
 pub enum CreateApplicationVersionError {
-    ///<p>AWS CodeBuild is not available in the specified region.</p>
+    /// <p>AWS CodeBuild is not available in the specified region.</p>
     CodeBuildNotInServiceRegion(String),
-    ///<p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
     InsufficientPrivileges(String),
-    ///<p>The specified S3 bucket does not belong to the S3 region in which the service is running. The following regions are supported:</p> <ul> <li> <p>IAD/us-east-1</p> </li> <li> <p>PDX/us-west-2</p> </li> <li> <p>DUB/eu-west-1</p> </li> </ul>
+    /// <p><p>The specified S3 bucket does not belong to the S3 region in which the service is running. The following regions are supported:</p> <ul> <li> <p>IAD/us-east-1</p> </li> <li> <p>PDX/us-west-2</p> </li> <li> <p>DUB/eu-west-1</p> </li> </ul></p>
     S3LocationNotInServiceRegion(String),
-    ///<p>The specified account has reached its limit of application versions.</p>
+    /// <p>The specified account has reached its limit of application versions.</p>
     TooManyApplicationVersions(String),
-    ///<p>The specified account has reached its limit of applications.</p>
+    /// <p>The specified account has reached its limit of applications.</p>
     TooManyApplications(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10362,11 +10362,11 @@ impl Error for CreateApplicationVersionError {
 /// Errors returned by CreateConfigurationTemplate
 #[derive(Debug, PartialEq)]
 pub enum CreateConfigurationTemplateError {
-    ///<p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
     InsufficientPrivileges(String),
-    ///<p>The specified account has reached its limit of Amazon S3 buckets.</p>
+    /// <p>The specified account has reached its limit of Amazon S3 buckets.</p>
     TooManyBuckets(String),
-    ///<p>The specified account has reached its limit of configuration templates.</p>
+    /// <p>The specified account has reached its limit of configuration templates.</p>
     TooManyConfigurationTemplates(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10449,9 +10449,9 @@ impl Error for CreateConfigurationTemplateError {
 /// Errors returned by CreateEnvironment
 #[derive(Debug, PartialEq)]
 pub enum CreateEnvironmentError {
-    ///<p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
     InsufficientPrivileges(String),
-    ///<p>The specified account has reached its limit of environments.</p>
+    /// <p>The specified account has reached its limit of environments.</p>
     TooManyEnvironments(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10528,11 +10528,11 @@ impl Error for CreateEnvironmentError {
 /// Errors returned by CreatePlatformVersion
 #[derive(Debug, PartialEq)]
 pub enum CreatePlatformVersionError {
-    ///<p>A generic service exception has occurred.</p>
+    /// <p>A generic service exception has occurred.</p>
     ElasticBeanstalkService(String),
-    ///<p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
     InsufficientPrivileges(String),
-    ///<p>You have exceeded the maximum number of allowed platforms associated with the account.</p>
+    /// <p>You have exceeded the maximum number of allowed platforms associated with the account.</p>
     TooManyPlatforms(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10615,11 +10615,11 @@ impl Error for CreatePlatformVersionError {
 /// Errors returned by CreateStorageLocation
 #[derive(Debug, PartialEq)]
 pub enum CreateStorageLocationError {
-    ///<p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
     InsufficientPrivileges(String),
-    ///<p>The specified account does not have a subscription to Amazon S3.</p>
+    /// <p>The specified account does not have a subscription to Amazon S3.</p>
     S3SubscriptionRequired(String),
-    ///<p>The specified account has reached its limit of Amazon S3 buckets.</p>
+    /// <p>The specified account has reached its limit of Amazon S3 buckets.</p>
     TooManyBuckets(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10702,7 +10702,7 @@ impl Error for CreateStorageLocationError {
 /// Errors returned by DeleteApplication
 #[derive(Debug, PartialEq)]
 pub enum DeleteApplicationError {
-    ///<p>Unable to perform the specified operation because another operation that effects an element in this activity is already in progress.</p>
+    /// <p>Unable to perform the specified operation because another operation that effects an element in this activity is already in progress.</p>
     OperationInProgress(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10773,13 +10773,13 @@ impl Error for DeleteApplicationError {
 /// Errors returned by DeleteApplicationVersion
 #[derive(Debug, PartialEq)]
 pub enum DeleteApplicationVersionError {
-    ///<p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
     InsufficientPrivileges(String),
-    ///<p>Unable to perform the specified operation because another operation that effects an element in this activity is already in progress.</p>
+    /// <p>Unable to perform the specified operation because another operation that effects an element in this activity is already in progress.</p>
     OperationInProgress(String),
-    ///<p>The specified S3 bucket does not belong to the S3 region in which the service is running. The following regions are supported:</p> <ul> <li> <p>IAD/us-east-1</p> </li> <li> <p>PDX/us-west-2</p> </li> <li> <p>DUB/eu-west-1</p> </li> </ul>
+    /// <p><p>The specified S3 bucket does not belong to the S3 region in which the service is running. The following regions are supported:</p> <ul> <li> <p>IAD/us-east-1</p> </li> <li> <p>PDX/us-west-2</p> </li> <li> <p>DUB/eu-west-1</p> </li> </ul></p>
     S3LocationNotInServiceRegion(String),
-    ///<p>Unable to delete the Amazon S3 source bundle associated with the application version. The application version was deleted successfully.</p>
+    /// <p>Unable to delete the Amazon S3 source bundle associated with the application version. The application version was deleted successfully.</p>
     SourceBundleDeletion(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10870,7 +10870,7 @@ impl Error for DeleteApplicationVersionError {
 /// Errors returned by DeleteConfigurationTemplate
 #[derive(Debug, PartialEq)]
 pub enum DeleteConfigurationTemplateError {
-    ///<p>Unable to perform the specified operation because another operation that effects an element in this activity is already in progress.</p>
+    /// <p>Unable to perform the specified operation because another operation that effects an element in this activity is already in progress.</p>
     OperationInProgress(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11008,13 +11008,13 @@ impl Error for DeleteEnvironmentConfigurationError {
 /// Errors returned by DeletePlatformVersion
 #[derive(Debug, PartialEq)]
 pub enum DeletePlatformVersionError {
-    ///<p>A generic service exception has occurred.</p>
+    /// <p>A generic service exception has occurred.</p>
     ElasticBeanstalkService(String),
-    ///<p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
     InsufficientPrivileges(String),
-    ///<p>Unable to perform the specified operation because another operation that effects an element in this activity is already in progress.</p>
+    /// <p>Unable to perform the specified operation because another operation that effects an element in this activity is already in progress.</p>
     OperationInProgress(String),
-    ///<p>You cannot delete the platform version because there are still environments running on it.</p>
+    /// <p>You cannot delete the platform version because there are still environments running on it.</p>
     PlatformVersionStillReferenced(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11233,7 +11233,7 @@ impl Error for DescribeApplicationsError {
 /// Errors returned by DescribeConfigurationOptions
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigurationOptionsError {
-    ///<p>The specified account has reached its limit of Amazon S3 buckets.</p>
+    /// <p>The specified account has reached its limit of Amazon S3 buckets.</p>
     TooManyBuckets(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11304,7 +11304,7 @@ impl Error for DescribeConfigurationOptionsError {
 /// Errors returned by DescribeConfigurationSettings
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigurationSettingsError {
-    ///<p>The specified account has reached its limit of Amazon S3 buckets.</p>
+    /// <p>The specified account has reached its limit of Amazon S3 buckets.</p>
     TooManyBuckets(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11375,9 +11375,9 @@ impl Error for DescribeConfigurationSettingsError {
 /// Errors returned by DescribeEnvironmentHealth
 #[derive(Debug, PartialEq)]
 pub enum DescribeEnvironmentHealthError {
-    ///<p>A generic service exception has occurred.</p>
+    /// <p>A generic service exception has occurred.</p>
     ElasticBeanstalkService(String),
-    ///<p>One or more input parameters is not valid. Please correct the input parameters and try the operation again.</p>
+    /// <p>One or more input parameters is not valid. Please correct the input parameters and try the operation again.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11454,7 +11454,7 @@ impl Error for DescribeEnvironmentHealthError {
 /// Errors returned by DescribeEnvironmentManagedActionHistory
 #[derive(Debug, PartialEq)]
 pub enum DescribeEnvironmentManagedActionHistoryError {
-    ///<p>A generic service exception has occurred.</p>
+    /// <p>A generic service exception has occurred.</p>
     ElasticBeanstalkService(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11529,7 +11529,7 @@ impl Error for DescribeEnvironmentManagedActionHistoryError {
 /// Errors returned by DescribeEnvironmentManagedActions
 #[derive(Debug, PartialEq)]
 pub enum DescribeEnvironmentManagedActionsError {
-    ///<p>A generic service exception has occurred.</p>
+    /// <p>A generic service exception has occurred.</p>
     ElasticBeanstalkService(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11602,7 +11602,7 @@ impl Error for DescribeEnvironmentManagedActionsError {
 /// Errors returned by DescribeEnvironmentResources
 #[derive(Debug, PartialEq)]
 pub enum DescribeEnvironmentResourcesError {
-    ///<p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
     InsufficientPrivileges(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11803,9 +11803,9 @@ impl Error for DescribeEventsError {
 /// Errors returned by DescribeInstancesHealth
 #[derive(Debug, PartialEq)]
 pub enum DescribeInstancesHealthError {
-    ///<p>A generic service exception has occurred.</p>
+    /// <p>A generic service exception has occurred.</p>
     ElasticBeanstalkService(String),
-    ///<p>One or more input parameters is not valid. Please correct the input parameters and try the operation again.</p>
+    /// <p>One or more input parameters is not valid. Please correct the input parameters and try the operation again.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11882,9 +11882,9 @@ impl Error for DescribeInstancesHealthError {
 /// Errors returned by DescribePlatformVersion
 #[derive(Debug, PartialEq)]
 pub enum DescribePlatformVersionError {
-    ///<p>A generic service exception has occurred.</p>
+    /// <p>A generic service exception has occurred.</p>
     ElasticBeanstalkService(String),
-    ///<p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
     InsufficientPrivileges(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12028,9 +12028,9 @@ impl Error for ListAvailableSolutionStacksError {
 /// Errors returned by ListPlatformVersions
 #[derive(Debug, PartialEq)]
 pub enum ListPlatformVersionsError {
-    ///<p>A generic service exception has occurred.</p>
+    /// <p>A generic service exception has occurred.</p>
     ElasticBeanstalkService(String),
-    ///<p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
     InsufficientPrivileges(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12109,7 +12109,7 @@ impl Error for ListPlatformVersionsError {
 /// Errors returned by RebuildEnvironment
 #[derive(Debug, PartialEq)]
 pub enum RebuildEnvironmentError {
-    ///<p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
     InsufficientPrivileges(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12440,7 +12440,7 @@ impl Error for SwapEnvironmentCNAMEsError {
 /// Errors returned by TerminateEnvironment
 #[derive(Debug, PartialEq)]
 pub enum TerminateEnvironmentError {
-    ///<p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
     InsufficientPrivileges(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12578,7 +12578,7 @@ impl Error for UpdateApplicationError {
 /// Errors returned by UpdateApplicationResourceLifecycle
 #[derive(Debug, PartialEq)]
 pub enum UpdateApplicationResourceLifecycleError {
-    ///<p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
     InsufficientPrivileges(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12716,9 +12716,9 @@ impl Error for UpdateApplicationVersionError {
 /// Errors returned by UpdateConfigurationTemplate
 #[derive(Debug, PartialEq)]
 pub enum UpdateConfigurationTemplateError {
-    ///<p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
     InsufficientPrivileges(String),
-    ///<p>The specified account has reached its limit of Amazon S3 buckets.</p>
+    /// <p>The specified account has reached its limit of Amazon S3 buckets.</p>
     TooManyBuckets(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12795,9 +12795,9 @@ impl Error for UpdateConfigurationTemplateError {
 /// Errors returned by UpdateEnvironment
 #[derive(Debug, PartialEq)]
 pub enum UpdateEnvironmentError {
-    ///<p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
     InsufficientPrivileges(String),
-    ///<p>The specified account has reached its limit of Amazon S3 buckets.</p>
+    /// <p>The specified account has reached its limit of Amazon S3 buckets.</p>
     TooManyBuckets(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12874,9 +12874,9 @@ impl Error for UpdateEnvironmentError {
 /// Errors returned by ValidateConfigurationSettings
 #[derive(Debug, PartialEq)]
 pub enum ValidateConfigurationSettingsError {
-    ///<p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
     InsufficientPrivileges(String),
-    ///<p>The specified account has reached its limit of Amazon S3 buckets.</p>
+    /// <p>The specified account has reached its limit of Amazon S3 buckets.</p>
     TooManyBuckets(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12952,126 +12952,126 @@ impl Error for ValidateConfigurationSettingsError {
 }
 /// Trait representing the capabilities of the Elastic Beanstalk API. Elastic Beanstalk clients implement this trait.
 pub trait ElasticBeanstalk {
-    #[doc="<p>Cancels in-progress environment configuration update or application version deployment.</p>"]
+    /// <p>Cancels in-progress environment configuration update or application version deployment.</p>
     fn abort_environment_update(
         &self,
         input: &AbortEnvironmentUpdateMessage,
     ) -> Result<(), AbortEnvironmentUpdateError>;
 
-    #[doc="<p>Applies a scheduled managed action immediately. A managed action can be applied only if its status is <code>Scheduled</code>. Get the status and action ID of a managed action with <a>DescribeEnvironmentManagedActions</a>.</p>"]
+    /// <p>Applies a scheduled managed action immediately. A managed action can be applied only if its status is <code>Scheduled</code>. Get the status and action ID of a managed action with <a>DescribeEnvironmentManagedActions</a>.</p>
     fn apply_environment_managed_action(
         &self,
         input: &ApplyEnvironmentManagedActionRequest,
     ) -> Result<ApplyEnvironmentManagedActionResult, ApplyEnvironmentManagedActionError>;
 
-    #[doc = "<p>Checks if the specified CNAME is available.</p>"]
+    /// <p>Checks if the specified CNAME is available.</p>
     fn check_dns_availability(
         &self,
         input: &CheckDNSAvailabilityMessage,
     ) -> Result<CheckDNSAvailabilityResultMessage, CheckDNSAvailabilityError>;
 
-    #[doc="<p>Create or update a group of environments that each run a separate component of a single application. Takes a list of version labels that specify application source bundles for each of the environments to create or update. The name of each environment and other required information must be included in the source bundles in an environment manifest named <code>env.yaml</code>. See <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/environment-mgmt-compose.html\">Compose Environments</a> for details.</p>"]
+    /// <p>Create or update a group of environments that each run a separate component of a single application. Takes a list of version labels that specify application source bundles for each of the environments to create or update. The name of each environment and other required information must be included in the source bundles in an environment manifest named <code>env.yaml</code>. See <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/environment-mgmt-compose.html">Compose Environments</a> for details.</p>
     fn compose_environments(
         &self,
         input: &ComposeEnvironmentsMessage,
     ) -> Result<EnvironmentDescriptionsMessage, ComposeEnvironmentsError>;
 
-    #[doc="<p> Creates an application that has one configuration template named <code>default</code> and no application versions. </p>"]
+    /// <p> Creates an application that has one configuration template named <code>default</code> and no application versions. </p>
     fn create_application(
         &self,
         input: &CreateApplicationMessage,
     ) -> Result<ApplicationDescriptionMessage, CreateApplicationError>;
 
-    #[doc="<p>Creates an application version for the specified application. You can create an application version from a source bundle in Amazon S3, a commit in AWS CodeCommit, or the output of an AWS CodeBuild build as follows:</p> <p>Specify a commit in an AWS CodeCommit repository with <code>SourceBuildInformation</code>.</p> <p>Specify a build in an AWS CodeBuild with <code>SourceBuildInformation</code> and <code>BuildConfiguration</code>.</p> <p>Specify a source bundle in S3 with <code>SourceBundle</code> </p> <p>Omit both <code>SourceBuildInformation</code> and <code>SourceBundle</code> to use the default sample application.</p> <note> <p>Once you create an application version with a specified Amazon S3 bucket and key location, you cannot change that Amazon S3 location. If you change the Amazon S3 location, you receive an exception when you attempt to launch an environment from the application version.</p> </note>"]
+    /// <p><p>Creates an application version for the specified application. You can create an application version from a source bundle in Amazon S3, a commit in AWS CodeCommit, or the output of an AWS CodeBuild build as follows:</p> <p>Specify a commit in an AWS CodeCommit repository with <code>SourceBuildInformation</code>.</p> <p>Specify a build in an AWS CodeBuild with <code>SourceBuildInformation</code> and <code>BuildConfiguration</code>.</p> <p>Specify a source bundle in S3 with <code>SourceBundle</code> </p> <p>Omit both <code>SourceBuildInformation</code> and <code>SourceBundle</code> to use the default sample application.</p> <note> <p>Once you create an application version with a specified Amazon S3 bucket and key location, you cannot change that Amazon S3 location. If you change the Amazon S3 location, you receive an exception when you attempt to launch an environment from the application version.</p> </note></p>
     fn create_application_version(
         &self,
         input: &CreateApplicationVersionMessage,
     ) -> Result<ApplicationVersionDescriptionMessage, CreateApplicationVersionError>;
 
-    #[doc="<p>Creates a configuration template. Templates are associated with a specific application and are used to deploy different versions of the application with the same configuration settings.</p> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> <li> <p> <a>DescribeConfigurationSettings</a> </p> </li> <li> <p> <a>ListAvailableSolutionStacks</a> </p> </li> </ul>"]
+    /// <p><p>Creates a configuration template. Templates are associated with a specific application and are used to deploy different versions of the application with the same configuration settings.</p> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> <li> <p> <a>DescribeConfigurationSettings</a> </p> </li> <li> <p> <a>ListAvailableSolutionStacks</a> </p> </li> </ul></p>
     fn create_configuration_template(
         &self,
         input: &CreateConfigurationTemplateMessage,
     ) -> Result<ConfigurationSettingsDescription, CreateConfigurationTemplateError>;
 
-    #[doc="<p>Launches an environment for the specified application using the specified configuration.</p>"]
+    /// <p>Launches an environment for the specified application using the specified configuration.</p>
     fn create_environment(
         &self,
         input: &CreateEnvironmentMessage,
     ) -> Result<EnvironmentDescription, CreateEnvironmentError>;
 
-    #[doc = "<p>Create a new version of your custom platform.</p>"]
+    /// <p>Create a new version of your custom platform.</p>
     fn create_platform_version(
         &self,
         input: &CreatePlatformVersionRequest,
     ) -> Result<CreatePlatformVersionResult, CreatePlatformVersionError>;
 
-    #[doc="<p>Creates the Amazon S3 storage location for the account.</p> <p>This location is used to store user log files.</p>"]
+    /// <p>Creates the Amazon S3 storage location for the account.</p> <p>This location is used to store user log files.</p>
     fn create_storage_location(
         &self,
     ) -> Result<CreateStorageLocationResultMessage, CreateStorageLocationError>;
 
-    #[doc="<p>Deletes the specified application along with all associated versions and configurations. The application versions will not be deleted from your Amazon S3 bucket.</p> <note> <p>You cannot delete an application that has a running environment.</p> </note>"]
+    /// <p><p>Deletes the specified application along with all associated versions and configurations. The application versions will not be deleted from your Amazon S3 bucket.</p> <note> <p>You cannot delete an application that has a running environment.</p> </note></p>
     fn delete_application(
         &self,
         input: &DeleteApplicationMessage,
     ) -> Result<(), DeleteApplicationError>;
 
-    #[doc="<p>Deletes the specified version from the specified application.</p> <note> <p>You cannot delete an application version that is associated with a running environment.</p> </note>"]
+    /// <p><p>Deletes the specified version from the specified application.</p> <note> <p>You cannot delete an application version that is associated with a running environment.</p> </note></p>
     fn delete_application_version(
         &self,
         input: &DeleteApplicationVersionMessage,
     ) -> Result<(), DeleteApplicationVersionError>;
 
-    #[doc="<p>Deletes the specified configuration template.</p> <note> <p>When you launch an environment using a configuration template, the environment gets a copy of the template. You can delete or modify the environment's copy of the template without affecting the running environment.</p> </note>"]
+    /// <p><p>Deletes the specified configuration template.</p> <note> <p>When you launch an environment using a configuration template, the environment gets a copy of the template. You can delete or modify the environment&#39;s copy of the template without affecting the running environment.</p> </note></p>
     fn delete_configuration_template(
         &self,
         input: &DeleteConfigurationTemplateMessage,
     ) -> Result<(), DeleteConfigurationTemplateError>;
 
-    #[doc="<p>Deletes the draft configuration associated with the running environment.</p> <p>Updating a running environment with any configuration changes creates a draft configuration set. You can get the draft configuration using <a>DescribeConfigurationSettings</a> while the update is in progress or if the update fails. The <code>DeploymentStatus</code> for the draft configuration indicates whether the deployment is in process or has failed. The draft configuration remains in existence until it is deleted with this action.</p>"]
+    /// <p>Deletes the draft configuration associated with the running environment.</p> <p>Updating a running environment with any configuration changes creates a draft configuration set. You can get the draft configuration using <a>DescribeConfigurationSettings</a> while the update is in progress or if the update fails. The <code>DeploymentStatus</code> for the draft configuration indicates whether the deployment is in process or has failed. The draft configuration remains in existence until it is deleted with this action.</p>
     fn delete_environment_configuration(
         &self,
         input: &DeleteEnvironmentConfigurationMessage,
     ) -> Result<(), DeleteEnvironmentConfigurationError>;
 
-    #[doc = "<p>Deletes the specified version of a custom platform.</p>"]
+    /// <p>Deletes the specified version of a custom platform.</p>
     fn delete_platform_version(
         &self,
         input: &DeletePlatformVersionRequest,
     ) -> Result<DeletePlatformVersionResult, DeletePlatformVersionError>;
 
-    #[doc = "<p>Retrieve a list of application versions.</p>"]
+    /// <p>Retrieve a list of application versions.</p>
     fn describe_application_versions(
         &self,
         input: &DescribeApplicationVersionsMessage,
     ) -> Result<ApplicationVersionDescriptionsMessage, DescribeApplicationVersionsError>;
 
-    #[doc = "<p>Returns the descriptions of existing applications.</p>"]
+    /// <p>Returns the descriptions of existing applications.</p>
     fn describe_applications(
         &self,
         input: &DescribeApplicationsMessage,
     ) -> Result<ApplicationDescriptionsMessage, DescribeApplicationsError>;
 
-    #[doc="<p>Describes the configuration options that are used in a particular configuration template or environment, or that a specified solution stack defines. The description includes the values the options, their default values, and an indication of the required action on a running environment if an option value is changed.</p>"]
+    /// <p>Describes the configuration options that are used in a particular configuration template or environment, or that a specified solution stack defines. The description includes the values the options, their default values, and an indication of the required action on a running environment if an option value is changed.</p>
     fn describe_configuration_options(
         &self,
         input: &DescribeConfigurationOptionsMessage,
     ) -> Result<ConfigurationOptionsDescription, DescribeConfigurationOptionsError>;
 
-    #[doc="<p>Returns a description of the settings for the specified configuration set, that is, either a configuration template or the configuration set associated with a running environment.</p> <p>When describing the settings for the configuration set associated with a running environment, it is possible to receive two sets of setting descriptions. One is the deployed configuration set, and the other is a draft configuration of an environment that is either in the process of deployment or that failed to deploy.</p> <p>Related Topics</p> <ul> <li> <p> <a>DeleteEnvironmentConfiguration</a> </p> </li> </ul>"]
+    /// <p><p>Returns a description of the settings for the specified configuration set, that is, either a configuration template or the configuration set associated with a running environment.</p> <p>When describing the settings for the configuration set associated with a running environment, it is possible to receive two sets of setting descriptions. One is the deployed configuration set, and the other is a draft configuration of an environment that is either in the process of deployment or that failed to deploy.</p> <p>Related Topics</p> <ul> <li> <p> <a>DeleteEnvironmentConfiguration</a> </p> </li> </ul></p>
     fn describe_configuration_settings(
         &self,
         input: &DescribeConfigurationSettingsMessage,
     ) -> Result<ConfigurationSettingsDescriptions, DescribeConfigurationSettingsError>;
 
-    #[doc="<p>Returns information about the overall health of the specified environment. The <b>DescribeEnvironmentHealth</b> operation is only available with AWS Elastic Beanstalk Enhanced Health.</p>"]
+    /// <p>Returns information about the overall health of the specified environment. The <b>DescribeEnvironmentHealth</b> operation is only available with AWS Elastic Beanstalk Enhanced Health.</p>
     fn describe_environment_health(
         &self,
         input: &DescribeEnvironmentHealthRequest,
     ) -> Result<DescribeEnvironmentHealthResult, DescribeEnvironmentHealthError>;
 
-    #[doc = "<p>Lists an environment's completed and failed managed actions.</p>"]
+    /// <p>Lists an environment's completed and failed managed actions.</p>
     fn describe_environment_managed_action_history(
         &self,
         input: &DescribeEnvironmentManagedActionHistoryRequest,
@@ -13080,96 +13080,96 @@ pub trait ElasticBeanstalk {
         DescribeEnvironmentManagedActionHistoryError,
     >;
 
-    #[doc = "<p>Lists an environment's upcoming and in-progress managed actions.</p>"]
+    /// <p>Lists an environment's upcoming and in-progress managed actions.</p>
     fn describe_environment_managed_actions(
         &self,
         input: &DescribeEnvironmentManagedActionsRequest,
     ) -> Result<DescribeEnvironmentManagedActionsResult, DescribeEnvironmentManagedActionsError>;
 
-    #[doc = "<p>Returns AWS resources for this environment.</p>"]
+    /// <p>Returns AWS resources for this environment.</p>
     fn describe_environment_resources(
         &self,
         input: &DescribeEnvironmentResourcesMessage,
     ) -> Result<EnvironmentResourceDescriptionsMessage, DescribeEnvironmentResourcesError>;
 
-    #[doc = "<p>Returns descriptions for existing environments.</p>"]
+    /// <p>Returns descriptions for existing environments.</p>
     fn describe_environments(
         &self,
         input: &DescribeEnvironmentsMessage,
     ) -> Result<EnvironmentDescriptionsMessage, DescribeEnvironmentsError>;
 
-    #[doc="<p>Returns list of event descriptions matching criteria up to the last 6 weeks.</p> <note> <p>This action returns the most recent 1,000 events from the specified <code>NextToken</code>.</p> </note>"]
+    /// <p><p>Returns list of event descriptions matching criteria up to the last 6 weeks.</p> <note> <p>This action returns the most recent 1,000 events from the specified <code>NextToken</code>.</p> </note></p>
     fn describe_events(
         &self,
         input: &DescribeEventsMessage,
     ) -> Result<EventDescriptionsMessage, DescribeEventsError>;
 
-    #[doc="<p>Retrives detailed information about the health of instances in your AWS Elastic Beanstalk. This operation requires <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced.html\">enhanced health reporting</a>.</p>"]
+    /// <p>Retrives detailed information about the health of instances in your AWS Elastic Beanstalk. This operation requires <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced.html">enhanced health reporting</a>.</p>
     fn describe_instances_health(
         &self,
         input: &DescribeInstancesHealthRequest,
     ) -> Result<DescribeInstancesHealthResult, DescribeInstancesHealthError>;
 
-    #[doc = "<p>Describes the version of the platform.</p>"]
+    /// <p>Describes the version of the platform.</p>
     fn describe_platform_version(
         &self,
         input: &DescribePlatformVersionRequest,
     ) -> Result<DescribePlatformVersionResult, DescribePlatformVersionError>;
 
-    #[doc="<p>Returns a list of the available solution stack names, with the public version first and then in reverse chronological order.</p>"]
+    /// <p>Returns a list of the available solution stack names, with the public version first and then in reverse chronological order.</p>
     fn list_available_solution_stacks(
         &self,
     ) -> Result<ListAvailableSolutionStacksResultMessage, ListAvailableSolutionStacksError>;
 
-    #[doc = "<p>Lists the available platforms.</p>"]
+    /// <p>Lists the available platforms.</p>
     fn list_platform_versions(
         &self,
         input: &ListPlatformVersionsRequest,
     ) -> Result<ListPlatformVersionsResult, ListPlatformVersionsError>;
 
-    #[doc="<p>Deletes and recreates all of the AWS resources (for example: the Auto Scaling group, load balancer, etc.) for a specified environment and forces a restart.</p>"]
+    /// <p>Deletes and recreates all of the AWS resources (for example: the Auto Scaling group, load balancer, etc.) for a specified environment and forces a restart.</p>
     fn rebuild_environment(
         &self,
         input: &RebuildEnvironmentMessage,
     ) -> Result<(), RebuildEnvironmentError>;
 
-    #[doc="<p>Initiates a request to compile the specified type of information of the deployed environment.</p> <p> Setting the <code>InfoType</code> to <code>tail</code> compiles the last lines from the application server log files of every Amazon EC2 instance in your environment. </p> <p> Setting the <code>InfoType</code> to <code>bundle</code> compresses the application server log files for every Amazon EC2 instance into a <code>.zip</code> file. Legacy and .NET containers do not support bundle logs. </p> <p> Use <a>RetrieveEnvironmentInfo</a> to obtain the set of logs. </p> <p>Related Topics</p> <ul> <li> <p> <a>RetrieveEnvironmentInfo</a> </p> </li> </ul>"]
+    /// <p><p>Initiates a request to compile the specified type of information of the deployed environment.</p> <p> Setting the <code>InfoType</code> to <code>tail</code> compiles the last lines from the application server log files of every Amazon EC2 instance in your environment. </p> <p> Setting the <code>InfoType</code> to <code>bundle</code> compresses the application server log files for every Amazon EC2 instance into a <code>.zip</code> file. Legacy and .NET containers do not support bundle logs. </p> <p> Use <a>RetrieveEnvironmentInfo</a> to obtain the set of logs. </p> <p>Related Topics</p> <ul> <li> <p> <a>RetrieveEnvironmentInfo</a> </p> </li> </ul></p>
     fn request_environment_info(
         &self,
         input: &RequestEnvironmentInfoMessage,
     ) -> Result<(), RequestEnvironmentInfoError>;
 
-    #[doc="<p>Causes the environment to restart the application container server running on each Amazon EC2 instance.</p>"]
+    /// <p>Causes the environment to restart the application container server running on each Amazon EC2 instance.</p>
     fn restart_app_server(
         &self,
         input: &RestartAppServerMessage,
     ) -> Result<(), RestartAppServerError>;
 
-    #[doc="<p>Retrieves the compiled information from a <a>RequestEnvironmentInfo</a> request.</p> <p>Related Topics</p> <ul> <li> <p> <a>RequestEnvironmentInfo</a> </p> </li> </ul>"]
+    /// <p><p>Retrieves the compiled information from a <a>RequestEnvironmentInfo</a> request.</p> <p>Related Topics</p> <ul> <li> <p> <a>RequestEnvironmentInfo</a> </p> </li> </ul></p>
     fn retrieve_environment_info(
         &self,
         input: &RetrieveEnvironmentInfoMessage,
     ) -> Result<RetrieveEnvironmentInfoResultMessage, RetrieveEnvironmentInfoError>;
 
-    #[doc = "<p>Swaps the CNAMEs of two environments.</p>"]
+    /// <p>Swaps the CNAMEs of two environments.</p>
     fn swap_environment_cnam_es(
         &self,
         input: &SwapEnvironmentCNAMEsMessage,
     ) -> Result<(), SwapEnvironmentCNAMEsError>;
 
-    #[doc = "<p>Terminates the specified environment.</p>"]
+    /// <p>Terminates the specified environment.</p>
     fn terminate_environment(
         &self,
         input: &TerminateEnvironmentMessage,
     ) -> Result<EnvironmentDescription, TerminateEnvironmentError>;
 
-    #[doc="<p>Updates the specified application to have the specified properties.</p> <note> <p>If a property (for example, <code>description</code>) is not provided, the value remains unchanged. To clear these properties, specify an empty string.</p> </note>"]
+    /// <p><p>Updates the specified application to have the specified properties.</p> <note> <p>If a property (for example, <code>description</code>) is not provided, the value remains unchanged. To clear these properties, specify an empty string.</p> </note></p>
     fn update_application(
         &self,
         input: &UpdateApplicationMessage,
     ) -> Result<ApplicationDescriptionMessage, UpdateApplicationError>;
 
-    #[doc = "<p>Modifies lifecycle settings for an application.</p>"]
+    /// <p>Modifies lifecycle settings for an application.</p>
     fn update_application_resource_lifecycle(
         &self,
         input: &UpdateApplicationResourceLifecycleMessage,
@@ -13178,25 +13178,25 @@ pub trait ElasticBeanstalk {
         UpdateApplicationResourceLifecycleError,
     >;
 
-    #[doc="<p>Updates the specified application version to have the specified properties.</p> <note> <p>If a property (for example, <code>description</code>) is not provided, the value remains unchanged. To clear properties, specify an empty string.</p> </note>"]
+    /// <p><p>Updates the specified application version to have the specified properties.</p> <note> <p>If a property (for example, <code>description</code>) is not provided, the value remains unchanged. To clear properties, specify an empty string.</p> </note></p>
     fn update_application_version(
         &self,
         input: &UpdateApplicationVersionMessage,
     ) -> Result<ApplicationVersionDescriptionMessage, UpdateApplicationVersionError>;
 
-    #[doc="<p>Updates the specified configuration template to have the specified properties or configuration option values.</p> <note> <p>If a property (for example, <code>ApplicationName</code>) is not provided, its value remains unchanged. To clear such properties, specify an empty string.</p> </note> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> </ul>"]
+    /// <p><p>Updates the specified configuration template to have the specified properties or configuration option values.</p> <note> <p>If a property (for example, <code>ApplicationName</code>) is not provided, its value remains unchanged. To clear such properties, specify an empty string.</p> </note> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> </ul></p>
     fn update_configuration_template(
         &self,
         input: &UpdateConfigurationTemplateMessage,
     ) -> Result<ConfigurationSettingsDescription, UpdateConfigurationTemplateError>;
 
-    #[doc="<p>Updates the environment description, deploys a new application version, updates the configuration settings to an entirely new configuration template, or updates select configuration option values in the running environment.</p> <p> Attempting to update both the release and configuration is not allowed and AWS Elastic Beanstalk returns an <code>InvalidParameterCombination</code> error. </p> <p> When updating the configuration settings to a new template or individual settings, a draft configuration is created and <a>DescribeConfigurationSettings</a> for this environment returns two setting descriptions with different <code>DeploymentStatus</code> values. </p>"]
+    /// <p>Updates the environment description, deploys a new application version, updates the configuration settings to an entirely new configuration template, or updates select configuration option values in the running environment.</p> <p> Attempting to update both the release and configuration is not allowed and AWS Elastic Beanstalk returns an <code>InvalidParameterCombination</code> error. </p> <p> When updating the configuration settings to a new template or individual settings, a draft configuration is created and <a>DescribeConfigurationSettings</a> for this environment returns two setting descriptions with different <code>DeploymentStatus</code> values. </p>
     fn update_environment(
         &self,
         input: &UpdateEnvironmentMessage,
     ) -> Result<EnvironmentDescription, UpdateEnvironmentError>;
 
-    #[doc="<p>Takes a set of configuration settings and either a configuration template or environment, and determines whether those values are valid.</p> <p>This action returns a list of messages indicating any errors or warnings associated with the selection of option values.</p>"]
+    /// <p>Takes a set of configuration settings and either a configuration template or environment, and determines whether those values are valid.</p> <p>This action returns a list of messages indicating any errors or warnings associated with the selection of option values.</p>
     fn validate_configuration_settings(
         &self,
         input: &ValidateConfigurationSettingsMessage,
@@ -13232,7 +13232,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Cancels in-progress environment configuration update or application version deployment.</p>"]
+    /// <p>Cancels in-progress environment configuration update or application version deployment.</p>
     fn abort_environment_update(
         &self,
         input: &AbortEnvironmentUpdateMessage,
@@ -13262,7 +13262,7 @@ where
         }
     }
 
-    #[doc="<p>Applies a scheduled managed action immediately. A managed action can be applied only if its status is <code>Scheduled</code>. Get the status and action ID of a managed action with <a>DescribeEnvironmentManagedActions</a>.</p>"]
+    /// <p>Applies a scheduled managed action immediately. A managed action can be applied only if its status is <code>Scheduled</code>. Get the status and action ID of a managed action with <a>DescribeEnvironmentManagedActions</a>.</p>
     fn apply_environment_managed_action(
         &self,
         input: &ApplyEnvironmentManagedActionRequest,
@@ -13315,7 +13315,7 @@ where
         }
     }
 
-    #[doc = "<p>Checks if the specified CNAME is available.</p>"]
+    /// <p>Checks if the specified CNAME is available.</p>
     fn check_dns_availability(
         &self,
         input: &CheckDNSAvailabilityMessage,
@@ -13366,7 +13366,7 @@ where
         }
     }
 
-    #[doc="<p>Create or update a group of environments that each run a separate component of a single application. Takes a list of version labels that specify application source bundles for each of the environments to create or update. The name of each environment and other required information must be included in the source bundles in an environment manifest named <code>env.yaml</code>. See <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/environment-mgmt-compose.html\">Compose Environments</a> for details.</p>"]
+    /// <p>Create or update a group of environments that each run a separate component of a single application. Takes a list of version labels that specify application source bundles for each of the environments to create or update. The name of each environment and other required information must be included in the source bundles in an environment manifest named <code>env.yaml</code>. See <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/environment-mgmt-compose.html">Compose Environments</a> for details.</p>
     fn compose_environments(
         &self,
         input: &ComposeEnvironmentsMessage,
@@ -13417,7 +13417,7 @@ where
         }
     }
 
-    #[doc="<p> Creates an application that has one configuration template named <code>default</code> and no application versions. </p>"]
+    /// <p> Creates an application that has one configuration template named <code>default</code> and no application versions. </p>
     fn create_application(
         &self,
         input: &CreateApplicationMessage,
@@ -13468,7 +13468,7 @@ where
         }
     }
 
-    #[doc="<p>Creates an application version for the specified application. You can create an application version from a source bundle in Amazon S3, a commit in AWS CodeCommit, or the output of an AWS CodeBuild build as follows:</p> <p>Specify a commit in an AWS CodeCommit repository with <code>SourceBuildInformation</code>.</p> <p>Specify a build in an AWS CodeBuild with <code>SourceBuildInformation</code> and <code>BuildConfiguration</code>.</p> <p>Specify a source bundle in S3 with <code>SourceBundle</code> </p> <p>Omit both <code>SourceBuildInformation</code> and <code>SourceBundle</code> to use the default sample application.</p> <note> <p>Once you create an application version with a specified Amazon S3 bucket and key location, you cannot change that Amazon S3 location. If you change the Amazon S3 location, you receive an exception when you attempt to launch an environment from the application version.</p> </note>"]
+    /// <p><p>Creates an application version for the specified application. You can create an application version from a source bundle in Amazon S3, a commit in AWS CodeCommit, or the output of an AWS CodeBuild build as follows:</p> <p>Specify a commit in an AWS CodeCommit repository with <code>SourceBuildInformation</code>.</p> <p>Specify a build in an AWS CodeBuild with <code>SourceBuildInformation</code> and <code>BuildConfiguration</code>.</p> <p>Specify a source bundle in S3 with <code>SourceBundle</code> </p> <p>Omit both <code>SourceBuildInformation</code> and <code>SourceBundle</code> to use the default sample application.</p> <note> <p>Once you create an application version with a specified Amazon S3 bucket and key location, you cannot change that Amazon S3 location. If you change the Amazon S3 location, you receive an exception when you attempt to launch an environment from the application version.</p> </note></p>
     fn create_application_version(
         &self,
         input: &CreateApplicationVersionMessage,
@@ -13521,7 +13521,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a configuration template. Templates are associated with a specific application and are used to deploy different versions of the application with the same configuration settings.</p> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> <li> <p> <a>DescribeConfigurationSettings</a> </p> </li> <li> <p> <a>ListAvailableSolutionStacks</a> </p> </li> </ul>"]
+    /// <p><p>Creates a configuration template. Templates are associated with a specific application and are used to deploy different versions of the application with the same configuration settings.</p> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> <li> <p> <a>DescribeConfigurationSettings</a> </p> </li> <li> <p> <a>ListAvailableSolutionStacks</a> </p> </li> </ul></p>
     fn create_configuration_template(
         &self,
         input: &CreateConfigurationTemplateMessage,
@@ -13572,7 +13572,7 @@ where
         }
     }
 
-    #[doc="<p>Launches an environment for the specified application using the specified configuration.</p>"]
+    /// <p>Launches an environment for the specified application using the specified configuration.</p>
     fn create_environment(
         &self,
         input: &CreateEnvironmentMessage,
@@ -13623,7 +13623,7 @@ where
         }
     }
 
-    #[doc = "<p>Create a new version of your custom platform.</p>"]
+    /// <p>Create a new version of your custom platform.</p>
     fn create_platform_version(
         &self,
         input: &CreatePlatformVersionRequest,
@@ -13674,7 +13674,7 @@ where
         }
     }
 
-    #[doc="<p>Creates the Amazon S3 storage location for the account.</p> <p>This location is used to store user log files.</p>"]
+    /// <p>Creates the Amazon S3 storage location for the account.</p> <p>This location is used to store user log files.</p>
     fn create_storage_location(
         &self,
     ) -> Result<CreateStorageLocationResultMessage, CreateStorageLocationError> {
@@ -13726,7 +13726,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified application along with all associated versions and configurations. The application versions will not be deleted from your Amazon S3 bucket.</p> <note> <p>You cannot delete an application that has a running environment.</p> </note>"]
+    /// <p><p>Deletes the specified application along with all associated versions and configurations. The application versions will not be deleted from your Amazon S3 bucket.</p> <note> <p>You cannot delete an application that has a running environment.</p> </note></p>
     fn delete_application(
         &self,
         input: &DeleteApplicationMessage,
@@ -13756,7 +13756,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified version from the specified application.</p> <note> <p>You cannot delete an application version that is associated with a running environment.</p> </note>"]
+    /// <p><p>Deletes the specified version from the specified application.</p> <note> <p>You cannot delete an application version that is associated with a running environment.</p> </note></p>
     fn delete_application_version(
         &self,
         input: &DeleteApplicationVersionMessage,
@@ -13786,7 +13786,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified configuration template.</p> <note> <p>When you launch an environment using a configuration template, the environment gets a copy of the template. You can delete or modify the environment's copy of the template without affecting the running environment.</p> </note>"]
+    /// <p><p>Deletes the specified configuration template.</p> <note> <p>When you launch an environment using a configuration template, the environment gets a copy of the template. You can delete or modify the environment&#39;s copy of the template without affecting the running environment.</p> </note></p>
     fn delete_configuration_template(
         &self,
         input: &DeleteConfigurationTemplateMessage,
@@ -13816,7 +13816,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the draft configuration associated with the running environment.</p> <p>Updating a running environment with any configuration changes creates a draft configuration set. You can get the draft configuration using <a>DescribeConfigurationSettings</a> while the update is in progress or if the update fails. The <code>DeploymentStatus</code> for the draft configuration indicates whether the deployment is in process or has failed. The draft configuration remains in existence until it is deleted with this action.</p>"]
+    /// <p>Deletes the draft configuration associated with the running environment.</p> <p>Updating a running environment with any configuration changes creates a draft configuration set. You can get the draft configuration using <a>DescribeConfigurationSettings</a> while the update is in progress or if the update fails. The <code>DeploymentStatus</code> for the draft configuration indicates whether the deployment is in process or has failed. The draft configuration remains in existence until it is deleted with this action.</p>
     fn delete_environment_configuration(
         &self,
         input: &DeleteEnvironmentConfigurationMessage,
@@ -13846,7 +13846,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the specified version of a custom platform.</p>"]
+    /// <p>Deletes the specified version of a custom platform.</p>
     fn delete_platform_version(
         &self,
         input: &DeletePlatformVersionRequest,
@@ -13897,7 +13897,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieve a list of application versions.</p>"]
+    /// <p>Retrieve a list of application versions.</p>
     fn describe_application_versions(
         &self,
         input: &DescribeApplicationVersionsMessage,
@@ -13950,7 +13950,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns the descriptions of existing applications.</p>"]
+    /// <p>Returns the descriptions of existing applications.</p>
     fn describe_applications(
         &self,
         input: &DescribeApplicationsMessage,
@@ -14001,7 +14001,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the configuration options that are used in a particular configuration template or environment, or that a specified solution stack defines. The description includes the values the options, their default values, and an indication of the required action on a running environment if an option value is changed.</p>"]
+    /// <p>Describes the configuration options that are used in a particular configuration template or environment, or that a specified solution stack defines. The description includes the values the options, their default values, and an indication of the required action on a running environment if an option value is changed.</p>
     fn describe_configuration_options(
         &self,
         input: &DescribeConfigurationOptionsMessage,
@@ -14052,7 +14052,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a description of the settings for the specified configuration set, that is, either a configuration template or the configuration set associated with a running environment.</p> <p>When describing the settings for the configuration set associated with a running environment, it is possible to receive two sets of setting descriptions. One is the deployed configuration set, and the other is a draft configuration of an environment that is either in the process of deployment or that failed to deploy.</p> <p>Related Topics</p> <ul> <li> <p> <a>DeleteEnvironmentConfiguration</a> </p> </li> </ul>"]
+    /// <p><p>Returns a description of the settings for the specified configuration set, that is, either a configuration template or the configuration set associated with a running environment.</p> <p>When describing the settings for the configuration set associated with a running environment, it is possible to receive two sets of setting descriptions. One is the deployed configuration set, and the other is a draft configuration of an environment that is either in the process of deployment or that failed to deploy.</p> <p>Related Topics</p> <ul> <li> <p> <a>DeleteEnvironmentConfiguration</a> </p> </li> </ul></p>
     fn describe_configuration_settings(
         &self,
         input: &DescribeConfigurationSettingsMessage,
@@ -14103,7 +14103,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about the overall health of the specified environment. The <b>DescribeEnvironmentHealth</b> operation is only available with AWS Elastic Beanstalk Enhanced Health.</p>"]
+    /// <p>Returns information about the overall health of the specified environment. The <b>DescribeEnvironmentHealth</b> operation is only available with AWS Elastic Beanstalk Enhanced Health.</p>
     fn describe_environment_health(
         &self,
         input: &DescribeEnvironmentHealthRequest,
@@ -14154,7 +14154,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists an environment's completed and failed managed actions.</p>"]
+    /// <p>Lists an environment's completed and failed managed actions.</p>
     fn describe_environment_managed_action_history(
         &self,
         input: &DescribeEnvironmentManagedActionHistoryRequest,
@@ -14214,7 +14214,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists an environment's upcoming and in-progress managed actions.</p>"]
+    /// <p>Lists an environment's upcoming and in-progress managed actions.</p>
     fn describe_environment_managed_actions(
         &self,
         input: &DescribeEnvironmentManagedActionsRequest,
@@ -14268,7 +14268,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns AWS resources for this environment.</p>"]
+    /// <p>Returns AWS resources for this environment.</p>
     fn describe_environment_resources(
         &self,
         input: &DescribeEnvironmentResourcesMessage,
@@ -14321,7 +14321,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns descriptions for existing environments.</p>"]
+    /// <p>Returns descriptions for existing environments.</p>
     fn describe_environments(
         &self,
         input: &DescribeEnvironmentsMessage,
@@ -14372,7 +14372,7 @@ where
         }
     }
 
-    #[doc="<p>Returns list of event descriptions matching criteria up to the last 6 weeks.</p> <note> <p>This action returns the most recent 1,000 events from the specified <code>NextToken</code>.</p> </note>"]
+    /// <p><p>Returns list of event descriptions matching criteria up to the last 6 weeks.</p> <note> <p>This action returns the most recent 1,000 events from the specified <code>NextToken</code>.</p> </note></p>
     fn describe_events(
         &self,
         input: &DescribeEventsMessage,
@@ -14423,7 +14423,7 @@ where
         }
     }
 
-    #[doc="<p>Retrives detailed information about the health of instances in your AWS Elastic Beanstalk. This operation requires <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced.html\">enhanced health reporting</a>.</p>"]
+    /// <p>Retrives detailed information about the health of instances in your AWS Elastic Beanstalk. This operation requires <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced.html">enhanced health reporting</a>.</p>
     fn describe_instances_health(
         &self,
         input: &DescribeInstancesHealthRequest,
@@ -14474,7 +14474,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes the version of the platform.</p>"]
+    /// <p>Describes the version of the platform.</p>
     fn describe_platform_version(
         &self,
         input: &DescribePlatformVersionRequest,
@@ -14525,7 +14525,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list of the available solution stack names, with the public version first and then in reverse chronological order.</p>"]
+    /// <p>Returns a list of the available solution stack names, with the public version first and then in reverse chronological order.</p>
     fn list_available_solution_stacks(
         &self,
     ) -> Result<ListAvailableSolutionStacksResultMessage, ListAvailableSolutionStacksError> {
@@ -14577,7 +14577,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists the available platforms.</p>"]
+    /// <p>Lists the available platforms.</p>
     fn list_platform_versions(
         &self,
         input: &ListPlatformVersionsRequest,
@@ -14628,7 +14628,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes and recreates all of the AWS resources (for example: the Auto Scaling group, load balancer, etc.) for a specified environment and forces a restart.</p>"]
+    /// <p>Deletes and recreates all of the AWS resources (for example: the Auto Scaling group, load balancer, etc.) for a specified environment and forces a restart.</p>
     fn rebuild_environment(
         &self,
         input: &RebuildEnvironmentMessage,
@@ -14658,7 +14658,7 @@ where
         }
     }
 
-    #[doc="<p>Initiates a request to compile the specified type of information of the deployed environment.</p> <p> Setting the <code>InfoType</code> to <code>tail</code> compiles the last lines from the application server log files of every Amazon EC2 instance in your environment. </p> <p> Setting the <code>InfoType</code> to <code>bundle</code> compresses the application server log files for every Amazon EC2 instance into a <code>.zip</code> file. Legacy and .NET containers do not support bundle logs. </p> <p> Use <a>RetrieveEnvironmentInfo</a> to obtain the set of logs. </p> <p>Related Topics</p> <ul> <li> <p> <a>RetrieveEnvironmentInfo</a> </p> </li> </ul>"]
+    /// <p><p>Initiates a request to compile the specified type of information of the deployed environment.</p> <p> Setting the <code>InfoType</code> to <code>tail</code> compiles the last lines from the application server log files of every Amazon EC2 instance in your environment. </p> <p> Setting the <code>InfoType</code> to <code>bundle</code> compresses the application server log files for every Amazon EC2 instance into a <code>.zip</code> file. Legacy and .NET containers do not support bundle logs. </p> <p> Use <a>RetrieveEnvironmentInfo</a> to obtain the set of logs. </p> <p>Related Topics</p> <ul> <li> <p> <a>RetrieveEnvironmentInfo</a> </p> </li> </ul></p>
     fn request_environment_info(
         &self,
         input: &RequestEnvironmentInfoMessage,
@@ -14688,7 +14688,7 @@ where
         }
     }
 
-    #[doc="<p>Causes the environment to restart the application container server running on each Amazon EC2 instance.</p>"]
+    /// <p>Causes the environment to restart the application container server running on each Amazon EC2 instance.</p>
     fn restart_app_server(
         &self,
         input: &RestartAppServerMessage,
@@ -14718,7 +14718,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves the compiled information from a <a>RequestEnvironmentInfo</a> request.</p> <p>Related Topics</p> <ul> <li> <p> <a>RequestEnvironmentInfo</a> </p> </li> </ul>"]
+    /// <p><p>Retrieves the compiled information from a <a>RequestEnvironmentInfo</a> request.</p> <p>Related Topics</p> <ul> <li> <p> <a>RequestEnvironmentInfo</a> </p> </li> </ul></p>
     fn retrieve_environment_info(
         &self,
         input: &RetrieveEnvironmentInfoMessage,
@@ -14771,7 +14771,7 @@ where
         }
     }
 
-    #[doc = "<p>Swaps the CNAMEs of two environments.</p>"]
+    /// <p>Swaps the CNAMEs of two environments.</p>
     fn swap_environment_cnam_es(
         &self,
         input: &SwapEnvironmentCNAMEsMessage,
@@ -14801,7 +14801,7 @@ where
         }
     }
 
-    #[doc = "<p>Terminates the specified environment.</p>"]
+    /// <p>Terminates the specified environment.</p>
     fn terminate_environment(
         &self,
         input: &TerminateEnvironmentMessage,
@@ -14852,7 +14852,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the specified application to have the specified properties.</p> <note> <p>If a property (for example, <code>description</code>) is not provided, the value remains unchanged. To clear these properties, specify an empty string.</p> </note>"]
+    /// <p><p>Updates the specified application to have the specified properties.</p> <note> <p>If a property (for example, <code>description</code>) is not provided, the value remains unchanged. To clear these properties, specify an empty string.</p> </note></p>
     fn update_application(
         &self,
         input: &UpdateApplicationMessage,
@@ -14903,7 +14903,7 @@ where
         }
     }
 
-    #[doc = "<p>Modifies lifecycle settings for an application.</p>"]
+    /// <p>Modifies lifecycle settings for an application.</p>
     fn update_application_resource_lifecycle(
         &self,
         input: &UpdateApplicationResourceLifecycleMessage,
@@ -14959,7 +14959,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the specified application version to have the specified properties.</p> <note> <p>If a property (for example, <code>description</code>) is not provided, the value remains unchanged. To clear properties, specify an empty string.</p> </note>"]
+    /// <p><p>Updates the specified application version to have the specified properties.</p> <note> <p>If a property (for example, <code>description</code>) is not provided, the value remains unchanged. To clear properties, specify an empty string.</p> </note></p>
     fn update_application_version(
         &self,
         input: &UpdateApplicationVersionMessage,
@@ -15012,7 +15012,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the specified configuration template to have the specified properties or configuration option values.</p> <note> <p>If a property (for example, <code>ApplicationName</code>) is not provided, its value remains unchanged. To clear such properties, specify an empty string.</p> </note> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> </ul>"]
+    /// <p><p>Updates the specified configuration template to have the specified properties or configuration option values.</p> <note> <p>If a property (for example, <code>ApplicationName</code>) is not provided, its value remains unchanged. To clear such properties, specify an empty string.</p> </note> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> </ul></p>
     fn update_configuration_template(
         &self,
         input: &UpdateConfigurationTemplateMessage,
@@ -15063,7 +15063,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the environment description, deploys a new application version, updates the configuration settings to an entirely new configuration template, or updates select configuration option values in the running environment.</p> <p> Attempting to update both the release and configuration is not allowed and AWS Elastic Beanstalk returns an <code>InvalidParameterCombination</code> error. </p> <p> When updating the configuration settings to a new template or individual settings, a draft configuration is created and <a>DescribeConfigurationSettings</a> for this environment returns two setting descriptions with different <code>DeploymentStatus</code> values. </p>"]
+    /// <p>Updates the environment description, deploys a new application version, updates the configuration settings to an entirely new configuration template, or updates select configuration option values in the running environment.</p> <p> Attempting to update both the release and configuration is not allowed and AWS Elastic Beanstalk returns an <code>InvalidParameterCombination</code> error. </p> <p> When updating the configuration settings to a new template or individual settings, a draft configuration is created and <a>DescribeConfigurationSettings</a> for this environment returns two setting descriptions with different <code>DeploymentStatus</code> values. </p>
     fn update_environment(
         &self,
         input: &UpdateEnvironmentMessage,
@@ -15114,7 +15114,7 @@ where
         }
     }
 
-    #[doc="<p>Takes a set of configuration settings and either a configuration template or environment, and determines whether those values are valid.</p> <p>This action returns a list of messages indicating any errors or warnings associated with the selection of option values.</p>"]
+    /// <p>Takes a set of configuration settings and either a configuration template or environment, and determines whether those values are valid.</p> <p>This action returns a list of messages indicating any errors or warnings associated with the selection of option values.</p>
     fn validate_configuration_settings(
         &self,
         input: &ValidateConfigurationSettingsMessage,

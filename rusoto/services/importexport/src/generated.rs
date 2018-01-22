@@ -39,7 +39,7 @@ enum DeserializerNext {
     Skip,
     Element(String),
 }
-/// A discrete item that contains the description and URL of an artifact (such as a PDF).
+/// <p>A discrete item that contains the description and URL of an artifact (such as a PDF).</p>
 #[derive(Default, Debug, Clone)]
 pub struct Artifact {
     pub description: Option<String>,
@@ -131,7 +131,7 @@ impl ArtifactListDeserializer {
         Ok(obj)
     }
 }
-/// Input structure for the CancelJob operation.
+/// <p>Input structure for the CancelJob operation.</p>
 #[derive(Default, Debug, Clone)]
 pub struct CancelJobInput {
     pub api_version: Option<String>,
@@ -160,7 +160,7 @@ impl CancelJobInputSerializer {
     }
 }
 
-/// Output structure for the CancelJob operation.
+/// <p>Output structure for the CancelJob operation.</p>
 #[derive(Default, Debug, Clone)]
 pub struct CancelJobOutput {
     pub success: Option<bool>,
@@ -220,7 +220,7 @@ impl CarrierDeserializer {
         Ok(obj)
     }
 }
-/// Input structure for the CreateJob operation.
+/// <p>Input structure for the CreateJob operation.</p>
 #[derive(Default, Debug, Clone)]
 pub struct CreateJobInput {
     pub api_version: Option<String>,
@@ -266,7 +266,7 @@ impl CreateJobInputSerializer {
     }
 }
 
-/// Output structure for the CreateJob operation.
+/// <p>Output structure for the CreateJob operation.</p>
 #[derive(Default, Debug, Clone)]
 pub struct CreateJobOutput {
     pub artifact_list: Option<Vec<Artifact>>,
@@ -561,7 +561,7 @@ impl GetShippingLabelOutputDeserializer {
         Ok(obj)
     }
 }
-/// Input structure for the GetStatus operation.
+/// <p>Input structure for the GetStatus operation.</p>
 #[derive(Default, Debug, Clone)]
 pub struct GetStatusInput {
     pub api_version: Option<String>,
@@ -590,7 +590,7 @@ impl GetStatusInputSerializer {
     }
 }
 
-/// Output structure for the GetStatus operation.
+/// <p>Output structure for the GetStatus operation.</p>
 #[derive(Default, Debug, Clone)]
 pub struct GetStatusOutput {
     pub artifact_list: Option<Vec<Artifact>>,
@@ -753,7 +753,7 @@ impl IsTruncatedDeserializer {
         Ok(obj)
     }
 }
-/// Representation of a job returned by the ListJobs operation.
+/// <p>Representation of a job returned by the ListJobs operation.</p>
 #[derive(Default, Debug, Clone)]
 pub struct Job {
     pub creation_date: Option<String>,
@@ -897,7 +897,7 @@ impl JobsListDeserializer {
         Ok(obj)
     }
 }
-/// Input structure for the ListJobs operation.
+/// <p>Input structure for the ListJobs operation.</p>
 #[derive(Default, Debug, Clone)]
 pub struct ListJobsInput {
     pub api_version: Option<String>,
@@ -935,7 +935,7 @@ impl ListJobsInputSerializer {
     }
 }
 
-/// Output structure for the ListJobs operation.
+/// <p>Output structure for the ListJobs operation.</p>
 #[derive(Default, Debug, Clone)]
 pub struct ListJobsOutput {
     pub is_truncated: Option<bool>,
@@ -1141,7 +1141,7 @@ impl URLDeserializer {
         Ok(obj)
     }
 }
-/// Input structure for the UpateJob operation.
+/// <p>Input structure for the UpateJob operation.</p>
 #[derive(Default, Debug, Clone)]
 pub struct UpdateJobInput {
     pub api_version: Option<String>,
@@ -1185,7 +1185,7 @@ impl UpdateJobInputSerializer {
     }
 }
 
-/// Output structure for the UpateJob operation.
+/// <p>Output structure for the UpateJob operation.</p>
 #[derive(Default, Debug, Clone)]
 pub struct UpdateJobOutput {
     pub artifact_list: Option<Vec<Artifact>>,
@@ -1262,17 +1262,17 @@ impl WarningMessageDeserializer {
 /// Errors returned by CancelJob
 #[derive(Debug, PartialEq)]
 pub enum CancelJobError {
-    ///AWS Import/Export cannot cancel the job
+    /// <p>AWS Import/Export cannot cancel the job</p>
     UnableToCancelJobId(String),
-    ///Indicates that the specified job has expired out of the system.
+    /// <p>Indicates that the specified job has expired out of the system.</p>
     ExpiredJobId(String),
-    ///The AWS Access Key ID specified in the request did not match the manifest's accessKeyId value. The manifest and the request authentication must use the same AWS Access Key ID.
+    /// <p>The AWS Access Key ID specified in the request did not match the manifest&#39;s accessKeyId value. The manifest and the request authentication must use the same AWS Access Key ID.</p>
     InvalidAccessKeyId(String),
-    ///The JOBID was missing, not found, or not associated with the AWS account.
+    /// <p>The JOBID was missing, not found, or not associated with the AWS account.</p>
     InvalidJobId(String),
-    ///The client tool version is invalid.
+    /// <p>The client tool version is invalid.</p>
     InvalidVersion(String),
-    ///The specified job ID has been canceled and is no longer valid.
+    /// <p>The specified job ID has been canceled and is no longer valid.</p>
     CanceledJobId(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1361,37 +1361,37 @@ impl Error for CancelJobError {
 /// Errors returned by CreateJob
 #[derive(Debug, PartialEq)]
 pub enum CreateJobError {
-    ///Each account can create only a certain number of jobs per day. If you need to create more than this, please contact awsimportexport@amazon.com to explain your particular use case.
+    /// <p>Each account can create only a certain number of jobs per day. If you need to create more than this, please contact awsimportexport@amazon.com to explain your particular use case.</p>
     CreateJobQuotaExceeded(String),
-    ///File system specified in export manifest is invalid.
+    /// <p>File system specified in export manifest is invalid.</p>
     InvalidFileSystem(String),
-    ///One or more customs parameters was invalid. Please correct and resubmit.
+    /// <p>One or more customs parameters was invalid. Please correct and resubmit.</p>
     InvalidCustoms(String),
-    ///One or more manifest fields was invalid. Please correct and resubmit.
+    /// <p>One or more manifest fields was invalid. Please correct and resubmit.</p>
     InvalidManifestField(String),
-    ///One or more parameters had an invalid value.
+    /// <p>One or more parameters had an invalid value.</p>
     InvalidParameter(String),
-    ///One or more required customs parameters was missing from the manifest.
+    /// <p>One or more required customs parameters was missing from the manifest.</p>
     MissingCustoms(String),
-    ///One or more required fields were missing from the manifest file. Please correct and resubmit.
+    /// <p>One or more required fields were missing from the manifest file. Please correct and resubmit.</p>
     MissingManifestField(String),
-    ///One or more required parameters was missing from the request.
+    /// <p>One or more required parameters was missing from the request.</p>
     MissingParameter(String),
-    ///The AWS Access Key ID specified in the request did not match the manifest's accessKeyId value. The manifest and the request authentication must use the same AWS Access Key ID.
+    /// <p>The AWS Access Key ID specified in the request did not match the manifest&#39;s accessKeyId value. The manifest and the request authentication must use the same AWS Access Key ID.</p>
     InvalidAccessKeyId(String),
-    ///The JOBID was missing, not found, or not associated with the AWS account.
+    /// <p>The JOBID was missing, not found, or not associated with the AWS account.</p>
     InvalidJobId(String),
-    ///The account specified does not have the appropriate bucket permissions.
+    /// <p>The account specified does not have the appropriate bucket permissions.</p>
     BucketPermission(String),
-    ///The address specified in the manifest is invalid.
+    /// <p>The address specified in the manifest is invalid.</p>
     InvalidAddress(String),
-    ///The client tool version is invalid.
+    /// <p>The client tool version is invalid.</p>
     InvalidVersion(String),
-    ///The specified bucket does not exist. Create the specified bucket or change the manifest's bucket, exportBucket, or logBucket field to a bucket that the account, as specified by the manifest's Access Key ID, has write permissions to.
+    /// <p>The specified bucket does not exist. Create the specified bucket or change the manifest&#39;s bucket, exportBucket, or logBucket field to a bucket that the account, as specified by the manifest&#39;s Access Key ID, has write permissions to.</p>
     NoSuchBucket(String),
-    ///Your manifest file contained buckets from multiple regions. A job is restricted to buckets from one region. Please correct and resubmit.
+    /// <p>Your manifest file contained buckets from multiple regions. A job is restricted to buckets from one region. Please correct and resubmit.</p>
     MultipleRegions(String),
-    ///Your manifest is not well-formed.
+    /// <p>Your manifest is not well-formed.</p>
     MalformedManifest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1520,19 +1520,19 @@ impl Error for CreateJobError {
 /// Errors returned by GetShippingLabel
 #[derive(Debug, PartialEq)]
 pub enum GetShippingLabelError {
-    ///Indicates that the specified job has expired out of the system.
+    /// <p>Indicates that the specified job has expired out of the system.</p>
     ExpiredJobId(String),
-    ///One or more parameters had an invalid value.
+    /// <p>One or more parameters had an invalid value.</p>
     InvalidParameter(String),
-    ///The AWS Access Key ID specified in the request did not match the manifest's accessKeyId value. The manifest and the request authentication must use the same AWS Access Key ID.
+    /// <p>The AWS Access Key ID specified in the request did not match the manifest&#39;s accessKeyId value. The manifest and the request authentication must use the same AWS Access Key ID.</p>
     InvalidAccessKeyId(String),
-    ///The JOBID was missing, not found, or not associated with the AWS account.
+    /// <p>The JOBID was missing, not found, or not associated with the AWS account.</p>
     InvalidJobId(String),
-    ///The address specified in the manifest is invalid.
+    /// <p>The address specified in the manifest is invalid.</p>
     InvalidAddress(String),
-    ///The client tool version is invalid.
+    /// <p>The client tool version is invalid.</p>
     InvalidVersion(String),
-    ///The specified job ID has been canceled and is no longer valid.
+    /// <p>The specified job ID has been canceled and is no longer valid.</p>
     CanceledJobId(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1625,15 +1625,15 @@ impl Error for GetShippingLabelError {
 /// Errors returned by GetStatus
 #[derive(Debug, PartialEq)]
 pub enum GetStatusError {
-    ///Indicates that the specified job has expired out of the system.
+    /// <p>Indicates that the specified job has expired out of the system.</p>
     ExpiredJobId(String),
-    ///The AWS Access Key ID specified in the request did not match the manifest's accessKeyId value. The manifest and the request authentication must use the same AWS Access Key ID.
+    /// <p>The AWS Access Key ID specified in the request did not match the manifest&#39;s accessKeyId value. The manifest and the request authentication must use the same AWS Access Key ID.</p>
     InvalidAccessKeyId(String),
-    ///The JOBID was missing, not found, or not associated with the AWS account.
+    /// <p>The JOBID was missing, not found, or not associated with the AWS account.</p>
     InvalidJobId(String),
-    ///The client tool version is invalid.
+    /// <p>The client tool version is invalid.</p>
     InvalidVersion(String),
-    ///The specified job ID has been canceled and is no longer valid.
+    /// <p>The specified job ID has been canceled and is no longer valid.</p>
     CanceledJobId(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1718,11 +1718,11 @@ impl Error for GetStatusError {
 /// Errors returned by ListJobs
 #[derive(Debug, PartialEq)]
 pub enum ListJobsError {
-    ///One or more parameters had an invalid value.
+    /// <p>One or more parameters had an invalid value.</p>
     InvalidParameter(String),
-    ///The AWS Access Key ID specified in the request did not match the manifest's accessKeyId value. The manifest and the request authentication must use the same AWS Access Key ID.
+    /// <p>The AWS Access Key ID specified in the request did not match the manifest&#39;s accessKeyId value. The manifest and the request authentication must use the same AWS Access Key ID.</p>
     InvalidAccessKeyId(String),
-    ///The client tool version is invalid.
+    /// <p>The client tool version is invalid.</p>
     InvalidVersion(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1799,41 +1799,41 @@ impl Error for ListJobsError {
 /// Errors returned by UpdateJob
 #[derive(Debug, PartialEq)]
 pub enum UpdateJobError {
-    ///AWS Import/Export cannot update the job
+    /// <p>AWS Import/Export cannot update the job</p>
     UnableToUpdateJobId(String),
-    ///File system specified in export manifest is invalid.
+    /// <p>File system specified in export manifest is invalid.</p>
     InvalidFileSystem(String),
-    ///Indicates that the specified job has expired out of the system.
+    /// <p>Indicates that the specified job has expired out of the system.</p>
     ExpiredJobId(String),
-    ///One or more customs parameters was invalid. Please correct and resubmit.
+    /// <p>One or more customs parameters was invalid. Please correct and resubmit.</p>
     InvalidCustoms(String),
-    ///One or more manifest fields was invalid. Please correct and resubmit.
+    /// <p>One or more manifest fields was invalid. Please correct and resubmit.</p>
     InvalidManifestField(String),
-    ///One or more parameters had an invalid value.
+    /// <p>One or more parameters had an invalid value.</p>
     InvalidParameter(String),
-    ///One or more required customs parameters was missing from the manifest.
+    /// <p>One or more required customs parameters was missing from the manifest.</p>
     MissingCustoms(String),
-    ///One or more required fields were missing from the manifest file. Please correct and resubmit.
+    /// <p>One or more required fields were missing from the manifest file. Please correct and resubmit.</p>
     MissingManifestField(String),
-    ///One or more required parameters was missing from the request.
+    /// <p>One or more required parameters was missing from the request.</p>
     MissingParameter(String),
-    ///The AWS Access Key ID specified in the request did not match the manifest's accessKeyId value. The manifest and the request authentication must use the same AWS Access Key ID.
+    /// <p>The AWS Access Key ID specified in the request did not match the manifest&#39;s accessKeyId value. The manifest and the request authentication must use the same AWS Access Key ID.</p>
     InvalidAccessKeyId(String),
-    ///The JOBID was missing, not found, or not associated with the AWS account.
+    /// <p>The JOBID was missing, not found, or not associated with the AWS account.</p>
     InvalidJobId(String),
-    ///The account specified does not have the appropriate bucket permissions.
+    /// <p>The account specified does not have the appropriate bucket permissions.</p>
     BucketPermission(String),
-    ///The address specified in the manifest is invalid.
+    /// <p>The address specified in the manifest is invalid.</p>
     InvalidAddress(String),
-    ///The client tool version is invalid.
+    /// <p>The client tool version is invalid.</p>
     InvalidVersion(String),
-    ///The specified bucket does not exist. Create the specified bucket or change the manifest's bucket, exportBucket, or logBucket field to a bucket that the account, as specified by the manifest's Access Key ID, has write permissions to.
+    /// <p>The specified bucket does not exist. Create the specified bucket or change the manifest&#39;s bucket, exportBucket, or logBucket field to a bucket that the account, as specified by the manifest&#39;s Access Key ID, has write permissions to.</p>
     NoSuchBucket(String),
-    ///The specified job ID has been canceled and is no longer valid.
+    /// <p>The specified job ID has been canceled and is no longer valid.</p>
     CanceledJobId(String),
-    ///Your manifest file contained buckets from multiple regions. A job is restricted to buckets from one region. Please correct and resubmit.
+    /// <p>Your manifest file contained buckets from multiple regions. A job is restricted to buckets from one region. Please correct and resubmit.</p>
     MultipleRegions(String),
-    ///Your manifest is not well-formed.
+    /// <p>Your manifest is not well-formed.</p>
     MalformedManifest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1969,25 +1969,25 @@ impl Error for UpdateJobError {
 }
 /// Trait representing the capabilities of the AWS Import/Export API. AWS Import/Export clients implement this trait.
 pub trait ImportExport {
-    #[doc="This operation cancels a specified job. Only the job owner can cancel it. The operation fails if the job has already started or is complete."]
+    /// <p>This operation cancels a specified job. Only the job owner can cancel it. The operation fails if the job has already started or is complete.</p>
     fn cancel_job(&self, input: &CancelJobInput) -> Result<CancelJobOutput, CancelJobError>;
 
-    #[doc="This operation initiates the process of scheduling an upload or download of your data. You include in the request a manifest that describes the data transfer specifics. The response to the request includes a job ID, which you can use in other operations, a signature that you use to identify your storage device, and the address where you should ship your storage device."]
+    /// <p>This operation initiates the process of scheduling an upload or download of your data. You include in the request a manifest that describes the data transfer specifics. The response to the request includes a job ID, which you can use in other operations, a signature that you use to identify your storage device, and the address where you should ship your storage device.</p>
     fn create_job(&self, input: &CreateJobInput) -> Result<CreateJobOutput, CreateJobError>;
 
-    #[doc="This operation generates a pre-paid UPS shipping label that you will use to ship your device to AWS for processing."]
+    /// <p>This operation generates a pre-paid UPS shipping label that you will use to ship your device to AWS for processing.</p>
     fn get_shipping_label(
         &self,
         input: &GetShippingLabelInput,
     ) -> Result<GetShippingLabelOutput, GetShippingLabelError>;
 
-    #[doc="This operation returns information about a job, including where the job is in the processing pipeline, the status of the results, and the signature value associated with the job. You can only return information about jobs you own."]
+    /// <p>This operation returns information about a job, including where the job is in the processing pipeline, the status of the results, and the signature value associated with the job. You can only return information about jobs you own.</p>
     fn get_status(&self, input: &GetStatusInput) -> Result<GetStatusOutput, GetStatusError>;
 
-    #[doc="This operation returns the jobs associated with the requester. AWS Import/Export lists the jobs in reverse chronological order based on the date of creation. For example if Job Test1 was created 2009Dec30 and Test2 was created 2010Feb05, the ListJobs operation would return Test2 followed by Test1."]
+    /// <p>This operation returns the jobs associated with the requester. AWS Import/Export lists the jobs in reverse chronological order based on the date of creation. For example if Job Test1 was created 2009Dec30 and Test2 was created 2010Feb05, the ListJobs operation would return Test2 followed by Test1.</p>
     fn list_jobs(&self, input: &ListJobsInput) -> Result<ListJobsOutput, ListJobsError>;
 
-    #[doc="You use this operation to change the parameters specified in the original manifest file by supplying a new manifest file. The manifest file attached to this request replaces the original manifest file. You can only use the operation after a CreateJob request but before the data transfer starts and you can only use it on jobs you own."]
+    /// <p>You use this operation to change the parameters specified in the original manifest file by supplying a new manifest file. The manifest file attached to this request replaces the original manifest file. You can only use the operation after a CreateJob request but before the data transfer starts and you can only use it on jobs you own.</p>
     fn update_job(&self, input: &UpdateJobInput) -> Result<UpdateJobOutput, UpdateJobError>;
 }
 /// A client for the AWS Import/Export API.
@@ -2020,7 +2020,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="This operation cancels a specified job. Only the job owner can cancel it. The operation fails if the job has already started or is complete."]
+    /// <p>This operation cancels a specified job. Only the job owner can cancel it. The operation fails if the job has already started or is complete.</p>
     fn cancel_job(&self, input: &CancelJobInput) -> Result<CancelJobOutput, CancelJobError> {
         let mut request = SignedRequest::new(
             "POST",
@@ -2073,7 +2073,7 @@ where
         }
     }
 
-    #[doc="This operation initiates the process of scheduling an upload or download of your data. You include in the request a manifest that describes the data transfer specifics. The response to the request includes a job ID, which you can use in other operations, a signature that you use to identify your storage device, and the address where you should ship your storage device."]
+    /// <p>This operation initiates the process of scheduling an upload or download of your data. You include in the request a manifest that describes the data transfer specifics. The response to the request includes a job ID, which you can use in other operations, a signature that you use to identify your storage device, and the address where you should ship your storage device.</p>
     fn create_job(&self, input: &CreateJobInput) -> Result<CreateJobOutput, CreateJobError> {
         let mut request = SignedRequest::new(
             "POST",
@@ -2126,7 +2126,7 @@ where
         }
     }
 
-    #[doc="This operation generates a pre-paid UPS shipping label that you will use to ship your device to AWS for processing."]
+    /// <p>This operation generates a pre-paid UPS shipping label that you will use to ship your device to AWS for processing.</p>
     fn get_shipping_label(
         &self,
         input: &GetShippingLabelInput,
@@ -2182,7 +2182,7 @@ where
         }
     }
 
-    #[doc="This operation returns information about a job, including where the job is in the processing pipeline, the status of the results, and the signature value associated with the job. You can only return information about jobs you own."]
+    /// <p>This operation returns information about a job, including where the job is in the processing pipeline, the status of the results, and the signature value associated with the job. You can only return information about jobs you own.</p>
     fn get_status(&self, input: &GetStatusInput) -> Result<GetStatusOutput, GetStatusError> {
         let mut request = SignedRequest::new(
             "POST",
@@ -2235,7 +2235,7 @@ where
         }
     }
 
-    #[doc="This operation returns the jobs associated with the requester. AWS Import/Export lists the jobs in reverse chronological order based on the date of creation. For example if Job Test1 was created 2009Dec30 and Test2 was created 2010Feb05, the ListJobs operation would return Test2 followed by Test1."]
+    /// <p>This operation returns the jobs associated with the requester. AWS Import/Export lists the jobs in reverse chronological order based on the date of creation. For example if Job Test1 was created 2009Dec30 and Test2 was created 2010Feb05, the ListJobs operation would return Test2 followed by Test1.</p>
     fn list_jobs(&self, input: &ListJobsInput) -> Result<ListJobsOutput, ListJobsError> {
         let mut request =
             SignedRequest::new("POST", "importexport", &self.region, "/?Operation=ListJobs");
@@ -2284,7 +2284,7 @@ where
         }
     }
 
-    #[doc="You use this operation to change the parameters specified in the original manifest file by supplying a new manifest file. The manifest file attached to this request replaces the original manifest file. You can only use the operation after a CreateJob request but before the data transfer starts and you can only use it on jobs you own."]
+    /// <p>You use this operation to change the parameters specified in the original manifest file by supplying a new manifest file. The manifest file attached to this request replaces the original manifest file. You can only use the operation after a CreateJob request but before the data transfer starts and you can only use it on jobs you own.</p>
     fn update_job(&self, input: &UpdateJobInput) -> Result<UpdateJobOutput, UpdateJobError> {
         let mut request = SignedRequest::new(
             "POST",

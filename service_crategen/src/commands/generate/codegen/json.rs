@@ -137,8 +137,7 @@ fn generate_payload(service: &Service, operation: &Operation) -> String {
 
 fn generate_documentation(operation: &Operation) -> Option<String> {
     operation.documentation.as_ref().map(|docs| {
-        format!("#[doc=\"{}\"]",
-                docs.replace("\\", "\\\\").replace("\"", "\\\""))
+        ::doco::Item(docs).to_string()
     })
 }
 

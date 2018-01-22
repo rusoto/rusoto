@@ -448,9 +448,9 @@ pub struct EventTypeFilter {
 /// Errors returned by DescribeAffectedEntities
 #[derive(Debug, PartialEq)]
 pub enum DescribeAffectedEntitiesError {
-    ///<p>The specified pagination token (<code>nextToken</code>) is not valid.</p>
+    /// <p>The specified pagination token (<code>nextToken</code>) is not valid.</p>
     InvalidPaginationToken(String),
-    ///<p>The specified locale is not supported.</p>
+    /// <p>The specified locale is not supported.</p>
     UnsupportedLocale(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -610,7 +610,7 @@ impl Error for DescribeEntityAggregatesError {
 /// Errors returned by DescribeEventAggregates
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventAggregatesError {
-    ///<p>The specified pagination token (<code>nextToken</code>) is not valid.</p>
+    /// <p>The specified pagination token (<code>nextToken</code>) is not valid.</p>
     InvalidPaginationToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -692,7 +692,7 @@ impl Error for DescribeEventAggregatesError {
 /// Errors returned by DescribeEventDetails
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventDetailsError {
-    ///<p>The specified locale is not supported.</p>
+    /// <p>The specified locale is not supported.</p>
     UnsupportedLocale(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -772,9 +772,9 @@ impl Error for DescribeEventDetailsError {
 /// Errors returned by DescribeEventTypes
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventTypesError {
-    ///<p>The specified pagination token (<code>nextToken</code>) is not valid.</p>
+    /// <p>The specified pagination token (<code>nextToken</code>) is not valid.</p>
     InvalidPaginationToken(String),
-    ///<p>The specified locale is not supported.</p>
+    /// <p>The specified locale is not supported.</p>
     UnsupportedLocale(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -858,9 +858,9 @@ impl Error for DescribeEventTypesError {
 /// Errors returned by DescribeEvents
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventsError {
-    ///<p>The specified pagination token (<code>nextToken</code>) is not valid.</p>
+    /// <p>The specified pagination token (<code>nextToken</code>) is not valid.</p>
     InvalidPaginationToken(String),
-    ///<p>The specified locale is not supported.</p>
+    /// <p>The specified locale is not supported.</p>
     UnsupportedLocale(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -941,37 +941,37 @@ impl Error for DescribeEventsError {
 }
 /// Trait representing the capabilities of the AWSHealth API. AWSHealth clients implement this trait.
 pub trait AWSHealth {
-    #[doc="<p>Returns a list of entities that have been affected by the specified events, based on the specified filter criteria. Entities can refer to individual customer resources, groups of customer resources, or any other construct, depending on the AWS service. Events that have impact beyond that of the affected entities, or where the extent of impact is unknown, include at least one entity indicating this.</p> <p>At least one event ARN is required. Results are sorted by the <code>lastUpdatedTime</code> of the entity, starting with the most recent.</p>"]
+    /// <p>Returns a list of entities that have been affected by the specified events, based on the specified filter criteria. Entities can refer to individual customer resources, groups of customer resources, or any other construct, depending on the AWS service. Events that have impact beyond that of the affected entities, or where the extent of impact is unknown, include at least one entity indicating this.</p> <p>At least one event ARN is required. Results are sorted by the <code>lastUpdatedTime</code> of the entity, starting with the most recent.</p>
     fn describe_affected_entities(
         &self,
         input: &DescribeAffectedEntitiesRequest,
     ) -> Result<DescribeAffectedEntitiesResponse, DescribeAffectedEntitiesError>;
 
-    #[doc="<p>Returns the number of entities that are affected by each of the specified events. If no events are specified, the counts of all affected entities are returned.</p>"]
+    /// <p>Returns the number of entities that are affected by each of the specified events. If no events are specified, the counts of all affected entities are returned.</p>
     fn describe_entity_aggregates(
         &self,
         input: &DescribeEntityAggregatesRequest,
     ) -> Result<DescribeEntityAggregatesResponse, DescribeEntityAggregatesError>;
 
-    #[doc="<p>Returns the number of events of each event type (issue, scheduled change, and account notification). If no filter is specified, the counts of all events in each category are returned.</p>"]
+    /// <p>Returns the number of events of each event type (issue, scheduled change, and account notification). If no filter is specified, the counts of all events in each category are returned.</p>
     fn describe_event_aggregates(
         &self,
         input: &DescribeEventAggregatesRequest,
     ) -> Result<DescribeEventAggregatesResponse, DescribeEventAggregatesError>;
 
-    #[doc="<p>Returns detailed information about one or more specified events. Information includes standard event data (region, service, etc., as returned by <a>DescribeEvents</a>), a detailed event description, and possible additional metadata that depends upon the nature of the event. Affected entities are not included; to retrieve those, use the <a>DescribeAffectedEntities</a> operation.</p> <p>If a specified event cannot be retrieved, an error message is returned for that event.</p>"]
+    /// <p>Returns detailed information about one or more specified events. Information includes standard event data (region, service, etc., as returned by <a>DescribeEvents</a>), a detailed event description, and possible additional metadata that depends upon the nature of the event. Affected entities are not included; to retrieve those, use the <a>DescribeAffectedEntities</a> operation.</p> <p>If a specified event cannot be retrieved, an error message is returned for that event.</p>
     fn describe_event_details(
         &self,
         input: &DescribeEventDetailsRequest,
     ) -> Result<DescribeEventDetailsResponse, DescribeEventDetailsError>;
 
-    #[doc="<p>Returns the event types that meet the specified filter criteria. If no filter criteria are specified, all event types are returned, in no particular order.</p>"]
+    /// <p>Returns the event types that meet the specified filter criteria. If no filter criteria are specified, all event types are returned, in no particular order.</p>
     fn describe_event_types(
         &self,
         input: &DescribeEventTypesRequest,
     ) -> Result<DescribeEventTypesResponse, DescribeEventTypesError>;
 
-    #[doc="<p>Returns information about events that meet the specified filter criteria. Events are returned in a summary form and do not include the detailed description, any additional metadata that depends on the event type, or any affected resources. To retrieve that information, use the <a>DescribeEventDetails</a> and <a>DescribeAffectedEntities</a> operations.</p> <p>If no filter criteria are specified, all events are returned. Results are sorted by <code>lastModifiedTime</code>, starting with the most recent.</p>"]
+    /// <p>Returns information about events that meet the specified filter criteria. Events are returned in a summary form and do not include the detailed description, any additional metadata that depends on the event type, or any affected resources. To retrieve that information, use the <a>DescribeEventDetails</a> and <a>DescribeAffectedEntities</a> operations.</p> <p>If no filter criteria are specified, all events are returned. Results are sorted by <code>lastModifiedTime</code>, starting with the most recent.</p>
     fn describe_events(
         &self,
         input: &DescribeEventsRequest,
@@ -1007,7 +1007,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Returns a list of entities that have been affected by the specified events, based on the specified filter criteria. Entities can refer to individual customer resources, groups of customer resources, or any other construct, depending on the AWS service. Events that have impact beyond that of the affected entities, or where the extent of impact is unknown, include at least one entity indicating this.</p> <p>At least one event ARN is required. Results are sorted by the <code>lastUpdatedTime</code> of the entity, starting with the most recent.</p>"]
+    /// <p>Returns a list of entities that have been affected by the specified events, based on the specified filter criteria. Entities can refer to individual customer resources, groups of customer resources, or any other construct, depending on the AWS service. Events that have impact beyond that of the affected entities, or where the extent of impact is unknown, include at least one entity indicating this.</p> <p>At least one event ARN is required. Results are sorted by the <code>lastUpdatedTime</code> of the entity, starting with the most recent.</p>
     fn describe_affected_entities(
         &self,
         input: &DescribeAffectedEntitiesRequest,
@@ -1044,7 +1044,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the number of entities that are affected by each of the specified events. If no events are specified, the counts of all affected entities are returned.</p>"]
+    /// <p>Returns the number of entities that are affected by each of the specified events. If no events are specified, the counts of all affected entities are returned.</p>
     fn describe_entity_aggregates(
         &self,
         input: &DescribeEntityAggregatesRequest,
@@ -1081,7 +1081,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the number of events of each event type (issue, scheduled change, and account notification). If no filter is specified, the counts of all events in each category are returned.</p>"]
+    /// <p>Returns the number of events of each event type (issue, scheduled change, and account notification). If no filter is specified, the counts of all events in each category are returned.</p>
     fn describe_event_aggregates(
         &self,
         input: &DescribeEventAggregatesRequest,
@@ -1115,7 +1115,7 @@ where
         }
     }
 
-    #[doc="<p>Returns detailed information about one or more specified events. Information includes standard event data (region, service, etc., as returned by <a>DescribeEvents</a>), a detailed event description, and possible additional metadata that depends upon the nature of the event. Affected entities are not included; to retrieve those, use the <a>DescribeAffectedEntities</a> operation.</p> <p>If a specified event cannot be retrieved, an error message is returned for that event.</p>"]
+    /// <p>Returns detailed information about one or more specified events. Information includes standard event data (region, service, etc., as returned by <a>DescribeEvents</a>), a detailed event description, and possible additional metadata that depends upon the nature of the event. Affected entities are not included; to retrieve those, use the <a>DescribeAffectedEntities</a> operation.</p> <p>If a specified event cannot be retrieved, an error message is returned for that event.</p>
     fn describe_event_details(
         &self,
         input: &DescribeEventDetailsRequest,
@@ -1149,7 +1149,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the event types that meet the specified filter criteria. If no filter criteria are specified, all event types are returned, in no particular order.</p>"]
+    /// <p>Returns the event types that meet the specified filter criteria. If no filter criteria are specified, all event types are returned, in no particular order.</p>
     fn describe_event_types(
         &self,
         input: &DescribeEventTypesRequest,
@@ -1183,7 +1183,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about events that meet the specified filter criteria. Events are returned in a summary form and do not include the detailed description, any additional metadata that depends on the event type, or any affected resources. To retrieve that information, use the <a>DescribeEventDetails</a> and <a>DescribeAffectedEntities</a> operations.</p> <p>If no filter criteria are specified, all events are returned. Results are sorted by <code>lastModifiedTime</code>, starting with the most recent.</p>"]
+    /// <p>Returns information about events that meet the specified filter criteria. Events are returned in a summary form and do not include the detailed description, any additional metadata that depends on the event type, or any affected resources. To retrieve that information, use the <a>DescribeEventDetails</a> and <a>DescribeAffectedEntities</a> operations.</p> <p>If no filter criteria are specified, all events are returned. Results are sorted by <code>lastModifiedTime</code>, starting with the most recent.</p>
     fn describe_events(
         &self,
         input: &DescribeEventsRequest,
