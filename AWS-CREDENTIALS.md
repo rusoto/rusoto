@@ -12,7 +12,9 @@ If credentials cannot be obtained through one method, it falls back to the next.
 If all possibilites are exhausted, an error will be returned.
 
 `ProfileProvider` (and `ChainProvider`) also allow you to specify a custom path to the credentials file and the name of the profile to use.
-If not specified, the profile "default" is used.
+If not explicitly provided as arguments, the values for these two parameters are computed according to the following rules:
+* **location of credentials file:** if set and not empty the value of the environment variable ```AWS_SHARED_CREDENTIALS_FILE``` otherwise ```"~/.aws/credentials"```.
+* **profile name:** if set and not empty the value of the environment variable ```AWS_PROFILE``` otherwise ```"default"```
 
 It's also possible to implement your own credentials sourcing mechanism by creating a type that implements `rusoto::ProvideAwsCredentials`.
 

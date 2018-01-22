@@ -499,6 +499,9 @@ fn make_request(
 }
 
 #[cfg(test)]
+#[macro_use] extern crate lazy_static;
+
+#[cfg(test)]
 mod tests {
     use std::io::Read;
     use std::fs::{self, File};
