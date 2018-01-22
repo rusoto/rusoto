@@ -800,7 +800,8 @@ pub struct PutRetentionPolicyRequest {
     /// <p>The name of the log group.</p>
     #[serde(rename = "logGroupName")]
     pub log_group_name: String,
-    #[serde(rename = "retentionInDays")] pub retention_in_days: i64,
+    #[serde(rename = "retentionInDays")]
+    pub retention_in_days: i64,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
@@ -901,7 +902,8 @@ pub struct TagLogGroupRequest {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct TestMetricFilterRequest {
-    #[serde(rename = "filterPattern")] pub filter_pattern: String,
+    #[serde(rename = "filterPattern")]
+    pub filter_pattern: String,
     /// <p>The log event messages to test.</p>
     #[serde(rename = "logEventMessages")]
     pub log_event_messages: Vec<String>,

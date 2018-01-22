@@ -1260,8 +1260,10 @@ pub struct PredictInput {
     /// <p>A unique identifier of the <code>MLModel</code>.</p>
     #[serde(rename = "MLModelId")]
     pub ml_model_id: String,
-    #[serde(rename = "PredictEndpoint")] pub predict_endpoint: String,
-    #[serde(rename = "Record")] pub record: ::std::collections::HashMap<String, String>,
+    #[serde(rename = "PredictEndpoint")]
+    pub predict_endpoint: String,
+    #[serde(rename = "Record")]
+    pub record: ::std::collections::HashMap<String, String>,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -1334,7 +1336,8 @@ pub struct RDSDataSpec {
 /// <p>The database details of an Amazon RDS database.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct RDSDatabase {
-    #[serde(rename = "DatabaseName")] pub database_name: String,
+    #[serde(rename = "DatabaseName")]
+    pub database_name: String,
     /// <p>The ID of an RDS DB instance.</p>
     #[serde(rename = "InstanceIdentifier")]
     pub instance_identifier: String,
@@ -1343,8 +1346,10 @@ pub struct RDSDatabase {
 /// <p>The database credentials to connect to a database on an RDS DB instance.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct RDSDatabaseCredentials {
-    #[serde(rename = "Password")] pub password: String,
-    #[serde(rename = "Username")] pub username: String,
+    #[serde(rename = "Password")]
+    pub password: String,
+    #[serde(rename = "Username")]
+    pub username: String,
 }
 
 /// <p>The datasource details that are specific to Amazon RDS.</p>
@@ -1428,15 +1433,19 @@ pub struct RedshiftDataSpec {
 /// <p>Describes the database details required to connect to an Amazon Redshift database.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct RedshiftDatabase {
-    #[serde(rename = "ClusterIdentifier")] pub cluster_identifier: String,
-    #[serde(rename = "DatabaseName")] pub database_name: String,
+    #[serde(rename = "ClusterIdentifier")]
+    pub cluster_identifier: String,
+    #[serde(rename = "DatabaseName")]
+    pub database_name: String,
 }
 
 /// <p> Describes the database credentials for connecting to a database on an Amazon Redshift cluster.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct RedshiftDatabaseCredentials {
-    #[serde(rename = "Password")] pub password: String,
-    #[serde(rename = "Username")] pub username: String,
+    #[serde(rename = "Password")]
+    pub password: String,
+    #[serde(rename = "Username")]
+    pub username: String,
 }
 
 /// <p>Describes the <code>DataSource</code> details specific to Amazon Redshift.</p>

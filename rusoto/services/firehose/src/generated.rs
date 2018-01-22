@@ -505,7 +505,8 @@ pub struct ExtendedS3DestinationUpdate {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetKinesisStreamInput {
-    #[serde(rename = "DeliveryStreamARN")] pub delivery_stream_arn: String,
+    #[serde(rename = "DeliveryStreamARN")]
+    pub delivery_stream_arn: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -915,10 +916,14 @@ pub struct S3DestinationUpdate {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct SessionCredentials {
-    #[serde(rename = "AccessKeyId")] pub access_key_id: String,
-    #[serde(rename = "Expiration")] pub expiration: f64,
-    #[serde(rename = "SecretAccessKey")] pub secret_access_key: String,
-    #[serde(rename = "SessionToken")] pub session_token: String,
+    #[serde(rename = "AccessKeyId")]
+    pub access_key_id: String,
+    #[serde(rename = "Expiration")]
+    pub expiration: f64,
+    #[serde(rename = "SecretAccessKey")]
+    pub secret_access_key: String,
+    #[serde(rename = "SessionToken")]
+    pub session_token: String,
 }
 
 /// <p>Details about a Kinesis stream used as the source for a Kinesis Firehose delivery stream.</p>

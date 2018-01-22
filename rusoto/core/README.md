@@ -44,9 +44,9 @@ For example, to include only S3 and SQS:
 
 ``` toml
 [dependencies]
-rusoto_core = "0.30.0"
-rusoto_sqs = "0.30.0"
-rusoto_s3 = "0.30.0"
+rusoto_core = "0.31.0"
+rusoto_sqs = "0.31.0"
+rusoto_s3 = "0.31.0"
 ```
 
 ## Migrating from Rusoto 0.24.0 to 0.25.0 or later

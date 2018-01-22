@@ -23,7 +23,7 @@ To use `rusoto_ssm` in your application, add it as a dependency in your `Cargo.t
 
 ```toml
 [dependencies]
-rusoto_ssm = "0.30.0"
+rusoto_ssm = "0.31.0"
 ```
 
 ## Contributing

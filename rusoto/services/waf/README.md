@@ -23,7 +23,7 @@ To use `rusoto_waf` in your application, add it as a dependency in your `Cargo.t
 
 ```toml
 [dependencies]
-rusoto_waf = "0.30.0"
+rusoto_waf = "0.31.0"
 ```
 
 ## Contributing

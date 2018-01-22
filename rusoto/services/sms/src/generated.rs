@@ -67,15 +67,18 @@ pub struct CreateReplicationJobRequest {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[serde(rename = "frequency")] pub frequency: i64,
+    #[serde(rename = "frequency")]
+    pub frequency: i64,
     #[serde(rename = "licenseType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub license_type: Option<String>,
     #[serde(rename = "roleName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_name: Option<String>,
-    #[serde(rename = "seedReplicationTime")] pub seed_replication_time: f64,
-    #[serde(rename = "serverId")] pub server_id: String,
+    #[serde(rename = "seedReplicationTime")]
+    pub seed_replication_time: f64,
+    #[serde(rename = "serverId")]
+    pub server_id: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -87,7 +90,8 @@ pub struct CreateReplicationJobResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteReplicationJobRequest {
-    #[serde(rename = "replicationJobId")] pub replication_job_id: String,
+    #[serde(rename = "replicationJobId")]
+    pub replication_job_id: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -101,7 +105,8 @@ pub struct DeleteServerCatalogResponse;
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DisassociateConnectorRequest {
-    #[serde(rename = "connectorId")] pub connector_id: String,
+    #[serde(rename = "connectorId")]
+    pub connector_id: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -158,7 +163,8 @@ pub struct GetReplicationRunsRequest {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[serde(rename = "replicationJobId")] pub replication_job_id: String,
+    #[serde(rename = "replicationJobId")]
+    pub replication_job_id: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -307,7 +313,8 @@ pub struct StartOnDemandReplicationRunRequest {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[serde(rename = "replicationJobId")] pub replication_job_id: String,
+    #[serde(rename = "replicationJobId")]
+    pub replication_job_id: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -331,7 +338,8 @@ pub struct UpdateReplicationJobRequest {
     #[serde(rename = "nextReplicationRunStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_replication_run_start_time: Option<f64>,
-    #[serde(rename = "replicationJobId")] pub replication_job_id: String,
+    #[serde(rename = "replicationJobId")]
+    pub replication_job_id: String,
     #[serde(rename = "roleName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_name: Option<String>,

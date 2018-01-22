@@ -2193,7 +2193,8 @@ pub struct PartitionInput {
 
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct PartitionValueList {
-    #[serde(rename = "Values")] pub values: Vec<String>,
+    #[serde(rename = "Values")]
+    pub values: Vec<String>,
 }
 
 /// <p>Specifies the physical requirements for a connection.</p>

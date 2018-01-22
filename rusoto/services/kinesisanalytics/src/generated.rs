@@ -733,7 +733,8 @@ pub struct MappingParameters {
 /// <p> Describes application output configuration in which you identify an in-application stream and a destination where you want the in-application stream data to be written. The destination can be an Amazon Kinesis stream or an Amazon Kinesis Firehose delivery stream. </p> <p/> <p>For limits on how many destinations an application can write and other limitations, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/limits.html">Limits</a>. </p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct Output {
-    #[serde(rename = "DestinationSchema")] pub destination_schema: DestinationSchema,
+    #[serde(rename = "DestinationSchema")]
+    pub destination_schema: DestinationSchema,
     /// <p>Identifies an Amazon Kinesis Firehose delivery stream as the destination.</p>
     #[serde(rename = "KinesisFirehoseOutput")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -824,7 +825,8 @@ pub struct RecordFormat {
 /// <p>Describes the reference data source by providing the source information (S3 bucket name and object key name), the resulting in-application table name that is created, and the necessary schema to map the data elements in the Amazon S3 object to the in-application table.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ReferenceDataSource {
-    #[serde(rename = "ReferenceSchema")] pub reference_schema: SourceSchema,
+    #[serde(rename = "ReferenceSchema")]
+    pub reference_schema: SourceSchema,
     #[serde(rename = "S3ReferenceDataSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_reference_data_source: Option<S3ReferenceDataSource>,

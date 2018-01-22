@@ -453,7 +453,8 @@ pub struct DescribeAssessmentTargetsResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeAssessmentTemplatesRequest {
-    #[serde(rename = "assessmentTemplateArns")] pub assessment_template_arns: Vec<String>,
+    #[serde(rename = "assessmentTemplateArns")]
+    pub assessment_template_arns: Vec<String>,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
