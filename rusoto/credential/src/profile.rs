@@ -63,7 +63,6 @@ impl ProfileProvider {
     /// 2. otherwise return `~/.aws/credentials` (Linux/Mac) resp. `%USERPROFILE%\.aws\credentials` (Windows)
     fn default_profile_location() -> Result<PathBuf, CredentialsError> {
         let env = ProfileProvider::non_empty_env_var("AWS_SHARED_CREDENTIALS_FILE");
-        print!("{:?}",env);
         match env {
             Some(path) => Ok(PathBuf::from(path)),
             None => ProfileProvider::hardcoded_profile_location(),
@@ -252,7 +251,7 @@ mod tests {
     use std::path::Path;
 
     use {CredentialsError, ProvideAwsCredentials};
-    use std::sync::{Mutex,MutexGuard};
+    use std::sync::{Mutex, MutexGuard};
     use super::*;
 
     // cargo runs tests in parallel, which leads to race conditions when changing
@@ -446,7 +445,7 @@ mod tests {
     fn default_profile_name_from_env_var(){
         let _guard = lock(&ENV_MUTEX);
         env::set_var("AWS_PROFILE", "bar");
-        assert_eq!("bar",ProfileProvider::default_profile_name());
+        assert_eq!("bar", ProfileProvider::default_profile_name());
         env::remove_var("AWS_PROFILE");
     }
 
@@ -454,7 +453,7 @@ mod tests {
     fn default_profile_name_from_empty_env_var(){
         let _guard = lock(&ENV_MUTEX);
         env::set_var("AWS_PROFILE", "");
-        assert_eq!("default",ProfileProvider::default_profile_name());
+        assert_eq!("default", ProfileProvider::default_profile_name());
         env::remove_var("AWS_PROFILE");
     }
 
@@ -462,14 +461,14 @@ mod tests {
     fn default_profile_name(){
         let _guard = lock(&ENV_MUTEX);
         env::remove_var("AWS_PROFILE");
-        assert_eq!("default",ProfileProvider::default_profile_name());
+        assert_eq!("default", ProfileProvider::default_profile_name());
     }
 
     #[test]
     fn default_profile_location_from_env_var(){
         let _guard = lock(&ENV_MUTEX);
         env::set_var("AWS_SHARED_CREDENTIALS_FILE", "bar");
-        assert_eq!(Ok(PathBuf::from("bar")),ProfileProvider::default_profile_location());
+        assert_eq!(Ok(PathBuf::from("bar")), ProfileProvider::default_profile_location());
         env::remove_var("AWS_SHARED_CREDENTIALS_FILE");
     }
 
@@ -477,7 +476,7 @@ mod tests {
     fn default_profile_location_from_empty_env_var(){
         let _guard = lock(&ENV_MUTEX);
         env::set_var("AWS_SHARED_CREDENTIALS_FILE", "");
-        assert_eq!(ProfileProvider::hardcoded_profile_location(),ProfileProvider::default_profile_location());
+        assert_eq!(ProfileProvider::hardcoded_profile_location(), ProfileProvider::default_profile_location());
         env::remove_var("AWS_SHARED_CREDENTIALS_FILE");
     }
 
@@ -485,7 +484,7 @@ mod tests {
     fn default_profile_location(){
         let _guard = lock(&ENV_MUTEX);
         env::remove_var("AWS_SHARED_CREDENTIALS_FILE");
-        assert_eq!(ProfileProvider::hardcoded_profile_location(),ProfileProvider::default_profile_location());
+        assert_eq!(ProfileProvider::hardcoded_profile_location(), ProfileProvider::default_profile_location());
     }
 
 }
